@@ -1,11 +1,11 @@
+/**
+ * TestimonialsSection — Glassmorphic review cards with auto-slide carousel
+ */
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Container, SectionHeading, Card } from '@/components/ui'
-import { Star, ChevronLeft, ChevronRight, Quote } from 'lucide-react'
-import { fadeUp, viewportOnce } from '@/utils/motion'
+import { Container } from '@/components/ui'
+import { Star, ChevronLeft, ChevronRight, Quote, MessageSquare } from 'lucide-react'
 import { useTestimonials } from '@/hooks/useTestimonials'
 
-// Fallback while loading or if DB empty
 const PLACEHOLDER = [
   {
     id: '1',
@@ -33,146 +33,140 @@ const PLACEHOLDER = [
   },
 ]
 
+function getInitials(name = '') {
+  return name.split(' ').map((n) => n[0]).slice(0, 2).join('').toUpperCase()
+}
+
+const AVATAR_COLORS = [
+  'from-blue-500 to-cyan-500',
+  'from-purple-500 to-pink-500',
+  'from-amber-500 to-orange-500',
+  'from-emerald-500 to-teal-500',
+]
+
 export default function TestimonialsSection() {
   const { data, isLoading } = useTestimonials()
   const testimonials = data?.data?.length ? data.data : isLoading ? [] : PLACEHOLDER
-
   const [currentIndex, setCurrentIndex] = useState(0)
 
-  // Auto-slide transition effect
   useEffect(() => {
     if (testimonials.length <= 1) return
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1))
-    }, 5500) // Transition every 5.5s
+    }, 5500)
     return () => clearInterval(timer)
-  }, [testimonials.length, currentIndex]) // Reset timer when index changes manually
+  }, [testimonials.length, currentIndex])
 
-  const handlePrev = () => {
-    setCurrentIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1))
-  }
-
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1))
-  }
+  const handlePrev = () => setCurrentIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1))
+  const handleNext = () => setCurrentIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1))
 
   const t = testimonials[currentIndex]
-  const initials = t
-    ? t.name
-        .split(' ')
-        .map((n) => n[0])
-        .slice(0, 2)
-        .join('')
-        .toUpperCase()
-    : ''
 
   return (
     <section
-      className="py-20 bg-white relative overflow-hidden"
+      className="py-24 relative overflow-hidden"
+      style={{ background: 'linear-gradient(160deg, #f0f6ff 0%, #ffffff 40%, #f8fafc 100%)' }}
       aria-labelledby="testimonials-heading"
     >
-      {/* Background Graphic elements */}
-      <div className="absolute top-1/4 left-0 w-72 h-72 bg-brand-blue/5 rounded-full blur-3xl -translate-x-1/2 pointer-events-none" />
-      <div className="absolute bottom-1/4 right-0 w-80 h-80 bg-brand-red/5 rounded-full blur-3xl translate-x-1/2 pointer-events-none" />
+      {/* Ambient blobs */}
+      <div className="absolute top-0 left-0 w-80 h-80 bg-brand-primary/8 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-80 h-80 bg-brand-cyan/6 rounded-full blur-3xl translate-x-1/3 translate-y-1/3 pointer-events-none" />
 
       <Container>
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={viewportOnce}
-          variants={fadeUp}
-          className="text-center mb-12"
-        >
-          <SectionHeading
-            id="testimonials-heading"
-            eyebrow="Success Stories"
-            title="What Our Clients Say"
-            subtitle="Hear from the business owners who trust us with their growth and digital transformation."
-            className="mb-0 mx-auto"
-          />
-        </motion.div>
+        {/* Heading */}
+        <div className="reveal text-center mb-14">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-primary/8 border border-brand-primary/20 text-brand-primary text-xs font-bold uppercase tracking-widest mb-4">
+            <MessageSquare className="w-3.5 h-3.5" />
+            Client Success Stories
+          </div>
+          <h2 id="testimonials-heading" className="font-heading text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-3">
+            What Our <span className="text-gradient-blue">Clients Say</span>
+          </h2>
+          <p className="text-slate-500 text-base max-w-xl mx-auto">
+            Hear from business owners who trust us with their digital transformation and growth.
+          </p>
+        </div>
 
-        {/* Spotlight Slider Card container */}
-        <div className="max-w-4xl mx-auto relative px-4 sm:px-12">
+        {/* Slider */}
+        <div className="max-w-4xl mx-auto reveal">
           {isLoading ? (
-            <div className="bg-gray-50 border border-gray-100 rounded-3xl p-8 sm:p-12 animate-pulse h-72 flex items-center justify-center">
-              <div className="w-10 h-10 border-2 border-brand-blue border-t-transparent rounded-full animate-spin" />
+            <div className="glass-card-light rounded-3xl p-8 sm:p-12 h-72 flex items-center justify-center">
+              <div className="w-10 h-10 border-2 border-brand-primary border-t-transparent rounded-full animate-spin" />
             </div>
           ) : t ? (
             <div className="relative">
-              {/* Actual testimonial card */}
-              <Card className="bg-gray-50/50 backdrop-blur-sm border border-gray-100 rounded-3xl p-8 sm:p-14 shadow-lg shadow-gray-100/40 relative overflow-hidden">
-                {/* Large watermark quote icon */}
-                <Quote
-                  className="absolute right-8 top-8 w-24 h-24 text-brand-blue/4 pointer-events-none"
-                  strokeWidth={1}
-                />
+              {/* Main glassmorphic card */}
+              <div className="relative bg-white/70 backdrop-blur-xl border border-white/60 rounded-3xl p-8 sm:p-14 shadow-[0_24px_64px_rgba(0,102,255,0.08),0_4px_16px_rgba(0,0,0,0.04)] overflow-hidden transition-all duration-500">
 
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={currentIndex}
-                    initial={{ opacity: 0, y: 15 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -15 }}
-                    transition={{ duration: 0.4 }}
-                    className="flex flex-col items-center text-center"
-                  >
-                    {/* Stars */}
-                    <div className="flex gap-1.5 mb-6 text-amber-500">
-                      {Array.from({ length: t.rating ?? 5 }).map((_, i) => (
-                        <Star key={i} className="w-5 h-5 fill-current" />
-                      ))}
-                    </div>
+                {/* Big decorative quote */}
+                <Quote className="absolute right-8 top-6 w-24 h-24 text-brand-primary/5 pointer-events-none" strokeWidth={1} />
 
-                    {/* Testimonial Quote text */}
-                    <blockquote className="text-lg sm:text-xl md:text-2xl font-medium text-gray-800 leading-relaxed max-w-2xl italic mb-8">
-                      &ldquo;{t.text}&rdquo;
-                    </blockquote>
+                {/* Gradient top line */}
+                <div className="absolute top-0 left-0 right-0 h-[3px] rounded-t-3xl bg-gradient-to-r from-brand-primary via-brand-cyan to-brand-primary" />
 
-                    {/* Client info profile */}
-                    <div className="flex flex-col sm:flex-row items-center gap-3.5 border-t border-gray-200/60 pt-6 w-full max-w-md justify-center">
-                      {t.avatarUrl ? (
-                        <img
-                          src={t.avatarUrl}
-                          alt={t.name}
-                          className="w-12 h-12 rounded-full object-cover shrink-0 border-2 border-white shadow-md"
-                          loading="lazy"
-                        />
-                      ) : (
-                        <div
-                          className="w-12 h-12 rounded-full bg-brand-blue flex items-center
-                          justify-center font-heading text-sm font-bold text-white shrink-0 border-2 border-white shadow-md"
-                        >
-                          {initials}
-                        </div>
-                      )}
-                      <div className="text-center sm:text-left">
-                        <h3 className="font-heading text-base font-bold text-brand-blue leading-none mb-1">
-                          {t.name}
-                        </h3>
-                        <p className="text-xs text-text-muted">
-                          {t.role},{' '}
-                          <span className="font-semibold text-brand-red">{t.company}</span>
-                        </p>
+                <div
+                  key={currentIndex}
+                  className="flex flex-col items-center text-center"
+                  style={{ animation: 'heroFadeUp 0.45s ease forwards' }}
+                >
+                  {/* Stars */}
+                  <div className="flex gap-1.5 mb-6">
+                    {Array.from({ length: t.rating ?? 5 }).map((_, i) => (
+                      <Star key={i} className="w-5 h-5 fill-amber-400 text-amber-400" />
+                    ))}
+                  </div>
+
+                  {/* Quote Text */}
+                  <blockquote className="text-lg sm:text-xl md:text-2xl font-medium text-slate-700 leading-relaxed max-w-2xl italic mb-8">
+                    &ldquo;{t.text}&rdquo;
+                  </blockquote>
+
+                  {/* Client Profile */}
+                  <div className="flex flex-col sm:flex-row items-center gap-4 pt-6 border-t border-slate-100 w-full max-w-sm justify-center">
+                    {t.avatarUrl ? (
+                      <img
+                        src={t.avatarUrl}
+                        alt={t.name}
+                        className="w-14 h-14 rounded-full object-cover shrink-0 border-2 border-brand-primary/20 shadow-md"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div
+                        className={`w-14 h-14 rounded-full bg-gradient-to-br ${AVATAR_COLORS[currentIndex % AVATAR_COLORS.length]}
+                          flex items-center justify-center font-heading text-sm font-bold text-white shrink-0 shadow-lg`}
+                      >
+                        {getInitials(t.name)}
                       </div>
+                    )}
+                    <div className="text-center sm:text-left">
+                      <h3 className="font-heading text-base font-bold text-slate-800 leading-none mb-1">{t.name}</h3>
+                      <p className="text-xs text-slate-500">
+                        {t.role}{t.company && <span>, <span className="font-semibold text-brand-primary">{t.company}</span></span>}
+                      </p>
                     </div>
-                  </motion.div>
-                </AnimatePresence>
-              </Card>
+                  </div>
+                </div>
+              </div>
 
-              {/* Side Navigation Chevrons */}
+              {/* Navigation Chevrons */}
               {testimonials.length > 1 && (
                 <>
                   <button
                     onClick={handlePrev}
-                    className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 sm:-translate-x-6 w-11 h-11 rounded-full border border-gray-200 bg-white flex items-center justify-center text-gray-500 hover:border-brand-blue hover:text-brand-blue transition-all shadow-md active:scale-95 cursor-pointer z-10 hover:bg-gray-50"
+                    className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 sm:-translate-x-6
+                      w-11 h-11 rounded-full border border-slate-200 bg-white flex items-center justify-center
+                      text-slate-500 hover:border-brand-primary hover:text-brand-primary hover:bg-brand-ice
+                      transition-all shadow-md cursor-pointer z-10"
                     aria-label="Previous testimonial"
                   >
                     <ChevronLeft className="w-5 h-5" />
                   </button>
                   <button
                     onClick={handleNext}
-                    className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 sm:translate-x-6 w-11 h-11 rounded-full border border-gray-200 bg-white flex items-center justify-center text-gray-500 hover:border-brand-blue hover:text-brand-blue transition-all shadow-md active:scale-95 cursor-pointer z-10 hover:bg-gray-50"
+                    className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 sm:translate-x-6
+                      w-11 h-11 rounded-full border border-slate-200 bg-white flex items-center justify-center
+                      text-slate-500 hover:border-brand-primary hover:text-brand-primary hover:bg-brand-ice
+                      transition-all shadow-md cursor-pointer z-10"
                     aria-label="Next testimonial"
                   >
                     <ChevronRight className="w-5 h-5" />
@@ -182,15 +176,15 @@ export default function TestimonialsSection() {
             </div>
           ) : null}
 
-          {/* Dots Indicator */}
+          {/* Progress Dots */}
           {testimonials.length > 1 && (
             <div className="flex justify-center items-center gap-2 mt-8">
               {testimonials.map((_, idx) => (
                 <button
                   key={idx}
                   onClick={() => setCurrentIndex(idx)}
-                  className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                    currentIndex === idx ? 'w-8 bg-brand-blue' : 'w-2 bg-gray-200 hover:bg-gray-300'
+                  className={`h-2 rounded-full transition-all duration-400 cursor-pointer ${
+                    currentIndex === idx ? 'w-8 bg-brand-primary' : 'w-2 bg-slate-300 hover:bg-slate-400'
                   }`}
                   aria-label={`Go to testimonial ${idx + 1}`}
                 />

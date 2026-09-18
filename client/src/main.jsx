@@ -98,3 +98,36 @@ async function initializeAnalytics() {
 
 initializeAnalytics()
 
+// ── Global Scroll-Reveal Observer ──────────────────────────────
+// Watches for .reveal, .reveal-left, .reveal-right, .reveal-scale elements
+// and adds .visible class when they enter the viewport.
+function initScrollReveal() {
+  const selectors = '.reveal, .reveal-left, .reveal-right, .reveal-scale'
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible')
+          observer.unobserve(entry.target)
+        }
+      })
+    },
+    { threshold: 0.1, rootMargin: '0px 0px -48px 0px' }
+  )
+
+  const observe = () => {
+    document.querySelectorAll(selectors).forEach((el) => {
+      if (!el.classList.contains('visible')) observer.observe(el)
+    })
+  }
+
+  // Initial pass after first render
+  setTimeout(observe, 100)
+
+  // MutationObserver picks up dynamically added reveal elements (route changes)
+  const mutObs = new MutationObserver(observe)
+  mutObs.observe(document.body, { childList: true, subtree: true })
+}
+
+initScrollReveal()
+
