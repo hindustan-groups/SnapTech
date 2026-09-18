@@ -12,16 +12,27 @@
 
 /* ── Brand Design Tokens (Tailwind v4 @theme) ─────────────────── */
 @theme {
-  /* Colors */
-  --color-brand-red: #e31e24;
-  --color-brand-red-dark: #c01a1f;
-  --color-brand-red-light: #f04046;
-  --color-brand-blue: #1a3e8c;
-  --color-brand-blue-dark: #122d6b;
-  --color-brand-blue-light: #2550b0;
-  --color-bg-base: #fdfbf9;
-  --color-text-dark: #1a1a1a;
-  --color-text-muted: #6b7280;
+  /* Colors — Official Snaptech IT Palette */
+  --color-brand-primary: #0066ff;        /* Official Snaptech Electric Blue */
+  --color-brand-primary-dark: #0052cc;
+  --color-brand-primary-light: #3385ff;
+  --color-brand-navy: #001d4a;           /* Official Snaptech Deep Midnight Navy */
+  --color-brand-navy-dark: #001230;
+  --color-brand-navy-light: #002d6e;
+  --color-brand-cyan: #00d2ff;           /* Tech Accent / Cyber Glow */
+  --color-brand-ice: #f0f6ff;            /* Clean Tech Surface */
+  --color-dark-tech: #050c1a;            /* Deep Tech Contrast Surface */
+
+  /* Aliases for legacy component compatibility (converts all red accents to Snaptech Electric Blue) */
+  --color-brand-red: #0066ff;
+  --color-brand-red-dark: #0052cc;
+  --color-brand-red-light: #3385ff;
+  --color-brand-blue: #001d4a;
+  --color-brand-blue-dark: #001230;
+  --color-brand-blue-light: #002d6e;
+  --color-bg-base: #f8fafc;
+  --color-text-dark: #0f172a;
+  --color-text-muted: #64748b;
 
   /* Typography */
   --font-heading: 'Poppins', sans-serif;
@@ -35,12 +46,13 @@
   --spacing-120: 30rem;
 
   /* Border radius */
-  --radius-btn: 0.375rem; /* rounded-md — corporate, not playful */
+  --radius-btn: 0.5rem;
 
   /* Shadows */
-  --shadow-card: 0 2px 8px 0 rgba(26, 62, 140, 0.08);
-  --shadow-card-hover: 0 8px 24px 0 rgba(26, 62, 140, 0.14);
-  --shadow-navbar: 0 2px 12px 0 rgba(26, 26, 26, 0.08);
+  --shadow-card: 0 4px 20px -2px rgba(0, 102, 255, 0.06), 0 2px 6px -1px rgba(0, 29, 74, 0.04);
+  --shadow-card-hover: 0 12px 30px -4px rgba(0, 102, 255, 0.12), 0 4px 12px -2px rgba(0, 29, 74, 0.08);
+  --shadow-navbar: 0 4px 20px -2px rgba(0, 29, 74, 0.06);
+  --shadow-tech-glow: 0 0 25px -5px rgba(0, 102, 255, 0.35);
 }
 
 /* ── Base styles ──────────────────────────────────────────────── */
@@ -297,4 +309,61 @@ select {
     animation: none;
   }
 }
+
+/* ── Snaptech IT Enterprise Design System Utilities ─────────────── */
+.bg-tech-grid {
+  background-image: radial-gradient(rgba(0, 102, 255, 0.12) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.bg-tech-grid-dark {
+  background-image: radial-gradient(rgba(0, 210, 255, 0.15) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.bg-tech-glow {
+  background: radial-gradient(circle at 50% 0%, rgba(0, 102, 255, 0.15) 0%, rgba(0, 210, 255, 0.05) 50%, transparent 80%);
+}
+
+.text-gradient-tech {
+  background: linear-gradient(135deg, #001d4a 0%, #0066ff 60%, #00d2ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-blue {
+  background: linear-gradient(135deg, #0066ff 0%, #00d2ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Opposing Tech Focus Brackets (Snaptech geometric signature) */
+.tech-bracket-container {
+  position: relative;
+}
+.tech-bracket-container::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  width: 14px;
+  height: 14px;
+  border-top: 2.5px solid #0066ff;
+  border-left: 2.5px solid #0066ff;
+  pointer-events: none;
+}
+.tech-bracket-container::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  width: 14px;
+  height: 14px;
+  border-bottom: 2.5px solid #0066ff;
+  border-right: 2.5px solid #0066ff;
+  pointer-events: none;
+}
+
 

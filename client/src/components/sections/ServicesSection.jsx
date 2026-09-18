@@ -6,7 +6,7 @@
 import { createElement } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
-import { Container, SectionHeading, Card, Badge } from '@/components/ui'
+import { Container, SectionHeading, Card } from '@/components/ui'
 import { ServiceCardSkeleton } from '@/components/ui/Skeleton'
 import { useServices } from '@/hooks/useServices'
 import { getServiceIcon } from '@/utils/serviceIcons'
@@ -138,17 +138,17 @@ export default function ServicesSection() {
   const services = data?.data?.length ? data.data : isLoading ? [] : PLACEHOLDER_SERVICES
 
   return (
-    <section id="services" className="py-20 bg-gradient-to-b from-white via-slate-50/50 to-white" aria-labelledby="services-heading">
+    <section id="services" className="py-24 bg-gradient-to-b from-white via-brand-ice/30 to-white relative" aria-labelledby="services-heading">
       <Container>
         <SectionHeading
           id="services-heading"
-          eyebrow="What We Do"
-          title="Our IT Services"
-          subtitle="End-to-end technology solutions designed to help your business grow, compete, and thrive in the digital world."
-          className="mb-14"
+          eyebrow="Enterprise IT Solutions"
+          title="Engineered for Scalability, Security & Speed"
+          subtitle="Snaptech provides full-cycle technology engineering — from responsive web apps and cloud architecture to native mobile systems and digital marketing growth engines."
+          className="mb-16 text-center max-w-3xl mx-auto"
         />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {isLoading && services.length === 0
             ? Array.from({ length: 6 }).map((_, i) => (
                 <div key={i} className={i >= 3 ? 'hidden sm:block' : 'block'}>
@@ -164,16 +164,24 @@ export default function ServicesSection() {
 
         {/* CTA below grid */}
         {!isLoading && services.length > 0 && (
-          <div className="text-center mt-12">
+          <div className="text-center mt-14 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               to="/services"
+              className="inline-flex items-center gap-2 text-sm font-bold
+                bg-brand-primary text-white px-7 py-3.5 rounded-xl shadow-lg shadow-brand-primary/25
+                hover:bg-brand-primary-dark transition-all duration-200"
+            >
+              Explore All IT Capabilities
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link
+              to="/pricing"
               className="inline-flex items-center gap-2 text-sm font-semibold
-                text-brand-blue border border-brand-blue/30 px-6 py-2.5 rounded-md
-                hover:bg-brand-blue hover:text-white hover:border-brand-blue
+                text-brand-navy border border-slate-300 px-6 py-3.5 rounded-xl
+                hover:border-brand-primary hover:text-brand-primary hover:bg-brand-ice/50
                 transition-all duration-200"
             >
-              View All Services
-              <ArrowRight className="w-4 h-4" />
+              Estimate Your Project Cost
             </Link>
           </div>
         )}

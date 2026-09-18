@@ -7,10 +7,13 @@
 import { Helmet } from 'react-helmet-async'
 
 export const SITE = {
-  name: 'Hindustan Projects',
-  url: 'https://www.itservices.hindustanprojects.in',
+  name: 'Snaptech',
+  alternateName: 'Snaptech — Technology Division of Hindustan Projects',
+  parentName: 'Hindustan Projects',
+  parentUrl: 'https://www.hindustanprojects.in',
+  url: 'https://www.snaptech.hindustanprojects.in',
   description:
-    'Hindustan Projects is a leading IT services company in Bhilwara, Rajasthan offering custom web development, digital marketing, IT consulting, mobile app development, and SEO services.',
+    'Looking for IT Solutions? Search. Discover. Connect with Snaptech — the enterprise technology and digital innovation wing of Hindustan Projects Group. Custom Web Applications, Mobile Apps, Cloud & AI Automation.',
   phone: '+91 7597000601',
   email: 'info@hindustanprojects.com',
   address: {
@@ -21,17 +24,17 @@ export const SITE = {
     country: 'IN',
   },
   geo: { lat: 25.3478, lng: 74.6367 },
-  logo: 'https://www.itservices.hindustanprojects.in/og-image.png',
-  ogImage: 'https://www.itservices.hindustanprojects.in/og-image.png',
+  logo: 'https://www.snaptech.hindustanprojects.in/snaptech-logo.png',
+  ogImage: 'https://www.snaptech.hindustanprojects.in/snaptech-social-banner.jpg',
   twitterHandle: '@hindustanprojects',
   founded: '2019',
   keywords:
-    'IT services Bhilwara, web development Rajasthan, digital marketing Bhilwara, IT company Rajasthan, custom software development, SEO services India',
+    'Snaptech, Hindustan Projects IT, IT solutions Bhilwara, web development Rajasthan, mobile app development India, cloud DevOps, AI automation, enterprise software, custom CRM',
   sameAs: [
-    'https://www.linkedin.com/company/hindustan-projects',
-    'https://www.facebook.com/hindustanprojects',
-    'https://twitter.com/hindustanprojects',
     'https://www.instagram.com/hindustanprojects',
+    'https://www.facebook.com/hindustanprojects',
+    'https://pinterest.com/hindustanprojects',
+    'https://www.linkedin.com/company/hindustan-projects',
   ],
 }
 
@@ -43,10 +46,16 @@ export function organizationSchema() {
     '@type': 'Organization',
     '@id': `${SITE.url}/#organization`,
     name: SITE.name,
+    alternateName: SITE.alternateName,
     url: SITE.url,
     logo: {
       '@type': 'ImageObject',
       url: SITE.logo,
+    },
+    parentOrganization: {
+      '@type': 'Organization',
+      name: SITE.parentName,
+      url: SITE.parentUrl,
     },
     description: SITE.description,
     foundingDate: SITE.founded,
@@ -100,12 +109,12 @@ export function localBusinessSchema() {
     },
     hasMap: `https://www.google.com/maps?q=${SITE.geo.lat},${SITE.geo.lng}`,
     knowsAbout: [
-      'Web Development',
-      'Digital Marketing',
-      'IT Consulting',
-      'Mobile App Development',
-      'SEO',
-      'Branding',
+      'Custom Web Applications',
+      'Native Mobile Apps (iOS & Android)',
+      'Enterprise Cloud & DevOps',
+      'AI Agents & Automation',
+      'Custom ERP & CRM Platforms',
+      'Technical SEO & Digital Growth',
     ],
     areaServed: [
       { '@type': 'City', name: 'Bhilwara' },
@@ -123,8 +132,17 @@ export function websiteSchema() {
     '@id': `${SITE.url}/#website`,
     url: SITE.url,
     name: SITE.name,
+    alternateName: SITE.alternateName,
     description: SITE.description,
     inLanguage: 'en-IN',
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${SITE.url}/services?q={search_term_string}`,
+      },
+      'query-input': 'required name=search_term_string',
+    },
   }
 }
 

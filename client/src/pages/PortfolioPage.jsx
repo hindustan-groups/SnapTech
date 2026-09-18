@@ -23,37 +23,35 @@ export default function PortfolioPage() {
   return (
     <>
       <SEO
-        title={`Portfolio — ${cfg.stat_projects || '50'}+ Projects Delivered`}
-        description="Explore Hindustan Projects portfolio — 50+ projects delivered across web development, digital marketing, mobile apps, branding and software for clients in Bhilwara and across India."
+        title={`Portfolio — ${cfg.stat_projects || '50'}+ Projects Delivered | Snaptech`}
+        description="Explore Snaptech (Hindustan Projects) portfolio — enterprise projects delivered across web applications, cloud architecture, native mobile apps, and custom software."
         path="/portfolio"
-        keywords="web development portfolio Bhilwara, IT projects Rajasthan, digital marketing case studies, mobile app development portfolio India"
+        keywords="Snaptech portfolio, web development portfolio, IT projects, software engineering case studies, Hindustan Projects IT"
       />
       {/* ── Hero ─────────────────────────────────────────────────── */}
       <section className="relative pt-24 sm:pt-32 lg:pt-36 pb-0 overflow-hidden bg-[#050e20] flex flex-col justify-between">
         {/* Grid bg */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff06_1px,transparent_1px),linear-gradient(to_bottom,#ffffff06_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
         {/* Blobs */}
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-blue/20 rounded-full blur-3xl -translate-y-1/2 pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-brand-red/15 rounded-full blur-3xl translate-y-1/2 pointer-events-none" />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-primary/20 rounded-full blur-3xl -translate-y-1/2 pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-brand-cyan/15 rounded-full blur-3xl translate-y-1/2 pointer-events-none" />
 
         <Container className="relative h-full flex flex-col justify-end">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-end">
             {/* Left - text content */}
             <div className="pb-16 lg:pb-24">
-              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand-red/30 bg-brand-red/10 text-brand-red text-xs font-semibold uppercase tracking-widest mb-6">
-                <span className="w-1.5 h-1.5 rounded-full bg-brand-red animate-pulse" />
-                Case Studies
+              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand-primary/30 bg-brand-primary/10 text-brand-primary text-xs font-semibold uppercase tracking-widest mb-6">
+                <span className="w-1.5 h-1.5 rounded-full bg-brand-cyan animate-pulse" />
+                Case Studies &amp; Engineering
               </span>
               <h1 className="font-heading text-4xl sm:text-5xl lg:text-[3.5rem] font-bold !text-white leading-tight mb-5">
                 Our Work,{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-red to-orange-400">
-                  Our Results.
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-brand-cyan">
+                  Our Engineering.
                 </span>
               </h1>
               <p className="text-white/60 text-base sm:text-lg leading-relaxed mb-8">
-                Real projects. Real impact. Explore how we've helped {cfg.stat_clients || '40'}+
-                businesses across Rajasthan and India grow through technology, branding, and digital
-                marketing.
+                Enterprise software. Scalable architecture. Real business impact. Explore how Snaptech — the technology division of Hindustan Projects — powers digital infrastructure, custom cloud software, and mobile ecosystems.
               </p>
               <div className="flex flex-wrap gap-4 mb-8">
                 <Button variant="primary" size="lg" as={Link} to="/contact">

@@ -1,209 +1,233 @@
 /**
- * HeroSection — Professional corporate hero.
- * Deep blue gradient background with geometric accents.
- * Animations: Pure CSS (no framer-motion) — keeps framer-motion out of the initial JS bundle.
+ * HeroSection — Official Snaptech Enterprise IT Hero.
+ * Matches campaign artwork: "Looking for IT Solutions? Search. Discover. Connect with Snaptech."
+ * Deep Navy & Electric Blue tech background with subtle blueprint grid and cyber glow accents.
  */
-import { Link } from 'react-router-dom'
-import { ArrowRight, ChevronDown, CheckCircle2 } from 'lucide-react'
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { ArrowRight, Search, ShieldCheck, CheckCircle2, ChevronDown } from 'lucide-react'
 import { Button, Container } from '@/components/ui'
 import { useSiteSettings } from '@/hooks/useContent'
-import professionalHero from '@/assets/professional_hero.webp'
+import snaptechSocialBanner from '@/assets/snaptech-social-banner.jpg'
 
-const HEADLINE_LINE1 = ['Building', 'Digital', 'Solutions']
-const HEADLINE_LINE2 = ['That', 'Drive', 'Business', 'Growth']
+const TECH_SEARCH_QUERIES = [
+  'Custom Web Applications',
+  'Mobile App Development',
+  'Enterprise ERP & CRM',
+  'Cloud Migration & AWS',
+  'AI & Workflow Automation',
+  'High-Speed SEO Optimization',
+]
 
-const TRUST_POINTS = [
-  'Custom websites tailored to your business',
-  'Result-driven digital marketing campaigns',
-  'Dedicated support — always reachable',
+const IT_CAPABILITIES = [
+  'Enterprise Cloud & Scalable Web Architecture',
+  'iOS & Android Native & Cross-Platform Apps',
+  'Full-Cycle Software Engineering & DevOps',
+  'ISO 9001 Grade Engineering & 99.9% Uptime SLA',
 ]
 
 export default function HeroSection() {
+  const [searchQuery, setSearchQuery] = useState('')
+  const navigate = useNavigate()
   const { data: settingsData } = useSiteSettings()
   const cfg = settingsData?.data || {}
 
+  const handleSearchSubmit = (e) => {
+    e.preventDefault()
+    if (searchQuery.trim()) {
+      navigate(`/services?q=${encodeURIComponent(searchQuery.trim())}`)
+    } else {
+      navigate('/services')
+    }
+  }
+
   const stats = [
-    { value: `${cfg.stat_projects || '50'}+`, label: 'Projects Delivered' },
-    { value: `${cfg.stat_clients || '40'}+`, label: 'Happy Clients' },
-    { value: `${cfg.stat_experience || '5'}+`, label: 'Years Experience' },
-    { value: `${cfg.stat_cities || '3'}+`, label: 'Cities Served' },
+    { value: `${cfg.stat_projects || '50'}+`, label: 'Enterprise Deployments' },
+    { value: `${cfg.stat_clients || '40'}+`, label: 'Active Corporate Clients' },
+    { value: '99.9%', label: 'Uptime & Cloud SLA' },
+    { value: 'Pan-India & Global', label: 'Client Delivery Reach' },
   ]
 
   return (
     <section
       id="home"
-      className="relative flex flex-col overflow-hidden isolate"
-      style={{ minHeight: '100vh' }}
-      aria-label="Hero"
+      className="relative flex flex-col overflow-hidden isolate min-h-[100vh] bg-[#020714] text-white"
+      aria-label="Snaptech IT Solutions Hero"
     >
-      {/* ── Background ── */}
-      <div
-        className="absolute inset-0 -z-10"
-        style={{
-          background: 'linear-gradient(135deg, #071530 0%, #0d2460 40%, #1A3E8C 100%)',
-        }}
-      >
-        {/* Subtle dot grid */}
+      {/* ── Background: Tech Blueprint & Cyber Glow ── */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#020714] via-[#051129] to-[#020714]">
+        {/* Subtle Tech Dot Grid */}
         <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px)',
-            backgroundSize: '32px 32px',
-          }}
+          className="absolute inset-0 opacity-20 bg-tech-grid"
           aria-hidden="true"
         />
-        {/* Red glow — right side */}
+
+        {/* Electric Blue Radial Glows */}
         <div
-          className="absolute right-0 top-0 w-1/2 h-full"
-          style={{
-            background:
-              'radial-gradient(ellipse 60% 70% at 80% 40%, rgba(227,30,36,0.18) 0%, transparent 65%)',
-          }}
+          className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] rounded-full bg-brand-primary/15 blur-[120px] pointer-events-none"
           aria-hidden="true"
         />
-        {/* Bottom fade */}
         <div
-          className="absolute bottom-0 inset-x-0 h-48"
-          style={{
-            background: 'linear-gradient(to bottom, transparent, rgba(7,21,48,0.6))',
-          }}
+          className="absolute top-1/3 right-0 w-[500px] h-[500px] rounded-full bg-brand-cyan/10 blur-[130px] pointer-events-none"
           aria-hidden="true"
         />
       </div>
 
-      {/* ── Main content — pushed below fixed navbar ── */}
-      <div className="flex-1 flex items-center pt-28 lg:pt-28 pb-12 lg:pb-8">
+      {/* ── Main Hero Content ── */}
+      <div className="flex-1 flex items-center pt-28 sm:pt-32 lg:pt-36 pb-14 lg:pb-16">
         <Container>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
-            {/* ── Left: text ── */}
-            <div className="lg:col-span-7">
-              {/* Eyebrow */}
-              <div className="hero-fade-up" style={{ animationDelay: '0s' }}>
-                <span
-                  className="inline-flex items-center gap-2 px-4 py-1.5 mb-3
-                  rounded-full border border-white/20 bg-white/8
-                  text-white/85 text-xs font-semibold tracking-widest uppercase"
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-brand-red animate-pulse" />
-                  IT Services — Bhilwara, Rajasthan
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+            {/* ── Left Column: Value Proposition & Interactive Domain Bar ── */}
+            <div className="lg:col-span-7 space-y-6">
+              {/* Parent Group Eyebrow Badge */}
+              <div className="flex flex-wrap items-center gap-2 hero-fade-up" style={{ animationDelay: '0s' }}>
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-brand-primary/40 bg-brand-primary/10 text-brand-cyan text-xs font-semibold tracking-wider uppercase">
+                  <span className="w-2 h-2 rounded-full bg-brand-primary animate-ping" />
+                  <span>A Hindustan Projects Enterprise</span>
+                </div>
+                <span className="text-xs text-slate-400 font-mono hidden sm:inline">
+                  | Engineering & IT Division
                 </span>
               </div>
 
-              {/* Headline — word by word staggered */}
-              <h1 className="font-heading font-bold leading-[1.1] mb-3 text-white">
-                {/* Line 1 */}
-                <div className="flex flex-wrap gap-x-3 mb-1">
-                  {HEADLINE_LINE1.map((word, i) => (
-                    <span
-                      key={word}
-                      className="inline-block text-3xl sm:text-4xl lg:text-5xl xl:text-6xl text-white hero-fade-up"
-                      style={{ animationDelay: `${0.25 + i * 0.08}s` }}
+              {/* Main Headline */}
+              <div className="space-y-2 hero-fade-up" style={{ animationDelay: '0.15s' }}>
+                <h1 className="font-heading font-extrabold text-3xl sm:text-4xl lg:text-5xl xl:text-6xl tracking-tight leading-[1.15]">
+                  Looking for{' '}
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary-light via-brand-cyan to-white">
+                    IT Solutions?
+                  </span>
+                </h1>
+                <p className="text-xl sm:text-2xl text-slate-200 font-medium tracking-tight">
+                  Search. Discover. Connect with <span className="text-brand-primary-light font-bold">Snaptech</span>.
+                </p>
+              </div>
+
+              {/* ── Interactive Domain Search Box (from campaign art) ── */}
+              <div className="hero-fade-up max-w-xl" style={{ animationDelay: '0.3s' }}>
+                <form
+                  onSubmit={handleSearchSubmit}
+                  className="relative flex items-center bg-white/10 hover:bg-white/15 focus-within:bg-white/20 backdrop-blur-md rounded-2xl border border-brand-primary/40 focus-within:border-brand-primary focus-within:ring-2 focus-within:ring-brand-primary/30 p-2 shadow-xl shadow-black/40 transition-all"
+                >
+                  <div className="pl-3 pr-2 text-brand-cyan">
+                    <Search className="w-5 h-5" />
+                  </div>
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="www.snaptech.hindustanprojects.in"
+                    className="w-full bg-transparent text-white placeholder:text-slate-400 font-mono text-xs sm:text-sm focus:outline-none"
+                  />
+                  <button
+                    type="submit"
+                    className="px-4 py-2 rounded-xl bg-brand-primary hover:bg-brand-primary-dark text-white text-xs font-bold uppercase tracking-wider transition-colors shrink-0 shadow-md flex items-center gap-1.5"
+                  >
+                    <span>Search</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </form>
+
+                {/* Quick suggestion tags */}
+                <div className="flex flex-wrap items-center gap-1.5 mt-2.5">
+                  <span className="text-[11px] text-slate-400 font-mono">Popular:</span>
+                  {TECH_SEARCH_QUERIES.slice(0, 3).map((query) => (
+                    <button
+                      key={query}
+                      type="button"
+                      onClick={() => setSearchQuery(query)}
+                      className="text-[11px] px-2.5 py-0.5 rounded-md bg-white/5 hover:bg-brand-primary/20 text-slate-300 hover:text-brand-cyan border border-white/10 transition-colors"
                     >
-                      {word}
-                    </span>
+                      {query}
+                    </button>
                   ))}
                 </div>
-                {/* Line 2 — "Drive Business Growth" in light red */}
-                <div className="flex flex-wrap gap-x-3">
-                  {HEADLINE_LINE2.map((word, i) => (
-                    <span
-                      key={word}
-                      className={`inline-block text-3xl sm:text-4xl lg:text-5xl xl:text-6xl hero-fade-up ${
-                        i >= 1 ? 'text-brand-red-light font-extrabold' : 'text-white'
-                      }`}
-                      style={{ animationDelay: `${0.25 + (HEADLINE_LINE1.length + i) * 0.08}s` }}
-                    >
-                      {word}
-                    </span>
-                  ))}
-                </div>
-              </h1>
+              </div>
 
-              {/* Subtext */}
-              <p
-                className="text-white/80 text-sm sm:text-base leading-relaxed mb-4 max-w-lg hero-fade-up"
-                style={{ animationDelay: '0.85s' }}
-              >
-                We design custom websites, run result-driven digital marketing, and provide
-                strategic IT consulting — helping businesses across India grow online.
-              </p>
-
-              {/* Trust points */}
-              <ul
-                className="space-y-2 mb-4 hero-fade-up"
-                style={{ animationDelay: '0.95s' }}
-              >
-                {TRUST_POINTS.map((pt) => (
-                  <li key={pt} className="flex items-center gap-2.5 text-sm text-white/85">
-                    <CheckCircle2 className="w-4 h-4 text-brand-red-light shrink-0" />
-                    {pt}
+              {/* IT Capabilities Bullet List */}
+              <ul className="space-y-2 pt-2 hero-fade-up" style={{ animationDelay: '0.45s' }}>
+                {IT_CAPABILITIES.map((cap) => (
+                  <li key={cap} className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-300">
+                    <CheckCircle2 className="w-4 h-4 text-brand-cyan shrink-0" />
+                    <span>{cap}</span>
                   </li>
                 ))}
               </ul>
 
-              {/* CTAs */}
-              <div
-                className="flex flex-wrap gap-6 hero-fade-up"
-                style={{ animationDelay: '1.1s' }}
-              >
+              {/* High-Converting Action Buttons */}
+              <div className="flex flex-wrap items-center gap-4 pt-2 hero-fade-up" style={{ animationDelay: '0.6s' }}>
                 <Button
                   variant="primary"
                   size="lg"
                   as={Link}
-                  to="/contact"
+                  to="/services"
+                  className="bg-brand-primary hover:bg-brand-primary-dark text-white font-bold shadow-lg shadow-brand-primary/30 px-6"
                   rightIcon={<ArrowRight className="w-4 h-4" />}
                 >
-                  Get a Free Quote
+                  Explore IT Services
                 </Button>
+
                 <Button
                   size="lg"
                   as={Link}
-                  to="/portfolio"
-                  className="border border-white/30 bg-white/8 text-white
-                    hover:bg-white/15 hover:border-white/50 transition-all duration-200
-                    rounded-md font-medium inline-flex items-center justify-center"
+                  to="/contact"
+                  className="bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-sm font-semibold"
                 >
-                  View Our Work
+                  Schedule Consultation
                 </Button>
+
+                <a
+                  href="https://wa.me/917597000601?text=Hello%20Snaptech%2C%20I%20am%20interested%20in%20IT%20Solutions."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-4 py-3 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-400 text-sm font-semibold transition-colors"
+                >
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  WhatsApp
+                </a>
               </div>
             </div>
 
-            {/* ── Right: Visual image container ── */}
-            <div
-              className="flex justify-center items-end relative self-end lg:col-span-5 h-full pt-8 lg:pt-2 w-full max-w-md mx-auto lg:max-w-none hero-fade-up"
-              style={{ animationDelay: '0.6s' }}
-            >
-              <div className="relative w-full max-w-xs sm:max-w-md lg:max-w-lg self-end mt-auto px-4 sm:px-0">
-                {/* Glowing background aura behind the arch portal */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4/5 h-4/5 rounded-full bg-brand-blue-light/10 blur-3xl -z-10" />
+            {/* ── Right Column: Official Artwork & Interactive Tech Studio ── */}
+            <div className="lg:col-span-5 hero-fade-up" style={{ animationDelay: '0.35s' }}>
+              <div className="relative mx-auto max-w-md lg:max-w-none">
+                {/* Tech Bracket Container Framing */}
+                <div className="relative p-2 rounded-2xl bg-gradient-to-br from-brand-primary/30 via-slate-800/40 to-brand-cyan/20 border border-brand-primary/40 shadow-2xl backdrop-blur-md">
+                  {/* Opposing Focus Brackets Graphic */}
+                  <div className="absolute -top-2 -left-2 w-6 h-6 border-t-3 border-l-3 border-brand-primary pointer-events-none" />
+                  <div className="absolute -bottom-2 -right-2 w-6 h-6 border-b-3 border-r-3 border-brand-primary pointer-events-none" />
 
-                {/* Person image - rendered as a premium arch portal */}
-                <div className="relative z-10 overflow-hidden rounded-t-full border-t border-x border-white/20 shadow-2xl">
-                  <img
-                    src={cfg.hero_image_url || professionalHero}
-                    alt="Hindustan Projects Corporate Professional"
-                    className="w-full h-auto max-h-[320px] sm:max-h-[460px] lg:max-h-[485px] object-cover block"
-                    style={{ display: 'block', marginBottom: '-1px' }}
-                    fetchPriority="high"
-                    decoding="async"
-                  />
-                </div>
+                  {/* Main Visual Poster Image */}
+                  <div className="rounded-xl overflow-hidden bg-white/95 shadow-inner">
+                    <img
+                      src={snaptechSocialBanner}
+                      alt="Snaptech IT Solutions - Hindustan Projects Group"
+                      className="w-full h-auto object-cover block transition-transform duration-500 hover:scale-[1.02]"
+                    />
+                  </div>
 
-                {/* Floating Badge 1: 5+ Years Experience */}
-                <div className="absolute z-20 top-8 sm:top-12 -right-2 sm:-right-6 bg-white/95 backdrop-blur-md rounded-xl px-3 py-2 sm:px-4 sm:py-2.5 shadow-xl border border-black/5 transition-transform duration-300 hover:scale-105">
-                  <div className="flex items-center gap-1.5 sm:gap-2">
-                    <span className="text-brand-red-light text-base sm:text-lg font-bold">5+</span>
+                  {/* Floating Trust Card: Parent Group Backing */}
+                  <div className="absolute -bottom-6 -left-4 sm:-left-6 bg-[#030d22]/95 backdrop-blur-xl border border-brand-primary/40 rounded-xl p-3 sm:p-3.5 shadow-2xl flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-brand-primary/20 text-brand-cyan">
+                      <ShieldCheck className="w-5 h-5" />
+                    </div>
                     <div>
-                      <p className="font-heading text-[10px] sm:text-xs font-bold text-brand-blue leading-none">Years of</p>
-                      <p className="text-[8px] sm:text-[10px] text-text-muted mt-0.5 leading-none">Excellence</p>
+                      <p className="text-[10px] uppercase tracking-wider text-slate-400 font-mono">
+                        Enterprise Guarantee
+                      </p>
+                      <p className="text-xs font-bold text-white">
+                        Backed by Hindustan Projects Group
+                      </p>
                     </div>
                   </div>
-                </div>
 
-                {/* Floating Badge 2: 50+ Projects Delivered */}
-                <div className="absolute z-20 bottom-8 sm:bottom-12 -left-2 sm:-left-6 bg-[#0a1835] rounded-xl px-3 py-2 sm:px-4 sm:py-2.5 shadow-xl transition-transform duration-300 hover:scale-105 border border-white/10">
-                  <p className="font-heading text-[10px] sm:text-xs font-bold text-white leading-none">50+ Projects</p>
-                  <p className="text-[8px] sm:text-[10px] text-white mt-0.5 leading-none">Delivered Successfully</p>
+                  {/* Floating Tech Telemetry Chip: 99.9% Uptime */}
+                  <div className="absolute -top-4 -right-2 sm:-right-4 bg-white/95 backdrop-blur-md rounded-xl px-3 py-1.5 shadow-xl border border-black/10 flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="text-xs font-bold text-[#001d4a] font-mono">
+                      Cloud SLA 99.9%
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -211,38 +235,28 @@ export default function HeroSection() {
         </Container>
       </div>
 
-      {/* ── Stats strip ── */}
-      <div
-        className="border-t border-white/10 bg-white/5 backdrop-blur-sm hero-fade-in"
-        style={{ animationDelay: '1.4s' }}
-      >
+      {/* ── Bottom Enterprise Stats Strip ── */}
+      <div className="border-t border-white/10 bg-white/[0.03] backdrop-blur-md hero-fade-in" style={{ animationDelay: '0.8s' }}>
         <Container>
-          <div className="grid grid-cols-2 md:grid-cols-4">
-            {stats.map((s, i) => (
-              <div
-                key={s.label}
-                className={`py-3.5 px-6 text-center ${
-                  i < stats.length - 1 ? 'border-r border-white/10' : ''
-                }`}
-              >
-                <p className="font-heading text-2xl font-bold text-white">{s.value}</p>
-                <p className="text-white/70 text-xs mt-1">{s.label}</p>
+          <div className="grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-white/10">
+            {stats.map((s) => (
+              <div key={s.label} className="py-4 px-4 sm:px-6 text-center">
+                <p className="font-heading text-xl sm:text-2xl lg:text-3xl font-bold text-white font-mono">
+                  {s.value}
+                </p>
+                <p className="text-slate-400 text-[11px] sm:text-xs mt-0.5 tracking-wide">
+                  {s.label}
+                </p>
               </div>
             ))}
           </div>
         </Container>
       </div>
 
-      {/* Scroll hint */}
-      <div
-        className="absolute bottom-20 left-1/2 -translate-x-1/2 hidden lg:flex flex-col items-center gap-1 z-20 hero-fade-in"
-        style={{ animationDelay: '2s' }}
-        aria-hidden="true"
-      >
-        <span className="text-white/30 text-[10px] tracking-widest uppercase">Scroll</span>
-        <div className="hero-bounce">
-          <ChevronDown className="w-4 h-4 text-white/30" />
-        </div>
+      {/* Scroll indicator */}
+      <div className="py-2 flex justify-center items-center text-slate-500 text-[10px] uppercase tracking-widest gap-1" aria-hidden="true">
+        <span>Scroll to Explore</span>
+        <ChevronDown className="w-3.5 h-3.5 animate-bounce" />
       </div>
     </section>
   )

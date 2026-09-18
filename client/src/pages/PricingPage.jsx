@@ -82,8 +82,8 @@ const WEBSITE_PACKAGES = [
     icon: Zap,
     badge: 'Most Popular',
     isPopular: true,
-    headerGradient: 'from-brand-red via-rose-600 to-brand-red-dark',
-    iconBg: 'bg-red-50 text-brand-red border-red-200',
+    headerGradient: 'from-brand-primary via-blue-600 to-brand-navy',
+    iconBg: 'bg-blue-50 text-brand-primary border-blue-200',
     price: '₹14,999',
     priceSubtitle: 'Starting From',
     delivery: '7–12 Days',
@@ -190,8 +190,8 @@ const APP_PACKAGES = [
     price: '₹49,999',
     badge: 'Most Demanded',
     isPopular: true,
-    headerGradient: 'from-brand-red via-rose-600 to-brand-red-dark',
-    iconBg: 'bg-red-50 text-brand-red border-red-200',
+    headerGradient: 'from-brand-primary via-blue-600 to-brand-navy',
+    iconBg: 'bg-blue-50 text-brand-primary border-blue-200',
     timeline: '25–30 Days',
     desc: 'Feature-packed mobile application with user authentication, payment gateway & admin portal.',
     techStack: ['React Native / Flutter', 'Node.js Backend', 'Payment Gateway'],
@@ -290,8 +290,8 @@ const MARKETING_SERVICES = [
     period: '/ month',
     badge: 'MOST POPULAR',
     isPopular: true,
-    headerGradient: 'from-brand-red via-rose-600 to-brand-red-dark',
-    iconBg: 'bg-red-50 text-brand-red border-red-200',
+    headerGradient: 'from-brand-primary via-blue-600 to-brand-navy',
+    iconBg: 'bg-blue-50 text-brand-primary border-blue-200',
     desc: 'Most popular growth retainer for growing companies wanting high-frequency reels, advanced SEO & ad leads.',
     groups: [
       {
@@ -508,7 +508,7 @@ export default function PricingPage() {
         title="Pricing & Packages"
         description="Affordable IT Solutions for Startups, Local Businesses and Enterprises. Transparent pricing for Web Development, Software, Mobile Apps, Branding and Digital Marketing."
         path="/pricing"
-        keywords="IT services pricing, website packages Bhilwara, software development cost, mobile app pricing India, SEO package cost, Hindustan Projects pricing"
+        keywords="Snaptech pricing, IT services pricing, website packages, software development cost, mobile app pricing India, enterprise ERP pricing, Hindustan Projects IT"
         schemas={[
           breadcrumbSchema([
             { name: 'Home', path: '/' },
@@ -519,9 +519,9 @@ export default function PricingPage() {
       />
 
       {/* ── HERO SECTION ──────────────────────────────────────────────── */}
-      <section className="relative pt-28 pb-16 lg:pt-36 lg:pb-24 overflow-hidden bg-gradient-to-b from-brand-blue/10 via-brand-red/5 to-bg-base border-b border-gray-100">
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-brand-blue/15 rounded-full filter blur-3xl pointer-events-none -z-10 animate-pulse" />
-        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-brand-red/15 rounded-full filter blur-3xl pointer-events-none -z-10" />
+      <section className="relative pt-28 pb-16 lg:pt-36 lg:pb-24 overflow-hidden bg-gradient-to-b from-brand-primary/10 via-brand-navy/5 to-bg-base border-b border-gray-100">
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-brand-primary/15 rounded-full filter blur-3xl pointer-events-none -z-10 animate-pulse" />
+        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-brand-cyan/15 rounded-full filter blur-3xl pointer-events-none -z-10" />
 
         <Container>
           <div className="max-w-4xl mx-auto text-center px-2">
@@ -530,10 +530,10 @@ export default function PricingPage() {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 border border-brand-blue/20 shadow-sm text-brand-blue text-xs font-extrabold uppercase tracking-wider mb-6"
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 border border-brand-primary/20 shadow-sm text-brand-primary text-xs font-extrabold uppercase tracking-wider mb-6"
             >
-              <Sparkles className="w-4 h-4 text-brand-red animate-spin" style={{ animationDuration: '4s' }} />
-              <span>Transparent &amp; Affordable IT Packages</span>
+              <Sparkles className="w-4 h-4 text-brand-cyan animate-spin" style={{ animationDuration: '4s' }} />
+              <span>Transparent &amp; Predictable IT Engineering</span>
             </motion.div>
 
             {/* Main Title */}
@@ -543,7 +543,7 @@ export default function PricingPage() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="font-heading text-4xl sm:text-5xl lg:text-6xl font-black text-text-dark tracking-tight leading-[1.12]"
             >
-              Pricing &amp; <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-red via-rose-600 to-brand-red-dark">Packages</span>
+              Pricing &amp; <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary via-blue-600 to-brand-navy">Packages</span>
             </motion.h1>
 
             {/* Subtitle */}
@@ -767,7 +767,7 @@ export default function PricingPage() {
                     <div
                       className={`absolute top-5 right-5 px-3 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider shadow-xs ${
                         pkg.isPopular
-                          ? 'bg-gradient-to-r from-brand-red to-rose-600 text-white'
+                          ? 'bg-gradient-to-r from-brand-primary to-brand-navy text-white'
                           : 'bg-brand-blue/10 text-brand-blue border border-brand-blue/20'
                       }`}
                     >
@@ -956,7 +956,7 @@ export default function PricingPage() {
                     <div
                       className={`absolute top-5 right-5 px-3 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider shadow-xs ${
                         isFeatured
-                          ? 'bg-gradient-to-r from-brand-red to-rose-600 text-white'
+                          ? 'bg-gradient-to-r from-brand-primary to-brand-navy text-white'
                           : 'bg-brand-blue/10 text-brand-blue border border-brand-blue/20'
                       }`}
                     >
@@ -1091,18 +1091,18 @@ export default function PricingPage() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.3, delay: idx * 0.05 }}
                   onClick={() => openQuoteModal(`Branding: ${item.title}`)}
-                  className="bg-white rounded-3xl p-5 border border-gray-200/90 hover:border-brand-red/50 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 text-center flex flex-col items-center justify-between group cursor-pointer overflow-hidden relative"
+                  className="bg-white rounded-3xl p-5 border border-gray-200/90 hover:border-brand-primary/50 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 text-center flex flex-col items-center justify-between group cursor-pointer overflow-hidden relative"
                 >
-                  <div className="h-1.5 w-full bg-gradient-to-r from-brand-red to-rose-600 absolute top-0 left-0" />
+                  <div className="h-1.5 w-full bg-gradient-to-r from-brand-primary to-brand-cyan absolute top-0 left-0" />
                   
-                  <div className="w-13 h-13 rounded-2xl bg-brand-red/10 text-brand-red flex items-center justify-center my-2 group-hover:scale-110 group-hover:bg-brand-red group-hover:text-white transition-all duration-300 shadow-sm">
+                  <div className="w-13 h-13 rounded-2xl bg-brand-primary/10 text-brand-primary flex items-center justify-center my-2 group-hover:scale-110 group-hover:bg-brand-primary group-hover:text-white transition-all duration-300 shadow-sm">
                     <IconComp className="w-6 h-6" />
                   </div>
-                  <h3 className="font-heading text-sm font-extrabold text-text-dark mb-3 group-hover:text-brand-red transition-colors">{item.title}</h3>
+                  <h3 className="font-heading text-sm font-extrabold text-text-dark mb-3 group-hover:text-brand-primary transition-colors">{item.title}</h3>
                   
                   <div className="mt-auto pt-2.5 border-t border-gray-100 w-full">
                     <span className="text-[9px] text-text-muted uppercase block font-extrabold">Starting From</span>
-                    <span className="font-heading text-base font-black text-brand-red">{item.price}</span>
+                    <span className="font-heading text-base font-black text-brand-primary">{item.price}</span>
                   </div>
                 </motion.div>
               )
@@ -1136,8 +1136,8 @@ export default function PricingPage() {
                   transition={{ duration: 0.4, delay: idx * 0.1 }}
                   className={`relative bg-white rounded-3xl overflow-hidden transition-all duration-300 flex flex-col justify-between ${
                     isFeatured
-                      ? 'border-2 border-brand-red shadow-[0_15px_50px_rgba(227,30,36,0.22)] ring-2 ring-brand-red/40 lg:-translate-y-3 z-10'
-                      : 'border border-gray-200/90 hover:border-brand-blue/50 shadow-sm hover:shadow-2xl hover:-translate-y-1.5'
+                      ? 'border-2 border-brand-primary shadow-[0_15px_50px_rgba(0,102,255,0.22)] ring-2 ring-brand-primary/40 lg:-translate-y-3 z-10'
+                      : 'border border-gray-200/90 hover:border-brand-primary/50 shadow-sm hover:shadow-2xl hover:-translate-y-1.5'
                   }`}
                 >
                   {/* Top Colored Accent Line */}
@@ -1148,7 +1148,7 @@ export default function PricingPage() {
                     <div
                       className={`absolute top-5 right-5 px-3 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider shadow-xs ${
                         isFeatured
-                          ? 'bg-gradient-to-r from-brand-red to-rose-600 text-white'
+                          ? 'bg-gradient-to-r from-brand-primary to-brand-navy text-white'
                           : 'bg-brand-blue/10 text-brand-blue border border-brand-blue/20'
                       }`}
                     >

@@ -43,8 +43,55 @@ import {
   Sliders,
 } from 'lucide-react'
 import { SEO } from '@/components/ui'
-import { useSiteSettings } from '@/hooks/useContent'
 import { useToast } from '@/components/ui/ToastProvider'
+import { useSiteSettings } from '@/hooks/useContent'
+import snaptechLogo from '@/assets/snaptech-logo.png'
+// Official Brand Logo Emblem Component (Declared at module level for stable React rendering)
+function LogoEmblem({ isLarge = false }) {
+  return (
+    <div className="flex items-center gap-3">
+      <img
+        src={snaptechLogo}
+        alt="Snaptech - Hindustan Projects IT"
+        className={isLarge ? "h-11 object-contain" : "h-8.5 object-contain"}
+      />
+      <div className="border-l border-slate-300 pl-2.5 hidden sm:block">
+        <span className="text-[7.5px] font-black text-[#001D4A] tracking-wider uppercase block">
+          A HINDUSTAN PROJECTS ENTERPRISE
+        </span>
+        <span className="text-[7px] font-bold text-[#0066FF] tracking-widest uppercase block">
+          IT &amp; SOFTWARE ENGINEERING DIVISION
+        </span>
+      </div>
+    </div>
+  )
+}
+
+// Architectural Technical Watermark Background Component (Declared at module level)
+function TechnicalWatermark() {
+  return (
+    <>
+      {/* Background Micro Blueprint Grid */}
+      <div className="absolute inset-0 opacity-[0.035] pointer-events-none z-0">
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="blueprint-grid" width="30" height="30" patternUnits="userSpaceOnUse">
+              <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#0A2540" strokeWidth="0.8" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#blueprint-grid)" />
+        </svg>
+      </div>
+
+      {/* Security Diagonal Watermark */}
+      <div className="absolute inset-0 flex items-center justify-center opacity-[0.02] pointer-events-none select-none rotate-[-35deg] z-0">
+        <span className="font-heading font-black text-6xl text-[#0A2540] uppercase tracking-widest text-center leading-tight">
+          HINDUSTAN PROJECTS IT SERVICES<br />CONFIDENTIAL PROPOSAL
+        </span>
+      </div>
+    </>
+  )
+}
 
 export default function AdminProposalBookPage() {
   const { addToast } = useToast()
@@ -214,48 +261,6 @@ export default function AdminProposalBookPage() {
     window.print()
   }
 
-  // Official Brand Logo Emblem Component
-  const LogoEmblem = ({ isLarge = false }) => (
-    <div className="flex items-center gap-3">
-      {cfg.logo ? (
-        <img
-          src={cfg.logo}
-          alt="Hindustan Projects Logo"
-          className={isLarge ? "h-11 object-contain" : "h-8.5 object-contain"}
-        />
-      ) : (
-        <div className="flex items-center gap-2.5">
-          <div className={`relative bg-[#0A2540] text-white font-heading font-black rounded-xl flex items-center justify-center shadow-xs border border-[#0A2540] overflow-hidden ${
-            isLarge ? "w-11 h-11 text-xs" : "w-8.5 h-8.5 text-[11px]"
-          }`}>
-            <span className="relative z-10 tracking-tighter">Hi</span>
-            <span className="bg-[#D32F2F] text-white text-[8px] px-1 py-0.5 rounded-xs ml-0.5 font-mono font-black z-10">
-              Pro
-            </span>
-          </div>
-
-          <div>
-            <div className="flex items-center gap-1.5">
-              <span className={`font-heading font-black text-[#0A2540] tracking-tight leading-none ${
-                isLarge ? "text-base" : "text-xs"
-              }`}>
-                HINDUSTAN PROJECTS
-              </span>
-              <span className="text-[7px] font-black bg-[#0A2540]/10 text-[#0A2540] px-1.5 py-0.5 rounded border border-[#0A2540]/20 uppercase tracking-widest">
-                IT SERVICES
-              </span>
-            </div>
-            <span className={`font-bold text-[#D32F2F] tracking-widest uppercase block ${
-              isLarge ? "text-[9px] mt-0.5" : "text-[7.5px] mt-0.5"
-            }`}>
-              ENTERPRISE IT SOLUTIONS &amp; SOFTWARE DIVISION
-            </span>
-          </div>
-        </div>
-      )}
-    </div>
-  )
-
   // Unified Design System Header (Pages 03 - 09)
   const renderHeader = (pageCode) => (
     <div className="border-b-2 border-[#0A2540] pb-2.5 mb-5 flex items-center justify-between relative z-10">
@@ -287,30 +292,6 @@ export default function AdminProposalBookPage() {
         {pageCode} | Page {pageNum} of 09
       </div>
     </div>
-  )
-
-  // Architectural Technical Watermark Background Component
-  const TechnicalWatermark = () => (
-    <>
-      {/* Background Micro Blueprint Grid */}
-      <div className="absolute inset-0 opacity-[0.035] pointer-events-none z-0">
-        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="blueprint-grid" width="30" height="30" patternUnits="userSpaceOnUse">
-              <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#0A2540" strokeWidth="0.8" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#blueprint-grid)" />
-        </svg>
-      </div>
-
-      {/* Security Diagonal Watermark */}
-      <div className="absolute inset-0 flex items-center justify-center opacity-[0.02] pointer-events-none select-none rotate-[-35deg] z-0">
-        <span className="font-heading font-black text-6xl text-[#0A2540] uppercase tracking-widest text-center leading-tight">
-          HINDUSTAN PROJECTS IT SERVICES<br />CONFIDENTIAL PROPOSAL
-        </span>
-      </div>
-    </>
   )
 
   return (

@@ -145,58 +145,58 @@ export default function AboutPage() {
   return (
     <>
       <SEO
-        title="About Us — IT Company in Bhilwara, Rajasthan"
-        description="Hindustan Projects is a technology company based in Bhilwara, Rajasthan founded in 2019. Learn about our story, team, mission and vision."
+        title="About Snaptech — IT & Technology Division of Hindustan Projects Group"
+        description="Learn about Snaptech, the enterprise technology and software engineering company backed by Hindustan Projects Group. Custom Web Apps, Mobile, Cloud & AI."
         path="/about"
-        keywords="IT company Bhilwara, technology company Rajasthan, web development company Bhilwara, about Hindustan Projects, IT firm Rajasthan"
+        keywords="Snaptech, Hindustan Projects IT, technology company Bhilwara, software company Rajasthan, about Snaptech, IT solutions India"
         schemas={[
           {
             '@context': 'https://schema.org',
             '@type': 'AboutPage',
-            name: 'About Hindustan Projects',
-            url: 'https://www.itservices.hindustanprojects.in/about',
+            name: 'About Snaptech',
+            url: 'https://www.snaptech.hindustanprojects.in/about',
             description:
-              'Hindustan Projects is a technology company based in Bhilwara, Rajasthan, helping businesses grow through smart digital solutions.',
+              'Snaptech is the dedicated technology and digital transformation company of Hindustan Projects Group, delivering enterprise digital systems.',
           },
         ]}
       />
       {/* ── Hero ─────────────────────────────────────────────────── */}
-      <section className="relative pt-24 sm:pt-32 lg:pt-36 pb-14 sm:pb-20 lg:pb-24 overflow-hidden bg-[#050e20]">
+      <section className="relative pt-24 sm:pt-32 lg:pt-36 pb-14 sm:pb-20 lg:pb-24 overflow-hidden bg-[#020714]">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff06_1px,transparent_1px),linear-gradient(to_bottom,#ffffff06_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
-        <div className="absolute top-0 left-1/3 w-96 h-96 bg-brand-blue/20 rounded-full blur-3xl -translate-y-1/2 pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-brand-red/15 rounded-full blur-3xl translate-y-1/2 pointer-events-none" />
+        <div className="absolute top-0 left-1/3 w-96 h-96 bg-brand-primary/20 rounded-full blur-3xl -translate-y-1/2 pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-brand-cyan/15 rounded-full blur-3xl translate-y-1/2 pointer-events-none" />
 
         <Container className="relative">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
             {/* Left */}
             <div>
-              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand-red/30 bg-brand-red/10 text-brand-red text-xs font-semibold uppercase tracking-widest mb-6">
-                <span className="w-1.5 h-1.5 rounded-full bg-brand-red animate-pulse" />
-                Who We Are
+              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand-primary/30 bg-brand-primary/10 text-brand-cyan text-xs font-semibold uppercase tracking-widest mb-6">
+                <span className="w-1.5 h-1.5 rounded-full bg-brand-primary animate-pulse" />
+                A Hindustan Projects Venture
               </span>
-              <h1 className="font-heading text-4xl sm:text-5xl lg:text-[3.5rem] font-bold !text-white leading-tight mb-5">
-                Bhilwara's Premier{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-red to-orange-400">
-                  IT Partner
+              <h1 className="font-heading text-4xl sm:text-5xl lg:text-[3.5rem] font-bold text-white leading-tight mb-5">
+                Next-Gen IT Engineering with{' '}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary-light via-brand-cyan to-white">
+                  Corporate Stability
                 </span>
               </h1>
-              <p className="text-white/60 text-base sm:text-lg leading-relaxed mb-8">
-                Hindustan Projects is a technology company based in Bhilwara, Rajasthan — helping
-                businesses across India grow faster through smart, affordable, and reliable digital
-                solutions.
+              <p className="text-slate-300 text-base sm:text-lg leading-relaxed mb-8">
+                Snaptech is the dedicated technology company of Hindustan Projects Group, delivering
+                high-speed custom software, mobile applications, cloud DevOps, and digital growth infrastructure 
+                for enterprises in Bhilwara, India, and worldwide.
               </p>
               <div className="flex flex-wrap gap-4">
-                <Button variant="primary" size="lg" as={Link} to="/contact">
-                  Work With Us
+                <Button variant="primary" size="lg" as={Link} to="/contact" className="bg-brand-primary hover:bg-brand-primary-dark text-white font-bold">
+                  Work With Snaptech
                 </Button>
                 <Button
                   variant="ghost"
                   size="lg"
                   as={Link}
                   to="/portfolio"
-                  className="!text-white !border-white/20 hover:!bg-white/10"
+                  className="text-white border border-white/20 hover:bg-white/10"
                 >
-                  See Our Work
+                  See Case Studies
                 </Button>
               </div>
             </div>
@@ -204,15 +204,15 @@ export default function AboutPage() {
             {/* Right: Overlapping 3D Device Mockup Showcase */}
             <div className="relative w-full max-w-md mx-auto lg:max-w-none aspect-[4/3] flex items-center justify-center pt-8 pb-4 lg:py-0">
               {/* Decorative glows */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-brand-blue/10 to-brand-red/10 rounded-full blur-3xl pointer-events-none" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-brand-primary/10 to-brand-cyan/10 rounded-full blur-3xl pointer-events-none" />
 
               {/* 1. Laptop Base Frame (Desktop View) */}
               <div className="relative w-[85%] aspect-[16/10] bg-slate-900 border-[6px] border-slate-950 rounded-xl shadow-2xl overflow-hidden ring-1 ring-white/10 select-none">
                 {cfg.about_hero_laptop_image ? (
                   <img
                     src={cfg.about_hero_laptop_image}
-                    alt="Hindustan Projects Homepage"
-                    className="w-full h-full object-contain bg-[#050e20] block"
+                    alt="Snaptech Homepage"
+                    className="w-full h-full object-contain bg-[#020714] block"
                   />
                 ) : (
                   /* Simulated Corporate Website Homepage (Light Theme) */
@@ -224,9 +224,9 @@ export default function AboutPage() {
                         <span className="w-1.5 h-1.5 rounded-full bg-yellow-400" />
                         <span className="w-1.5 h-1.5 rounded-full bg-green-400" />
                       </div>
-                      <div className="flex-1 bg-gray-100 rounded-md py-0.5 px-2.5 flex items-center justify-center gap-1.5 text-[7px] text-gray-400 max-w-[160px] mx-auto border border-gray-200/50">
+                      <div className="flex-1 bg-gray-100 rounded-md py-0.5 px-2.5 flex items-center justify-center gap-1.5 text-[7px] text-gray-400 max-w-[170px] mx-auto border border-gray-200/50">
                         <span className="text-emerald-500">🔒</span>
-                        <span className="truncate tracking-wide font-medium">itservices.hindustanprojects.in</span>
+                        <span className="truncate tracking-wide font-medium">www.snaptech.hindustanprojects.in</span>
                       </div>
                     </div>
 
@@ -235,30 +235,30 @@ export default function AboutPage() {
                       {/* Nav bar */}
                       <nav className="px-3.5 py-1.5 border-b border-gray-100 flex items-center justify-between shrink-0 bg-white">
                         <div className="flex items-center gap-1">
-                          <span className="w-2.5 h-2.5 rounded bg-brand-blue" />
-                          <span className="font-heading font-black text-[7px] text-brand-blue tracking-wider">HINDUSTAN</span>
+                          <span className="w-2.5 h-2.5 rounded bg-brand-primary" />
+                          <span className="font-heading font-black text-[7px] text-brand-navy tracking-wider">SNAPTECH</span>
                         </div>
                         <div className="flex gap-2.5 text-[6px] text-gray-500 font-bold">
                           <span>Services</span>
                           <span>About</span>
-                          <span className="text-brand-blue">Portfolio</span>
+                          <span className="text-brand-primary">Portfolio</span>
                           <span>Contact</span>
                         </div>
                       </nav>
 
                       {/* Homepage Hero Section */}
                       <div className="flex-1 bg-gradient-to-tr from-blue-50/50 via-indigo-50/20 to-white p-3 flex flex-col justify-center items-center text-center space-y-1.5">
-                        <span className="text-[5px] font-black tracking-widest text-brand-red bg-brand-red/10 border border-brand-red/20 px-2 py-0.5 rounded-full uppercase">
-                          IT Services Department
+                        <span className="text-[5px] font-black tracking-widest text-brand-primary bg-brand-primary/10 border border-brand-primary/20 px-2 py-0.5 rounded-full uppercase">
+                          Hindustan Projects IT Division
                         </span>
-                        <div className="text-[11px] font-black text-gray-900 leading-tight max-w-[170px] font-heading">
-                          Building Digital Solutions That Drive Growth
+                        <div className="text-[11px] font-black text-gray-900 leading-tight max-w-[180px] font-heading">
+                          Looking for IT Solutions? Connect with Snaptech
                         </div>
                         <p className="text-[6px] text-gray-400 max-w-[150px]">
-                          We build next-generation platforms and custom applications for enterprises.
+                          Custom web platforms, mobile engineering & enterprise cloud solutions.
                         </p>
                         <div className="flex gap-1.5 pt-0.5">
-                          <span className="bg-brand-blue text-white rounded py-0.5 px-2 text-[5px] font-bold shadow-sm">
+                          <span className="bg-brand-primary text-white rounded py-0.5 px-2 text-[5px] font-bold shadow-sm">
                             Explore Services
                           </span>
                           <span className="bg-white border border-gray-200 text-gray-600 rounded py-0.5 px-2 text-[5px] font-bold">

@@ -24,12 +24,12 @@ function getStrategy() {
 async function sendViaResend({ to, subject, html, text, attachments }) {
   const resend = new Resend(env.RESEND_API_KEY)
 
-  // Ensure from always has a display name like "Hindustan Projects <email>"
+  // Ensure from always has a display name like "Snaptech — Hindustan Projects <email>"
   // If EMAIL_FROM is just an email (no display name), wrap it properly
   const rawFrom = env.EMAIL_FROM || 'info@hindustanprojects.in'
   const from = rawFrom.includes('<')
     ? rawFrom
-    : `Hindustan Projects <${rawFrom}>`
+    : `Snaptech — Hindustan Projects <${rawFrom}>`
 
   const { data, error } = await resend.emails.send({ from, to, subject, html, text, attachments })
   if (error) throw new Error(error.message || 'Resend send failed')
@@ -44,7 +44,7 @@ async function sendViaSMTP({ to, subject, html, text, attachments }) {
     secure: env.EMAIL_PORT === 465,
     auth: { user: env.EMAIL_USER, pass: env.EMAIL_PASS },
   })
-  const from = env.EMAIL_FROM || `"Hindustan Projects" <${env.EMAIL_USER}>`
+  const from = env.EMAIL_FROM || `"Snaptech — Hindustan Projects" <${env.EMAIL_USER}>`
   const info = await transporter.sendMail({ from, to, subject, html, text, attachments })
   return info
 }
@@ -121,12 +121,13 @@ export async function sendEmail(options) {
  * Accepts settings object from SiteSetting DB so values stay updated from admin panel.
  */
 export function professionalEmailFooter(settings = {}) {
-  const phone    = settings.phone    || '+91 99291 20431'
-  const whatsapp = settings.whatsapp || '+91 70147 96047'
+  const phone    = settings.phone    || '+91 75970 00601'
+  const whatsapp = settings.whatsapp || '+91 75970 00601'
   const address  = settings.address  || 'Bhilwara – 311001, Rajasthan, India'
   const linkedin  = settings.linkedin  || null
   const facebook  = settings.facebook  || null
   const instagram = settings.instagram || null
+  const pinterest = settings.pinterest || null
   const youtube   = settings.youtube   || null
 
   // Clean whatsapp number for wa.me link (remove spaces, dashes, +)
@@ -137,11 +138,12 @@ export function professionalEmailFooter(settings = {}) {
     linkedin  && `<a href="${linkedin}" style="display:inline-block;background:#0A66C2;color:white;font-size:11px;font-weight:bold;padding:3px 9px;border-radius:4px;text-decoration:none;margin:2px;">in</a>`,
     facebook  && `<a href="${facebook}" style="display:inline-block;background:#1877F2;color:white;font-size:11px;font-weight:bold;padding:3px 9px;border-radius:4px;text-decoration:none;margin:2px;">f</a>`,
     instagram && `<a href="${instagram}" style="display:inline-block;background:#E1306C;color:white;font-size:11px;font-weight:bold;padding:3px 9px;border-radius:4px;text-decoration:none;margin:2px;">&#9678;</a>`,
+    pinterest && `<a href="${pinterest}" style="display:inline-block;background:#E60023;color:white;font-size:11px;font-weight:bold;padding:3px 9px;border-radius:4px;text-decoration:none;margin:2px;">P</a>`,
     youtube   && `<a href="${youtube}" style="display:inline-block;background:#FF0000;color:white;font-size:11px;font-weight:bold;padding:3px 9px;border-radius:4px;text-decoration:none;margin:2px;">&#9654;</a>`,
   ].filter(Boolean).join('\n        ')
 
   return `
-    <div style="margin-top: 32px; border-top: 2px solid #1A3E8C; padding-top: 20px;">
+    <div style="margin-top: 32px; border-top: 2px solid #0066FF; padding-top: 20px;">
 
       <!-- Brand + Contact -->
       <table style="width: 100%; border-collapse: collapse;">
@@ -150,24 +152,24 @@ export function professionalEmailFooter(settings = {}) {
 
             <!-- Logo Text -->
             <div style="margin-bottom: 12px;">
-              <span style="font-size: 22px; font-weight: 900; color: #1A3E8C; letter-spacing: -0.5px;">Hi</span><span style="font-size: 22px; font-weight: 900; color: #E31E24;">PRO</span>
-              <div style="font-size: 9px; font-weight: 700; color: #1A3E8C; letter-spacing: 2px; text-transform: uppercase; margin-top: 1px;">HINDUSTAN PROJECTS</div>
-              <div style="font-size: 8px; color: #6B7280; letter-spacing: 0.5px; margin-top: 2px;">Engineering &bull; Construction &bull; Infrastructure</div>
+              <span style="font-size: 22px; font-weight: 900; color: #001D4A; letter-spacing: -0.5px;">Snap</span><span style="font-size: 22px; font-weight: 900; color: #0066FF;">tech</span>
+              <div style="font-size: 9px; font-weight: 800; color: #001D4A; letter-spacing: 2px; text-transform: uppercase; margin-top: 1px;">A HINDUSTAN PROJECTS ENTERPRISE</div>
+              <div style="font-size: 8px; color: #0066FF; font-weight: 700; letter-spacing: 0.5px; margin-top: 2px;">Enterprise IT Solutions &bull; Web &bull; Mobile &bull; Cloud</div>
             </div>
 
             <!-- Contact Details -->
             <table style="border-collapse: collapse; font-size: 12px; color: #374151;">
               <tr>
                 <td style="padding: 2px 8px 2px 0; white-space: nowrap;">&#128222;</td>
-                <td style="padding: 2px 0;"><a href="tel:${phone.replace(/\s/g, '')}" style="color: #1A3E8C; text-decoration: none;">${phone}</a></td>
+                <td style="padding: 2px 0;"><a href="tel:${phone.replace(/\s/g, '')}" style="color: #0066FF; text-decoration: none;">${phone}</a></td>
               </tr>
               <tr>
                 <td style="padding: 2px 8px 2px 0; white-space: nowrap;">&#128241;</td>
-                <td style="padding: 2px 0;"><a href="${waLink}" style="color: #1A3E8C; text-decoration: none;">${whatsapp}</a> <span style="color: #6B7280;">(WhatsApp)</span></td>
+                <td style="padding: 2px 0;"><a href="${waLink}" style="color: #0066FF; text-decoration: none;">${whatsapp}</a> <span style="color: #6B7280;">(WhatsApp)</span></td>
               </tr>
               <tr>
                 <td style="padding: 2px 8px 2px 0; white-space: nowrap;">&#127760;</td>
-                <td style="padding: 2px 0;"><a href="https://www.itservices.hindustanprojects.in" style="color: #1A3E8C; text-decoration: none;">www.itservices.hindustanprojects.in</a></td>
+                <td style="padding: 2px 0;"><a href="https://www.snaptech.hindustanprojects.in" style="color: #0066FF; text-decoration: none;">www.snaptech.hindustanprojects.in</a> &bull; <a href="https://www.hindustanprojects.in" style="color: #001D4A; text-decoration: none;">www.hindustanprojects.in</a></td>
               </tr>
               <tr>
                 <td style="padding: 2px 8px 2px 0; white-space: nowrap;">&#128205;</td>
@@ -187,15 +189,15 @@ export function professionalEmailFooter(settings = {}) {
       </div>` : ''}
 
       <!-- Confidentiality Notice -->
-      <div style="margin-top: 16px; padding: 10px 14px; background: #f9fafb; border-left: 3px solid #d1d5db; border-radius: 0 4px 4px 0;">
-        <p style="margin: 0; font-size: 10px; color: #9CA3AF; line-height: 1.6;">
-          <strong style="color: #6B7280;">CONFIDENTIALITY NOTICE:</strong> This email and any attachments are intended solely for the use of the addressee and may contain confidential information. If you are not the intended recipient, please notify the sender and delete this email immediately.
+      <div style="margin-top: 16px; padding: 10px 14px; background: #f0f6ff; border-left: 3px solid #0066FF; border-radius: 0 4px 4px 0;">
+        <p style="margin: 0; font-size: 10px; color: #64748B; line-height: 1.6;">
+          <strong style="color: #001D4A;">CONFIDENTIALITY NOTICE:</strong> This email and any attachments are intended solely for the use of the addressee and may contain confidential information. If you are not the intended recipient, please notify the sender and delete this email immediately.
         </p>
       </div>
 
       <!-- Copyright -->
       <p style="margin: 12px 0 0; font-size: 10px; color: #9CA3AF; text-align: center;">
-        &copy; ${new Date().getFullYear()} Hindustan Projects. All rights reserved. &nbsp;|&nbsp; Bhilwara, Rajasthan, India
+        &copy; ${new Date().getFullYear()} Snaptech &bull; Hindustan Projects Group. All rights reserved. &nbsp;|&nbsp; Bhilwara, Rajasthan, India
       </p>
     </div>
   `
@@ -207,7 +209,7 @@ export function professionalEmailFooter(settings = {}) {
  */
 export async function fetchEmailFooterSettings(prisma) {
   try {
-    const keys = ['phone', 'whatsapp', 'address', 'linkedin', 'facebook', 'instagram', 'youtube']
+    const keys = ['phone', 'whatsapp', 'address', 'linkedin', 'facebook', 'instagram', 'youtube', 'pinterest']
     const rows = await prisma.siteSetting.findMany({ where: { key: { in: keys } } })
     const settings = {}
     for (const row of rows) settings[row.key] = row.value
@@ -228,12 +230,12 @@ export function adminNotificationTemplate({ name, email, phone, message, service
   const phoneDisplay = phone || 'Not provided'
 
   return {
-    subject: `New Contact Lead: ${name}`,
+    subject: `New IT Project Lead: ${name} [Snaptech]`,
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
-        <div style="background: #1A3E8C; padding: 20px; border-radius: 6px 6px 0 0; margin: -20px -20px 20px;">
-          <h1 style="color: #ffffff; margin: 0; font-size: 20px;">New Contact Lead</h1>
-          <p style="color: #93c5fd; margin: 4px 0 0; font-size: 14px;">Hindustan Projects Website</p>
+        <div style="background: #001D4A; padding: 20px; border-radius: 6px 6px 0 0; margin: -20px -20px 20px;">
+          <h1 style="color: #ffffff; margin: 0; font-size: 20px;">New IT Project Lead</h1>
+          <p style="color: #00D2FF; margin: 4px 0 0; font-size: 14px; font-weight: bold;">Snaptech &bull; Hindustan Projects IT Services</p>
         </div>
 
         <table style="width: 100%; border-collapse: collapse;">
@@ -243,7 +245,7 @@ export function adminNotificationTemplate({ name, email, phone, message, service
           </tr>
           <tr style="background: #f9fafb;">
             <td style="padding: 8px 4px; color: #6B7280; font-size: 14px;">Email</td>
-            <td style="padding: 8px 4px; font-size: 14px;"><a href="mailto:${email}" style="color: #1A3E8C;">${email}</a></td>
+            <td style="padding: 8px 4px; font-size: 14px;"><a href="mailto:${email}" style="color: #0066FF;">${email}</a></td>
           </tr>
           <tr>
             <td style="padding: 8px 0; color: #6B7280; font-size: 14px;">Phone</td>
@@ -255,21 +257,21 @@ export function adminNotificationTemplate({ name, email, phone, message, service
           </tr>
         </table>
 
-        <div style="margin-top: 16px; padding: 16px; background: #f3f4f6; border-radius: 6px; border-left: 4px solid #1A3E8C;">
-          <p style="margin: 0 0 8px; color: #6B7280; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em;">Message</p>
+        <div style="margin-top: 16px; padding: 16px; background: #f0f6ff; border-radius: 6px; border-left: 4px solid #0066FF;">
+          <p style="margin: 0 0 8px; color: #001D4A; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: bold;">Project Requirements</p>
           <p style="margin: 0; color: #1A1A1A; font-size: 15px; line-height: 1.6; white-space: pre-wrap;">${message}</p>
         </div>
 
         <div style="margin-top: 20px; text-align: center;">
-          <a href="mailto:${email}" style="display: inline-block; background: #E31E24; color: white; padding: 10px 24px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 600;">Reply to ${name}</a>
+          <a href="mailto:${email}" style="display: inline-block; background: #0066FF; color: white; padding: 10px 24px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 600;">Reply to ${name}</a>
         </div>
 
         <p style="margin-top: 24px; font-size: 12px; color: #9ca3af; text-align: center; border-top: 1px solid #e5e7eb; padding-top: 16px;">
-          This lead was submitted via the Hindustan Projects contact form.
+          This lead was submitted via the Snaptech portal (www.snaptech.hindustanprojects.in).
         </p>
       </div>
     `,
-    text: `New Contact Lead\n\nName: ${name}\nEmail: ${email}\nPhone: ${phoneDisplay}\nService: ${service}\n\nMessage:\n${message}`,
+    text: `New IT Project Lead\n\nName: ${name}\nEmail: ${email}\nPhone: ${phoneDisplay}\nService: ${service}\n\nRequirements:\n${message}`,
   }
 }
 
@@ -277,43 +279,47 @@ export function adminNotificationTemplate({ name, email, phone, message, service
  * Auto-reply email — sent to the user confirming their submission.
  */
 export function autoReplyTemplate({ name }) {
-  const phone = process.env.SITE_PHONE || '+91 99999 99999'
+  const phone = process.env.SITE_PHONE || '+91 75970 00601'
   const email = process.env.EMAIL_FROM
     ? process.env.EMAIL_FROM.replace(/.*<(.+)>/, '$1')
     : process.env.EMAIL_USER || 'info@hindustanprojects.com'
   return {
-    subject: 'Thank you for contacting Hindustan Projects',
+    subject: 'Thank you for contacting Snaptech — Hindustan Projects',
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
-        <div style="background: #1A3E8C; padding: 20px; border-radius: 6px 6px 0 0; margin: -20px -20px 20px; text-align: center;">
-          <h1 style="color: #ffffff; margin: 0; font-size: 22px;">
-            <span style="color: #E31E24;">Hindustan </span>Projects
+        <div style="background: #001D4A; padding: 20px; border-radius: 6px 6px 0 0; margin: -20px -20px 20px; text-align: center;">
+          <h1 style="color: #ffffff; margin: 0; font-size: 24px;">
+            <span style="color: #0066FF;">Snap</span>tech
           </h1>
+          <p style="color: #00D2FF; margin: 4px 0 0; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; font-weight: bold;">
+            A Hindustan Projects Venture &bull; Enterprise IT Division
+          </p>
         </div>
 
         <p style="font-size: 16px; color: #1A1A1A;">Hi <strong>${name}</strong>,</p>
 
         <p style="font-size: 15px; color: #374151; line-height: 1.7;">
-          Thank you for reaching out to us! We've received your message and our team will contact you within <strong>24 hours</strong>.
+          Thank you for reaching out to <strong>Snaptech</strong>! We've received your project inquiry and our solutions engineering team will contact you within <strong>24 hours</strong> with a detailed consultation.
         </p>
 
         <p style="font-size: 15px; color: #374151; line-height: 1.7;">
-          In the meantime, feel free to explore our services or reach us directly:
+          In the meantime, feel free to review our capabilities or reach us directly:
         </p>
 
-        <div style="margin: 20px 0; padding: 16px; background: #f0f4ff; border-radius: 6px;">
+        <div style="margin: 20px 0; padding: 16px; background: #f0f6ff; border-radius: 6px; border-left: 4px solid #0066FF;">
           <p style="margin: 0 0 8px; font-size: 14px; color: #1A1A1A;">📞 <strong>Phone:</strong> ${phone}</p>
           <p style="margin: 0 0 8px; font-size: 14px; color: #1A1A1A;">📧 <strong>Email:</strong> ${email}</p>
-          <p style="margin: 0; font-size: 14px; color: #1A1A1A;">📍 <strong>Location:</strong> Bhilwara, Rajasthan, India</p>
+          <p style="margin: 0 0 8px; font-size: 14px; color: #1A1A1A;">🌐 <strong>Portal:</strong> <a href="https://www.snaptech.hindustanprojects.in" style="color: #0066FF;">www.snaptech.hindustanprojects.in</a></p>
+          <p style="margin: 0; font-size: 14px; color: #1A1A1A;">🏢 <strong>Parent Group:</strong> <a href="https://www.hindustanprojects.in" style="color: #001D4A;">www.hindustanprojects.in</a></p>
         </div>
 
         <p style="font-size: 13px; color: #6B7280; margin-top: 24px; border-top: 1px solid #e5e7eb; padding-top: 16px; text-align: center;">
-          © ${new Date().getFullYear()} Hindustan Projects. All rights reserved.<br>
+          &copy; ${new Date().getFullYear()} Snaptech &bull; Hindustan Projects Group. All rights reserved.<br>
           Bhilwara, Rajasthan, India
         </p>
       </div>
     `,
-    text: `Hi ${name},\n\nThank you for contacting Hindustan Projects!\n\nWe've received your message and will get back to you within 1–2 business days.\n\nRegards,\nHindustan Projects Team\nBhilwara, Rajasthan, India`,
+    text: `Hi ${name},\n\nThank you for contacting Snaptech (Hindustan Projects)!\n\nWe've received your inquiry and our engineering team will get back to you within 24 hours.\n\nWebsite: https://www.snaptech.hindustanprojects.in\nParent Group: https://www.hindustanprojects.in\n\nRegards,\nSnaptech Solutions Team\nHindustan Projects Group`,
   }
 }
 
@@ -755,4 +761,6 @@ export function supportTicketReplyTemplate({ recipientName, ticketId, subject, s
     text: `Support Ticket #${ticketId.slice(-6).toUpperCase()}\n\nReply from: ${senderName}\n\nMessage:\n${message}`,
   }
 }
+
+export default sendEmail
 

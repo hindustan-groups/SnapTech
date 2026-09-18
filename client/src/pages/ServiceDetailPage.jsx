@@ -402,10 +402,10 @@ export default function ServiceDetailPage() {
   return (
     <>
       <SEO
-        title={service.title}
+        title={`${service.title} — Snaptech IT Solutions | Hindustan Projects`}
         description={service.shortDescription}
         path={`/services/${service.slug}`}
-        keywords={`${service.title} Bhilwara, ${service.title} Rajasthan, ${service.title} India`}
+        keywords={`${service.title}, Snaptech IT, ${service.title} enterprise, Hindustan Projects IT`}
         schemas={[
           serviceSchema({
             title: service.title,
@@ -427,7 +427,7 @@ export default function ServiceDetailPage() {
         <div
           className={`absolute top-0 left-0 w-full h-full bg-gradient-to-br ${config.bgGlow} opacity-60 pointer-events-none`}
         />
-        <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-brand-red/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-brand-cyan/15 rounded-full blur-3xl pointer-events-none" />
 
         <Container className="relative">
           {/* Breadcrumb */}

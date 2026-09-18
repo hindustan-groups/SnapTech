@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { Phone, Mail } from 'lucide-react'
 import HeroSection from '@/components/sections/HeroSection'
+import ParentGroupSection from '@/components/sections/ParentGroupSection'
 import ServicesSection from '@/components/sections/ServicesSection'
 import ShowcaseSection from '@/components/sections/ShowcaseSection'
 import ProcessSection from '@/components/sections/ProcessSection'
@@ -12,8 +12,8 @@ import FeaturedProjects from '@/components/sections/FeaturedProjects'
 import TestimonialsSection from '@/components/sections/TestimonialsSection'
 import TeamSection from '@/components/sections/TeamSection'
 import FaqSection from '@/components/sections/FaqSection'
-import { Container, Button, SEO } from '@/components/ui'
-import { SITE, localBusinessSchema } from '@/components/ui/SEO'
+import { Container, SEO } from '@/components/ui'
+import { organizationSchema, localBusinessSchema } from '@/components/ui/SEO'
 import { usePartners, useSiteSettings } from '@/hooks/useContent'
 import { api } from '@/utils/api'
 
@@ -75,9 +75,11 @@ export default function HomePage() {
   return (
     <>
       <SEO
+        title="Snaptech — IT & Technology Solutions | Hindustan Projects Group"
+        description="Looking for IT Solutions? Search. Discover. Connect with Snaptech — the enterprise technology and digital innovation wing of Hindustan Projects Group."
         path="/"
-        schemas={[localBusinessSchema()]}
-        keywords="IT company Bhilwara, web development Bhilwara, digital marketing Rajasthan, IT services Bhilwara, custom software Rajasthan"
+        schemas={[organizationSchema(), localBusinessSchema()]}
+        keywords="Snaptech, Hindustan Projects IT, IT company Bhilwara, web development Rajasthan, mobile app development India, cloud DevOps, AI automation, enterprise software"
       />
       <HeroSection />
 
@@ -99,6 +101,9 @@ export default function HomePage() {
           </div>
         </Container>
       </section>
+
+      {/* ── Official Parent Group Ecosystem Section ── */}
+      <ParentGroupSection />
 
       <ServicesSection />
       <ShowcaseSection />

@@ -44,32 +44,31 @@ export default function CareersPage() {
   return (
     <>
       <SEO
-        title="Careers | Join Hindustan Projects"
-        description="Build premium tech products, craft high-impact marketing strategies, and grow your career with Hindustan Projects. Explore open positions in Bhilwara, Rajasthan."
+        title="Careers — Snaptech | Hindustan Projects IT Division"
+        description="Build premium software platforms, cloud infrastructure, AI automation, and high-impact digital systems. Explore engineering & tech careers at Snaptech, Hindustan Projects."
         path="/careers"
-        keywords="IT jobs Bhilwara, software developer jobs Rajasthan, digital marketing jobs India, careers Hindustan Projects"
+        keywords="Snaptech careers, IT jobs, software engineer jobs, web developer careers, tech jobs, Hindustan Projects careers"
       />
 
-      {/* Hero Section - Dark Blue (Matches /services page hero) */}
+      {/* Hero Section - Dark Tech (Matches /services page hero) */}
       <section className="relative pt-24 sm:pt-32 lg:pt-36 pb-12 sm:pb-16 lg:pb-24 overflow-hidden bg-[#050e20]">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff06_1px,transparent_1px),linear-gradient(to_bottom,#ffffff06_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-blue/20 rounded-full blur-3xl -translate-y-1/2 pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-72 h-72 bg-brand-red/15 rounded-full blur-3xl translate-y-1/2 pointer-events-none" />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-primary/20 rounded-full blur-3xl -translate-y-1/2 pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-72 h-72 bg-brand-cyan/15 rounded-full blur-3xl translate-y-1/2 pointer-events-none" />
 
         <Container className="relative text-center max-w-3xl">
-          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand-red/30 bg-brand-red/10 text-brand-red text-xs font-semibold uppercase tracking-widest mb-6">
-            <Sparkles className="w-3.5 h-3.5 text-brand-red animate-pulse" />
-            Join Our Team
+          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand-primary/30 bg-brand-primary/10 text-brand-primary text-xs font-semibold uppercase tracking-widest mb-6">
+            <Sparkles className="w-3.5 h-3.5 text-brand-cyan animate-pulse" />
+            Engineering &amp; Innovation Careers
           </span>
           <h1 className="font-heading text-4xl sm:text-5xl lg:text-[3.5rem] font-bold !text-white leading-tight mb-5">
-            Build the Future of{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-red to-orange-400">
-              Digital Tech
+            Build the Future with{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-brand-cyan">
+              Snaptech
             </span>
           </h1>
           <p className="text-white/60 text-base sm:text-lg leading-relaxed max-w-xl mx-auto">
-            Hindustan Projects is a fast-growing IT team in Bhilwara. We build premium software,
-            custom ERPs, and run high-ROI digital campaigns.
+            Snaptech is the technology powerhouse of Hindustan Projects Group. We engineer mission-critical cloud applications, custom ERP/CRMs, and scalable digital platforms.
           </p>
         </Container>
       </section>

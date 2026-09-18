@@ -250,10 +250,10 @@ export default function ContactPage() {
   return (
     <>
       <SEO
-        title="Contact Us — Get a Free IT Consultation"
-        description="Contact Hindustan Projects in Bhilwara, Rajasthan. Get a free consultation for web development, digital marketing, IT consulting. Call, email, or WhatsApp us today."
+        title="Contact Snaptech — IT Solutions & Consultation | Hindustan Projects"
+        description="Contact Snaptech, the IT and software engineering division of Hindustan Projects Group. Schedule an enterprise consultation for web development, mobile apps, or cloud systems."
         path="/contact"
-        keywords="contact IT company Bhilwara, web development consultation Rajasthan, IT services quote India, hire web developer Bhilwara"
+        keywords="contact Snaptech, IT consultation Bhilwara, Hindustan Projects IT, hire software developers India, custom web development quote"
         schemas={[
           breadcrumbSchema([
             { name: 'Home', path: '/' },
@@ -265,31 +265,31 @@ export default function ContactPage() {
         ]}
       />
       {/* ── Page Hero Header ── */}
-      <section className="pt-24 sm:pt-32 lg:pt-36 pb-14 sm:pb-20 lg:pb-24 bg-[#050e20] border-b border-white/5 relative overflow-hidden">
+      <section className="pt-24 sm:pt-32 lg:pt-36 pb-14 sm:pb-20 lg:pb-24 bg-[#020714] border-b border-white/5 relative overflow-hidden">
         {/* Mesh Background grid */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:30px_30px] pointer-events-none" />
 
-        {/* Subtle Brand Red Glow to replace heavy blur blobs */}
-        <div className="absolute top-0 right-0 w-80 h-80 bg-brand-red/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-10 w-80 h-80 bg-brand-blue/10 rounded-full blur-3xl pointer-events-none" />
+        {/* Tech Electric Blue Glow */}
+        <div className="absolute top-0 right-0 w-80 h-80 bg-brand-primary/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-10 w-80 h-80 bg-brand-cyan/10 rounded-full blur-3xl pointer-events-none" />
 
         <Container className="relative">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
             {/* Left text column */}
             <div className="lg:col-span-7 space-y-6">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/25 mb-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                GET IN TOUCH
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold text-brand-cyan bg-brand-primary/20 border border-brand-primary/30 mb-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-brand-primary animate-pulse" />
+                A HINDUSTAN PROJECTS VENTURE
               </span>
-              <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-black !text-white leading-tight">
-                Let&apos;s Build Something{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-red to-orange-400">
-                  Extraordinary
+              <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight">
+                Let&apos;s Engineer Your{' '}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary-light via-brand-cyan to-white">
+                  Digital Future
                 </span>
               </h1>
-              <p className="text-white/70 text-base sm:text-lg max-w-2xl leading-relaxed">
-                Have a project in mind, need a consultation, or just want to say hello? Fill out the
-                form, WhatsApp us, or visit our office. We respond within 24 hours.
+              <p className="text-slate-300 text-base sm:text-lg max-w-2xl leading-relaxed">
+                Looking for enterprise web apps, mobile engineering, cloud infrastructure, or AI automation? 
+                Connect directly with Snaptech's software architects. We respond within 2 hours.
               </p>
 
               {/* Advanced Trust Blocks */}
