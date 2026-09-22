@@ -41,7 +41,10 @@ app.use(enforceHttps)
 // Enable console request logging
 app.use(requestLogger)
 
-// ── 0. Health check — BEFORE CORS so monitoring tools can ping it ─
+// ── 0. Health check & Root API status — BEFORE CORS so monitoring tools can ping it ─
+app.get('/', (req, res) => {
+  res.json({ status: 'ok', message: 'Snaptech Digital API is live', website: 'https://www.snaptech.digital' })
+})
 app.use('/api/health', healthRouter)
 
 // ── 1. Request Timeout (10 seconds) ───────────────────────────
