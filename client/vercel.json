@@ -2,11 +2,11 @@
   "routes": [
     {
       "src": "/sitemap.xml",
-      "dest": "https://api.hindustanprojects.in/sitemap.xml"
+      "dest": "https://api.snaptech.digital/sitemap.xml"
     },
     {
       "src": "/api/(.*)",
-      "dest": "https://api.hindustanprojects.in/api/$1"
+      "dest": "https://api.snaptech.digital/api/$1"
     },
     {
       "handle": "filesystem"
