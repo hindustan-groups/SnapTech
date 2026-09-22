@@ -41,18 +41,42 @@ async function sendViaResend({ to, subject, html, text, attachments }) {
 }
 
 // ── Nodemailer SMTP sender ─────────────────────────────────────
-async function sendViaSMTP({ to, subject, html, text, attachments }) {
-  const host = process.env.EMAIL_HOST || env.EMAIL_HOST || 'smtp.gmail.com'
+export async function sendViaSMTP({ to, subject, html, text, attachments }) {
+  const host = (process.env.EMAIL_HOST || env.EMAIL_HOST || 'smtp.gmail.com').trim()
   const port = parseInt(process.env.EMAIL_PORT || env.EMAIL_PORT || '587', 10)
-  const user = process.env.EMAIL_USER || env.EMAIL_USER
-  const pass = process.env.EMAIL_PASS || env.EMAIL_PASS
+  const user = (process.env.EMAIL_USER || env.EMAIL_USER || '').trim()
+  // Clean all spaces from App Password (e.g. "abcd efgh ijkl mnop" -> "abcdefghijklmnop")
+  const pass = (process.env.EMAIL_PASS || env.EMAIL_PASS || '').trim().replace(/\s+/g, '')
 
-  const transporter = nodemailer.createTransport({
-    host,
-    port,
-    secure: port === 465,
-    auth: { user, pass },
-  })
+  const isGmail =
+    host.includes('gmail') ||
+    user.toLowerCase().includes('gmail.com') ||
+    host === 'smtp.gmail.com'
+
+  const transportConfig = isGmail
+    ? {
+        service: 'gmail',
+        auth: { user, pass },
+        connectionTimeout: 8000,
+        greetingTimeout: 8000,
+        socketTimeout: 10000,
+        family: 4,
+      }
+    : {
+        host,
+        port,
+        secure: port === 465,
+        auth: { user, pass },
+        connectionTimeout: 8000,
+        greetingTimeout: 8000,
+        socketTimeout: 10000,
+        family: 4,
+        tls: {
+          rejectUnauthorized: false,
+        },
+      }
+
+  const transporter = nodemailer.createTransport(transportConfig)
   const from = process.env.EMAIL_FROM || env.EMAIL_FROM || `"Snaptech Digital" <${user}>`
   const info = await transporter.sendMail({ from, to, subject, html, text, attachments })
   return info

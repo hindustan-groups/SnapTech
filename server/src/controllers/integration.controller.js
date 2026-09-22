@@ -342,7 +342,7 @@ export const testSmtpConnection = async (req, res, next) => {
       })
     }
 
-    await sendEmail({
+    const emailPayload = {
       to: targetEmail,
       subject: '✅ Test Email — Snaptech Digital Admin',
       html: `<div style="font-family:Arial,sans-serif;padding:24px;border:1px solid #e2e8f0;border-radius:12px;max-width:520px;background:#ffffff">
@@ -361,7 +361,19 @@ export const testSmtpConnection = async (req, res, next) => {
         </p>
       </div>`,
       text: 'Email Test Successful — Your Snaptech Digital email configuration is working.',
-    })
+    }
+
+    if (usingResend) {
+      const { sendViaResend } = await import('../utils/mailer.js')
+      if (sendViaResend) {
+        await sendViaResend(emailPayload)
+      } else {
+        await sendEmail(emailPayload)
+      }
+    } else {
+      const { sendViaSMTP } = await import('../utils/mailer.js')
+      await sendViaSMTP(emailPayload)
+    }
 
     res.json({
       status: 'ok',
