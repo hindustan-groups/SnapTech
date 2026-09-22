@@ -1,3 +1,8 @@
+import dns from 'node:dns'
+if (dns.setDefaultResultOrder) {
+  dns.setDefaultResultOrder('ipv4first')
+}
+
 import './config/env.js' // load & validate env vars first
 import { logger } from './utils/logger.js'
 import { initScheduler } from './config/scheduler.js'

@@ -9,6 +9,11 @@
  * Never hardcode credentials here. All from env vars.
  */
 
+import dns from 'node:dns'
+if (dns.setDefaultResultOrder) {
+  dns.setDefaultResultOrder('ipv4first')
+}
+
 import nodemailer from 'nodemailer'
 import { Resend } from 'resend'
 import { env } from '../config/env.js'
@@ -53,28 +58,27 @@ export async function sendViaSMTP({ to, subject, html, text, attachments }) {
     user.toLowerCase().includes('gmail.com') ||
     host === 'smtp.gmail.com'
 
-  const transportConfig = isGmail
-    ? {
-        service: 'gmail',
-        auth: { user, pass },
-        connectionTimeout: 8000,
-        greetingTimeout: 8000,
-        socketTimeout: 10000,
-        family: 4,
-      }
-    : {
-        host,
-        port,
-        secure: port === 465,
-        auth: { user, pass },
-        connectionTimeout: 8000,
-        greetingTimeout: 8000,
-        socketTimeout: 10000,
-        family: 4,
-        tls: {
-          rejectUnauthorized: false,
-        },
-      }
+  const finalHost = isGmail ? 'smtp.gmail.com' : host
+  const finalPort = port === 465 ? 465 : 587
+  const isSecure = finalPort === 465
+
+  const transportConfig = {
+    host: finalHost,
+    port: finalPort,
+    secure: isSecure,
+    auth: { user, pass },
+    connectionTimeout: 10000,
+    greetingTimeout: 10000,
+    socketTimeout: 10000,
+    family: 4,
+    dnsLookup: (hostname, options, callback) => {
+      dns.lookup(hostname, { ...options, family: 4, all: false }, callback)
+    },
+    tls: {
+      rejectUnauthorized: false,
+      servername: finalHost,
+    },
+  }
 
   const transporter = nodemailer.createTransport(transportConfig)
   const from = process.env.EMAIL_FROM || env.EMAIL_FROM || `"Snaptech Digital" <${user}>`
