@@ -15,21 +15,25 @@ import { env } from '../config/env.js'
 
 // ── Determine sending strategy ─────────────────────────────────
 function getStrategy() {
-  if (env.RESEND_API_KEY) return 'resend'
-  if (env.EMAIL_USER && env.EMAIL_PASS) return 'smtp'
+  if (process.env.RESEND_API_KEY || env.RESEND_API_KEY) return 'resend'
+  if (
+    (process.env.EMAIL_USER || env.EMAIL_USER) &&
+    (process.env.EMAIL_PASS || env.EMAIL_PASS)
+  )
+    return 'smtp'
   return 'console'
 }
 
 // ── Resend sender ──────────────────────────────────────────────
 async function sendViaResend({ to, subject, html, text, attachments }) {
-  const resend = new Resend(env.RESEND_API_KEY)
+  const apiKey = process.env.RESEND_API_KEY || env.RESEND_API_KEY
+  const resend = new Resend(apiKey)
 
-  // Ensure from always has a display name like "Snaptech — Hindustan Projects <email>"
-  // If EMAIL_FROM is just an email (no display name), wrap it properly
-  const rawFrom = env.EMAIL_FROM || 'info@hindustanprojects.in'
+  // Ensure from always has a display name like "Snaptech Digital <email>"
+  const rawFrom = process.env.EMAIL_FROM || env.EMAIL_FROM || 'Snaptech Digital <info@snaptech.digital>'
   const from = rawFrom.includes('<')
     ? rawFrom
-    : `Snaptech — Hindustan Projects <${rawFrom}>`
+    : `Snaptech Digital <${rawFrom}>`
 
   const { data, error } = await resend.emails.send({ from, to, subject, html, text, attachments })
   if (error) throw new Error(error.message || 'Resend send failed')
@@ -38,13 +42,18 @@ async function sendViaResend({ to, subject, html, text, attachments }) {
 
 // ── Nodemailer SMTP sender ─────────────────────────────────────
 async function sendViaSMTP({ to, subject, html, text, attachments }) {
+  const host = process.env.EMAIL_HOST || env.EMAIL_HOST || 'smtp.gmail.com'
+  const port = parseInt(process.env.EMAIL_PORT || env.EMAIL_PORT || '587', 10)
+  const user = process.env.EMAIL_USER || env.EMAIL_USER
+  const pass = process.env.EMAIL_PASS || env.EMAIL_PASS
+
   const transporter = nodemailer.createTransport({
-    host: env.EMAIL_HOST || 'smtp.gmail.com',
-    port: env.EMAIL_PORT || 587,
-    secure: env.EMAIL_PORT === 465,
-    auth: { user: env.EMAIL_USER, pass: env.EMAIL_PASS },
+    host,
+    port,
+    secure: port === 465,
+    auth: { user, pass },
   })
-  const from = env.EMAIL_FROM || `"Snaptech — Hindustan Projects" <${env.EMAIL_USER}>`
+  const from = process.env.EMAIL_FROM || env.EMAIL_FROM || `"Snaptech Digital" <${user}>`
   const info = await transporter.sendMail({ from, to, subject, html, text, attachments })
   return info
 }

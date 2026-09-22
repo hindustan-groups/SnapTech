@@ -212,44 +212,80 @@ export const testSmtpConnection = async (req, res, next) => {
   try {
     const { sendEmail } = await import('../utils/mailer.js')
 
+    // If not in process.env, load from database site_settings
+    if (!process.env.RESEND_API_KEY && (!process.env.EMAIL_USER || !process.env.EMAIL_PASS)) {
+      const dbRows = await prisma.siteSetting.findMany({
+        where: {
+          key: {
+            in: [
+              'sys_smtp_user',
+              'sys_smtp_pass',
+              'sys_smtp_host',
+              'sys_smtp_port',
+              'sys_smtp_from',
+              'sys_resend_api_key',
+            ],
+          },
+        },
+      })
+      for (const r of dbRows) {
+        if (r.value && ENV_MAP[r.key]) {
+          process.env[ENV_MAP[r.key]] = r.value
+        }
+      }
+    }
+
     // Determine which strategy is active
-    const usingResend = !!process.env.RESEND_API_KEY
-    const usingSmtp = !!(process.env.EMAIL_USER && process.env.EMAIL_PASS)
+    const usingResend = !!(process.env.RESEND_API_KEY || env.RESEND_API_KEY)
+    const usingSmtp = !!(
+      (process.env.EMAIL_USER || env.EMAIL_USER) &&
+      (process.env.EMAIL_PASS || env.EMAIL_PASS)
+    )
 
     if (!usingResend && !usingSmtp) {
       return res.status(400).json({
         status: 'error',
-        message: 'No email provider configured. Set RESEND_API_KEY or EMAIL_USER + EMAIL_PASS.',
+        message:
+          'No email provider configured. Please enter your SMTP Email & App Password in the form below and click "Save All Integration Keys" first.',
       })
     }
 
     const targetEmail =
-      process.env.EMAIL_USER || (process.env.EMAIL_FROM || '').replace(/.*<(.+)>/, '$1')
+      process.env.EMAIL_USER ||
+      env.EMAIL_USER ||
+      (process.env.EMAIL_FROM || env.EMAIL_FROM || '').replace(/.*<(.+)>/, '$1')
 
     if (!targetEmail) {
       return res.status(400).json({
         status: 'error',
-        message: 'Set EMAIL_USER (or EMAIL_FROM) so the test email has a destination.',
+        message: 'Set SMTP User (or EMAIL_FROM) so the test email has a destination.',
       })
     }
 
     await sendEmail({
       to: targetEmail,
-      subject: 'Test Email — Hindustan Projects Admin',
-      html: `<div style="font-family:Arial,sans-serif;padding:20px;border:1px solid #e5e7eb;border-radius:8px;max-width:500px">
-        <h2 style="color:#1A3E8C;margin:0 0 12px">✅ Email Test Successful</h2>
-        <p style="color:#374151">Your email configuration is working correctly.</p>
-        <p style="color:#6B7280;font-size:13px">Provider: <strong>${usingResend ? 'Resend' : 'SMTP/Nodemailer'}</strong></p>
-        <p style="color:#6B7280;font-size:13px;margin-top:20px;border-top:1px solid #f3f4f6;padding-top:12px">
-          Sent from Hindustan Projects Admin Panel
+      subject: '✅ Test Email — Snaptech Digital Admin',
+      html: `<div style="font-family:Arial,sans-serif;padding:24px;border:1px solid #e2e8f0;border-radius:12px;max-width:520px;background:#ffffff">
+        <div style="background:linear-gradient(135deg,#0b0f19,#1e3a8a);padding:18px;border-radius:8px;margin-bottom:20px;text-align:center">
+          <h2 style="color:#ffffff;margin:0;font-size:20px;font-weight:700">Snaptech Digital</h2>
+          <p style="color:#93c5fd;margin:4px 0 0;font-size:12px">Integration Vault Verification</p>
+        </div>
+        <h3 style="color:#0f172a;margin:0 0 12px;font-size:16px">✅ Email Service Active & Verified</h3>
+        <p style="color:#475569;font-size:14px;line-height:1.6">Your SMTP / Email configuration is working correctly. All website contact form inquiries and client notifications will be routed through this inbox.</p>
+        <div style="background:#f8fafc;border-left:4px solid #2563eb;padding:12px;margin:16px 0;border-radius:4px">
+          <p style="color:#64748b;font-size:12px;margin:0">Provider: <strong style="color:#0f172a">${usingResend ? 'Resend API' : 'Gmail / Nodemailer SMTP'}</strong></p>
+          <p style="color:#64748b;font-size:12px;margin:4px 0 0">Recipient: <strong style="color:#0f172a">${targetEmail}</strong></p>
+        </div>
+        <p style="color:#94a3b8;font-size:11px;margin-top:24px;border-top:1px solid #f1f5f9;padding-top:12px;text-align:center">
+          Sent from Snaptech Digital Admin Integration Vault
         </p>
       </div>`,
-      text: 'Email Test Successful — Your email configuration is working.',
+      text: 'Email Test Successful — Your Snaptech Digital email configuration is working.',
     })
 
     res.json({
       status: 'ok',
-      message: `Test email sent to ${targetEmail} via ${usingResend ? 'Resend' : 'SMTP'}.`,
+      message: `Test email sent successfully to ${targetEmail} via ${usingResend ? 'Resend' : 'SMTP'}! Check your inbox.`,
     })
   } catch (err) {
     // Sanitize error — never forward raw provider errors (may contain credentials)
