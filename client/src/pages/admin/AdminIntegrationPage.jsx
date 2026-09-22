@@ -331,6 +331,7 @@ export default function AdminIntegrationPage() {
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { isSubmitting },
   } = useForm({
     values: data
@@ -377,9 +378,18 @@ export default function AdminIntegrationPage() {
     setSmtpTesting(true)
     setSmtpTest(null)
     try {
-      const r = await api.post('/admin/integrations/test-smtp', {})
+      const vals = getValues ? getValues() : {}
+      const r = await api.post('/admin/integrations/test-smtp', {
+        sys_smtp_host: vals.sys_smtp_host,
+        sys_smtp_port: vals.sys_smtp_port,
+        sys_smtp_user: vals.sys_smtp_user,
+        sys_smtp_pass: vals.sys_smtp_pass,
+        sys_smtp_from: vals.sys_smtp_from,
+        sys_resend_api_key: vals.sys_resend_api_key,
+      })
       setSmtpTest({ ok: true, message: r.message })
       addToast('Test email sent successfully', 'success')
+      qc.invalidateQueries({ queryKey: ['admin-integrations'] })
     } catch (err) {
       setSmtpTest({ ok: false, message: err.message })
       addToast(err.message || 'SMTP test failed', 'error')
@@ -392,9 +402,15 @@ export default function AdminIntegrationPage() {
     setCloudTesting(true)
     setCloudTest(null)
     try {
-      const r = await api.post('/admin/integrations/test-cloudinary', {})
+      const vals = getValues ? getValues() : {}
+      const r = await api.post('/admin/integrations/test-cloudinary', {
+        sys_cloudinary_cloud_name: vals.sys_cloudinary_cloud_name,
+        sys_cloudinary_api_key: vals.sys_cloudinary_api_key,
+        sys_cloudinary_api_secret: vals.sys_cloudinary_api_secret,
+      })
       setCloudTest({ ok: true, message: r.message })
       addToast('Cloudinary connection verified successfully', 'success')
+      qc.invalidateQueries({ queryKey: ['admin-integrations'] })
     } catch (err) {
       setCloudTest({ ok: false, message: err.message })
       addToast(err.message || 'Cloudinary test failed', 'error')
@@ -407,9 +423,13 @@ export default function AdminIntegrationPage() {
     setDbTesting(true)
     setDbTest(null)
     try {
-      const r = await api.post('/admin/integrations/test-database', {})
+      const vals = getValues ? getValues() : {}
+      const r = await api.post('/admin/integrations/test-database', {
+        sys_database_url: vals.sys_database_url,
+      })
       setDbTest({ ok: true, message: r.message })
       addToast('Database connection ping verified successfully', 'success')
+      qc.invalidateQueries({ queryKey: ['admin-integrations'] })
     } catch (err) {
       setDbTest({ ok: false, message: err.message })
       addToast(err.message || 'Database connection test failed', 'error')

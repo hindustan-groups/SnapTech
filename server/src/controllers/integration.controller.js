@@ -212,7 +212,87 @@ export const testSmtpConnection = async (req, res, next) => {
   try {
     const { sendEmail } = await import('../utils/mailer.js')
 
-    // If not in process.env, load from database site_settings
+    const {
+      sys_smtp_host,
+      sys_smtp_port,
+      sys_smtp_user,
+      sys_smtp_pass,
+      sys_smtp_from,
+      sys_resend_api_key,
+    } = req.body || {}
+
+    // 1. If non-masked credentials passed in body, auto-save and apply them immediately
+    if (sys_smtp_user && typeof sys_smtp_user === 'string' && sys_smtp_user.trim()) {
+      const u = sys_smtp_user.trim()
+      process.env.EMAIL_USER = u
+      await prisma.siteSetting.upsert({
+        where: { key: 'sys_smtp_user' },
+        update: { value: u },
+        create: { key: 'sys_smtp_user', value: u },
+      })
+    }
+
+    if (
+      sys_smtp_pass &&
+      typeof sys_smtp_pass === 'string' &&
+      sys_smtp_pass.trim() &&
+      !/^•+/.test(sys_smtp_pass.trim())
+    ) {
+      const p = sys_smtp_pass.trim()
+      process.env.EMAIL_PASS = p
+      await prisma.siteSetting.upsert({
+        where: { key: 'sys_smtp_pass' },
+        update: { value: p },
+        create: { key: 'sys_smtp_pass', value: p },
+      })
+    }
+
+    if (sys_smtp_host && typeof sys_smtp_host === 'string' && sys_smtp_host.trim()) {
+      const h = sys_smtp_host.trim()
+      process.env.EMAIL_HOST = h
+      await prisma.siteSetting.upsert({
+        where: { key: 'sys_smtp_host' },
+        update: { value: h },
+        create: { key: 'sys_smtp_host', value: h },
+      })
+    }
+
+    if (sys_smtp_port) {
+      const pt = String(parseInt(sys_smtp_port, 10) || 587)
+      process.env.EMAIL_PORT = pt
+      await prisma.siteSetting.upsert({
+        where: { key: 'sys_smtp_port' },
+        update: { value: pt },
+        create: { key: 'sys_smtp_port', value: pt },
+      })
+    }
+
+    if (sys_smtp_from && typeof sys_smtp_from === 'string' && sys_smtp_from.trim()) {
+      const f = sys_smtp_from.trim()
+      process.env.EMAIL_FROM = f
+      await prisma.siteSetting.upsert({
+        where: { key: 'sys_smtp_from' },
+        update: { value: f },
+        create: { key: 'sys_smtp_from', value: f },
+      })
+    }
+
+    if (
+      sys_resend_api_key &&
+      typeof sys_resend_api_key === 'string' &&
+      sys_resend_api_key.trim() &&
+      !/^•+/.test(sys_resend_api_key.trim())
+    ) {
+      const r = sys_resend_api_key.trim()
+      process.env.RESEND_API_KEY = r
+      await prisma.siteSetting.upsert({
+        where: { key: 'sys_resend_api_key' },
+        update: { value: r },
+        create: { key: 'sys_resend_api_key', value: r },
+      })
+    }
+
+    // 2. If not in process.env, load from database site_settings
     if (!process.env.RESEND_API_KEY && (!process.env.EMAIL_USER || !process.env.EMAIL_PASS)) {
       const dbRows = await prisma.siteSetting.findMany({
         where: {
@@ -246,7 +326,7 @@ export const testSmtpConnection = async (req, res, next) => {
       return res.status(400).json({
         status: 'error',
         message:
-          'No email provider configured. Please enter your SMTP Email & App Password in the form below and click "Save All Integration Keys" first.',
+          'No email credentials found. Please type your SMTP Email & App Password into the boxes above and click "Send Test Email via SMTP".',
       })
     }
 
@@ -290,10 +370,10 @@ export const testSmtpConnection = async (req, res, next) => {
   } catch (err) {
     // Sanitize error — never forward raw provider errors (may contain credentials)
     const safeMsg = err.message?.includes('Invalid login')
-      ? 'Authentication failed. Check your email credentials.'
+      ? 'Authentication failed. Please verify your 16-character Google App Password.'
       : err.message?.includes('ECONNREFUSED') || err.message?.includes('ETIMEDOUT')
         ? 'Could not connect to email server. Check HOST and PORT settings.'
-        : 'Email test failed. Check your configuration and try again.'
+        : `Email test failed: ${err.message || 'Check your configuration and try again.'}`
     res.status(500).json({ status: 'error', message: safeMsg })
   }
 }
@@ -306,6 +386,70 @@ export const testCloudinaryConnection = async (req, res, next) => {
   try {
     const { cloudinary } = await import('../utils/cloudinary.js')
 
+    const {
+      sys_cloudinary_cloud_name,
+      sys_cloudinary_api_key,
+      sys_cloudinary_api_secret,
+    } = req.body || {}
+
+    if (sys_cloudinary_cloud_name && typeof sys_cloudinary_cloud_name === 'string') {
+      const c = sys_cloudinary_cloud_name.trim()
+      process.env.CLOUDINARY_CLOUD_NAME = c
+      await prisma.siteSetting.upsert({
+        where: { key: 'sys_cloudinary_cloud_name' },
+        update: { value: c },
+        create: { key: 'sys_cloudinary_cloud_name', value: c },
+      })
+    }
+
+    if (sys_cloudinary_api_key && typeof sys_cloudinary_api_key === 'string') {
+      const k = sys_cloudinary_api_key.trim()
+      process.env.CLOUDINARY_API_KEY = k
+      await prisma.siteSetting.upsert({
+        where: { key: 'sys_cloudinary_api_key' },
+        update: { value: k },
+        create: { key: 'sys_cloudinary_api_key', value: k },
+      })
+    }
+
+    if (
+      sys_cloudinary_api_secret &&
+      typeof sys_cloudinary_api_secret === 'string' &&
+      !/^•+/.test(sys_cloudinary_api_secret.trim())
+    ) {
+      const s = sys_cloudinary_api_secret.trim()
+      process.env.CLOUDINARY_API_SECRET = s
+      await prisma.siteSetting.upsert({
+        where: { key: 'sys_cloudinary_api_secret' },
+        update: { value: s },
+        create: { key: 'sys_cloudinary_api_secret', value: s },
+      })
+    }
+
+    // If not in env, load from DB
+    if (
+      !process.env.CLOUDINARY_CLOUD_NAME ||
+      !process.env.CLOUDINARY_API_KEY ||
+      !process.env.CLOUDINARY_API_SECRET
+    ) {
+      const dbRows = await prisma.siteSetting.findMany({
+        where: {
+          key: {
+            in: [
+              'sys_cloudinary_cloud_name',
+              'sys_cloudinary_api_key',
+              'sys_cloudinary_api_secret',
+            ],
+          },
+        },
+      })
+      for (const r of dbRows) {
+        if (r.value && ENV_MAP[r.key]) {
+          process.env[ENV_MAP[r.key]] = r.value
+        }
+      }
+    }
+
     if (
       !process.env.CLOUDINARY_CLOUD_NAME ||
       !process.env.CLOUDINARY_API_KEY ||
@@ -317,16 +461,21 @@ export const testCloudinaryConnection = async (req, res, next) => {
       })
     }
 
+    cloudinary.config({
+      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+      api_key: process.env.CLOUDINARY_API_KEY,
+      api_secret: process.env.CLOUDINARY_API_SECRET,
+    })
+
     // Lightweight ping — fetches usage stats (doesn't upload anything)
     await cloudinary.api.ping()
 
     res.json({ status: 'ok', message: 'Cloudinary connection verified successfully.' })
   } catch (err) {
-    // Sanitize — never leak API keys from error messages
     const safeMsg =
       err.message?.includes('401') || err.message?.includes('Invalid')
         ? 'Authentication failed. Check your Cloudinary API Key and Secret.'
-        : 'Cloudinary connection failed. Verify your credentials and try again.'
+        : `Cloudinary connection failed: ${err.message || 'Verify credentials.'}`
     res.status(500).json({ status: 'error', message: safeMsg })
   }
 }
