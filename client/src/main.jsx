@@ -17,6 +17,12 @@ import './index.css'
 import App from './App.jsx'
 import { ErrorBoundary } from './components/monitoring/ErrorBoundary.jsx'
 
+// Auto-reload cleanly when a new Vercel deployment updates JavaScript chunk hashes
+window.addEventListener('vite:preloadError', (event) => {
+  event.preventDefault()
+  window.location.reload()
+})
+
 // Inject reCAPTCHA site key as a meta tag so index.html can pick it up
 const recaptchaSiteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY
 if (recaptchaSiteKey) {

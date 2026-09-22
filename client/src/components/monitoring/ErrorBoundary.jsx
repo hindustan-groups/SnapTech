@@ -14,6 +14,22 @@ export class ErrorBoundary extends React.Component {
   componentDidCatch(error, errorInfo) {
     this.setState({ errorInfo })
 
+    // Auto-recover from stale dynamic chunk imports on new deployments
+    const errorStr = error?.toString() || ''
+    if (
+      errorStr.includes('Failed to fetch dynamically imported module') ||
+      errorStr.includes('Importing a module script failed')
+    ) {
+      const storageKey = 'chunk_reload_ts'
+      const lastReload = sessionStorage.getItem(storageKey)
+      const now = Date.now()
+      if (!lastReload || now - parseInt(lastReload, 10) > 10000) {
+        sessionStorage.setItem(storageKey, String(now))
+        window.location.reload()
+        return
+      }
+    }
+
     const payload = {
       errorMessage: error?.toString() || 'Unknown Frontend Error',
       pageOrRoute: window.location.pathname + window.location.search,
