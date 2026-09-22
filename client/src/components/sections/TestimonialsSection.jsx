@@ -1,9 +1,11 @@
 /**
- * TestimonialsSection — Glassmorphic review cards with auto-slide carousel
+ * TestimonialsSection — Premium client reviews with multi-card layout on desktop,
+ * auto-slide carousel, star ratings, and "View All Reviews" CTA.
  */
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { Container } from '@/components/ui'
-import { Star, ChevronLeft, ChevronRight, Quote, MessageSquare } from 'lucide-react'
+import { Star, ChevronLeft, ChevronRight, Quote, MessageSquare, ArrowRight } from 'lucide-react'
 import { useTestimonials } from '@/hooks/useTestimonials'
 
 const PLACEHOLDER = [
@@ -28,7 +30,15 @@ const PLACEHOLDER = [
     name: 'Rajesh Singhal',
     role: 'Owner',
     company: 'Singhal Marbles & Granites',
-    text: 'We tried multiple marketing agencies but got zero leads. Hindustan Projects designed a targeted SEO and Google Ads strategy. Today we get 15+ high-quality inquiries every week.',
+    text: 'We tried multiple agencies but got zero leads. Hindustan Projects designed a targeted SEO and Google Ads strategy. Today we get 15+ high-quality inquiries every week.',
+    rating: 5,
+  },
+  {
+    id: '4',
+    name: 'Priya Mehta',
+    role: 'COO',
+    company: 'FinServe Solutions',
+    text: 'The cloud migration Snaptech executed for us cut our infrastructure costs by 38% and improved response times dramatically. Outstanding technical depth.',
     rating: 5,
   },
 ]
@@ -38,17 +48,87 @@ function getInitials(name = '') {
 }
 
 const AVATAR_COLORS = [
-  'from-blue-500 to-cyan-500',
-  'from-purple-500 to-pink-500',
-  'from-amber-500 to-orange-500',
-  'from-emerald-500 to-teal-500',
+  'from-brand-navy to-brand-blue',
+  'from-violet-600 to-purple-400',
+  'from-brand-blue to-cyan-400',
+  'from-amber-500 to-orange-400',
 ]
+
+function StarRating({ rating = 5 }) {
+  return (
+    <div className="flex gap-1 mb-5" aria-label={`${rating} out of 5 stars`}>
+      {Array.from({ length: 5 }).map((_, i) => (
+        <Star
+          key={i}
+          className={`w-4 h-4 ${i < rating ? 'fill-amber-400 text-amber-400' : 'fill-slate-200 text-slate-200'}`}
+        />
+      ))}
+    </div>
+  )
+}
+
+function TestimonialCard({ t, index, isActive }) {
+  return (
+    <div
+      className={`relative bg-white border rounded-2xl p-6 sm:p-8 shadow-sm transition-all duration-500 overflow-hidden group
+        ${isActive
+          ? 'border-brand-blue/30 shadow-lg scale-[1.01] ring-1 ring-brand-blue/10'
+          : 'border-slate-200 hover:border-brand-blue/20 hover:shadow-md'
+        }`}
+    >
+      {/* Top brand accent */}
+      <div
+        className={`absolute top-0 left-0 right-0 h-[3px] transition-opacity duration-300
+          ${isActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-60'}`}
+        style={{ background: 'linear-gradient(90deg, #1B6EF3, #0D1B4B)' }}
+      />
+
+      {/* Large decorative quote */}
+      <Quote
+        className="absolute right-5 top-4 w-16 h-16 text-slate-100 pointer-events-none transition-transform duration-300 group-hover:scale-110"
+        strokeWidth={1}
+      />
+
+      <StarRating rating={t.rating ?? 5} />
+
+      <blockquote className="text-sm sm:text-base text-slate-600 leading-relaxed italic mb-6 line-clamp-4 group-hover:text-slate-700 transition-colors">
+        &ldquo;{t.text}&rdquo;
+      </blockquote>
+
+      <div className="flex items-center gap-3 pt-5 border-t border-slate-100">
+        {t.avatarUrl ? (
+          <img
+            src={t.avatarUrl}
+            alt={t.name}
+            className="w-11 h-11 rounded-full object-cover shrink-0 border-2 border-brand-blue/20 shadow-sm"
+            loading="lazy"
+          />
+        ) : (
+          <div
+            className={`w-11 h-11 rounded-full bg-linear-to-br ${AVATAR_COLORS[index % AVATAR_COLORS.length]}
+              flex items-center justify-center font-heading text-xs font-bold text-white shrink-0 shadow-md`}
+          >
+            {getInitials(t.name)}
+          </div>
+        )}
+        <div>
+          <p className="font-heading text-sm font-bold text-slate-800 leading-none mb-0.5">{t.name}</p>
+          <p className="text-[11px] text-slate-500">
+            {t.role}
+            {t.company && <span>, <span className="font-semibold text-brand-blue">{t.company}</span></span>}
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export default function TestimonialsSection() {
   const { data, isLoading } = useTestimonials()
   const testimonials = data?.data?.length ? data.data : isLoading ? [] : PLACEHOLDER
   const [currentIndex, setCurrentIndex] = useState(0)
 
+  // Auto-advance every 5s
   useEffect(() => {
     if (testimonials.length <= 1) return
     const timer = setInterval(() => {
@@ -57,140 +137,148 @@ export default function TestimonialsSection() {
     return () => clearInterval(timer)
   }, [testimonials.length, currentIndex])
 
-  const handlePrev = () => setCurrentIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1))
-  const handleNext = () => setCurrentIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1))
+  const handlePrev = () =>
+    setCurrentIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1))
+  const handleNext = () =>
+    setCurrentIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1))
 
-  const t = testimonials[currentIndex]
+  // On desktop show 3 visible cards, mobile 1
+  const visibleCount = 3
+  const getVisible = () => {
+    if (testimonials.length === 0) return []
+    return Array.from({ length: Math.min(visibleCount, testimonials.length) }, (_, i) =>
+      testimonials[(currentIndex + i) % testimonials.length]
+    )
+  }
+  const visibleCards = getVisible()
 
   return (
     <section
-      className="py-24 relative overflow-hidden"
-      style={{ background: 'linear-gradient(160deg, #f0f6ff 0%, #ffffff 40%, #f8fafc 100%)' }}
+      className="py-24 relative overflow-hidden bg-slate-50 border-t border-slate-100"
       aria-labelledby="testimonials-heading"
     >
-      {/* Ambient blobs */}
-      <div className="absolute top-0 left-0 w-80 h-80 bg-brand-primary/8 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-80 h-80 bg-brand-cyan/6 rounded-full blur-3xl translate-x-1/3 translate-y-1/3 pointer-events-none" />
+      {/* Background glows */}
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-blue/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-brand-navy/5 rounded-full blur-[120px] pointer-events-none" />
 
-      <Container>
-        {/* Heading */}
+      <Container className="relative z-10">
+        {/* Header */}
         <div className="reveal text-center mb-14">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-primary/8 border border-brand-primary/20 text-brand-primary text-xs font-bold uppercase tracking-widest mb-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-blue/10 border border-brand-blue/20 text-brand-blue text-xs font-bold uppercase tracking-widest mb-4">
             <MessageSquare className="w-3.5 h-3.5" />
-            Client Success Stories
+            {testimonials.length > 0 && `${testimonials.length}+ `}Verified Reviews
           </div>
-          <h2 id="testimonials-heading" className="font-heading text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-3">
-            What Our <span className="text-gradient-blue">Clients Say</span>
+          <h2
+            id="testimonials-heading"
+            className="font-heading text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight mb-3"
+          >
+            What Our{' '}
+            <span
+              className="text-transparent bg-clip-text"
+              style={{ backgroundImage: 'linear-gradient(135deg, #1B6EF3, #0D1B4B)' }}
+            >
+              Clients Say
+            </span>
           </h2>
           <p className="text-slate-500 text-base max-w-xl mx-auto">
-            Hear from business owners who trust us with their digital transformation and growth.
+            Real feedback from business leaders and founders who scaled their operations with our
+            high-performance digital engineering.
           </p>
-        </div>
-
-        {/* Slider */}
-        <div className="max-w-4xl mx-auto reveal">
-          {isLoading ? (
-            <div className="glass-card-light rounded-3xl p-8 sm:p-12 h-72 flex items-center justify-center">
-              <div className="w-10 h-10 border-2 border-brand-primary border-t-transparent rounded-full animate-spin" />
-            </div>
-          ) : t ? (
-            <div className="relative">
-              {/* Main glassmorphic card */}
-              <div className="relative bg-white/70 backdrop-blur-xl border border-white/60 rounded-3xl p-8 sm:p-14 shadow-[0_24px_64px_rgba(0,102,255,0.08),0_4px_16px_rgba(0,0,0,0.04)] overflow-hidden transition-all duration-500">
-
-                {/* Big decorative quote */}
-                <Quote className="absolute right-8 top-6 w-24 h-24 text-brand-primary/5 pointer-events-none" strokeWidth={1} />
-
-                {/* Gradient top line */}
-                <div className="absolute top-0 left-0 right-0 h-[3px] rounded-t-3xl bg-gradient-to-r from-brand-primary via-brand-cyan to-brand-primary" />
-
-                <div
-                  key={currentIndex}
-                  className="flex flex-col items-center text-center"
-                  style={{ animation: 'heroFadeUp 0.45s ease forwards' }}
-                >
-                  {/* Stars */}
-                  <div className="flex gap-1.5 mb-6">
-                    {Array.from({ length: t.rating ?? 5 }).map((_, i) => (
-                      <Star key={i} className="w-5 h-5 fill-amber-400 text-amber-400" />
-                    ))}
-                  </div>
-
-                  {/* Quote Text */}
-                  <blockquote className="text-lg sm:text-xl md:text-2xl font-medium text-slate-700 leading-relaxed max-w-2xl italic mb-8">
-                    &ldquo;{t.text}&rdquo;
-                  </blockquote>
-
-                  {/* Client Profile */}
-                  <div className="flex flex-col sm:flex-row items-center gap-4 pt-6 border-t border-slate-100 w-full max-w-sm justify-center">
-                    {t.avatarUrl ? (
-                      <img
-                        src={t.avatarUrl}
-                        alt={t.name}
-                        className="w-14 h-14 rounded-full object-cover shrink-0 border-2 border-brand-primary/20 shadow-md"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <div
-                        className={`w-14 h-14 rounded-full bg-gradient-to-br ${AVATAR_COLORS[currentIndex % AVATAR_COLORS.length]}
-                          flex items-center justify-center font-heading text-sm font-bold text-white shrink-0 shadow-lg`}
-                      >
-                        {getInitials(t.name)}
-                      </div>
-                    )}
-                    <div className="text-center sm:text-left">
-                      <h3 className="font-heading text-base font-bold text-slate-800 leading-none mb-1">{t.name}</h3>
-                      <p className="text-xs text-slate-500">
-                        {t.role}{t.company && <span>, <span className="font-semibold text-brand-primary">{t.company}</span></span>}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Navigation Chevrons */}
-              {testimonials.length > 1 && (
-                <>
-                  <button
-                    onClick={handlePrev}
-                    className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 sm:-translate-x-6
-                      w-11 h-11 rounded-full border border-slate-200 bg-white flex items-center justify-center
-                      text-slate-500 hover:border-brand-primary hover:text-brand-primary hover:bg-brand-ice
-                      transition-all shadow-md cursor-pointer z-10"
-                    aria-label="Previous testimonial"
-                  >
-                    <ChevronLeft className="w-5 h-5" />
-                  </button>
-                  <button
-                    onClick={handleNext}
-                    className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 sm:translate-x-6
-                      w-11 h-11 rounded-full border border-slate-200 bg-white flex items-center justify-center
-                      text-slate-500 hover:border-brand-primary hover:text-brand-primary hover:bg-brand-ice
-                      transition-all shadow-md cursor-pointer z-10"
-                    aria-label="Next testimonial"
-                  >
-                    <ChevronRight className="w-5 h-5" />
-                  </button>
-                </>
-              )}
-            </div>
-          ) : null}
-
-          {/* Progress Dots */}
-          {testimonials.length > 1 && (
-            <div className="flex justify-center items-center gap-2 mt-8">
-              {testimonials.map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setCurrentIndex(idx)}
-                  className={`h-2 rounded-full transition-all duration-400 cursor-pointer ${
-                    currentIndex === idx ? 'w-8 bg-brand-primary' : 'w-2 bg-slate-300 hover:bg-slate-400'
-                  }`}
-                  aria-label={`Go to testimonial ${idx + 1}`}
-                />
+          {/* Average stars */}
+          <div className="flex items-center justify-center gap-2 mt-4">
+            <div className="flex gap-0.5">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
               ))}
             </div>
-          )}
+            <span className="text-sm font-bold text-slate-700">5.0</span>
+            <span className="text-sm text-slate-500">average rating</span>
+          </div>
+        </div>
+
+        {/* Cards grid */}
+        {isLoading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="bg-white border border-slate-200 rounded-2xl p-8 h-64 animate-pulse" />
+            ))}
+          </div>
+        ) : (
+          <div className="relative">
+            {/* Desktop: 3 cards */}
+            <div className="hidden lg:grid grid-cols-3 gap-5">
+              {visibleCards.map((t, i) => (
+                <div
+                  key={`${t.id}-${currentIndex}`}
+                  style={{ animation: `heroFadeUp 0.4s ease ${i * 0.08}s both` }}
+                >
+                  <TestimonialCard t={t} index={(currentIndex + i) % AVATAR_COLORS.length} isActive={i === 0} />
+                </div>
+              ))}
+            </div>
+
+            {/* Mobile: single card */}
+            <div className="lg:hidden max-w-2xl mx-auto">
+              {testimonials[currentIndex] && (
+                <div
+                  key={currentIndex}
+                  style={{ animation: 'heroFadeUp 0.4s ease both' }}
+                >
+                  <TestimonialCard
+                    t={testimonials[currentIndex]}
+                    index={currentIndex % AVATAR_COLORS.length}
+                    isActive
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Navigation */}
+            {testimonials.length > 1 && (
+              <div className="flex justify-center items-center gap-4 mt-8">
+                <button
+                  onClick={handlePrev}
+                  className="w-10 h-10 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-500 hover:border-brand-blue hover:text-brand-blue hover:shadow-md transition-all shadow-sm cursor-pointer"
+                  aria-label="Previous testimonial"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+
+                {/* Dot indicators */}
+                <div className="flex items-center gap-2">
+                  {testimonials.map((_, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setCurrentIndex(idx)}
+                      className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                        currentIndex === idx ? 'w-8 bg-brand-blue' : 'w-2 bg-slate-300 hover:bg-slate-400'
+                      }`}
+                      aria-label={`Go to testimonial ${idx + 1}`}
+                    />
+                  ))}
+                </div>
+
+                <button
+                  onClick={handleNext}
+                  className="w-10 h-10 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-500 hover:border-brand-blue hover:text-brand-blue hover:shadow-md transition-all shadow-sm cursor-pointer"
+                  aria-label="Next testimonial"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* View All CTA */}
+        <div className="text-center mt-10">
+          <Link
+            to="/contact"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-brand-blue hover:text-brand-navy transition-colors group"
+          >
+            Work with us and share your success story
+            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+          </Link>
         </div>
       </Container>
     </section>

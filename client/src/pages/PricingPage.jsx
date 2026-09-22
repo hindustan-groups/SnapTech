@@ -519,8 +519,8 @@ export default function PricingPage() {
       />
 
       {/* ── HERO SECTION ──────────────────────────────────────────────── */}
-      <section className="relative pt-28 pb-16 lg:pt-36 lg:pb-24 overflow-hidden bg-gradient-to-b from-brand-primary/10 via-brand-navy/5 to-bg-base border-b border-gray-100">
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-brand-primary/15 rounded-full filter blur-3xl pointer-events-none -z-10 animate-pulse" />
+      <section className="relative pt-28 pb-16 lg:pt-36 lg:pb-24 overflow-hidden bg-[#020714] border-b border-white/10">
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-brand-primary/20 rounded-full filter blur-3xl pointer-events-none -z-10 animate-pulse" />
         <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-brand-cyan/15 rounded-full filter blur-3xl pointer-events-none -z-10" />
 
         <Container>
@@ -530,7 +530,7 @@ export default function PricingPage() {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 border border-brand-primary/20 shadow-sm text-brand-primary text-xs font-extrabold uppercase tracking-wider mb-6"
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-cyan/10 border border-brand-cyan/30 shadow-lg shadow-cyan-950/40 text-brand-cyan text-xs font-bold uppercase tracking-wider mb-6 backdrop-blur-md"
             >
               <Sparkles className="w-4 h-4 text-brand-cyan animate-spin" style={{ animationDuration: '4s' }} />
               <span>Transparent &amp; Predictable IT Engineering</span>
@@ -541,9 +541,12 @@ export default function PricingPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="font-heading text-4xl sm:text-5xl lg:text-6xl font-black text-text-dark tracking-tight leading-[1.12]"
+              className="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.12]"
             >
-              Pricing &amp; <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary via-blue-600 to-brand-navy">Packages</span>
+              Pricing &amp;{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan via-blue-400 to-indigo-400">
+                Enterprise Packages
+              </span>
             </motion.h1>
 
             {/* Subtitle */}
@@ -551,18 +554,18 @@ export default function PricingPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="mt-4 text-lg sm:text-xl font-bold text-brand-blue"
+              className="mt-4 text-lg sm:text-xl font-bold text-brand-cyan"
             >
-              Affordable IT Solutions for Startups, Local Businesses and Enterprises.
+              Predictable IT Solutions for Startups, Regional Enterprises and Industrial Brands.
             </motion.p>
 
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.25 }}
-              className="mt-3 text-sm sm:text-base text-text-muted leading-relaxed max-w-2xl mx-auto"
+              className="mt-3 text-sm sm:text-base text-slate-400 leading-relaxed max-w-2xl mx-auto"
             >
-              We provide transparent pricing, modern development and long-term support to help your business grow online.
+              We provide upfront milestone quotes, modern cloud architectures, and dedicated long-term SLA support.
             </motion.p>
 
             {/* CTA Action Buttons */}
@@ -577,9 +580,9 @@ export default function PricingPage() {
                 size="lg"
                 onClick={() => openQuoteModal('Hero CTA - Free Quote')}
                 leftIcon={<Sparkles className="w-5 h-5" />}
-                className="w-full sm:w-auto shadow-lg shadow-brand-red/25 hover:shadow-xl hover:shadow-brand-red/35 transition-all"
+                className="w-full sm:w-auto bg-brand-cyan hover:bg-brand-cyan-light text-slate-950 font-bold shadow-lg shadow-cyan-950/50 transition-all cursor-pointer"
               >
-                Get Free Quote
+                Request Custom Quote
               </Button>
 
               <Button
@@ -590,7 +593,7 @@ export default function PricingPage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 leftIcon={<MessageSquare className="w-5 h-5" />}
-                className="w-full sm:w-auto !bg-[#25D366] hover:!bg-[#20ba5a] !border-[#25D366] shadow-md shadow-emerald-500/20"
+                className="w-full sm:w-auto !bg-emerald-500 hover:!bg-emerald-400 !border-emerald-500 !text-slate-950 font-bold shadow-md shadow-emerald-500/20"
               >
                 WhatsApp Us
               </Button>
@@ -601,23 +604,23 @@ export default function PricingPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="mt-12 pt-8 border-t border-gray-200/60 grid grid-cols-2 md:grid-cols-4 gap-4 text-xs font-semibold text-text-muted"
+              className="mt-12 pt-8 border-t border-white/10 grid grid-cols-2 md:grid-cols-4 gap-4 text-xs font-semibold text-slate-400"
             >
               <div className="flex items-center justify-center gap-2">
-                <CheckCircle className="w-4 h-4 text-emerald-500 shrink-0" />
-                <span>100% Transparent Quotes</span>
+                <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+                <span>100% Itemized Proposals</span>
               </div>
               <div className="flex items-center justify-center gap-2">
-                <Zap className="w-4 h-4 text-amber-500 shrink-0" />
-                <span>Fast 5–7 Days Delivery</span>
+                <Zap className="w-4 h-4 text-brand-cyan shrink-0" />
+                <span>Fast 5–7 Days Sprint 0</span>
               </div>
               <div className="flex items-center justify-center gap-2">
-                <Shield className="w-4 h-4 text-brand-blue shrink-0" />
-                <span>Secure Development</span>
+                <Shield className="w-4 h-4 text-blue-400 shrink-0" />
+                <span>Zero-Vulnerability Code</span>
               </div>
               <div className="flex items-center justify-center gap-2">
-                <Clock className="w-4 h-4 text-brand-red shrink-0" />
-                <span>Long-Term Support</span>
+                <Clock className="w-4 h-4 text-amber-400 shrink-0" />
+                <span>Dedicated SLA Support</span>
               </div>
             </motion.div>
           </div>
@@ -625,53 +628,53 @@ export default function PricingPage() {
       </section>
 
       {/* ── SECTION NAVIGATION PILLS (Quick Scroll) ─────────────────────── */}
-      <div className="sticky top-16 z-30 bg-white/90 backdrop-blur-md border-b border-gray-200/80 shadow-xs py-3 overflow-x-auto no-scrollbar">
+      <div className="sticky top-16 z-30 bg-slate-900/85 backdrop-blur-xl border-b border-white/10 shadow-lg py-3 overflow-x-auto no-scrollbar">
         <Container className="flex items-center justify-start sm:justify-center gap-2 min-w-max px-4">
           <a
             href="#website-packages"
-            className="px-3.5 py-1.5 rounded-full bg-brand-blue/10 text-brand-blue hover:bg-brand-blue hover:text-white text-xs font-bold transition-all duration-200"
+            className="px-3.5 py-1.5 rounded-xl bg-brand-cyan text-slate-950 text-xs font-bold shadow-md shadow-cyan-500/20 transition-all"
           >
             Website Packages
           </a>
           <a
             href="#software-development"
-            className="px-3.5 py-1.5 rounded-full bg-gray-100 text-text-dark hover:bg-brand-blue hover:text-white text-xs font-bold transition-all duration-200"
+            className="px-3.5 py-1.5 rounded-xl bg-slate-900/60 text-slate-300 border border-white/10 hover:border-brand-cyan/40 hover:text-white text-xs font-bold transition-all"
           >
             Software
           </a>
           <a
             href="#mobile-app-development"
-            className="px-3.5 py-1.5 rounded-full bg-gray-100 text-text-dark hover:bg-brand-blue hover:text-white text-xs font-bold transition-all duration-200"
+            className="px-3.5 py-1.5 rounded-xl bg-slate-900/60 text-slate-300 border border-white/10 hover:border-brand-cyan/40 hover:text-white text-xs font-bold transition-all"
           >
             Mobile Apps
           </a>
           <a
             href="#branding-services"
-            className="px-3.5 py-1.5 rounded-full bg-gray-100 text-text-dark hover:bg-brand-blue hover:text-white text-xs font-bold transition-all duration-200"
+            className="px-3.5 py-1.5 rounded-xl bg-slate-900/60 text-slate-300 border border-white/10 hover:border-brand-cyan/40 hover:text-white text-xs font-bold transition-all"
           >
             Branding
           </a>
           <a
             href="#digital-marketing"
-            className="px-3.5 py-1.5 rounded-full bg-gray-100 text-text-dark hover:bg-brand-blue hover:text-white text-xs font-bold transition-all duration-200"
+            className="px-3.5 py-1.5 rounded-xl bg-slate-900/60 text-slate-300 border border-white/10 hover:border-brand-cyan/40 hover:text-white text-xs font-bold transition-all"
           >
             Marketing
           </a>
           <a
             href="#hosting-maintenance"
-            className="px-3.5 py-1.5 rounded-full bg-gray-100 text-text-dark hover:bg-brand-blue hover:text-white text-xs font-bold transition-all duration-200"
+            className="px-3.5 py-1.5 rounded-xl bg-slate-900/60 text-slate-300 border border-white/10 hover:border-brand-cyan/40 hover:text-white text-xs font-bold transition-all"
           >
-            Hosting
+            Hosting &amp; SLA
           </a>
           <a
             href="#development-process"
-            className="px-3.5 py-1.5 rounded-full bg-gray-100 text-text-dark hover:bg-brand-blue hover:text-white text-xs font-bold transition-all duration-200"
+            className="px-3.5 py-1.5 rounded-xl bg-slate-900/60 text-slate-300 border border-white/10 hover:border-brand-cyan/40 hover:text-white text-xs font-bold transition-all"
           >
             Process
           </a>
           <a
             href="#faq-section"
-            className="px-3.5 py-1.5 rounded-full bg-gray-100 text-text-dark hover:bg-brand-blue hover:text-white text-xs font-bold transition-all duration-200"
+            className="px-3.5 py-1.5 rounded-xl bg-slate-900/60 text-slate-300 border border-white/10 hover:border-brand-cyan/40 hover:text-white text-xs font-bold transition-all"
           >
             FAQ
           </a>
@@ -679,17 +682,17 @@ export default function PricingPage() {
       </div>
 
       {/* ── 10 QUICK DELIVERABLES & POLICY GUARANTEES ─────────────────── */}
-      <section className="py-12 bg-gradient-to-b from-gray-50 to-bg-base border-b border-gray-200/60">
+      <section className="py-14 bg-[#03091e] border-b border-white/10">
         <Container>
           <div className="text-center max-w-2xl mx-auto mb-10">
-            <span className="inline-block px-3.5 py-1 rounded-full bg-brand-red/10 text-brand-red text-xs font-black uppercase tracking-wider mb-2.5">
-              10-Point Client Promise
+            <span className="inline-block px-3.5 py-1 rounded-full bg-brand-cyan/10 border border-brand-cyan/20 text-brand-cyan text-xs font-bold uppercase tracking-wider mb-2.5">
+              10-Point Engineering Charter
             </span>
-            <h2 className="font-heading text-2xl sm:text-3xl font-black text-text-dark">
-              Quick Answers &amp; Package Deliverables
+            <h2 className="font-heading text-2xl sm:text-3xl font-bold text-white">
+              Package Deliverables &amp; Standards
             </h2>
-            <p className="text-text-muted text-xs sm:text-sm mt-1.5">
-              Everything you need to know about timelines, hosting, domain, payments &amp; support before getting started.
+            <p className="text-slate-400 text-xs sm:text-sm mt-1.5">
+              Everything you need to know about timelines, hosting, domain ownership, and SLA support.
             </p>
           </div>
 
@@ -703,23 +706,23 @@ export default function PricingPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.3, delay: idx * 0.04 }}
-                  className="bg-white rounded-2xl p-4 border border-gray-200/90 shadow-xs hover:shadow-md hover:border-brand-blue/40 transition-all flex flex-col justify-between group relative overflow-hidden"
+                  className="bg-slate-900/70 rounded-2xl p-4 border border-white/10 hover:border-brand-cyan/40 backdrop-blur-xl shadow-lg transition-all flex flex-col justify-between group relative overflow-hidden"
                 >
-                  <div className="h-1 w-full bg-gradient-to-r from-brand-blue to-brand-red absolute top-0 left-0" />
+                  <div className="h-1 w-full bg-gradient-to-r from-brand-cyan to-blue-500 absolute top-0 left-0" />
                   <div>
                     <div className="flex items-center justify-between gap-2 mb-2">
-                      <div className="w-8 h-8 rounded-xl bg-brand-blue/10 text-brand-blue flex items-center justify-center group-hover:bg-brand-blue group-hover:text-white transition-colors">
+                      <div className="w-8 h-8 rounded-xl bg-brand-cyan/10 text-brand-cyan flex items-center justify-center group-hover:bg-brand-cyan group-hover:text-slate-950 transition-colors">
                         <IconComp className="w-4 h-4" />
                       </div>
-                      <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
+                      <span className="text-[9px] font-bold uppercase px-2 py-0.5 rounded-full bg-white/[0.05] text-slate-300 border border-white/5">
                         {item.badge}
                       </span>
                     </div>
 
-                    <h3 className="font-heading text-xs font-black text-text-dark group-hover:text-brand-blue transition-colors">
+                    <h3 className="font-heading text-xs font-bold text-white group-hover:text-brand-cyan transition-colors">
                       {item.question}
                     </h3>
-                    <p className="text-[11px] text-text-muted mt-1 leading-snug">
+                    <p className="text-[11px] text-slate-400 mt-1 leading-snug">
                       {item.answer}
                     </p>
                   </div>
@@ -731,14 +734,15 @@ export default function PricingPage() {
       </section>
 
       {/* ── SECTION 1: WEBSITE DEVELOPMENT PACKAGES ───────────────────── */}
-      <section id="website-packages" className="py-16 lg:py-24 bg-bg-base scroll-mt-24">
+      <section id="website-packages" className="py-16 lg:py-24 bg-[#020714] scroll-mt-24">
         <Container>
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-black text-text-dark">
+            <span className="text-xs font-bold uppercase tracking-widest text-brand-cyan">Web Platforms</span>
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mt-1">
               Website Development Packages
             </h2>
-            <p className="text-text-muted text-sm sm:text-base mt-3 leading-relaxed">
-              High-performance, mobile-responsive website solutions built to scale your business and capture high-intent leads.
+            <p className="text-slate-400 text-sm sm:text-base mt-3 leading-relaxed">
+              High-performance, mobile-responsive web platforms built to scale your business and capture high-intent leads.
             </p>
           </div>
 
@@ -753,22 +757,22 @@ export default function PricingPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: idx * 0.1 }}
-                  className={`relative flex flex-col justify-between rounded-3xl transition-all duration-300 overflow-hidden ${
+                  className={`relative flex flex-col justify-between rounded-3xl transition-all duration-300 overflow-hidden backdrop-blur-xl ${
                     pkg.isPopular
-                      ? 'bg-gradient-to-b from-white via-red-50/40 to-white border-2 border-brand-red shadow-[0_15px_50px_rgba(227,30,36,0.22)] ring-2 ring-brand-red/40 lg:-translate-y-3 z-10'
-                      : 'bg-white border border-gray-200/90 hover:border-brand-blue/50 shadow-sm hover:shadow-2xl hover:-translate-y-1.5'
+                      ? 'bg-slate-900/90 border-2 border-brand-cyan shadow-2xl shadow-cyan-950/50 ring-1 ring-brand-cyan/40 lg:-translate-y-3 z-10'
+                      : 'bg-slate-900/70 border border-white/10 hover:border-brand-cyan/40 shadow-xl hover:-translate-y-1.5'
                   }`}
                 >
                   {/* Top Colored Gradient Accent Line */}
-                  <div className={`h-2.5 w-full bg-gradient-to-r ${pkg.headerGradient}`} />
+                  <div className={`h-2 w-full bg-gradient-to-r ${pkg.headerGradient}`} />
 
                   {/* Floating Popular / Category Badge */}
                   {pkg.badge && (
                     <div
-                      className={`absolute top-5 right-5 px-3 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider shadow-xs ${
+                      className={`absolute top-5 right-5 px-3 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
                         pkg.isPopular
-                          ? 'bg-gradient-to-r from-brand-primary to-brand-navy text-white'
-                          : 'bg-brand-blue/10 text-brand-blue border border-brand-blue/20'
+                          ? 'bg-brand-cyan text-slate-950 shadow-md shadow-cyan-500/30'
+                          : 'bg-white/10 text-slate-300 border border-white/10'
                       }`}
                     >
                       {pkg.badge}
@@ -778,32 +782,32 @@ export default function PricingPage() {
                   <div className="p-5 sm:p-6">
                     {/* Header Icon + Name */}
                     <div className="flex items-center gap-3 mb-2.5">
-                      <div className={`w-10 h-10 rounded-2xl border flex items-center justify-center shrink-0 shadow-xs ${pkg.iconBg}`}>
+                      <div className={`w-10 h-10 rounded-2xl border border-white/10 flex items-center justify-center shrink-0 shadow-sm bg-white/5 text-brand-cyan`}>
                         <IconComp className="w-5 h-5" />
                       </div>
                       <div>
-                        <h3 className="font-heading text-xl font-black text-text-dark">
+                        <h3 className="font-heading text-xl font-bold text-white">
                           {pkg.name}
                         </h3>
-                        <span className="text-[10px] font-bold text-emerald-600 block">
-                          ✔ Verified Plan
+                        <span className="text-[10px] font-bold text-emerald-400 block">
+                          ✔ Verified Tier
                         </span>
                       </div>
                     </div>
 
-                    <p className="text-xs text-text-muted leading-relaxed">
+                    <p className="text-xs text-slate-400 leading-relaxed">
                       {pkg.description}
                     </p>
 
                     {/* Price Block */}
-                    <div className="my-3.5 pt-3 border-t border-gray-100">
-                      <span className="text-[10px] font-extrabold text-text-muted uppercase tracking-wider block">
+                    <div className="my-3.5 pt-3 border-t border-white/10">
+                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
                         {pkg.priceSubtitle}
                       </span>
                       <div className="flex items-baseline gap-1 mt-0.5">
                         <span
-                          className={`font-heading text-3xl sm:text-4xl font-black tracking-tight ${
-                            pkg.isPopular ? 'text-brand-red' : 'text-brand-blue'
+                          className={`font-heading text-3xl sm:text-4xl font-extrabold tracking-tight ${
+                            pkg.isPopular ? 'text-brand-cyan' : 'text-white'
                           }`}
                         >
                           {pkg.price}
@@ -811,30 +815,30 @@ export default function PricingPage() {
                       </div>
 
                       {/* Delivery & Support Badges */}
-                      <div className="mt-2.5 flex flex-wrap gap-1.5 text-[11px] font-semibold text-text-muted">
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-gray-100 text-gray-700 text-[10px]">
-                          <Zap className="w-3 h-3 text-amber-500" />
+                      <div className="mt-2.5 flex flex-wrap gap-1.5 text-[11px] font-semibold text-slate-400">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-white/[0.04] text-slate-300 text-[10px] border border-white/5">
+                          <Zap className="w-3 h-3 text-amber-400" />
                           {pkg.delivery}
                         </span>
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-gray-100 text-gray-700 text-[10px]">
-                          <Shield className="w-3 h-3 text-brand-blue" />
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-white/[0.04] text-slate-300 text-[10px] border border-white/5">
+                          <Shield className="w-3 h-3 text-brand-cyan" />
                           {pkg.support}
                         </span>
                       </div>
                     </div>
 
                     {/* Feature Checklist */}
-                    <div className="border-t border-gray-100 pt-3 mb-1">
-                      <span className="text-[10px] font-extrabold text-text-dark uppercase tracking-wider block mb-2">
-                        Included Features:
+                    <div className="border-t border-white/10 pt-3 mb-1">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">
+                        Included Deliverables:
                       </span>
                       <ul className="space-y-2">
                         {pkg.features.map((feature, fIdx) => (
-                          <li key={fIdx} className="flex items-start gap-2 text-xs text-text-dark">
-                            <span className="p-0.5 rounded-full bg-emerald-500 text-white mt-0.5 shrink-0 shadow-xs">
+                          <li key={fIdx} className="flex items-start gap-2 text-xs text-slate-300">
+                            <span className="p-0.5 rounded-full bg-emerald-500/20 text-emerald-400 mt-0.5 shrink-0 border border-emerald-500/30">
                               <Check className="w-2.5 h-2.5 stroke-[3]" />
                             </span>
-                            <span className="font-semibold">{feature}</span>
+                            <span className="font-medium">{feature}</span>
                           </li>
                         ))}
                       </ul>
@@ -842,14 +846,18 @@ export default function PricingPage() {
                   </div>
 
                   {/* Card Bottom CTA Button */}
-                  <div className="p-5 sm:p-6 pt-0 border-t border-gray-100/80 mt-auto">
+                  <div className="p-5 sm:p-6 pt-0 border-t border-white/10 mt-auto">
                     <Button
                       variant={pkg.isPopular ? 'primary' : 'outline'}
                       fullWidth
                       onClick={() => openQuoteModal(`Website Package: ${pkg.name}`)}
-                      className={pkg.isPopular ? 'shadow-lg shadow-brand-red/30' : ''}
+                      className={
+                        pkg.isPopular
+                          ? 'bg-brand-cyan hover:bg-brand-cyan-light text-slate-950 font-bold shadow-lg shadow-cyan-950/50'
+                          : 'border-white/15 text-slate-300 hover:border-brand-cyan/40 hover:text-white'
+                      }
                     >
-                      Get Started
+                      Select {pkg.name}
                     </Button>
                   </div>
                 </motion.div>
@@ -860,14 +868,15 @@ export default function PricingPage() {
       </section>
 
       {/* ── SECTION 2: SOFTWARE DEVELOPMENT ─────────────────────────────── */}
-      <section id="software-development" className="py-16 lg:py-24 bg-gradient-to-b from-gray-50 to-bg-base border-t border-gray-100 scroll-mt-24">
+      <section id="software-development" className="py-16 lg:py-24 bg-[#03091e] border-t border-white/10 scroll-mt-24">
         <Container>
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-black text-text-dark">
-              Software Development
+            <span className="text-xs font-bold uppercase tracking-widest text-brand-cyan">Operational Architecture</span>
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mt-1">
+              Custom Software Development
             </h2>
-            <p className="text-text-muted text-sm sm:text-base mt-3 leading-relaxed">
-              Custom business software, GST billing platforms, CRM pipelines, and ERP systems tailored for your operational workflow.
+            <p className="text-slate-400 text-sm sm:text-base mt-3 leading-relaxed">
+              Tailored ERP systems, GST billing engines, CRM pipelines, and supply-chain platforms engineered for Rajasthan and national industries.
             </p>
           </div>
 
@@ -881,7 +890,7 @@ export default function PricingPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: idx * 0.08 }}
-                  className="bg-white rounded-3xl overflow-hidden border border-gray-200/90 hover:border-brand-blue/50 shadow-sm hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group"
+                  className="bg-slate-900/70 rounded-3xl overflow-hidden border border-white/10 hover:border-brand-cyan/40 shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group backdrop-blur-xl"
                 >
                   <div className={`h-2 w-full bg-gradient-to-r ${item.color}`} />
                   <div className="p-5 sm:p-6">
@@ -889,18 +898,18 @@ export default function PricingPage() {
                       <IconComp className="w-6 h-6" />
                     </div>
 
-                    <h3 className="font-heading text-xl font-bold text-text-dark group-hover:text-brand-blue transition-colors">
+                    <h3 className="font-heading text-xl font-bold text-white group-hover:text-brand-cyan transition-colors">
                       {item.title}
                     </h3>
-                    <p className="text-xs sm:text-sm text-text-muted mt-2 leading-relaxed">
+                    <p className="text-xs sm:text-sm text-slate-400 mt-2 leading-relaxed">
                       {item.desc}
                     </p>
                   </div>
 
-                  <div className="p-5 sm:p-6 pt-0 border-t border-gray-100/80 mt-auto flex items-center justify-between">
+                  <div className="p-5 sm:p-6 pt-0 border-t border-white/10 mt-auto flex items-center justify-between">
                     <div>
-                      <span className="text-[10px] text-text-muted uppercase tracking-wider block font-extrabold">Starting From</span>
-                      <span className="font-heading text-xl font-black text-brand-red">{item.price}</span>
+                      <span className="text-[10px] text-slate-500 uppercase tracking-wider block font-bold">Starting From</span>
+                      <span className="font-heading text-xl font-extrabold text-brand-cyan">{item.price}</span>
                     </div>
 
                     <Button
@@ -908,6 +917,7 @@ export default function PricingPage() {
                       size="sm"
                       onClick={() => openQuoteModal(`Software: ${item.title}`)}
                       rightIcon={<ArrowRight className="w-4 h-4" />}
+                      className="border-white/15 text-slate-300 hover:border-brand-cyan/40 hover:text-white"
                     >
                       Enquire
                     </Button>
@@ -920,13 +930,14 @@ export default function PricingPage() {
       </section>
 
       {/* ── SECTION 3: MOBILE APP DEVELOPMENT ───────────────────────────── */}
-      <section id="mobile-app-development" className="py-16 lg:py-24 bg-bg-base border-t border-gray-100 scroll-mt-24">
+      <section id="mobile-app-development" className="py-16 lg:py-24 bg-[#020714] border-t border-white/10 scroll-mt-24">
         <Container>
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-black text-text-dark">
+            <span className="text-xs font-bold uppercase tracking-widest text-brand-cyan">Mobile Engineering</span>
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mt-1">
               Mobile App Development
             </h2>
-            <p className="text-text-muted text-sm sm:text-base mt-3 leading-relaxed">
+            <p className="text-slate-400 text-sm sm:text-base mt-3 leading-relaxed">
               High-performance Android and iOS mobile applications published on Google Play Store &amp; Apple App Store.
             </p>
           </div>
@@ -942,22 +953,22 @@ export default function PricingPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: idx * 0.08 }}
-                  className={`relative bg-white rounded-3xl overflow-hidden transition-all duration-300 flex flex-col justify-between ${
+                  className={`relative bg-slate-900/70 rounded-3xl overflow-hidden transition-all duration-300 flex flex-col justify-between backdrop-blur-xl ${
                     isFeatured
-                      ? 'border-2 border-brand-red shadow-[0_15px_50px_rgba(227,30,36,0.22)] ring-2 ring-brand-red/40 lg:-translate-y-3 z-10'
-                      : 'border border-gray-200/90 hover:border-brand-blue/50 shadow-sm hover:shadow-2xl hover:-translate-y-1.5'
+                      ? 'border-2 border-brand-cyan shadow-2xl shadow-cyan-950/50 ring-1 ring-brand-cyan/40 lg:-translate-y-3 z-10'
+                      : 'border border-white/10 hover:border-brand-cyan/40 shadow-xl hover:-translate-y-1.5'
                   }`}
                 >
-                  {/* Top Colored Accent Bar */}
-                  <div className={`h-2.5 w-full bg-gradient-to-r ${app.headerGradient}`} />
+                  {/* Top Accent Line */}
+                  <div className={`h-2 w-full bg-gradient-to-r ${app.headerGradient}`} />
 
                   {/* Floating Popular Badge */}
                   {app.badge && (
                     <div
-                      className={`absolute top-5 right-5 px-3 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider shadow-xs ${
+                      className={`absolute top-5 right-5 px-3 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
                         isFeatured
-                          ? 'bg-gradient-to-r from-brand-primary to-brand-navy text-white'
-                          : 'bg-brand-blue/10 text-brand-blue border border-brand-blue/20'
+                          ? 'bg-brand-cyan text-slate-950 font-bold'
+                          : 'bg-white/10 text-slate-300 border border-white/10'
                       }`}
                     >
                       {app.badge}
@@ -967,62 +978,62 @@ export default function PricingPage() {
                   <div className="p-5 sm:p-6">
                     {/* Header Icon + App Title */}
                     <div className="flex items-center gap-3 mb-2.5">
-                      <div className={`w-10 h-10 rounded-2xl border flex items-center justify-center shrink-0 shadow-xs ${app.iconBg}`}>
+                      <div className={`w-10 h-10 rounded-2xl border border-white/10 bg-white/5 flex items-center justify-center shrink-0 shadow-sm text-brand-cyan`}>
                         <IconComp className="w-5 h-5" />
                       </div>
                       <div>
-                        <h3 className="font-heading text-xl font-black text-text-dark">
+                        <h3 className="font-heading text-xl font-bold text-white">
                           {app.title}
                         </h3>
-                        <span className="text-[10px] font-bold text-gray-400 block">
+                        <span className="text-[10px] font-bold text-slate-400 block">
                           Android &amp; iOS Apps
                         </span>
                       </div>
                     </div>
 
-                    <p className="text-xs text-text-muted leading-relaxed">
+                    <p className="text-xs text-slate-400 leading-relaxed">
                       {app.desc}
                     </p>
 
                     {/* Tech Stack Chips */}
                     <div className="flex flex-wrap gap-1.5 my-2.5">
                       {app.techStack.map((tech, tIdx) => (
-                        <span key={tIdx} className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[10px] font-extrabold">
+                        <span key={tIdx} className="px-2 py-0.5 rounded-md bg-white/[0.04] text-slate-300 text-[10px] font-bold border border-white/5">
                           {tech}
                         </span>
                       ))}
                     </div>
 
                     {/* Price Block */}
-                    <div className="my-3 pt-3 border-t border-gray-100">
-                      <span className="text-[10px] font-extrabold text-text-muted uppercase tracking-wider block">
+                    <div className="my-3 pt-3 border-t border-white/10">
+                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
                         Starting From
                       </span>
                       <span
-                        className={`font-heading text-3xl sm:text-4xl font-black tracking-tight ${
-                          isFeatured ? 'text-brand-red' : 'text-brand-blue'
+                        className={`font-heading text-3xl sm:text-4xl font-extrabold tracking-tight ${
+                          isFeatured ? 'text-brand-cyan' : 'text-white'
                         }`}
                       >
                         {app.price}
                       </span>
-                      <div className="mt-1.5 text-[10px] font-semibold text-text-muted inline-flex items-center gap-1 bg-gray-100 px-2 py-0.5 rounded-md">
-                        <Clock className="w-3 h-3 text-amber-500" />
+                      <div className="mt-1.5 text-[10px] font-semibold text-slate-400 inline-flex items-center gap-1 bg-white/[0.04] px-2 py-0.5 rounded-md border border-white/5">
+                        <Clock className="w-3 h-3 text-amber-400" />
                         Est. {app.timeline}
                       </div>
                     </div>
 
                     {/* Features List */}
-                    <div className="border-t border-gray-100 pt-3 mb-1">
-                      <span className="text-[10px] font-extrabold text-text-dark uppercase tracking-wider block mb-2">
+                    <div className="border-t border-white/10 pt-3 mb-1">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">
                         Key Deliverables:
                       </span>
                       <ul className="space-y-2">
                         {app.features.map((feat, fIdx) => (
-                          <li key={fIdx} className="flex items-start gap-2 text-xs text-text-dark">
-                            <span className="p-0.5 rounded-full bg-emerald-500 text-white mt-0.5 shrink-0 shadow-xs">
+                          <li key={fIdx} className="flex items-start gap-2 text-xs text-slate-300">
+                            <span className="p-0.5 rounded-full bg-emerald-500/20 text-emerald-400 mt-0.5 shrink-0 border border-emerald-500/30">
                               <Check className="w-2.5 h-2.5 stroke-[3]" />
                             </span>
-                            <span className="font-semibold">{feat}</span>
+                            <span className="font-medium">{feat}</span>
                           </li>
                         ))}
                       </ul>
@@ -1030,12 +1041,16 @@ export default function PricingPage() {
                   </div>
 
                   {/* Card Bottom CTA Button */}
-                  <div className="p-5 sm:p-6 pt-0 border-t border-gray-100/80 mt-auto">
+                  <div className="p-5 sm:p-6 pt-0 border-t border-white/10 mt-auto">
                     <Button
                       variant={isFeatured ? 'primary' : 'outline'}
                       fullWidth
                       onClick={() => openQuoteModal(`Mobile App: ${app.title}`)}
-                      className={isFeatured ? 'shadow-lg shadow-brand-red/30' : ''}
+                      className={
+                        isFeatured
+                          ? 'bg-brand-cyan hover:bg-brand-cyan-light text-slate-950 font-bold shadow-lg shadow-cyan-950/50'
+                          : 'border-white/15 text-slate-300 hover:border-brand-cyan/40 hover:text-white'
+                      }
                     >
                       Get Started
                     </Button>
@@ -1045,22 +1060,22 @@ export default function PricingPage() {
             })}
           </div>
 
-          {/* App Store Publishing Guarantee Banner */}
-          <div className="mt-12 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-brand-blue/10 via-brand-red/5 to-brand-blue/10 border border-brand-blue/20 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs sm:text-sm text-text-dark shadow-xs">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-brand-blue text-white flex items-center justify-center shrink-0 shadow-xs">
+          {/* App Store Guarantee Banner */}
+          <div className="mt-12 p-5 sm:p-6 rounded-3xl bg-slate-900/80 border border-brand-cyan/30 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs sm:text-sm text-white backdrop-blur-xl shadow-xl">
+            <div className="flex items-center gap-3.5">
+              <div className="w-10 h-10 rounded-2xl bg-brand-cyan/10 border border-brand-cyan/20 text-brand-cyan flex items-center justify-center shrink-0">
                 <Smartphone className="w-5 h-5" />
               </div>
               <div>
-                <span className="font-extrabold text-brand-blue block">100% App Store Publishing Guarantee</span>
-                <span className="text-text-muted text-xs">Full source code ownership, Play Store / App Store deployment help, and backend API setup.</span>
+                <span className="font-bold text-white block text-sm">100% App Store Publishing Guarantee</span>
+                <span className="text-slate-400 text-xs">Full source code ownership, Play Store / App Store deployment help, and backend API setup.</span>
               </div>
             </div>
             <Button
               variant="outline"
               size="sm"
               onClick={() => openQuoteModal('Mobile App Architecture Consultation')}
-              className="shrink-0 text-xs"
+              className="shrink-0 text-xs border-brand-cyan/30 text-brand-cyan hover:bg-brand-cyan/10"
             >
               Consult App Architect
             </Button>
@@ -1069,14 +1084,15 @@ export default function PricingPage() {
       </section>
 
       {/* ── SECTION 4: BRANDING SERVICES ────────────────────────────────── */}
-      <section id="branding-services" className="py-16 lg:py-24 bg-gradient-to-b from-gray-50 to-bg-base border-t border-gray-100 scroll-mt-24">
+      <section id="branding-services" className="py-16 lg:py-24 bg-[#03091e] border-t border-white/10 scroll-mt-24">
         <Container>
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-black text-text-dark">
-              Branding Services
+            <span className="text-xs font-bold uppercase tracking-widest text-brand-cyan">Identity &amp; Design</span>
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mt-1">
+              Corporate Branding Services
             </h2>
-            <p className="text-text-muted text-sm sm:text-base mt-3 leading-relaxed">
-              Craft a distinct corporate identity with professional graphic design, brand kits, and print-ready collaterals.
+            <p className="text-slate-400 text-sm sm:text-base mt-3 leading-relaxed">
+              Craft a distinct corporate identity with professional design systems, brand guidelines, and high-impact digital collaterals.
             </p>
           </div>
 
@@ -1091,18 +1107,18 @@ export default function PricingPage() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.3, delay: idx * 0.05 }}
                   onClick={() => openQuoteModal(`Branding: ${item.title}`)}
-                  className="bg-white rounded-3xl p-5 border border-gray-200/90 hover:border-brand-primary/50 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 text-center flex flex-col items-center justify-between group cursor-pointer overflow-hidden relative"
+                  className="bg-slate-900/70 rounded-3xl p-5 border border-white/10 hover:border-brand-cyan/40 shadow-xl hover:-translate-y-2 transition-all duration-300 text-center flex flex-col items-center justify-between group cursor-pointer overflow-hidden relative backdrop-blur-xl"
                 >
-                  <div className="h-1.5 w-full bg-gradient-to-r from-brand-primary to-brand-cyan absolute top-0 left-0" />
+                  <div className="h-1.5 w-full bg-gradient-to-r from-brand-cyan to-blue-500 absolute top-0 left-0" />
                   
-                  <div className="w-13 h-13 rounded-2xl bg-brand-primary/10 text-brand-primary flex items-center justify-center my-2 group-hover:scale-110 group-hover:bg-brand-primary group-hover:text-white transition-all duration-300 shadow-sm">
+                  <div className="w-12 h-12 rounded-2xl bg-brand-cyan/10 text-brand-cyan flex items-center justify-center my-2 group-hover:scale-110 group-hover:bg-brand-cyan group-hover:text-slate-950 transition-all duration-300 shadow-sm">
                     <IconComp className="w-6 h-6" />
                   </div>
-                  <h3 className="font-heading text-sm font-extrabold text-text-dark mb-3 group-hover:text-brand-primary transition-colors">{item.title}</h3>
+                  <h3 className="font-heading text-xs sm:text-sm font-bold text-white mb-3 group-hover:text-brand-cyan transition-colors">{item.title}</h3>
                   
-                  <div className="mt-auto pt-2.5 border-t border-gray-100 w-full">
-                    <span className="text-[9px] text-text-muted uppercase block font-extrabold">Starting From</span>
-                    <span className="font-heading text-base font-black text-brand-primary">{item.price}</span>
+                  <div className="mt-auto pt-2.5 border-t border-white/10 w-full">
+                    <span className="text-[9px] text-slate-500 uppercase block font-bold">Starting From</span>
+                    <span className="font-heading text-sm sm:text-base font-extrabold text-brand-cyan">{item.price}</span>
                   </div>
                 </motion.div>
               )
@@ -1112,14 +1128,15 @@ export default function PricingPage() {
       </section>
 
       {/* ── SECTION 5: DIGITAL MARKETING ────────────────────────────────── */}
-      <section id="digital-marketing" className="py-16 lg:py-24 bg-bg-base border-t border-gray-100 scroll-mt-24">
+      <section id="digital-marketing" className="py-16 lg:py-24 bg-[#020714] border-t border-white/10 scroll-mt-24">
         <Container>
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-black text-text-dark">
-              Digital Marketing
+            <span className="text-xs font-bold uppercase tracking-widest text-brand-cyan">Performance Growth</span>
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mt-1">
+              Digital Marketing Retainers
             </h2>
-            <p className="text-text-muted text-sm sm:text-base mt-3 leading-relaxed">
-              Drive high-intent customer leads, rank #1 on Google, and scale sales ROI across Google and Meta ad platforms.
+            <p className="text-slate-400 text-sm sm:text-base mt-3 leading-relaxed">
+              Drive qualified customer leads, rank #1 on Google for target keywords, and scale commercial ROI across Google &amp; Meta ad suites.
             </p>
           </div>
 
@@ -1134,22 +1151,22 @@ export default function PricingPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: idx * 0.1 }}
-                  className={`relative bg-white rounded-3xl overflow-hidden transition-all duration-300 flex flex-col justify-between ${
+                  className={`relative bg-slate-900/70 rounded-3xl overflow-hidden transition-all duration-300 flex flex-col justify-between backdrop-blur-xl ${
                     isFeatured
-                      ? 'border-2 border-brand-primary shadow-[0_15px_50px_rgba(0,102,255,0.22)] ring-2 ring-brand-primary/40 lg:-translate-y-3 z-10'
-                      : 'border border-gray-200/90 hover:border-brand-primary/50 shadow-sm hover:shadow-2xl hover:-translate-y-1.5'
+                      ? 'border-2 border-brand-cyan shadow-2xl shadow-cyan-950/50 ring-1 ring-brand-cyan/40 lg:-translate-y-3 z-10'
+                      : 'border border-white/10 hover:border-brand-cyan/40 shadow-xl hover:-translate-y-1.5'
                   }`}
                 >
-                  {/* Top Colored Accent Line */}
-                  <div className={`h-2.5 w-full bg-gradient-to-r ${mkt.headerGradient}`} />
+                  {/* Top Accent Line */}
+                  <div className={`h-2 w-full bg-gradient-to-r ${mkt.headerGradient}`} />
 
                   {/* Badge */}
                   {mkt.badge && (
                     <div
-                      className={`absolute top-5 right-5 px-3 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider shadow-xs ${
+                      className={`absolute top-5 right-5 px-3 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
                         isFeatured
-                          ? 'bg-gradient-to-r from-brand-primary to-brand-navy text-white'
-                          : 'bg-brand-blue/10 text-brand-blue border border-brand-blue/20'
+                          ? 'bg-brand-cyan text-slate-950 font-bold'
+                          : 'bg-white/10 text-slate-300 border border-white/10'
                       }`}
                     >
                       {mkt.badge}
@@ -1159,59 +1176,59 @@ export default function PricingPage() {
                   <div className="p-5 sm:p-6">
                     {/* Header Icon + Service Title */}
                     <div className="flex items-center gap-3 mb-2.5">
-                      <div className={`w-11 h-11 rounded-2xl border flex items-center justify-center shrink-0 shadow-xs ${mkt.iconBg}`}>
+                      <div className={`w-11 h-11 rounded-2xl border border-white/10 bg-white/5 flex items-center justify-center shrink-0 shadow-sm text-brand-cyan`}>
                         <IconComp className="w-5.5 h-5.5" />
                       </div>
                       <div>
-                        <h3 className="font-heading text-xl font-black text-text-dark leading-snug">
+                        <h3 className="font-heading text-xl font-bold text-white leading-snug">
                           {mkt.title}
                         </h3>
-                        <span className="text-[10px] font-extrabold text-emerald-600 uppercase block">
+                        <span className="text-[10px] font-bold text-emerald-400 uppercase block">
                           Official Growth Retainer
                         </span>
                       </div>
                     </div>
 
-                    <p className="text-xs text-text-muted leading-relaxed">
+                    <p className="text-xs text-slate-400 leading-relaxed">
                       {mkt.desc}
                     </p>
 
-                    {/* Clean Price & Billing Suffix */}
-                    <div className="my-3.5 pt-3 border-t border-gray-100">
-                      <span className="text-[10px] font-extrabold text-text-muted uppercase tracking-wider block">
-                        Monthly Investment
+                    {/* Price Block */}
+                    <div className="my-3.5 pt-3 border-t border-white/10">
+                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                        Monthly Retainer
                       </span>
                       <div className="flex items-baseline gap-2 mt-1 flex-wrap">
                         <span
-                          className={`font-heading text-3xl sm:text-4xl font-black tracking-tight ${
-                            isFeatured ? 'text-brand-red' : 'text-brand-blue'
+                          className={`font-heading text-3xl sm:text-4xl font-extrabold tracking-tight ${
+                            isFeatured ? 'text-brand-cyan' : 'text-white'
                           }`}
                         >
                           {mkt.price}
                         </span>
-                        <span className="text-xs font-bold text-gray-600 bg-gray-100 px-2.5 py-0.5 rounded-md border border-gray-200 shrink-0">
+                        <span className="text-xs font-bold text-slate-300 bg-white/[0.05] px-2.5 py-0.5 rounded-md border border-white/10 shrink-0">
                           {mkt.period}
                         </span>
                       </div>
                     </div>
 
-                    {/* Grouped Deliverables List (Matching Brochure Sections) */}
-                    <div className="border-t border-gray-100 pt-3 space-y-3">
+                    {/* Grouped Deliverables List */}
+                    <div className="border-t border-white/10 pt-3 space-y-3">
                       {mkt.groups.map((group, gIdx) => {
                         const GroupIcon = group.icon
                         return (
-                          <div key={gIdx} className="bg-slate-50/80 p-3 rounded-2xl border border-gray-100">
-                            <span className="text-[10px] font-black text-[#0A3D91] uppercase tracking-wider block mb-1.5 flex items-center gap-1.5">
-                              <GroupIcon className="w-3.5 h-3.5 text-brand-red" />
+                          <div key={gIdx} className="bg-white/[0.03] p-3 rounded-2xl border border-white/5">
+                            <span className="text-[10px] font-bold text-brand-cyan uppercase tracking-wider block mb-1.5 flex items-center gap-1.5">
+                              <GroupIcon className="w-3.5 h-3.5 text-blue-400" />
                               {group.name}
                             </span>
                             <ul className="space-y-1.5">
                               {group.items.map((item, iIdx) => (
-                                <li key={iIdx} className="flex items-start gap-2 text-xs text-text-dark">
-                                  <span className="p-0.5 rounded-full bg-emerald-500 text-white mt-0.5 shrink-0 shadow-xs">
+                                <li key={iIdx} className="flex items-start gap-2 text-xs text-slate-300">
+                                  <span className="p-0.5 rounded-full bg-emerald-500/20 text-emerald-400 mt-0.5 shrink-0 border border-emerald-500/30">
                                     <Check className="w-2.5 h-2.5 stroke-[3]" />
                                   </span>
-                                  <span className="font-semibold text-[11px] leading-snug">{item}</span>
+                                  <span className="font-medium text-[11px] leading-snug">{item}</span>
                                 </li>
                               ))}
                             </ul>
@@ -1222,12 +1239,16 @@ export default function PricingPage() {
                   </div>
 
                   {/* Card Bottom CTA Button */}
-                  <div className="p-5 sm:p-6 pt-0 border-t border-gray-100/80 mt-auto">
+                  <div className="p-5 sm:p-6 pt-0 border-t border-white/10 mt-auto">
                     <Button
                       variant={isFeatured ? 'primary' : 'outline'}
                       fullWidth
                       onClick={() => openQuoteModal(`Digital Marketing: ${mkt.title}`)}
-                      className={isFeatured ? 'shadow-lg shadow-brand-red/30' : ''}
+                      className={
+                        isFeatured
+                          ? 'bg-brand-cyan hover:bg-brand-cyan-light text-slate-950 font-bold shadow-lg shadow-cyan-950/50'
+                          : 'border-white/15 text-slate-300 hover:border-brand-cyan/40 hover:text-white'
+                      }
                     >
                       Choose {mkt.title}
                     </Button>
@@ -1237,38 +1258,38 @@ export default function PricingPage() {
             })}
           </div>
 
-          {/* Marketing Flyer Slogan Strip */}
-          <div className="mt-12 p-6 rounded-3xl bg-gradient-to-r from-[#0a1936] via-[#122D6B] to-[#0a1936] text-white shadow-xl relative overflow-hidden">
+          {/* Marketing Slogan Strip */}
+          <div className="mt-12 p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-blue-950/50 via-slate-900/80 to-cyan-950/50 border border-brand-cyan/30 text-white shadow-2xl relative overflow-hidden backdrop-blur-xl">
             <div className="flex flex-col lg:flex-row items-center justify-between gap-6 relative z-10">
               <div>
-                <span className="text-[10px] font-black uppercase tracking-widest text-brand-red bg-white/10 px-3 py-1 rounded-full inline-block mb-2">
-                  Official Growth Promise
+                <span className="text-[10px] font-bold uppercase tracking-widest text-brand-cyan bg-brand-cyan/10 border border-brand-cyan/20 px-3 py-1 rounded-full inline-block mb-2">
+                  Growth &amp; ROI Commitment
                 </span>
-                <h3 className="font-heading text-xl sm:text-2xl font-black text-white">
-                  LET'S GROW YOUR BUSINESS DIGITALLY
+                <h3 className="font-heading text-xl sm:text-2xl font-bold text-white">
+                  SCALE YOUR REVENUE CHANNELS WITH CONFIDENCE
                 </h3>
-                <p className="text-xs text-blue-200 mt-1 italic">
-                  "Your Growth, Our Responsibility" — Result-Driven Strategies &amp; Dedicated Campaign Support
+                <p className="text-xs text-slate-300 mt-1">
+                  "Your Growth, Our Responsibility" — Transparent analytics dashboards &amp; dedicated growth managers.
                 </p>
               </div>
 
-              {/* 4 Trust Highlights from Brochure */}
+              {/* 4 Trust Highlights */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-                <div className="bg-white/10 p-2.5 rounded-xl border border-white/10 text-center">
-                  <span className="block font-black text-white">🎯 Result Driven</span>
-                  <span className="text-[10px] text-blue-200">Strategies</span>
+                <div className="bg-white/5 p-2.5 rounded-xl border border-white/10 text-center">
+                  <span className="block font-bold text-brand-cyan">🎯 ROI Driven</span>
+                  <span className="text-[10px] text-slate-400">Meta &amp; Google Ads</span>
                 </div>
-                <div className="bg-white/10 p-2.5 rounded-xl border border-white/10 text-center">
-                  <span className="block font-black text-white">👥 Expert Team</span>
-                  <span className="text-[10px] text-blue-200">Dedicated Marketers</span>
+                <div className="bg-white/5 p-2.5 rounded-xl border border-white/10 text-center">
+                  <span className="block font-bold text-emerald-400">👥 Dedicated Pod</span>
+                  <span className="text-[10px] text-slate-400">Growth Specialists</span>
                 </div>
-                <div className="bg-white/10 p-2.5 rounded-xl border border-white/10 text-center">
-                  <span className="block font-black text-white">📈 Measurable</span>
-                  <span className="text-[10px] text-blue-200">Growth Metrics</span>
+                <div className="bg-white/5 p-2.5 rounded-xl border border-white/10 text-center">
+                  <span className="block font-bold text-amber-400">📈 Live Telemetry</span>
+                  <span className="text-[10px] text-slate-400">Weekly Reports</span>
                 </div>
-                <div className="bg-white/10 p-2.5 rounded-xl border border-white/10 text-center">
-                  <span className="block font-black text-white">🎧 Dedicated</span>
-                  <span className="text-[10px] text-blue-200">Account Support</span>
+                <div className="bg-white/5 p-2.5 rounded-xl border border-white/10 text-center">
+                  <span className="block font-bold text-purple-400">🎧 SLA Support</span>
+                  <span className="text-[10px] text-slate-400">Direct WhatsApp</span>
                 </div>
               </div>
             </div>
@@ -1277,14 +1298,15 @@ export default function PricingPage() {
       </section>
 
       {/* ── SECTION 6: HOSTING & MAINTENANCE ────────────────────────────── */}
-      <section id="hosting-maintenance" className="py-16 lg:py-24 bg-gradient-to-b from-gray-50 to-bg-base border-t border-gray-100 scroll-mt-24">
+      <section id="hosting-maintenance" className="py-16 lg:py-24 bg-[#03091e] border-t border-white/10 scroll-mt-24">
         <Container>
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-black text-text-dark">
-              Hosting &amp; Maintenance
+            <span className="text-xs font-bold uppercase tracking-widest text-brand-cyan">Cloud Infrastructure</span>
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mt-1">
+              Hosting &amp; Maintenance SLAs
             </h2>
-            <p className="text-text-muted text-sm sm:text-base mt-3 leading-relaxed">
-              Enterprise cloud infrastructure, 99.9% uptime server management, SSL security, and continuous maintenance.
+            <p className="text-slate-400 text-sm sm:text-base mt-3 leading-relaxed">
+              Enterprise cloud infrastructure, 99.8% uptime server monitoring, automated daily backups, and security patching.
             </p>
           </div>
 
@@ -1298,23 +1320,23 @@ export default function PricingPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.3, delay: idx * 0.05 }}
-                  className="bg-white rounded-3xl p-6 border border-gray-200/90 hover:border-brand-blue/50 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group overflow-hidden relative"
+                  className="bg-slate-900/70 rounded-3xl p-6 border border-white/10 hover:border-brand-cyan/40 shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group overflow-hidden relative backdrop-blur-xl"
                 >
-                  <div className="h-1.5 w-full bg-gradient-to-r from-brand-blue to-indigo-600 absolute top-0 left-0" />
+                  <div className="h-1.5 w-full bg-gradient-to-r from-brand-cyan to-blue-600 absolute top-0 left-0" />
                   <div>
-                    <div className="w-12 h-12 rounded-2xl bg-brand-blue/10 text-brand-blue flex items-center justify-center mb-4 group-hover:bg-brand-blue group-hover:text-white transition-colors duration-300 shadow-xs">
+                    <div className="w-12 h-12 rounded-2xl bg-brand-cyan/10 text-brand-cyan flex items-center justify-center mb-4 group-hover:bg-brand-cyan group-hover:text-slate-950 transition-colors duration-300 shadow-sm">
                       <IconComp className="w-6 h-6" />
                     </div>
-                    <h3 className="font-heading text-base font-extrabold text-text-dark group-hover:text-brand-blue transition-colors">
+                    <h3 className="font-heading text-base font-bold text-white group-hover:text-brand-cyan transition-colors">
                       {feat.title}
                     </h3>
-                    <p className="text-xs text-text-muted mt-2 leading-relaxed">{feat.desc}</p>
+                    <p className="text-xs text-slate-400 mt-2 leading-relaxed">{feat.desc}</p>
                   </div>
-                  <div className="mt-5 pt-4 border-t border-gray-100 text-right">
+                  <div className="mt-5 pt-4 border-t border-white/10 text-right">
                     <button
                       type="button"
                       onClick={() => openQuoteModal(`Hosting & Maintenance: ${feat.title}`)}
-                      className="text-xs font-bold text-brand-blue hover:text-brand-red inline-flex items-center gap-1 transition-colors cursor-pointer"
+                      className="text-xs font-bold text-brand-cyan hover:underline inline-flex items-center gap-1 transition-colors cursor-pointer"
                     >
                       Inquire Details <ArrowRight className="w-3.5 h-3.5" />
                     </button>
@@ -1327,14 +1349,15 @@ export default function PricingPage() {
       </section>
 
       {/* ── SECTION 7: WHY CHOOSE HINDUSTAN PROJECTS IT SERVICES ────────── */}
-      <section id="why-choose-us" className="py-16 lg:py-24 bg-bg-base border-t border-gray-100 scroll-mt-24">
+      <section id="why-choose-us" className="py-16 lg:py-24 bg-[#020714] border-t border-white/10 scroll-mt-24">
         <Container>
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-black text-text-dark">
-              Why Choose Hindustan Projects IT Services
+            <span className="text-xs font-bold uppercase tracking-widest text-brand-cyan">The Snaptech Edge</span>
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mt-1">
+              Why Choose Hindustan Projects
             </h2>
-            <p className="text-text-muted text-sm sm:text-base mt-3 leading-relaxed">
-              We combine technological innovation, regional market expertise, and long-term client partnership commitment.
+            <p className="text-slate-400 text-sm sm:text-base mt-3 leading-relaxed">
+              We combine enterprise engineering caliber, deep industrial workflow understanding, and long-term client commitments.
             </p>
           </div>
 
@@ -1349,20 +1372,20 @@ export default function PricingPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.3, delay: idx * 0.05 }}
-                  className="relative bg-white rounded-3xl p-6 border border-gray-200/90 hover:border-brand-blue/40 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between overflow-hidden"
+                  className="relative bg-slate-900/70 rounded-3xl p-6 border border-white/10 hover:border-brand-cyan/40 shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between overflow-hidden backdrop-blur-xl"
                 >
-                  <span className="absolute top-4 right-4 text-xs font-black text-gray-300">
+                  <span className="absolute top-4 right-4 text-xs font-mono font-bold text-white/20">
                     #{stepNum}
                   </span>
 
                   <div>
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-red/10 to-brand-blue/10 text-brand-red flex items-center justify-center mb-4 shadow-xs">
+                    <div className="w-12 h-12 rounded-2xl bg-brand-cyan/10 text-brand-cyan flex items-center justify-center mb-4 shadow-sm">
                       <IconComp className="w-6 h-6" />
                     </div>
-                    <h3 className="font-heading text-base font-extrabold text-text-dark mb-2">
+                    <h3 className="font-heading text-base font-bold text-white mb-2">
                       {item.title}
                     </h3>
-                    <p className="text-xs text-text-muted leading-relaxed">{item.desc}</p>
+                    <p className="text-xs text-slate-400 leading-relaxed">{item.desc}</p>
                   </div>
                 </motion.div>
               )
@@ -1372,21 +1395,22 @@ export default function PricingPage() {
       </section>
 
       {/* ── SECTION 8: OUR DEVELOPMENT PROCESS ──────────────────────────── */}
-      <section id="development-process" className="py-16 lg:py-24 bg-gradient-to-b from-gray-50 to-bg-base border-t border-gray-100 scroll-mt-24">
+      <section id="development-process" className="py-16 lg:py-24 bg-[#03091e] border-t border-white/10 scroll-mt-24">
         <Container>
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-black text-text-dark">
-              Our Development Process
+            <span className="text-xs font-bold uppercase tracking-widest text-brand-cyan">Milestone Delivery</span>
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mt-1">
+              Our 9-Step Engineering Lifecycle
             </h2>
-            <p className="text-text-muted text-sm sm:text-base mt-3 leading-relaxed">
-              A structured 9-step timeline ensuring complete transparency, quality control, and timely milestone delivery.
+            <p className="text-slate-400 text-sm sm:text-base mt-3 leading-relaxed">
+              A structured roadmap ensuring complete transparency, regular client sprint reviews, and production-ready code.
             </p>
           </div>
 
           {/* DESKTOP TIMELINE (Horizontal) */}
           <div className="hidden lg:block relative my-12">
             {/* Timeline Horizontal Gradient Line */}
-            <div className="absolute top-7 left-[4%] right-[4%] h-1 bg-gradient-to-r from-brand-blue via-brand-red to-brand-blue rounded-full -z-0" />
+            <div className="absolute top-7 left-[4%] right-[4%] h-1 bg-gradient-to-r from-brand-cyan via-blue-500 to-indigo-500 rounded-full -z-0" />
 
             <div className="grid grid-cols-9 gap-2 relative z-10">
               {PROCESS_STEPS.map((proc, idx) => (
@@ -1398,13 +1422,13 @@ export default function PricingPage() {
                   transition={{ duration: 0.3, delay: idx * 0.05 }}
                   className="flex flex-col items-center text-center group"
                 >
-                  <div className="w-14 h-14 rounded-full bg-white border-4 border-brand-blue text-brand-blue font-heading font-black text-sm flex items-center justify-center shadow-lg group-hover:scale-115 group-hover:border-brand-red group-hover:text-brand-red transition-all duration-300">
+                  <div className="w-14 h-14 rounded-full bg-slate-950 border-4 border-brand-cyan text-brand-cyan font-heading font-extrabold text-sm flex items-center justify-center shadow-lg group-hover:scale-115 group-hover:bg-brand-cyan group-hover:text-slate-950 transition-all duration-300">
                     {proc.step}
                   </div>
-                  <h3 className="font-heading text-xs font-extrabold text-text-dark mt-4 line-clamp-2 min-h-[32px] group-hover:text-brand-blue transition-colors">
+                  <h3 className="font-heading text-xs font-bold text-white mt-4 line-clamp-2 min-h-[32px] group-hover:text-brand-cyan transition-colors">
                     {proc.title}
                   </h3>
-                  <p className="text-[11px] text-text-muted mt-1 leading-snug px-1">
+                  <p className="text-[11px] text-slate-400 mt-1 leading-snug px-1">
                     {proc.desc}
                   </p>
                 </motion.div>
@@ -1413,7 +1437,7 @@ export default function PricingPage() {
           </div>
 
           {/* MOBILE & TABLET TIMELINE (Vertical) */}
-          <div className="lg:hidden relative pl-6 border-l-4 border-brand-red/50 space-y-6 my-6 ml-4">
+          <div className="lg:hidden relative pl-6 border-l-4 border-brand-cyan/40 space-y-6 my-6 ml-4">
             {PROCESS_STEPS.map((proc, idx) => (
               <motion.div
                 key={proc.step}
@@ -1421,16 +1445,16 @@ export default function PricingPage() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.3, delay: idx * 0.05 }}
-                className="relative pl-6 bg-white p-4 rounded-2xl border border-gray-200/80 shadow-xs"
+                className="relative pl-6 bg-slate-900/70 p-4 rounded-2xl border border-white/10 shadow-md backdrop-blur-xl"
               >
                 {/* Step Circle Pin */}
-                <div className="absolute -left-[37px] top-4 w-9 h-9 rounded-full bg-white border-2 border-brand-red text-brand-red font-heading font-extrabold text-xs flex items-center justify-center shadow-md">
+                <div className="absolute -left-[37px] top-4 w-9 h-9 rounded-full bg-slate-950 border-2 border-brand-cyan text-brand-cyan font-heading font-bold text-xs flex items-center justify-center shadow-md">
                   {proc.step}
                 </div>
-                <h3 className="font-heading text-base font-extrabold text-text-dark">
+                <h3 className="font-heading text-base font-bold text-white">
                   {proc.title}
                 </h3>
-                <p className="text-xs text-text-muted mt-1 leading-relaxed">
+                <p className="text-xs text-slate-400 mt-1 leading-relaxed">
                   {proc.desc}
                 </p>
               </motion.div>
@@ -1440,14 +1464,15 @@ export default function PricingPage() {
       </section>
 
       {/* ── SECTION 9: FREQUENTLY ASKED QUESTIONS ───────────────────────── */}
-      <section id="faq-section" className="py-16 lg:py-24 bg-bg-base border-t border-gray-100 scroll-mt-24">
+      <section id="faq-section" className="py-16 lg:py-24 bg-[#020714] border-t border-white/10 scroll-mt-24">
         <Container>
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-black text-text-dark">
+            <span className="text-xs font-bold uppercase tracking-widest text-brand-cyan">Clear Answers</span>
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mt-1">
               Frequently Asked Questions
             </h2>
-            <p className="text-text-muted text-sm sm:text-base mt-3 leading-relaxed">
-              Clear answers to common questions about timelines, hosting, upgrades, and payment terms.
+            <p className="text-slate-400 text-sm sm:text-base mt-3 leading-relaxed">
+              Clear answers to common questions about milestone billing, hosting ownership, upgrades, and support terms.
             </p>
           </div>
 
@@ -1462,20 +1487,20 @@ export default function PricingPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.3, delay: idx * 0.05 }}
-                  className={`bg-white rounded-2xl border transition-all duration-300 overflow-hidden ${
-                    isOpen ? 'border-brand-blue shadow-md ring-1 ring-brand-blue/20' : 'border-gray-200/90 shadow-xs hover:border-gray-300'
+                  className={`bg-slate-900/70 rounded-2xl border transition-all duration-300 overflow-hidden backdrop-blur-xl ${
+                    isOpen ? 'border-brand-cyan/60 shadow-lg shadow-cyan-950/30' : 'border-white/10 hover:border-brand-cyan/30'
                   }`}
                 >
                   <button
                     type="button"
                     onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
-                    className="w-full text-left px-6 py-5 flex items-center justify-between gap-4 font-heading font-extrabold text-base text-text-dark hover:text-brand-blue transition-colors focus:outline-none cursor-pointer"
+                    className="w-full text-left px-6 py-5 flex items-center justify-between gap-4 font-heading font-bold text-base text-white hover:text-brand-cyan transition-colors focus:outline-none cursor-pointer"
                     aria-expanded={isOpen}
                   >
                     <span>{faq.question}</span>
                     <ChevronDown
-                      className={`w-5 h-5 text-brand-blue shrink-0 transition-transform duration-300 ${
-                        isOpen ? 'rotate-180 text-brand-red' : ''
+                      className={`w-5 h-5 text-brand-cyan shrink-0 transition-transform duration-300 ${
+                        isOpen ? 'rotate-180' : ''
                       }`}
                     />
                   </button>
@@ -1488,7 +1513,7 @@ export default function PricingPage() {
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.3, ease: 'easeInOut' }}
                       >
-                        <div className="px-6 pb-5 pt-1 text-sm text-text-muted leading-relaxed border-t border-gray-100">
+                        <div className="px-6 pb-5 pt-1 text-sm text-slate-300 leading-relaxed border-t border-white/10">
                           {faq.answer}
                         </div>
                       </motion.div>
@@ -1500,31 +1525,31 @@ export default function PricingPage() {
           </div>
 
           {/* Bottom Disclaimer Note */}
-          <div className="mt-14 max-w-3xl mx-auto text-center p-5 rounded-2xl bg-gradient-to-r from-brand-blue/5 via-brand-red/5 to-brand-blue/5 border border-brand-blue/20 text-xs sm:text-sm text-text-muted shadow-xs flex items-center justify-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-brand-blue shrink-0" />
+          <div className="mt-14 max-w-3xl mx-auto text-center p-5 rounded-2xl bg-slate-900/60 border border-white/10 text-xs sm:text-sm text-slate-400 shadow-md flex items-center justify-center gap-2">
+            <ShieldCheck className="w-5 h-5 text-brand-cyan shrink-0" />
             <span>
-              <strong className="text-brand-blue">Transparent Pricing Policy: </strong>
-              "All prices shown are starting prices. Final quotation depends on project requirements, features, integrations and delivery timeline."
+              <strong className="text-white">Transparent Pricing Policy: </strong>
+              All prices shown represent standardized base milestones. Final scope is itemized in your formal Statement of Work.
             </span>
           </div>
         </Container>
       </section>
 
       {/* ── FINAL CTA BANNER ────────────────────────────────────────────── */}
-      <section className="py-16 lg:py-24 bg-gradient-to-r from-[#0a1936] via-[#122D6B] to-[#0a1936] text-white relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-brand-red/25 rounded-full filter blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-brand-blue/25 rounded-full filter blur-3xl pointer-events-none" />
+      <section className="py-16 lg:py-24 bg-gradient-to-r from-[#03091e] via-[#051438] to-[#03091e] border-t border-white/10 text-white relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-brand-cyan/15 rounded-full filter blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-brand-primary/20 rounded-full filter blur-3xl pointer-events-none" />
         
         <Container>
           <div className="max-w-3xl mx-auto text-center relative z-10 px-2">
-            <span className="inline-block px-4 py-1.5 rounded-full bg-white/10 text-white text-xs font-extrabold uppercase tracking-widest mb-4">
+            <span className="inline-block px-4 py-1.5 rounded-full bg-brand-cyan/10 border border-brand-cyan/30 text-brand-cyan text-xs font-bold uppercase tracking-widest mb-4">
               Get Custom Proposal
             </span>
-            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight">
-              Ready to Start Your Project?
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
+              Ready to Architect Your Solution?
             </h2>
-            <p className="text-white/80 text-base sm:text-lg mt-4 leading-relaxed max-w-xl mx-auto">
-              Let's discuss your requirements and get a custom quotation tailored to your business.
+            <p className="text-slate-400 text-base sm:text-lg mt-4 leading-relaxed max-w-xl mx-auto">
+              Schedule a discovery session with our senior engineers and receive an itemized proposal within 24 hours.
             </p>
 
             <div className="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
@@ -1533,9 +1558,9 @@ export default function PricingPage() {
                 size="lg"
                 onClick={() => openQuoteModal('Final CTA Banner - Get Free Quote')}
                 leftIcon={<Sparkles className="w-5 h-5" />}
-                className="w-full sm:w-auto shadow-xl shadow-brand-red/30"
+                className="w-full sm:w-auto bg-brand-cyan hover:bg-brand-cyan-light text-slate-950 font-bold shadow-xl shadow-cyan-950/50 cursor-pointer"
               >
-                Get Free Quote
+                Request Custom Proposal
               </Button>
 
               <Button
@@ -1543,10 +1568,10 @@ export default function PricingPage() {
                 size="lg"
                 as="a"
                 href={`tel:${cleanPhone}`}
-                className="w-full sm:w-auto !text-white !border-white/80 hover:!bg-white hover:!text-brand-blue"
+                className="w-full sm:w-auto !text-white !border-white/20 hover:!bg-white/10 hover:!border-white/40"
                 leftIcon={<Phone className="w-5 h-5" />}
               >
-                Call Now
+                Call Architects
               </Button>
 
               <Button
@@ -1556,17 +1581,17 @@ export default function PricingPage() {
                 href={`https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent('Hi Hindustan Projects! I want to discuss a new project.')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full sm:w-auto !bg-[#25D366] hover:!bg-[#20ba5a] !border-[#25D366] !text-white shadow-lg shadow-emerald-500/20"
+                className="w-full sm:w-auto !bg-emerald-500 hover:!bg-emerald-400 !border-emerald-500 !text-slate-950 font-bold shadow-lg shadow-emerald-950/40"
                 leftIcon={<MessageSquare className="w-5 h-5" />}
               >
-                WhatsApp Now
+                WhatsApp Us
               </Button>
             </div>
           </div>
         </Container>
       </section>
 
-      {/* ── FREE QUOTE MODAL (Rendered via Portal outside PageTransition transform stack) ── */}
+      {/* ── FREE QUOTE MODAL ──────────────────────────────────────────────── */}
       {typeof document !== 'undefined' &&
         createPortal(
           <AnimatePresence>
@@ -1578,92 +1603,92 @@ export default function PricingPage() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   onClick={() => setIsQuoteModalOpen(false)}
-                  className="fixed inset-0 bg-slate-950/75 backdrop-blur-md"
+                  className="fixed inset-0 bg-slate-950/85 backdrop-blur-md"
                 />
 
-                {/* Modal Card */}
+                {/* Modal Card (Cyber Dark Glass) */}
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95, y: 10 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95, y: 10 }}
                   transition={{ duration: 0.2, ease: 'easeOut' }}
-                  className="relative z-10 w-full max-w-lg bg-white rounded-3xl shadow-2xl p-6 sm:p-8 my-auto max-h-[90vh] overflow-y-auto border border-gray-100"
+                  className="relative z-10 w-full max-w-lg bg-slate-900/95 rounded-3xl shadow-2xl p-6 sm:p-8 my-auto max-h-[90vh] overflow-y-auto border border-white/15 text-white backdrop-blur-2xl"
                 >
                   <button
                     type="button"
                     onClick={() => setIsQuoteModalOpen(false)}
-                    className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
+                    className="absolute top-4 right-4 p-2 text-slate-400 hover:text-white hover:bg-white/10 rounded-full transition-colors cursor-pointer"
                   >
                     <X className="w-5 h-5" />
                   </button>
 
-                  <div className="mb-6">
-                    <span className="inline-block px-3.5 py-1 rounded-full bg-brand-blue/10 text-brand-blue text-xs font-bold uppercase tracking-wider mb-2">
-                      Selected: {selectedPlan}
+                  <div className="mb-6 border-b border-white/10 pb-4">
+                    <span className="inline-block px-3.5 py-1 rounded-full bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/30 text-xs font-bold uppercase tracking-wider mb-2">
+                      Selected Plan: {selectedPlan}
                     </span>
-                    <h3 className="font-heading text-2xl font-extrabold text-text-dark">
-                      Request a Free Quote
+                    <h3 className="font-heading text-2xl font-extrabold text-white">
+                      Request Technical Proposal
                     </h3>
-                    <p className="text-xs text-text-muted mt-1">
-                      Fill in your details below and our technical expert will reach out within 2 hours.
+                    <p className="text-xs text-slate-400 mt-1">
+                      Fill in your specifications below and an engineering architect will reach out within 2 hours.
                     </p>
                   </div>
 
                   <form onSubmit={handleQuoteSubmit} className="space-y-4">
                     <div>
-                      <label className="block text-xs font-bold text-text-dark uppercase tracking-wider mb-1">
-                        Your Name *
+                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                        Full Name *
                       </label>
                       <input
                         type="text"
                         required
-                        placeholder="e.g. Rahul Sharma"
+                        placeholder="e.g. Vikramaditya Sharma"
                         value={quoteForm.name}
                         onChange={(e) => setQuoteForm({ ...quoteForm, name: e.target.value })}
-                        className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all"
+                        className="w-full px-4 py-2.5 rounded-xl border border-white/15 bg-white/[0.04] text-white text-sm focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan/30 outline-none transition-all placeholder:text-slate-500"
                       />
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-bold text-text-dark uppercase tracking-wider mb-1">
+                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
                           Email Address *
                         </label>
                         <input
                           type="email"
                           required
-                          placeholder="rahul@example.com"
+                          placeholder="vikram@enterprise.com"
                           value={quoteForm.email}
                           onChange={(e) => setQuoteForm({ ...quoteForm, email: e.target.value })}
-                          className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all"
+                          className="w-full px-4 py-2.5 rounded-xl border border-white/15 bg-white/[0.04] text-white text-sm focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan/30 outline-none transition-all placeholder:text-slate-500"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-xs font-bold text-text-dark uppercase tracking-wider mb-1">
+                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
                           Phone / WhatsApp *
                         </label>
                         <input
                           type="tel"
                           required
-                          placeholder="+91 99999 99999"
+                          placeholder="+91 98765 43210"
                           value={quoteForm.phone}
                           onChange={(e) => setQuoteForm({ ...quoteForm, phone: e.target.value })}
-                          className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all"
+                          className="w-full px-4 py-2.5 rounded-xl border border-white/15 bg-white/[0.04] text-white text-sm focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan/30 outline-none transition-all placeholder:text-slate-500"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-text-dark uppercase tracking-wider mb-1">
-                        Project Requirements / Notes
+                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                        Project Scope &amp; Deliverables
                       </label>
                       <textarea
                         rows={3}
-                        placeholder="Briefly describe what you need (e.g. 5-page website, e-commerce, custom features)..."
+                        placeholder="Briefly outline your requirements (e.g. 5-page portal, payment integration, custom ERP module)..."
                         value={quoteForm.message}
                         onChange={(e) => setQuoteForm({ ...quoteForm, message: e.target.value })}
-                        className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all resize-none"
+                        className="w-full px-4 py-2.5 rounded-xl border border-white/15 bg-white/[0.04] text-white text-sm focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan/30 outline-none transition-all resize-none placeholder:text-slate-500"
                       />
                     </div>
 
@@ -1673,9 +1698,9 @@ export default function PricingPage() {
                       fullWidth
                       loading={formSubmitting}
                       leftIcon={<Send className="w-4 h-4" />}
-                      className="shadow-md shadow-brand-red/20"
+                      className="bg-brand-cyan hover:bg-brand-cyan-light text-slate-950 font-bold shadow-lg shadow-cyan-950/50 py-3"
                     >
-                      Submit Quote Request
+                      Submit Technical Quote Request
                     </Button>
                   </form>
                 </motion.div>

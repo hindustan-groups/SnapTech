@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
-import { Container, SectionHeading, Card, Badge, Button } from '@/components/ui'
+import { Container } from '@/components/ui'
 import { useProjects } from '@/hooks/useProjects'
 import { fadeUp, staggerContainer, viewportOnce } from '@/utils/motion'
 import { ProjectModal } from '@/components/sections/PortfolioSection'
@@ -60,21 +60,34 @@ export default function FeaturedProjects() {
       : PLACEHOLDER_FEATURED
 
   return (
-    <section className="py-20 bg-gradient-to-b from-white via-slate-50/50 to-white" aria-labelledby="featured-heading">
-      <Container>
+    <section
+      className="py-24 bg-white border-t border-slate-100 relative overflow-hidden isolate"
+      aria-labelledby="featured-heading"
+    >
+      {/* Subtle background decorations */}
+      <div className="absolute top-1/3 left-0 w-96 h-96 bg-[#1a3e8c]/5 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-80 h-80 bg-[#e31e24]/5 rounded-full blur-[140px] pointer-events-none" />
+
+      <Container className="relative z-10">
         <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={viewportOnce}
           variants={fadeUp}
+          className="text-center mb-16 max-w-3xl mx-auto"
         >
-          <SectionHeading
-            id="featured-heading"
-            eyebrow="Case Studies"
-            title="Featured Projects"
-            subtitle="A glimpse of the work we're most proud of."
-            className="mb-14"
-          />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1a3e8c]/10 border border-[#1a3e8c]/20 text-[#1a3e8c] text-xs font-mono font-bold uppercase tracking-widest mb-4">
+            <span>Enterprise Case Studies</span>
+          </div>
+          <h2 id="featured-heading" className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-800 tracking-tight mb-4">
+            Flagship Software &{' '}
+            <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(135deg, #1a3e8c, #e31e24)' }}>
+              Cloud Deployments
+            </span>
+          </h2>
+          <p className="text-slate-500 text-base sm:text-lg leading-relaxed">
+            Real-world digital transformations engineered for industry leaders, textile conglomerates, and high-growth ventures.
+          </p>
         </motion.div>
 
         <motion.div
@@ -86,32 +99,19 @@ export default function FeaturedProjects() {
         >
           {isLoading
             ? Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="h-64 bg-gray-100 rounded-lg animate-pulse" />
+                <div key={i} className="h-72 bg-slate-100 border border-slate-200 rounded-2xl animate-pulse" />
               ))
             : projects.map((p, index) => {
-                const getStickyClass = (idx) => {
-                  switch (idx) {
-                    case 0:
-                      return 'sticky sm:relative top-[80px] sm:top-auto z-10 sm:z-auto shadow-[0_8px_30px_rgba(26,62,140,0.06)] scale-[0.93] sm:scale-100 origin-top transition-all duration-300'
-                    case 1:
-                      return 'sticky sm:relative top-[100px] sm:top-auto z-20 sm:z-auto shadow-[0_12px_36px_rgba(26,62,140,0.09)] scale-[0.96] sm:scale-100 origin-top transition-all duration-300'
-                    case 2:
-                      return 'sticky sm:relative top-[120px] sm:top-auto z-30 sm:z-auto shadow-[0_16px_40px_rgba(26,62,140,0.12)] scale-[1] sm:scale-100 origin-top transition-all duration-300'
-                    default:
-                      return ''
-                  }
-                }
                 return (
-                  <motion.div key={p.id} variants={fadeUp} className={getStickyClass(index)}>
-                    <Card
-                      hoverable
-                      className="overflow-hidden group cursor-pointer border border-slate-100 bg-white rounded-2xl hover:border-brand-blue/20 hover:shadow-[0_12px_30px_rgba(26,62,140,0.12)] transition-all duration-300"
+                  <motion.div key={p.id} variants={fadeUp}>
+                    <div
+                      className="overflow-hidden group cursor-pointer border border-slate-200 bg-white rounded-2xl hover:border-[#1a3e8c]/40 hover:shadow-xl transition-all duration-300 flex flex-col h-full"
                       onClick={() => setSelectedProject(p)}
                     >
                       {p.thumbnailUrl ? (
-                        <div className="overflow-hidden relative h-44">
+                        <div className="overflow-hidden relative h-48 bg-slate-950">
                           {/* Image hover glow overlay */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-brand-blue/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 pointer-events-none" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent z-10 pointer-events-none" />
                           <img
                             src={p.thumbnailUrl}
                             alt={p.title}
@@ -120,40 +120,60 @@ export default function FeaturedProjects() {
                           />
                         </div>
                       ) : (
-                        <div
-                          className="w-full h-44 bg-gradient-to-br from-brand-blue/8 to-brand-blue/18
-                          flex items-center justify-center relative overflow-hidden"
-                        >
-                          <div className="absolute inset-0 bg-gradient-to-t from-brand-blue/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 pointer-events-none" />
-                          <span className="font-heading text-5xl font-bold text-brand-blue/15 group-hover:scale-110 transition-transform duration-500">
+                        <div className="w-full h-48 bg-slate-950 flex items-center justify-center relative overflow-hidden border-b border-white/5">
+                          <span className="font-heading text-6xl font-extrabold text-brand-primary/20 group-hover:scale-110 transition-transform duration-500 font-mono">
                             {p.title[0]}
                           </span>
                         </div>
                       )}
-                      <div className="p-5 relative z-10">
-                        <Badge variant="blue" className="mb-2.5">
-                          {p.category}
-                        </Badge>
-                        <div className="flex items-start justify-between gap-4 mb-1">
-                          <h3 className="font-heading text-base font-bold text-brand-blue group-hover:text-brand-blue-light transition-colors duration-200">
+
+                      <div className="p-6 flex flex-col flex-1 justify-between">
+                        <div>
+                          <div className="flex items-center justify-between gap-2 mb-3">
+                            <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-brand-primary/20 border border-brand-primary/40 text-brand-cyan">
+                              {p.category}
+                            </span>
+                            <span className="text-[11px] font-mono text-slate-400">
+                              {p.clientName}
+                            </span>
+                          </div>
+
+                          <h3 className="font-heading text-lg font-bold text-white group-hover:text-brand-cyan transition-colors duration-200 mb-2">
                             {p.title}
                           </h3>
-                          <span className="shrink-0 inline-flex items-center gap-1 text-xs font-bold text-brand-red group-hover:translate-x-0.5 transition-transform duration-200 mt-0.5">
-                            View <ArrowRight className="w-3.5 h-3.5" />
-                          </span>
+                          <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed mb-4">
+                            {p.description}
+                          </p>
                         </div>
-                        <p className="text-xs text-text-muted">{p.clientName}</p>
+
+                        {/* Tech stack chips */}
+                        {p.technologies && p.technologies.length > 0 && (
+                          <div className="flex flex-wrap gap-1.5 pt-2 border-t border-white/10">
+                            {p.technologies.slice(0, 3).map((t) => (
+                              <span
+                                key={t}
+                                className="text-[10px] px-2 py-0.5 rounded-md bg-white/5 text-slate-300 font-mono border border-white/5"
+                              >
+                                {t}
+                              </span>
+                            ))}
+                          </div>
+                        )}
                       </div>
-                    </Card>
+                    </div>
                   </motion.div>
                 )
               })}
         </motion.div>
 
-        <div className="text-center mt-10">
-          <Button variant="outline" size="md" as={Link} to="/portfolio">
-            View All Projects <ArrowRight className="w-4 h-4 inline ml-1" />
-          </Button>
+        <div className="text-center mt-14">
+          <Link
+            to="/portfolio"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/5 hover:bg-brand-primary/20 border border-white/10 hover:border-brand-primary/50 text-white text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-200 group shadow-lg"
+          >
+            <span>Explore Complete Enterprise Case Studies</span>
+            <ArrowRight className="w-4 h-4 text-brand-cyan group-hover:translate-x-1.5 transition-transform" />
+          </Link>
         </div>
       </Container>
 

@@ -25,7 +25,6 @@ import {
 } from 'lucide-react'
 import { Container, Button, SEO } from '@/components/ui'
 import { serviceSchema, breadcrumbSchema, SITE } from '@/components/ui/SEO'
-import Skeleton from '@/components/ui/Skeleton'
 import { useService, useServices } from '@/hooks/useServices'
 import { getServiceIcon } from '@/utils/serviceIcons'
 import { useSiteSettings } from '@/hooks/useContent'
@@ -344,18 +343,20 @@ const PLACEHOLDER_SERVICE_DETAILS = {
 
 function DetailSkeleton() {
   return (
-    <Container className="py-20">
-      <Skeleton className="h-5 w-24 mb-8" />
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-        <div className="lg:col-span-2 space-y-4">
-          <Skeleton className="h-12 w-12 rounded-xl mb-4" />
-          <Skeleton className="h-10 w-2/3" />
-          <Skeleton className="h-4 w-full" />
-          <Skeleton className="h-4 w-5/6" />
+    <div className="bg-[#020714] min-h-screen pt-32 pb-20 text-slate-100">
+      <Container>
+        <div className="h-6 w-32 bg-white/10 rounded-full mb-8 animate-pulse" />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          <div className="lg:col-span-2 space-y-6">
+            <div className="h-14 w-14 rounded-2xl bg-white/10 animate-pulse" />
+            <div className="h-12 w-3/4 bg-white/10 rounded-xl animate-pulse" />
+            <div className="h-5 w-full bg-white/5 rounded animate-pulse" />
+            <div className="h-5 w-5/6 bg-white/5 rounded animate-pulse" />
+          </div>
+          <div className="h-80 rounded-2xl bg-slate-900/60 border border-white/10 animate-pulse" />
         </div>
-        <Skeleton className="h-64 rounded-xl" />
-      </div>
-    </Container>
+      </Container>
+    </div>
   )
 }
 
@@ -390,17 +391,21 @@ export default function ServiceDetailPage() {
 
   if (!service) {
     return (
-      <Container className="py-32 text-center">
-        <p className="text-text-muted text-lg mb-6">Service not found.</p>
-        <Button as={Link} to="/services" variant="outline">
-          ← Back to Services
-        </Button>
-      </Container>
+      <div className="bg-[#020714] min-h-screen py-36 text-center text-white">
+        <Container>
+          <div className="max-w-md mx-auto p-8 rounded-2xl border border-white/10 bg-slate-900/60 backdrop-blur-xl">
+            <p className="text-slate-300 text-lg mb-6">Service capability not found.</p>
+            <Button as={Link} to="/services" variant="primary">
+              ← Return to Services Directory
+            </Button>
+          </div>
+        </Container>
+      </div>
     )
   }
 
   return (
-    <>
+    <div className="bg-[#020714] min-h-screen text-slate-100 selection:bg-brand-cyan/20 selection:text-brand-cyan">
       <SEO
         title={`${service.title} — Snaptech IT Solutions | Hindustan Projects`}
         description={service.shortDescription}
@@ -420,103 +425,121 @@ export default function ServiceDetailPage() {
           ]),
         ]}
       />
-      {/* ── Hero Header ──────────────────────────────────────────── */}
-      <section className="relative pt-32 pb-20 overflow-hidden bg-[#050e20]">
-        {/* Grid pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff06_1px,transparent_1px),linear-gradient(to_bottom,#ffffff06_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
+
+      {/* ── 1. Cyber Hero Header ────────────────────────────────────── */}
+      <section className="relative pt-28 sm:pt-36 lg:pt-40 pb-16 sm:pb-20 overflow-hidden border-b border-white/10 bg-[#020714]">
+        {/* Subtle grid pattern & glows */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:48px_48px] pointer-events-none" />
         <div
-          className={`absolute top-0 left-0 w-full h-full bg-gradient-to-br ${config.bgGlow} opacity-60 pointer-events-none`}
+          className={`absolute top-0 left-0 w-full h-full bg-gradient-to-br ${config.bgGlow} opacity-70 pointer-events-none`}
         />
-        <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-brand-cyan/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-brand-cyan/15 rounded-full blur-[100px] pointer-events-none" />
 
         <Container className="relative">
           {/* Breadcrumb */}
           <nav
-            className="flex items-center gap-2 text-sm text-white/70 mb-10"
+            className="flex items-center gap-2 text-xs sm:text-sm text-slate-400 mb-8 font-mono"
             aria-label="Breadcrumb"
           >
-            <Link to="/" className="hover:text-white transition-colors">
+            <Link to="/" className="hover:text-brand-cyan transition-colors">
               Home
             </Link>
-            <span>/</span>
-            <Link to="/services" className="hover:text-white transition-colors">
+            <span className="text-white/20">/</span>
+            <Link to="/services" className="hover:text-brand-cyan transition-colors">
               Services
             </Link>
-            <span>/</span>
-            <span className="text-white/80 font-medium">{service.title}</span>
+            <span className="text-white/20">/</span>
+            <span className="text-brand-cyan font-semibold">{service.title}</span>
           </nav>
 
-          <div className="flex flex-col lg:flex-row lg:items-center gap-10">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-12">
             {/* Left: title + description */}
-            <div className="flex-1">
+            <div className="flex-1 max-w-3xl">
               {/* Tag badge */}
-              <span
-                className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 text-white/60 text-xs font-semibold uppercase tracking-widest mb-5`}
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-brand-cyan/40 bg-brand-cyan/10 text-brand-cyan text-xs font-semibold uppercase tracking-widest mb-6 backdrop-blur-md shadow-[0_0_15px_rgba(6,182,212,0.2)]">
+                <span className="w-2 h-2 rounded-full bg-brand-cyan animate-pulse" />
                 {tag}
               </span>
 
               {/* Icon + title row */}
-              <div className="flex items-center gap-5 mb-5">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-5 mb-6">
                 <div
-                  className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${config.color} flex items-center justify-center shadow-xl shrink-0`}
+                  className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${config.color} flex items-center justify-center shadow-[0_0_30px_rgba(6,182,212,0.3)] shrink-0`}
                 >
-                  {createElement(getServiceIcon(service?.icon || 'Globe'), { className: 'w-8 h-8 text-white', strokeWidth: 1.6 })}
+                  {createElement(getServiceIcon(service?.icon || 'Globe'), {
+                    className: 'w-8 h-8 text-white',
+                    strokeWidth: 1.8,
+                  })}
                 </div>
-                <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold !text-white leading-tight">
+                <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight">
                   {service.title}
                 </h1>
               </div>
 
-              <p className="text-white/60 text-base sm:text-lg leading-relaxed max-w-xl mb-8">
+              <p className="text-slate-300 text-base sm:text-lg leading-relaxed max-w-2xl mb-8 font-light">
                 {service.shortDescription}
               </p>
 
-              {/* Quick stats */}
-              <div className="flex flex-wrap gap-4">
-                <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10">
-                  <Clock className="w-4 h-4 text-green-400" />
-                  <span className="text-sm text-white/70">
-                    Delivery: <strong className="text-white">{deliveryTime}</strong>
+              {/* Quick Telemetry & SLA Pills */}
+              <div className="flex flex-wrap gap-3 sm:gap-4">
+                <div className="flex items-center gap-2.5 px-4 py-2 rounded-xl bg-slate-900/80 border border-white/10 backdrop-blur-md">
+                  <Clock className="w-4 h-4 text-brand-cyan" />
+                  <span className="text-xs sm:text-sm text-slate-300">
+                    Sprint Cycle: <strong className="text-white font-mono">{deliveryTime}</strong>
                   </span>
                 </div>
-                <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10">
-                  <Shield className="w-4 h-4 text-blue-400" />
-                  <span className="text-sm text-white/70">
-                    <strong className="text-white">Free</strong> consultation
+                <div className="flex items-center gap-2.5 px-4 py-2 rounded-xl bg-slate-900/80 border border-white/10 backdrop-blur-md">
+                  <Shield className="w-4 h-4 text-emerald-400" />
+                  <span className="text-xs sm:text-sm text-slate-300">
+                    <strong className="text-white">Enterprise</strong> SLA Covered
                   </span>
                 </div>
-                <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10">
-                  <Star className="w-4 h-4 text-yellow-400" />
-                  <span className="text-sm text-white/70">
-                    <strong className="text-white">50+</strong> happy clients
+                <div className="flex items-center gap-2.5 px-4 py-2 rounded-xl bg-slate-900/80 border border-white/10 backdrop-blur-md">
+                  <Star className="w-4 h-4 text-amber-400" />
+                  <span className="text-xs sm:text-sm text-slate-300">
+                    <strong className="text-white">Hindustan Projects</strong> Backed
                   </span>
                 </div>
               </div>
             </div>
 
-            {/* Right: CTA card */}
-            <div className="lg:w-80 shrink-0">
-              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
-                <h3 className="font-heading text-lg font-bold !text-white mb-2">
-                  Ready to Get Started?
+            {/* Right: Quick Action Banner Card */}
+            <div className="lg:w-84 shrink-0">
+              <div className="relative rounded-2xl border border-brand-cyan/30 bg-slate-900/80 backdrop-blur-2xl p-7 shadow-[0_20px_50px_rgba(0,0,0,0.6)]">
+                <div className="flex items-center justify-between pb-3 border-b border-white/10 mb-4">
+                  <span className="text-xs font-mono font-bold text-brand-cyan uppercase tracking-wider">
+                    Engage Architecture
+                  </span>
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                </div>
+                <h3 className="font-heading text-lg font-bold text-white mb-2">
+                  Launch {service.title}
                 </h3>
-                <p className="text-white/50 text-sm mb-5 leading-relaxed">
-                  Talk to our team — free consultation, no commitment required.
+                <p className="text-slate-400 text-xs sm:text-sm mb-6 leading-relaxed">
+                  Book a free technical scoping call with our lead architects. Immediate NDA protection available.
                 </p>
-                <Button variant="primary" fullWidth as={Link} to="/contact" className="mb-3">
-                  Get a Free Quote
+                <Button
+                  variant="primary"
+                  fullWidth
+                  as={Link}
+                  to="/contact"
+                  className="mb-3 bg-gradient-to-r from-brand-primary to-brand-cyan hover:from-brand-primary-dark hover:to-brand-cyan-dark text-white font-bold shadow-[0_0_20px_rgba(30,107,238,0.4)] border border-brand-cyan/40"
+                >
+                  Request Technical Proposal
                 </Button>
                 <a
-                  href={`https://wa.me/${waNum}?text=${encodeURIComponent(settingsData?.data?.whatsappMessage ? settingsData.data.whatsappMessage.replace('{service}', service.title) : `Hi! I visited your website and want to discuss ${service.title} service.`)}`}
+                  href={`https://wa.me/${waNum}?text=${encodeURIComponent(
+                    settingsData?.data?.whatsappMessage
+                      ? settingsData.data.whatsappMessage.replace('{service}', service.title)
+                      : `Hi! I visited your website and want to discuss ${service.title} service.`
+                  )}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 w-full py-2.5 rounded-md border border-white/15
-                    text-white/70 text-sm font-medium hover:bg-white/5 hover:text-white transition-all duration-200"
+                  className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl border border-white/15
+                    text-slate-300 text-sm font-medium hover:bg-white/5 hover:text-white transition-all duration-200"
                 >
                   <MessageSquare className="w-4 h-4 text-[#25D366]" />
-                  Chat on WhatsApp
+                  Direct WhatsApp Hotline
                 </a>
               </div>
             </div>
@@ -524,42 +547,42 @@ export default function ServiceDetailPage() {
         </Container>
       </section>
 
-      {/* ── Main Content ─────────────────────────────────────────── */}
-      <section className="py-16 bg-gradient-to-b from-gray-50/80 to-white">
+      {/* ── 2. Main Content Breakdown ──────────────────────────────── */}
+      <section className="py-16 sm:py-20 lg:py-24 bg-[#020714] relative">
         <Container>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            {/* ── Left Column ── */}
-            <div className="lg:col-span-2 space-y-14">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+            {/* ── Left Column (col-span-8) ── */}
+            <div className="lg:col-span-8 space-y-16">
               {/* Overview */}
-              <div>
-                <span className="text-xs font-bold tracking-widest uppercase text-brand-red mb-3 block">
-                  Overview
+              <div className="p-8 rounded-2xl border border-white/10 bg-slate-900/60 backdrop-blur-xl">
+                <span className="text-xs font-mono font-bold tracking-widest uppercase text-brand-cyan mb-3 block">
+                  // CAPABILITY OVERVIEW
                 </span>
-                <h2 className="font-heading text-2xl font-bold text-brand-blue mb-4">
-                  What is {service.title}?
+                <h2 className="font-heading text-2xl sm:text-3xl font-bold text-white mb-4">
+                  Engineering Scope: {service.title}
                 </h2>
-                <p className="text-text-muted leading-relaxed text-base">
-                  {service.fullDescription}
+                <p className="text-slate-300 leading-relaxed text-base sm:text-lg font-light">
+                  {service.fullDescription || service.shortDescription}
                 </p>
               </div>
 
-              {/* Key Features */}
+              {/* Key Features & Deliverables */}
               <div>
-                <span className="text-xs font-bold tracking-widest uppercase text-brand-red mb-3 block">
-                  Deliverables
+                <span className="text-xs font-mono font-bold tracking-widest uppercase text-brand-cyan mb-3 block">
+                  // TECHNICAL DELIVERABLES
                 </span>
-                <h2 className="font-heading text-2xl font-bold text-brand-blue mb-6">
-                  What You Get
+                <h2 className="font-heading text-2xl sm:text-3xl font-bold text-white mb-6">
+                  What You Receive In Production
                 </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {keyFeatures.map((feature, i) => (
                     <div
                       key={i}
-                      className="flex items-start gap-3 p-4 rounded-xl border border-gray-100 bg-white
-                        hover:border-brand-blue/20 hover:shadow-sm transition-all duration-200"
+                      className="flex items-start gap-3.5 p-4 sm:p-5 rounded-xl border border-white/10 bg-slate-900/70
+                        hover:border-brand-cyan/40 hover:bg-slate-900/90 transition-all duration-200"
                     >
-                      <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
-                      <span className="text-sm text-text-dark font-medium">{feature}</span>
+                      <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+                      <span className="text-sm text-slate-200 font-medium leading-snug">{feature}</span>
                     </div>
                   ))}
                 </div>
@@ -567,31 +590,32 @@ export default function ServiceDetailPage() {
 
               {/* Process Steps */}
               <div>
-                <span className="text-xs font-bold tracking-widest uppercase text-brand-red mb-3 block">
-                  Our Process
+                <span className="text-xs font-mono font-bold tracking-widest uppercase text-brand-cyan mb-3 block">
+                  // EXECUTION ROADMAP
                 </span>
-                <h2 className="font-heading text-2xl font-bold text-brand-blue mb-8">
-                  How We Deliver It
+                <h2 className="font-heading text-2xl sm:text-3xl font-bold text-white mb-8">
+                  Deployment Lifecycle
                 </h2>
-                <div className="space-y-4">
+                <div className="space-y-6">
                   {process.map((step, i) => (
-                    <div key={i} className="flex gap-5 group">
+                    <div
+                      key={i}
+                      className="flex gap-6 p-6 rounded-2xl border border-white/10 bg-slate-900/50 backdrop-blur-xl group hover:border-brand-cyan/40 transition-all"
+                    >
                       <div className="flex flex-col items-center">
                         <div
-                          className={`w-11 h-11 rounded-full bg-gradient-to-br ${config.color} flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-md`}
+                          className={`w-12 h-12 rounded-xl bg-gradient-to-br ${config.color} flex items-center justify-center text-white font-heading font-extrabold text-base shrink-0 shadow-[0_0_20px_rgba(6,182,212,0.3)]`}
                         >
                           {step.step}
                         </div>
-                        {i < process.length - 1 && (
-                          <div className="w-0.5 flex-1 bg-gradient-to-b from-gray-200 to-transparent mt-2" />
-                        )}
                       </div>
-                      {/* Content */}
-                      <div className="pb-8">
-                        <h3 className="font-heading text-base font-bold text-brand-blue mb-1">
+                      <div className="flex-1">
+                        <h3 className="font-heading text-lg font-bold text-white mb-1.5 group-hover:text-brand-cyan transition-colors">
                           {step.title}
                         </h3>
-                        <p className="text-sm text-text-muted leading-relaxed">{step.desc}</p>
+                        <p className="text-sm text-slate-300/80 leading-relaxed font-light">
+                          {step.desc}
+                        </p>
                       </div>
                     </div>
                   ))}
@@ -600,18 +624,18 @@ export default function ServiceDetailPage() {
 
               {/* Tech Stack */}
               <div>
-                <span className="text-xs font-bold tracking-widest uppercase text-brand-red mb-3 block">
-                  Technology
+                <span className="text-xs font-mono font-bold tracking-widest uppercase text-brand-cyan mb-3 block">
+                  // TECHNOLOGIES & TOOLS
                 </span>
-                <h2 className="font-heading text-2xl font-bold text-brand-blue mb-5">
-                  Tools & Technologies
+                <h2 className="font-heading text-2xl sm:text-3xl font-bold text-white mb-5">
+                  Verified Tech Stack
                 </h2>
-                <div className="flex flex-wrap gap-2.5">
+                <div className="flex flex-wrap gap-3">
                   {techStack.map((tech) => (
                     <span
                       key={tech}
-                      className="px-4 py-2 rounded-full border border-gray-200 bg-white text-sm font-medium
-                        text-brand-blue hover:border-brand-blue/40 hover:bg-brand-blue/4 transition-all duration-200"
+                      className="px-4 py-2 rounded-xl border border-brand-cyan/20 bg-brand-cyan/5 text-sm font-mono
+                        text-brand-cyan hover:border-brand-cyan/60 hover:bg-brand-cyan/15 transition-all duration-200"
                     >
                       {tech}
                     </span>
@@ -620,120 +644,120 @@ export default function ServiceDetailPage() {
               </div>
 
               {/* Back link */}
-              <Link
-                to="/services"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-brand-blue
-                  hover:text-brand-red transition-colors duration-150 group"
-              >
-                <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform duration-200" />
-                Back to All Services
-              </Link>
+              <div className="pt-6 border-t border-white/10">
+                <Link
+                  to="/services"
+                  className="inline-flex items-center gap-2 text-sm font-semibold text-brand-cyan
+                    hover:text-white transition-colors duration-150 group"
+                >
+                  <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1.5 transition-transform duration-200" />
+                  Return To All Solutions Directory
+                </Link>
+              </div>
             </div>
 
-            {/* ── Right Sidebar ── */}
-            <div className="space-y-5">
-              {/* CTA Card */}
-              <div className="relative rounded-2xl overflow-hidden">
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    background: 'linear-gradient(135deg, #0d1b3e 0%, #1a2d6b 60%, #0a1530 100%)',
-                  }}
-                />
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:20px_20px]" />
-                <div
-                  className="absolute bottom-0 right-0 w-24 h-24 rounded-full blur-2xl opacity-30"
-                  style={{
-                    background: 'radial-gradient(circle, rgba(220,38,38,0.4), transparent)',
-                  }}
-                />
-                <div className="relative p-6">
+            {/* ── Right Sidebar (col-span-4) ── */}
+            <div className="lg:col-span-4 space-y-6">
+              {/* Initiation Card */}
+              <div className="relative rounded-2xl overflow-hidden border border-brand-cyan/40 bg-gradient-to-b from-slate-900 to-[#020714] p-6 sm:p-7 shadow-[0_15px_40px_rgba(0,0,0,0.5)]">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-brand-cyan/15 rounded-full blur-2xl" />
+                <div className="relative">
                   <div
-                    className={`w-12 h-12 rounded-xl bg-gradient-to-br ${config.color} flex items-center justify-center mb-4 shadow-lg`}
+                    className={`w-12 h-12 rounded-xl bg-gradient-to-br ${config.color} flex items-center justify-center mb-5 shadow-lg`}
                   >
-                    {createElement(getServiceIcon(service?.icon || 'Globe'), { className: 'w-6 h-6 text-white', strokeWidth: 1.6 })}
+                    {createElement(getServiceIcon(service?.icon || 'Globe'), {
+                      className: 'w-6 h-6 text-white',
+                      strokeWidth: 1.8,
+                    })}
                   </div>
-                  <h3
-                    className="font-heading text-xl font-bold mb-2"
-                    style={{ color: '#ffffff', textShadow: '0 2px 12px rgba(0,0,0,0.8)' }}
-                  >
-                    Interested in {service.title}?
+                  <h3 className="font-heading text-xl font-bold text-white mb-2">
+                    Commission {service.title}
                   </h3>
-                  <p
-                    className="text-sm mb-5 leading-relaxed"
-                    style={{ color: 'rgba(255,255,255,0.85)' }}
-                  >
-                    Let's discuss how we can grow your business. Free consultation, no strings
-                    attached.
+                  <p className="text-slate-300 text-xs sm:text-sm mb-6 leading-relaxed font-light">
+                    Commission our dedicated squad for your next milestone. We adhere strictly to verified deadlines and ISO security standards.
                   </p>
-                  <Button variant="primary" fullWidth as={Link} to="/contact" className="mb-3">
-                    Get a Free Quote
+                  <Button
+                    variant="primary"
+                    fullWidth
+                    as={Link}
+                    to="/contact"
+                    className="mb-3 bg-gradient-to-r from-brand-primary to-brand-cyan text-white font-bold"
+                  >
+                    Get Accurate Quotation
                   </Button>
                   <a
-                    href={`https://wa.me/${waNum}?text=${encodeURIComponent(settingsData?.data?.whatsappMessage ? settingsData.data.whatsappMessage.replace('{service}', service.title) : `Hi! I visited your website and want to discuss ${service.title} service.`)}`}
+                    href={`https://wa.me/${waNum}?text=${encodeURIComponent(
+                      settingsData?.data?.whatsappMessage
+                        ? settingsData.data.whatsappMessage.replace('{service}', service.title)
+                        : `Hi! I visited your website and want to discuss ${service.title} service.`
+                    )}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 w-full py-2.5 rounded-md
-                      border border-white/15 text-white/60 text-sm font-medium
-                      hover:bg-white/8 hover:text-white transition-all duration-200"
+                    className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl
+                      border border-white/15 text-slate-300 text-sm font-medium
+                      hover:bg-white/10 hover:text-white transition-all duration-200"
                   >
                     <MessageSquare className="w-4 h-4 text-[#25D366]" />
-                    WhatsApp Us
+                    WhatsApp Architecture Lead
                   </a>
                 </div>
               </div>
 
-              {/* Contact Info Card */}
-              <div className="rounded-2xl border border-gray-100 bg-white p-5 space-y-4">
-                <p className="text-sm font-bold text-brand-blue font-heading">Quick Contact</p>
-                <a href={`tel:${(settingsData?.data?.phone || '+919999999999').replace(/\s+/g, '')}`} className="flex items-center gap-3 group">
-                  <div className="w-9 h-9 rounded-xl bg-brand-blue/8 flex items-center justify-center shrink-0 group-hover:bg-brand-blue/14 transition-colors">
-                    <Phone className="w-4 h-4 text-brand-blue" />
+              {/* Direct Support & Contact Card */}
+              <div className="rounded-2xl border border-white/10 bg-slate-900/70 p-6 space-y-4 backdrop-blur-xl">
+                <p className="text-xs font-mono font-bold text-brand-cyan uppercase tracking-wider">
+                  Direct Engineering Desk
+                </p>
+                <a
+                  href={`tel:${(settingsData?.data?.phone || '+919999999999').replace(/\s+/g, '')}`}
+                  className="flex items-center gap-3.5 group p-2.5 rounded-xl hover:bg-white/5 transition-all"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-brand-primary/20 border border-brand-primary/30 flex items-center justify-center shrink-0">
+                    <Phone className="w-4 h-4 text-brand-cyan" />
                   </div>
                   <div>
-                    <p className="text-[11px] text-text-muted">Call Us</p>
-                    <p className="text-sm font-semibold text-brand-blue group-hover:text-brand-red transition-colors">
+                    <p className="text-[11px] text-slate-400 font-mono">Immediate Telephone</p>
+                    <p className="text-sm font-semibold text-white group-hover:text-brand-cyan transition-colors">
                       {settingsData?.data?.phone || '+91 99999 99999'}
                     </p>
                   </div>
                 </a>
+
                 <a
                   href={`mailto:${settingsData?.data?.email || 'info@hindustanprojects.com'}`}
-                  className="flex items-center gap-3 group"
+                  className="flex items-center gap-3.5 group p-2.5 rounded-xl hover:bg-white/5 transition-all"
                 >
-                  <div className="w-9 h-9 rounded-xl bg-brand-red/8 flex items-center justify-center shrink-0 group-hover:bg-brand-red/14 transition-colors">
-                    <Mail className="w-4 h-4 text-brand-red" />
+                  <div className="w-10 h-10 rounded-xl bg-brand-cyan/15 border border-brand-cyan/30 flex items-center justify-center shrink-0">
+                    <Mail className="w-4 h-4 text-brand-cyan" />
                   </div>
                   <div>
-                    <p className="text-[11px] text-text-muted">Email Us</p>
-                    <p className="text-sm font-semibold text-brand-blue group-hover:text-brand-red transition-colors">
+                    <p className="text-[11px] text-slate-400 font-mono">Official Inquiries</p>
+                    <p className="text-sm font-semibold text-white group-hover:text-brand-cyan transition-colors truncate">
                       {settingsData?.data?.email || 'info@hindustanprojects.com'}
                     </p>
                   </div>
                 </a>
-                <div className="flex items-center gap-2 pt-1 text-[11px] text-text-muted">
-                  <Zap className="w-3 h-3 text-yellow-500" />
-                  We reply within 24 hours
+
+                <div className="flex items-center gap-2 pt-2 text-xs text-slate-400 border-t border-white/10 font-mono">
+                  <Zap className="w-3.5 h-3.5 text-brand-cyan" />
+                  24-Hour Guaranteed Proposal SLA
                 </div>
               </div>
 
-              {/* Why Choose Us mini card */}
-              <div className="rounded-2xl border border-gray-100 bg-white p-5">
-                <p className="text-sm font-bold text-brand-blue font-heading mb-4">
-                  Why Hindustan Projects?
+              {/* Group SLA Guarantees */}
+              <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-6 backdrop-blur-xl">
+                <p className="text-xs font-mono font-bold text-brand-cyan uppercase tracking-wider mb-4">
+                  Group SLA Assurances
                 </p>
-                <ul className="space-y-3">
+                <ul className="space-y-3.5">
                   {[
-                    { icon: Zap, text: 'Fast delivery, always on time' },
-                    { icon: Shield, text: 'Trusted by 50+ businesses' },
-                    { icon: Users, text: 'Dedicated project manager' },
-                    { icon: Star, text: 'Free post-launch support' },
+                    { icon: Zap, text: 'Strict Sprint Milestones With Zero Slippage' },
+                    { icon: Shield, text: 'Hindustan Projects Enterprise Backing' },
+                    { icon: Users, text: 'Dedicated Lead Engineer & Scrum Master' },
+                    { icon: Star, text: '30-Day Post-Launch Warranty Included' },
                   ].map((item) => (
-                    <li
-                      key={item.text}
-                      className="flex items-center gap-2.5 text-sm text-text-muted"
-                    >
-                      <item.icon className="w-4 h-4 text-brand-red shrink-0" />
+                    <li key={item.text} className="flex items-center gap-3 text-xs sm:text-sm text-slate-300">
+                      <item.icon className="w-4 h-4 text-brand-cyan shrink-0" />
                       {item.text}
                     </li>
                   ))}
@@ -744,24 +768,24 @@ export default function ServiceDetailPage() {
         </Container>
       </section>
 
-      {/* ── Related Services ─────────────────────────────────────── */}
+      {/* ── 3. Related Services (Explore More) ─────────────────────── */}
       {related.length > 0 && (
-        <section className="py-16 bg-gray-50/60 border-t border-gray-100">
+        <section className="py-16 sm:py-20 bg-[#03091e] border-t border-white/10">
           <Container>
-            <div className="flex items-end justify-between mb-10">
+            <div className="flex items-end justify-between mb-12">
               <div>
-                <span className="text-xs font-bold tracking-widest uppercase text-brand-red mb-2 block">
-                  Explore More
+                <span className="text-xs font-mono font-bold tracking-widest uppercase text-brand-cyan mb-2 block">
+                  // ECOSYSTEM EXPANSION
                 </span>
-                <h2 className="font-heading text-2xl sm:text-3xl font-bold text-brand-blue">
-                  Other Services You May Like
+                <h2 className="font-heading text-2xl sm:text-3xl font-bold text-white">
+                  Complementary Engineering Modules
                 </h2>
               </div>
               <Link
                 to="/services"
-                className="hidden sm:inline-flex items-center gap-1.5 text-sm font-semibold text-brand-blue hover:text-brand-red transition-colors"
+                className="hidden sm:inline-flex items-center gap-1.5 text-sm font-semibold text-brand-cyan hover:text-white transition-colors"
               >
-                View All <ArrowRight className="w-4 h-4" />
+                View Full Catalog <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
 
@@ -773,23 +797,23 @@ export default function ServiceDetailPage() {
                   <Link
                     key={s.id}
                     to={`/services/${s.slug}`}
-                    className="group bg-white rounded-2xl border border-gray-100 p-6 flex flex-col
-                      hover:border-transparent hover:shadow-[0_8px_30px_rgba(26,62,140,0.10)]
-                      hover:-translate-y-1 transition-all duration-300"
+                    className="group bg-slate-900/70 rounded-2xl border border-white/10 p-6 flex flex-col
+                      hover:border-brand-cyan/50 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)]
+                      hover:-translate-y-1 transition-all duration-300 backdrop-blur-xl"
                   >
                     <div
                       className={`w-11 h-11 rounded-xl bg-gradient-to-br ${rc.color} flex items-center justify-center mb-4 shadow-md group-hover:scale-110 transition-transform duration-300`}
                     >
-                      <RelIcon className="w-5 h-5 text-white" strokeWidth={1.7} />
+                      <RelIcon className="w-5 h-5 text-white" strokeWidth={1.8} />
                     </div>
-                    <h3 className="font-heading text-base font-bold text-brand-blue mb-2">
+                    <h3 className="font-heading text-base font-bold text-white group-hover:text-brand-cyan transition-colors mb-2">
                       {s.title}
                     </h3>
-                    <p className="text-xs text-text-muted leading-relaxed flex-1 mb-4 line-clamp-2">
+                    <p className="text-xs text-slate-300/80 leading-relaxed flex-1 mb-5 line-clamp-2">
                       {s.shortDescription || ''}
                     </p>
-                    <span className="inline-flex items-center gap-1 text-xs font-semibold text-brand-red group-hover:gap-2.5 transition-all duration-200">
-                      Learn More <ArrowRight className="w-3.5 h-3.5" />
+                    <span className="inline-flex items-center gap-1 text-xs font-semibold text-brand-cyan group-hover:gap-2 transition-all duration-200">
+                      View Module Specs <ArrowRight className="w-3.5 h-3.5" />
                     </span>
                   </Link>
                 )
@@ -798,6 +822,7 @@ export default function ServiceDetailPage() {
           </Container>
         </section>
       )}
-    </>
+    </div>
   )
 }
+

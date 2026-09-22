@@ -21,11 +21,11 @@ import { useClientProjects, useClientSubmitFeedback, useClientDashboardStats, us
 import { useSiteSettings } from '@/hooks/useContent'
 
 const STATUS_COLORS = {
-  PLANNING: 'bg-gray-100 text-gray-700 border-gray-200',
-  IN_PROGRESS: 'bg-blue-50 text-blue-700 border-blue-100',
-  REVIEW: 'bg-purple-50 text-purple-700 border-purple-100',
-  COMPLETED: 'bg-emerald-50 text-emerald-700 border-emerald-100',
-  ON_HOLD: 'bg-amber-50 text-amber-700 border-amber-100',
+  PLANNING: 'bg-white/5 text-slate-300 border-white/10',
+  IN_PROGRESS: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  REVIEW: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
+  COMPLETED: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+  ON_HOLD: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
 }
 
 const STATUS_LABELS = {
@@ -38,11 +38,11 @@ const STATUS_LABELS = {
 
 function StatCardSkeleton() {
   return (
-    <div className="bg-white/80 border border-gray-150 backdrop-blur-md rounded-2xl p-5 md:p-6 shadow-sm flex items-center gap-4 animate-pulse">
-      <div className="w-12 h-12 rounded-xl bg-gray-100 shrink-0" />
+    <div className="bg-slate-900/70 border border-white/10 backdrop-blur-xl rounded-2xl p-5 md:p-6 shadow-xl flex items-center gap-4 animate-pulse">
+      <div className="w-12 h-12 rounded-2xl bg-white/5 shrink-0" />
       <div className="flex-1 space-y-2">
-        <div className="h-3 bg-gray-100 rounded w-2/3" />
-        <div className="h-6 bg-gray-100 rounded w-1/3" />
+        <div className="h-3 bg-white/5 rounded w-2/3" />
+        <div className="h-6 bg-white/5 rounded w-1/3" />
       </div>
     </div>
   )
@@ -87,7 +87,7 @@ export default function ClientDashboardPage() {
   if (projectsLoading) {
     return (
       <div className="flex justify-center items-center py-12">
-        <div className="w-8 h-8 border-2 border-brand-blue border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-brand-cyan border-t-transparent rounded-full animate-spin" />
       </div>
     )
   }
@@ -112,8 +112,8 @@ export default function ClientDashboardPage() {
       label: 'Active Projects',
       value: statsLoading ? '…' : s.activeProjects ?? 0,
       icon: FolderKanban,
-      color: 'bg-blue-50 text-blue-600',
-      accent: 'border-blue-100',
+      color: 'bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/20',
+      accent: 'border-white/10 hover:border-brand-cyan/40',
       link: null,
       subtext: null,
     },
@@ -122,8 +122,8 @@ export default function ClientDashboardPage() {
       label: 'Completed Projects',
       value: statsLoading ? '…' : s.completedProjects ?? 0,
       icon: CheckCircle,
-      color: 'bg-emerald-50 text-emerald-600',
-      accent: 'border-emerald-100',
+      color: 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20',
+      accent: 'border-white/10 hover:border-emerald-500/40',
       link: null,
       subtext: null,
     },
@@ -132,30 +132,30 @@ export default function ClientDashboardPage() {
       label: 'Overall Progress',
       value: statsLoading ? '…' : `${s.overallProgress ?? 0}%`,
       icon: TrendingUp,
-      color: 'bg-purple-50 text-purple-600',
-      accent: 'border-purple-100',
+      color: 'bg-purple-500/10 text-purple-400 border border-purple-500/20',
+      accent: 'border-white/10 hover:border-purple-500/40',
       link: null,
-      subtext: 'Across all projects',
+      subtext: 'Across all active milestones',
     },
     {
       id: 'open-tickets',
       label: 'Open Support Tickets',
       value: statsLoading ? '…' : s.openTickets ?? 0,
       icon: TicketCheck,
-      color: s.openTickets > 0 ? 'bg-amber-50 text-amber-600' : 'bg-gray-50 text-gray-400',
-      accent: s.openTickets > 0 ? 'border-amber-100' : 'border-gray-100',
+      color: s.openTickets > 0 ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-white/5 text-slate-400 border border-white/10',
+      accent: s.openTickets > 0 ? 'border-amber-500/30 hover:border-amber-500/60' : 'border-white/10',
       link: '/client/support',
       subtext: s.unreadReplies > 0 ? `${s.unreadReplies} unread ${s.unreadReplies === 1 ? 'reply' : 'replies'}` : null,
       subIcon: Bell,
-      subIconColor: 'text-rose-500',
+      subIconColor: 'text-brand-cyan',
     },
     {
       id: 'next-payment',
       label: 'Next Payment Due',
       value: statsLoading ? '…' : formatCurrency(s.pendingMilestoneAmount),
       icon: Wallet,
-      color: s.pendingMilestoneAmount != null ? 'bg-rose-50 text-rose-600' : 'bg-gray-50 text-gray-400',
-      accent: s.pendingMilestoneAmount != null ? 'border-rose-100' : 'border-gray-100',
+      color: s.pendingMilestoneAmount != null ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' : 'bg-white/5 text-slate-400 border border-white/10',
+      accent: s.pendingMilestoneAmount != null ? 'border-rose-500/30 hover:border-rose-500/60' : 'border-white/10',
       link: '/client/billing',
       subtext: s.nextMilestoneTitle ? `Milestone: ${s.nextMilestoneTitle}` : null,
     },
@@ -164,8 +164,8 @@ export default function ClientDashboardPage() {
       label: 'Payment Deadline',
       value: statsLoading ? '…' : formatDate(s.nextMilestoneDue),
       icon: CalendarClock,
-      color: s.nextMilestoneDue != null ? 'bg-indigo-50 text-indigo-600' : 'bg-gray-50 text-gray-400',
-      accent: s.nextMilestoneDue != null ? 'border-indigo-100' : 'border-gray-100',
+      color: s.nextMilestoneDue != null ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : 'bg-white/5 text-slate-400 border border-white/10',
+      accent: s.nextMilestoneDue != null ? 'border-blue-500/30 hover:border-blue-500/60' : 'border-white/10',
       link: '/client/billing',
       subtext: null,
     },
@@ -179,35 +179,36 @@ export default function ClientDashboardPage() {
   const clientName = clientMe?.name || localStorage.getItem('hp_client_name') || 'Valued Client'
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 text-white">
       {/* Personalized Welcome Hero Banner */}
-      <div className="relative rounded-2xl overflow-hidden p-6 md:p-8 bg-gradient-to-r from-brand-blue via-blue-900 to-indigo-950 text-white shadow-lg">
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="relative rounded-3xl overflow-hidden p-6 md:p-8 bg-gradient-to-r from-blue-950/60 via-slate-900/80 to-cyan-950/60 border border-brand-cyan/30 text-white shadow-2xl backdrop-blur-xl">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-brand-cyan/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
-            <span className="text-xs font-semibold px-3 py-1 bg-white/10 text-blue-200 border border-white/15 rounded-full backdrop-blur-sm">
+            <span className="text-xs font-bold px-3.5 py-1 bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/20 rounded-full backdrop-blur-sm uppercase tracking-wider">
               Client Portal &bull; {clientMe?.companyName || 'Hindustan Projects Partner'}
             </span>
-            <h1 className="font-heading text-2xl md:text-3xl font-bold text-white mt-3">
-              Welcome back, {clientName}! 👋
+            <h1 className="font-heading text-2xl md:text-3xl font-extrabold text-white mt-3 tracking-tight">
+              Welcome back, <span className="text-brand-cyan">{clientName}</span>! 👋
             </h1>
-            <p className="text-xs md:text-sm text-blue-100/90 mt-1 max-w-xl">
+            <p className="text-xs md:text-sm text-slate-300 mt-1 max-w-xl leading-relaxed">
               Track your active project roadmap, milestone billing status, and open support tickets in real-time.
             </p>
           </div>
           <div className="flex items-center gap-3">
             <Link
               to="/client/support"
-              className="px-4 py-2.5 bg-white text-brand-blue font-bold text-xs rounded-xl shadow hover:bg-blue-50 transition-all flex items-center gap-2"
+              className="px-4 py-2.5 bg-brand-cyan hover:bg-brand-cyan-light text-slate-950 font-bold text-xs rounded-xl shadow-lg shadow-cyan-950/50 transition-all flex items-center gap-2 cursor-pointer"
             >
               <TicketCheck className="w-4 h-4" />
               Support Desk
             </Link>
             <Link
               to="/client/billing"
-              className="px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white font-semibold text-xs border border-white/20 rounded-xl transition-all flex items-center gap-2"
+              className="px-4 py-2.5 bg-white/[0.06] hover:bg-white/[0.12] text-white font-semibold text-xs border border-white/15 rounded-xl transition-all flex items-center gap-2 cursor-pointer"
             >
               <Wallet className="w-4 h-4" />
-              Billing & Invoices
+              Billing &amp; Invoices
             </Link>
           </div>
         </div>
@@ -225,23 +226,23 @@ export default function ClientDashboardPage() {
                 <CardWrapper
                   key={stat.id}
                   {...wrapperProps}
-                  className={`bg-white/80 border backdrop-blur-md rounded-2xl p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-start gap-4 group ${stat.accent || 'border-gray-150'} ${stat.link ? 'cursor-pointer' : ''}`}
+                  className={`bg-slate-900/70 border backdrop-blur-xl rounded-2xl p-5 shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-start gap-4 group ${stat.accent || 'border-white/10'} ${stat.link ? 'cursor-pointer' : ''}`}
                 >
-                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-105 ${stat.color}`}>
+                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110 shadow-sm ${stat.color}`}>
                     <stat.icon className="w-5 h-5" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{stat.label}</p>
-                    <h3 className="text-xl font-bold text-gray-900 mt-0.5 truncate">{stat.value}</h3>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{stat.label}</p>
+                    <h3 className="text-xl font-extrabold text-white mt-0.5 truncate">{stat.value}</h3>
                     {stat.subtext && (
-                      <p className={`text-[10px] font-semibold mt-1 flex items-center gap-1 ${stat.subIconColor || 'text-gray-400'}`}>
+                      <p className={`text-[10px] font-semibold mt-1 flex items-center gap-1 ${stat.subIconColor || 'text-slate-400'}`}>
                         {stat.subIcon && <stat.subIcon className="w-3 h-3" />}
                         {stat.subtext}
                       </p>
                     )}
                   </div>
                   {stat.link && (
-                    <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-brand-blue group-hover:translate-x-0.5 transition-all shrink-0 mt-1" />
+                    <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-brand-cyan group-hover:translate-x-0.5 transition-all shrink-0 mt-1" />
                   )}
                 </CardWrapper>
               )
@@ -249,34 +250,37 @@ export default function ClientDashboardPage() {
       </div>
 
       {/* Dynamic WhatsApp Support Banner */}
-      <div className="bg-gradient-to-r from-brand-blue to-blue-700 rounded-2xl p-5 md:p-6 text-white shadow-md relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none" />
-        <div className="space-y-1 relative">
-          <h4 className="font-heading font-bold text-base md:text-lg">Need Immediate Assistance?</h4>
-          <p className="text-xs text-blue-100 max-w-xl">
-            Get in touch directly with our support team or your dedicated project lead on WhatsApp for quick updates, feedback, or any technical queries.
+      <div className="bg-gradient-to-r from-emerald-950/40 via-slate-900/80 to-cyan-950/40 border border-emerald-500/30 rounded-3xl p-5 md:p-6 text-white shadow-xl relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 backdrop-blur-xl">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none" />
+        <div className="space-y-1 relative z-10">
+          <h4 className="font-heading font-bold text-base md:text-lg text-white">Need Immediate Technical Assistance?</h4>
+          <p className="text-xs text-slate-300 max-w-xl leading-relaxed">
+            Get in touch directly with our support team or your dedicated project lead on WhatsApp for quick milestone reviews, feedback, or urgent bug escalations.
           </p>
         </div>
         <a
           href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="px-5 py-2.5 bg-white text-brand-blue hover:bg-blue-50 font-bold rounded-xl text-xs flex items-center gap-2 shadow-md hover:scale-[1.02] transition-all relative cursor-pointer shrink-0"
+          className="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl text-xs flex items-center gap-2 shadow-lg shadow-emerald-950/40 hover:scale-[1.02] transition-all relative cursor-pointer shrink-0 z-10"
         >
-          <MessageCircle className="w-4 h-4 text-emerald-500 fill-emerald-50" />
+          <MessageCircle className="w-4 h-4 fill-slate-950 text-slate-950" />
           <span>Chat on WhatsApp</span>
         </a>
       </div>
 
       {/* Projects Grid */}
       <div className="space-y-6">
-        <h3 className="text-lg font-bold text-gray-900 font-heading">Your Projects</h3>
+        <div className="flex items-center justify-between">
+          <h3 className="text-xl font-bold text-white font-heading">Your Active Projects</h3>
+          <span className="text-xs text-slate-400 font-semibold">{projects.length} Total Project(s)</span>
+        </div>
         
         {projects.length === 0 ? (
-          <div className="bg-white border border-dashed border-gray-300 rounded-2xl py-12 text-center">
-            <FolderKanban className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-            <p className="text-sm font-semibold text-gray-500">No projects linked to your account yet.</p>
-            <p className="text-xs text-gray-400 mt-1">Please contact your account manager if this is an error.</p>
+          <div className="bg-slate-900/60 border border-dashed border-white/15 rounded-3xl py-12 text-center backdrop-blur-xl">
+            <FolderKanban className="w-12 h-12 text-slate-500 mx-auto mb-3" />
+            <p className="text-sm font-bold text-slate-300">No projects linked to your account yet.</p>
+            <p className="text-xs text-slate-400 mt-1">Please reach out to your account manager if this is an error.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -288,33 +292,33 @@ export default function ClientDashboardPage() {
               })
 
               return (
-                <div key={project.id} className="bg-white border border-gray-150 rounded-2xl p-5 md:p-6 shadow-sm hover:shadow-md hover:border-gray-250 transition-all duration-200 flex flex-col justify-between group">
+                <div key={project.id} className="bg-slate-900/70 border border-white/10 hover:border-brand-cyan/40 rounded-3xl p-5 md:p-6 shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group backdrop-blur-xl">
                   <div>
                     {/* Title and Status */}
                     <div className="flex justify-between items-start gap-4">
                       <div>
-                        <h4 className="font-heading text-lg font-bold text-gray-900">{project.projectTitle}</h4>
-                        <p className="text-xs text-gray-400 mt-0.5 font-medium">Project ID: {project.id}</p>
+                        <h4 className="font-heading text-lg font-bold text-white group-hover:text-brand-cyan transition-colors">{project.projectTitle}</h4>
+                        <p className="text-xs text-slate-500 mt-0.5 font-mono">Project ID: {project.id}</p>
                       </div>
-                      <span className={`px-2.5 py-1 text-xs font-semibold rounded-full border ${STATUS_COLORS[project.status]}`}>
+                      <span className={`px-3 py-1 text-xs font-bold rounded-full border ${STATUS_COLORS[project.status]}`}>
                         {STATUS_LABELS[project.status]}
                       </span>
                     </div>
 
                     {/* Description */}
-                    <p className="text-sm text-gray-500 mt-4 line-clamp-2">
+                    <p className="text-xs sm:text-sm text-slate-400 mt-4 line-clamp-2 leading-relaxed">
                       {project.description || 'No description provided.'}
                     </p>
 
                     {/* Progress Slider */}
                     <div className="mt-6 space-y-2">
-                      <div className="flex justify-between text-xs font-semibold text-gray-500">
+                      <div className="flex justify-between text-xs font-bold text-slate-300">
                         <span>Milestone Progress</span>
-                        <span>{project.progress}%</span>
+                        <span className="text-brand-cyan">{project.progress}%</span>
                       </div>
-                      <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
+                      <div className="w-full bg-white/10 rounded-full h-2 overflow-hidden">
                         <div
-                          className="bg-brand-blue h-2 rounded-full transition-all duration-500"
+                          className="bg-gradient-to-r from-brand-cyan to-blue-500 h-2 rounded-full transition-all duration-500"
                           style={{ width: `${project.progress}%` }}
                         />
                       </div>
@@ -322,16 +326,16 @@ export default function ClientDashboardPage() {
                   </div>
 
                   {/* Card Footer */}
-                  <div className="mt-8 pt-4 border-t border-gray-100 flex items-center justify-between text-xs text-gray-400 font-medium">
+                  <div className="mt-8 pt-4 border-t border-white/10 flex items-center justify-between text-xs text-slate-400 font-medium">
                     <div className="flex items-center gap-4">
-                      <div className="flex items-center gap-1">
-                        <Clock className="w-3.5 h-3.5" />
+                      <div className="flex items-center gap-1.5">
+                        <Clock className="w-3.5 h-3.5 text-amber-400" />
                         <span>Deadline: {formattedDeadline}</span>
                       </div>
-                      <div className="flex items-center gap-1">
-                        <FileText className="w-3.5 h-3.5" />
+                      <div className="flex items-center gap-1.5">
+                        <FileText className="w-3.5 h-3.5 text-brand-cyan" />
                         <span>
-                          {project.taskStats.completed} / {project.taskStats.total} Tasks Done
+                          {project.taskStats.completed} / {project.taskStats.total} Done
                         </span>
                       </div>
                     </div>
@@ -340,18 +344,18 @@ export default function ClientDashboardPage() {
                       {project.status === 'COMPLETED' && !project.hasFeedback && (
                         <button
                           onClick={() => setSelectedProjectFeedback(project)}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 text-emerald-700 border border-emerald-100 hover:bg-emerald-100/50 font-bold rounded-xl text-xs transition-colors cursor-pointer shadow-sm"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/20 font-bold rounded-xl text-xs transition-colors cursor-pointer shadow-sm"
                         >
-                          <Star className="w-3.5 h-3.5 fill-emerald-500 text-emerald-600" />
-                          <span>Leave Feedback</span>
+                          <Star className="w-3.5 h-3.5 fill-emerald-400 text-emerald-400" />
+                          <span>Leave Review</span>
                         </button>
                       )}
 
                       <Link
                         to={`/client/projects/${project.id}`}
-                        className="inline-flex items-center gap-1 text-sm font-bold text-brand-blue hover:text-brand-blue-hover transition-colors"
+                        className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-cyan hover:text-brand-cyan-light transition-colors"
                       >
-                        <span>Track</span>
+                        <span>View Project</span>
                         <ArrowRight className="w-4 h-4" />
                       </Link>
                     </div>
@@ -365,22 +369,22 @@ export default function ClientDashboardPage() {
 
       {/* Testimonial Feedback Modal */}
       {selectedProjectFeedback && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/60 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-2xl border border-gray-150 shadow-xl max-w-md w-full overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-            <div className="p-5 border-b border-gray-100 bg-gray-50/50">
-              <h3 className="font-heading font-bold text-gray-800 text-sm flex items-center gap-2">
-                <Star className="w-4 h-4 text-emerald-500 fill-emerald-100" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 backdrop-blur-md p-4 animate-fadeIn">
+          <div className="bg-slate-900/95 rounded-3xl border border-white/15 shadow-2xl max-w-md w-full overflow-hidden text-white backdrop-blur-2xl">
+            <div className="p-5 border-b border-white/10 bg-white/[0.02]">
+              <h3 className="font-heading font-bold text-white text-base flex items-center gap-2">
+                <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
                 <span>Submit Project Review</span>
               </h3>
-              <p className="text-[10px] text-gray-400 mt-1">
-                Share your experience on project: <span className="font-bold text-gray-700">{selectedProjectFeedback.projectTitle}</span>
+              <p className="text-xs text-slate-400 mt-1">
+                Share your experience on project: <span className="font-bold text-brand-cyan">{selectedProjectFeedback.projectTitle}</span>
               </p>
             </div>
 
             <form onSubmit={handleFeedbackSubmit} className="p-5 space-y-4">
               {/* Star Rating Selector */}
               <div>
-                <label className="text-[10px] font-bold text-gray-500 block mb-1.5 uppercase">Rating</label>
+                <label className="text-[10px] font-bold text-slate-400 block mb-1.5 uppercase tracking-wider">Rating</label>
                 <div className="flex gap-1.5">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button
@@ -392,8 +396,8 @@ export default function ClientDashboardPage() {
                       <Star
                         className={`w-6 h-6 ${
                           star <= feedbackRating
-                            ? 'fill-amber-400 text-amber-500'
-                            : 'text-gray-300 fill-transparent'
+                            ? 'fill-amber-400 text-amber-400'
+                            : 'text-slate-600 fill-transparent'
                         }`}
                       />
                     </button>
@@ -404,37 +408,37 @@ export default function ClientDashboardPage() {
               {/* Optional Client Role & Company */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-[10px] font-bold text-gray-500 block mb-1 uppercase">Your Title / Role</label>
+                  <label className="text-[10px] font-bold text-slate-400 block mb-1 uppercase tracking-wider">Your Title / Role</label>
                   <input
                     type="text"
                     placeholder="e.g. Managing Director"
                     value={clientRole}
                     onChange={(e) => setClientRole(e.target.value)}
-                    className="w-full px-3 py-2 text-xs border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue/20 bg-gray-50 focus:bg-white"
+                    className="w-full px-3 py-2 text-xs border border-white/15 rounded-xl focus:outline-none focus:ring-1 focus:ring-brand-cyan/30 focus:border-brand-cyan bg-white/[0.04] text-white placeholder:text-slate-500"
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] font-bold text-gray-500 block mb-1 uppercase">Company Name</label>
+                  <label className="text-[10px] font-bold text-slate-400 block mb-1 uppercase tracking-wider">Company Name</label>
                   <input
                     type="text"
                     placeholder="e.g. Hindustan Groups"
                     value={clientCompany}
                     onChange={(e) => setClientCompany(e.target.value)}
-                    className="w-full px-3 py-2 text-xs border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue/20 bg-gray-50 focus:bg-white"
+                    className="w-full px-3 py-2 text-xs border border-white/15 rounded-xl focus:outline-none focus:ring-1 focus:ring-brand-cyan/30 focus:border-brand-cyan bg-white/[0.04] text-white placeholder:text-slate-500"
                   />
                 </div>
               </div>
 
               {/* Feedback text */}
               <div>
-                <label className="text-[10px] font-bold text-gray-500 block mb-1 uppercase">Review Feedback</label>
+                <label className="text-[10px] font-bold text-slate-400 block mb-1 uppercase tracking-wider">Review Feedback</label>
                 <textarea
                   required
                   rows={4}
                   value={feedbackText}
                   onChange={(e) => setFeedbackText(e.target.value)}
                   placeholder="Tell us about the project quality, team communication, and overall execution..."
-                  className="w-full px-3 py-2 text-xs border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue/20 bg-gray-50 focus:bg-white resize-none"
+                  className="w-full px-3 py-2 text-xs border border-white/15 rounded-xl focus:outline-none focus:ring-1 focus:ring-brand-cyan/30 focus:border-brand-cyan bg-white/[0.04] text-white placeholder:text-slate-500 resize-none"
                 />
               </div>
 
@@ -443,14 +447,14 @@ export default function ClientDashboardPage() {
                 <button
                   type="button"
                   onClick={() => setSelectedProjectFeedback(null)}
-                  className="px-4 py-2 border border-gray-200 text-gray-500 rounded-xl text-xs font-bold bg-white hover:bg-gray-50 cursor-pointer"
+                  className="px-4 py-2 border border-white/15 text-slate-300 rounded-xl text-xs font-bold hover:bg-white/[0.08] cursor-pointer transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitFeedbackMutation.isPending}
-                  className="px-4 py-2 bg-emerald-500 text-white rounded-xl text-xs font-bold hover:bg-emerald-600 cursor-pointer shadow-md disabled:opacity-50"
+                  className="px-4 py-2 bg-brand-cyan hover:bg-brand-cyan-light text-slate-950 rounded-xl text-xs font-bold cursor-pointer shadow-lg shadow-cyan-950/40 disabled:opacity-50 transition-all"
                 >
                   Submit Review
                 </button>

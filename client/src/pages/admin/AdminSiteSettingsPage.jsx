@@ -171,6 +171,54 @@ const FIELD_GROUPS = [
     ],
   },
   {
+    label: 'Homepage Hero & Headline Controls',
+    fields: [
+      {
+        key: 'hero_eyebrow',
+        label: 'Hero Eyebrow Tech Pill',
+        placeholder: 'Autonomous Systems & Full-Stack Cloud Architecture',
+        Icon: Sparkles,
+      },
+      {
+        key: 'hero_division',
+        label: 'Enterprise Division Tag',
+        placeholder: 'Hindustan Projects — Enterprise IT Division',
+        Icon: Type,
+      },
+      {
+        key: 'hero_title_prefix',
+        label: 'Hero Main Headline (Prefix)',
+        placeholder: 'Architecting Enterprise',
+        Icon: Type,
+      },
+      {
+        key: 'hero_title_highlight',
+        label: 'Hero Main Headline (Glowing Accent)',
+        placeholder: 'Digital Supremacy.',
+        Icon: Sparkles,
+      },
+      {
+        key: 'tagline',
+        label: 'Homepage Hero Tagline / Subtitle',
+        placeholder: 'We engineer mission-critical web platforms, hyper-scalable cloud applications, and automated business workflows that drive verifiable competitive advantage.',
+        Icon: Type,
+        isTextarea: true,
+      },
+      {
+        key: 'hero_popular_queries',
+        label: 'Hero Capability Quick Tags (Comma-separated)',
+        placeholder: 'Cloud Migration, Custom ERP, Next.js 15, AI Agents, Microservices, ISO 9001',
+        Icon: Type,
+      },
+      {
+        key: 'hero_image_url',
+        label: 'Homepage Hero Custom Poster / Graphic',
+        isImage: true,
+        Icon: Globe,
+      },
+    ],
+  },
+  {
     label: 'Website Branding & Enterprise Ecosystem',
     fields: [
       {
@@ -186,21 +234,8 @@ const FIELD_GROUPS = [
         Icon: Globe,
       },
       {
-        key: 'tagline',
-        label: 'Homepage Hero Tagline',
-        placeholder: 'Building High-Performance Digital Solutions That Drive Growth',
-        Icon: Type,
-        isTextarea: true,
-      },
-      {
-        key: 'hero_image_url',
-        label: 'Homepage Hero Avatar Image (Blank uses default portrait)',
-        isImage: true,
-        Icon: Globe,
-      },
-      {
         key: 'why_choose_us_image_url',
-        label: 'Why Choose Us Section Graphic (Blank uses default layout)',
+        label: 'Why Choose Us Section Graphic (Blank uses telemetry matrix)',
         isImage: true,
         Icon: Globe,
       },
@@ -242,12 +277,14 @@ const FIELD_GROUPS = [
     ],
   },
   {
-    label: 'Company Impact Statistics (Numeric values)',
+    label: 'Company Impact & SLA Telemetry (Numeric/Stat values)',
     fields: [
       { key: 'stat_projects', label: 'Projects Delivered Count', placeholder: '50', Icon: Type },
-      { key: 'stat_clients', label: 'Satisfied Clients Count', placeholder: '40', Icon: Type },
-      { key: 'stat_experience', label: 'Years Experience Count', placeholder: '5', Icon: Type },
-      { key: 'stat_cities', label: 'Cities Served Count', placeholder: '3', Icon: Type },
+      { key: 'stat_clients', label: 'Satisfied Enterprise Clients', placeholder: '40', Icon: Type },
+      { key: 'stat_experience', label: 'Years Engineering Experience', placeholder: '5', Icon: Type },
+      { key: 'stat_cities', label: 'Tier-1 & Regional Cities Served', placeholder: '3', Icon: Type },
+      { key: 'stat_sla', label: 'Uptime & Production SLA Guarantee', placeholder: '99.9', Icon: Type },
+      { key: 'stat_reach', label: 'Engineering Support & Node Response', placeholder: '24/7', Icon: Type },
     ],
   },
 ]

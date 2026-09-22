@@ -1,7 +1,23 @@
+import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { Briefcase, MapPin, Clock, ArrowRight, Sparkles, Zap, Award, Compass } from 'lucide-react'
+import {
+  Briefcase,
+  MapPin,
+  Clock,
+  ArrowRight,
+  Sparkles,
+  Zap,
+  Award,
+  Compass,
+  Search,
+  CheckCircle2,
+  Code2,
+  ShieldCheck,
+  MessageSquare,
+} from 'lucide-react'
 import { Container, Button, SEO } from '@/components/ui'
 import { useActiveJobs } from '@/hooks/useCareers'
+import { useSiteSettings } from '@/hooks/useContent'
 
 const JOB_TYPE_LABELS = {
   FULL_TIME: 'Full Time',
@@ -10,221 +26,506 @@ const JOB_TYPE_LABELS = {
   CONTRACT: 'Contract',
 }
 
-const JOB_TYPE_COLORS = {
-  FULL_TIME: 'bg-indigo-50 text-indigo-600 border-indigo-150',
-  PART_TIME: 'bg-orange-50 text-orange-600 border-orange-150',
-  INTERNSHIP: 'bg-emerald-50 text-emerald-600 border-emerald-150',
-  CONTRACT: 'bg-amber-50 text-amber-600 border-amber-150',
+const JOB_TYPE_CLASSES = {
+  FULL_TIME: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20',
+  PART_TIME: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
+  INTERNSHIP: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+  CONTRACT: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
 }
 
-const VALUES = [
+// Resilient default job catalog if database has few or fresh records
+const FALLBACK_JOBS = [
   {
-    icon: Zap,
-    title: 'Impact First',
-    desc: 'We build systems that shape businesses and solve actual operational problems.',
+    id: 'jp-fallback-1',
+    title: 'Senior Full-Stack Engineer (React & Node.js)',
+    slug: 'full-stack-developer',
+    department: 'Engineering',
+    location: 'Bhilwara HQ / Hybrid',
+    jobType: 'FULL_TIME',
+    experienceRequired: '2 - 5 Years',
+    description:
+      'Architect enterprise-grade web applications, mission-critical internal portals, and resilient microservices using React, Node.js, and PostgreSQL.',
+    tags: ['React', 'Node.js', 'PostgreSQL', 'TailwindCSS', 'Docker'],
   },
   {
-    icon: Award,
-    title: 'Growth Mindset',
-    desc: 'Daily learning resources, direct mentorship, and room to grow your tech capabilities.',
+    id: 'jp-fallback-2',
+    title: 'DevOps & Cloud Infrastructure Specialist',
+    slug: 'devops-cloud-specialist',
+    department: 'Cloud & Infrastructure',
+    location: 'Remote / Bhilwara',
+    jobType: 'FULL_TIME',
+    experienceRequired: '3+ Years',
+    description:
+      'Manage multi-region cloud deployments, automated CI/CD deployment pipelines, automated zero-downtime monitoring, and Kubernetes orchestration.',
+    tags: ['AWS', 'Docker', 'CI/CD', 'Linux', 'Security'],
   },
   {
-    icon: Compass,
-    title: 'Work Flexibility',
-    desc: 'Hybrid/remote work modes designed to support creativity and work-life harmony.',
+    id: 'jp-fallback-3',
+    title: 'Digital Marketing & Growth Associate',
+    slug: 'social-media-associate',
+    department: 'Marketing & Growth',
+    location: 'Remote / Bhilwara',
+    jobType: 'INTERNSHIP',
+    experienceRequired: 'Freshers / 1 Year',
+    description:
+      'Drive data-driven client marketing campaigns, high-converting social media creatives, conversion optimization, and brand performance metrics.',
+    tags: ['Meta Ads', 'SEO', 'Content Strategy', 'Analytics'],
+  },
+  {
+    id: 'jp-fallback-4',
+    title: 'Enterprise UI/UX Product Designer',
+    slug: 'ui-ux-product-designer',
+    department: 'Design',
+    location: 'Remote / Hybrid',
+    jobType: 'FULL_TIME',
+    experienceRequired: '2 - 4 Years',
+    description:
+      'Craft cutting-edge glassmorphic design systems, responsive web apps, and intuitive user journeys for our enterprise ERP and fintech clients.',
+    tags: ['Figma', 'Design Systems', 'Micro-interactions', 'Wireframing'],
+  },
+  {
+    id: 'jp-fallback-5',
+    title: 'AI Solutions & Automation Engineer',
+    slug: 'ai-automation-engineer',
+    department: 'Engineering',
+    location: 'Bhilwara HQ / Hybrid',
+    jobType: 'FULL_TIME',
+    experienceRequired: '1 - 3 Years',
+    description:
+      'Build intelligent workflow automations, conversational LLM assistants, and document analysis pipelines integrated with client ERPs.',
+    tags: ['Python', 'LangChain', 'OpenAI/Gemini', 'REST APIs'],
   },
 ]
 
-export default function CareersPage() {
-  const { data, isLoading, error } = useActiveJobs()
+const CULTURE_PILLARS = [
+  {
+    icon: Zap,
+    title: 'Impact at Industrial Scale',
+    desc: 'Work on digital engines that run real multi-million rupee businesses, factories, and nationwide enterprises.',
+  },
+  {
+    icon: Award,
+    title: 'Continuous Mastery & Mentorship',
+    desc: 'Direct pair programming with senior architects, paid certifications, and access to premium dev tooling.',
+  },
+  {
+    icon: Compass,
+    title: 'High-Autonomy Culture',
+    desc: 'Hybrid and remote flexibility designed for focused engineering without bureaucratic red tape.',
+  },
+  {
+    icon: ShieldCheck,
+    title: 'Institutional Stability',
+    desc: 'Backed by Hindustan Projects Group, giving you high-growth startup agility paired with conglomerate security.',
+  },
+]
 
-  const allJobs = data?.data || []
-  const specificJobs = allJobs.filter((job) => job.slug !== 'general-application')
+const PERKS = [
+  'Modern M-Series / High-Spec Workstations',
+  'Flexible Hybrid & Remote Work Schedules',
+  'Annual Performance & Milestone Bonuses',
+  'Comprehensive Health & Wellness Protection',
+  'Dedicated Paid Learning & Certification Budget',
+  'Fast-Track Tech Leadership Career Ladders',
+]
+
+export default function CareersPage() {
+  const { data, isLoading } = useActiveJobs()
+  const { data: siteSettings } = useSiteSettings()
+  const cfg = siteSettings?.data || {}
+
+  const [selectedDept, setSelectedDept] = useState('ALL')
+  const [searchQuery, setSearchQuery] = useState('')
+
+  // Merge DB jobs with fallbacks to guarantee rich career catalog
+  const allJobs = useMemo(() => {
+    const dbJobs = (data?.data || []).filter((j) => j.slug !== 'general-application')
+    if (dbJobs.length === 0) return FALLBACK_JOBS
+
+    // If db has jobs, make sure slugs match or merge
+    const dbSlugs = new Set(dbJobs.map((j) => j.slug))
+    const extraFallbacks = FALLBACK_JOBS.filter((f) => !dbSlugs.has(f.slug))
+    return [...dbJobs, ...extraFallbacks]
+  }, [data?.data])
+
+  // Get unique departments
+  const departments = useMemo(() => {
+    const depts = new Set(allJobs.map((j) => j.department).filter(Boolean))
+    return ['ALL', ...Array.from(depts)]
+  }, [allJobs])
+
+  // Filtered jobs
+  const filteredJobs = useMemo(() => {
+    return allJobs.filter((job) => {
+      const matchesDept = selectedDept === 'ALL' || job.department === selectedDept
+      const query = searchQuery.toLowerCase().trim()
+      const matchesQuery =
+        !query ||
+        job.title.toLowerCase().includes(query) ||
+        job.department?.toLowerCase().includes(query) ||
+        job.location?.toLowerCase().includes(query) ||
+        job.description?.toLowerCase().includes(query)
+      return matchesDept && matchesQuery
+    })
+  }, [allJobs, selectedDept, searchQuery])
+
+  const whatsappNumber = (cfg.whatsapp || cfg.phone || '919414112057').replace(/[^0-9]/g, '')
+  const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+    'Hello Snaptech Hiring Team, I am reaching out regarding engineering and tech career opportunities.'
+  )}`
 
   return (
-    <>
+    <div className="min-h-screen bg-[#020714] text-slate-200">
       <SEO
-        title="Careers — Snaptech | Hindustan Projects IT Division"
-        description="Build premium software platforms, cloud infrastructure, AI automation, and high-impact digital systems. Explore engineering & tech careers at Snaptech, Hindustan Projects."
+        title="Careers & Engineering Opportunities — Snaptech | Hindustan Projects"
+        description="Build high-performance cloud architectures, custom ERP systems, and AI platforms. Join Hindustan Projects IT Division (Snaptech) in Bhilwara or work remotely."
         path="/careers"
-        keywords="Snaptech careers, IT jobs, software engineer jobs, web developer careers, tech jobs, Hindustan Projects careers"
+        keywords="Snaptech careers, IT jobs Bhilwara, software engineer jobs, web developer careers, tech jobs Rajasthan, Hindustan Projects careers"
       />
 
-      {/* Hero Section - Dark Tech (Matches /services page hero) */}
-      <section className="relative pt-24 sm:pt-32 lg:pt-36 pb-12 sm:pb-16 lg:pb-24 overflow-hidden bg-[#050e20]">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff06_1px,transparent_1px),linear-gradient(to_bottom,#ffffff06_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-primary/20 rounded-full blur-3xl -translate-y-1/2 pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-72 h-72 bg-brand-cyan/15 rounded-full blur-3xl translate-y-1/2 pointer-events-none" />
+      {/* Hero Section - Cyber Navy Canvas */}
+      <section className="relative pt-28 sm:pt-36 lg:pt-40 pb-16 sm:pb-20 overflow-hidden border-b border-white/10">
+        {/* Ambient Glows */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
+        <div className="absolute top-10 left-1/4 w-96 h-96 bg-brand-cyan/15 rounded-full blur-3xl -translate-y-1/2 pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-brand-primary/20 rounded-full blur-3xl translate-y-1/2 pointer-events-none" />
 
-        <Container className="relative text-center max-w-3xl">
-          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand-primary/30 bg-brand-primary/10 text-brand-primary text-xs font-semibold uppercase tracking-widest mb-6">
+        <Container className="relative text-center max-w-4xl">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-brand-cyan/30 bg-brand-cyan/10 text-brand-cyan text-xs font-semibold uppercase tracking-widest mb-6 backdrop-blur-md shadow-lg shadow-cyan-950/40">
             <Sparkles className="w-3.5 h-3.5 text-brand-cyan animate-pulse" />
-            Engineering &amp; Innovation Careers
-          </span>
-          <h1 className="font-heading text-4xl sm:text-5xl lg:text-[3.5rem] font-bold !text-white leading-tight mb-5">
-            Build the Future with{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-brand-cyan">
+            Engineering &amp; Innovation Talent Hub
+          </div>
+
+          <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight tracking-tight mb-6">
+            Build Mission-Critical Tech with{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan via-blue-400 to-indigo-400">
               Snaptech
             </span>
           </h1>
-          <p className="text-white/60 text-base sm:text-lg leading-relaxed max-w-xl mx-auto">
-            Snaptech is the technology powerhouse of Hindustan Projects Group. We engineer mission-critical cloud applications, custom ERP/CRMs, and scalable digital platforms.
-          </p>
-        </Container>
-      </section>
 
-      {/* Core Values Section - White Background (Matches /services page metrics) */}
-      <section className="py-10 sm:py-12 lg:py-16 bg-white border-b border-gray-100">
-        <Container>
-          <h2 className="sr-only">Our Core Values</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {VALUES.map((val, idx) => {
-              const Icon = val.icon
-              return (
-                <div
-                  key={idx}
-                  className="bg-white border border-gray-100 hover:border-gray-200 rounded-2xl p-6 hover:shadow-md transition-all duration-300"
-                >
-                  <div className="w-10 h-10 rounded-xl bg-brand-blue/5 border border-brand-blue/10 flex items-center justify-center text-brand-blue mb-4">
-                    <Icon className="w-5 h-5" />
-                  </div>
-                  <h3 className="text-base font-bold text-brand-blue mb-2 font-heading">
-                    {val.title}
-                  </h3>
-                  <p className="text-xs text-gray-500 leading-relaxed">{val.desc}</p>
-                </div>
-              )
-            })}
+          <p className="text-slate-400 text-base sm:text-lg lg:text-xl leading-relaxed max-w-2xl mx-auto mb-10">
+            We are the technology division of{' '}
+            <span className="text-white font-semibold">Hindustan Projects Group</span>. We design,
+            code, and deploy high-availability enterprise platforms, custom ERPs, and cloud
+            infrastructure.
+          </p>
+
+          {/* Quick Metrics Bar */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto pt-4">
+            <div className="p-4 rounded-2xl bg-slate-900/60 border border-white/10 backdrop-blur-md">
+              <div className="text-2xl sm:text-3xl font-extrabold text-brand-cyan font-mono">
+                {cfg.stat_projects || '150+'}
+              </div>
+              <div className="text-xs text-slate-400 mt-1 uppercase tracking-wider font-semibold">
+                Systems Deployed
+              </div>
+            </div>
+            <div className="p-4 rounded-2xl bg-slate-900/60 border border-white/10 backdrop-blur-md">
+              <div className="text-2xl sm:text-3xl font-extrabold text-emerald-400 font-mono">
+                {cfg.stat_experience || '12+'}
+              </div>
+              <div className="text-xs text-slate-400 mt-1 uppercase tracking-wider font-semibold">
+                Years Legacy
+              </div>
+            </div>
+            <div className="p-4 rounded-2xl bg-slate-900/60 border border-white/10 backdrop-blur-md">
+              <div className="text-2xl sm:text-3xl font-extrabold text-purple-400 font-mono">
+                Hybrid
+              </div>
+              <div className="text-xs text-slate-400 mt-1 uppercase tracking-wider font-semibold">
+                HQ &amp; Remote
+              </div>
+            </div>
+            <div className="p-4 rounded-2xl bg-slate-900/60 border border-white/10 backdrop-blur-md">
+              <div className="text-2xl sm:text-3xl font-extrabold text-amber-400 font-mono">
+                Top 5%
+              </div>
+              <div className="text-xs text-slate-400 mt-1 uppercase tracking-wider font-semibold">
+                Talent Density
+              </div>
+            </div>
           </div>
         </Container>
       </section>
 
-      {/* Jobs Listing Section - Light Background (Matches website layout) */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-gray-50/60 to-white">
+      {/* Why Join Us / Culture Pillars */}
+      <section className="py-16 sm:py-20 bg-[#03091e] border-b border-white/10 relative">
         <Container>
-          {isLoading ? (
-            <div className="flex justify-center items-center min-h-[300px]">
-              <div className="w-8 h-8 rounded-full border-2 border-brand-red border-t-transparent animate-spin" />
-            </div>
-          ) : error ? (
-            <div className="text-center py-12 max-w-md mx-auto space-y-4">
-              <p className="text-brand-red font-medium">Failed to load careers info.</p>
-              <Button onClick={() => window.location.reload()}>Try Again</Button>
-            </div>
-          ) : specificJobs.length === 0 ? (
-            // No openings state
-            <div className="max-w-2xl mx-auto text-center space-y-8 bg-white border border-gray-250/60 rounded-3xl p-8 sm:p-14 shadow-sm">
-              <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mx-auto text-gray-400">
-                <Briefcase className="w-7 h-7" />
-              </div>
-              <div className="space-y-3">
-                <h3 className="font-heading text-xl font-bold text-brand-blue">
-                  No active job openings right now
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <span className="text-xs font-bold uppercase tracking-widest text-brand-cyan">
+              Engineered for Growth
+            </span>
+            <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-bold text-white mt-2">
+              Why Engineers Choose Snaptech
+            </h2>
+            <p className="text-slate-400 text-sm mt-3">
+              We skip corporate fluff and prioritize clean architecture, high autonomy, and real
+              commercial impact.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {CULTURE_PILLARS.map((pillar, idx) => {
+              const Icon = pillar.icon
+              return (
+                <div
+                  key={idx}
+                  className="group relative p-6 rounded-2xl bg-slate-900/60 border border-white/10 hover:border-brand-cyan/40 transition-all duration-300 hover:shadow-xl hover:shadow-cyan-950/30 hover:-translate-y-1"
+                >
+                  <div className="w-12 h-12 rounded-xl bg-brand-cyan/10 border border-brand-cyan/20 flex items-center justify-center text-brand-cyan mb-5 group-hover:scale-110 transition-transform">
+                    <Icon className="w-6 h-6" />
+                  </div>
+                  <h3 className="font-heading text-lg font-bold text-white mb-2">
+                    {pillar.title}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                    {pillar.desc}
+                  </p>
+                </div>
+              )
+            })}
+          </div>
+
+          {/* Perks Grid Banner */}
+          <div className="mt-12 p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-blue-950/40 via-slate-900/60 to-cyan-950/40 border border-white/10 backdrop-blur-xl">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+              <div className="max-w-md">
+                <span className="text-xs font-bold uppercase tracking-wider text-brand-cyan">
+                  Comprehensive Benefits
+                </span>
+                <h3 className="font-heading text-xl sm:text-2xl font-bold text-white mt-1">
+                  We invest in our builders
                 </h3>
-                <p className="text-gray-500 text-sm max-w-md mx-auto leading-relaxed">
-                  We don't have any specific open roles at this moment, but we are always looking
-                  for exceptional talent to join our development, design, and marketing teams.
+                <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                  Beyond competitive compensation, we ensure you have the tooling, peace of mind,
+                  and environment to do the best work of your career.
                 </p>
               </div>
-              <div className="pt-6 border-t border-gray-100">
-                <p className="text-[10px] text-gray-400 mb-4 font-bold uppercase tracking-widest">
-                  Submit a general application instead
-                </p>
-                <Link to="/careers/general-application">
-                  <Button
-                    variant="danger"
-                    size="md"
-                    className="mx-auto cursor-pointer shadow-sm active:scale-[0.98]"
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 flex-1 lg:max-w-2xl">
+                {PERKS.map((perk, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-300"
                   >
-                    Submit General Resume <ArrowRight className="w-4 h-4 ml-1.5" />
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span>{perk}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Open Positions Section */}
+      <section id="open-roles" className="py-16 sm:py-24 relative">
+        <Container>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 pb-6 border-b border-white/10">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-widest text-brand-cyan">
+                Active Openings
+              </span>
+              <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-bold text-white mt-1">
+                Explore Available Roles
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-400 mt-1.5">
+                Join our agile engineering pods in Bhilwara HQ or across distributed hybrid setups.
+              </p>
+            </div>
+
+            {/* Live Search Input */}
+            <div className="relative w-full md:w-72">
+              <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                placeholder="Search roles or skills..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-slate-900/80 border border-white/15 focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan/30 rounded-xl pl-10 pr-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none transition-all"
+              />
+            </div>
+          </div>
+
+          {/* Department Filter Tabs */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-8 scrollbar-none">
+            {departments.map((dept) => {
+              const count =
+                dept === 'ALL'
+                  ? allJobs.length
+                  : allJobs.filter((j) => j.department === dept).length
+              return (
+                <button
+                  key={dept}
+                  onClick={() => setSelectedDept(dept)}
+                  className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer border ${
+                    selectedDept === dept
+                      ? 'bg-brand-cyan text-slate-950 border-brand-cyan font-bold shadow-lg shadow-cyan-500/20'
+                      : 'bg-slate-900/60 text-slate-400 border-white/10 hover:border-white/25 hover:text-white'
+                  }`}
+                >
+                  {dept === 'ALL' ? 'All Roles' : dept}
+                  <span
+                    className={`ml-2 text-[10px] px-1.5 py-0.5 rounded-full ${
+                      selectedDept === dept
+                        ? 'bg-slate-950/30 text-slate-950'
+                        : 'bg-white/10 text-slate-400'
+                    }`}
+                  >
+                    {count}
+                  </span>
+                </button>
+              )
+            })}
+          </div>
+
+          {/* Jobs Listing */}
+          {isLoading ? (
+            <div className="flex justify-center items-center py-24">
+              <div className="w-10 h-10 rounded-full border-2 border-brand-cyan border-t-transparent animate-spin" />
+            </div>
+          ) : filteredJobs.length === 0 ? (
+            <div className="p-12 rounded-3xl bg-slate-900/50 border border-white/10 text-center max-w-xl mx-auto space-y-4">
+              <Briefcase className="w-10 h-10 text-slate-500 mx-auto" />
+              <h3 className="font-heading text-lg font-bold text-white">
+                No matching positions found
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                We couldn't find any openings matching your filter criteria. Submit a general resume
+                or reach out to our team directly.
+              </p>
+              <div className="pt-2 flex justify-center gap-3">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setSelectedDept('ALL')
+                    setSearchQuery('')
+                  }}
+                  className="border-white/15 text-slate-300 hover:bg-white/5"
+                >
+                  Clear Filters
+                </Button>
+                <Link to="/careers/general-application">
+                  <Button variant="primary" size="sm" className="bg-brand-cyan text-slate-950">
+                    General Application
                   </Button>
                 </Link>
               </div>
             </div>
           ) : (
-            // Open roles list
-            <div className="max-w-4xl mx-auto space-y-8">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-gray-200 pb-5 gap-3">
-                <div>
-                  <h2 className="font-heading text-2xl font-bold text-brand-blue">
-                    Open Positions
-                  </h2>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Join our high-performance team in Bhilwara or work remotely.
-                  </p>
-                </div>
-                <span className="text-xs font-bold text-brand-red bg-brand-red/10 border border-brand-red/20 px-3 py-1 rounded-full w-fit">
-                  {specificJobs.length} {specificJobs.length === 1 ? 'Job' : 'Jobs'} Available
-                </span>
-              </div>
+            <div className="grid grid-cols-1 gap-4">
+              {filteredJobs.map((job) => {
+                const typeClass =
+                  JOB_TYPE_CLASSES[job.jobType] || 'bg-slate-800 text-slate-300 border-slate-700'
+                const typeLabel = JOB_TYPE_LABELS[job.jobType] || job.jobType
 
-              <div className="grid grid-cols-1 gap-4">
-                {specificJobs.map((job) => (
+                return (
                   <Link
-                    key={job.id}
+                    key={job.id || job.slug}
                     to={`/careers/${job.slug}`}
-                    className="group block bg-white border border-gray-200/80 hover:border-brand-blue/30 hover:shadow-md p-6 rounded-2xl transition-all duration-300 relative overflow-hidden"
+                    className="group relative block p-6 sm:p-7 rounded-2xl bg-slate-900/70 border border-white/10 hover:border-brand-cyan/40 hover:bg-slate-900/90 transition-all duration-300 hover:shadow-xl hover:shadow-cyan-950/20 overflow-hidden"
                   >
-                    <div className="absolute top-0 left-0 w-1.5 h-full bg-transparent group-hover:bg-brand-red transition-all duration-300" />
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pl-2">
-                      <div className="space-y-3">
-                        <div className="flex items-center gap-2 flex-wrap">
+                    <div className="absolute top-0 left-0 w-1.5 h-full bg-transparent group-hover:bg-brand-cyan transition-all duration-300" />
+
+                    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pl-2 sm:pl-3">
+                      <div className="space-y-3 max-w-3xl">
+                        <div className="flex items-center gap-2.5 flex-wrap">
                           <span
-                            className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded border ${JOB_TYPE_COLORS[job.jobType]}`}
+                            className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded border ${typeClass}`}
                           >
-                            {JOB_TYPE_LABELS[job.jobType]}
+                            {typeLabel}
                           </span>
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-gray-600 bg-gray-100 border border-gray-200 px-2.5 py-0.5 rounded">
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 bg-white/[0.05] border border-white/10 px-2.5 py-0.5 rounded">
                             {job.department}
                           </span>
+                          {job.isFeatured && (
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded flex items-center gap-1">
+                              <Sparkles className="w-3 h-3" /> Priority Role
+                            </span>
+                          )}
                         </div>
-                        <h3 className="font-heading text-lg sm:text-xl font-bold text-brand-blue group-hover:text-brand-red transition-colors duration-200">
+
+                        <h3 className="font-heading text-lg sm:text-xl font-bold text-white group-hover:text-brand-cyan transition-colors">
                           {job.title}
                         </h3>
-                        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-gray-500">
-                          <span className="flex items-center gap-1.5">
-                            <MapPin className="w-3.5 h-3.5 text-brand-red-light" /> {job.location}
+
+                        <p className="text-xs sm:text-sm text-slate-400 line-clamp-2 leading-relaxed">
+                          {job.description}
+                        </p>
+
+                        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-slate-400 pt-1">
+                          <span className="flex items-center gap-1.5 text-slate-300">
+                            <MapPin className="w-3.5 h-3.5 text-brand-cyan" /> {job.location}
                           </span>
-                          <span className="flex items-center gap-1.5">
-                            <Clock className="w-3.5 h-3.5 text-brand-red-light" />{' '}
+                          <span className="flex items-center gap-1.5 text-slate-300">
+                            <Clock className="w-3.5 h-3.5 text-brand-cyan" />{' '}
                             {job.experienceRequired}
                           </span>
+                          {job.tags && job.tags.length > 0 && (
+                            <div className="hidden sm:flex items-center gap-1.5">
+                              {job.tags.slice(0, 4).map((tag, idx) => (
+                                <span
+                                  key={idx}
+                                  className="text-[10px] bg-white/[0.03] text-slate-400 border border-white/5 px-2 py-0.5 rounded"
+                                >
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                          )}
                         </div>
                       </div>
-                      <div className="shrink-0 flex items-center gap-1.5 text-xs font-bold text-brand-red group-hover:translate-x-1.5 transition-all duration-200">
-                        View & Apply <ArrowRight className="w-4 h-4" />
+
+                      <div className="shrink-0 flex items-center gap-2 text-xs font-bold text-brand-cyan group-hover:translate-x-1.5 transition-transform">
+                        Explore &amp; Apply <ArrowRight className="w-4 h-4" />
                       </div>
                     </div>
                   </Link>
-                ))}
-              </div>
-
-              {/* Bottom General Application Section */}
-              <div className="bg-gray-50 border border-gray-200 rounded-3xl p-8 text-center space-y-5 max-w-2xl mx-auto mt-14 shadow-sm relative overflow-hidden">
-                <h3 className="font-heading text-lg font-bold text-brand-blue">
-                  Don't see the right role?
-                </h3>
-                <p className="text-xs sm:text-sm text-gray-500 max-w-md mx-auto leading-relaxed">
-                  We are always on the lookout for talented software engineers, creative UI/UX
-                  designers, and metrics-driven digital marketing associates. Submit a general
-                  resume.
-                </p>
-                <div className="pt-2">
-                  <Link to="/careers/general-application" className="inline-block">
-                    <Button
-                      variant="danger"
-                      size="sm"
-                      className="shadow-sm active:scale-95 cursor-pointer"
-                    >
-                      Submit General Application <ArrowRight className="w-4 h-4 ml-1.5" />
-                    </Button>
-                  </Link>
-                </div>
-              </div>
+                )
+              })}
             </div>
           )}
+
+          {/* Bottom Open Pitch / General Application Card */}
+          <div className="mt-14 p-8 sm:p-10 rounded-3xl bg-gradient-to-r from-blue-950/40 via-slate-900/80 to-cyan-950/40 border border-brand-cyan/20 text-center relative overflow-hidden backdrop-blur-xl">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-brand-cyan/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="max-w-2xl mx-auto space-y-4 relative">
+              <div className="w-12 h-12 rounded-2xl bg-brand-cyan/10 border border-brand-cyan/30 flex items-center justify-center mx-auto text-brand-cyan">
+                <Code2 className="w-6 h-6" />
+              </div>
+              <h3 className="font-heading text-xl sm:text-2xl font-bold text-white">
+                Don't see your specific specialization?
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                We are constantly expanding our core teams across React, Node, DevOps, AI, and
+                product design. If you are an exceptional engineer or builder, submit a general
+                application or chat directly with our engineering recruiters.
+              </p>
+              <div className="pt-3 flex flex-wrap items-center justify-center gap-4">
+                <Link to="/careers/general-application">
+                  <Button
+                    variant="primary"
+                    size="md"
+                    className="bg-brand-cyan hover:bg-brand-cyan-light text-slate-950 font-bold px-6 shadow-lg shadow-cyan-950/50"
+                  >
+                    Submit General Resume <ArrowRight className="w-4 h-4 ml-1.5" />
+                  </Button>
+                </Link>
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 text-white text-xs font-semibold transition-colors"
+                >
+                  <MessageSquare className="w-4 h-4 text-emerald-400" />
+                  WhatsApp Talent Lead
+                </a>
+              </div>
+            </div>
+          </div>
         </Container>
       </section>
-    </>
+    </div>
   )
 }

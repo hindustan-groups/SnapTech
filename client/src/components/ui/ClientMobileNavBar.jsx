@@ -31,18 +31,18 @@ export default function ClientMobileNavBar() {
   const isDashboardActive = location.pathname === '/client/dashboard' || location.pathname.startsWith('/client/projects/')
 
   return (
-    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 px-4 pb-4 pt-2 bg-gradient-to-t from-gray-50/95 via-gray-50/80 to-transparent backdrop-blur-sm pointer-events-none">
-      <nav className="max-w-md mx-auto flex items-center justify-around p-2.5 bg-white/90 border border-gray-150 rounded-2xl shadow-lg shadow-gray-200/50 backdrop-blur-md pointer-events-auto">
+    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 px-4 pb-4 pt-2 bg-gradient-to-t from-[#020714] via-[#020714]/80 to-transparent backdrop-blur-sm pointer-events-none">
+      <nav className="max-w-md mx-auto flex items-center justify-around p-2.5 bg-slate-900/90 border border-white/10 rounded-2xl shadow-2xl shadow-cyan-950/50 backdrop-blur-xl pointer-events-auto">
         {/* Dashboard Tab */}
         <Link
           to="/client/dashboard"
           className={`flex flex-col items-center gap-1.5 px-4 py-1.5 rounded-xl transition-all ${
             isDashboardActive
-              ? 'text-brand-blue font-bold scale-105'
-              : 'text-gray-400 hover:text-gray-600'
+              ? 'text-brand-cyan font-bold scale-105'
+              : 'text-slate-400 hover:text-white'
           }`}
         >
-          <LayoutDashboard className={`w-5 h-5 transition-transform ${isDashboardActive ? 'scale-110 stroke-[2.5]' : ''}`} />
+          <LayoutDashboard className={`w-5 h-5 transition-transform ${isDashboardActive ? 'scale-110 stroke-[2.5] text-brand-cyan' : ''}`} />
           <span className="text-[10px] tracking-wide">Portal</span>
         </Link>
 
@@ -51,16 +51,16 @@ export default function ClientMobileNavBar() {
           href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex flex-col items-center gap-1.5 px-4 py-1.5 rounded-xl text-gray-400 hover:text-gray-600 transition-all"
+          className="flex flex-col items-center gap-1.5 px-4 py-1.5 rounded-xl text-slate-400 hover:text-emerald-400 transition-all"
         >
-          <MessageCircle className="w-5 h-5 text-emerald-500 hover:scale-110 transition-transform" />
-          <span className="text-[10px] tracking-wide text-gray-500 font-semibold">WhatsApp</span>
+          <MessageCircle className="w-5 h-5 text-emerald-400 hover:scale-110 transition-transform" />
+          <span className="text-[10px] tracking-wide text-slate-300 font-semibold">WhatsApp</span>
         </a>
 
         {/* Logout Tab */}
         <button
           onClick={handleLogout}
-          className="flex flex-col items-center gap-1.5 px-4 py-1.5 rounded-xl text-gray-400 hover:text-red-500 transition-all cursor-pointer"
+          className="flex flex-col items-center gap-1.5 px-4 py-1.5 rounded-xl text-slate-400 hover:text-rose-400 transition-all cursor-pointer"
         >
           <LogOut className="w-5 h-5 hover:rotate-6 transition-transform" />
           <span className="text-[10px] tracking-wide">Sign Out</span>

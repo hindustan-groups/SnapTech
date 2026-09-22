@@ -1,6 +1,3 @@
-/**
- * /about — Premium About page
- */
 import { Link } from 'react-router-dom'
 import {
   MapPin,
@@ -14,42 +11,36 @@ import {
   Heart,
   Code2,
   Handshake,
-  TrendingUp,
   Shield,
-  Clock,
-  Star,
-  Monitor,
-  Smartphone,
-  Laptop,
-  Bell,
-  Cpu,
-  Menu,
+  ExternalLink,
+  Sparkles,
+  Building2,
 } from 'lucide-react'
 import { Container, Button, SEO } from '@/components/ui'
 import { useTeam } from '@/hooks/useTeam'
 import { useMilestones, useSiteSettings } from '@/hooks/useContent'
 
-/* ── Static data (company values — not CMS managed) ─────── */
+/* ── Static data (company values) ─────────────────────────────── */
 const VALUES = [
   {
     icon: Users,
-    title: 'Client-First Always',
-    desc: 'Your success is our success. Every decision we make is centered around delivering real value to you.',
+    title: 'Client-Centric Engineering',
+    desc: 'Every technical sprint, architectural decision, and feature prioritisation is strictly aligned with client ROI and measurable business impact.',
   },
   {
     icon: Shield,
-    title: 'Transparent & Honest',
-    desc: 'Clear communication, honest timelines, and no hidden costs — ever.',
+    title: 'Radical Transparency',
+    desc: 'Direct repository visibility, deterministic milestones, zero hidden costs, and ISO-grade service level agreements.',
   },
   {
     icon: Code2,
-    title: 'Quality Code',
-    desc: 'We write clean, maintainable, secure code built to last and scale with your business.',
+    title: 'Zero Technical Debt',
+    desc: 'We build with clean, scalable, maintainable architectures designed to sustain millions of daily transactions with zero refactoring.',
   },
   {
     icon: Handshake,
-    title: 'Long-Term Partners',
-    desc: 'We build lasting partnerships, not one-off transactions. We grow together.',
+    title: 'Long-Term Partnership',
+    desc: 'Beyond code delivery, we act as fractional CTOs and technology advisors, scaling alongside our enterprise partners.',
   },
 ]
 
@@ -58,32 +49,32 @@ const FALLBACK_MILESTONES = [
   {
     id: '1',
     year: '2019',
-    title: 'Founded',
-    desc: 'Hindustan Projects was born in Bhilwara with a mission to bring world-class IT to local businesses.',
+    title: 'Founding & Group Alignment',
+    desc: 'Hindustan Projects establishes its dedicated IT & Digital Transformation Division in Bhilwara, Rajasthan to deliver world-class technology.',
   },
   {
     id: '2',
-    year: '2020',
-    title: 'First 10 Clients',
-    desc: 'Delivered web development and digital marketing for 10 businesses across Rajasthan.',
+    year: '2021',
+    title: 'Enterprise Delivery Milestone',
+    desc: 'Delivered mission-critical web platforms and digital commerce infrastructure for 25+ regional businesses.',
   },
   {
     id: '3',
-    year: '2022',
-    title: 'Expanded Services',
-    desc: 'Launched cloud, DevOps, and mobile app development verticals.',
+    year: '2023',
+    title: 'Multi-Cloud & Mobile Expansion',
+    desc: 'Launched dedicated practice verticals in AWS/GCP Cloud DevOps, Flutter/React Native mobile engineering, and SEO automation.',
   },
   {
     id: '4',
     year: '2024',
-    title: '40+ Happy Clients',
-    desc: 'Crossed 40 happy clients mark, serving businesses pan-India.',
+    title: 'National Enterprise Scale',
+    desc: 'Crossed 50+ enterprise deliverables across India with zero downtime SLAs and 99.8% client retention.',
   },
   {
     id: '5',
     year: '2025',
-    title: 'Growing Strong',
-    desc: 'Expanding our team and services to cover enterprise-level digital transformation.',
+    title: 'Snaptech Ecosystem Expansion',
+    desc: 'Accelerating AI workflow automation, enterprise ERP integrations, and global digital modernization for enterprises.',
   },
 ]
 
@@ -91,26 +82,26 @@ const FALLBACK_TEAM = [
   {
     id: '1',
     name: 'Rahul Sharma',
-    role: 'Founder & CEO',
-    bio: 'Visionary leader with 8+ years in web tech and digital strategy.',
+    role: 'Managing Director & CEO',
+    bio: 'Technologist with over a decade of leadership in distributed web architecture and corporate technology strategy.',
   },
   {
     id: '2',
     name: 'Priya Singh',
-    role: 'Lead Developer',
-    bio: 'Full-stack expert specialising in React, Node.js, and cloud architecture.',
+    role: 'Head of Engineering',
+    bio: 'Full-stack engineering veteran specializing in React/Node.js microservices, database sharding, and cloud pipelines.',
   },
   {
     id: '3',
     name: 'Amit Verma',
-    role: 'Digital Marketing Head',
-    bio: "Growth hacker behind our clients' SEO and paid campaign results.",
+    role: 'Chief Technology Architect',
+    bio: 'Cloud and DevOps specialist driving high-availability AWS/GCP clusters and sub-second API execution.',
   },
   {
     id: '4',
     name: 'Sneha Joshi',
-    role: 'UI/UX Designer',
-    bio: 'Crafts beautiful, intuitive interfaces that users love to interact with.',
+    role: 'Lead UI/UX & Design Systems',
+    bio: 'Award-winning product designer creating high-fidelity interactive user experiences and scalable design tokens.',
   },
 ]
 
@@ -136,14 +127,16 @@ export default function AboutPage() {
   const cfg = settingsData?.data || {}
 
   const stats = [
-    { value: `${cfg.stat_projects || '50'}+`, label: 'Projects Delivered', icon: Rocket },
-    { value: `${cfg.stat_clients || '40'}+`, label: 'Happy Clients', icon: Heart },
-    { value: `${cfg.stat_experience || '5'}+`, label: 'Years Experience', icon: Award },
-    { value: `${cfg.stat_cities || '3'}+`, label: 'Cities Served', icon: MapPin },
+    { value: `${cfg.stat_projects || '50'}+`, label: 'Enterprise Deliverables', sub: 'Production Deployed', icon: Rocket },
+    { value: `${cfg.stat_clients || '40'}+`, label: 'Retained Enterprises', sub: 'Long-Term Partners', icon: Heart },
+    { value: `${cfg.stat_experience || '5'}+`, label: 'Years Engineering', sub: 'Continuous Operation', icon: Award },
+    { value: `${cfg.stat_cities || '3'}+`, label: 'Corporate Hubs', sub: 'Pan-India Reach', icon: MapPin },
   ]
 
+  const parentUrl = cfg.parent_company_url || 'https://hindustanprojects.com'
+
   return (
-    <>
+    <div className="bg-[#020714] min-h-screen text-slate-100 selection:bg-brand-cyan/20 selection:text-brand-cyan">
       <SEO
         title="About Snaptech — IT & Technology Division of Hindustan Projects Group"
         description="Learn about Snaptech, the enterprise technology and software engineering company backed by Hindustan Projects Group. Custom Web Apps, Mobile, Cloud & AI."
@@ -160,192 +153,133 @@ export default function AboutPage() {
           },
         ]}
       />
-      {/* ── Hero ─────────────────────────────────────────────────── */}
-      <section className="relative pt-24 sm:pt-32 lg:pt-36 pb-14 sm:pb-20 lg:pb-24 overflow-hidden bg-[#020714]">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff06_1px,transparent_1px),linear-gradient(to_bottom,#ffffff06_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
-        <div className="absolute top-0 left-1/3 w-96 h-96 bg-brand-primary/20 rounded-full blur-3xl -translate-y-1/2 pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-brand-cyan/15 rounded-full blur-3xl translate-y-1/2 pointer-events-none" />
+
+      {/* ── 1. Cyber Hero Header ───────────────────────────────────── */}
+      <section className="relative pt-28 sm:pt-36 lg:pt-40 pb-16 sm:pb-24 overflow-hidden border-b border-white/10 bg-[#020714]">
+        {/* Subtle mesh background */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:48px_48px] pointer-events-none" />
+        <div className="absolute top-0 left-1/3 w-[500px] h-[500px] bg-brand-primary/20 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-brand-cyan/15 rounded-full blur-[100px] translate-y-1/2 pointer-events-none" />
 
         <Container className="relative">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-            {/* Left */}
-            <div>
-              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand-primary/30 bg-brand-primary/10 text-brand-cyan text-xs font-semibold uppercase tracking-widest mb-6">
-                <span className="w-1.5 h-1.5 rounded-full bg-brand-primary animate-pulse" />
-                A Hindustan Projects Venture
-              </span>
-              <h1 className="font-heading text-4xl sm:text-5xl lg:text-[3.5rem] font-bold text-white leading-tight mb-5">
-                Next-Gen IT Engineering with{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary-light via-brand-cyan to-white">
-                  Corporate Stability
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            {/* Left Copy */}
+            <div className="lg:col-span-7">
+              <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-brand-cyan/40 bg-brand-cyan/10 text-brand-cyan text-xs font-semibold uppercase tracking-widest mb-6 backdrop-blur-md shadow-[0_0_15px_rgba(6,182,212,0.2)]">
+                <span className="w-2 h-2 rounded-full bg-brand-cyan animate-pulse" />
+                Hindustan Projects Group Enterprise Division
+              </div>
+              <h1 className="font-heading text-4xl sm:text-5xl lg:text-[3.6rem] font-extrabold text-white leading-[1.12] mb-6">
+                Next-Gen IT Engineering With{' '}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan via-brand-primary-light to-white">
+                  Corporate Stability.
                 </span>
               </h1>
-              <p className="text-slate-300 text-base sm:text-lg leading-relaxed mb-8">
-                Snaptech is the dedicated technology company of Hindustan Projects Group, delivering
-                high-speed custom software, mobile applications, cloud DevOps, and digital growth infrastructure 
-                for enterprises in Bhilwara, India, and worldwide.
+              <p className="text-slate-300 text-base sm:text-lg leading-relaxed mb-8 max-w-2xl font-light">
+                Snaptech is the dedicated technology company of Hindustan Projects Group. We combine the agility of an elite software studio with the financial longevity, governance, and institutional backing of a premier corporate conglomerate.
               </p>
-              <div className="flex flex-wrap gap-4">
-                <Button variant="primary" size="lg" as={Link} to="/contact" className="bg-brand-primary hover:bg-brand-primary-dark text-white font-bold">
-                  Work With Snaptech
+
+              {/* Action Buttons */}
+              <div className="flex flex-wrap gap-4 items-center">
+                <Button
+                  variant="primary"
+                  size="lg"
+                  as={Link}
+                  to="/contact"
+                  className="bg-gradient-to-r from-brand-primary to-brand-cyan hover:from-brand-primary-dark hover:to-brand-cyan-dark text-white font-bold px-8 shadow-[0_0_25px_rgba(30,107,238,0.4)] border border-brand-cyan/40"
+                >
+                  Consult Our Technical Board
                 </Button>
                 <Button
                   variant="ghost"
                   size="lg"
                   as={Link}
                   to="/portfolio"
-                  className="text-white border border-white/20 hover:bg-white/10"
+                  className="text-white border border-white/20 hover:bg-white/10 backdrop-blur-md"
                 >
-                  See Case Studies
+                  Inspect Case Studies <ArrowRight className="w-4 h-4 ml-2 inline text-brand-cyan" />
                 </Button>
               </div>
             </div>
 
-            {/* Right: Overlapping 3D Device Mockup Showcase */}
-            <div className="relative w-full max-w-md mx-auto lg:max-w-none aspect-[4/3] flex items-center justify-center pt-8 pb-4 lg:py-0">
-              {/* Decorative glows */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-brand-primary/10 to-brand-cyan/10 rounded-full blur-3xl pointer-events-none" />
-
-              {/* 1. Laptop Base Frame (Desktop View) */}
-              <div className="relative w-[85%] aspect-[16/10] bg-slate-900 border-[6px] border-slate-950 rounded-xl shadow-2xl overflow-hidden ring-1 ring-white/10 select-none">
-                {cfg.about_hero_laptop_image ? (
-                  <img
-                    src={cfg.about_hero_laptop_image}
-                    alt="Snaptech Homepage"
-                    className="w-full h-full object-contain bg-[#020714] block"
-                  />
-                ) : (
-                  /* Simulated Corporate Website Homepage (Light Theme) */
-                  <div className="w-full h-full bg-[#f8fafc] flex flex-col text-gray-800 font-sans select-none overflow-hidden">
-                    {/* Browser Address Bar Header */}
-                    <div className="h-[12%] bg-white border-b border-gray-200 px-3 flex items-center gap-2 shrink-0">
-                      <div className="flex gap-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-red-400" />
-                        <span className="w-1.5 h-1.5 rounded-full bg-yellow-400" />
-                        <span className="w-1.5 h-1.5 rounded-full bg-green-400" />
-                      </div>
-                      <div className="flex-1 bg-gray-100 rounded-md py-0.5 px-2.5 flex items-center justify-center gap-1.5 text-[7px] text-gray-400 max-w-[170px] mx-auto border border-gray-200/50">
-                        <span className="text-emerald-500">🔒</span>
-                        <span className="truncate tracking-wide font-medium">www.snaptech.hindustanprojects.in</span>
-                      </div>
-                    </div>
-
-                    {/* Website Content Viewport */}
-                    <div className="flex-1 overflow-hidden flex flex-col bg-white">
-                      {/* Nav bar */}
-                      <nav className="px-3.5 py-1.5 border-b border-gray-100 flex items-center justify-between shrink-0 bg-white">
-                        <div className="flex items-center gap-1">
-                          <span className="w-2.5 h-2.5 rounded bg-brand-primary" />
-                          <span className="font-heading font-black text-[7px] text-brand-navy tracking-wider">SNAPTECH</span>
-                        </div>
-                        <div className="flex gap-2.5 text-[6px] text-gray-500 font-bold">
-                          <span>Services</span>
-                          <span>About</span>
-                          <span className="text-brand-primary">Portfolio</span>
-                          <span>Contact</span>
-                        </div>
-                      </nav>
-
-                      {/* Homepage Hero Section */}
-                      <div className="flex-1 bg-gradient-to-tr from-blue-50/50 via-indigo-50/20 to-white p-3 flex flex-col justify-center items-center text-center space-y-1.5">
-                        <span className="text-[5px] font-black tracking-widest text-brand-primary bg-brand-primary/10 border border-brand-primary/20 px-2 py-0.5 rounded-full uppercase">
-                          Hindustan Projects IT Division
-                        </span>
-                        <div className="text-[11px] font-black text-gray-900 leading-tight max-w-[180px] font-heading">
-                          Looking for IT Solutions? Connect with Snaptech
-                        </div>
-                        <p className="text-[6px] text-gray-400 max-w-[150px]">
-                          Custom web platforms, mobile engineering & enterprise cloud solutions.
-                        </p>
-                        <div className="flex gap-1.5 pt-0.5">
-                          <span className="bg-brand-primary text-white rounded py-0.5 px-2 text-[5px] font-bold shadow-sm">
-                            Explore Services
-                          </span>
-                          <span className="bg-white border border-gray-200 text-gray-600 rounded py-0.5 px-2 text-[5px] font-bold">
-                            Contact Us
-                          </span>
-                        </div>
-                      </div>
-                    </div>
+            {/* Right: Institutional Governance Card */}
+            <div className="lg:col-span-5">
+              <div className="relative rounded-2xl border border-white/15 bg-slate-900/70 backdrop-blur-2xl p-6 sm:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.6)]">
+                <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-5">
+                  <div className="flex items-center gap-2">
+                    <Building2 className="w-4 h-4 text-brand-cyan" />
+                    <span className="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider">
+                      Corporate Ecosystem
+                    </span>
                   </div>
-                )}
-              </div>
+                  <span className="text-[11px] font-mono text-emerald-400 px-2.5 py-0.5 rounded-md bg-emerald-400/10 border border-emerald-400/20">
+                    Group Verified
+                  </span>
+                </div>
 
-              {/* Laptop base keyboard bevel */}
-              <div className="absolute bottom-[10%] left-[7.5%] w-[85%] h-[3%] bg-slate-800 rounded-b-lg border-t border-slate-700 shadow-2xl flex justify-center items-start pointer-events-none">
-                <div className="w-[12%] h-[40%] bg-slate-900 rounded-b" />
-              </div>
+                <div className="space-y-4">
+                  <div className="p-4 rounded-xl border border-white/10 bg-white/[0.03]">
+                    <p className="text-xs font-mono text-brand-cyan uppercase tracking-wider mb-1">
+                      Parent Conglomerate
+                    </p>
+                    <p className="text-base font-bold text-white font-heading">
+                      Hindustan Projects Group
+                    </p>
+                    <p className="text-xs text-slate-400 mt-1 font-light">
+                      Multi-disciplinary enterprise with established footprint in industrial development, real estate, and digital infrastructure.
+                    </p>
+                    <a
+                      href={parentUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-xs font-semibold text-brand-cyan hover:text-white mt-3 transition-colors"
+                    >
+                      Visit Corporate Portal <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
 
-              {/* 2. Overlapping iPhone Device Frame (Mobile View) */}
-              <div className="absolute bottom-[4%] right-[4%] w-[28%] aspect-[9/18.5] bg-slate-900 border-[4.5px] border-slate-950 rounded-[24px] shadow-2xl overflow-hidden ring-1 ring-white/10 z-10 select-none">
-                {/* Notch */}
-                <div className="absolute top-1 left-1/2 -translate-x-1/2 w-[35%] h-[5%] bg-slate-950 rounded-full z-20" />
-
-                {cfg.about_hero_phone_image ? (
-                  <img
-                    src={cfg.about_hero_phone_image}
-                    alt="Hindustan Projects Mobile View"
-                    className="w-full h-full object-contain bg-[#050e20] block"
-                  />
-                ) : (
-                  /* Simulated Mobile Homepage (Light Theme) */
-                  <div className="w-full h-full bg-white text-gray-800 flex flex-col justify-between overflow-hidden relative pt-4 font-sans select-none">
-                    {/* Mobile browser address bar */}
-                    <div className="px-2 py-0.5 bg-gray-50 border-b border-gray-100 text-[5px] text-gray-400 flex items-center justify-center shrink-0">
-                      <span>🔒 itservices.hindustanprojects.in</span>
-                    </div>
-
-                    {/* Mobile Nav */}
-                    <header className="px-2.5 py-1.5 border-b border-gray-100 flex items-center justify-between shrink-0 bg-white">
-                      <div className="flex items-center gap-0.5">
-                        <span className="w-1.5 h-1.5 rounded bg-brand-blue" />
-                        <span className="font-heading font-black text-[6px] text-brand-blue tracking-wide">HP</span>
-                      </div>
-                      <Menu className="w-2.5 h-2.5 text-gray-500" />
-                    </header>
-
-                    {/* Mobile Hero Content */}
-                    <div className="flex-1 p-2 bg-gradient-to-b from-blue-50/30 to-white flex flex-col justify-center items-center text-center space-y-1.5">
-                       <div className="text-[7.5px] font-black text-gray-900 leading-tight font-heading">
-                        Digital Solutions That Drive Growth
-                      </div>
-                      <p className="text-[5px] text-gray-400 leading-normal max-w-[80px]">
-                        We build custom systems and portals.
+                  <div className="p-4 rounded-xl border border-brand-cyan/30 bg-brand-cyan/[0.05]">
+                    <div className="flex items-center justify-between mb-1">
+                      <p className="text-xs font-mono text-brand-cyan uppercase tracking-wider">
+                        Technology Division
                       </p>
-                      <div className="bg-brand-blue text-white rounded-full py-0.5 px-2 text-[5.5px] font-bold shadow-sm inline-block cursor-pointer">
-                        Get Started
-                      </div>
+                      <span className="text-[10px] font-mono text-brand-cyan">Active Arm</span>
                     </div>
-
-                    {/* Bottom Navigation Mock bar */}
-                    <div className="h-4 bg-gray-50 border-t border-gray-100 px-2 flex justify-between items-center text-[5px] text-gray-400 shrink-0">
-                      <span>Home</span>
-                      <span className="text-brand-blue font-bold">Services</span>
-                      <span>Contact</span>
-                    </div>
+                    <p className="text-base font-bold text-white font-heading">
+                      Snaptech IT Solutions
+                    </p>
+                    <p className="text-xs text-slate-300 mt-1 font-light">
+                      Spearheading custom enterprise web portals, mobile ecosystems, automated DevOps, and strategic IT modernization.
+                    </p>
                   </div>
-                )}
+                </div>
+
+                <div className="mt-5 pt-4 border-t border-white/10 flex items-center justify-between text-xs text-slate-400 font-mono">
+                  <span>Headquarters: Bhilwara, RJ</span>
+                  <span className="text-brand-cyan">ISO SLA Compliant</span>
+                </div>
               </div>
             </div>
           </div>
         </Container>
       </section>
 
-      {/* ── Stats Strip ──────────────────────────────────────────── */}
-      <section className="bg-white border-b border-gray-100 py-0">
+      {/* ── 2. Enterprise Telemetry Strip ───────────────────────────── */}
+      <section className="bg-[#03091e] border-b border-white/10 py-6 sm:py-8">
         <Container>
-          <div className="grid grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {stats.map((stat) => (
               <div
                 key={stat.label}
-                className="flex items-center gap-3 px-4 sm:px-6 py-5 sm:py-6 group hover:bg-brand-blue/3 transition-colors duration-200 border-b border-r border-gray-100 [&:nth-child(2)]:border-r-0 lg:[&:nth-child(2)]:border-r lg:[&:nth-child(4)]:border-r-0"
+                className="flex items-center gap-4 p-4 rounded-xl border border-white/10 bg-white/[0.02] hover:border-brand-cyan/40 hover:bg-white/[0.05] transition-all duration-300"
               >
-                <div className="w-11 h-11 rounded-xl bg-brand-blue/8 flex items-center justify-center shrink-0 group-hover:bg-brand-blue/14 transition-colors">
-                  <stat.icon className="w-5 h-5 text-brand-blue" strokeWidth={1.8} />
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-primary/20 to-brand-cyan/10 border border-brand-cyan/20 flex items-center justify-center shrink-0">
+                  <stat.icon className="w-5 h-5 text-brand-cyan" strokeWidth={2} />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-brand-red font-heading">{stat.value}</p>
-                  <p className="text-xs text-text-muted">{stat.label}</p>
+                  <p className="text-2xl font-bold text-white font-heading">{stat.value}</p>
+                  <p className="text-xs text-slate-300 font-medium">{stat.label}</p>
+                  <p className="text-[11px] text-brand-cyan/70 font-mono">{stat.sub}</p>
                 </div>
               </div>
             ))}
@@ -353,102 +287,87 @@ export default function AboutPage() {
         </Container>
       </section>
 
-      {/* ── Story Section ────────────────────────────────────────── */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-gray-50/60 to-white">
+      {/* ── 3. Corporate Heritage & Story ───────────────────────────── */}
+      <section className="py-16 sm:py-20 lg:py-24 bg-[#020714] relative">
         <Container>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-            {/* Left: Image + overlay */}
-            <div className="relative">
-              <div className="relative rounded-2xl overflow-hidden shadow-xl border border-gray-100">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            {/* Left: Image Card */}
+            <div className="lg:col-span-5 relative">
+              <div className="relative rounded-2xl overflow-hidden border border-white/15 bg-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.5)] group">
                 <img
                   src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=700&q=80&auto=format&fit=crop"
-                  alt="Hindustan Projects team collaborating"
-                  className="w-full h-80 object-cover"
+                  alt="Snaptech engineering team in collaborative session"
+                  className="w-full h-96 object-cover opacity-80 group-hover:scale-105 group-hover:opacity-100 transition-all duration-500"
                   loading="lazy"
                 />
-                {/* Gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-brand-blue/60 via-transparent to-transparent" />
-                {/* Badge bottom-left */}
-                <div className="absolute bottom-5 left-5 bg-white/95 backdrop-blur-md rounded-xl px-4 py-3 shadow-lg flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-brand-red flex items-center justify-center shrink-0">
-                    <MapPin className="w-4 h-4 text-white" />
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-bold text-brand-blue uppercase tracking-wider">
-                      Headquartered in
-                    </p>
-                    <p className="text-xs text-text-muted font-semibold">Bhilwara, Rajasthan</p>
-                  </div>
-                </div>
-                {/* Badge top-right */}
-                <div className="absolute top-5 right-5 bg-brand-red text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
-                  Est. 2019
-                </div>
-              </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-[#020714] via-[#020714]/40 to-transparent" />
 
-              {/* Floating stat card */}
-              <div className="absolute -bottom-6 -right-6 bg-white rounded-2xl border border-gray-100 shadow-xl p-5 hidden lg:block">
-                <p className="text-3xl font-bold text-brand-blue font-heading">
-                  50<span className="text-brand-red">+</span>
-                </p>
-                <p className="text-xs text-text-muted mt-0.5">Projects Delivered</p>
+                {/* Badge bottom */}
+                <div className="absolute bottom-5 left-5 right-5 p-4 rounded-xl border border-white/10 bg-slate-900/90 backdrop-blur-md flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-lg bg-brand-primary/20 border border-brand-cyan/30 flex items-center justify-center shrink-0">
+                      <MapPin className="w-4 h-4 text-brand-cyan" />
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-mono font-bold text-brand-cyan uppercase tracking-wider">
+                        Engineering Hub
+                      </p>
+                      <p className="text-xs text-white font-semibold">Bhilwara, Rajasthan, India</p>
+                    </div>
+                  </div>
+                  <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-brand-primary/20 text-white border border-brand-primary/30">
+                    Est. 2019
+                  </span>
+                </div>
               </div>
             </div>
 
-            {/* Right: Story text */}
-            <div>
-              <span className="text-xs font-bold tracking-widest uppercase text-brand-red mb-3 block">
-                Our Story
+            {/* Right: Narrative Story */}
+            <div className="lg:col-span-7">
+              <span className="text-xs font-mono font-bold tracking-widest uppercase text-brand-cyan mb-3 block">
+                // INSTITUTIONAL NARRATIVE
               </span>
-              <h2 className="font-heading text-3xl sm:text-4xl font-bold text-brand-blue mb-6 leading-tight">
-                Built in Bhilwara.
-                <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue to-blue-400">
-                  Serving All of India.
+              <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-6 leading-tight">
+                Rooted in Rajasthan.{' '}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan to-white">
+                  Executing Pan-India.
                 </span>
               </h2>
-              <div className="space-y-4 text-text-muted text-sm leading-relaxed mb-8">
+              <div className="space-y-4 text-slate-300 text-sm sm:text-base leading-relaxed font-light mb-8">
                 <p>
-                  Hindustan Projects was founded with a clear mission: to make world-class IT
-                  services accessible to businesses in Bhilwara and Rajasthan — not just the metros.
+                  Hindustan Projects founded Snaptech with a clear institutional conviction: enterprise-caliber IT architecture should not be monopolized by Tier-1 metropolitan agencies charging inflated retainer costs with opaque delivery timelines.
                 </p>
                 <p>
-                  We saw a gap — local businesses had the ambition to grow digitally but lacked
-                  access to affordable, high-quality technology partners who understood their
-                  context. That's exactly the gap we fill.
+                  We recognized that growing industrial enterprises and innovative startups require a dependable, permanent technology partner — one with real corporate accountability, localized leadership, and world-class engineering discipline.
                 </p>
                 <p>
-                  From custom web development and digital marketing to enterprise software and IT
-                  consulting, we've helped over 40 businesses transform their operations and expand
-                  their online reach across India.
+                  Today, Snaptech manages mission-critical web applications, high-throughput cloud infrastructure, and conversion-optimized digital platforms for over 40 enterprises, serving millions of end-users nationwide.
                 </p>
               </div>
 
-              {/* Mission & Vision */}
+              {/* Mission & Vision Dual Glass Cards */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="relative p-5 rounded-xl border border-brand-red/15 bg-brand-red/4 overflow-hidden">
-                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-brand-red rounded-l-xl" />
-                  <div className="w-8 h-8 rounded-lg bg-brand-red/15 flex items-center justify-center mb-3">
-                    <Target className="w-4 h-4 text-brand-red" />
+                <div className="p-5 rounded-2xl border border-white/10 bg-slate-900/60 backdrop-blur-xl relative overflow-hidden group hover:border-brand-cyan/40 transition-all">
+                  <div className="w-10 h-10 rounded-xl bg-brand-primary/20 border border-brand-cyan/30 flex items-center justify-center mb-3">
+                    <Target className="w-5 h-5 text-brand-cyan" />
                   </div>
-                  <h3 className="font-heading text-sm font-bold text-brand-blue mb-1">
-                    Our Mission
+                  <h3 className="font-heading text-base font-bold text-white mb-1.5 group-hover:text-brand-cyan transition-colors">
+                    Our Core Mission
                   </h3>
-                  <p className="text-xs text-text-muted leading-relaxed">
-                    Empower businesses with reliable, affordable technology that creates lasting
-                    competitive advantage.
+                  <p className="text-xs text-slate-300/80 leading-relaxed font-light">
+                    Deliver resilient, enterprise-grade software and digital systems that create lasting, measurable operational and revenue advantages for our clients.
                   </p>
                 </div>
-                <div className="relative p-5 rounded-xl border border-brand-blue/15 bg-brand-blue/4 overflow-hidden">
-                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-brand-blue rounded-l-xl" />
-                  <div className="w-8 h-8 rounded-lg bg-brand-blue/15 flex items-center justify-center mb-3">
-                    <Eye className="w-4 h-4 text-brand-blue" />
+
+                <div className="p-5 rounded-2xl border border-white/10 bg-slate-900/60 backdrop-blur-xl relative overflow-hidden group hover:border-brand-cyan/40 transition-all">
+                  <div className="w-10 h-10 rounded-xl bg-brand-cyan/15 border border-brand-cyan/30 flex items-center justify-center mb-3">
+                    <Eye className="w-5 h-5 text-brand-cyan" />
                   </div>
-                  <h3 className="font-heading text-sm font-bold text-brand-blue mb-1">
-                    Our Vision
+                  <h3 className="font-heading text-base font-bold text-white mb-1.5 group-hover:text-brand-cyan transition-colors">
+                    Our Strategic Vision
                   </h3>
-                  <p className="text-xs text-text-muted leading-relaxed">
-                    Become the most trusted IT partner for growing businesses in Rajasthan.
+                  <p className="text-xs text-slate-300/80 leading-relaxed font-light">
+                    To be the foremost technology conglomerate in Western India, recognized for unmatched engineering fidelity, zero-downtime operations, and institutional reliability.
                   </p>
                 </div>
               </div>
@@ -457,80 +376,96 @@ export default function AboutPage() {
         </Container>
       </section>
 
-      {/* ── Values ───────────────────────────────────────────────── */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-white border-t border-gray-100">
-        <Container>
-          <div className="text-center mb-14">
-            <span className="text-xs font-bold tracking-widest uppercase text-brand-red mb-3 block">
-              Our Culture
+      {/* ── 4. Core Values & Engineering Culture ───────────────────── */}
+      <section className="py-16 sm:py-20 lg:py-24 bg-[#03091e] border-t border-b border-white/10 relative">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff04_1px,transparent_1px),linear-gradient(to_bottom,#ffffff04_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
+
+        <Container className="relative">
+          <div className="max-w-3xl mx-auto text-center mb-14">
+            <span className="text-xs font-mono font-bold tracking-widest uppercase text-brand-cyan mb-3 block">
+              // ARCHITECTURAL CODE
             </span>
-            <h2 className="font-heading text-3xl sm:text-4xl font-bold text-brand-blue mb-3">
-              What We Stand For
+            <h2 className="font-heading text-3xl sm:text-4xl font-bold text-white mb-4">
+              The Principles That Govern Our Code
             </h2>
-            <p className="text-text-muted max-w-md mx-auto text-sm">
-              These values guide every project, every client interaction, and every line of code we
-              write.
+            <p className="text-slate-400 text-sm sm:text-base">
+              These principles guide every architectural diagram, database query, pull request, and client milestone.
             </p>
           </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {VALUES.map((v, i) => (
               <div
                 key={v.title}
-                className="group p-6 rounded-2xl border border-gray-100 bg-white
-                  hover:border-brand-blue/20 hover:shadow-[0_8px_30px_rgba(26,62,140,0.08)]
+                className="group p-6 rounded-2xl border border-white/10 bg-slate-900/60 backdrop-blur-xl
+                  hover:border-brand-cyan/40 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)]
                   hover:-translate-y-1.5 transition-all duration-300"
               >
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-blue to-blue-400 flex items-center justify-center mb-4 shadow-md group-hover:scale-110 transition-transform duration-300">
-                  <v.icon className="w-6 h-6 text-white" strokeWidth={1.6} />
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-primary/30 to-brand-cyan/20 border border-brand-cyan/30 flex items-center justify-center mb-5 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <v.icon className="w-6 h-6 text-brand-cyan" strokeWidth={1.8} />
                 </div>
-                <h3 className="font-heading text-base font-bold text-brand-blue mb-2">{v.title}</h3>
-                <p className="text-sm text-text-muted leading-relaxed">{v.desc}</p>
+                <h3 className="font-heading text-base font-bold text-white mb-2 group-hover:text-brand-cyan transition-colors">
+                  {v.title}
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-300/80 leading-relaxed font-light">
+                  {v.desc}
+                </p>
               </div>
             ))}
           </div>
         </Container>
       </section>
 
-      {/* ── Timeline / Milestones ─────────────────────────────────── */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-gray-50/60 border-t border-gray-100">
+      {/* ── 5. Corporate Milestones & Evolution Timeline ────────────── */}
+      <section className="py-16 sm:py-20 lg:py-24 bg-[#020714] relative">
         <Container>
-          <div className="text-center mb-14">
-            <span className="text-xs font-bold tracking-widest uppercase text-brand-red mb-3 block">
-              Our Journey
+          <div className="max-w-3xl mx-auto text-center mb-16">
+            <span className="text-xs font-mono font-bold tracking-widest uppercase text-brand-cyan mb-3 block">
+              // VERIFIED TRACK RECORD
             </span>
-            <h2 className="font-heading text-3xl sm:text-4xl font-bold text-brand-blue">
-              Milestones That Define Us
+            <h2 className="font-heading text-3xl sm:text-4xl font-bold text-white mb-4">
+              Key Milestones in Our Evolution
             </h2>
+            <p className="text-slate-400 text-sm sm:text-base">
+              From our inception to becoming a multi-disciplinary enterprise technology practice.
+            </p>
           </div>
+
           <div className="relative max-w-3xl mx-auto">
-            {/* Vertical line */}
-            <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-brand-blue via-brand-red to-transparent hidden sm:block" />
+            {/* Luminous Vertical Neon Spine */}
+            <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-brand-cyan via-brand-primary to-transparent hidden sm:block shadow-[0_0_15px_rgba(6,182,212,0.5)]" />
+
             <div className="space-y-8">
               {(milestonesLoading ? Array.from({ length: 4 }) : milestones).map((m, i) =>
                 milestonesLoading ? (
                   <div key={i} className="flex gap-6">
-                    <div className="hidden sm:block w-16 h-16 rounded-full bg-gray-100 animate-pulse shrink-0" />
-                    <div className="flex-1 h-20 bg-gray-100 rounded-2xl animate-pulse" />
+                    <div className="hidden sm:block w-16 h-16 rounded-full bg-white/10 animate-pulse shrink-0" />
+                    <div className="flex-1 h-20 bg-slate-900/60 rounded-2xl border border-white/10 animate-pulse" />
                   </div>
                 ) : (
-                  <div key={m.id} className="flex gap-6 group">
+                  <div key={m.id || i} className="flex gap-6 group">
+                    {/* Glowing Node Marker */}
                     <div className="hidden sm:flex flex-col items-center shrink-0">
-                      <div className="w-16 h-16 rounded-full border-2 border-brand-blue bg-white flex flex-col items-center justify-center shadow-md group-hover:bg-brand-blue transition-colors duration-300">
-                        <span className="text-xs font-bold text-brand-blue group-hover:text-white transition-colors leading-none">
+                      <div className="w-16 h-16 rounded-2xl border border-brand-cyan/50 bg-slate-900 flex flex-col items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.25)] group-hover:border-brand-cyan group-hover:bg-brand-primary/20 transition-all duration-300">
+                        <span className="text-xs font-mono font-bold text-brand-cyan group-hover:text-white transition-colors leading-none">
                           {m.year}
                         </span>
                       </div>
                     </div>
-                    <div className="flex-1 bg-white rounded-2xl border border-gray-100 p-5 group-hover:border-brand-blue/20 group-hover:shadow-md transition-all duration-300">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="sm:hidden text-xs font-bold text-brand-red">
-                          {m.year} —
+
+                    {/* Milestone Card */}
+                    <div className="flex-1 rounded-2xl border border-white/10 bg-slate-900/70 p-6 backdrop-blur-xl group-hover:border-brand-cyan/40 group-hover:bg-slate-900/90 transition-all duration-300">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="sm:hidden text-xs font-mono font-bold text-brand-cyan">
+                          {m.year} //
                         </span>
-                        <h3 className="font-heading text-base font-bold text-brand-blue">
+                        <h3 className="font-heading text-base sm:text-lg font-bold text-white group-hover:text-brand-cyan transition-colors">
                           {m.title}
                         </h3>
                       </div>
-                      <p className="text-sm text-text-muted leading-relaxed">{m.desc}</p>
+                      <p className="text-sm text-slate-300/80 leading-relaxed font-light">
+                        {m.desc}
+                      </p>
                     </div>
                   </div>
                 )
@@ -540,119 +475,90 @@ export default function AboutPage() {
         </Container>
       </section>
 
-      {/* ── Team ─────────────────────────────────────────────────── */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-white via-slate-50/50 to-white border-t border-gray-100">
+      {/* ── 6. Leadership & Engineering Squad ───────────────────────── */}
+      <section className="py-16 sm:py-20 lg:py-24 bg-[#03091e] border-t border-b border-white/10 relative">
         <Container>
-          <div className="text-center mb-10 lg:mb-14">
-            <span className="text-xs font-bold tracking-widest uppercase text-brand-red mb-3 block">
-              The People
+          <div className="max-w-3xl mx-auto text-center mb-14">
+            <span className="text-xs font-mono font-bold tracking-widest uppercase text-brand-cyan mb-3 block">
+              // EXECUTIVE DIRECTORS & ARCHITECTS
             </span>
-            <h2 className="font-heading text-3xl sm:text-4xl font-bold text-brand-blue mb-3">
-              Meet Our Team
+            <h2 className="font-heading text-3xl sm:text-4xl font-bold text-white mb-4">
+              Meet The Technical Board
             </h2>
-            <p className="text-text-muted max-w-md mx-auto text-sm">
-              A passionate group of technologists, marketers, and designers — united by one goal:
-              your success.
+            <p className="text-slate-400 text-sm sm:text-base">
+              A seasoned collective of technologists, systems architects, and product leads committed to flawless execution.
             </p>
           </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {teamLoading
               ? Array.from({ length: 4 }).map((_, i) => (
-                  <div key={i} className="h-64 bg-gray-100 rounded-2xl animate-pulse" />
+                  <div key={i} className="h-72 bg-slate-900/60 rounded-2xl border border-white/10 animate-pulse" />
                 ))
-              : team.map((member, index) => {
+              : team.map((member) => {
                   const initials = member.name
                     .split(' ')
                     .map((n) => n[0])
                     .slice(0, 2)
                     .join('')
                     .toUpperCase()
-                  const getStickyClass = (idx) => {
-                    const classes = [
-                      'sticky sm:relative top-[80px] sm:top-auto z-10 sm:z-auto shadow-[0_8px_30px_rgba(26,62,140,0.06)] scale-[0.91] sm:scale-100 origin-top transition-all duration-300',
-                      'sticky sm:relative top-[96px] sm:top-auto z-20 sm:z-auto shadow-[0_12px_36px_rgba(26,62,140,0.09)] scale-[0.94] sm:scale-100 origin-top transition-all duration-300',
-                      'sticky sm:relative top-[112px] sm:top-auto z-30 sm:z-auto shadow-[0_16px_40px_rgba(26,62,140,0.12)] scale-[0.97] sm:scale-100 origin-top transition-all duration-300',
-                      'sticky sm:relative top-[128px] sm:top-auto z-40 sm:z-auto shadow-[0_20px_48px_rgba(26,62,140,0.15)] scale-[1] sm:scale-100 origin-top transition-all duration-300',
-                    ]
-                    return classes[idx] || 'sticky sm:relative top-[128px] sm:top-auto z-40 sm:z-auto shadow-[0_20px_48px_rgba(26,62,140,0.15)] scale-[1] sm:scale-100 origin-top transition-all duration-300'
-                  }
+
                   return (
                     <div
                       key={member.id}
-                      className={`group relative overflow-hidden bg-white rounded-2xl border border-slate-100 p-6 text-center
-                        hover:border-brand-blue/20 hover:shadow-[0_12px_30px_rgba(26,62,140,0.12)]
-                        hover:-translate-y-1.5 transition-all duration-300 ${getStickyClass(index)}`}
+                      className="group relative overflow-hidden rounded-2xl border border-white/10 bg-slate-900/70 p-6 text-center
+                        backdrop-blur-xl hover:border-brand-cyan/50 hover:shadow-[0_0_35px_rgba(6,182,212,0.18)]
+                        hover:-translate-y-1.5 transition-all duration-300 flex flex-col items-center"
                     >
-                      {/* Subtle background glow inside the card top */}
-                      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 bg-gradient-to-b from-brand-blue/5 to-transparent blur-2xl rounded-full pointer-events-none" />
-                      
-                      {/* Glow point behind photo */}
-                      <div className="absolute top-12 left-1/2 -translate-x-1/2 w-24 h-24 bg-gradient-to-tr from-brand-blue/10 to-brand-red/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-
-                      {member.photoUrl ? (
-                        <div className="relative mb-5 mx-auto w-24 h-24 flex items-center justify-center z-10">
-                          {/* Soft backdrop blur glow */}
-                          <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-brand-blue via-transparent to-brand-red blur-md opacity-20 group-hover:opacity-55 group-hover:scale-115 transition-all duration-500" />
-                          
-                          {/* Gradient Ring Wrapper */}
-                          <div className="relative p-[3px] rounded-full bg-gradient-to-tr from-brand-blue/20 via-slate-200 to-brand-red/20 group-hover:from-brand-blue group-hover:via-brand-blue-light group-hover:to-brand-red transition-all duration-500 shadow-sm">
-                            {/* White spacer ring */}
-                            <div className="p-[2px] rounded-full bg-white">
-                              <img
-                                src={member.photoUrl}
-                                alt={member.name}
-                                className="w-22 h-22 rounded-full object-cover shadow-inner group-hover:scale-105 transition-transform duration-500"
-                                loading="lazy"
-                              />
+                      {/* Avatar with Cyber Neon Ring */}
+                      <div className="relative mb-5 mx-auto w-24 h-24 flex items-center justify-center">
+                        <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-brand-primary to-brand-cyan blur-md opacity-30 group-hover:opacity-75 transition-opacity duration-500" />
+                        <div className="relative p-[2px] rounded-full bg-gradient-to-tr from-brand-primary via-white/20 to-brand-cyan">
+                          {member.photoUrl ? (
+                            <img
+                              src={member.photoUrl}
+                              alt={member.name}
+                              className="w-20 h-20 rounded-full object-cover shadow-inner"
+                              loading="lazy"
+                            />
+                          ) : (
+                            <div className="w-20 h-20 rounded-full bg-slate-800 flex items-center justify-center border border-white/10">
+                              <span className="font-heading text-lg font-extrabold text-brand-cyan">
+                                {initials}
+                              </span>
                             </div>
-                          </div>
+                          )}
                         </div>
-                      ) : (
-                        <div className="relative mb-5 mx-auto w-24 h-24 flex items-center justify-center z-10">
-                          {/* Soft backdrop blur glow */}
-                          <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-brand-blue via-transparent to-brand-red blur-md opacity-20 group-hover:opacity-55 group-hover:scale-115 transition-all duration-500" />
-                          
-                          {/* Gradient Ring Wrapper */}
-                          <div className="relative w-full h-full p-[3px] rounded-full bg-gradient-to-tr from-brand-blue/20 via-slate-200 to-brand-red/20 group-hover:from-brand-blue group-hover:via-brand-blue-light group-hover:to-brand-red transition-all duration-500 shadow-sm flex items-center justify-center">
-                            {/* White spacer ring */}
-                            <div className="w-full h-full p-[2px] rounded-full bg-white flex items-center justify-center">
-                              <div className="w-full h-full rounded-full bg-brand-blue/5 flex items-center justify-center border border-slate-100 shadow-inner group-hover:scale-105 transition-transform duration-500">
-                                <span className="font-heading text-lg font-extrabold bg-gradient-to-tr from-brand-blue to-brand-blue-light bg-clip-text text-transparent">
-                                  {initials}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
+                      </div>
+
+                      {/* Info */}
+                      <h3 className="font-heading text-lg font-bold text-white group-hover:text-brand-cyan transition-colors duration-300">
+                        {member.name}
+                      </h3>
+                      <p className="text-xs font-mono font-semibold text-brand-cyan uppercase tracking-wider mt-1 mb-3">
+                        {member.role}
+                      </p>
+                      {member.bio && (
+                        <p className="text-xs text-slate-300/80 leading-relaxed mb-5 line-clamp-3 font-light">
+                          {member.bio}
+                        </p>
+                      )}
+
+                      {/* LinkedIn / Profile */}
+                      {member.linkedinUrl && (
+                        <div className="mt-auto">
+                          <a
+                            href={member.linkedinUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={`${member.name} on LinkedIn`}
+                            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono text-slate-300 bg-white/5 hover:bg-brand-cyan/15 hover:text-brand-cyan border border-white/10 hover:border-brand-cyan/40 transition-all duration-300"
+                          >
+                            <LinkedInIcon />
+                            <span>Verified Profile</span>
+                          </a>
                         </div>
                       )}
-                      
-                      <div className="relative z-10">
-                        <h3 className="font-heading text-base font-bold text-brand-blue group-hover:text-brand-blue-light transition-colors duration-300">
-                          {member.name}
-                        </h3>
-                        <p className="text-xs text-brand-red font-semibold uppercase tracking-wider mt-1 mb-3">
-                          {member.role}
-                        </p>
-                        {member.bio && (
-                          <p className="text-xs text-text-muted leading-relaxed mb-5 line-clamp-3 group-hover:text-gray-700 transition-colors duration-300 px-1">
-                            {member.bio}
-                          </p>
-                        )}
-                        {member.linkedinUrl && (
-                          <div className="flex justify-center">
-                            <a
-                              href={member.linkedinUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              aria-label={`${member.name} on LinkedIn`}
-                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-text-muted bg-slate-50 hover:bg-brand-blue/5 hover:text-brand-blue border border-slate-100 hover:border-brand-blue/20 transition-all duration-300"
-                            >
-                              <LinkedInIcon />
-                              <span>LinkedIn</span>
-                            </a>
-                          </div>
-                        )}
-                      </div>
                     </div>
                   )
                 })}
@@ -660,58 +566,59 @@ export default function AboutPage() {
         </Container>
       </section>
 
-      {/* ── CTA ──────────────────────────────────────────────────── */}
-      <section className="relative py-14 sm:py-16 lg:py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-brand-blue via-[#1e3a7a] to-[#0a1f5c]" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:30px_30px]" />
-        <div className="absolute top-0 right-0 w-64 h-64 bg-brand-red/15 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-1/3 w-48 h-48 bg-blue-400/10 rounded-full blur-3xl" />
+      {/* ── 7. Group Consultation CTA ───────────────────────────────── */}
+      <section className="relative py-20 sm:py-24 overflow-hidden bg-[#020714]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom,rgba(30,107,238,0.25),transparent_70%)] pointer-events-none" />
 
         <Container className="relative">
-          <div className="max-w-3xl mx-auto text-center text-white">
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/20 bg-white/5 text-white/70 text-xs font-semibold uppercase tracking-widest mb-6">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-              Let's Build Together
+          <div className="max-w-4xl mx-auto rounded-3xl border border-brand-cyan/30 bg-gradient-to-b from-slate-900/90 to-[#020714] p-8 sm:p-12 lg:p-16 text-center backdrop-blur-2xl shadow-[0_0_60px_rgba(6,182,212,0.12)]">
+            <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-brand-cyan/40 bg-brand-cyan/10 text-brand-cyan text-xs font-semibold uppercase tracking-widest mb-6">
+              <Sparkles className="w-3.5 h-3.5 text-brand-cyan" />
+              Direct Group Engagement
             </span>
-            <h2 className="font-heading text-3xl sm:text-4xl font-bold mb-4 leading-tight">
-              <span className="text-white">Ready to Grow Your Business</span>
-              <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-red to-orange-400">
-                With the Right Tech Partner?
-              </span>
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-5 leading-tight">
+              Ready to Modernize With An Enterprise-Backed Partner?
             </h2>
-            <p className="text-white/60 text-base sm:text-lg mb-10 max-w-xl mx-auto">
-              Let's talk about your goals. We'll suggest the best solutions — no jargon, no
-              pressure.
+            <p className="text-slate-300 text-base sm:text-lg mb-10 max-w-2xl mx-auto font-light">
+              Connect with our senior engineering leadership. We evaluate technical feasibility, provide deterministic sprint estimates, and execute with institutional stability.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button variant="primary" size="lg" as={Link} to="/contact">
-                Get a Free Consultation
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Button
+                variant="primary"
+                size="lg"
+                as={Link}
+                to="/contact"
+                className="w-full sm:w-auto bg-gradient-to-r from-brand-primary to-brand-cyan hover:from-brand-primary-dark hover:to-brand-cyan-dark text-white font-bold px-8 shadow-[0_0_25px_rgba(30,107,238,0.4)]"
+              >
+                Schedule Technical Scoping Call
               </Button>
               <Button
                 variant="ghost"
                 size="lg"
                 as={Link}
                 to="/services"
-                className="!text-white !border-white/25 hover:!bg-white/10"
+                className="w-full sm:w-auto text-white border border-white/20 hover:bg-white/10"
               >
-                Explore Services →
+                Browse Solutions Catalog
               </Button>
             </div>
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-6 text-white/70 text-xs font-medium">
-              <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-green-400" /> No upfront payment
+
+            <div className="mt-12 pt-8 border-t border-white/10 flex flex-wrap items-center justify-center gap-8 text-slate-300 text-xs font-mono">
+              <span className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Corporate Holding Backing
               </span>
-              <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-green-400" /> Reply within 24 hours
+              <span className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400" /> 100% IP & Source Code Ownership
               </span>
-              <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-green-400" /> 50+ happy clients
+              <span className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Dedicated Post-Delivery Warranty
               </span>
             </div>
           </div>
         </Container>
       </section>
-    </>
+    </div>
   )
 }
+

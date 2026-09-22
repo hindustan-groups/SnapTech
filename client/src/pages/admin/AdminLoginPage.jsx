@@ -115,13 +115,15 @@ export default function AdminLoginPage() {
     <>
       <SEO title="Admin Login" noIndex />
       <div
-        className="min-h-screen flex"
-        style={{ background: 'linear-gradient(135deg, #f0f4ff 0%, #e8eeff 50%, #f5f0ff 100%)' }}
+        className="min-h-screen flex bg-[#020714] text-white selection:bg-cyan-500 selection:text-black relative overflow-hidden"
       >
+        {/* Background ambient orbs */}
+        <div className="absolute top-1/4 left-1/3 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-10 right-10 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl pointer-events-none" />
+
         {/* ── Left panel — Brand ── */}
         <div
-          className="hidden lg:flex flex-col justify-between w-[420px] shrink-0 p-10 relative overflow-hidden"
-          style={{ background: 'linear-gradient(175deg, #1A3E8C 0%, #0f2660 100%)' }}
+          className="hidden lg:flex flex-col justify-between w-[440px] shrink-0 p-10 relative overflow-hidden bg-[#03091e]/90 border-r border-white/10"
         >
           {/* Grid pattern */}
           <div
@@ -134,19 +136,19 @@ export default function AdminLoginPage() {
           />
 
           {/* Glow orbs */}
-          <div className="absolute top-20 left-10 w-48 h-48 bg-brand-red/20 rounded-full blur-3xl" />
-          <div className="absolute bottom-20 right-0 w-64 h-64 bg-blue-300/10 rounded-full blur-3xl" />
+          <div className="absolute top-20 left-10 w-48 h-48 bg-cyan-500/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-20 right-0 w-64 h-64 bg-blue-600/10 rounded-full blur-3xl" />
 
           {/* Logo */}
           <div className="relative flex items-center gap-3">
             <img
               src="/logo-with-bg.png"
               alt="Logo"
-              className="w-10 h-10 rounded-xl object-contain"
+              className="w-10 h-10 rounded-xl object-contain border border-white/10"
             />
             <div>
               <p className="font-heading font-bold text-white text-base">Hindustan Projects</p>
-              <p className="text-white/40 text-xs">Admin Panel</p>
+              <p className="text-cyan-400 text-xs font-semibold tracking-wider uppercase">Command Center</p>
             </div>
           </div>
 
@@ -155,31 +157,30 @@ export default function AdminLoginPage() {
             <div>
               <h2
                 className="text-white font-heading text-3xl font-bold leading-tight mb-3"
-                style={{ color: '#fff' }}
               >
                 Manage Your
                 <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-300">
-                  Digital Presence
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+                  Digital Architecture
                 </span>
               </h2>
-              <p className="text-white/50 text-sm leading-relaxed">
-                Update services, projects, team, leads and site settings — all in one place.
+              <p className="text-slate-400 text-sm leading-relaxed">
+                Control services, client projects, leads, team members, and enterprise settings — all in real time.
               </p>
             </div>
 
             {/* Feature bullets */}
             <div className="space-y-3">
               {[
-                'Manage services & portfolio projects',
-                'Track and respond to client leads',
-                'Update team, FAQs & testimonials',
+                'Real-time lead telemetry & CRM tracking',
+                'Client portal milestones & deliverable vault',
+                'Dynamic services, pricing & proposal generation',
               ].map((text) => (
                 <div key={text} className="flex items-center gap-3">
-                  <div className="w-5 h-5 rounded-full bg-brand-red/20 border border-brand-red/30 flex items-center justify-center shrink-0">
-                    <div className="w-1.5 h-1.5 rounded-full bg-brand-red" />
+                  <div className="w-5 h-5 rounded-full bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center shrink-0">
+                    <div className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
                   </div>
-                  <p className="text-white/60 text-sm">{text}</p>
+                  <p className="text-slate-300 text-sm">{text}</p>
                 </div>
               ))}
             </div>
@@ -187,39 +188,39 @@ export default function AdminLoginPage() {
 
           {/* Footer */}
           <div className="relative">
-            <p className="text-white/25 text-xs">© 2025 Hindustan Projects, Bhilwara</p>
+            <p className="text-slate-500 text-xs">© {new Date().getFullYear()} Hindustan Projects &bull; Enterprise IT</p>
           </div>
         </div>
 
         {/* ── Right panel — Form ── */}
-        <div className="flex-1 flex items-center justify-center p-6 lg:p-12">
+        <div className="flex-1 flex items-center justify-center p-6 lg:p-12 relative z-10">
           <div className="w-full max-w-md">
             {/* Mobile logo */}
             <div className="lg:hidden text-center mb-8">
-              <div className="inline-flex items-center gap-2.5 mb-2">
+              <div className="inline-flex items-center gap-2.5">
                 <img
                   src="/logo-with-bg.png"
                   alt="Logo"
-                  className="w-9 h-9 rounded-xl object-contain"
+                  className="w-9 h-9 rounded-xl object-contain border border-white/10"
                 />
-                <span className="font-heading font-bold text-xl text-brand-blue">
+                <span className="font-heading font-bold text-xl text-white">
                   Hindustan Projects
                 </span>
               </div>
             </div>
 
             {/* Card */}
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-xl shadow-gray-200/60 p-8">
+            <div className="bg-[#03091e]/90 rounded-2xl border border-white/10 shadow-2xl backdrop-blur-xl p-8">
               <div className="mb-8">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-blue/8 border border-brand-blue/15 mb-4">
-                  <ShieldCheck className="w-3.5 h-3.5 text-brand-blue" />
-                  <span className="text-xs font-semibold text-brand-blue">Secure Admin Access</span>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 mb-4">
+                  <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
+                  <span className="text-xs font-semibold text-cyan-400">Secure Admin Access</span>
                 </div>
-                <h1 className="font-heading text-2xl font-bold text-gray-900">
+                <h1 className="font-heading text-2xl font-bold text-white">
                   {tempToken ? 'Two-Factor Authentication' : 'Welcome Back'}
                 </h1>
-                <p className="text-sm text-gray-500 mt-1">
-                  {tempToken ? 'Enter your 6-digit Google Authenticator code' : 'Sign in to your admin dashboard'}
+                <p className="text-sm text-slate-400 mt-1">
+                  {tempToken ? 'Enter your 6-digit Google Authenticator code' : 'Sign in to access your administrative command center'}
                 </p>
               </div>
 
@@ -228,23 +229,23 @@ export default function AdminLoginPage() {
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
                   {/* Email */}
                   <div>
-                    <label className="text-xs font-semibold text-gray-600 block mb-1.5 uppercase tracking-wide">
+                    <label className="text-xs font-semibold text-slate-300 block mb-1.5 uppercase tracking-wide">
                       Email Address
                     </label>
                     <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                       <input
                         type="email"
                         autoComplete="email"
                         className={`w-full pl-9 pr-3.5 py-3 text-sm border rounded-xl focus:outline-none
-                          focus:ring-2 focus:ring-brand-blue/25 focus:border-brand-blue transition-all
-                          ${errors.email ? 'border-red-400 bg-red-50' : 'border-gray-200 bg-gray-50 focus:bg-white'}`}
-                        placeholder="Enter your email"
+                          focus:ring-1 focus:ring-cyan-500/40 focus:border-cyan-500/50 transition-all text-white placeholder:text-slate-500
+                          ${errors.email ? 'border-red-500/50 bg-red-500/10' : 'border-white/10 bg-slate-900/80 focus:bg-slate-900'}`}
+                        placeholder="admin@hindustanprojects.com"
                         {...register('email')}
                       />
                     </div>
                     {errors.email && (
-                      <p className="text-xs text-red-500 mt-1.5 flex items-center gap-1">
+                      <p className="text-xs text-red-400 mt-1.5 flex items-center gap-1">
                         <AlertCircle className="w-3 h-3" /> {errors.email.message}
                       </p>
                     )}
@@ -252,30 +253,30 @@ export default function AdminLoginPage() {
 
                   {/* Password */}
                   <div>
-                    <label className="text-xs font-semibold text-gray-600 block mb-1.5 uppercase tracking-wide">
+                    <label className="text-xs font-semibold text-slate-300 block mb-1.5 uppercase tracking-wide">
                       Password
                     </label>
                     <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                       <input
                         type={showPass ? 'text' : 'password'}
                         autoComplete="current-password"
                         className={`w-full pl-9 pr-10 py-3 text-sm border rounded-xl focus:outline-none
-                          focus:ring-2 focus:ring-brand-blue/25 focus:border-brand-blue transition-all
-                          ${errors.password ? 'border-red-400 bg-red-50' : 'border-gray-200 bg-gray-50 focus:bg-white'}`}
-                        placeholder="Enter your password"
+                          focus:ring-1 focus:ring-cyan-500/40 focus:border-cyan-500/50 transition-all text-white placeholder:text-slate-500
+                          ${errors.password ? 'border-red-500/50 bg-red-500/10' : 'border-white/10 bg-slate-900/80 focus:bg-slate-900'}`}
+                        placeholder="••••••••••••"
                         {...register('password')}
                       />
                       <button
                         type="button"
                         onClick={() => setShowPass((v) => !v)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors cursor-pointer"
                       >
                         {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                       </button>
                     </div>
                     {errors.password && (
-                      <p className="text-xs text-red-500 mt-1.5 flex items-center gap-1">
+                      <p className="text-xs text-red-400 mt-1.5 flex items-center gap-1">
                         <AlertCircle className="w-3 h-3" /> {errors.password.message}
                       </p>
                     )}
@@ -284,8 +285,8 @@ export default function AdminLoginPage() {
                   {/* API error */}
                   {error && (
                     <div
-                      className="flex items-center gap-2.5 text-sm text-red-700 bg-red-50
-                      border border-red-200 rounded-xl px-4 py-3"
+                      className="flex items-center gap-2.5 text-sm text-red-300 bg-red-500/10
+                      border border-red-500/30 rounded-xl px-4 py-3"
                     >
                       <AlertCircle className="w-4 h-4 shrink-0" />
                       {error}
@@ -295,22 +296,17 @@ export default function AdminLoginPage() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full text-white font-semibold py-3 rounded-xl text-sm
+                    className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold py-3 rounded-xl text-sm
                       transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed
-                      hover:shadow-lg hover:shadow-brand-blue/25 hover:-translate-y-0.5 active:translate-y-0 mt-2"
-                    style={{
-                      background: loading
-                        ? '#94a3b8'
-                        : 'linear-gradient(135deg, #1A3E8C 0%, #2d5fd6 100%)',
-                    }}
+                      hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] cursor-pointer mt-2"
                   >
                     {loading ? (
                       <span className="flex items-center justify-center gap-2">
-                        <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                        <span className="w-4 h-4 border-2 border-black/40 border-t-black rounded-full animate-spin" />
                         Signing in…
                       </span>
                     ) : (
-                      'Sign In to Dashboard'
+                      'Sign In to Command Center'
                     )}
                   </button>
                 </form>
@@ -318,26 +314,26 @@ export default function AdminLoginPage() {
                 // ── 2FA Verification Form ──
                 <form onSubmit={handleOtpSubmit} className="space-y-5">
                   <div>
-                    <label className="text-xs font-semibold text-gray-600 block mb-1.5 uppercase tracking-wide">
+                    <label className="text-xs font-semibold text-slate-300 block mb-1.5 uppercase tracking-wide">
                       Verification Code
                     </label>
                     <div className="relative">
-                      <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                       <input
                         type="text"
                         maxLength={6}
                         pattern="[0-9]*"
                         inputMode="numeric"
                         className={`w-full pl-9 pr-3.5 py-3 text-sm border rounded-xl focus:outline-none
-                          focus:ring-2 focus:ring-brand-blue/25 focus:border-brand-blue bg-gray-50 focus:bg-white transition-all
-                          ${otpError ? 'border-red-400 bg-red-50' : 'border-gray-200'}`}
+                          focus:ring-1 focus:ring-cyan-500/40 focus:border-cyan-500/50 bg-slate-900/80 text-white placeholder:text-slate-500 transition-all
+                          ${otpError ? 'border-red-500/50 bg-red-500/10' : 'border-white/10'}`}
                         placeholder="000000"
                         value={otpCode}
                         onChange={(e) => setOtpCode(e.target.value.replace(/[^0-9]/g, ''))}
                       />
                     </div>
                     {otpError && (
-                      <p className="text-xs text-red-500 mt-1.5 flex items-center gap-1">
+                      <p className="text-xs text-red-400 mt-1.5 flex items-center gap-1">
                         <AlertCircle className="w-3 h-3" /> {otpError}
                       </p>
                     )}
@@ -346,22 +342,17 @@ export default function AdminLoginPage() {
                   <button
                     type="submit"
                     disabled={otpLoading}
-                    className="w-full text-white font-semibold py-3 rounded-xl text-sm
+                    className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold py-3 rounded-xl text-sm
                       transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed
-                      hover:shadow-lg hover:shadow-brand-blue/25 hover:-translate-y-0.5 active:translate-y-0 mt-2"
-                    style={{
-                      background: otpLoading
-                        ? '#94a3b8'
-                        : 'linear-gradient(135deg, #1A3E8C 0%, #2d5fd6 100%)',
-                    }}
+                      hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] cursor-pointer mt-2"
                   >
                     {otpLoading ? (
                       <span className="flex items-center justify-center gap-2">
-                        <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                        <span className="w-4 h-4 border-2 border-black/40 border-t-black rounded-full animate-spin" />
                         Verifying OTP…
                       </span>
                     ) : (
-                      'Verify & Login'
+                      'Verify & Access'
                     )}
                   </button>
 
@@ -372,7 +363,7 @@ export default function AdminLoginPage() {
                       setOtpCode('')
                       setOtpError('')
                     }}
-                    className="w-full text-gray-500 hover:text-gray-700 text-xs font-semibold py-2 text-center block mt-1 transition-colors"
+                    className="w-full text-slate-400 hover:text-cyan-400 text-xs font-semibold py-2 text-center block mt-1 transition-colors cursor-pointer"
                   >
                     Back to password login
                   </button>
@@ -380,9 +371,9 @@ export default function AdminLoginPage() {
               )}
 
               {/* Footer */}
-              <div className="mt-6 pt-5 border-t border-gray-100 flex items-center justify-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-gray-300" />
-                <p className="text-xs text-gray-400">Secured with 2FA & JWT authentication</p>
+              <div className="mt-6 pt-5 border-t border-white/10 flex items-center justify-center gap-1.5">
+                <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
+                <p className="text-xs text-slate-400">Secured with 2FA & JWT enterprise authentication</p>
               </div>
             </div>
           </div>

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Monitor,
@@ -6,21 +7,13 @@ import {
   Laptop,
   Check,
   ArrowRight,
-  TrendingUp,
   Users,
-  Search,
   ShoppingCart,
   Heart,
   Grid,
   Menu,
   Bell,
-  Sliders,
-  DollarSign,
-  PieChart as PieIcon,
   FolderKanban,
-  Star,
-  Zap,
-  ShieldCheck,
   RefreshCw,
   Cpu
 } from 'lucide-react'
@@ -80,29 +73,32 @@ export default function ShowcaseSection() {
   const activeContent = showcaseData[activeTab]
 
   return (
-    <section className="py-24 relative overflow-hidden bg-gray-50 border-t border-b border-gray-100">
+    <section className="py-24 relative overflow-hidden bg-[#03091e] border-t border-b border-white/10 text-white isolate">
       {/* Background decoration */}
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden -z-10">
-        <div className="absolute top-[-10%] left-[-10%] w-[45%] h-[55%] rounded-full bg-brand-blue/5 blur-3xl" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[45%] h-[55%] rounded-full bg-brand-red/5 blur-3xl" />
+        <div className="absolute top-[-10%] left-[-10%] w-[45%] h-[55%] rounded-full bg-brand-primary/10 blur-3xl" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[45%] h-[55%] rounded-full bg-brand-cyan/10 blur-3xl" />
       </div>
 
       <Container className="space-y-16">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
-          <span className="text-xs font-extrabold tracking-widest uppercase text-brand-red-dark bg-brand-red/10 border border-brand-red/20 px-4.5 py-1.5 rounded-full inline-block">
-            Interactive Showcase
+          <span className="text-xs font-mono font-bold tracking-widest uppercase text-brand-cyan bg-brand-primary/20 border border-brand-primary/40 px-4.5 py-1.5 rounded-full inline-block">
+            Interactive Showcase Studio
           </span>
-          <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 leading-tight">
-            Experience Our Digital Craftsmanship
+          <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight">
+            Experience Our{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary-light via-brand-cyan to-white">
+              Digital Craftsmanship
+            </span>
           </h2>
-          <p className="text-sm sm:text-base text-gray-500 max-w-2xl mx-auto leading-relaxed">
-            Click on the tabs below to explore high-fidelity mockups of our custom-built web apps, SaaS portals, and mobile systems.
+          <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
+            Click on the tabs below to explore high-fidelity interactive mockups of our custom-built web apps, SaaS portals, and mobile systems.
           </p>
         </div>
 
         {/* Tab Switcher - Premium Minimal Style */}
-        <div className="flex justify-center border-b border-gray-200 max-w-md mx-auto">
+        <div className="flex justify-center border-b border-white/10 max-w-md mx-auto">
           {tabs.map((tab) => {
             const Icon = tab.icon
             const active = activeTab === tab.id
@@ -113,8 +109,8 @@ export default function ShowcaseSection() {
                 className={`flex-1 pb-4 flex flex-col items-center gap-2 border-b-2 text-xs font-bold transition-all duration-300 cursor-pointer outline-none
                   ${
                     active
-                      ? 'border-brand-blue text-brand-blue scale-105'
-                      : 'border-transparent text-gray-400 hover:text-gray-600'
+                      ? 'border-brand-cyan text-brand-cyan scale-105'
+                      : 'border-transparent text-slate-400 hover:text-white'
                   }`}
               >
                 <Icon className="w-5 h-5" />
@@ -137,23 +133,23 @@ export default function ShowcaseSection() {
                 transition={{ duration: 0.35, ease: [0.25, 1, 0.5, 1] }}
                 className="space-y-6"
               >
-                <span className="text-[10px] font-black tracking-widest text-brand-blue bg-brand-blue/10 border border-brand-blue/20 px-3 py-1 rounded-full w-fit block uppercase">
+                <span className="text-[10px] font-mono font-bold tracking-widest text-brand-cyan bg-brand-primary/20 border border-brand-primary/40 px-3 py-1 rounded-full w-fit block uppercase">
                   {activeContent.eyebrow}
                 </span>
 
-                <h3 className="font-heading text-2xl sm:text-3xl font-extrabold text-gray-900 leading-tight">
+                <h3 className="font-heading text-2xl sm:text-3xl font-extrabold text-white leading-tight">
                   {activeContent.title}
                 </h3>
 
-                <p className="text-sm text-gray-500 leading-relaxed">
+                <p className="text-sm text-slate-300 leading-relaxed">
                   {activeContent.desc}
                 </p>
 
                 {/* Checklist */}
                 <ul className="space-y-3">
                   {activeContent.checklist.map((item, idx) => (
-                    <li key={idx} className="flex items-start gap-3 text-xs text-gray-700 leading-relaxed">
-                      <div className="w-4.5 h-4.5 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 shrink-0 mt-0.5">
+                    <li key={idx} className="flex items-start gap-3 text-xs text-slate-200 leading-relaxed">
+                      <div className="w-4.5 h-4.5 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shrink-0 mt-0.5">
                         <Check className="w-2.5 h-2.5" />
                       </div>
                       <span>{item}</span>
@@ -161,16 +157,13 @@ export default function ShowcaseSection() {
                   ))}
                 </ul>
 
-                {/* Action CTA */}
-                <div className="pt-2">
-                  <a
-                    href={activeContent.link}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-blue hover:bg-brand-blue-hover text-white text-xs font-bold rounded-xl shadow-sm hover:shadow transition-all group"
-                  >
-                    <span>{activeContent.cta}</span>
-                    <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />
-                  </a>
-                </div>
+                <Link
+                  to={activeContent.link}
+                  className="inline-flex items-center gap-2 text-xs font-bold text-brand-cyan hover:text-white group pt-2 transition-colors duration-200"
+                >
+                  <span>{activeContent.cta}</span>
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1.5 transition-transform duration-200" />
+                </Link>
               </motion.div>
             </AnimatePresence>
           </div>

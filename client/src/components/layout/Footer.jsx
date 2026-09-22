@@ -116,7 +116,7 @@ export default function Footer() {
 
   const cfg = settingsData?.data || {}
   const phone = cfg.phone || '+91 75970 00601'
-  const contactEmail = cfg.email || 'info@hindustanprojects.com'
+  const contactEmail = cfg.email || 'info@snaptech.digital'
   const address = cfg.address || 'Bhilwara, Rajasthan 311001, India'
 
   const socials = SOCIAL_LINKS.map((s) => ({
@@ -169,12 +169,12 @@ export default function Footer() {
                 </span>
               </div>
               <a
-                href="https://www.hindustanprojects.in"
+                href={cfg.parent_company_url || 'https://www.hindustanprojects.in'}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 text-brand-cyan hover:text-white font-medium transition-colors shrink-0"
               >
-                <span>hindustanprojects.in</span>
+                <span>{cfg.parent_company_url ? cfg.parent_company_url.replace(/^https?:\/\//, '') : 'hindustanprojects.in'}</span>
                 <ExternalLink className="w-3.5 h-3.5" />
               </a>
             </div>
@@ -220,7 +220,7 @@ export default function Footer() {
               </Link>
 
               <p className="text-xs text-brand-cyan font-mono tracking-wider">
-                www.snaptech.hindustanprojects.in
+                snaptech.digital
               </p>
 
               <p className="text-sm text-slate-300 leading-relaxed">

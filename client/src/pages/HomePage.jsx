@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Phone, Mail } from 'lucide-react'
 import HeroSection from '@/components/sections/HeroSection'
+import PartnerTrustMarquee from '@/components/sections/PartnerTrustMarquee'
 import ParentGroupSection from '@/components/sections/ParentGroupSection'
 import ServicesSection from '@/components/sections/ServicesSection'
 import ShowcaseSection from '@/components/sections/ShowcaseSection'
@@ -14,16 +15,8 @@ import TeamSection from '@/components/sections/TeamSection'
 import FaqSection from '@/components/sections/FaqSection'
 import { Container, SEO } from '@/components/ui'
 import { organizationSchema, localBusinessSchema } from '@/components/ui/SEO'
-import { usePartners, useSiteSettings } from '@/hooks/useContent'
+import { useSiteSettings } from '@/hooks/useContent'
 import { api } from '@/utils/api'
-
-const FALLBACK_PARTNERS = [
-  { id: '1', name: 'Local Business 1' },
-  { id: '2', name: 'Local Business 2' },
-  { id: '3', name: 'Local Business 3' },
-  { id: '4', name: 'Local Business 4' },
-  { id: '5', name: 'Local Business 5' },
-]
 
 /**
  * HomePage — assembles all homepage sections.
@@ -35,12 +28,10 @@ export default function HomePage() {
   const [submitted, setSubmitted] = useState(false)
   const [submitError, setSubmitError] = useState(false)
   const [submitting, setSubmitting] = useState(false)
-  const { data: partnersData } = usePartners()
   const { data: settingsData } = useSiteSettings()
-  const partners = partnersData?.data?.length ? partnersData.data : FALLBACK_PARTNERS
   const cfg = settingsData?.data || {}
   const phone = cfg.phone || '+91 99999 99999'
-  const contactEmail = cfg.email || 'info@hindustanprojects.com'
+  const contactEmail = cfg.email || 'info@snaptech.digital'
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -83,24 +74,8 @@ export default function HomePage() {
       />
       <HeroSection />
 
-      {/* ── Partner Logos Banner — decorative, screen readers skip ── */}
-      <section className="py-12 bg-white border-b border-gray-100" aria-hidden="true">
-        <Container>
-          <p className="text-center text-[10px] md:text-xs font-bold text-text-muted tracking-widest uppercase mb-8">
-            Trusted By Forward-Thinking Brands & Businesses
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6 md:gap-x-16 pointer-events-none select-none">
-            {partners.map((p) => (
-              <span
-                key={p.id}
-                className="font-heading text-sm md:text-base font-black tracking-wider text-gray-500 uppercase"
-              >
-                {p.name}
-              </span>
-            ))}
-          </div>
-        </Container>
-      </section>
+      {/* ── Enterprise Trust Badges & Infinite Partner Marquee ── */}
+      <PartnerTrustMarquee />
 
       {/* ── Official Parent Group Ecosystem Section ── */}
       <ParentGroupSection />
@@ -119,152 +94,171 @@ export default function HomePage() {
       {/* Contact CTA Banner */}
       <section
         id="contact"
-        className="py-20 relative overflow-hidden border-t border-white/5"
-        style={{
-          background: 'linear-gradient(135deg, #020712 0%, #08173d 100%)',
-        }}
+        className="py-24 relative overflow-hidden bg-slate-50 border-t border-slate-100"
       >
-        {/* Background gradient overlay (replaces external Unsplash image) */}
-        <div
-          className="absolute inset-0 opacity-[0.06]"
-          style={{
-            backgroundImage:
-              'linear-gradient(45deg, #1a3e8c 0%, #0d2460 50%, #1a3e8c 100%)',
-            backgroundSize: '200% 200%',
-          }}
-          aria-hidden="true"
-        />
+        {/* Background ambient lighting */}
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#1a3e8c]/5 blur-[140px] rounded-full pointer-events-none" />
+        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-[#e31e24]/5 blur-[140px] rounded-full pointer-events-none" />
 
-        <Container className="relative">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+        <Container className="relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left: text */}
-            <div className="space-y-4">
-              <span className="text-xs font-bold tracking-widest uppercase text-brand-red-light bg-brand-red/10 border border-brand-red-light/20 px-3 py-1 rounded-full w-fit block">
-                Start Your Project Today
-              </span>
-              <h2 className="font-heading text-3xl sm:text-4xl font-extrabold !text-white leading-tight">
-                Ready to Grow Your Business Digitally?
+            <div className="lg:col-span-6 space-y-6">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1a3e8c]/10 border border-[#1a3e8c]/20 text-[#1a3e8c] text-xs font-bold uppercase tracking-widest w-fit">
+                <span className="w-2 h-2 rounded-full bg-[#1a3e8c] animate-pulse" />
+                Start Your Project
+              </div>
+
+              <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-800 leading-tight">
+                Ready to Scale Your Business{' '}
+                <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(135deg, #1a3e8c, #e31e24)' }}>Digitally?</span>
               </h2>
-              <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-md">
-                Get a free consultation with our team. We will understand your goals and recommend
-                the right technology solution — no jargon, no pressure.
+
+              <p className="text-slate-500 text-sm sm:text-base leading-relaxed max-w-lg">
+                Direct technical consultation with our engineering leads. We analyze your requirements and blueprint the optimal high-availability solution — zero ambiguity, zero technical debt.
               </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 max-w-lg">
+                <div className="flex items-center gap-2.5 p-3 rounded-xl bg-white border border-slate-200 text-xs text-slate-600">
+                  <span className="text-[#1a3e8c] font-black">✓</span> 2-Hour Response SLA Guarantee
+                </div>
+                <div className="flex items-center gap-2.5 p-3 rounded-xl bg-white border border-slate-200 text-xs text-slate-600">
+                  <span className="text-[#1a3e8c] font-black">✓</span> 100% IP &amp; Code Ownership
+                </div>
+                <div className="flex items-center gap-2.5 p-3 rounded-xl bg-white border border-slate-200 text-xs text-slate-600">
+                  <span className="text-[#1a3e8c] font-black">✓</span> Milestone Sprint Deliveries
+                </div>
+                <div className="flex items-center gap-2.5 p-3 rounded-xl bg-white border border-slate-200 text-xs text-slate-600">
+                  <span className="text-[#1a3e8c] font-black">✓</span> Transparent Pricing Matrix
+                </div>
+              </div>
             </div>
 
-            {/* Right: Glassmorphic Contact Card */}
-            <div className="bg-slate-900/80 border border-white/15 backdrop-blur-lg rounded-2xl p-6 lg:p-7 max-w-md lg:ml-auto w-full shadow-2xl">
-              <div className="space-y-4">
-                {submitted ? (
-                  <div className="text-center py-5 space-y-3" role="alert" aria-live="polite">
-                    <div className="w-11 h-11 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto text-emerald-400 font-bold text-lg">
-                      ✓
+            {/* Right: Contact Card */}
+            <div className="lg:col-span-6 max-w-md lg:ml-auto w-full">
+              <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden group hover:border-[#1a3e8c]/30 transition-all">
+                {/* Top brand gradient line */}
+                <div className="absolute top-0 left-0 right-0 h-[3px]" style={{ background: 'linear-gradient(90deg, #1a3e8c, #e31e24)' }} />
+
+                <div className="space-y-4">
+                  {submitted ? (
+                    <div className="text-center py-6 space-y-3" role="alert" aria-live="polite">
+                      <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center mx-auto text-emerald-600 font-bold text-xl">
+                        ✓
+                      </div>
+                      <h3 className="font-heading text-lg font-bold text-slate-800">
+                        Inquiry Sent!
+                      </h3>
+                      <p className="text-xs text-slate-500 leading-relaxed">
+                        Thank you. Our senior technical advisors will review your project brief and connect with you within 2 hours.
+                      </p>
                     </div>
-                    <h3 className="font-heading text-base font-bold" style={{ color: '#ffffff' }}>
-                      Inquiry Received!
-                    </h3>
-                    <p className="text-xs text-slate-300 leading-relaxed">
-                      Thank you! Mohammad Dilshan and our technical advisors will get back to you
-                      within 2 hours.
-                    </p>
-                  </div>
-                ) : submitError ? (
-                  <div className="text-center py-5 space-y-3" role="alert" aria-live="assertive">
-                    <div className="w-11 h-11 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center mx-auto text-red-400 font-bold text-lg">
-                      ✕
-                    </div>
-                    <h3 className="font-heading text-base font-bold text-red-400">
-                      Something Went Wrong
-                    </h3>
-                    <p className="text-xs text-slate-300 leading-relaxed">
-                      Sorry, we couldn&apos;t send your message. Please try again or contact us directly.
-                    </p>
-                    <button
-                      onClick={() => setSubmitError(false)}
-                      className="text-xs text-brand-red-light underline cursor-pointer"
-                    >
-                      Try again
-                    </button>
-                  </div>
-                ) : (
-                  <form onSubmit={handleSubmit} className="space-y-3">
-                    <h3 className="font-heading text-sm font-bold mb-2 uppercase tracking-wider text-center" style={{ color: '#ffffff' }}>
-                      Request a Free Quote
-                    </h3>
-                    <div>
-                      <label htmlFor="quote-name" className="block text-[10px] font-bold uppercase tracking-wider text-gray-300 mb-1">
-                        Your Name
-                      </label>
-                      <input
-                        id="quote-name"
-                        type="text"
-                        required
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        placeholder="e.g. Aditya Sharma"
-                        className="w-full bg-slate-950/50 border border-white/10 rounded-lg px-3.5 py-2 text-xs text-white placeholder-white/30 focus:outline-none focus:border-brand-red-light focus:ring-1 focus:ring-brand-red-light/30 transition-all"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="quote-email" className="block text-[10px] font-bold uppercase tracking-wider text-gray-300 mb-1">
-                        Your Email
-                      </label>
-                      <input
-                        id="quote-email"
-                        type="email"
-                        required
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="e.g. aditya@textiles.com"
-                        className="w-full bg-slate-950/50 border border-white/10 rounded-lg px-3.5 py-2 text-xs text-white placeholder-white/30 focus:outline-none focus:border-brand-red-light focus:ring-1 focus:ring-brand-red-light/30 transition-all"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="quote-service" className="block text-[10px] font-bold uppercase tracking-wider text-gray-300 mb-1">
-                        Service Needed
-                      </label>
-                      <select
-                        id="quote-service"
-                        value={service}
-                        onChange={(e) => setService(e.target.value)}
-                        className="w-full bg-slate-950 border border-white/10 rounded-lg px-3.5 py-2 text-xs text-white focus:outline-none focus:border-brand-red-light transition-all cursor-pointer"
+                  ) : submitError ? (
+                    <div className="text-center py-6 space-y-3" role="alert" aria-live="assertive">
+                      <div className="w-12 h-12 rounded-2xl bg-red-50 border border-red-200 flex items-center justify-center mx-auto text-red-500 font-bold text-xl">
+                        ✕
+                      </div>
+                      <h3 className="font-heading text-base font-bold text-red-600">
+                        Submission Failed
+                      </h3>
+                      <p className="text-xs text-slate-500 leading-relaxed">
+                        Unable to deliver message right now. Please reach us directly via Phone or WhatsApp.
+                      </p>
+                      <button
+                        onClick={() => setSubmitError(false)}
+                        className="text-xs text-brand-cyan hover:underline cursor-pointer"
                       >
-                        <option value="Web Development">Web Development</option>
-                        <option value="App Development">Mobile App Development</option>
-                        <option value="Digital Marketing">Digital Marketing &amp; SEO</option>
-                        <option value="E-Commerce Solutions">E-Commerce Solutions</option>
-                      </select>
+                        Retry Submission
+                      </button>
                     </div>
-                    <button
-                      type="submit"
-                      className="w-full mt-2.5 bg-brand-red hover:bg-brand-red-dark text-white font-bold py-2.5 rounded-lg text-xs transition-all shadow-md active:scale-[0.98] cursor-pointer disabled:opacity-60"
-                      disabled={submitting}
+                  ) : (
+                    <form onSubmit={handleSubmit} className="space-y-3.5">
+                      <div className="text-center pb-1">
+                        <h3 className="font-heading text-sm font-bold uppercase tracking-wider text-slate-800">
+                          Request Free Consultation
+                        </h3>
+                        <p className="text-[11px] text-slate-500">Zero-cost preliminary architecture assessment</p>
+                      </div>
+                      <div>
+                        <label htmlFor="quote-name" className="block text-[10px] font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                          Full Name
+                        </label>
+                        <input
+                          id="quote-name"
+                          type="text"
+                          required
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          placeholder="e.g. Aditya Sharma"
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#1a3e8c]/60 focus:ring-1 focus:ring-[#1a3e8c]/20 transition-all"
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="quote-email" className="block text-[10px] font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                          Work Email
+                        </label>
+                        <input
+                          id="quote-email"
+                          type="email"
+                          required
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          placeholder="e.g. aditya@textiles.com"
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#1a3e8c]/60 focus:ring-1 focus:ring-[#1a3e8c]/20 transition-all"
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="quote-service" className="block text-[10px] font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                          Target Capability
+                        </label>
+                        <select
+                          id="quote-service"
+                          value={service}
+                          onChange={(e) => setService(e.target.value)}
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 focus:outline-none focus:border-[#1a3e8c]/60 transition-all cursor-pointer"
+                        >
+                          <option value="Web Development">Full-Stack Web &amp; Portal Development</option>
+                          <option value="App Development">Mobile App Development (iOS &amp; Android)</option>
+                          <option value="Enterprise ERP">Custom Enterprise ERP &amp; SaaS Systems</option>
+                          <option value="Digital Marketing">Digital Performance Marketing &amp; SEO</option>
+                          <option value="E-Commerce Solutions">High-Volume E-Commerce Engines</option>
+                        </select>
+                      </div>
+                      <button
+                        type="submit"
+                        className="w-full mt-2 text-white font-bold py-3 rounded-xl text-xs transition-all shadow-lg active:scale-[0.98] cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2"
+                        style={{ background: submitting ? '#94a3b8' : 'linear-gradient(135deg, #1a3e8c, #e31e24)' }}
+                        disabled={submitting}
+                      >
+                        {submitting ? 'Submitting…' : 'Submit Consultation Request'}
+                      </button>
+                    </form>
+                  )}
+
+                  <div className="border-t border-slate-100 my-4" />
+
+                  <div className="space-y-2.5">
+                    <a
+                      href={`tel:${phone.replace(/\s+/g, '')}`}
+                      className="text-slate-600 hover:text-[#1a3e8c] text-xs sm:text-sm flex items-center gap-3 p-2 rounded-xl hover:bg-[#1a3e8c]/5 transition-colors group"
                     >
-                      {submitting ? 'Sending…' : 'Send Message'}
-                    </button>
-                  </form>
-                )}
-
-                <div className="border-t border-white/10 my-4" />
-
-                <div className="space-y-3.5">
-                  <a
-                    href={`tel:${phone.replace(/\s+/g, '')}`}
-                    className="text-slate-300 hover:text-white text-sm flex items-center gap-3 transition-colors duration-150 group"
-                  >
-                    <div className="w-8 h-8 rounded-full bg-brand-red/10 border border-brand-red-light/20 flex items-center justify-center shrink-0 group-hover:bg-brand-red group-hover:border-brand-red transition-all duration-200">
-                      <Phone className="w-3.5 h-3.5 text-brand-red-light group-hover:text-white transition-colors" />
-                    </div>
-                    <span className="font-semibold">{phone}</span>
-                  </a>
-                  <a
-                    href={`mailto:${contactEmail}`}
-                    className="text-slate-300 hover:text-white text-sm flex items-center gap-3 transition-colors duration-150 group"
-                  >
-                    <div className="w-8 h-8 rounded-full bg-brand-red/10 border border-brand-red-light/20 flex items-center justify-center shrink-0 group-hover:bg-brand-red group-hover:border-brand-red transition-all duration-200">
-                      <Mail className="w-3.5 h-3.5 text-brand-red-light group-hover:text-white transition-colors" />
-                    </div>
-                    <span className="font-semibold">{contactEmail}</span>
-                  </a>
+                      <div className="w-8 h-8 rounded-xl bg-[#1a3e8c]/10 border border-[#1a3e8c]/20 flex items-center justify-center shrink-0 group-hover:bg-[#1a3e8c] group-hover:border-[#1a3e8c] transition-all duration-200">
+                        <Phone className="w-3.5 h-3.5 text-[#1a3e8c] group-hover:text-white transition-colors" />
+                      </div>
+                      <span className="font-semibold">{phone}</span>
+                      <span className="ml-auto text-[10px] text-slate-400 uppercase tracking-wider">Direct Line</span>
+                    </a>
+                    <a
+                      href={`mailto:${contactEmail}`}
+                      className="text-slate-600 hover:text-[#e31e24] text-xs sm:text-sm flex items-center gap-3 p-2 rounded-xl hover:bg-[#e31e24]/5 transition-colors group"
+                    >
+                      <div className="w-8 h-8 rounded-xl bg-[#e31e24]/10 border border-[#e31e24]/20 flex items-center justify-center shrink-0 group-hover:bg-[#e31e24] group-hover:border-[#e31e24] transition-all duration-200">
+                        <Mail className="w-3.5 h-3.5 text-[#e31e24] group-hover:text-white transition-colors" />
+                      </div>
+                      <span className="font-semibold">{contactEmail}</span>
+                      <span className="ml-auto text-[10px] text-slate-400 uppercase tracking-wider">Email</span>
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>

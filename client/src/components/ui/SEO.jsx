@@ -11,11 +11,11 @@ export const SITE = {
   alternateName: 'Snaptech — Technology Division of Hindustan Projects',
   parentName: 'Hindustan Projects',
   parentUrl: 'https://www.hindustanprojects.in',
-  url: 'https://www.snaptech.hindustanprojects.in',
+  url: 'https://www.snaptech.digital',
   description:
     'Looking for IT Solutions? Search. Discover. Connect with Snaptech — the enterprise technology and digital innovation wing of Hindustan Projects Group. Custom Web Applications, Mobile Apps, Cloud & AI Automation.',
   phone: '+91 7597000601',
-  email: 'info@hindustanprojects.com',
+  email: 'info@snaptech.digital',
   address: {
     street: 'Bhilwara',
     city: 'Bhilwara',
@@ -24,9 +24,9 @@ export const SITE = {
     country: 'IN',
   },
   geo: { lat: 25.3478, lng: 74.6367 },
-  logo: 'https://www.snaptech.hindustanprojects.in/snaptech-logo.png',
-  ogImage: 'https://www.snaptech.hindustanprojects.in/snaptech-social-banner.jpg',
-  twitterHandle: '@hindustanprojects',
+  logo: 'https://www.snaptech.digital/snaptech-logo.png',
+  ogImage: 'https://www.snaptech.digital/snaptech-social-banner.jpg',
+  twitterHandle: '@snaptechdigital',
   founded: '2019',
   keywords:
     'Snaptech, Hindustan Projects IT, IT solutions Bhilwara, web development Rajasthan, mobile app development India, cloud DevOps, AI automation, enterprise software, custom CRM',

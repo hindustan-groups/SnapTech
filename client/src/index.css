@@ -12,26 +12,32 @@
 
 /* ── Brand Design Tokens (Tailwind v4 @theme) ─────────────────── */
 @theme {
-  /* Colors — Official Snaptech IT Palette */
-  --color-brand-primary: #0066ff;        /* Official Snaptech Electric Blue */
-  --color-brand-primary-dark: #0052cc;
-  --color-brand-primary-light: #3385ff;
-  --color-brand-navy: #001d4a;           /* Official Snaptech Deep Midnight Navy */
-  --color-brand-navy-dark: #001230;
-  --color-brand-navy-light: #002d6e;
-  --color-brand-cyan: #00d2ff;           /* Tech Accent / Cyber Glow */
-  --color-brand-ice: #f0f6ff;            /* Clean Tech Surface */
-  --color-dark-tech: #050c1a;            /* Deep Tech Contrast Surface */
+  /* Colors — Official Snaptech Brand Palette */
+  /* From logo: 'Snap' = Dark Navy, 'tech' + brackets = Electric Blue */
+  --color-brand-navy: #0D1B4B;           /* Snaptech Dark Navy ('Snap') */
+  --color-brand-navy-dark: #090f2d;
+  --color-brand-navy-light: #1a2d6b;
 
-  /* Aliases for legacy component compatibility */
-  --color-brand-red: #0066ff;
-  --color-brand-red-dark: #0052cc;
-  --color-brand-red-light: #3385ff;
-  --color-brand-blue: #001d4a;
-  --color-brand-blue-dark: #001230;
-  --color-brand-blue-light: #002d6e;
-  --color-bg-base: #f8fafc;
-  --color-text-dark: #0f172a;
+  --color-brand-blue: #1B6EF3;           /* Snaptech Electric Blue ('tech' + brackets) */
+  --color-brand-blue-dark: #1458d0;
+  --color-brand-blue-light: #4d8ef6;
+
+  --color-brand-primary: #1B6EF3;        /* Primary CTA — Electric Blue */
+  --color-brand-primary-dark: #1458d0;
+  --color-brand-primary-light: #4d8ef6;
+
+  /* Legacy alias kept for compatibility — now maps to navy */
+  --color-brand-red: #0D1B4B;            /* Remapped: was HiPRO red, now Snaptech navy */
+  --color-brand-red-dark: #090f2d;
+  --color-brand-red-light: #1a2d6b;
+
+  --color-brand-cyan: #1B6EF3;           /* Accent — same as brand blue */
+  --color-brand-ice: #f0f5ff;            /* Light blue surface tint */
+  --color-dark-tech: #0D1B4B;
+
+  --color-bg-base: #ffffff;              /* Clean White Background */
+  --color-bg-subtle: #f5f8ff;            /* Very subtle blue-tinted off-white */
+  --color-text-dark: #0D1B4B;            /* Dark Navy for headings */
   --color-text-muted: #64748b;
 
   /* Typography */
@@ -48,11 +54,11 @@
   /* Border radius */
   --radius-btn: 0.5rem;
 
-  /* Shadows */
-  --shadow-card: 0 4px 20px -2px rgba(0, 102, 255, 0.06), 0 2px 6px -1px rgba(0, 29, 74, 0.04);
-  --shadow-card-hover: 0 12px 30px -4px rgba(0, 102, 255, 0.12), 0 4px 12px -2px rgba(0, 29, 74, 0.08);
-  --shadow-navbar: 0 4px 20px -2px rgba(0, 29, 74, 0.06);
-  --shadow-tech-glow: 0 0 25px -5px rgba(0, 102, 255, 0.35);
+  /* Shadows — tuned to Snaptech Electric Blue */
+  --shadow-card: 0 2px 10px -2px rgba(27, 110, 243, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  --shadow-card-hover: 0 10px 25px -4px rgba(27, 110, 243, 0.18), 0 4px 10px -2px rgba(0, 0, 0, 0.06);
+  --shadow-navbar: 0 2px 12px -2px rgba(13, 27, 75, 0.08);
+  --shadow-tech-glow: 0 0 25px -5px rgba(27, 110, 243, 0.3);
 
   /* Animation durations */
   --duration-fast: 150ms;
@@ -95,7 +101,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ── Focus ring (accessibility) ───────────────────────────────── */
 :focus-visible {
-  outline: 2px solid var(--color-brand-primary);
+  outline: 2px solid var(--color-brand-blue);
   outline-offset: 2px;
 }
 
@@ -123,7 +129,7 @@ input[type='button']:active {
 }
 
 ::selection {
-  background-color: var(--color-brand-primary);
+  background-color: var(--color-brand-red);
   color: #fff;
 }
 
@@ -466,6 +472,96 @@ button, a, [role='button'], label[for], select {
   background-size: 200% auto;
   animation: gradient 4s ease infinite;
 }
+
+/* Floating animation (used by hero chips, floating badges) */
+.animate-float {
+  animation: floatChip 5s ease-in-out infinite;
+}
+
+/* ────────────────────────────────────────────────────────────────
+   BUTTON SHIMMER EFFECT
+   ──────────────────────────────────────────────────────────────── */
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%) skewX(-15deg);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  transition: transform 0.6s ease;
+}
+.btn-shimmer:hover::after {
+  transform: translateX(100%) skewX(-15deg);
+}
+
+/* ────────────────────────────────────────────────────────────────
+   READING PROGRESS BAR (top of page on blog posts)
+   ──────────────────────────────────────────────────────────────── */
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-brand-blue), var(--color-brand-blue-light));
+  z-index: 9999;
+  transition: width 0.1s linear;
+  border-radius: 0 2px 2px 0;
+  box-shadow: 0 0 8px rgba(27, 110, 243, 0.5);
+}
+
+/* ────────────────────────────────────────────────────────────────
+   MOBILE UX IMPROVEMENTS
+   ──────────────────────────────────────────────────────────────── */
+/* Remove tap highlight on mobile */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Fix 100vh on mobile browsers (address bar space) */
+.min-h-screen-safe {
+  min-height: 100svh;
+}
+.h-screen-safe {
+  height: 100svh;
+}
+
+/* Ensure touch targets are at least 44x44px */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ────────────────────────────────────────────────────────────────
+   CARD 3D TILT EFFECT (applied via JS onMouseMove)
+   ──────────────────────────────────────────────────────────────── */
+.card-tilt {
+  transform-style: preserve-3d;
+  transition: transform 0.12s ease;
+  will-change: transform;
+}
+.card-tilt:not(:hover) {
+  transform: perspective(1000px) rotateX(0deg) rotateY(0deg) !important;
+  transition: transform 0.4s ease;
+}
+
+/* ────────────────────────────────────────────────────────────────
+   ENHANCED SELECTION COLOR
+   ──────────────────────────────────────────────────────────────── */
+::selection {
+  background-color: var(--color-brand-blue);
+  color: #fff;
+}
+::-moz-selection {
+  background-color: var(--color-brand-blue);
+  color: #fff;
+}
+
 
 /* ────────────────────────────────────────────────────────────────
    SNAPTECH IT ENTERPRISE DESIGN SYSTEM UTILITIES

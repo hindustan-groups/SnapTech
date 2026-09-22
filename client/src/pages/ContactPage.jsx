@@ -47,17 +47,17 @@ function Field({ label, required, error, children, htmlFor }) {
     <div className="flex flex-col gap-2">
       <label
         htmlFor={htmlFor}
-        className="text-xs font-bold text-brand-blue uppercase tracking-wider flex justify-between items-center"
+        className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex justify-between items-center"
       >
         <span>
           {label}
-          {required && <span className="text-brand-red ml-0.5">*</span>}
+          {required && <span className="text-brand-cyan ml-0.5">*</span>}
         </span>
       </label>
       {children}
       {error && (
         <p
-          className="text-xs text-brand-red flex items-center gap-1 font-semibold mt-0.5"
+          className="text-xs text-red-400 flex items-center gap-1 font-semibold mt-0.5"
           role="alert"
         >
           <AlertCircle className="w-3.5 h-3.5 shrink-0" />
@@ -68,38 +68,40 @@ function Field({ label, required, error, children, htmlFor }) {
   )
 }
 
-// ── Custom Input Class helper ─────────────────────────────────
+// ── Custom Input Class helper (Cyber Dark Glass) ───────────────
 const inputClass = (hasError) =>
   [
-    'w-full px-4 py-3 text-sm text-brand-blue rounded-xl border bg-slate-50/50',
-    'placeholder:text-slate-400 font-medium',
-    'focus:outline-none focus:ring-4 focus:ring-brand-blue/5 focus:border-brand-blue focus:bg-white',
+    'w-full px-4 py-3 text-xs sm:text-sm text-white rounded-xl border bg-white/[0.04]',
+    'placeholder:text-slate-500 font-medium',
+    'focus:outline-none focus:ring-1 focus:ring-brand-cyan/40 focus:border-brand-cyan focus:bg-slate-900',
     'transition-all duration-200',
     hasError
-      ? 'border-brand-red focus:ring-brand-red/10 focus:border-brand-red bg-red-50/10'
-      : 'border-slate-200 hover:border-slate-300 focus:border-brand-blue',
+      ? 'border-red-500/80 focus:ring-red-500/20 focus:border-red-500 bg-red-500/5'
+      : 'border-white/10 hover:border-white/20 focus:border-brand-cyan',
   ].join(' ')
 
 // ── Contact Info Cards ─────────────────────────────────────────
 function ContactInfoCard({ icon: Icon, label, value, href, borderColor }) {
   const inner = (
     <div className="flex items-start gap-4">
-      <span className="w-11 h-11 rounded-xl bg-brand-blue/5 border border-brand-blue/10 flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 group-hover:bg-brand-blue group-hover:text-white transition-all duration-300">
+      <span className="w-11 h-11 rounded-xl bg-brand-cyan/10 border border-brand-cyan/20 flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 group-hover:bg-brand-cyan group-hover:text-slate-950 transition-all duration-300">
         <Icon
-          className="w-5 h-5 text-brand-blue group-hover:text-white transition-colors duration-300"
+          className="w-5 h-5 text-brand-cyan group-hover:text-slate-950 transition-colors duration-300"
           strokeWidth={1.5}
         />
       </span>
-      <div className="space-y-0.5">
-        <p className="text-[10px] text-text-muted font-bold uppercase tracking-wider">{label}</p>
-        <p className="text-sm text-brand-blue font-bold group-hover:text-brand-red transition-colors duration-200">
+      <div className="space-y-1">
+        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{label}</p>
+        <p className="text-xs sm:text-sm text-white font-bold group-hover:text-brand-cyan transition-colors duration-200 break-all sm:break-normal">
           {value}
         </p>
       </div>
     </div>
   )
 
-  const baseClass = `group p-5 rounded-2xl border bg-white shadow-sm hover:shadow-[0_12px_30px_rgba(26,62,140,0.06)] hover:-translate-y-0.5 transition-all duration-300 border-l-4 ${borderColor || 'border-l-brand-blue border-gray-100 hover:border-brand-blue/30'}`
+  const baseClass = `group p-5 rounded-2xl border bg-slate-900/70 shadow-lg backdrop-blur-xl hover:border-brand-cyan/40 hover:-translate-y-0.5 transition-all duration-300 border-l-4 ${
+    borderColor || 'border-l-brand-cyan border-white/10'
+  }`
 
   if (href) {
     return (
@@ -114,40 +116,40 @@ function ContactInfoCard({ icon: Icon, label, value, href, borderColor }) {
     )
   }
 
-  return <div className={baseClass.replace('hover:border-brand-blue/30', '')}>{inner}</div>
+  return <div className={baseClass}>{inner}</div>
 }
 
-// ── FAQ Fallback (when DB empty) ───────────────────────────────
+// ── FAQ Fallback ───────────────────────────────────────────────
 const FAQ_FALLBACK = [
   {
     id: '1',
-    question: 'What services does Hindustan Projects offer?',
+    question: 'What IT services does Hindustan Projects (Snaptech) specialize in?',
     answer:
-      'We provide custom Web Development, Mobile App Development, Digital Marketing, Brand Identity Design, and custom ERP/Software Solutions.',
+      'We architect and engineer enterprise custom web portals, mobile applications (iOS/Android), custom textile & manufacturing ERP solutions, scalable cloud infrastructure, and AI workflow automations.',
   },
   {
     id: '2',
-    question: 'Where is your office?',
+    question: 'Where is your engineering headquarters located?',
     answer:
-      'Our office is in Bhilwara, Rajasthan, India (311001). We also work remotely with clients across India.',
+      'Our physical development center is located in Bhilwara, Rajasthan (311001), serving regional industrial hubs and global enterprises remotely across India and international markets.',
   },
   {
     id: '3',
-    question: 'How long to start a new project?',
+    question: 'How quickly can our team initiate a project sprint?',
     answer:
-      'We typically onboard and kick off new projects within 3–5 business days after requirement discovery.',
+      'Following initial architecture scoping and proposal sign-off, we assign a dedicated engineering pod and initiate Sprint 0 within 3 to 5 business days.',
   },
   {
     id: '4',
-    question: 'Do you offer post-launch support?',
+    question: 'Do you offer guaranteed uptime and SLA maintenance contracts?',
     answer:
-      'Yes! Every project includes a standard support window. We also offer monthly maintenance contracts.',
+      'Yes. Every production deployment includes post-launch warranty, with options for 24/7 telemetry monitoring, scheduled database backups, security patches, and guaranteed 99.8% uptime SLAs.',
   },
   {
     id: '5',
-    question: 'How is pricing calculated?',
+    question: 'How is project cost and billing structured?',
     answer:
-      'Pricing is based on project scope, features, and complexity. We provide clear itemized quotes with no hidden fees.',
+      'We provide transparent, milestone-based fixed price proposals for scoped deliverables, as well as dedicated engineering pod retainers with weekly progress demos.',
   },
 ]
 
@@ -166,10 +168,10 @@ export default function ContactPage() {
 
   const { data: settingsData } = useSiteSettings()
   const cfg = settingsData?.data || {}
-  const phone = cfg.phone || '+91 99999 99999'
-  const email = cfg.email || 'info@hindustanprojects.com'
-  const address = cfg.address || 'Bhilwara, Rajasthan 311001, India'
-  const whatsapp = cfg.whatsapp || cfg.phone || '919999999999'
+  const phone = cfg.phone || '+91 94141 12057'
+  const email = cfg.email || 'info@snaptech.digital'
+  const address = cfg.address || 'Hindustan Projects Division, Bhilwara, Rajasthan 311001, India'
+  const whatsapp = cfg.whatsapp || cfg.phone || '919414112057'
   const whatsappNum = whatsapp.replace(/[^0-9]/g, '')
 
   const {
@@ -201,57 +203,60 @@ export default function ContactPage() {
     }
   }, [])
 
-  const onSubmit = useCallback(async (data) => {
-    // Check local lockout before calling API
-    const lastSubmit = localStorage.getItem('last_submit_lead')
-    if (lastSubmit && Date.now() - parseInt(lastSubmit, 10) < 24 * 60 * 60 * 1000) {
-      setSubmitState('error')
-      setApiError('You have already submitted an inquiry recently. Please wait 24 hours.')
-      return
-    }
-
-    setSubmitState('loading')
-    setApiError('')
-
-    try {
-      let recaptchaToken = 'dev-token'
-      const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY
-      if (siteKey && typeof window.grecaptcha !== 'undefined') {
-        recaptchaToken = await new Promise((resolve, reject) => {
-          window.grecaptcha.ready(() => {
-            window.grecaptcha
-              .execute(siteKey, { action: 'contact_form' })
-              .then(resolve)
-              .catch(reject)
-          })
-        })
+  const onSubmit = useCallback(
+    async (data) => {
+      // Check local lockout before calling API
+      const lastSubmit = localStorage.getItem('last_submit_lead')
+      if (lastSubmit && Date.now() - parseInt(lastSubmit, 10) < 24 * 60 * 60 * 1000) {
+        setSubmitState('error')
+        setApiError('You have already submitted an inquiry recently. Please wait 24 hours.')
+        return
       }
 
-      await api.post('/contact', {
-        ...data,
-        recaptchaToken,
-        _hp: data._hp || '', // honeypot
-      })
+      setSubmitState('loading')
+      setApiError('')
 
-      localStorage.setItem('last_submit_lead', Date.now().toString())
-      setLocalLockout(true)
-      setSubmitState('success')
-      reset()
-    } catch (err) {
-      setSubmitState('error')
-      setApiError(err.message || 'Something went wrong. Please try again.')
-    }
-  }, [reset])
+      try {
+        let recaptchaToken = 'dev-token'
+        const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY
+        if (siteKey && typeof window.grecaptcha !== 'undefined') {
+          recaptchaToken = await new Promise((resolve, reject) => {
+            window.grecaptcha.ready(() => {
+              window.grecaptcha
+                .execute(siteKey, { action: 'contact_form' })
+                .then(resolve)
+                .catch(reject)
+            })
+          })
+        }
+
+        await api.post('/contact', {
+          ...data,
+          recaptchaToken,
+          _hp: data._hp || '', // honeypot
+        })
+
+        localStorage.setItem('last_submit_lead', Date.now().toString())
+        setLocalLockout(true)
+        setSubmitState('success')
+        reset()
+      } catch (err) {
+        setSubmitState('error')
+        setApiError(err.message || 'Something went wrong. Please try again.')
+      }
+    },
+    [reset]
+  )
 
   const toggleFaq = (idx) => {
     setActiveFaq(activeFaq === idx ? null : idx)
   }
 
   return (
-    <>
+    <div className="min-h-screen bg-[#020714] text-slate-200">
       <SEO
-        title="Contact Snaptech — IT Solutions & Consultation | Hindustan Projects"
-        description="Contact Snaptech, the IT and software engineering division of Hindustan Projects Group. Schedule an enterprise consultation for web development, mobile apps, or cloud systems."
+        title="Contact Snaptech — IT Solutions & Architecture Consultation | Hindustan Projects"
+        description="Connect with Snaptech, the enterprise IT division of Hindustan Projects. Schedule a technical discovery session for custom software, web portals, mobile apps, or cloud systems."
         path="/contact"
         keywords="contact Snaptech, IT consultation Bhilwara, Hindustan Projects IT, hire software developers India, custom web development quote"
         schemas={[
@@ -264,61 +269,62 @@ export default function ContactPage() {
             : []),
         ]}
       />
-      {/* ── Page Hero Header ── */}
-      <section className="pt-24 sm:pt-32 lg:pt-36 pb-14 sm:pb-20 lg:pb-24 bg-[#020714] border-b border-white/5 relative overflow-hidden">
-        {/* Mesh Background grid */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:30px_30px] pointer-events-none" />
 
-        {/* Tech Electric Blue Glow */}
-        <div className="absolute top-0 right-0 w-80 h-80 bg-brand-primary/15 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-10 w-80 h-80 bg-brand-cyan/10 rounded-full blur-3xl pointer-events-none" />
+      {/* ── Page Hero Header ── */}
+      <section className="pt-28 sm:pt-36 lg:pt-40 pb-16 sm:pb-20 lg:pb-24 bg-[#020714] border-b border-white/10 relative overflow-hidden">
+        {/* Ambient Grid & Glows */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:30px_30px] pointer-events-none" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-brand-cyan/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-10 w-96 h-96 bg-brand-primary/20 rounded-full blur-3xl pointer-events-none" />
 
         <Container className="relative">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
             {/* Left text column */}
             <div className="lg:col-span-7 space-y-6">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold text-brand-cyan bg-brand-primary/20 border border-brand-primary/30 mb-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-brand-primary animate-pulse" />
-                A HINDUSTAN PROJECTS VENTURE
+              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold text-brand-cyan bg-brand-cyan/10 border border-brand-cyan/30 backdrop-blur-md mb-2 shadow-lg shadow-cyan-950/40">
+                <span className="w-1.5 h-1.5 rounded-full bg-brand-cyan animate-pulse shadow-sm shadow-cyan-400" />
+                HINDUSTAN PROJECTS ENTERPRISE IT DIVISION
               </span>
-              <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight">
-                Let&apos;s Engineer Your{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary-light via-brand-cyan to-white">
-                  Digital Future
+              <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight tracking-tight">
+                Let&apos;s Architect Your{' '}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan via-blue-400 to-indigo-400">
+                  Digital Engine
                 </span>
               </h1>
-              <p className="text-slate-300 text-base sm:text-lg max-w-2xl leading-relaxed">
-                Looking for enterprise web apps, mobile engineering, cloud infrastructure, or AI automation? 
-                Connect directly with Snaptech's software architects. We respond within 2 hours.
+              <p className="text-slate-400 text-base sm:text-lg max-w-2xl leading-relaxed">
+                Looking for enterprise web platforms, custom ERPs, mobile engineering, or cloud
+                infrastructure? Connect directly with our lead software architects.
               </p>
 
               {/* Advanced Trust Blocks */}
               <div className="grid grid-cols-2 gap-4 pt-2 max-w-md">
-                <div className="p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md hover:bg-white/10 transition-colors duration-300">
-                  <p className="text-2xl font-black text-emerald-400">99.4%</p>
+                <div className="p-4 rounded-2xl bg-slate-900/70 border border-white/10 backdrop-blur-md hover:border-brand-cyan/40 transition-colors duration-300">
+                  <p className="text-2xl font-black text-brand-cyan font-mono">
+                    {cfg.stat_projects || '150+'}
+                  </p>
                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
-                    Client Satisfaction
+                    Deployments Complete
                   </p>
                 </div>
-                <div className="p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md hover:bg-white/10 transition-colors duration-300">
-                  <p className="text-2xl font-black text-blue-400">&lt; 24h</p>
+                <div className="p-4 rounded-2xl bg-slate-900/70 border border-white/10 backdrop-blur-md hover:border-brand-cyan/40 transition-colors duration-300">
+                  <p className="text-2xl font-black text-emerald-400 font-mono">&lt; 2h</p>
                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
-                    Response Guarantee
+                    First Response SLA
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* Right graphic/portrait column (Advanced 2026 Style) */}
+            {/* Right graphic column */}
             <div className="hidden lg:flex lg:col-span-5 justify-center lg:justify-end relative h-[440px]">
-              {/* Main Futuristic Glass Panel */}
-              <div className="absolute bottom-4 left-4 right-4 lg:left-12 lg:right-0 top-12 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-lg shadow-[0_30px_100px_rgba(0,0,0,0.5)] overflow-hidden">
+              {/* Futuristic Glass Panel */}
+              <div className="absolute bottom-4 left-4 right-4 lg:left-12 lg:right-0 top-12 rounded-3xl bg-slate-900/60 border border-white/10 backdrop-blur-xl shadow-2xl overflow-hidden">
                 <div className="absolute inset-0 bg-[radial-gradient(#ffffff08_1px,transparent_1px)] [background-size:16px_16px]" />
-                <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-blue-500 via-cyan-400 to-purple-500 animate-pulse" />
+                <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-blue-500 via-cyan-400 to-indigo-500 animate-pulse" />
                 <div className="absolute -bottom-20 -right-20 w-64 h-64 rounded-full bg-cyan-500/10 blur-[80px]" />
               </div>
 
-              {/* Interactive 3D floating circles */}
+              {/* Interactive orbit rings */}
               <div
                 className="absolute top-4 right-1/2 translate-x-1/2 lg:right-24 w-[280px] h-[280px] rounded-full border border-dashed border-cyan-400/20 animate-spin"
                 style={{ animationDuration: '30s' }}
@@ -328,41 +334,41 @@ export default function ContactPage() {
                 style={{ animationDuration: '45s', animationDirection: 'reverse' }}
               />
 
-              {/* High-Tech blended specialist cutout */}
+              {/* Blended specialist portrait */}
               <div className="relative h-full w-full max-w-[340px] flex items-end justify-center z-10">
                 <img
                   src={contactHeroPerson}
                   alt="Customer Success Specialist"
-                  className="h-[380px] sm:h-[430px] object-contain bottom-0 filter drop-shadow-[0_20px_50px_rgba(0,0,0,0.6)] mix-blend-screen hover:scale-[1.02] transition-transform duration-300 ease-out select-none"
+                  className="h-[380px] sm:h-[430px] object-contain bottom-0 filter drop-shadow-[0_20px_50px_rgba(0,0,0,0.8)] mix-blend-screen hover:scale-[1.02] transition-transform duration-300 ease-out select-none"
                 />
 
                 {/* Overlapping Glass chat widget */}
                 <div
-                  className="absolute top-1/3 -left-6 z-20 bg-slate-900/80 border border-white/10 p-3 rounded-2xl shadow-[0_15px_30px_rgba(0,0,0,0.4)] backdrop-blur-md flex items-center gap-3 animate-bounce"
+                  className="absolute top-1/3 -left-6 z-20 bg-slate-900/90 border border-white/10 p-3.5 rounded-2xl shadow-2xl backdrop-blur-xl flex items-center gap-3 animate-bounce"
                   style={{ animationDuration: '4s' }}
                 >
-                  <span className="w-8 h-8 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400">
+                  <span className="w-8 h-8 rounded-full bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-brand-cyan">
                     <MessageCircle className="w-4 h-4" />
                   </span>
                   <div className="text-left">
                     <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">
-                      ONLINE NOW
+                      ACTIVE ARCHITECTS
                     </p>
-                    <p className="text-xs font-bold text-white">How can we help?</p>
+                    <p className="text-xs font-bold text-white">How can we assist?</p>
                   </div>
                 </div>
 
                 {/* Overlapping Glass status indicator */}
-                <div className="absolute bottom-12 -right-6 z-20 bg-slate-900/80 border border-white/10 p-3 rounded-2xl shadow-[0_15px_30px_rgba(0,0,0,0.4)] backdrop-blur-md flex items-center gap-3">
+                <div className="absolute bottom-12 -right-6 z-20 bg-slate-900/90 border border-white/10 p-3.5 rounded-2xl shadow-2xl backdrop-blur-xl flex items-center gap-3">
                   <span className="relative flex h-3 w-3">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
                   </span>
                   <div className="text-left">
                     <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">
-                      PRIORITY CONNECT
+                      DIRECT HEADQUARTERS
                     </p>
-                    <p className="text-xs font-bold text-white">Bhilwara, RJ</p>
+                    <p className="text-xs font-bold text-white">Bhilwara, Rajasthan</p>
                   </div>
                 </div>
               </div>
@@ -372,9 +378,9 @@ export default function ContactPage() {
       </section>
 
       {/* ── Main Content Grid ── */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-slate-50/30">
+      <section className="py-14 sm:py-20 lg:py-24 relative">
         <Container>
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 items-start">
             {/* ── Left Column: Contact Cards + WhatsApp + Map ── */}
             <motion.aside
               variants={staggerContainer}
@@ -384,85 +390,85 @@ export default function ContactPage() {
               className="lg:col-span-2 flex flex-col gap-6"
             >
               <motion.div variants={fadeUp}>
-                <span className="text-xs font-bold text-brand-red uppercase tracking-wider block mb-1">
-                  Connect Directly
+                <span className="text-xs font-bold text-brand-cyan uppercase tracking-wider block mb-1">
+                  Connect With Us
                 </span>
-                <h2 className="font-heading text-2xl font-bold text-brand-blue">
-                  Our Office details
+                <h2 className="font-heading text-2xl sm:text-3xl font-bold text-white">
+                  Headquarters &amp; Direct Channels
                 </h2>
-                <p className="text-sm text-text-muted mt-1">
-                  Reach out through any channel that&apos;s convenient for you.
+                <p className="text-xs sm:text-sm text-slate-400 mt-1 leading-relaxed">
+                  Reach out through your preferred channel for scoping, quote inquiries, or support.
                 </p>
               </motion.div>
 
               <motion.div variants={fadeUp} className="flex flex-col gap-4">
                 <ContactInfoCard
                   icon={MapPin}
-                  label="Office Address"
+                  label="Headquarters Address"
                   value={address}
-                  borderColor="border-l-blue-500"
+                  borderColor="border-l-brand-cyan"
                 />
                 <ContactInfoCard
                   icon={Phone}
-                  label="Phone Number"
+                  label="Direct Hotline"
                   value={phone}
                   href={`tel:${phone.replace(/\s+/g, '')}`}
-                  borderColor="border-l-amber-500"
+                  borderColor="border-l-blue-500"
                 />
                 <ContactInfoCard
                   icon={Mail}
-                  label="Email Address"
+                  label="Official Email"
                   value={email}
                   href={`mailto:${email}`}
-                  borderColor="border-l-pink-500"
+                  borderColor="border-l-indigo-500"
                 />
               </motion.div>
 
-              {/* Pulsing WhatsApp CTA */}
+              {/* WhatsApp CTA */}
               <motion.div variants={fadeUp}>
                 <a
-                  href={`https://wa.me/${whatsappNum}?text=${encodeURIComponent(cfg.whatsappMessage || "Hi! I'd like to discuss a project.")}`}
+                  href={`https://wa.me/${whatsappNum}?text=${encodeURIComponent(
+                    cfg.whatsappMessage || "Hi Snaptech Team! I'd like to discuss an enterprise project."
+                  )}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group relative flex items-center gap-3 px-6 py-4 rounded-2xl border border-[#25D366]/40
-                    text-white bg-gradient-to-r from-[#25D366] to-[#128C7E] hover:from-[#128C7E] hover:to-[#075E54]
+                  className="group relative flex items-center gap-3 px-6 py-4 rounded-2xl border border-emerald-500/40
+                    text-slate-950 bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 hover:from-emerald-300 hover:to-cyan-300
                     transition-all duration-300 font-bold text-sm w-full justify-center 
-                    shadow-[0_8px_20px_rgba(37,211,102,0.15)] hover:shadow-[0_12px_25px_rgba(37,211,102,0.3)]
+                    shadow-lg shadow-emerald-950/40 hover:shadow-xl hover:shadow-emerald-900/50
                     hover:-translate-y-0.5 cursor-pointer overflow-hidden"
                   aria-label="Chat with us on WhatsApp"
                 >
-                  <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out" />
-                  <MessageCircle className="w-5 h-5 shrink-0 animate-bounce" />
-                  Chat on WhatsApp
+                  <MessageCircle className="w-5 h-5 shrink-0 animate-bounce text-slate-950" />
+                  Chat Directly on WhatsApp
                 </a>
               </motion.div>
 
-              {/* Grayscale Map Container */}
+              {/* Map Container (Cyber Dark Frame) */}
               <motion.div
                 variants={fadeUp}
-                className="rounded-2xl overflow-hidden border border-slate-200/60 shadow-md hover:shadow-lg transition-all duration-300 bg-white p-1.5"
+                className="rounded-2xl overflow-hidden border border-white/10 shadow-xl bg-slate-900/70 p-1.5 backdrop-blur-xl"
               >
                 <div className="rounded-xl overflow-hidden h-56 relative group">
                   <iframe
                     title="Hindustan Projects Office Location — Bhilwara, Rajasthan"
-                    src={
-                      (() => {
-                        const raw = cfg.googleMapUrl;
-                        if (!raw) return 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d57692.35!2d74.6!3d25.35!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3968a5!2sBhilwara%2C+Rajasthan!5e0!3m2!1sen!2sin!4v1';
-                        if (raw.includes('src="')) {
-                          const match = raw.match(/src="([^"]+)"/);
-                          return match && match[1] ? match[1] : raw;
-                        }
-                        return raw;
-                      })()
-                    }
+                    src={(() => {
+                      const raw = cfg.googleMapUrl
+                      if (!raw)
+                        return 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d57692.35!2d74.6!3d25.35!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3968a5!2sBhilwara%2C+Rajasthan!5e0!3m2!1sen!2sin!4v1'
+                      if (raw.includes('src="')) {
+                        const match = raw.match(/src="([^"]+)"/)
+                        return match && match[1] ? match[1] : raw
+                      }
+                      return raw
+                    })()}
                     width="100%"
                     height="100%"
                     style={{ border: 0 }}
                     allowFullScreen=""
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
-                    className="grayscale hover:grayscale-0 transition-all duration-500 ease-out"
+                    className="brightness-90 contrast-125 invert hue-rotate-180 hover:invert-0 hover:hue-rotate-0 transition-all duration-500 ease-out"
                   />
                 </div>
               </motion.div>
@@ -476,54 +482,60 @@ export default function ContactPage() {
               viewport={{ once: true }}
               className="lg:col-span-3"
             >
-              <div
-                className="bg-white rounded-3xl border border-slate-100
-                shadow-[0_20px_50px_rgba(26,62,140,0.06)] p-8 sm:p-10 relative overflow-hidden"
-              >
-                <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400" />
+              <div className="bg-slate-900/80 rounded-3xl border border-white/10 shadow-2xl p-8 sm:p-10 relative overflow-hidden backdrop-blur-2xl">
+                {/* Luminous Top Gradient */}
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-cyan via-blue-500 to-indigo-500" />
 
                 {/* Success state */}
                 {submitState === 'success' ? (
                   <div className="flex flex-col items-center justify-center py-10 text-center gap-5">
-                    <span className="w-16 h-16 rounded-full bg-emerald-50 flex items-center justify-center shadow-inner">
-                      <CheckCircle className="w-8 h-8 text-emerald-500" />
+                    <span className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center shadow-lg shadow-emerald-950/40 text-emerald-400">
+                      <CheckCircle className="w-8 h-8" />
                     </span>
                     <div>
-                      <h3 className="font-heading text-2xl font-bold text-brand-blue mb-2">
+                      <h3 className="font-heading text-2xl font-bold text-white mb-2">
                         Message Received!
                       </h3>
-                      <p className="text-text-muted text-sm max-w-sm">
-                        Thank you for reaching out. We&apos;ll review your requirements and get back
-                        to you within 24 hours.
+                      <p className="text-slate-400 text-xs sm:text-sm max-w-sm leading-relaxed">
+                        Thank you for reaching out. Our solution architects will review your project
+                        needs and respond within 24 hours.
                       </p>
                     </div>
-                    <Button variant="outline" size="sm" onClick={() => setSubmitState('idle')}>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={() => setSubmitState('idle')}
+                      className="bg-brand-cyan text-slate-950 font-bold"
+                    >
                       Send Another Message
                     </Button>
                   </div>
                 ) : localLockout ? (
                   <div className="flex flex-col items-center justify-center py-10 text-center gap-5">
-                    <span className="w-16 h-16 rounded-full bg-amber-50 flex items-center justify-center shadow-inner">
-                      <AlertCircle className="w-8 h-8 text-amber-500 animate-pulse" />
+                    <span className="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center shadow-inner text-amber-400">
+                      <AlertCircle className="w-8 h-8 animate-pulse" />
                     </span>
                     <div>
-                      <h3 className="font-heading text-2xl font-bold text-brand-blue mb-2">
-                        Submission Locked
+                      <h3 className="font-heading text-2xl font-bold text-white mb-2">
+                        Submission Locked (24h)
                       </h3>
-                      <p className="text-text-muted text-sm max-w-sm leading-relaxed">
-                        You have already submitted an inquiry in the last 24 hours. To prevent spam
-                        and duplicate records, please wait before sending another message.
+                      <p className="text-slate-400 text-xs sm:text-sm max-w-sm leading-relaxed">
+                        You have already submitted an inquiry in the last 24 hours. To prevent duplicate
+                        tickets, our team is currently processing your active request.
                       </p>
                     </div>
                   </div>
                 ) : (
                   <>
-                    <div className="mb-8">
-                      <h2 className="font-heading text-2xl font-bold text-brand-blue mb-1 leading-tight">
-                        Send Us a Message
+                    <div className="mb-8 border-b border-white/10 pb-5">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-brand-cyan">
+                        Direct Architectural Consultation
+                      </span>
+                      <h2 className="font-heading text-2xl sm:text-3xl font-bold text-white mt-1 leading-tight">
+                        Send Project Brief
                       </h2>
-                      <p className="text-sm text-text-muted mt-1">
-                        Fill out the details below and our team will get back to you shortly.
+                      <p className="text-xs sm:text-sm text-slate-400 mt-1">
+                        Tell us about your technical goals, requirements, or operational bottlenecks.
                       </p>
                     </div>
 
@@ -533,7 +545,7 @@ export default function ContactPage() {
                       aria-label="Contact form"
                       className="space-y-5"
                     >
-                      {/* Honeypot — hidden from real users, bots fill it */}
+                      {/* Honeypot */}
                       <input
                         type="text"
                         tabIndex={-1}
@@ -555,15 +567,15 @@ export default function ContactPage() {
                             id="name"
                             type="text"
                             autoComplete="name"
-                            placeholder="Ramesh Sharma"
-                            className={inputClass(!!errors.name)}
+                            placeholder="e.g. Vikramaditya Sharma"
+                            className={inputClass(Boolean(errors.name))}
                             {...register('name')}
                           />
                         </Field>
 
                         {/* Email */}
                         <Field
-                          label="Email Address"
+                          label="Business Email"
                           required
                           error={errors.email?.message}
                           htmlFor="email"
@@ -572,8 +584,8 @@ export default function ContactPage() {
                             id="email"
                             type="email"
                             autoComplete="email"
-                            placeholder="ramesh@company.com"
-                            className={inputClass(!!errors.email)}
+                            placeholder="vikram@enterprise.com"
+                            className={inputClass(Boolean(errors.email))}
                             {...register('email')}
                           />
                         </Field>
@@ -589,25 +601,31 @@ export default function ContactPage() {
                             type="tel"
                             autoComplete="tel"
                             placeholder="+91 98765 43210"
-                            className={inputClass(!!errors.phone)}
+                            className={inputClass(Boolean(errors.phone))}
                             {...register('phone')}
                           />
                         </Field>
 
                         {/* Service dropdown */}
                         <Field
-                          label="Service Needed"
+                          label="Core Service Needed"
                           error={errors.serviceInterested?.message}
                           htmlFor="serviceInterested"
                         >
                           <select
                             id="serviceInterested"
-                            className={inputClass(!!errors.serviceInterested)}
+                            className={`${inputClass(Boolean(errors.serviceInterested))} bg-slate-900 cursor-pointer`}
                             {...register('serviceInterested')}
                           >
-                            <option value="">— Select a service —</option>
+                            <option value="" className="bg-slate-900 text-slate-400">
+                              — Select a technical domain —
+                            </option>
                             {services.map((s) => (
-                              <option key={s.id} value={s.title}>
+                              <option
+                                key={s.id}
+                                value={s.title}
+                                className="bg-slate-900 text-white"
+                              >
                                 {s.title}
                               </option>
                             ))}
@@ -617,7 +635,7 @@ export default function ContactPage() {
 
                       {/* Message */}
                       <Field
-                        label="Your Message"
+                        label="Project Brief / Scope"
                         required
                         error={errors.message?.message}
                         htmlFor="message"
@@ -625,8 +643,8 @@ export default function ContactPage() {
                         <textarea
                           id="message"
                           rows={5}
-                          placeholder="Tell us about your project goals, timelines, or ask any questions..."
-                          className={`${inputClass(!!errors.message)} resize-none`}
+                          placeholder="Outline your application goals, preferred timeline, integrations, or challenges..."
+                          className={`${inputClass(Boolean(errors.message))} resize-none`}
                           {...register('message')}
                         />
                       </Field>
@@ -634,31 +652,35 @@ export default function ContactPage() {
                       {/* API error alert */}
                       {submitState === 'error' && apiError && (
                         <div
-                          className="px-4 py-3 rounded-xl bg-red-50 border border-red-200 flex items-start gap-2.5"
+                          className="px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/20 flex items-start gap-2.5"
                           role="alert"
                           aria-live="assertive"
                         >
-                          <AlertCircle className="w-4 h-4 text-brand-red shrink-0 mt-0.5" />
-                          <p className="text-sm font-semibold text-brand-red">{apiError}</p>
+                          <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
+                          <p className="text-xs sm:text-sm font-semibold text-red-400">{apiError}</p>
                         </div>
                       )}
 
                       {/* Submit Button */}
                       <div className="pt-2">
-                        <Button
+                        <button
                           type="submit"
-                          variant="primary"
-                          size="lg"
-                          fullWidth
-                          loading={submitState === 'loading'}
-                          rightIcon={<Send className="w-4 h-4" />}
-                          className="rounded-xl shadow-lg shadow-brand-blue/15 hover:shadow-brand-blue/25 hover:scale-[1.01] transition-all duration-200 py-3.5 font-bold"
+                          disabled={submitState === 'loading'}
+                          className="w-full bg-brand-cyan hover:bg-brand-cyan-light text-slate-950 font-bold py-3.5 rounded-xl text-xs sm:text-sm transition-all shadow-lg shadow-cyan-950/50 active:scale-[0.99] cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2"
                         >
-                          {submitState === 'loading' ? 'Sending Message…' : 'Send Message'}
-                        </Button>
-                        <p className="text-[10px] text-text-muted text-center mt-3 font-medium">
-                          By submitting, you agree to our privacy policy. We strictly respect your
-                          privacy.
+                          {submitState === 'loading' ? (
+                            <>
+                              <div className="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
+                              Transmitting Brief…
+                            </>
+                          ) : (
+                            <>
+                              <Send className="w-4 h-4" /> Send Project Brief
+                            </>
+                          )}
+                        </button>
+                        <p className="text-[10px] text-slate-500 text-center mt-3 font-medium">
+                          Strict NDA protection guaranteed. Your intellectual property and data remain 100% confidential.
                         </p>
                       </div>
                     </form>
@@ -671,18 +693,18 @@ export default function ContactPage() {
       </section>
 
       {/* ── FAQ Accordion Section ── */}
-      <section className="py-20 bg-slate-50 border-t border-slate-100">
+      <section className="py-20 bg-[#03091e] border-t border-white/10">
         <Container>
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-12">
-              <span className="text-xs font-bold tracking-widest uppercase text-brand-red mb-3 block">
-                Got Questions?
+              <span className="text-xs font-bold tracking-widest uppercase text-brand-cyan mb-2 block">
+                Common Inquiries
               </span>
-              <h2 className="font-heading text-3xl font-bold text-brand-blue mb-4">
+              <h2 className="font-heading text-3xl font-bold text-white mb-3">
                 Frequently Asked Questions
               </h2>
-              <p className="text-text-muted text-sm max-w-md mx-auto">
-                Quick answers to common questions about working with Hindustan Projects.
+              <p className="text-slate-400 text-xs sm:text-sm max-w-md mx-auto leading-relaxed">
+                Clear answers regarding project discovery, timelines, pricing models, and ongoing SLA maintenance.
               </p>
             </div>
 
@@ -694,29 +716,33 @@ export default function ContactPage() {
                 return (
                   <div
                     key={faq.id ?? idx}
-                    className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden transition-all duration-300"
+                    className="bg-slate-900/60 rounded-2xl border border-white/10 shadow-sm overflow-hidden transition-all duration-300 hover:border-brand-cyan/30"
                   >
                     <button
                       onClick={() => toggleFaq(idx)}
-                      className="w-full flex items-center justify-between p-5 text-left font-heading font-bold text-brand-blue hover:text-brand-red transition-colors duration-200 cursor-pointer group"
+                      className="w-full flex items-center justify-between p-5 text-left font-heading font-bold text-white hover:text-brand-cyan transition-colors duration-200 cursor-pointer group"
                       aria-expanded={isOpen}
                     >
                       <span className="text-sm sm:text-base leading-snug">{question}</span>
                       <span
-                        className={`p-1 rounded-full bg-slate-50 text-slate-400 group-hover:bg-brand-blue/5 transition-transform duration-350 ${isOpen ? 'rotate-180 text-brand-blue' : ''}`}
+                        className={`p-1.5 rounded-full bg-white/[0.04] text-slate-400 group-hover:text-brand-cyan transition-transform duration-300 ${
+                          isOpen ? 'rotate-180 text-brand-cyan bg-brand-cyan/10' : ''
+                        }`}
                       >
                         <ChevronDown className="w-4 h-4" />
                       </span>
                     </button>
 
                     <div
-                      className={`transition-all duration-350 ease-in-out overflow-hidden ${
+                      className={`transition-all duration-300 ease-in-out overflow-hidden ${
                         isOpen
-                          ? 'max-h-60 opacity-100 border-t border-slate-50'
+                          ? 'max-h-60 opacity-100 border-t border-white/10'
                           : 'max-h-0 opacity-0 pointer-events-none'
                       }`}
                     >
-                      <div className="p-5 text-sm text-text-muted leading-relaxed">{answer}</div>
+                      <div className="p-5 text-xs sm:text-sm text-slate-300 leading-relaxed">
+                        {answer}
+                      </div>
                     </div>
                   </div>
                 )
@@ -725,6 +751,6 @@ export default function ContactPage() {
           </div>
         </Container>
       </section>
-    </>
+    </div>
   )
 }

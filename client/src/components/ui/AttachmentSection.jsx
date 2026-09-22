@@ -45,21 +45,21 @@ export default function AttachmentSection({
   const getFileIcon = (mimeType = '') => {
     const mime = mimeType.toLowerCase()
     if (mime.startsWith('image/')) {
-      return { Icon: FileImage, color: 'text-blue-500 bg-blue-50' }
+      return { Icon: FileImage, color: 'text-cyan-400 bg-cyan-500/10 border border-cyan-500/20' }
     }
     if (mime === 'application/pdf') {
-      return { Icon: FileText, color: 'text-red-500 bg-red-50' }
+      return { Icon: FileText, color: 'text-red-400 bg-red-500/10 border border-red-500/20' }
     }
     if (mime.includes('word') || mime.includes('msword')) {
-      return { Icon: FileText, color: 'text-indigo-500 bg-indigo-50' }
+      return { Icon: FileText, color: 'text-blue-400 bg-blue-500/10 border border-blue-500/20' }
     }
     if (mime.includes('excel') || mime.includes('spreadsheet') || mime.includes('sheet')) {
-      return { Icon: FileSpreadsheet, color: 'text-emerald-500 bg-emerald-50' }
+      return { Icon: FileSpreadsheet, color: 'text-emerald-400 bg-emerald-500/10 border border-emerald-500/20' }
     }
     if (mime.includes('zip') || mime.includes('compressed')) {
-      return { Icon: FileArchive, color: 'text-purple-500 bg-purple-50' }
+      return { Icon: FileArchive, color: 'text-purple-400 bg-purple-500/10 border border-purple-500/20' }
     }
-    return { Icon: File, color: 'text-gray-500 bg-gray-50' }
+    return { Icon: File, color: 'text-slate-400 bg-white/5 border border-white/10' }
   }
 
   // Handle file select & upload
@@ -93,6 +93,7 @@ export default function AttachmentSection({
         showStatus('error', res.data.message || 'Upload failed.')
       }
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error(err)
       showStatus('error', err.response?.data?.message || 'Error uploading file.')
     } finally {
@@ -117,6 +118,7 @@ export default function AttachmentSection({
         showStatus('error', res.data.message || 'Failed to delete file.')
       }
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error(err)
       showStatus('error', err.response?.data?.message || 'Error deleting file.')
     } finally {
@@ -126,8 +128,8 @@ export default function AttachmentSection({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between border-b border-gray-100 pb-2.5">
-        <h4 className="text-xs font-bold text-gray-700 uppercase tracking-wider">
+      <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
+        <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider">
           Attachments ({attachments.length})
         </h4>
         <input
@@ -141,7 +143,7 @@ export default function AttachmentSection({
           type="button"
           disabled={uploading}
           onClick={() => fileInputRef.current?.click()}
-          className="inline-flex items-center gap-1 text-[11px] font-bold text-brand-blue hover:text-brand-blue-hover transition-colors disabled:opacity-50"
+          className="inline-flex items-center gap-1 text-[11px] font-bold text-cyan-400 hover:text-cyan-300 transition-colors disabled:opacity-50 cursor-pointer"
         >
           {uploading ? (
             <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -157,8 +159,8 @@ export default function AttachmentSection({
         <div
           className={`flex items-center gap-2 text-xs rounded-xl px-3.5 py-2.5 border transition-all ${
             status.type === 'success'
-              ? 'bg-emerald-50 text-emerald-700 border-emerald-150'
-              : 'bg-red-50 text-red-700 border-red-150'
+              ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30'
+              : 'bg-red-500/10 text-red-300 border-red-500/30'
           }`}
         >
           {status.type === 'success' ? (
@@ -171,12 +173,12 @@ export default function AttachmentSection({
       )}
 
       {attachments.length === 0 ? (
-        <div className="text-center py-6 border-2 border-dashed border-gray-150 rounded-xl bg-gray-50/50">
-          <p className="text-[11px] text-gray-400">No attachments uploaded yet.</p>
-          <p className="text-[9px] text-gray-400/80 mt-0.5">Supports PDF, Word, Excel, ZIP, & Images up to 10MB</p>
+        <div className="text-center py-6 border-2 border-dashed border-white/10 rounded-xl bg-[#03091e]/50">
+          <p className="text-[11px] text-slate-400">No attachments uploaded yet.</p>
+          <p className="text-[9px] text-slate-500 mt-0.5">Supports PDF, Word, Excel, ZIP, & Images up to 10MB</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           {attachments.map((item) => {
             const { Icon, color } = getFileIcon(item.fileType)
             const isDeleting = deletingId === item.id
@@ -184,20 +186,20 @@ export default function AttachmentSection({
             return (
               <div
                 key={item.id}
-                className="flex items-center justify-between p-2.5 border border-gray-150 rounded-xl bg-white hover:border-gray-300 transition-all shadow-sm"
+                className="flex items-center justify-between p-3 border border-white/10 rounded-xl bg-slate-900/80 hover:border-cyan-500/30 transition-all shadow-sm"
               >
                 <div className="flex items-center gap-2.5 min-w-0 flex-1">
                   <div className={`p-2 rounded-lg ${color} shrink-0`}>
                     <Icon className="w-4 h-4" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs font-semibold text-gray-800 truncate" title={item.fileName}>
+                    <p className="text-xs font-semibold text-white truncate" title={item.fileName}>
                       {item.fileName}
                     </p>
-                    <p className="text-[10px] text-gray-400 mt-0.5 flex items-center gap-1.5">
+                    <p className="text-[10px] text-slate-400 mt-0.5 flex items-center gap-1.5">
                       <span>{formatBytes(item.fileSize)}</span>
                       {item.uploadedByRole === 'CLIENT' && (
-                        <span className="text-[9px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.2 rounded-full">
+                        <span className="text-[9px] font-bold text-emerald-300 bg-emerald-500/10 border border-emerald-500/30 px-1.5 py-0.2 rounded-full">
                           Client Uploaded
                         </span>
                       )}
@@ -210,7 +212,7 @@ export default function AttachmentSection({
                     href={item.fileUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-lg transition-all"
+                    className="p-1.5 text-slate-400 hover:text-cyan-400 hover:bg-white/5 rounded-lg transition-all"
                     title="Download/View File"
                   >
                     <Download className="w-3.5 h-3.5" />
@@ -219,7 +221,7 @@ export default function AttachmentSection({
                     type="button"
                     disabled={isDeleting}
                     onClick={() => handleDelete(item.id, item.fileName)}
-                    className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all disabled:opacity-50"
+                    className="p-1.5 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all disabled:opacity-50 cursor-pointer"
                     title="Delete File"
                   >
                     {isDeleting ? (

@@ -19,11 +19,11 @@ import { useClientProject, useClientPayMilestone } from '@/hooks/useClientPortal
 import AttachmentSection from '@/components/ui/AttachmentSection'
 
 const STATUS_COLORS = {
-  PLANNING: 'bg-gray-100 text-gray-700 border-gray-200',
-  IN_PROGRESS: 'bg-blue-50 text-blue-700 border-blue-100',
-  REVIEW: 'bg-purple-50 text-purple-700 border-purple-100',
-  COMPLETED: 'bg-emerald-50 text-emerald-700 border-emerald-100',
-  ON_HOLD: 'bg-amber-50 text-amber-700 border-amber-100',
+  PLANNING: 'bg-slate-800 text-slate-300 border-white/10',
+  IN_PROGRESS: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30',
+  REVIEW: 'bg-purple-500/10 text-purple-400 border-purple-500/30',
+  COMPLETED: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
+  ON_HOLD: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
 }
 
 const STATUS_LABELS = {
@@ -35,10 +35,10 @@ const STATUS_LABELS = {
 }
 
 const TASK_STATUS_COLORS = {
-  TODO: 'bg-gray-100 text-gray-500 border-gray-200',
-  IN_PROGRESS: 'bg-blue-50 text-blue-600 border-blue-100',
-  DONE: 'bg-emerald-50 text-emerald-600 border-emerald-100',
-  BLOCKED: 'bg-red-50 text-red-600 border-red-100',
+  TODO: 'bg-slate-800 text-slate-400 border-white/10',
+  IN_PROGRESS: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30',
+  DONE: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
+  BLOCKED: 'bg-red-500/10 text-red-400 border-red-500/30',
 }
 
 const TASK_STATUS_LABELS = {
@@ -56,18 +56,18 @@ export default function ClientProjectDetailPage() {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center py-12">
-        <div className="w-8 h-8 border-2 border-brand-blue border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin" />
       </div>
     )
   }
 
   if (isError || !project) {
     return (
-      <div className="text-center py-12 bg-white border border-gray-200 rounded-2xl p-8 max-w-md mx-auto">
-        <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-3" />
-        <h3 className="text-lg font-bold text-gray-900 font-heading">Failed to load project</h3>
-        <p className="text-sm text-gray-500 mt-1">This project does not exist or you do not have permission to view it.</p>
-        <Link to="/client/dashboard" className="mt-6 inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-semibold rounded-xl text-white bg-brand-blue hover:bg-brand-blue-hover transition-colors">
+      <div className="text-center py-12 bg-[#03091e] border border-white/10 rounded-2xl p-8 max-w-md mx-auto">
+        <AlertTriangle className="w-12 h-12 text-red-400 mx-auto mb-3" />
+        <h3 className="text-lg font-bold text-white font-heading">Failed to load project</h3>
+        <p className="text-sm text-slate-400 mt-1">This project does not exist or you do not have permission to view it.</p>
+        <Link to="/client/dashboard" className="mt-6 inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-bold rounded-xl text-black bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 transition-all shadow-[0_0_15px_rgba(6,182,212,0.3)]">
           Back to Dashboard
         </Link>
       </div>
@@ -102,7 +102,7 @@ export default function ClientProjectDetailPage() {
       <div>
         <Link
           to="/client/dashboard"
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-gray-500 hover:text-gray-900 transition-colors"
+          className="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-400 hover:text-cyan-400 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Dashboard</span>
@@ -110,64 +110,64 @@ export default function ClientProjectDetailPage() {
       </div>
 
       {/* Project Overview Card */}
-      <div className="bg-white border border-gray-200 rounded-2xl p-6 lg:p-8 shadow-sm space-y-6">
+      <div className="bg-[#03091e]/90 border border-white/10 rounded-2xl p-6 lg:p-8 shadow-xl backdrop-blur-xl space-y-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 font-heading">{project.projectTitle}</h2>
-            <p className="text-xs text-gray-400 mt-1 font-medium">Project Reference ID: {project.id}</p>
+            <h2 className="text-2xl font-bold text-white font-heading">{project.projectTitle}</h2>
+            <p className="text-xs text-slate-400 mt-1 font-medium">Project Reference ID: {project.id}</p>
           </div>
           <span className={`px-3 py-1.5 text-xs font-bold rounded-full border ${STATUS_COLORS[project.status]}`}>
             {STATUS_LABELS[project.status]}
           </span>
         </div>
 
-        <p className="text-sm text-gray-600 leading-relaxed max-w-3xl">
+        <p className="text-sm text-slate-300 leading-relaxed max-w-3xl">
           {project.description || 'No description provided for this project.'}
         </p>
 
         {/* Dynamic Progress Bar */}
         <div className="space-y-2.5 max-w-xl">
-          <div className="flex justify-between text-sm font-bold text-gray-700">
+          <div className="flex justify-between text-sm font-bold text-slate-300">
             <span>Overall Milestone Completion</span>
-            <span>{project.progress}%</span>
+            <span className="text-cyan-400">{project.progress}%</span>
           </div>
-          <div className="w-full bg-gray-150 rounded-full h-2.5 overflow-hidden">
+          <div className="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden border border-white/5">
             <div
-              className="bg-brand-blue h-2.5 rounded-full transition-all duration-500"
+              className="bg-gradient-to-r from-cyan-500 to-blue-600 h-2.5 rounded-full shadow-[0_0_12px_rgba(6,182,212,0.5)] transition-all duration-500"
               style={{ width: `${project.progress}%` }}
             />
           </div>
         </div>
 
         {/* Grid Meta */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-4 border-t border-gray-100">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-4 border-t border-white/10">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 border border-gray-200 shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-cyan-400 border border-white/10 shrink-0">
               <Calendar className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Start Date</p>
-              <p className="text-sm font-semibold text-gray-900 mt-0.5">{formatDate(project.startDate)}</p>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Start Date</p>
+              <p className="text-sm font-semibold text-white mt-0.5">{formatDate(project.startDate)}</p>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 border border-gray-200 shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-cyan-400 border border-white/10 shrink-0">
               <Clock className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Estimated Launch</p>
-              <p className="text-sm font-semibold text-gray-900 mt-0.5">{formatDate(project.deadline)}</p>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Estimated Launch</p>
+              <p className="text-sm font-semibold text-white mt-0.5">{formatDate(project.deadline)}</p>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 border border-gray-200 shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-cyan-400 border border-white/10 shrink-0">
               <FileText className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Deliverable Tasks</p>
-              <p className="text-sm font-semibold text-gray-900 mt-0.5">
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Deliverable Tasks</p>
+              <p className="text-sm font-semibold text-white mt-0.5">
                 {completedTasks.length} / {tasks.length} Completed
               </p>
             </div>
@@ -178,25 +178,25 @@ export default function ClientProjectDetailPage() {
       {/* Project Roadmap / Gantt Timeline */}
       {project.billingMilestones && project.billingMilestones.length > 0 && (
         <div className="space-y-6">
-          <h3 className="text-lg font-bold text-gray-900 font-heading">Project Roadmap & Milestones</h3>
+          <h3 className="text-lg font-bold text-white font-heading">Project Roadmap & Milestones</h3>
 
-          <div className="bg-white border border-gray-200 rounded-3xl p-6 md:p-8 shadow-sm relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-40 h-40 bg-brand-blue/5 rounded-full blur-3xl pointer-events-none" />
+          <div className="bg-[#03091e]/90 border border-white/10 rounded-3xl p-6 md:p-8 shadow-xl backdrop-blur-xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-40 h-40 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
 
             {/* The Stepper Track */}
-            <div className="relative border-l border-dashed border-gray-200 ml-4 md:ml-6 pl-6 md:pl-10 space-y-8 py-2">
+            <div className="relative border-l border-dashed border-white/15 ml-4 md:ml-6 pl-6 md:pl-10 space-y-8 py-2">
               {project.billingMilestones.map((m) => {
                 const isPaid = m.status === 'PAID'
                 const isOverdue = m.status === 'OVERDUE'
 
-                let iconBg = 'bg-blue-50 text-brand-blue ring-4 ring-blue-100/50'
+                let iconBg = 'bg-cyan-500/20 text-cyan-400 ring-4 ring-cyan-500/10'
                 let iconTag = Calendar
 
                 if (isPaid) {
-                  iconBg = 'bg-emerald-50 text-emerald-600 ring-4 ring-emerald-100/50'
+                  iconBg = 'bg-emerald-500/20 text-emerald-400 ring-4 ring-emerald-500/10'
                   iconTag = CheckCircle2
                 } else if (isOverdue) {
-                  iconBg = 'bg-red-50 text-red-600 ring-4 ring-red-150/50'
+                  iconBg = 'bg-red-500/20 text-red-400 ring-4 ring-red-500/10'
                   iconTag = AlertTriangle
                 }
 
@@ -211,31 +211,31 @@ export default function ClientProjectDetailPage() {
                     </div>
 
                     {/* Milestone Card Wrapper */}
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 border border-gray-150 rounded-2xl bg-white hover:shadow-md hover:border-gray-250 transition-all duration-200">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 border border-white/10 rounded-2xl bg-slate-900/60 hover:bg-slate-900/80 hover:border-cyan-500/30 transition-all duration-200">
 
                       {/* Left: Metadata */}
                       <div className="space-y-2">
                         <div className="flex items-center gap-2">
-                          <h4 className="text-sm font-bold text-gray-850">{m.title}</h4>
+                          <h4 className="text-sm font-bold text-white">{m.title}</h4>
                           <span className={`px-2 py-0.5 text-[9px] font-bold rounded border uppercase tracking-wider ${
                             isPaid
-                              ? 'bg-emerald-50 text-emerald-700 border-emerald-100'
+                              ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
                               : isOverdue
-                              ? 'bg-red-50 text-red-700 border-red-100'
-                              : 'bg-amber-50 text-amber-700 border-amber-100'
+                              ? 'bg-red-500/10 text-red-400 border-red-500/30'
+                              : 'bg-amber-500/10 text-amber-400 border-amber-500/30'
                           }`}>
                             {m.status}
                           </span>
                         </div>
 
-                        <div className="grid grid-cols-2 sm:flex sm:items-center gap-x-4 gap-y-1 text-xs text-gray-400 font-medium">
-                          <div>Amount: <span className="font-bold text-gray-700">₹{m.amount.toLocaleString('en-IN')}</span></div>
+                        <div className="grid grid-cols-2 sm:flex sm:items-center gap-x-4 gap-y-1 text-xs text-slate-400 font-medium">
+                          <div>Amount: <span className="font-bold text-white">₹{m.amount.toLocaleString('en-IN')}</span></div>
                           <div className="flex items-center gap-1">
                             <Calendar className="w-3.5 h-3.5" />
                             <span>Due: {formatDate(m.dueDate)}</span>
                           </div>
                           {m.paidAt && (
-                            <div className="text-emerald-600 font-bold">Paid on: {formatDate(m.paidAt)}</div>
+                            <div className="text-emerald-400 font-bold">Paid on: {formatDate(m.paidAt)}</div>
                           )}
                         </div>
 
@@ -247,14 +247,14 @@ export default function ClientProjectDetailPage() {
                                 key={i}
                                 className={`px-2 py-0.5 rounded text-[10px] font-semibold border flex items-center gap-1 ${
                                   isPaid
-                                    ? 'bg-emerald-50/55 text-emerald-700 border-emerald-100/60'
-                                    : 'bg-gray-50 text-gray-405 border-gray-200'
+                                    ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20'
+                                    : 'bg-white/5 text-slate-400 border-white/10'
                                 }`}
                               >
                                 {isPaid ? (
-                                  <Unlock className="w-3 h-3 text-emerald-500" />
+                                  <Unlock className="w-3 h-3 text-emerald-400" />
                                 ) : (
-                                  <Lock className="w-3 h-3 text-gray-300" />
+                                  <Lock className="w-3 h-3 text-slate-500" />
                                 )}
                                 <span>{del}</span>
                               </span>
@@ -268,7 +268,7 @@ export default function ClientProjectDetailPage() {
                         {isPaid && m.invoiceUrl ? (
                           <Link
                             to={m.invoiceUrl}
-                            className="inline-flex items-center gap-1 px-3 py-1.5 bg-emerald-50 text-emerald-700 hover:bg-emerald-100/60 border border-emerald-150 text-xs font-bold rounded-xl transition-all cursor-pointer shadow-sm"
+                            className="inline-flex items-center gap-1 px-3 py-1.5 bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 border border-emerald-500/30 text-xs font-bold rounded-xl transition-all cursor-pointer shadow-sm"
                           >
                             <FileCheck className="w-3.5 h-3.5" />
                             <span>Receipt Invoice</span>
@@ -277,7 +277,7 @@ export default function ClientProjectDetailPage() {
                           <button
                             onClick={() => handlePay(m.id)}
                             disabled={payMutation.isPending}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-brand-blue hover:bg-blue-600 text-white text-xs font-bold rounded-xl transition-all cursor-pointer shadow-sm disabled:opacity-50"
+                            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black text-xs font-bold rounded-xl transition-all cursor-pointer shadow-sm hover:shadow-[0_0_15px_rgba(6,182,212,0.3)] disabled:opacity-50"
                           >
                             <span>Simulate Pay</span>
                           </button>
@@ -296,36 +296,36 @@ export default function ClientProjectDetailPage() {
 
       {/* Tasks / Deliverables Checklist */}
       <div className="space-y-6">
-        <h3 className="text-lg font-bold text-gray-900 font-heading">Project Checklist & Deliverables</h3>
+        <h3 className="text-lg font-bold text-white font-heading">Project Checklist & Deliverables</h3>
 
         {tasks.length === 0 ? (
-          <div className="bg-white border border-gray-200 rounded-2xl py-10 text-center shadow-sm">
-            <HelpCircle className="w-12 h-12 text-gray-300 mx-auto mb-2" />
-            <p className="text-sm font-semibold text-gray-500">Checklist not configured yet.</p>
-            <p className="text-xs text-gray-400 mt-1">Our team is setting up your project roadmap.</p>
+          <div className="bg-[#03091e]/90 border border-white/10 rounded-2xl py-10 text-center shadow-xl backdrop-blur-xl">
+            <HelpCircle className="w-12 h-12 text-slate-600 mx-auto mb-2" />
+            <p className="text-sm font-semibold text-slate-300">Checklist not configured yet.</p>
+            <p className="text-xs text-slate-400 mt-1">Our team is setting up your project roadmap.</p>
           </div>
         ) : (
-          <div className="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
-            <div className="divide-y divide-gray-150">
+          <div className="bg-[#03091e]/90 border border-white/10 rounded-2xl shadow-xl overflow-hidden backdrop-blur-xl">
+            <div className="divide-y divide-white/5">
               {tasks.map((task) => {
                 const isDone = task.status === 'DONE'
 
                 return (
-                  <div key={task.id} className="p-4 md:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 hover:bg-gray-50/50 transition-colors">
+                  <div key={task.id} className="p-4 md:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 hover:bg-white/[0.03] transition-colors">
                     <div className="flex items-start gap-3">
                       <div className="mt-0.5 shrink-0">
                         {isDone ? (
-                          <CheckCircle2 className="w-5.5 h-5.5 text-emerald-500 fill-emerald-50" />
+                          <CheckCircle2 className="w-5.5 h-5.5 text-emerald-400 fill-emerald-500/20" />
                         ) : (
-                          <Circle className="w-5.5 h-5.5 text-gray-300" />
+                          <Circle className="w-5.5 h-5.5 text-slate-600" />
                         )}
                       </div>
                       <div>
-                        <p className={`text-sm font-semibold leading-snug ${isDone ? 'text-gray-400 line-through' : 'text-gray-900'}`}>
+                        <p className={`text-sm font-semibold leading-snug ${isDone ? 'text-slate-400 line-through' : 'text-white'}`}>
                           {task.title}
                         </p>
                         {task.description && (
-                          <p className="text-xs text-gray-400 mt-1 leading-relaxed max-w-2xl">{task.description}</p>
+                          <p className="text-xs text-slate-400 mt-1 leading-relaxed max-w-2xl">{task.description}</p>
                         )}
                       </div>
                     </div>
@@ -343,8 +343,8 @@ export default function ClientProjectDetailPage() {
 
       {/* Shared Files & Documents — Project File Vault */}
       <div className="space-y-4">
-        <h3 className="text-lg font-bold text-gray-900 font-heading flex items-center gap-2">
-          <FileCheck className="w-5 h-5 text-brand-blue" />
+        <h3 className="text-lg font-bold text-white font-heading flex items-center gap-2">
+          <FileCheck className="w-5 h-5 text-cyan-400" />
           Project File Vault & Asset Drive
         </h3>
         <AttachmentSection

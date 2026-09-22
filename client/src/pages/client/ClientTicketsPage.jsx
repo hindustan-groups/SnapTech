@@ -21,13 +21,13 @@ const TICKET_CATEGORIES = [
 ]
 
 const STATUS_BADGES = {
-  OPEN: 'bg-indigo-50 text-indigo-700 border-indigo-200',
-  IN_PROGRESS: 'bg-amber-50 text-amber-700 border-amber-200',
-  RESOLVED: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+  OPEN: 'bg-brand-cyan/10 text-brand-cyan border-brand-cyan/30',
+  IN_PROGRESS: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
+  RESOLVED: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
 }
 
 const inputCls =
-  'w-full px-3 py-2 text-sm border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-blue/25 focus:border-brand-blue transition-all'
+  'w-full px-3 py-2 text-sm border border-white/15 rounded-xl bg-white/[0.04] text-white focus:bg-white/[0.08] focus:outline-none focus:ring-1 focus:ring-brand-cyan/30 focus:border-brand-cyan transition-all placeholder:text-slate-500'
 
 export default function ClientTicketsPage() {
   const { data: tickets = [], isLoading: loadingList } = useClientTickets()
@@ -124,7 +124,7 @@ export default function ClientTicketsPage() {
   if (loadingList) {
     return (
       <div className="flex justify-center items-center py-12">
-        <div className="w-8 h-8 border-2 border-brand-blue border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin" />
       </div>
     )
   }
@@ -134,12 +134,12 @@ export default function ClientTicketsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 font-heading">Support Tickets</h2>
-          <p className="text-sm text-gray-500">Raise inquiries and discuss project updates directly with our team.</p>
+          <h2 className="text-2xl font-bold text-white font-heading">Support Tickets</h2>
+          <p className="text-sm text-slate-400">Raise inquiries and discuss project updates directly with our technical team.</p>
         </div>
         <button
           onClick={() => setShowCreateModal(true)}
-          className="flex items-center gap-2 px-4 py-2.5 bg-brand-blue text-white rounded-xl text-xs font-bold hover:bg-blue-600 shadow-sm transition-all cursor-pointer"
+          className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold rounded-xl text-xs hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           <span>New Ticket</span>
@@ -148,15 +148,15 @@ export default function ClientTicketsPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         {/* Ticket List Panel */}
-        <div className={`lg:col-span-1 bg-white border border-gray-150 rounded-2xl overflow-hidden shadow-sm ${selectedTicketId ? 'hidden lg:block' : 'block'}`}>
-          <div className="p-4 border-b border-gray-100 bg-gray-50/50">
-            <h3 className="text-sm font-bold text-gray-700">Ticket Registry</h3>
+        <div className={`lg:col-span-1 bg-[#03091e]/90 border border-white/10 rounded-2xl overflow-hidden backdrop-blur-xl shadow-xl ${selectedTicketId ? 'hidden lg:block' : 'block'}`}>
+          <div className="p-4 border-b border-white/10 bg-white/[0.02]">
+            <h3 className="text-sm font-bold text-white">Ticket Registry</h3>
           </div>
 
-          <div className="divide-y divide-gray-100 max-h-[600px] overflow-y-auto">
+          <div className="divide-y divide-white/5 max-h-[600px] overflow-y-auto">
             {tickets.length === 0 ? (
-              <div className="p-8 text-center text-gray-400">
-                <MessageSquare className="w-10 h-10 mx-auto mb-2 opacity-50" />
+              <div className="p-8 text-center text-slate-500">
+                <MessageSquare className="w-10 h-10 mx-auto mb-2 opacity-40" />
                 <p className="text-xs">No active support tickets found.</p>
               </div>
             ) : (
@@ -164,25 +164,25 @@ export default function ClientTicketsPage() {
                 <button
                   key={t.id}
                   onClick={() => setSelectedTicketId(t.id)}
-                  className={`w-full text-left p-4 hover:bg-gray-50/50 transition-colors flex flex-col gap-2 ${
-                    selectedTicketId === t.id ? 'bg-blue-50/40 border-r-4 border-brand-blue' : ''
+                  className={`w-full text-left p-4 hover:bg-white/[0.04] transition-colors flex flex-col gap-2 ${
+                    selectedTicketId === t.id ? 'bg-cyan-500/10 border-r-4 border-cyan-400' : ''
                   }`}
                 >
                   <div className="flex justify-between items-start gap-2">
-                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">
                       {TICKET_CATEGORIES.find((cat) => cat.value === t.category)?.label || t.category}
                     </span>
                     <span className={`px-2 py-0.5 text-[9px] font-bold rounded border uppercase tracking-wider ${STATUS_BADGES[t.status]}`}>
                       {t.status}
                     </span>
                   </div>
-                  <h4 className="text-xs font-bold text-gray-800 line-clamp-1">{t.subject}</h4>
+                  <h4 className="text-xs font-bold text-white line-clamp-1">{t.subject}</h4>
                   {t.clientProject && (
-                    <span className="text-[10px] text-brand-blue font-medium">
+                    <span className="text-[10px] text-cyan-400 font-medium">
                       Project: {t.clientProject.projectTitle}
                     </span>
                   )}
-                  <span className="text-[9px] text-gray-400 self-end">
+                  <span className="text-[9px] text-slate-500 self-end">
                     Last active: {new Date(t.updatedAt).toLocaleDateString()}
                   </span>
                 </button>
@@ -192,23 +192,23 @@ export default function ClientTicketsPage() {
         </div>
 
         {/* Ticket Chat Message Panel */}
-        <div className={`lg:col-span-2 bg-white border border-gray-150 rounded-2xl overflow-hidden shadow-sm flex flex-col min-h-[450px] lg:min-h-[550px] ${selectedTicketId ? 'block' : 'hidden lg:flex justify-center items-center text-center p-12'}`}>
+        <div className={`lg:col-span-2 bg-[#03091e]/90 border border-white/10 rounded-2xl overflow-hidden backdrop-blur-xl shadow-xl flex flex-col min-h-[450px] lg:min-h-[550px] ${selectedTicketId ? 'block' : 'hidden lg:flex justify-center items-center text-center p-12'}`}>
           {selectedTicketId ? (
             <>
               {/* Detail Header */}
-              <div className="p-4 border-b border-gray-100 bg-gray-50/50 flex items-center justify-between gap-3 shrink-0">
+              <div className="p-4 border-b border-white/10 bg-white/[0.02] flex items-center justify-between gap-3 shrink-0">
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => setSelectedTicketId(null)}
-                    className="lg:hidden p-1.5 hover:bg-gray-100 rounded-lg text-gray-500"
+                    className="lg:hidden p-1.5 hover:bg-white/10 rounded-lg text-slate-300"
                   >
                     <ArrowLeft className="w-5 h-5" />
                   </button>
                   <div>
-                    <h3 className="text-xs font-bold text-gray-800">
+                    <h3 className="text-xs font-bold text-white">
                       {loadingDetail ? 'Loading...' : ticketDetail?.subject}
                     </h3>
-                    <p className="text-[10px] text-gray-400 mt-0.5">
+                    <p className="text-[10px] text-slate-400 mt-0.5">
                       Ticket ID: {selectedTicketId}
                     </p>
                   </div>
@@ -221,10 +221,10 @@ export default function ClientTicketsPage() {
               </div>
 
               {/* Chat Thread Messages */}
-              <div className="flex-1 p-4 space-y-4 overflow-y-auto min-h-[250px] max-h-[380px] bg-gray-50/30">
+              <div className="flex-1 p-4 space-y-4 overflow-y-auto min-h-[250px] max-h-[380px] bg-[#020714]/60">
                 {loadingDetail ? (
                   <div className="flex justify-center items-center h-full">
-                    <div className="w-6 h-6 border-2 border-brand-blue border-t-transparent rounded-full animate-spin" />
+                    <div className="w-6 h-6 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin" />
                   </div>
                 ) : (
                   ticketDetail?.messages?.map((msg) => {
@@ -234,22 +234,22 @@ export default function ClientTicketsPage() {
                         key={msg.id}
                         className={`flex flex-col max-w-[85%] ${isSelf ? 'ml-auto items-end' : 'mr-auto items-start'}`}
                       >
-                        <span className="text-[9px] text-gray-400 font-semibold mb-1">
+                        <span className="text-[9px] text-slate-400 font-semibold mb-1">
                           {msg.senderName}
                         </span>
                         <div
-                          className={`p-3 rounded-2xl text-xs leading-relaxed ${
+                          className={`p-3.5 rounded-2xl text-xs leading-relaxed ${
                             isSelf
-                              ? 'bg-brand-blue text-white rounded-tr-none'
-                              : 'bg-white border border-gray-150 text-gray-800 rounded-tl-none shadow-sm'
+                              ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-black font-medium rounded-tr-none shadow-md shadow-cyan-500/10'
+                              : 'bg-slate-900/90 border border-white/10 text-slate-100 rounded-tl-none shadow-sm'
                           }`}
                         >
                           <div>{msg.message}</div>
                           {msg.fileUrl && (
-                            <div className={`mt-2 flex items-center gap-2 p-1.5 rounded-xl text-[10px] ${
+                            <div className={`mt-2 flex items-center gap-2 p-2 rounded-xl text-[10px] ${
                               isSelf
-                                ? 'bg-white/10 border border-white/20 text-white'
-                                : 'bg-gray-50 border border-gray-150 text-gray-700'
+                                ? 'bg-black/20 border border-black/20 text-black'
+                                : 'bg-slate-800/80 border border-white/10 text-cyan-400'
                             }`}>
                               <Paperclip className="w-3 h-3 shrink-0" />
                               <a
@@ -264,7 +264,7 @@ export default function ClientTicketsPage() {
                             </div>
                           )}
                         </div>
-                        <span className="text-[8px] text-gray-400 mt-1">
+                        <span className="text-[8px] text-slate-500 mt-1">
                           {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
                       </div>
@@ -275,18 +275,18 @@ export default function ClientTicketsPage() {
 
               {/* Chat Reply Box */}
               {!loadingDetail && ticketDetail?.status !== 'RESOLVED' ? (
-                <div className="p-3 border-t border-gray-100 flex flex-col gap-2 shrink-0">
+                <div className="p-3 border-t border-white/10 flex flex-col gap-2 shrink-0 bg-[#03091e]">
                   {replyFile && (
-                    <div className="flex items-center justify-between bg-blue-50/50 border border-blue-100 px-3 py-1.5 rounded-xl text-[10px] text-gray-700">
+                    <div className="flex items-center justify-between bg-cyan-500/10 border border-cyan-500/20 px-3 py-1.5 rounded-xl text-[10px] text-cyan-200">
                       <div className="flex items-center gap-1.5 truncate">
-                        <Paperclip className="w-3.5 h-3.5 text-brand-blue shrink-0" />
+                        <Paperclip className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
                         <span className="font-semibold truncate">{replyFile.name}</span>
-                        <span className="text-gray-400">({Math.round(replyFile.size / 1024)} KB)</span>
+                        <span className="text-cyan-400/60">({Math.round(replyFile.size / 1024)} KB)</span>
                       </div>
                       <button
                         type="button"
                         onClick={() => setReplyFile(null)}
-                        className="text-gray-400 hover:text-red-500 transition-colors"
+                        className="text-slate-400 hover:text-red-400 transition-colors"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
@@ -308,7 +308,7 @@ export default function ClientTicketsPage() {
                       type="button"
                       disabled={isUploading}
                       onClick={() => document.getElementById('reply-file-upload').click()}
-                      className="p-2.5 border border-gray-200 text-gray-500 rounded-xl hover:bg-gray-50 transition-all cursor-pointer"
+                      className="p-2.5 border border-white/10 text-slate-400 rounded-xl hover:text-cyan-400 hover:bg-white/5 transition-all cursor-pointer"
                       title="Attach file"
                     >
                       <Paperclip className="w-3.5 h-3.5" />
@@ -320,16 +320,16 @@ export default function ClientTicketsPage() {
                       onChange={(e) => setReplyText(e.target.value)}
                       placeholder={isUploading ? "Uploading attachment..." : "Write a message reply..."}
                       disabled={isUploading}
-                      className="flex-1 px-4 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-brand-blue/20 bg-gray-50 focus:bg-white disabled:opacity-50"
+                      className="flex-1 px-4 py-2 bg-slate-900/80 border border-white/10 rounded-xl text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/30 disabled:opacity-50"
                     />
 
                     <button
                       type="submit"
                       disabled={replyMutation.isPending || isUploading}
-                      className="p-2.5 bg-brand-blue text-white rounded-xl hover:bg-blue-600 shadow-sm transition-all disabled:opacity-50 cursor-pointer flex items-center justify-center min-w-[38px]"
+                      className="p-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold rounded-xl shadow-sm hover:shadow-[0_0_15px_rgba(6,182,212,0.4)] transition-all disabled:opacity-50 cursor-pointer flex items-center justify-center min-w-[38px]"
                     >
                       {isUploading ? (
-                        <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        <div className="w-3.5 h-3.5 border-2 border-black border-t-transparent rounded-full animate-spin" />
                       ) : (
                         <Send className="w-3.5 h-3.5" />
                       )}
@@ -337,15 +337,14 @@ export default function ClientTicketsPage() {
                   </form>
                 </div>
               ) : ticketDetail?.status === 'RESOLVED' ? (
-                <div className="p-4 border-t border-gray-100 bg-emerald-50 text-emerald-800 text-center flex items-center justify-center gap-2 text-xs font-semibold">
+                <div className="p-4 border-t border-emerald-500/20 bg-emerald-500/10 text-emerald-300 text-center flex items-center justify-center gap-2 text-xs font-semibold">
                   <Clock className="w-4 h-4" />
                   <span>This ticket is resolved. You can submit a reply to automatically reopen it.</span>
                   <button
                     onClick={() => {
                       setReplyText('Requesting reopen: ')
-                      // update status to open is handled on submit
                     }}
-                    className="ml-2 underline hover:text-emerald-950 font-bold"
+                    className="ml-2 underline hover:text-emerald-200 font-bold"
                   >
                     Reopen
                   </button>
@@ -354,9 +353,9 @@ export default function ClientTicketsPage() {
             </>
           ) : (
             <div className="space-y-3">
-              <MessageSquare className="w-12 h-12 text-gray-300 mx-auto opacity-75" />
-              <h4 className="text-sm font-bold text-gray-700">No Ticket Selected</h4>
-              <p className="text-xs text-gray-400 max-w-xs mx-auto">
+              <MessageSquare className="w-12 h-12 text-slate-600 mx-auto opacity-75" />
+              <h4 className="text-sm font-bold text-slate-300">No Ticket Selected</h4>
+              <p className="text-xs text-slate-400 max-w-xs mx-auto">
                 Select a ticket from the registry list to view the threaded conversation, status logs, and to reply.
               </p>
             </div>
@@ -366,21 +365,21 @@ export default function ClientTicketsPage() {
 
       {/* Create Ticket Modal */}
       {showCreateModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden border border-gray-100">
-            <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-              <h3 className="font-heading text-sm font-bold text-gray-800 flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 text-brand-blue" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
+          <div className="bg-[#03091e] rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden border border-white/10">
+            <div className="p-4 border-b border-white/10 flex justify-between items-center bg-white/[0.02]">
+              <h3 className="font-heading text-sm font-bold text-white flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 text-cyan-400" />
                 <span>Submit Support Inquiry</span>
               </h3>
-              <button onClick={() => setShowCreateModal(false)} className="text-gray-400 hover:text-gray-600">
+              <button onClick={() => setShowCreateModal(false)} className="text-slate-400 hover:text-white">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <form onSubmit={handleSubmit(onCreateSubmit)} className="p-5 space-y-4">
               <div>
-                <label className="text-xs font-semibold text-gray-600 block mb-1">Subject</label>
+                <label className="text-xs font-semibold text-slate-300 block mb-1">Subject</label>
                 <input
                   type="text"
                   required
@@ -392,10 +391,10 @@ export default function ClientTicketsPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-xs font-semibold text-gray-600 block mb-1">Category</label>
+                  <label className="text-xs font-semibold text-slate-300 block mb-1">Category</label>
                   <select {...register('category')} className={inputCls}>
                     {TICKET_CATEGORIES.map((cat) => (
-                      <option key={cat.value} value={cat.value}>
+                      <option key={cat.value} value={cat.value} className="bg-slate-900 text-white">
                         {cat.label}
                       </option>
                     ))}
@@ -403,11 +402,11 @@ export default function ClientTicketsPage() {
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-gray-600 block mb-1">Link Project (Optional)</label>
+                  <label className="text-xs font-semibold text-slate-300 block mb-1">Link Project (Optional)</label>
                   <select {...register('clientProjectId')} className={inputCls}>
-                    <option value="">No Project Link</option>
+                    <option value="" className="bg-slate-900 text-white">No Project Link</option>
                     {projects.map((p) => (
-                      <option key={p.id} value={p.id}>
+                      <option key={p.id} value={p.id} className="bg-slate-900 text-white">
                         {p.projectTitle}
                       </option>
                     ))}
@@ -416,7 +415,7 @@ export default function ClientTicketsPage() {
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-gray-600 block mb-1">Description / Inquiry Message</label>
+                <label className="text-xs font-semibold text-slate-300 block mb-1">Description / Inquiry Message</label>
                 <textarea
                   required
                   rows={4}
@@ -427,24 +426,24 @@ export default function ClientTicketsPage() {
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-gray-600 block mb-1">Attachment (Optional)</label>
+                <label className="text-xs font-semibold text-slate-300 block mb-1">Attachment (Optional)</label>
                 {createFile ? (
-                  <div className="flex items-center justify-between bg-gray-50 border border-gray-150 p-2.5 rounded-xl text-xs text-gray-700">
+                  <div className="flex items-center justify-between bg-slate-900/80 border border-white/10 p-2.5 rounded-xl text-xs text-slate-200">
                     <div className="flex items-center gap-1.5 truncate">
-                      <Paperclip className="w-4 h-4 text-brand-blue shrink-0" />
+                      <Paperclip className="w-4 h-4 text-cyan-400 shrink-0" />
                       <span className="font-semibold truncate">{createFile.name}</span>
-                      <span className="text-gray-400">({Math.round(createFile.size / 1024)} KB)</span>
+                      <span className="text-slate-400">({Math.round(createFile.size / 1024)} KB)</span>
                     </div>
                     <button
                       type="button"
                       onClick={() => setCreateFile(null)}
-                      className="text-gray-400 hover:text-red-500 transition-colors"
+                      className="text-slate-400 hover:text-red-400 transition-colors"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
                 ) : (
-                  <div className="flex items-center justify-center border-2 border-dashed border-gray-200 rounded-xl p-4 bg-gray-50 hover:bg-white transition-all">
+                  <div className="flex items-center justify-center border-2 border-dashed border-white/10 rounded-xl p-4 bg-slate-900/40 hover:bg-slate-900/70 hover:border-cyan-500/40 transition-all">
                     <input
                       type="file"
                       id="create-file-upload"
@@ -458,7 +457,7 @@ export default function ClientTicketsPage() {
                     <button
                       type="button"
                       onClick={() => document.getElementById('create-file-upload').click()}
-                      className="flex items-center gap-1.5 text-xs text-brand-blue font-bold hover:underline cursor-pointer"
+                      className="flex items-center gap-1.5 text-xs text-cyan-400 font-bold hover:underline cursor-pointer"
                     >
                       <Paperclip className="w-4 h-4" />
                       <span>Choose a file (Image, PDF, Word, Excel, ZIP)</span>
@@ -475,18 +474,18 @@ export default function ClientTicketsPage() {
                     setShowCreateModal(false)
                     setCreateFile(null)
                   }}
-                  className="px-4 py-2 border border-gray-200 text-gray-500 rounded-xl hover:bg-gray-50 text-xs font-bold transition-all cursor-pointer disabled:opacity-50"
+                  className="px-4 py-2 border border-white/10 text-slate-300 rounded-xl hover:bg-white/5 text-xs font-bold transition-all cursor-pointer disabled:opacity-50"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={createMutation.isPending || isUploading}
-                  className="px-4 py-2 bg-brand-blue text-white rounded-xl hover:bg-blue-600 text-xs font-bold shadow-sm transition-all disabled:opacity-50 cursor-pointer flex items-center gap-2"
+                  className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold rounded-xl text-xs shadow-sm hover:shadow-[0_0_15px_rgba(6,182,212,0.4)] transition-all disabled:opacity-50 cursor-pointer flex items-center gap-2"
                 >
                   {isUploading ? (
                     <>
-                      <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <div className="w-3.5 h-3.5 border-2 border-black border-t-transparent rounded-full animate-spin" />
                       <span>Uploading File...</span>
                     </>
                   ) : (

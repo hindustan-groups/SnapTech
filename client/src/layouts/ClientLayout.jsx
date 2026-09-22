@@ -48,13 +48,12 @@ export default function ClientLayout() {
       console.error('Logout failed:', err)
     }
   }
-
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-[#020714]">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-10 h-10 border-[3px] border-brand-blue border-t-transparent rounded-full animate-spin" />
-          <p className="text-sm text-gray-400">Loading Client Portal…</p>
+          <div className="w-10 h-10 border-[3px] border-brand-cyan border-t-transparent rounded-full animate-spin" />
+          <p className="text-sm font-semibold text-slate-400">Loading Client Portal…</p>
         </div>
       </div>
     )
@@ -71,29 +70,28 @@ export default function ClientLayout() {
   ]
 
   return (
-    <div className="h-screen flex bg-gray-50 overflow-hidden">
+    <div className="h-screen flex bg-[#020714] text-white overflow-hidden selection:bg-brand-cyan/20 selection:text-brand-cyan">
       {/* Sidebar for Desktop */}
       <aside
         className={`fixed inset-y-0 left-0 z-40 w-64 flex flex-col h-full
-          transition-transform duration-300 ease-in-out
+          transition-transform duration-300 ease-in-out bg-[#03091e]/95 backdrop-blur-2xl border-r border-white/10
           ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
           lg:translate-x-0 lg:static lg:flex`}
-        style={{ background: 'linear-gradient(175deg, #1A3E8C 0%, #0f2660 100%)' }}
       >
         {/* Logo */}
         <div className="flex items-center justify-between px-5 h-16 border-b border-white/10 shrink-0">
           <div className="flex items-center gap-2.5">
-            <img src="/logo-with-bg.png" alt="Logo" className="w-8 h-8 rounded-lg object-contain" />
+            <img src="/logo-with-bg.png" alt="Logo" className="w-8 h-8 rounded-lg object-contain shadow-md shadow-cyan-950/40" />
             <div>
               <p className="font-heading font-bold text-white text-sm leading-none">Hindustan</p>
-              <p className="text-white/40 text-[10px] font-medium tracking-wider uppercase">
+              <p className="text-brand-cyan text-[10px] font-bold tracking-wider uppercase mt-0.5">
                 Client Portal
               </p>
             </div>
           </div>
           <button
             onClick={() => setSidebarOpen(false)}
-            className="lg:hidden text-white/50 hover:text-white transition-colors"
+            className="lg:hidden text-slate-400 hover:text-white p-1 rounded-lg transition-colors cursor-pointer"
             aria-label="Close sidebar"
           >
             <X className="w-5 h-5" />
@@ -109,17 +107,17 @@ export default function ClientLayout() {
                 key={item.to}
                 to={item.to}
                 onClick={() => setSidebarOpen(false)}
-                className={`relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium
-                  transition-all duration-150 group ${
+                className={`relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
+                  transition-all duration-200 group ${
                     isActive
-                      ? 'bg-white/15 text-white shadow-sm'
-                      : 'text-white/60 hover:bg-white/8 hover:text-white/90'
+                      ? 'bg-brand-cyan/15 text-white font-bold border border-brand-cyan/30 shadow-lg shadow-cyan-950/30'
+                      : 'text-slate-400 hover:bg-white/[0.05] hover:text-white'
                   }`}
               >
                 {isActive && (
-                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 bg-brand-red rounded-full" />
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-brand-cyan rounded-r-full shadow-md shadow-brand-cyan/80" />
                 )}
-                <item.icon className="w-4 h-4 shrink-0" />
+                <item.icon className={`w-4 h-4 shrink-0 transition-colors ${isActive ? 'text-brand-cyan' : 'text-slate-400 group-hover:text-slate-200'}`} />
                 <span className="flex-1">{item.label}</span>
                 {item.badge > 0 && (
                   <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-red-500 text-white shrink-0 animate-pulse">
@@ -132,38 +130,38 @@ export default function ClientLayout() {
         </nav>
 
         {/* Portal Rules & Terms Section */}
-        <div className="p-4 border-t border-white/10 shrink-0 space-y-1">
+        <div className="p-4 border-t border-white/10 shrink-0 space-y-1.5">
           <button
             onClick={() => setShowTermsModal(true)}
-            className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold text-white/70 hover:bg-white/10 hover:text-white transition-colors"
+            className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:bg-white/[0.05] hover:text-brand-cyan transition-colors cursor-pointer"
           >
-            <FileText className="w-4 h-4 text-blue-300" />
-            <span>Portal Terms & SLA Rules</span>
+            <FileText className="w-4 h-4 text-brand-cyan" />
+            <span>Portal Terms &amp; SLA Rules</span>
           </button>
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold text-white/60 hover:bg-white/10 hover:text-white transition-colors"
+            className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-rose-400/80 hover:bg-rose-500/10 hover:text-rose-300 transition-colors cursor-pointer"
           >
-            <LogOut className="w-4 h-4 text-rose-300" />
+            <LogOut className="w-4 h-4 text-rose-400" />
             <span>Sign Out</span>
           </button>
         </div>
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden bg-[#020714]">
         {/* Top Header */}
-        <header className="h-16 bg-white border-b border-gray-250 flex items-center justify-between px-6 shrink-0">
+        <header className="h-16 bg-[#03091e]/85 backdrop-blur-2xl border-b border-white/10 flex items-center justify-between px-6 shrink-0 z-30">
           <div className="flex items-center gap-4">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden p-1.5 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+              className="lg:hidden p-1.5 text-slate-400 hover:text-white hover:bg-white/[0.08] rounded-xl transition-colors cursor-pointer"
               aria-label="Open sidebar"
             >
               <Menu className="w-6 h-6" />
             </button>
-            <h1 className="font-heading text-lg font-bold text-gray-900">
-              Welcome, {client.name}
+            <h1 className="font-heading text-lg font-bold text-white tracking-tight">
+              Welcome, <span className="text-brand-cyan">{client.name}</span>
             </h1>
           </div>
 
@@ -171,12 +169,12 @@ export default function ClientLayout() {
             {/* Notification Bell */}
             <button
               onClick={() => navigate('/client/support')}
-              className="relative p-2 rounded-xl hover:bg-gray-100 transition-all"
+              className="relative p-2 rounded-xl bg-white/[0.04] border border-white/10 hover:bg-white/[0.08] text-slate-300 hover:text-white transition-all cursor-pointer"
               title={unreadTicketsCount > 0 ? `${unreadTicketsCount} unread ticket update(s)` : 'No new notifications'}
             >
-              <Bell className={`w-4 h-4 ${unreadTicketsCount > 0 ? 'text-brand-red animate-pulse' : 'text-gray-400'}`} />
+              <Bell className={`w-4 h-4 ${unreadTicketsCount > 0 ? 'text-brand-cyan animate-pulse' : 'text-slate-400'}`} />
               {unreadTicketsCount > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 text-[9px] font-bold bg-red-500 text-white rounded-full flex items-center justify-center animate-bounce">
+                <span className="absolute -top-1 -right-1 w-4 h-4 text-[9px] font-bold bg-brand-cyan text-slate-950 rounded-full flex items-center justify-center shadow-md">
                   {unreadTicketsCount > 9 ? '9+' : unreadTicketsCount}
                 </span>
               )}
@@ -184,12 +182,12 @@ export default function ClientLayout() {
 
             <button
               onClick={() => setShowTermsModal(true)}
-              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold transition-all"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-slate-300 hover:text-white text-xs font-semibold transition-all cursor-pointer"
             >
-              <FileText className="w-3.5 h-3.5 text-brand-blue" />
+              <FileText className="w-3.5 h-3.5 text-brand-cyan" />
               <span>SLA Rules &amp; Terms</span>
             </button>
-            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-100">
+            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-bold border border-emerald-500/20">
               <ShieldCheck className="w-3.5 h-3.5" />
               <span>Authorized Client</span>
             </div>
@@ -197,7 +195,7 @@ export default function ClientLayout() {
         </header>
 
         {/* Dynamic Nested Content */}
-        <main className="flex-1 overflow-y-auto p-6 lg:p-8 pb-24 lg:pb-8 scrollbar-thin">
+        <main className="flex-1 overflow-y-auto p-6 lg:p-8 pb-24 lg:pb-8 scrollbar-thin bg-[#020714]">
           <Outlet />
         </main>
         <ClientMobileNavBar />
@@ -205,78 +203,77 @@ export default function ClientLayout() {
 
       {/* Client Portal SLA Rules & Terms Modal */}
       {showTermsModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-white rounded-3xl max-w-2xl w-full p-6 md:p-8 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto border border-gray-200">
-            <div className="flex items-center justify-between border-b border-gray-100 pb-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-fadeIn">
+          <div className="bg-slate-900/95 rounded-3xl max-w-2xl w-full p-6 md:p-8 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto border border-white/15 text-white backdrop-blur-2xl">
+            <div className="flex items-center justify-between border-b border-white/10 pb-4">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 bg-blue-50 text-brand-blue rounded-2xl">
+                <div className="p-2.5 bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/20 rounded-2xl">
                   <FileText className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold font-heading text-gray-900">
-                    Client Portal SLA Rules & Terms
+                  <h3 className="text-xl font-bold font-heading text-white">
+                    Client Portal SLA Rules &amp; Terms
                   </h3>
-                  <p className="text-xs text-gray-400">
-                    Hindustan Projects official client engagement guidelines & policies
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    Hindustan Projects official client engagement guidelines &amp; policies
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => setShowTermsModal(false)}
-                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-xl transition-all"
+                className="p-2 text-slate-400 hover:text-white hover:bg-white/[0.08] rounded-xl transition-all cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="space-y-5 text-sm text-gray-600 leading-relaxed">
-              <div className="bg-blue-50/50 border border-blue-100 p-4 rounded-2xl space-y-2">
-                <h4 className="font-bold text-brand-blue flex items-center gap-2 text-sm">
-                  <CheckCircle2 className="w-4 h-4 text-brand-blue" />
-                  1. Service Level Agreement (SLA) & Support SLA
+            <div className="space-y-4 text-sm text-slate-300 leading-relaxed">
+              <div className="bg-white/[0.03] border border-white/10 p-4 rounded-2xl space-y-2">
+                <h4 className="font-bold text-brand-cyan flex items-center gap-2 text-sm">
+                  <CheckCircle2 className="w-4 h-4 text-brand-cyan shrink-0" />
+                  1. Service Level Agreement (SLA) &amp; Support SLA
                 </h4>
-                <p className="text-xs text-gray-600">
-                  Support Desk tickets submitted via the portal receive a initial technical response within <strong>2 to 4 business hours</strong>. Urgent production issues are assigned directly to dedicated project leads.
+                <p className="text-xs text-slate-400">
+                  Support Desk tickets submitted via the portal receive an initial technical response within <strong className="text-white">2 to 4 business hours</strong>. Urgent production issues are assigned directly to dedicated project leads.
                 </p>
               </div>
 
-              <div className="bg-emerald-50/50 border border-emerald-100 p-4 rounded-2xl space-y-2">
-                <h4 className="font-bold text-emerald-800 flex items-center gap-2 text-sm">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  2. Intellectual Property (IP) & Source Code Transfer
+              <div className="bg-white/[0.03] border border-white/10 p-4 rounded-2xl space-y-2">
+                <h4 className="font-bold text-emerald-400 flex items-center gap-2 text-sm">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                  2. Intellectual Property (IP) &amp; Source Code Transfer
                 </h4>
-                <p className="text-xs text-gray-600">
-                  Full ownership rights, custom source code zips, and Figma assets are transferred into your <strong>Project File Vault</strong> immediately upon 100% completion of milestone payments.
+                <p className="text-xs text-slate-400">
+                  Full ownership rights, custom source code zips, and Figma assets are transferred into your <strong className="text-white">Project File Vault</strong> immediately upon 100% completion of milestone payments.
                 </p>
               </div>
 
-              <div className="bg-amber-50/50 border border-amber-100 p-4 rounded-2xl space-y-2">
-                <h4 className="font-bold text-amber-800 flex items-center gap-2 text-sm">
-                  <CheckCircle2 className="w-4 h-4 text-amber-600" />
-                  3. Milestone Billing & GST Tax Invoice Compliance
+              <div className="bg-white/[0.03] border border-white/10 p-4 rounded-2xl space-y-2">
+                <h4 className="font-bold text-amber-400 flex items-center gap-2 text-sm">
+                  <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
+                  3. Milestone Billing &amp; GST Tax Invoice Compliance
                 </h4>
-                <p className="text-xs text-gray-600">
-                  All billing milestones are subject to standard 18% GST itemized billing. Official verified tax receipts with GSTIN <strong>08AAACH9929P1Z5</strong> can be printed or saved as PDF directly from the Billing tab.
+                <p className="text-xs text-slate-400">
+                  All billing milestones are subject to standard 18% GST itemized billing. Official verified tax receipts with GSTIN <strong className="text-white">08AAACH9929P1Z5</strong> can be printed or saved as PDF directly from the Billing tab.
                 </p>
               </div>
 
-              <div className="bg-purple-50/50 border border-purple-100 p-4 rounded-2xl space-y-2">
-                <h4 className="font-bold text-purple-900 flex items-center gap-2 text-sm">
-                  <CheckCircle2 className="w-4 h-4 text-purple-600" />
+              <div className="bg-white/[0.03] border border-white/10 p-4 rounded-2xl space-y-2">
+                <h4 className="font-bold text-purple-400 flex items-center gap-2 text-sm">
+                  <CheckCircle2 className="w-4 h-4 text-purple-400 shrink-0" />
                   4. Project Asset Upload Guidelines
                 </h4>
-                <p className="text-xs text-gray-600">
+                <p className="text-xs text-slate-400">
                   Clients can upload project logos, Figma references, and zip files up to 10MB per file into their File Vault. All uploaded assets are securely stored and encrypted in Cloudinary CDN.
                 </p>
               </div>
             </div>
-
-            <div className="pt-4 border-t border-gray-100 flex justify-end">
+            <div className="pt-4 border-t border-white/10 flex justify-end">
               <button
                 onClick={() => setShowTermsModal(false)}
-                className="px-6 py-2.5 bg-brand-blue hover:bg-blue-600 text-white font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer"
+                className="px-6 py-2.5 bg-brand-cyan hover:bg-brand-cyan-light text-slate-950 font-bold text-xs rounded-xl shadow-lg shadow-cyan-950/40 transition-all cursor-pointer"
               >
-                I Understand & Agree
+                I Understand &amp; Agree
               </button>
             </div>
           </div>
