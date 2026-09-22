@@ -32,15 +32,15 @@ const BLOG_CATEGORIES = [
 const FALLBACK_POSTS = [
   {
     id: 'hp-blog-fallback-1',
-    title: "Why We Founded Hindustan Projects: Shifting Rajasthan's Businesses to Enterprise IT",
-    slug: 'why-we-founded-hindustan-projects-enterprise-it',
+    title: "Why We Built Snaptech: Elevating Modern Businesses with Enterprise Cloud & Engineering",
+    slug: 'why-we-built-snaptech-enterprise-it',
     excerpt:
-      "In today's digital-first economy, we founded Hindustan Projects to bridge the gap between legacy paper workflows and high-performance custom software for businesses in Rajasthan and beyond.",
+      "In today's digital-first economy, we engineered Snaptech to bridge the gap between legacy workflows and high-performance custom cloud software for ambitious enterprises across India and global markets.",
     featuredImageUrl:
       'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80',
     category: 'Company News',
-    tags: ['Hindustan Projects', 'mission', 'custom software', 'Rajasthan IT'],
-    authorName: 'Hindustan Projects Team',
+    tags: ['Snaptech Digital', 'engineering', 'custom software', 'cloud architecture'],
+    authorName: 'Snaptech Engineering Team',
     isFeatured: true,
     publishedAt: '2026-07-08T00:00:00.000Z',
     readTime: 5,
@@ -56,7 +56,7 @@ const FALLBACK_POSTS = [
       'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80',
     category: 'Web Development',
     tags: ['custom web apps', 'SaaS', 'ERP', 'mobile apps'],
-    authorName: 'Hindustan Projects Team',
+    authorName: 'Snaptech Engineering Team',
     isFeatured: false,
     publishedAt: '2026-07-08T00:00:00.000Z',
     readTime: 4,
@@ -72,7 +72,7 @@ const FALLBACK_POSTS = [
       'https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=800&q=80',
     category: 'Our Process',
     tags: ['methodology', 'agile', 'quality assurance'],
-    authorName: 'Hindustan Projects Team',
+    authorName: 'Snaptech Engineering Team',
     isFeatured: false,
     publishedAt: '2026-07-09T00:00:00.000Z',
     readTime: 6,

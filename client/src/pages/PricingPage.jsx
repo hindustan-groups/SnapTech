@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
-import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Check,
@@ -20,7 +19,6 @@ import {
   Lock,
   RefreshCw,
   Settings,
-  HelpCircle,
   Laptop,
   Smartphone,
   Cpu,
@@ -33,7 +31,6 @@ import {
   UserCheck,
   Send,
   X,
-  Star,
   CheckCircle,
   Shield,
   Rocket,
@@ -49,6 +46,21 @@ import { breadcrumbSchema, faqSchema } from '@/components/ui/SEO'
 import { useSiteSettings } from '@/hooks/useContent'
 import { useContact } from '@/hooks/useContact'
 import { useToast } from '@/components/ui/ToastProvider'
+
+// ── 0. Feature Comparison Matrix ───────────────────────────────────
+const COMPARISON_MATRIX = [
+  { feature: 'Target Use Case', starter: 'Startups & Portfolios', business: 'Growing Companies', enterprise: 'Industrial / High Scale' },
+  { feature: 'Pages & Subsystems', starter: 'Up to 5 Pages', business: 'Up to 10 Pages', enterprise: 'Unlimited Custom Scope' },
+  { feature: 'Modern UI/UX & Responsive', starter: true, business: true, enterprise: true },
+  { feature: 'Admin CMS Control Panel', starter: false, business: true, enterprise: true },
+  { feature: 'On-Page SEO & Schema Markup', starter: 'Standard', business: 'Advanced Schema + Local', enterprise: 'Enterprise AI Search' },
+  { feature: 'Payment Gateway Integration', starter: false, business: 'Standard (UPI/Razorpay)', enterprise: 'Multi-Currency & Subscriptions' },
+  { feature: 'High-Speed NVMe Cloud Hosting', starter: '1 Year Included', business: '1 Year Dedicated', enterprise: 'High-Availability Cluster' },
+  { feature: 'Custom Domain (.com / .in)', starter: 'Optional Add-on', business: '1 Year Free', enterprise: 'Multi-Domain DNS' },
+  { feature: 'Zero-Vulnerability Code Warranty', starter: true, business: true, enterprise: true },
+  { feature: 'Complimentary SLA Support', starter: '1 Month Free', business: '2 Months Free', enterprise: '6 Months SLA + Lead Pod' },
+  { feature: 'Full Source Code Ownership', starter: true, business: true, enterprise: true },
+]
 
 // ── 1. Website Development Packages ──────────────────────────────
 const WEBSITE_PACKAGES = [
@@ -445,6 +457,7 @@ export default function PricingPage() {
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false)
   const [selectedPlan, setSelectedPlan] = useState('General Enquiry')
   const [openFaqIndex, setOpenFaqIndex] = useState(0)
+  const [isAnnual, setIsAnnual] = useState(false)
 
   // Quote form state
   const [quoteForm, setQuoteForm] = useState({ name: '', email: '', phone: '', message: '' })
@@ -495,7 +508,7 @@ export default function PricingPage() {
       toast.showSuccess('Thank you! Your quote request has been sent successfully. We will get back to you shortly.')
       setIsQuoteModalOpen(false)
       setQuoteForm({ name: '', email: '', phone: '', message: '' })
-    } catch (err) {
+    } catch {
       toast.showError('Failed to submit quote request. Please try again or reach out via WhatsApp.')
     } finally {
       setFormSubmitting(false)
@@ -589,7 +602,7 @@ export default function PricingPage() {
                 variant="secondary"
                 size="lg"
                 as="a"
-                href={`https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent('Hi Hindustan Projects! I would like to discuss project packages & pricing.')}`}
+                href={`https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent('Hi Snaptech Digital! I would like to discuss project packages & pricing.')}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 leftIcon={<MessageSquare className="w-5 h-5" />}
@@ -863,6 +876,83 @@ export default function PricingPage() {
                 </motion.div>
               )
             })}
+          </div>
+
+          {/* ── Feature Comparison Matrix Table ────────────────────────── */}
+          <div className="mt-16 pt-12 border-t border-white/10">
+            <div className="text-center max-w-2xl mx-auto mb-8">
+              <span className="text-xs font-mono font-bold uppercase tracking-widest text-brand-cyan">Feature Deep-Dive</span>
+              <h3 className="font-heading text-2xl sm:text-3xl font-extrabold text-white mt-1">
+                Detailed Deliverables Comparison Matrix
+              </h3>
+              <p className="text-slate-400 text-xs sm:text-sm mt-2">
+                Side-by-side breakdown of technical deliverables and services across each tier.
+              </p>
+            </div>
+
+            <div className="overflow-x-auto rounded-2xl border border-white/10 bg-slate-900/60 backdrop-blur-xl shadow-2xl">
+              <table className="w-full text-left text-xs border-collapse min-w-[650px]">
+                <thead>
+                  <tr className="border-b border-white/10 bg-white/[0.03]">
+                    <th className="p-4 font-heading text-slate-300 font-bold text-sm w-2/5">Deliverables &amp; Specifications</th>
+                    <th className="p-4 font-heading text-white font-bold text-sm text-center">
+                      Starter <span className="block text-[11px] font-mono text-brand-cyan font-normal">₹7,999</span>
+                    </th>
+                    <th className="p-4 font-heading text-white font-bold text-sm text-center bg-brand-cyan/5 border-x border-brand-cyan/20">
+                      <span className="inline-block px-2 py-0.5 rounded-full bg-brand-cyan text-slate-950 text-[9px] font-black uppercase mb-1">Most Popular</span>
+                      <span className="block">Business</span>
+                      <span className="block text-[11px] font-mono text-brand-cyan font-normal">₹14,999</span>
+                    </th>
+                    <th className="p-4 font-heading text-white font-bold text-sm text-center">
+                      Enterprise <span className="block text-[11px] font-mono text-brand-cyan font-normal">Custom Scope</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/5">
+                  {COMPARISON_MATRIX.map((row, rIdx) => (
+                    <tr key={rIdx} className="hover:bg-white/[0.02] transition-colors">
+                      <td className="p-4 font-medium text-slate-300 flex items-center gap-2">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-brand-cyan shrink-0" />
+                        {row.feature}
+                      </td>
+                      <td className="p-4 text-center text-slate-400">
+                        {typeof row.starter === 'boolean' ? (
+                          row.starter ? (
+                            <span className="inline-flex p-1 rounded-full bg-emerald-500/15 text-emerald-400"><Check className="w-3 h-3 stroke-[3]" /></span>
+                          ) : (
+                            <span className="text-slate-600 font-bold">—</span>
+                          )
+                        ) : (
+                          <span className="font-mono text-slate-300">{row.starter}</span>
+                        )}
+                      </td>
+                      <td className="p-4 text-center bg-brand-cyan/5 border-x border-brand-cyan/20 text-white font-semibold">
+                        {typeof row.business === 'boolean' ? (
+                          row.business ? (
+                            <span className="inline-flex p-1 rounded-full bg-emerald-500/15 text-emerald-400"><Check className="w-3 h-3 stroke-[3]" /></span>
+                          ) : (
+                            <span className="text-slate-600 font-bold">—</span>
+                          )
+                        ) : (
+                          <span className="font-mono text-brand-cyan">{row.business}</span>
+                        )}
+                      </td>
+                      <td className="p-4 text-center text-slate-300">
+                        {typeof row.enterprise === 'boolean' ? (
+                          row.enterprise ? (
+                            <span className="inline-flex p-1 rounded-full bg-emerald-500/15 text-emerald-400"><Check className="w-3 h-3 stroke-[3]" /></span>
+                          ) : (
+                            <span className="text-slate-600 font-bold">—</span>
+                          )
+                        ) : (
+                          <span className="font-mono text-indigo-300">{row.enterprise}</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </Container>
       </section>
@@ -1138,6 +1228,31 @@ export default function PricingPage() {
             <p className="text-slate-400 text-sm sm:text-base mt-3 leading-relaxed">
               Drive qualified customer leads, rank #1 on Google for target keywords, and scale commercial ROI across Google &amp; Meta ad suites.
             </p>
+
+            {/* Monthly vs Annual Toggle */}
+            <div className="flex items-center justify-center gap-3 mt-6">
+              <span className={`text-xs font-bold uppercase tracking-wider ${!isAnnual ? 'text-white' : 'text-slate-400'}`}>
+                Monthly Retainer
+              </span>
+              <button
+                type="button"
+                onClick={() => setIsAnnual(!isAnnual)}
+                className="relative w-14 h-7 rounded-full bg-slate-800 border border-white/20 p-1 transition-colors cursor-pointer"
+                aria-label="Toggle annual discount"
+              >
+                <div
+                  className={`w-5 h-5 rounded-full bg-brand-cyan transition-transform ${
+                    isAnnual ? 'translate-x-7' : 'translate-x-0'
+                  }`}
+                />
+              </button>
+              <span className={`text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 ${isAnnual ? 'text-brand-cyan' : 'text-slate-400'}`}>
+                Annual Contract
+                <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-black">
+                  Save 20%
+                </span>
+              </span>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-stretch">
@@ -1196,7 +1311,7 @@ export default function PricingPage() {
                     {/* Price Block */}
                     <div className="my-3.5 pt-3 border-t border-white/10">
                       <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
-                        Monthly Retainer
+                        {isAnnual ? 'Annual Retainer (Billed Monthly)' : 'Monthly Retainer'}
                       </span>
                       <div className="flex items-baseline gap-2 mt-1 flex-wrap">
                         <span
@@ -1204,7 +1319,15 @@ export default function PricingPage() {
                             isFeatured ? 'text-brand-cyan' : 'text-white'
                           }`}
                         >
-                          {mkt.price}
+                          {isAnnual
+                            ? mkt.price === '₹4,999'
+                              ? '₹3,999'
+                              : mkt.price === '₹8,999'
+                              ? '₹7,199'
+                              : mkt.price === '₹14,999'
+                              ? '₹11,999'
+                              : mkt.price
+                            : mkt.price}
                         </span>
                         <span className="text-xs font-bold text-slate-300 bg-white/[0.05] px-2.5 py-0.5 rounded-md border border-white/10 shrink-0">
                           {mkt.period}

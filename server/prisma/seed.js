@@ -571,12 +571,12 @@ async function main() {
   const settings = [
     { key: 'phone', value: '+91 99999 99999' },
     { key: 'whatsapp', value: '+91 99999 99999' },
-    { key: 'email', value: 'info@hindustanprojects.com' },
+    { key: 'email', value: 'info@snaptech.digital' },
     { key: 'address', value: 'Bhilwara, Rajasthan 311001, India' },
-    { key: 'linkedin', value: '#' },
-    { key: 'instagram', value: '#' },
+    { key: 'linkedin', value: 'https://www.linkedin.com/company/snaptech-digital' },
+    { key: 'instagram', value: 'https://www.instagram.com/snaptech.digital' },
     { key: 'facebook', value: '#' },
-    { key: 'tagline', value: 'Building Digital Solutions That Drive Business Growth' },
+    { key: 'tagline', value: 'Architecting High-Performance Digital Solutions & Enterprise Cloud Systems' },
     { key: 'stat_projects', value: '50' },
     { key: 'stat_clients', value: '40' },
     { key: 'stat_experience', value: '5' },
@@ -709,7 +709,7 @@ async function main() {
   console.log('Seeded ' + jobs.length + ' job postings')
 
   // Admin — requires SEED_ADMIN_PASSWORD env var (never falls back to hardcoded value)
-  const adminEmail = process.env.SEED_ADMIN_EMAIL || 'admin@hindustanprojects.com'
+  const adminEmail = process.env.SEED_ADMIN_EMAIL || 'admin@snaptech.digital'
   const adminPassword = process.env.SEED_ADMIN_PASSWORD
   if (!adminPassword) {
     throw new Error(
