@@ -11,7 +11,6 @@ import {
   Sparkles,
   Cpu,
   Award,
-  Layers,
   PhoneCall,
   MessageSquare,
   BadgeCheck,
@@ -22,15 +21,57 @@ import { useServices } from '@/hooks/useServices'
 import { getServiceIcon } from '@/utils/serviceIcons'
 import { useSiteSettings } from '@/hooks/useContent'
 
-/* ── Colour palette — cycles through services ─────────────────── */
+/* ── Light-theme curated color palettes for services ───────────── */
 const COLORS = [
-  { gradient: 'from-blue-600 via-cyan-500 to-teal-400', glow: 'bg-cyan-500/10', border: 'hover:border-cyan-400/50', badge: 'bg-cyan-500/10 text-cyan-300 border-cyan-500/30' },
-  { gradient: 'from-orange-500 via-amber-500 to-yellow-400', glow: 'bg-amber-500/10', border: 'hover:border-amber-400/50', badge: 'bg-amber-500/10 text-amber-300 border-amber-500/30' },
-  { gradient: 'from-violet-600 via-purple-500 to-fuchsia-400', glow: 'bg-purple-500/10', border: 'hover:border-purple-400/50', badge: 'bg-purple-500/10 text-purple-300 border-purple-500/30' },
-  { gradient: 'from-emerald-600 via-teal-500 to-cyan-400', glow: 'bg-emerald-500/10', border: 'hover:border-emerald-400/50', badge: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30' },
-  { gradient: 'from-sky-600 via-blue-500 to-indigo-400', glow: 'bg-sky-500/10', border: 'hover:border-sky-400/50', badge: 'bg-sky-500/10 text-sky-300 border-sky-500/30' },
-  { gradient: 'from-pink-600 via-rose-500 to-orange-400', glow: 'bg-rose-500/10', border: 'hover:border-rose-400/50', badge: 'bg-rose-500/10 text-rose-300 border-rose-500/30' },
-  { gradient: 'from-indigo-600 via-violet-500 to-cyan-400', glow: 'bg-indigo-500/10', border: 'hover:border-indigo-400/50', badge: 'bg-indigo-500/10 text-indigo-300 border-indigo-500/30' },
+  {
+    gradient: 'from-blue-600 to-cyan-500',
+    glow: 'bg-blue-50',
+    border: 'hover:border-blue-400',
+    badge: 'bg-blue-50 text-[#1a3e8c] border-blue-200',
+    textAccent: 'text-[#1a3e8c]',
+  },
+  {
+    gradient: 'from-amber-500 to-orange-500',
+    glow: 'bg-amber-50',
+    border: 'hover:border-amber-400',
+    badge: 'bg-amber-50 text-amber-800 border-amber-200',
+    textAccent: 'text-amber-700',
+  },
+  {
+    gradient: 'from-purple-600 to-indigo-500',
+    glow: 'bg-purple-50',
+    border: 'hover:border-purple-400',
+    badge: 'bg-purple-50 text-purple-700 border-purple-200',
+    textAccent: 'text-purple-600',
+  },
+  {
+    gradient: 'from-emerald-600 to-teal-500',
+    glow: 'bg-emerald-50',
+    border: 'hover:border-emerald-400',
+    badge: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+    textAccent: 'text-emerald-700',
+  },
+  {
+    gradient: 'from-sky-600 to-blue-500',
+    glow: 'bg-sky-50',
+    border: 'hover:border-sky-400',
+    badge: 'bg-sky-50 text-sky-700 border-sky-200',
+    textAccent: 'text-sky-600',
+  },
+  {
+    gradient: 'from-rose-500 to-pink-500',
+    glow: 'bg-rose-50',
+    border: 'hover:border-rose-400',
+    badge: 'bg-rose-50 text-rose-700 border-rose-200',
+    textAccent: 'text-rose-600',
+  },
+  {
+    gradient: 'from-indigo-600 to-violet-500',
+    glow: 'bg-indigo-50',
+    border: 'hover:border-indigo-400',
+    badge: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+    textAccent: 'text-indigo-600',
+  },
 ]
 
 /** Helper to resolve clean service category taxonomy */
@@ -133,22 +174,22 @@ const FALLBACK_SERVICES = [
   },
 ]
 
-/* ── Skeleton Card ────────────────────────────────────────────── */
+/* ── Light Skeleton Card ───────────────────────────────────────── */
 function ServiceSkeleton() {
   return (
-    <div className="bg-slate-900/60 rounded-2xl border border-white/10 p-7 flex flex-col gap-4 animate-pulse backdrop-blur-xl">
+    <div className="bg-white rounded-2xl border border-slate-200 p-7 flex flex-col gap-4 animate-pulse shadow-sm">
       <div className="flex items-center justify-between">
-        <div className="w-14 h-14 rounded-2xl bg-white/10" />
-        <div className="h-5 w-20 bg-white/10 rounded-full" />
+        <div className="w-14 h-14 rounded-2xl bg-slate-100" />
+        <div className="h-5 w-20 bg-slate-100 rounded-full" />
       </div>
-      <div className="h-6 bg-white/10 rounded w-2/3 mt-2" />
+      <div className="h-6 bg-slate-100 rounded w-2/3 mt-2" />
       <div className="space-y-2 flex-1">
-        <div className="h-3.5 bg-white/5 rounded w-full" />
-        <div className="h-3.5 bg-white/5 rounded w-5/6" />
+        <div className="h-3.5 bg-slate-100 rounded w-full" />
+        <div className="h-3.5 bg-slate-100 rounded w-5/6" />
       </div>
       <div className="flex gap-2 mt-4">
-        <div className="h-6 w-20 bg-white/10 rounded-md" />
-        <div className="h-6 w-24 bg-white/10 rounded-md" />
+        <div className="h-6 w-20 bg-slate-100 rounded-md" />
+        <div className="h-6 w-24 bg-slate-100 rounded-md" />
       </div>
     </div>
   )
@@ -212,7 +253,7 @@ export default function ServicesPage() {
   ]
 
   return (
-    <div className="bg-[#020714] min-h-screen text-slate-100 selection:bg-brand-cyan/20 selection:text-brand-cyan">
+    <div className="bg-slate-50/50 min-h-screen text-slate-900 selection:bg-blue-500/20 selection:text-[#1a3e8c]">
       <SEO
         title="Enterprise IT Solutions & Services — Snaptech | Hindustan Projects"
         description="Explore Snaptech's full-suite IT capabilities: custom web applications, native mobile apps, cloud architecture, AI automation, enterprise CRM, and SEO engineering."
@@ -234,28 +275,28 @@ export default function ServicesPage() {
         ]}
       />
 
-      {/* ── 1. Cyber Hero Header ───────────────────────────────────── */}
-      <section className="relative pt-28 sm:pt-36 lg:pt-40 pb-16 sm:pb-24 overflow-hidden border-b border-white/10 bg-[#020714]">
-        {/* Deep Cyber Mesh Grids */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:48px_48px] pointer-events-none" />
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand-primary/20 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-brand-cyan/15 rounded-full blur-[100px] translate-y-1/2 pointer-events-none" />
+      {/* ── 1. Light Hero Header ───────────────────────────────────── */}
+      <section className="relative pt-28 sm:pt-36 lg:pt-40 pb-16 sm:pb-24 overflow-hidden border-b border-slate-100 bg-white">
+        {/* Subtle dot/grid background & soft ambient blurs */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000005_1px,transparent_1px),linear-gradient(to_bottom,#00000005_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
+        <div className="absolute top-1/4 right-0 w-96 h-96 bg-[#1a3e8c]/5 rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute bottom-0 left-10 w-80 h-80 bg-blue-400/5 rounded-full blur-[120px] pointer-events-none" />
 
         <Container className="relative">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left Copy */}
             <div className="lg:col-span-7">
-              <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-brand-cyan/40 bg-brand-cyan/10 text-brand-cyan text-xs font-semibold uppercase tracking-widest mb-6 backdrop-blur-md shadow-[0_0_15px_rgba(6,182,212,0.2)]">
-                <span className="w-2 h-2 rounded-full bg-brand-cyan animate-pulse" />
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1a3e8c]/10 border border-[#1a3e8c]/20 text-[#1a3e8c] text-xs font-mono font-bold uppercase tracking-widest mb-6">
+                <span className="w-2 h-2 rounded-full bg-[#1a3e8c] animate-pulse" />
                 Snaptech Enterprise Capabilities
               </div>
-              <h1 className="font-heading text-4xl sm:text-5xl lg:text-[3.6rem] font-extrabold text-white leading-[1.12] mb-6">
+              <h1 className="font-heading text-4xl sm:text-5xl lg:text-[3.5rem] font-extrabold text-slate-900 leading-[1.12] mb-6 tracking-tight">
                 Next-Gen IT Services{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan via-brand-primary-light to-white">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0D1B4B] via-[#1a3e8c] to-[#2563eb]">
                   Engineered For Scale.
                 </span>
               </h1>
-              <p className="text-slate-300 text-base sm:text-lg leading-relaxed mb-8 max-w-2xl font-light">
+              <p className="text-slate-600 text-base sm:text-lg leading-relaxed mb-8 max-w-2xl">
                 From high-concurrency cloud systems and resilient mobile apps to AI automation and high-ROI technical SEO — 
                 Snaptech delivers battle-tested engineering governed by Hindustan Projects Group.
               </p>
@@ -267,7 +308,7 @@ export default function ServicesPage() {
                   size="lg"
                   as={Link}
                   to="/contact"
-                  className="bg-gradient-to-r from-brand-primary to-brand-cyan hover:from-brand-primary-dark hover:to-brand-cyan-dark text-white font-bold px-8 shadow-[0_0_25px_rgba(30,107,238,0.4)] border border-brand-cyan/40"
+                  className="bg-[#0D1B4B] hover:bg-[#1B6EF3] text-white font-bold px-8 py-3.5 shadow-lg shadow-blue-900/10 transition-all"
                 >
                   Schedule Solution Architect
                 </Button>
@@ -276,29 +317,29 @@ export default function ServicesPage() {
                   size="lg"
                   as={Link}
                   to="/portfolio"
-                  className="text-white border border-white/20 hover:bg-white/10 backdrop-blur-md"
+                  className="border border-slate-300 bg-white text-slate-700 hover:text-[#1a3e8c] hover:bg-slate-50 hover:border-slate-400 font-semibold shadow-sm"
                 >
-                  View Case Studies <ArrowRight className="w-4 h-4 ml-2 inline text-brand-cyan" />
+                  View Case Studies <ArrowRight className="w-4 h-4 ml-2 inline text-[#1a3e8c]" />
                 </Button>
               </div>
             </div>
 
             {/* Right: Live Interactive Ecosystem Card */}
             <div className="lg:col-span-5">
-              <div className="relative rounded-2xl border border-white/15 bg-slate-900/70 backdrop-blur-2xl p-6 sm:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.6)]">
-                <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-5">
+              <div className="relative rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-7 shadow-xl shadow-slate-200/60">
+                <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-5">
                   <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-                    <span className="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="text-xs font-mono font-bold text-slate-800 uppercase tracking-wider">
                       Telemetry Matrix
                     </span>
                   </div>
-                  <span className="text-[11px] font-mono text-brand-cyan px-2.5 py-0.5 rounded-md bg-brand-cyan/10 border border-brand-cyan/20">
+                  <span className="text-[11px] font-mono text-[#1a3e8c] font-semibold px-2.5 py-0.5 rounded-md bg-blue-50 border border-blue-200/80">
                     Live Active ({services.length} Solutions)
                   </span>
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-2.5">
                   {services.slice(0, 4).map((s, idx) => {
                     const Icon = getServiceIcon(s.icon)
                     const c = COLORS[idx % COLORS.length]
@@ -306,32 +347,32 @@ export default function ServicesPage() {
                       <Link
                         key={s.id || idx}
                         to={`/services/${s.slug}`}
-                        className="flex items-center justify-between p-3 rounded-xl border border-white/5 bg-white/[0.03] hover:border-brand-cyan/40 hover:bg-white/[0.06] transition-all group"
+                        className="flex items-center justify-between p-3 rounded-xl border border-slate-100 bg-slate-50/70 hover:bg-blue-50/50 hover:border-blue-200/80 transition-all group"
                       >
                         <div className="flex items-center gap-3">
-                          <div className={`w-9 h-9 rounded-lg bg-gradient-to-br ${c.gradient} flex items-center justify-center shrink-0 shadow-md`}>
+                          <div className={`w-9 h-9 rounded-lg bg-gradient-to-br ${c.gradient} flex items-center justify-center shrink-0 shadow-sm`}>
                             <Icon className="w-4 h-4 text-white" strokeWidth={2} />
                           </div>
                           <div>
-                            <p className="text-sm font-semibold text-white group-hover:text-brand-cyan transition-colors">
+                            <p className="text-sm font-bold text-slate-900 group-hover:text-[#1a3e8c] transition-colors">
                               {s.title}
                             </p>
-                            <p className="text-[11px] text-slate-400 font-mono">
+                            <p className="text-[11px] text-slate-500 font-mono">
                               {s.tag || 'Enterprise Grade'} • {s.deliveryTime || '2–4 Weeks'}
                             </p>
                           </div>
                         </div>
-                        <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-brand-cyan group-hover:translate-x-1 transition-all" />
+                        <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-[#1a3e8c] group-hover:translate-x-1 transition-all" />
                       </Link>
                     )
                   })}
                 </div>
 
-                <div className="mt-5 pt-4 border-t border-white/10 flex items-center justify-between text-xs text-slate-400">
+                <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
                   <span className="flex items-center gap-1.5">
-                    <Award className="w-3.5 h-3.5 text-brand-cyan" /> Certified Solution Architects
+                    <Award className="w-3.5 h-3.5 text-[#1a3e8c]" /> Certified Solution Architects
                   </span>
-                  <span className="text-brand-cyan font-mono font-semibold">100% Dynamic Engine</span>
+                  <span className="text-[#1a3e8c] font-mono font-bold">100% Dynamic Engine</span>
                 </div>
               </div>
             </div>
@@ -340,21 +381,21 @@ export default function ServicesPage() {
       </section>
 
       {/* ── 2. Enterprise Telemetry & SLA Strip ─────────────────────── */}
-      <section className="bg-[#03091e] border-b border-white/10 py-6 sm:py-8">
+      <section className="bg-slate-50 border-b border-slate-200/80 py-6 sm:py-8">
         <Container>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {telemetryStats.map((stat) => (
               <div
                 key={stat.label}
-                className="flex items-center gap-4 p-4 rounded-xl border border-white/10 bg-white/[0.02] hover:border-brand-cyan/40 hover:bg-white/[0.05] transition-all duration-300"
+                className="flex items-center gap-4 p-4 rounded-xl border border-slate-200/80 bg-white shadow-sm hover:shadow-md hover:border-blue-300 transition-all duration-300"
               >
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-primary/20 to-brand-cyan/10 border border-brand-cyan/20 flex items-center justify-center shrink-0">
-                  <stat.icon className="w-5 h-5 text-brand-cyan" strokeWidth={2} />
+                <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0">
+                  <stat.icon className="w-5 h-5 text-[#1a3e8c]" strokeWidth={2} />
                 </div>
                 <div>
-                  <p className="text-base font-bold text-white font-heading">{stat.value}</p>
-                  <p className="text-xs text-slate-300 font-medium">{stat.label}</p>
-                  <p className="text-[11px] text-brand-cyan/70 font-mono">{stat.sub}</p>
+                  <p className="text-base font-bold text-slate-900 font-heading">{stat.value}</p>
+                  <p className="text-xs text-slate-600 font-medium">{stat.label}</p>
+                  <p className="text-[11px] text-[#1a3e8c] font-mono font-semibold">{stat.sub}</p>
                 </div>
               </div>
             ))}
@@ -363,25 +404,23 @@ export default function ServicesPage() {
       </section>
 
       {/* ── 3. Services Catalog & Filter Section ────────────────────── */}
-      <section className="py-16 sm:py-20 lg:py-24 bg-[#020714] relative">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(14,165,233,0.1),rgba(255,255,255,0))] pointer-events-none" />
-
+      <section className="py-16 sm:py-20 lg:py-24 bg-slate-50/60 relative">
         <Container className="relative">
           {/* Section Heading */}
           <div className="max-w-3xl mx-auto text-center mb-12 sm:mb-16">
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand-primary/40 bg-brand-primary/10 text-brand-cyan text-xs font-semibold uppercase tracking-widest mb-4">
-              <Cpu className="w-3.5 h-3.5 text-brand-cyan" /> Full Engineering Spectrum
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#1a3e8c]/20 bg-[#1a3e8c]/10 text-[#1a3e8c] text-xs font-mono font-bold uppercase tracking-widest mb-4">
+              <Cpu className="w-3.5 h-3.5 text-[#1a3e8c]" /> Full Engineering Spectrum
             </span>
-            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 mb-4 tracking-tight">
               Comprehensive Technology Solutions
             </h2>
-            <p className="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto">
+            <p className="text-slate-600 text-base sm:text-lg max-w-2xl mx-auto">
               Choose standalone engineering modules or commission complete end-to-end enterprise transformation suites.
             </p>
           </div>
 
           {/* Search & Category Filter Controls */}
-          <div className="flex flex-col lg:flex-row gap-4 items-center justify-between mb-12 p-4 rounded-2xl border border-white/10 bg-slate-900/60 backdrop-blur-xl">
+          <div className="flex flex-col lg:flex-row gap-4 items-center justify-between mb-12 p-4 rounded-2xl border border-slate-200 bg-white shadow-sm">
             {/* Search Input */}
             <div className="relative w-full lg:w-96">
               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
@@ -390,12 +429,12 @@ export default function ServicesPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search by capability, tech (React, AWS), or deliverable..."
-                className="w-full pl-10 pr-16 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-400 text-xs sm:text-sm focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all"
+                className="w-full pl-10 pr-16 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 text-xs sm:text-sm focus:outline-none focus:bg-white focus:border-[#1a3e8c] focus:ring-2 focus:ring-[#1a3e8c]/10 transition-all"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-brand-cyan hover:text-white"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#1a3e8c] font-semibold hover:text-[#0D1B4B]"
                 >
                   Clear
                 </button>
@@ -413,14 +452,14 @@ export default function ServicesPage() {
                     onClick={() => setActiveCategory(cat)}
                     className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 flex items-center gap-1.5 ${
                       isActive
-                        ? 'bg-gradient-to-r from-brand-primary to-brand-cyan text-white shadow-[0_0_15px_rgba(6,182,212,0.4)] border border-brand-cyan/40'
-                        : 'bg-white/5 text-slate-400 border border-white/10 hover:border-white/25 hover:text-white'
+                        ? 'bg-[#0D1B4B] text-white shadow-md shadow-blue-900/10 border border-[#0D1B4B]'
+                        : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 hover:text-slate-900'
                     }`}
                   >
                     <span>{cat}</span>
                     <span
-                      className={`text-[10px] px-1.5 py-0.2 rounded-full ${
-                        isActive ? 'bg-white/20 text-white' : 'bg-white/10 text-slate-400'
+                      className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${
+                        isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'
                       }`}
                     >
                       {count}
@@ -433,11 +472,11 @@ export default function ServicesPage() {
 
           {/* Error State */}
           {isError ? (
-            <div className="text-center py-16 p-8 rounded-2xl border border-red-500/30 bg-red-500/5 max-w-lg mx-auto">
-              <p className="text-red-400 font-semibold mb-3">Unable to synchronize with live database.</p>
+            <div className="text-center py-16 p-8 rounded-2xl border border-red-200 bg-red-50 max-w-lg mx-auto">
+              <p className="text-red-700 font-semibold mb-3">Unable to synchronize with live database.</p>
               <button
                 onClick={() => refetch()}
-                className="px-5 py-2 rounded-xl bg-brand-primary text-white font-medium hover:bg-brand-primary-dark transition-all text-sm"
+                className="px-5 py-2 rounded-xl bg-[#0D1B4B] text-white font-medium hover:bg-[#1B6EF3] transition-all text-sm"
               >
                 Reconnect API
               </button>
@@ -458,30 +497,24 @@ export default function ServicesPage() {
                     return (
                       <div
                         key={service.id || index}
-                        className={`group relative rounded-2xl border border-white/10 bg-slate-900/70 p-7 flex flex-col
-                          backdrop-blur-xl ${c.border} hover:shadow-[0_0_35px_rgba(6,182,212,0.18)]
-                          hover:-translate-y-1.5 transition-all duration-300 overflow-hidden`}
+                        className={`group relative rounded-2xl border border-slate-200 bg-white p-7 flex flex-col
+                          shadow-sm hover:shadow-xl ${c.border} hover:-translate-y-1.5 transition-all duration-300 overflow-hidden`}
                       >
-                        {/* Ambient Card Background Glow on Hover */}
-                        <div
-                          className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl ${c.glow} pointer-events-none`}
-                        />
-
                         {/* Top Bar: Number + Delivery Time + Tag */}
                         <div className="relative flex items-center justify-between mb-5">
                           <div className="flex items-center gap-2">
-                            <span className="text-xs font-mono font-bold text-brand-cyan/70 tracking-widest">
+                            <span className="text-xs font-mono font-bold text-slate-400 tracking-widest">
                               {String(index + 1).padStart(2, '0')} // MODULE
                             </span>
                             {service.deliveryTime && (
-                              <span className="inline-flex items-center gap-1 text-[10px] font-mono text-slate-400 bg-white/5 border border-white/10 px-2 py-0.5 rounded-md">
-                                <Clock className="w-2.5 h-2.5 text-brand-cyan" />
+                              <span className="inline-flex items-center gap-1 text-[11px] font-mono text-slate-600 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md">
+                                <Clock className="w-3 h-3 text-[#1a3e8c]" />
                                 {service.deliveryTime}
                               </span>
                             )}
                           </div>
                           {service.tag && (
-                            <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-semibold font-mono border ${c.badge}`}>
+                            <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold font-mono border ${c.badge}`}>
                               {service.tag}
                             </span>
                           )}
@@ -489,20 +522,20 @@ export default function ServicesPage() {
 
                         {/* Icon */}
                         <div
-                          className={`relative w-14 h-14 rounded-2xl bg-gradient-to-br ${c.gradient} flex items-center justify-center mb-5 shadow-lg group-hover:scale-105 transition-transform duration-300`}
+                          className={`relative w-14 h-14 rounded-2xl bg-gradient-to-br ${c.gradient} flex items-center justify-center mb-5 shadow-md group-hover:scale-105 transition-transform duration-300`}
                         >
                           <Icon className="w-7 h-7 text-white" strokeWidth={1.8} />
                         </div>
 
                         {/* Title */}
                         <Link to={`/services/${service.slug}`}>
-                          <h3 className="relative font-heading text-xl font-bold text-white group-hover:text-brand-cyan transition-colors mb-2.5">
+                          <h3 className="relative font-heading text-xl font-bold text-slate-900 group-hover:text-[#1a3e8c] transition-colors mb-2.5">
                             {service.title}
                           </h3>
                         </Link>
 
                         {/* Description */}
-                        <p className="relative text-xs sm:text-sm text-slate-300/80 leading-relaxed mb-5 line-clamp-3 font-light">
+                        <p className="relative text-xs sm:text-sm text-slate-600 leading-relaxed mb-5 line-clamp-3">
                           {service.shortDescription}
                         </p>
 
@@ -512,13 +545,13 @@ export default function ServicesPage() {
                             {tech.slice(0, 4).map((t) => (
                               <span
                                 key={t}
-                                className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-white/[0.04] text-slate-300 border border-white/10"
+                                className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 border border-slate-200/80"
                               >
                                 {t}
                               </span>
                             ))}
                             {tech.length > 4 && (
-                              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-md bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/20">
+                              <span className="text-[11px] font-mono px-1.5 py-0.5 rounded-md bg-blue-50 text-[#1a3e8c] font-semibold border border-blue-200">
                                 +{tech.length - 4} more
                               </span>
                             )}
@@ -526,20 +559,20 @@ export default function ServicesPage() {
                         )}
 
                         {/* Feature Badges Preview */}
-                        <div className="relative flex flex-col gap-1.5 mb-6 mt-auto pt-4 border-t border-white/5">
+                        <div className="relative flex flex-col gap-1.5 mb-6 mt-auto pt-4 border-t border-slate-100">
                           {features.slice(0, 3).map((f, fi) => (
-                            <div key={fi} className="flex items-center gap-2 text-[11px] text-slate-300 font-medium">
-                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                            <div key={fi} className="flex items-center gap-2 text-xs text-slate-700 font-medium">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                               <span className="truncate">{f}</span>
                             </div>
                           ))}
                         </div>
 
                         {/* Bottom Actions Row */}
-                        <div className="relative pt-4 border-t border-white/10 flex items-center justify-between gap-3">
+                        <div className="relative pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
                           <Link
                             to={`/services/${service.slug}`}
-                            className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-cyan group-hover:text-white transition-colors"
+                            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1a3e8c] group-hover:text-[#0D1B4B] transition-colors"
                           >
                             <span>Explore Architecture</span>
                             <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
@@ -551,10 +584,10 @@ export default function ServicesPage() {
                             )}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 text-[11px] px-2.5 py-1 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 transition-colors"
+                            className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 font-semibold transition-colors"
                             title="Quick WhatsApp discussion"
                           >
-                            <MessageSquare className="w-3 h-3 text-emerald-400" />
+                            <MessageSquare className="w-3 h-3 text-emerald-600" />
                             <span>Discuss</span>
                           </a>
                         </div>
@@ -566,9 +599,9 @@ export default function ServicesPage() {
 
           {/* Empty Search Result */}
           {!isLoading && filteredServices.length === 0 && (
-            <div className="text-center py-16 p-8 rounded-2xl border border-white/10 bg-slate-900/40">
-              <p className="text-lg font-bold text-white mb-2">No matching solutions found</p>
-              <p className="text-sm text-slate-400 mb-6">
+            <div className="text-center py-16 p-8 rounded-2xl border border-slate-200 bg-white shadow-sm">
+              <p className="text-lg font-bold text-slate-900 mb-2">No matching solutions found</p>
+              <p className="text-sm text-slate-600 mb-6">
                 Try searching for a different keyword or switch the category filter.
               </p>
               <Button
@@ -578,7 +611,7 @@ export default function ServicesPage() {
                   setSearchQuery('')
                   setActiveCategory('All')
                 }}
-                className="text-white border-white/20"
+                className="border-slate-300 text-slate-700 hover:bg-slate-100"
               >
                 Reset All Filters
               </Button>
@@ -588,18 +621,17 @@ export default function ServicesPage() {
       </section>
 
       {/* ── 4. Direct Pricing Packages Banner ───────────────────────── */}
-      <section className="bg-gradient-to-r from-blue-950/40 via-indigo-950/30 to-slate-900/50 border-t border-b border-white/10 py-12 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.08),transparent_60%)] pointer-events-none" />
+      <section className="py-12 bg-white border-t border-b border-slate-100 relative overflow-hidden">
         <Container className="relative">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-6 sm:p-8 rounded-2xl border border-brand-cyan/20 bg-slate-900/70 backdrop-blur-xl">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-8 sm:p-10 rounded-3xl bg-gradient-to-r from-[#0D1B4B] via-[#11235A] to-[#1a3e8c] text-white shadow-xl shadow-blue-900/10">
             <div className="space-y-2 text-center md:text-left">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-cyan/10 border border-brand-cyan/30 text-brand-cyan text-xs font-mono font-bold uppercase tracking-wider">
-                <BadgeCheck className="w-3.5 h-3.5 text-brand-cyan" /> Transparent Investment Packages
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-white text-xs font-mono font-bold uppercase tracking-wider">
+                <BadgeCheck className="w-3.5 h-3.5 text-cyan-300" /> Transparent Investment Packages
               </div>
               <h3 className="font-heading text-xl sm:text-2xl font-bold text-white">
                 Looking For Predictable Package Tiers With Zero Hidden Costs?
               </h3>
-              <p className="text-xs sm:text-sm text-slate-300 max-w-2xl font-light">
+              <p className="text-xs sm:text-sm text-slate-200 max-w-2xl font-light">
                 Explore our Starter, Business, and Enterprise packages spanning full-stack web platforms, mobile apps, and enterprise cloud migrations with clear delivery timelines.
               </p>
             </div>
@@ -607,28 +639,26 @@ export default function ServicesPage() {
               as={Link}
               to="/pricing"
               variant="primary"
-              className="shrink-0 bg-gradient-to-r from-brand-primary to-brand-cyan hover:from-brand-primary-dark hover:to-brand-cyan-dark text-white font-bold px-6 py-3 shadow-[0_0_20px_rgba(6,182,212,0.3)]"
+              className="shrink-0 bg-white hover:bg-slate-100 text-[#0D1B4B] font-bold px-6 py-3 shadow-lg"
             >
-              Explore Pricing &amp; Packages <ArrowRight className="w-4 h-4 ml-2 inline" />
+              Explore Pricing &amp; Packages <ArrowRight className="w-4 h-4 ml-2 inline text-[#0D1B4B]" />
             </Button>
           </div>
         </Container>
       </section>
 
       {/* ── 5. The 4-Step Engineering Delivery Model ────────────────── */}
-      <section className="py-16 sm:py-20 lg:py-24 bg-[#03091e] border-b border-white/10 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff04_1px,transparent_1px),linear-gradient(to_bottom,#ffffff04_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
-        
+      <section className="py-16 sm:py-20 lg:py-24 bg-white border-b border-slate-100 relative overflow-hidden">
         <Container className="relative">
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-12 mb-14">
             <div className="max-w-2xl">
-              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand-cyan/40 bg-brand-cyan/10 text-brand-cyan text-xs font-semibold uppercase tracking-widest mb-4">
-                <Sparkles className="w-3.5 h-3.5 text-brand-cyan" /> Agile Delivery Model
-              </span>
-              <h2 className="font-heading text-3xl sm:text-4xl font-bold text-white mb-3">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1a3e8c]/10 border border-[#1a3e8c]/20 text-[#1a3e8c] text-xs font-mono font-bold uppercase tracking-widest mb-4">
+                <Sparkles className="w-3.5 h-3.5" /> Agile Delivery Model
+              </div>
+              <h2 className="font-heading text-3xl sm:text-4xl font-extrabold text-slate-900 mb-3 tracking-tight">
                 From Specification to Production In 4 Sprints
               </h2>
-              <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+              <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
                 Our ISO-compliant delivery pipeline guarantees full repository visibility, clean documentation, zero technical debt, and deterministic milestone deadlines.
               </p>
             </div>
@@ -638,7 +668,7 @@ export default function ServicesPage() {
                 variant="outline"
                 as={Link}
                 to="/contact"
-                className="border-brand-cyan/40 text-brand-cyan hover:bg-brand-cyan/10 font-bold"
+                className="border-slate-300 bg-white text-slate-700 hover:text-[#1a3e8c] hover:bg-slate-50 font-bold"
               >
                 Request Architecture Blueprint
               </Button>
@@ -675,20 +705,20 @@ export default function ServicesPage() {
             ].map((p) => (
               <div
                 key={p.step}
-                className="p-6 rounded-2xl border border-white/10 bg-slate-900/60 backdrop-blur-xl relative group hover:border-brand-cyan/50 hover:bg-slate-900/80 transition-all duration-300"
+                className="p-6 rounded-2xl border border-slate-200/90 bg-slate-50/70 relative group hover:border-blue-300 hover:bg-white hover:shadow-lg transition-all duration-300"
               >
                 <div className="flex items-center justify-between mb-5">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-primary to-brand-cyan flex items-center justify-center font-heading font-extrabold text-white text-lg shadow-[0_0_20px_rgba(6,182,212,0.3)]">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#0D1B4B] to-[#1B6EF3] flex items-center justify-center font-heading font-extrabold text-white text-lg shadow-md">
                     {p.step}
                   </div>
-                  <span className="text-[11px] font-mono text-brand-cyan px-2.5 py-1 rounded-md bg-white/5 border border-white/10">
+                  <span className="text-[11px] font-mono text-slate-700 font-bold px-2.5 py-1 rounded-md bg-white border border-slate-200">
                     {p.time}
                   </span>
                 </div>
-                <h3 className="font-heading text-lg font-bold text-white mb-2 group-hover:text-brand-cyan transition-colors">
+                <h3 className="font-heading text-lg font-bold text-slate-900 mb-2 group-hover:text-[#1a3e8c] transition-colors">
                   {p.title}
                 </h3>
-                <p className="text-sm text-slate-300/80 leading-relaxed font-light">
+                <p className="text-sm text-slate-600 leading-relaxed">
                   {p.desc}
                 </p>
               </div>
@@ -698,51 +728,54 @@ export default function ServicesPage() {
       </section>
 
       {/* ── 6. Bottom Consultation Banner ──────────────────────────── */}
-      <section className="relative py-20 sm:py-24 overflow-hidden bg-[#020714]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom,rgba(30,107,238,0.25),transparent_70%)] pointer-events-none" />
-
+      <section className="relative py-20 sm:py-24 overflow-hidden bg-slate-50">
         <Container className="relative">
-          <div className="max-w-4xl mx-auto rounded-3xl border border-brand-cyan/30 bg-gradient-to-b from-slate-900/90 to-[#020714] p-8 sm:p-12 lg:p-16 text-center backdrop-blur-2xl shadow-[0_0_60px_rgba(6,182,212,0.12)]">
-            <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-emerald-400/40 bg-emerald-400/10 text-emerald-300 text-xs font-semibold uppercase tracking-widest mb-6">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              Direct Lead Engineer Consultation
-            </span>
-            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-5 leading-tight">
-              Need A Tailored Architecture For Your Business?
-            </h2>
-            <p className="text-slate-300 text-base sm:text-lg mb-8 max-w-2xl mx-auto font-light">
-              Speak directly with our senior technology team. We will analyze your scope, estimate investment, and formulate a clear 30-day delivery roadmap.
-            </p>
+          <div className="max-w-4xl mx-auto rounded-3xl bg-[#0D1B4B] text-white p-8 sm:p-12 lg:p-16 text-center shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
-              <Button
-                variant="primary"
-                size="lg"
-                as={Link}
-                to="/contact"
-                className="w-full sm:w-auto bg-gradient-to-r from-brand-primary to-brand-cyan hover:from-brand-primary-dark hover:to-brand-cyan-dark text-white font-bold px-8 shadow-[0_0_25px_rgba(30,107,238,0.4)]"
-              >
-                Schedule Strategy Call
-              </Button>
-              <a
-                href={`tel:${phone.replace(/\s+/g, '')}`}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl border border-white/20 text-white hover:bg-white/10 text-sm font-semibold transition-all"
-              >
-                <PhoneCall className="w-4 h-4 text-brand-cyan" />
-                <span>Call {phone}</span>
-              </a>
-            </div>
+            <div className="relative z-10">
+              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-semibold uppercase tracking-widest mb-6">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                Direct Lead Engineer Consultation
+              </span>
+              <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-5 leading-tight">
+                Need A Tailored Architecture For Your Business?
+              </h2>
+              <p className="text-slate-200 text-base sm:text-lg mb-8 max-w-2xl mx-auto font-light leading-relaxed">
+                Speak directly with our senior technology team. We will analyze your scope, estimate investment, and formulate a clear 30-day delivery roadmap.
+              </p>
 
-            <div className="pt-8 border-t border-white/10 flex flex-wrap items-center justify-center gap-8 text-slate-300 text-xs font-mono">
-              <span className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Zero Upfront Discovery Cost
-              </span>
-              <span className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" /> 24-Hour Spec Response SLA
-              </span>
-              <span className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" /> 100% Code &amp; IP Ownership
-              </span>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+                <Button
+                  variant="primary"
+                  size="lg"
+                  as={Link}
+                  to="/contact"
+                  className="w-full sm:w-auto bg-[#1B6EF3] hover:bg-blue-600 text-white font-bold px-8 py-3.5 shadow-lg shadow-blue-500/30"
+                >
+                  Schedule Strategy Call
+                </Button>
+                <a
+                  href={`tel:${phone.replace(/\s+/g, '')}`}
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border border-white/20 text-white hover:bg-white/10 text-sm font-semibold transition-all"
+                >
+                  <PhoneCall className="w-4 h-4 text-cyan-300" />
+                  <span>Call {phone}</span>
+                </a>
+              </div>
+
+              <div className="pt-8 border-t border-white/10 flex flex-wrap items-center justify-center gap-8 text-slate-300 text-xs font-mono">
+                <span className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Zero Upfront Discovery Cost
+                </span>
+                <span className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400" /> 24-Hour Spec Response SLA
+                </span>
+                <span className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400" /> 100% Code &amp; IP Ownership
+                </span>
+              </div>
             </div>
           </div>
         </Container>
@@ -750,5 +783,3 @@ export default function ServicesPage() {
     </div>
   )
 }
-
-
