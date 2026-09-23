@@ -20,7 +20,7 @@ import {
   BadgeCheck,
   MessageSquare,
 } from 'lucide-react'
-import { Container, Button, SEO } from '@/components/ui'
+import { Container, SEO } from '@/components/ui'
 import { serviceSchema, breadcrumbSchema, SITE } from '@/components/ui/SEO'
 import { useService, useServices } from '@/hooks/useServices'
 import { useProjects } from '@/hooks/useProjects'

@@ -15,7 +15,7 @@ import {
   MessageSquare,
   BadgeCheck,
 } from 'lucide-react'
-import { Container, Button, SEO } from '@/components/ui'
+import { Container, SEO } from '@/components/ui'
 import { serviceSchema, breadcrumbSchema, SITE } from '@/components/ui/SEO'
 import { useServices } from '@/hooks/useServices'
 import { getServiceIcon } from '@/utils/serviceIcons'
@@ -303,24 +303,18 @@ export default function ServicesPage() {
 
               {/* Action Buttons */}
               <div className="flex flex-wrap gap-4 items-center">
-                <Button
-                  variant="primary"
-                  size="lg"
-                  as={Link}
+                <Link
                   to="/contact"
-                  className="bg-[#0D1B4B] hover:bg-[#1B6EF3] text-white font-bold px-8 py-3.5 shadow-lg shadow-blue-900/10 transition-all"
+                  className="inline-flex items-center justify-center bg-[#0D1B4B] hover:bg-[#1B6EF3] text-white font-bold px-8 py-3.5 rounded-xl shadow-lg shadow-blue-900/10 transition-all text-sm"
                 >
                   Schedule Solution Architect
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="lg"
-                  as={Link}
+                </Link>
+                <Link
                   to="/portfolio"
-                  className="border border-slate-300 bg-white text-slate-700 hover:text-[#1a3e8c] hover:bg-slate-50 hover:border-slate-400 font-semibold shadow-sm"
+                  className="inline-flex items-center justify-center border border-slate-300 bg-white text-slate-700 hover:text-[#1a3e8c] hover:bg-slate-50 hover:border-slate-400 font-semibold px-6 py-3.5 rounded-xl shadow-sm transition-all text-sm"
                 >
                   View Case Studies <ArrowRight className="w-4 h-4 ml-2 inline text-[#1a3e8c]" />
-                </Button>
+                </Link>
               </div>
             </div>
 
@@ -604,17 +598,15 @@ export default function ServicesPage() {
               <p className="text-sm text-slate-600 mb-6">
                 Try searching for a different keyword or switch the category filter.
               </p>
-              <Button
-                variant="outline"
-                size="sm"
+              <button
                 onClick={() => {
                   setSearchQuery('')
                   setActiveCategory('All')
                 }}
-                className="border-slate-300 text-slate-700 hover:bg-slate-100"
+                className="px-4 py-2 rounded-xl border border-slate-300 bg-white text-slate-700 hover:bg-slate-100 font-medium text-xs transition-all"
               >
                 Reset All Filters
-              </Button>
+              </button>
             </div>
           )}
         </Container>
@@ -635,14 +627,13 @@ export default function ServicesPage() {
                 Explore our Starter, Business, and Enterprise packages spanning full-stack web platforms, mobile apps, and enterprise cloud migrations with clear delivery timelines.
               </p>
             </div>
-            <Button
-              as={Link}
+            <Link
               to="/pricing"
-              variant="primary"
-              className="shrink-0 bg-white hover:bg-slate-100 text-[#0D1B4B] font-bold px-6 py-3 shadow-lg"
+              className="shrink-0 inline-flex items-center gap-2 bg-white hover:bg-slate-100 text-[#0D1B4B] font-bold px-6 py-3.5 rounded-xl shadow-lg transition-all text-sm group"
             >
-              Explore Pricing &amp; Packages <ArrowRight className="w-4 h-4 ml-2 inline text-[#0D1B4B]" />
-            </Button>
+              <span>Explore Pricing &amp; Packages</span>
+              <ArrowRight className="w-4 h-4 text-[#0D1B4B] group-hover:translate-x-1 transition-transform" />
+            </Link>
           </div>
         </Container>
       </section>
@@ -664,14 +655,12 @@ export default function ServicesPage() {
             </div>
 
             <div className="flex items-center gap-4">
-              <Button
-                variant="outline"
-                as={Link}
+              <Link
                 to="/contact"
-                className="border-slate-300 bg-white text-slate-700 hover:text-[#1a3e8c] hover:bg-slate-50 font-bold"
+                className="inline-flex items-center justify-center px-6 py-3 rounded-xl border border-slate-300 bg-white text-slate-700 hover:text-[#1a3e8c] hover:bg-slate-50 font-bold text-sm transition-all"
               >
                 Request Architecture Blueprint
-              </Button>
+              </Link>
             </div>
           </div>
 
@@ -747,15 +736,12 @@ export default function ServicesPage() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
-                <Button
-                  variant="primary"
-                  size="lg"
-                  as={Link}
+                <Link
                   to="/contact"
-                  className="w-full sm:w-auto bg-[#1B6EF3] hover:bg-blue-600 text-white font-bold px-8 py-3.5 shadow-lg shadow-blue-500/30"
+                  className="w-full sm:w-auto inline-flex items-center justify-center bg-[#1B6EF3] hover:bg-blue-600 text-white font-bold px-8 py-3.5 rounded-xl shadow-lg shadow-blue-500/30 text-sm transition-all"
                 >
                   Schedule Strategy Call
-                </Button>
+                </Link>
                 <a
                   href={`tel:${phone.replace(/\s+/g, '')}`}
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border border-white/20 text-white hover:bg-white/10 text-sm font-semibold transition-all"
