@@ -120,10 +120,14 @@ export default function Footer() {
   const contactEmail = cfg.email || 'info@snaptech.digital'
   const address = cfg.address || 'Bhilwara, Rajasthan 311001, India'
 
-  const socials = SOCIAL_LINKS.map((s) => ({
-    ...s,
-    href: cfg[s.key] || s.fallback,
-  }))
+  const socials = SOCIAL_LINKS.map((s) => {
+    const val = cfg[s.key]
+    const isValid = val && val.trim() !== '#' && val.trim() !== ''
+    return {
+      ...s,
+      href: isValid ? val : s.fallback,
+    }
+  })
 
   const serviceLinks = servicesData?.data?.length
     ? servicesData.data.slice(0, 6).map((s) => ({ label: s.title, href: `/services/${s.slug}` }))
@@ -267,12 +271,16 @@ export default function Footer() {
                 ) : (
                   <form onSubmit={handleNewsletterSubmit} className="flex gap-2">
                     <input
+                      id="newsletter-email"
+                      name="newsletter_email"
+                      autoComplete="email"
+                      aria-label="Your work email address"
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="your@email.com"
                       required
-                      className="flex-1 min-w-0 bg-white/5 border border-white/15 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-primary focus:bg-white/10 transition-all"
+                      className="flex-1 min-w-0 bg-white/5 border border-white/15 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-brand-primary focus:bg-white/10 transition-all"
                     />
                     <button
                       type="submit"
@@ -372,8 +380,8 @@ export default function Footer() {
                 </a>
 
                 {/* Business Hours */}
-                <div className="pt-1 text-xs text-slate-500 space-y-1">
-                  <p className="text-slate-400 font-semibold">Business Hours</p>
+                <div className="pt-1 text-xs text-slate-400 space-y-1">
+                  <p className="text-slate-300 font-semibold">Business Hours</p>
                   <p>Mon–Sat: 9:00 AM – 7:00 PM IST</p>
                   <p>Sun: Emergency support only</p>
                 </div>
@@ -393,7 +401,7 @@ export default function Footer() {
               <Link to="/terms-of-service" className="hover:text-white transition-colors">Terms of Service</Link>
               <Link to="/refund-policy" className="hover:text-white transition-colors">Refund Policy</Link>
             </div>
-            <p className="text-slate-500 flex items-center gap-1.5">
+            <p className="text-slate-400 flex items-center gap-1.5">
               <span className="inline-block w-1.5 h-1.5 rounded-full bg-brand-primary" />
               Bhilwara, Rajasthan, India
             </p>

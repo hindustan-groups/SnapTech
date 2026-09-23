@@ -24,6 +24,7 @@ import { api } from '@/utils/api'
 export default function HomePage() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
+  const [clientPhone, setClientPhone] = useState('')
   const [service, setService] = useState('Web Development')
   const [submitted, setSubmitted] = useState(false)
   const [submitError, setSubmitError] = useState(false)
@@ -50,8 +51,9 @@ export default function HomePage() {
       await api.post('/contact', {
         name,
         email,
+        phone: clientPhone,
         serviceInterested: service,
-        message: `Quick quote request from homepage for: ${service}`,
+        message: `Quick quote request from homepage for: ${service}${clientPhone ? ` (Phone/WhatsApp: ${clientPhone})` : ''}`,
         recaptchaToken,
         _hp: '',
       })
@@ -185,6 +187,8 @@ export default function HomePage() {
                         </label>
                         <input
                           id="quote-name"
+                          name="name"
+                          autoComplete="name"
                           type="text"
                           required
                           value={name}
@@ -193,19 +197,38 @@ export default function HomePage() {
                           className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#1a3e8c]/60 focus:ring-1 focus:ring-[#1a3e8c]/20 transition-all"
                         />
                       </div>
-                      <div>
-                        <label htmlFor="quote-email" className="block text-[10px] font-bold uppercase tracking-wider text-slate-600 mb-1.5">
-                          Work Email
-                        </label>
-                        <input
-                          id="quote-email"
-                          type="email"
-                          required
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          placeholder="e.g. aditya@textiles.com"
-                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#1a3e8c]/60 focus:ring-1 focus:ring-[#1a3e8c]/20 transition-all"
-                        />
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label htmlFor="quote-email" className="block text-[10px] font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                            Work Email
+                          </label>
+                          <input
+                            id="quote-email"
+                            name="email"
+                            autoComplete="email"
+                            type="email"
+                            required
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="aditya@textiles.com"
+                            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#1a3e8c]/60 focus:ring-1 focus:ring-[#1a3e8c]/20 transition-all"
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor="quote-phone" className="block text-[10px] font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                            Phone / WhatsApp
+                          </label>
+                          <input
+                            id="quote-phone"
+                            name="phone"
+                            autoComplete="tel"
+                            type="tel"
+                            value={clientPhone}
+                            onChange={(e) => setClientPhone(e.target.value)}
+                            placeholder="+91 98765 43210"
+                            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#1a3e8c]/60 focus:ring-1 focus:ring-[#1a3e8c]/20 transition-all"
+                          />
+                        </div>
                       </div>
                       <div>
                         <label htmlFor="quote-service" className="block text-[10px] font-bold uppercase tracking-wider text-slate-600 mb-1.5">
@@ -213,6 +236,7 @@ export default function HomePage() {
                         </label>
                         <select
                           id="quote-service"
+                          name="service"
                           value={service}
                           onChange={(e) => setService(e.target.value)}
                           className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 focus:outline-none focus:border-[#1a3e8c]/60 transition-all cursor-pointer"

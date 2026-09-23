@@ -41,7 +41,7 @@ function Avatar({ name }) {
   )
 }
 
-function TeamCard({ member, index }) {
+function TeamCard({ member }) {
   return (
     <motion.div variants={fadeUp}>
       <div className="relative overflow-hidden p-6 text-center group border border-slate-200 bg-white hover:border-[#1a3e8c]/30 hover:shadow-xl transition-all duration-300 rounded-2xl flex flex-col justify-between h-full">
@@ -89,7 +89,7 @@ function TeamCard({ member, index }) {
         {member.linkedinUrl && (
           <div className="flex justify-center pt-3 border-t border-slate-100 mt-auto">
             <a
-              href={member.linkedinUrl}
+              href={member.linkedinUrl && member.linkedinUrl !== '#' ? member.linkedinUrl : 'https://www.linkedin.com/company/hindustanprojects/'}
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`${member.name} on LinkedIn`}

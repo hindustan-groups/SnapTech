@@ -73,7 +73,7 @@ export default function ShowcaseSection() {
   const activeContent = showcaseData[activeTab]
 
   return (
-    <section className="py-24 relative overflow-hidden bg-[#03091e] border-t border-b border-white/10 text-white isolate">
+    <section id="showcase" className="py-24 relative overflow-hidden bg-[#03091e] border-t border-b border-white/10 text-white isolate">
       {/* Background decoration */}
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden -z-10">
         <div className="absolute top-[-10%] left-[-10%] w-[45%] h-[55%] rounded-full bg-brand-primary/10 blur-3xl" />

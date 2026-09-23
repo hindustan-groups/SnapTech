@@ -56,7 +56,7 @@ const AVATAR_COLORS = [
 
 function StarRating({ rating = 5 }) {
   return (
-    <div className="flex gap-1 mb-5" aria-label={`${rating} out of 5 stars`}>
+    <div className="flex gap-1 mb-5" role="img" aria-label={`${rating} out of 5 stars`}>
       {Array.from({ length: 5 }).map((_, i) => (
         <Star
           key={i}
@@ -154,6 +154,7 @@ export default function TestimonialsSection() {
 
   return (
     <section
+      id="testimonials"
       className="py-24 relative overflow-hidden bg-slate-50 border-t border-slate-100"
       aria-labelledby="testimonials-heading"
     >
@@ -244,17 +245,21 @@ export default function TestimonialsSection() {
                   <ChevronLeft className="w-4 h-4" />
                 </button>
 
-                {/* Dot indicators */}
-                <div className="flex items-center gap-2">
+                {/* Dot indicators with accessible 24px+ touch target */}
+                <div className="flex items-center gap-1">
                   {testimonials.map((_, idx) => (
                     <button
                       key={idx}
                       onClick={() => setCurrentIndex(idx)}
-                      className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                        currentIndex === idx ? 'w-8 bg-brand-blue' : 'w-2 bg-slate-300 hover:bg-slate-400'
-                      }`}
+                      className="p-2 min-w-7 min-h-7 flex items-center justify-center cursor-pointer rounded-full"
                       aria-label={`Go to testimonial ${idx + 1}`}
-                    />
+                    >
+                      <span
+                        className={`h-2 rounded-full transition-all duration-300 block ${
+                          currentIndex === idx ? 'w-8 bg-brand-blue' : 'w-2 bg-slate-300 hover:bg-slate-400'
+                        }`}
+                      />
+                    </button>
                   ))}
                 </div>
 

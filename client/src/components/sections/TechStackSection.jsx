@@ -40,7 +40,7 @@ export default function TechStackSection() {
   const filtered = activeCat === 'All' ? TECHNOLOGIES : TECHNOLOGIES.filter((t) => t.cat === activeCat)
 
   return (
-    <section className="py-20 bg-white border-t border-slate-100 relative overflow-hidden" aria-labelledby="tech-heading">
+    <section id="tech-stack" className="py-20 bg-white border-t border-slate-100 relative overflow-hidden" aria-labelledby="tech-heading">
       {/* Subtle background decorations */}
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#1a3e8c]/4 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#e31e24]/4 blur-[120px] rounded-full pointer-events-none" />

@@ -16,7 +16,7 @@ const ECOSYSTEM_PILLARS = [
   {
     icon: Globe,
     title: 'Unified Domain Architecture',
-    desc: 'Operating under official group domain snaptech.hindustanprojects.in with cross-functional synergy and enterprise compliance.',
+    desc: 'Operating under official domain www.snaptech.digital with cross-functional enterprise compliance and cloud synergy.',
   },
   {
     icon: Award,
@@ -32,7 +32,7 @@ export default function ParentGroupSection() {
   const companyBrand = cfg.company_name || 'Hindustan Projects Group'
 
   return (
-    <section className="py-20 bg-slate-50 text-slate-900 relative overflow-hidden isolate border-b border-slate-200" aria-labelledby="parent-group-heading">
+    <section id="group-ecosystem" className="py-20 bg-slate-50 text-slate-900 relative overflow-hidden isolate border-b border-slate-200" aria-labelledby="parent-group-heading">
       {/* Background subtle ambient elements */}
       <div className="absolute top-1/2 left-0 w-96 h-96 bg-blue-100/30 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-red-100/30 rounded-full blur-3xl pointer-events-none" />

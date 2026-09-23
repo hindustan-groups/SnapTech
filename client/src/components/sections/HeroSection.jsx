@@ -171,10 +171,14 @@ export default function HeroSection() {
                     <Search className="w-5 h-5" />
                   </div>
                   <input
+                    id="hero-tech-search"
+                    name="q"
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder={domainPlaceholder}
+                    aria-label="Search IT services or technologies"
+                    autoComplete="off"
                     className="w-full bg-transparent text-slate-900 placeholder:text-slate-400 font-mono text-xs sm:text-sm focus:outline-none"
                   />
                   <button

@@ -128,6 +128,7 @@ export default function ProcessSection() {
 
   return (
     <section
+      id="process"
       className="py-24 bg-slate-50 border-t border-slate-100 relative overflow-hidden isolate"
       aria-labelledby="process-heading"
     >

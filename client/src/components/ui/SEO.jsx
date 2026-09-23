@@ -212,7 +212,9 @@ export default function SEO({
   breadcrumbs,
 }) {
   const fullTitle = title
-    ? `${title} | ${SITE.name} — IT Services, Bhilwara`
+    ? title.includes(SITE.name)
+      ? title
+      : `${title} | ${SITE.name} — IT Services, Bhilwara`
     : `${SITE.name} — IT Services Company in Bhilwara, Rajasthan`
   const desc = description || SITE.description
   const canonical = `${SITE.url}${path}`

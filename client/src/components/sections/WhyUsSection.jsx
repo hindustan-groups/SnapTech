@@ -56,6 +56,7 @@ export default function WhyUsSection() {
 
   return (
     <section
+      id="why-us"
       className="py-24 bg-white border-t border-slate-100 relative overflow-hidden isolate"
       aria-labelledby="whyus-heading"
     >

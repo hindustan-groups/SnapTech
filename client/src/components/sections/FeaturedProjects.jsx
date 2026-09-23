@@ -61,6 +61,7 @@ export default function FeaturedProjects() {
 
   return (
     <section
+      id="portfolio"
       className="py-24 bg-white border-t border-slate-100 relative overflow-hidden isolate"
       aria-labelledby="featured-heading"
     >
@@ -101,7 +102,7 @@ export default function FeaturedProjects() {
             ? Array.from({ length: 3 }).map((_, i) => (
                 <div key={i} className="h-72 bg-slate-100 border border-slate-200 rounded-2xl animate-pulse" />
               ))
-            : projects.map((p, index) => {
+            : projects.map((p) => {
                 return (
                   <motion.div key={p.id} variants={fadeUp}>
                     <div
