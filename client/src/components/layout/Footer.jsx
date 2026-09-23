@@ -14,7 +14,8 @@ import { useSiteSettings } from '@/hooks/useContent'
 import { useServices } from '@/hooks/useServices'
 import { api } from '@/utils/api'
 import { ArrowUp, CheckCircle2, MapPin, Phone, Mail, ExternalLink } from 'lucide-react'
-import snaptechLogo from '@/assets/snaptech-logo.png'
+import snaptechLogoWhite from '@/assets/snaptech-logo-white.png'
+import WaterRippleLogo from '@/components/ui/WaterRippleLogo'
 
 const QUICK_LINKS = [
   { label: 'Home', href: '/' },
@@ -150,6 +151,8 @@ export default function Footer() {
   return (
     <>
       <BackToTop />
+      {/* ── Interactive Liquid Water Ripple Brand Showcase (Pre-Footer) ── */}
+      <WaterRippleLogo />
       <footer className="bg-[#020714] text-white border-t border-blue-900/30 relative overflow-hidden" role="contentinfo">
         {/* Ambient glow */}
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-primary/8 rounded-full blur-3xl pointer-events-none" />
@@ -210,13 +213,11 @@ export default function Footer() {
                   }
                 }}
               >
-                <div className="bg-white rounded-xl px-3.5 py-2 inline-block shadow-md ring-1 ring-white/20">
-                  <img
-                    src={snaptechLogo}
-                    alt="Snaptech - IT & Technology Solutions"
-                    className="h-8 lg:h-9 w-auto object-contain"
-                  />
-                </div>
+                <img
+                  src={snaptechLogoWhite}
+                  alt="Snaptech - IT & Technology Solutions"
+                  className="h-10 lg:h-11 w-auto object-contain"
+                />
               </Link>
 
               <p className="text-xs text-brand-cyan font-mono tracking-wider">

@@ -1,16 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <!-- Background rounded square -->
-  <rect width="512" height="512" rx="100" fill="#1A3E8C"/>
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0D1B4B" />
+      <stop offset="100%" stop-color="#060C24" />
+    </linearGradient>
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3B82F6" />
+      <stop offset="100%" stop-color="#1B6EF3" />
+    </linearGradient>
+  </defs>
+  <!-- Background with smooth rounded corners -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)"/>
+  
+  <!-- Top-Left Electric Blue Bracket Accent -->
+  <path d="M 86 210 V 120 H 176" fill="none" stroke="url(#blueGrad)" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
 
-  <!-- Letter H — left vertical bar -->
-  <rect x="90" y="100" width="90" height="312" rx="16" fill="#FDFBF9"/>
+  <!-- Bottom-Right Electric Blue Bracket Accent -->
+  <path d="M 426 302 V 392 H 336" fill="none" stroke="url(#blueGrad)" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
 
-  <!-- Letter H — right vertical bar -->
-  <rect x="332" y="100" width="90" height="312" rx="16" fill="#FDFBF9"/>
-
-  <!-- Letter H — horizontal crossbar (white) -->
-  <rect x="90" y="211" width="332" height="90" rx="16" fill="#FDFBF9"/>
-
-  <!-- Red accent dot — top right corner (brand-red accent) -->
-  <circle cx="402" cy="110" r="38" fill="#E31E24"/>
+  <!-- Iconic Monogram "ST" (Snaptech) -->
+  <text x="256" y="315" font-family="'Poppins', system-ui, -apple-system, BlinkMacSystemFont, sans-serif" font-size="172" font-weight="900" text-anchor="middle" letter-spacing="-6">
+    <tspan fill="#FFFFFF">S</tspan><tspan fill="#1B6EF3">T</tspan>
+  </text>
 </svg>
