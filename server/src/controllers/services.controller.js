@@ -28,6 +28,12 @@ export const getAllServices = async (_req, res, next) => {
         shortDescription: true,
         icon: true,
         order: true,
+        tag: true,
+        deliveryTime: true,
+        techStack: true,
+        keyFeatures: true,
+        colorFrom: true,
+        colorTo: true,
       },
     })
     setCache(cacheKey, services, 600) // 10 min cache
