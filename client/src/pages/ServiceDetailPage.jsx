@@ -16,7 +16,6 @@ import {
   Zap,
   Users,
   Star,
-  Sparkles,
   BadgeCheck,
   MessageSquare,
 } from 'lucide-react'
@@ -116,6 +115,7 @@ export default function ServiceDetailPage() {
   const whatsappNum = (cfg.whatsapp || cfg.phone || '919929120431').replace(/[^0-9]/g, '')
 
   const theme = getServiceTheme(slug)
+  const Icon = getServiceIcon(service?.icon || 'Globe')
 
   // Pure dynamic data extraction
   const keyFeatures = useMemo(() => {
@@ -200,16 +200,18 @@ export default function ServiceDetailPage() {
         <Container>
           <div className="max-w-md mx-auto p-8 rounded-2xl border border-slate-200 bg-white shadow-sm">
             <p className="text-slate-600 text-lg mb-6">Service capability not found in database.</p>
-            <Button as={Link} to="/services" variant="primary" className="bg-[#0D1B4B] hover:bg-[#1B6EF3] text-white">
+            <Link
+              to="/services"
+              className="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-[#0D1B4B] hover:bg-[#1B6EF3] text-white font-bold text-sm transition-all"
+            >
               ← Return to Services Directory
-            </Button>
+            </Link>
           </div>
         </Container>
       </div>
     )
   }
 
-  const IconComponent = getServiceIcon(service.icon || 'Globe')
 
   return (
     <div className="bg-slate-50/50 min-h-screen text-slate-900 selection:bg-blue-500/20 selection:text-[#1a3e8c]">
@@ -268,7 +270,7 @@ export default function ServiceDetailPage() {
                 <div
                   className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${theme.color} flex items-center justify-center shadow-md shrink-0`}
                 >
-                  <IconComponent className="w-8 h-8 text-white" strokeWidth={1.8} />
+                  <Icon className="w-8 h-8 text-white" strokeWidth={1.8} />
                 </div>
                 <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 leading-tight tracking-tight">
                   {service.title}
@@ -581,15 +583,13 @@ export default function ServiceDetailPage() {
                         <p className="text-[11px] text-red-600 font-semibold">Submission failed. Please call us directly.</p>
                       )}
 
-                      <Button
+                      <button
                         type="submit"
                         disabled={submitting}
-                        variant="primary"
-                        fullWidth
-                        className="bg-[#0D1B4B] hover:bg-[#1B6EF3] text-white font-bold py-3 text-xs shadow-md shadow-blue-900/10 transition-all"
+                        className="w-full py-3 rounded-xl bg-[#0D1B4B] hover:bg-[#1B6EF3] text-white font-bold text-xs shadow-md shadow-blue-900/10 transition-all cursor-pointer disabled:opacity-60"
                       >
                         {submitting ? 'Connecting…' : 'Submit Consultation Request'}
-                      </Button>
+                      </button>
                     </form>
                   )}
 

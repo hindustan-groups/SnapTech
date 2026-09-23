@@ -75,7 +75,7 @@ const COLORS = [
 ]
 
 /** Helper to resolve clean service category taxonomy */
-export function getServiceCategory(s) {
+function getServiceCategory(s) {
   if (s.category) return s.category
   const slug = (s.slug || '').toLowerCase()
   if (slug.includes('web') || slug.includes('app') || slug.includes('commerce') || slug.includes('software')) return 'Engineering'
