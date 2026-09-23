@@ -390,9 +390,9 @@ export default function HeroSection() {
       </div>
 
       {/* Scroll indicator */}
-      <div className="py-2 flex justify-center items-center text-slate-400 text-[10px] uppercase tracking-widest gap-1" aria-hidden="true">
+      <div className="py-2 flex justify-center items-center text-slate-600 font-semibold text-[10px] uppercase tracking-widest gap-1" aria-hidden="true">
         <span>Scroll to Explore</span>
-        <ChevronDown className="w-3.5 h-3.5 animate-bounce text-slate-400" />
+        <ChevronDown className="w-3.5 h-3.5 animate-bounce text-slate-600" />
       </div>
     </section>
   )

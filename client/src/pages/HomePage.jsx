@@ -270,7 +270,7 @@ export default function HomePage() {
                         <Phone className="w-3.5 h-3.5 text-[#1a3e8c] group-hover:text-white transition-colors" />
                       </div>
                       <span className="font-semibold">{phone}</span>
-                      <span className="ml-auto text-[10px] text-slate-400 uppercase tracking-wider">Direct Line</span>
+                      <span className="ml-auto text-[10px] text-slate-500 uppercase tracking-wider font-medium">Direct Line</span>
                     </a>
                     <a
                       href={`mailto:${contactEmail}`}
@@ -280,7 +280,7 @@ export default function HomePage() {
                         <Mail className="w-3.5 h-3.5 text-[#e31e24] group-hover:text-white transition-colors" />
                       </div>
                       <span className="font-semibold">{contactEmail}</span>
-                      <span className="ml-auto text-[10px] text-slate-400 uppercase tracking-wider">Email</span>
+                      <span className="ml-auto text-[10px] text-slate-500 uppercase tracking-wider font-medium">Email</span>
                     </a>
                   </div>
                 </div>
