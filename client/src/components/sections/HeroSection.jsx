@@ -230,10 +230,11 @@ export default function HeroSection() {
                 </Button>
 
                 <Button
+                  variant="outline"
                   size="lg"
                   as={Link}
                   to="/contact"
-                  className="bg-white hover:bg-slate-50 text-brand-blue border border-slate-300 font-bold shadow-xs"
+                  className="bg-white hover:bg-blue-50/60 text-brand-blue border border-brand-blue/30 hover:border-brand-blue font-bold shadow-xs px-6"
                 >
                   Schedule Consultation
                 </Button>
