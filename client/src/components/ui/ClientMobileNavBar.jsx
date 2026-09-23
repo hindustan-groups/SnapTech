@@ -13,9 +13,9 @@ export default function ClientMobileNavBar() {
   const { data: settingsData } = useSiteSettings()
 
   const cfg = settingsData?.data || {}
-  const rawPhone = cfg.phone || '+91 99291 20431'
+  const rawPhone = cfg.phone || '+91 75970 00601'
   const cleanPhone = rawPhone.replace(/[^0-9]/g, '')
-  const whatsappUrl = `https://wa.me/${cleanPhone}?text=Hi%20Hindustan%20Projects%20Team,%20I%20have%20a%20query%20regarding%20my%20project.`
+  const whatsappUrl = `https://wa.me/${cleanPhone}?text=Hi%20SnapTech%20Team,%20I%20have%20a%20query%20regarding%20my%20project.`
 
   const handleLogout = async () => {
     if (window.confirm('Are you sure you want to sign out?')) {

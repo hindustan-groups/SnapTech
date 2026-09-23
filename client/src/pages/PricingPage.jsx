@@ -532,9 +532,9 @@ export default function PricingPage() {
       />
 
       {/* ── HERO SECTION ──────────────────────────────────────────────── */}
-      <section className="relative pt-28 pb-16 lg:pt-36 lg:pb-24 overflow-hidden bg-[#020714] border-b border-white/10">
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-brand-primary/20 rounded-full filter blur-3xl pointer-events-none -z-10 animate-pulse" />
-        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-brand-cyan/15 rounded-full filter blur-3xl pointer-events-none -z-10" />
+      <section className="relative pt-28 pb-16 lg:pt-36 lg:pb-24 overflow-hidden bg-gradient-to-b from-blue-50/60 via-white to-slate-50/50 border-b border-slate-200/80">
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-100/60 rounded-full filter blur-3xl pointer-events-none -z-10 animate-pulse" />
+        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-indigo-50/70 rounded-full filter blur-3xl pointer-events-none -z-10" />
 
         <Container>
           <div className="max-w-4xl mx-auto text-center px-2">
@@ -543,9 +543,9 @@ export default function PricingPage() {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-cyan/10 border border-brand-cyan/30 shadow-lg shadow-cyan-950/40 text-brand-cyan text-xs font-bold uppercase tracking-wider mb-6 backdrop-blur-md"
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 border border-blue-200 shadow-sm text-brand-blue text-xs font-bold uppercase tracking-wider mb-6"
             >
-              <Sparkles className="w-4 h-4 text-brand-cyan animate-spin" style={{ animationDuration: '4s' }} />
+              <Sparkles className="w-4 h-4 text-brand-blue animate-spin" style={{ animationDuration: '4s' }} />
               <span>Transparent &amp; Predictable IT Engineering</span>
             </motion.div>
 
@@ -554,10 +554,10 @@ export default function PricingPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.12]"
+              className="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.12]"
             >
               Pricing &amp;{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan via-blue-400 to-indigo-400">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue via-blue-600 to-indigo-600">
                 Enterprise Packages
               </span>
             </motion.h1>
@@ -567,7 +567,7 @@ export default function PricingPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="mt-4 text-lg sm:text-xl font-bold text-brand-cyan"
+              className="mt-4 text-lg sm:text-xl font-bold text-brand-blue"
             >
               Predictable IT Solutions for Startups, Regional Enterprises and Industrial Brands.
             </motion.p>
@@ -576,7 +576,7 @@ export default function PricingPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.25 }}
-              className="mt-3 text-sm sm:text-base text-slate-400 leading-relaxed max-w-2xl mx-auto"
+              className="mt-3 text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl mx-auto"
             >
               We provide upfront milestone quotes, modern cloud architectures, and dedicated long-term SLA support.
             </motion.p>
@@ -593,7 +593,7 @@ export default function PricingPage() {
                 size="lg"
                 onClick={() => openQuoteModal('Hero CTA - Free Quote')}
                 leftIcon={<Sparkles className="w-5 h-5" />}
-                className="w-full sm:w-auto bg-brand-cyan hover:bg-brand-cyan-light text-slate-950 font-bold shadow-lg shadow-cyan-950/50 transition-all cursor-pointer"
+                className="w-full sm:w-auto bg-brand-blue hover:bg-blue-600 text-white font-bold shadow-lg shadow-blue-500/25 transition-all cursor-pointer"
               >
                 Request Custom Quote
               </Button>
@@ -602,11 +602,11 @@ export default function PricingPage() {
                 variant="secondary"
                 size="lg"
                 as="a"
-                href={`https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent('Hi Snaptech Digital! I would like to discuss project packages & pricing.')}`}
+                href={`https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent('Hi SnapTech Digital! I would like to discuss project packages & pricing.')}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 leftIcon={<MessageSquare className="w-5 h-5" />}
-                className="w-full sm:w-auto !bg-emerald-500 hover:!bg-emerald-400 !border-emerald-500 !text-slate-950 font-bold shadow-md shadow-emerald-500/20"
+                className="w-full sm:w-auto !bg-emerald-600 hover:!bg-emerald-500 !border-emerald-600 !text-white font-bold shadow-md shadow-emerald-600/20"
               >
                 WhatsApp Us
               </Button>
@@ -617,22 +617,22 @@ export default function PricingPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="mt-12 pt-8 border-t border-white/10 grid grid-cols-2 md:grid-cols-4 gap-4 text-xs font-semibold text-slate-400"
+              className="mt-12 pt-8 border-t border-slate-200/80 grid grid-cols-2 md:grid-cols-4 gap-4 text-xs font-semibold text-slate-600"
             >
               <div className="flex items-center justify-center gap-2">
-                <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+                <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
                 <span>100% Itemized Proposals</span>
               </div>
               <div className="flex items-center justify-center gap-2">
-                <Zap className="w-4 h-4 text-brand-cyan shrink-0" />
+                <Zap className="w-4 h-4 text-brand-blue shrink-0" />
                 <span>Fast 5–7 Days Sprint 0</span>
               </div>
               <div className="flex items-center justify-center gap-2">
-                <Shield className="w-4 h-4 text-blue-400 shrink-0" />
+                <Shield className="w-4 h-4 text-indigo-600 shrink-0" />
                 <span>Zero-Vulnerability Code</span>
               </div>
               <div className="flex items-center justify-center gap-2">
-                <Clock className="w-4 h-4 text-amber-400 shrink-0" />
+                <Clock className="w-4 h-4 text-amber-600 shrink-0" />
                 <span>Dedicated SLA Support</span>
               </div>
             </motion.div>
@@ -641,53 +641,53 @@ export default function PricingPage() {
       </section>
 
       {/* ── SECTION NAVIGATION PILLS (Quick Scroll) ─────────────────────── */}
-      <div className="sticky top-16 z-30 bg-slate-900/85 backdrop-blur-xl border-b border-white/10 shadow-lg py-3 overflow-x-auto no-scrollbar">
+      <div className="sticky top-16 z-30 bg-white/95 backdrop-blur-xl border-b border-slate-200 shadow-sm py-3 overflow-x-auto no-scrollbar">
         <Container className="flex items-center justify-start sm:justify-center gap-2 min-w-max px-4">
           <a
             href="#website-packages"
-            className="px-3.5 py-1.5 rounded-xl bg-brand-cyan text-slate-950 text-xs font-bold shadow-md shadow-cyan-500/20 transition-all"
+            className="px-3.5 py-1.5 rounded-xl bg-brand-blue text-white text-xs font-bold shadow-sm transition-all"
           >
             Website Packages
           </a>
           <a
             href="#software-development"
-            className="px-3.5 py-1.5 rounded-xl bg-slate-900/60 text-slate-300 border border-white/10 hover:border-brand-cyan/40 hover:text-white text-xs font-bold transition-all"
+            className="px-3.5 py-1.5 rounded-xl bg-slate-100 text-slate-700 border border-slate-200 hover:border-brand-blue/40 hover:text-brand-blue text-xs font-bold transition-all"
           >
             Software
           </a>
           <a
             href="#mobile-app-development"
-            className="px-3.5 py-1.5 rounded-xl bg-slate-900/60 text-slate-300 border border-white/10 hover:border-brand-cyan/40 hover:text-white text-xs font-bold transition-all"
+            className="px-3.5 py-1.5 rounded-xl bg-slate-100 text-slate-700 border border-slate-200 hover:border-brand-blue/40 hover:text-brand-blue text-xs font-bold transition-all"
           >
             Mobile Apps
           </a>
           <a
             href="#branding-services"
-            className="px-3.5 py-1.5 rounded-xl bg-slate-900/60 text-slate-300 border border-white/10 hover:border-brand-cyan/40 hover:text-white text-xs font-bold transition-all"
+            className="px-3.5 py-1.5 rounded-xl bg-slate-100 text-slate-700 border border-slate-200 hover:border-brand-blue/40 hover:text-brand-blue text-xs font-bold transition-all"
           >
             Branding
           </a>
           <a
             href="#digital-marketing"
-            className="px-3.5 py-1.5 rounded-xl bg-slate-900/60 text-slate-300 border border-white/10 hover:border-brand-cyan/40 hover:text-white text-xs font-bold transition-all"
+            className="px-3.5 py-1.5 rounded-xl bg-slate-100 text-slate-700 border border-slate-200 hover:border-brand-blue/40 hover:text-brand-blue text-xs font-bold transition-all"
           >
             Marketing
           </a>
           <a
             href="#hosting-maintenance"
-            className="px-3.5 py-1.5 rounded-xl bg-slate-900/60 text-slate-300 border border-white/10 hover:border-brand-cyan/40 hover:text-white text-xs font-bold transition-all"
+            className="px-3.5 py-1.5 rounded-xl bg-slate-100 text-slate-700 border border-slate-200 hover:border-brand-blue/40 hover:text-brand-blue text-xs font-bold transition-all"
           >
             Hosting &amp; SLA
           </a>
           <a
             href="#development-process"
-            className="px-3.5 py-1.5 rounded-xl bg-slate-900/60 text-slate-300 border border-white/10 hover:border-brand-cyan/40 hover:text-white text-xs font-bold transition-all"
+            className="px-3.5 py-1.5 rounded-xl bg-slate-100 text-slate-700 border border-slate-200 hover:border-brand-blue/40 hover:text-brand-blue text-xs font-bold transition-all"
           >
             Process
           </a>
           <a
             href="#faq-section"
-            className="px-3.5 py-1.5 rounded-xl bg-slate-900/60 text-slate-300 border border-white/10 hover:border-brand-cyan/40 hover:text-white text-xs font-bold transition-all"
+            className="px-3.5 py-1.5 rounded-xl bg-slate-100 text-slate-700 border border-slate-200 hover:border-brand-blue/40 hover:text-brand-blue text-xs font-bold transition-all"
           >
             FAQ
           </a>
@@ -695,16 +695,16 @@ export default function PricingPage() {
       </div>
 
       {/* ── 10 QUICK DELIVERABLES & POLICY GUARANTEES ─────────────────── */}
-      <section className="py-14 bg-[#03091e] border-b border-white/10">
+      <section className="py-14 bg-slate-50/70 border-b border-slate-200/80">
         <Container>
           <div className="text-center max-w-2xl mx-auto mb-10">
-            <span className="inline-block px-3.5 py-1 rounded-full bg-brand-cyan/10 border border-brand-cyan/20 text-brand-cyan text-xs font-bold uppercase tracking-wider mb-2.5">
+            <span className="inline-block px-3.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-brand-blue text-xs font-bold uppercase tracking-wider mb-2.5">
               10-Point Engineering Charter
             </span>
-            <h2 className="font-heading text-2xl sm:text-3xl font-bold text-white">
+            <h2 className="font-heading text-2xl sm:text-3xl font-bold text-slate-900">
               Package Deliverables &amp; Standards
             </h2>
-            <p className="text-slate-400 text-xs sm:text-sm mt-1.5">
+            <p className="text-slate-600 text-xs sm:text-sm mt-1.5">
               Everything you need to know about timelines, hosting, domain ownership, and SLA support.
             </p>
           </div>
@@ -719,23 +719,23 @@ export default function PricingPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.3, delay: idx * 0.04 }}
-                  className="bg-slate-900/70 rounded-2xl p-4 border border-white/10 hover:border-brand-cyan/40 backdrop-blur-xl shadow-lg transition-all flex flex-col justify-between group relative overflow-hidden"
+                  className="bg-white rounded-2xl p-4 border border-slate-200/80 hover:border-brand-blue/40 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group relative overflow-hidden"
                 >
-                  <div className="h-1 w-full bg-gradient-to-r from-brand-cyan to-blue-500 absolute top-0 left-0" />
+                  <div className="h-1 w-full bg-gradient-to-r from-brand-blue to-blue-500 absolute top-0 left-0" />
                   <div>
                     <div className="flex items-center justify-between gap-2 mb-2">
-                      <div className="w-8 h-8 rounded-xl bg-brand-cyan/10 text-brand-cyan flex items-center justify-center group-hover:bg-brand-cyan group-hover:text-slate-950 transition-colors">
+                      <div className="w-8 h-8 rounded-xl bg-blue-50 text-brand-blue flex items-center justify-center group-hover:bg-brand-blue group-hover:text-white transition-colors">
                         <IconComp className="w-4 h-4" />
                       </div>
-                      <span className="text-[9px] font-bold uppercase px-2 py-0.5 rounded-full bg-white/[0.05] text-slate-300 border border-white/5">
+                      <span className="text-[9px] font-bold uppercase px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
                         {item.badge}
                       </span>
                     </div>
 
-                    <h3 className="font-heading text-xs font-bold text-white group-hover:text-brand-cyan transition-colors">
+                    <h3 className="font-heading text-xs font-bold text-slate-900 group-hover:text-brand-blue transition-colors">
                       {item.question}
                     </h3>
-                    <p className="text-[11px] text-slate-400 mt-1 leading-snug">
+                    <p className="text-[11px] text-slate-600 mt-1 leading-snug">
                       {item.answer}
                     </p>
                   </div>
@@ -747,14 +747,14 @@ export default function PricingPage() {
       </section>
 
       {/* ── SECTION 1: WEBSITE DEVELOPMENT PACKAGES ───────────────────── */}
-      <section id="website-packages" className="py-16 lg:py-24 bg-[#020714] scroll-mt-24">
+      <section id="website-packages" className="py-16 lg:py-24 bg-white border-b border-slate-200/80 scroll-mt-24">
         <Container>
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <span className="text-xs font-bold uppercase tracking-widest text-brand-cyan">Web Platforms</span>
-            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mt-1">
+            <span className="text-xs font-bold uppercase tracking-widest text-brand-blue">Web Platforms</span>
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 mt-1">
               Website Development Packages
             </h2>
-            <p className="text-slate-400 text-sm sm:text-base mt-3 leading-relaxed">
+            <p className="text-slate-600 text-sm sm:text-base mt-3 leading-relaxed">
               High-performance, mobile-responsive web platforms built to scale your business and capture high-intent leads.
             </p>
           </div>
@@ -770,10 +770,10 @@ export default function PricingPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: idx * 0.1 }}
-                  className={`relative flex flex-col justify-between rounded-3xl transition-all duration-300 overflow-hidden backdrop-blur-xl ${
+                  className={`relative flex flex-col justify-between rounded-3xl transition-all duration-300 overflow-hidden ${
                     pkg.isPopular
-                      ? 'bg-slate-900/90 border-2 border-brand-cyan shadow-2xl shadow-cyan-950/50 ring-1 ring-brand-cyan/40 lg:-translate-y-3 z-10'
-                      : 'bg-slate-900/70 border border-white/10 hover:border-brand-cyan/40 shadow-xl hover:-translate-y-1.5'
+                      ? 'bg-white border-2 border-brand-blue shadow-xl shadow-blue-500/10 ring-1 ring-brand-blue/30 lg:-translate-y-3 z-10'
+                      : 'bg-slate-50/50 border border-slate-200 hover:border-brand-blue/40 shadow-sm hover:shadow-md hover:-translate-y-1.5'
                   }`}
                 >
                   {/* Top Colored Gradient Accent Line */}
@@ -784,8 +784,8 @@ export default function PricingPage() {
                     <div
                       className={`absolute top-5 right-5 px-3 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
                         pkg.isPopular
-                          ? 'bg-brand-cyan text-slate-950 shadow-md shadow-cyan-500/30'
-                          : 'bg-white/10 text-slate-300 border border-white/10'
+                          ? 'bg-brand-blue text-white shadow-sm'
+                          : 'bg-slate-100 text-slate-700 border border-slate-200'
                       }`}
                     >
                       {pkg.badge}
@@ -795,32 +795,32 @@ export default function PricingPage() {
                   <div className="p-5 sm:p-6">
                     {/* Header Icon + Name */}
                     <div className="flex items-center gap-3 mb-2.5">
-                      <div className={`w-10 h-10 rounded-2xl border border-white/10 flex items-center justify-center shrink-0 shadow-sm bg-white/5 text-brand-cyan`}>
+                      <div className="w-10 h-10 rounded-2xl border border-blue-200 flex items-center justify-center shrink-0 shadow-xs bg-blue-50 text-brand-blue">
                         <IconComp className="w-5 h-5" />
                       </div>
                       <div>
-                        <h3 className="font-heading text-xl font-bold text-white">
+                        <h3 className="font-heading text-xl font-bold text-slate-900">
                           {pkg.name}
                         </h3>
-                        <span className="text-[10px] font-bold text-emerald-400 block">
+                        <span className="text-[10px] font-bold text-emerald-600 block">
                           ✔ Verified Tier
                         </span>
                       </div>
                     </div>
 
-                    <p className="text-xs text-slate-400 leading-relaxed">
+                    <p className="text-xs text-slate-600 leading-relaxed">
                       {pkg.description}
                     </p>
 
                     {/* Price Block */}
-                    <div className="my-3.5 pt-3 border-t border-white/10">
+                    <div className="my-3.5 pt-3 border-t border-slate-200">
                       <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
                         {pkg.priceSubtitle}
                       </span>
                       <div className="flex items-baseline gap-1 mt-0.5">
                         <span
                           className={`font-heading text-3xl sm:text-4xl font-extrabold tracking-tight ${
-                            pkg.isPopular ? 'text-brand-cyan' : 'text-white'
+                            pkg.isPopular ? 'text-brand-blue' : 'text-slate-900'
                           }`}
                         >
                           {pkg.price}
@@ -828,27 +828,27 @@ export default function PricingPage() {
                       </div>
 
                       {/* Delivery & Support Badges */}
-                      <div className="mt-2.5 flex flex-wrap gap-1.5 text-[11px] font-semibold text-slate-400">
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-white/[0.04] text-slate-300 text-[10px] border border-white/5">
-                          <Zap className="w-3 h-3 text-amber-400" />
+                      <div className="mt-2.5 flex flex-wrap gap-1.5 text-[11px] font-semibold text-slate-600">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-white text-slate-700 text-[10px] border border-slate-200 shadow-xs">
+                          <Zap className="w-3 h-3 text-amber-500" />
                           {pkg.delivery}
                         </span>
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-white/[0.04] text-slate-300 text-[10px] border border-white/5">
-                          <Shield className="w-3 h-3 text-brand-cyan" />
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-white text-slate-700 text-[10px] border border-slate-200 shadow-xs">
+                          <Shield className="w-3 h-3 text-brand-blue" />
                           {pkg.support}
                         </span>
                       </div>
                     </div>
 
                     {/* Feature Checklist */}
-                    <div className="border-t border-white/10 pt-3 mb-1">
-                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">
+                    <div className="border-t border-slate-200 pt-3 mb-1">
+                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-2">
                         Included Deliverables:
                       </span>
                       <ul className="space-y-2">
                         {pkg.features.map((feature, fIdx) => (
-                          <li key={fIdx} className="flex items-start gap-2 text-xs text-slate-300">
-                            <span className="p-0.5 rounded-full bg-emerald-500/20 text-emerald-400 mt-0.5 shrink-0 border border-emerald-500/30">
+                          <li key={fIdx} className="flex items-start gap-2 text-xs text-slate-700">
+                            <span className="p-0.5 rounded-full bg-emerald-50 text-emerald-600 mt-0.5 shrink-0 border border-emerald-200">
                               <Check className="w-2.5 h-2.5 stroke-[3]" />
                             </span>
                             <span className="font-medium">{feature}</span>
@@ -859,15 +859,15 @@ export default function PricingPage() {
                   </div>
 
                   {/* Card Bottom CTA Button */}
-                  <div className="p-5 sm:p-6 pt-0 border-t border-white/10 mt-auto">
+                  <div className="p-5 sm:p-6 pt-0 border-t border-slate-200 mt-auto">
                     <Button
                       variant={pkg.isPopular ? 'primary' : 'outline'}
                       fullWidth
                       onClick={() => openQuoteModal(`Website Package: ${pkg.name}`)}
                       className={
                         pkg.isPopular
-                          ? 'bg-brand-cyan hover:bg-brand-cyan-light text-slate-950 font-bold shadow-lg shadow-cyan-950/50'
-                          : 'border-white/15 text-slate-300 hover:border-brand-cyan/40 hover:text-white'
+                          ? 'bg-brand-blue hover:bg-blue-600 text-white font-bold shadow-md shadow-blue-500/20'
+                          : 'border-slate-300 text-slate-800 hover:border-brand-blue hover:text-brand-blue hover:bg-blue-50 font-semibold'
                       }
                     >
                       Select {pkg.name}
@@ -879,73 +879,73 @@ export default function PricingPage() {
           </div>
 
           {/* ── Feature Comparison Matrix Table ────────────────────────── */}
-          <div className="mt-16 pt-12 border-t border-white/10">
+          <div className="mt-16 pt-12 border-t border-slate-200">
             <div className="text-center max-w-2xl mx-auto mb-8">
-              <span className="text-xs font-mono font-bold uppercase tracking-widest text-brand-cyan">Feature Deep-Dive</span>
-              <h3 className="font-heading text-2xl sm:text-3xl font-extrabold text-white mt-1">
+              <span className="text-xs font-mono font-bold uppercase tracking-widest text-brand-blue">Feature Deep-Dive</span>
+              <h3 className="font-heading text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">
                 Detailed Deliverables Comparison Matrix
               </h3>
-              <p className="text-slate-400 text-xs sm:text-sm mt-2">
+              <p className="text-slate-600 text-xs sm:text-sm mt-2">
                 Side-by-side breakdown of technical deliverables and services across each tier.
               </p>
             </div>
 
-            <div className="overflow-x-auto rounded-2xl border border-white/10 bg-slate-900/60 backdrop-blur-xl shadow-2xl">
+            <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
               <table className="w-full text-left text-xs border-collapse min-w-[650px]">
                 <thead>
-                  <tr className="border-b border-white/10 bg-white/[0.03]">
-                    <th className="p-4 font-heading text-slate-300 font-bold text-sm w-2/5">Deliverables &amp; Specifications</th>
-                    <th className="p-4 font-heading text-white font-bold text-sm text-center">
-                      Starter <span className="block text-[11px] font-mono text-brand-cyan font-normal">₹7,999</span>
+                  <tr className="border-b border-slate-200 bg-slate-50/70">
+                    <th className="p-4 font-heading text-slate-800 font-bold text-sm w-2/5">Deliverables &amp; Specifications</th>
+                    <th className="p-4 font-heading text-slate-900 font-bold text-sm text-center">
+                      Starter <span className="block text-[11px] font-mono text-brand-blue font-normal">₹7,999</span>
                     </th>
-                    <th className="p-4 font-heading text-white font-bold text-sm text-center bg-brand-cyan/5 border-x border-brand-cyan/20">
-                      <span className="inline-block px-2 py-0.5 rounded-full bg-brand-cyan text-slate-950 text-[9px] font-black uppercase mb-1">Most Popular</span>
+                    <th className="p-4 font-heading text-slate-900 font-bold text-sm text-center bg-blue-50/70 border-x border-blue-200">
+                      <span className="inline-block px-2 py-0.5 rounded-full bg-brand-blue text-white text-[9px] font-black uppercase mb-1">Most Popular</span>
                       <span className="block">Business</span>
-                      <span className="block text-[11px] font-mono text-brand-cyan font-normal">₹14,999</span>
+                      <span className="block text-[11px] font-mono text-brand-blue font-bold">₹14,999</span>
                     </th>
-                    <th className="p-4 font-heading text-white font-bold text-sm text-center">
-                      Enterprise <span className="block text-[11px] font-mono text-brand-cyan font-normal">Custom Scope</span>
+                    <th className="p-4 font-heading text-slate-900 font-bold text-sm text-center">
+                      Enterprise <span className="block text-[11px] font-mono text-brand-blue font-normal">Custom Scope</span>
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/5">
+                <tbody className="divide-y divide-slate-100">
                   {COMPARISON_MATRIX.map((row, rIdx) => (
-                    <tr key={rIdx} className="hover:bg-white/[0.02] transition-colors">
-                      <td className="p-4 font-medium text-slate-300 flex items-center gap-2">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-brand-cyan shrink-0" />
+                    <tr key={rIdx} className="hover:bg-slate-50/70 transition-colors">
+                      <td className="p-4 font-medium text-slate-800 flex items-center gap-2">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-brand-blue shrink-0" />
                         {row.feature}
                       </td>
-                      <td className="p-4 text-center text-slate-400">
+                      <td className="p-4 text-center text-slate-600">
                         {typeof row.starter === 'boolean' ? (
                           row.starter ? (
-                            <span className="inline-flex p-1 rounded-full bg-emerald-500/15 text-emerald-400"><Check className="w-3 h-3 stroke-[3]" /></span>
+                            <span className="inline-flex p-1 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200"><Check className="w-3 h-3 stroke-[3]" /></span>
                           ) : (
-                            <span className="text-slate-600 font-bold">—</span>
+                            <span className="text-slate-400 font-bold">—</span>
                           )
                         ) : (
-                          <span className="font-mono text-slate-300">{row.starter}</span>
+                          <span className="font-mono text-slate-700">{row.starter}</span>
                         )}
                       </td>
-                      <td className="p-4 text-center bg-brand-cyan/5 border-x border-brand-cyan/20 text-white font-semibold">
+                      <td className="p-4 text-center bg-blue-50/30 border-x border-blue-100 text-brand-blue font-semibold">
                         {typeof row.business === 'boolean' ? (
                           row.business ? (
-                            <span className="inline-flex p-1 rounded-full bg-emerald-500/15 text-emerald-400"><Check className="w-3 h-3 stroke-[3]" /></span>
+                            <span className="inline-flex p-1 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200"><Check className="w-3 h-3 stroke-[3]" /></span>
                           ) : (
-                            <span className="text-slate-600 font-bold">—</span>
+                            <span className="text-slate-400 font-bold">—</span>
                           )
                         ) : (
-                          <span className="font-mono text-brand-cyan">{row.business}</span>
+                          <span className="font-mono text-brand-blue font-bold">{row.business}</span>
                         )}
                       </td>
-                      <td className="p-4 text-center text-slate-300">
+                      <td className="p-4 text-center text-slate-600">
                         {typeof row.enterprise === 'boolean' ? (
                           row.enterprise ? (
-                            <span className="inline-flex p-1 rounded-full bg-emerald-500/15 text-emerald-400"><Check className="w-3 h-3 stroke-[3]" /></span>
+                            <span className="inline-flex p-1 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200"><Check className="w-3 h-3 stroke-[3]" /></span>
                           ) : (
-                            <span className="text-slate-600 font-bold">—</span>
+                            <span className="text-slate-400 font-bold">—</span>
                           )
                         ) : (
-                          <span className="font-mono text-indigo-300">{row.enterprise}</span>
+                          <span className="font-mono text-indigo-700">{row.enterprise}</span>
                         )}
                       </td>
                     </tr>
@@ -958,14 +958,14 @@ export default function PricingPage() {
       </section>
 
       {/* ── SECTION 2: SOFTWARE DEVELOPMENT ─────────────────────────────── */}
-      <section id="software-development" className="py-16 lg:py-24 bg-[#03091e] border-t border-white/10 scroll-mt-24">
+      <section id="software-development" className="py-16 lg:py-24 bg-slate-50/60 border-t border-slate-200/80 scroll-mt-24">
         <Container>
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <span className="text-xs font-bold uppercase tracking-widest text-brand-cyan">Operational Architecture</span>
-            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mt-1">
+            <span className="text-xs font-bold uppercase tracking-widest text-brand-blue">Operational Architecture</span>
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 mt-1">
               Custom Software Development
             </h2>
-            <p className="text-slate-400 text-sm sm:text-base mt-3 leading-relaxed">
+            <p className="text-slate-600 text-sm sm:text-base mt-3 leading-relaxed">
               Tailored ERP systems, GST billing engines, CRM pipelines, and supply-chain platforms engineered for Rajasthan and national industries.
             </p>
           </div>
@@ -980,26 +980,26 @@ export default function PricingPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: idx * 0.08 }}
-                  className="bg-slate-900/70 rounded-3xl overflow-hidden border border-white/10 hover:border-brand-cyan/40 shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group backdrop-blur-xl"
+                  className="bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand-blue/40 shadow-sm hover:shadow-md hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group"
                 >
                   <div className={`h-2 w-full bg-gradient-to-r ${item.color}`} />
                   <div className="p-5 sm:p-6">
-                    <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${item.color} text-white flex items-center justify-center mb-4 shadow-md group-hover:scale-110 transition-transform duration-300`}>
+                    <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${item.color} text-white flex items-center justify-center mb-4 shadow-sm group-hover:scale-110 transition-transform duration-300`}>
                       <IconComp className="w-6 h-6" />
                     </div>
 
-                    <h3 className="font-heading text-xl font-bold text-white group-hover:text-brand-cyan transition-colors">
+                    <h3 className="font-heading text-xl font-bold text-slate-900 group-hover:text-brand-blue transition-colors">
                       {item.title}
                     </h3>
-                    <p className="text-xs sm:text-sm text-slate-400 mt-2 leading-relaxed">
+                    <p className="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
                       {item.desc}
                     </p>
                   </div>
 
-                  <div className="p-5 sm:p-6 pt-0 border-t border-white/10 mt-auto flex items-center justify-between">
+                  <div className="p-5 sm:p-6 pt-0 border-t border-slate-200 mt-auto flex items-center justify-between">
                     <div>
                       <span className="text-[10px] text-slate-500 uppercase tracking-wider block font-bold">Starting From</span>
-                      <span className="font-heading text-xl font-extrabold text-brand-cyan">{item.price}</span>
+                      <span className="font-heading text-xl font-extrabold text-brand-blue">{item.price}</span>
                     </div>
 
                     <Button
@@ -1007,7 +1007,7 @@ export default function PricingPage() {
                       size="sm"
                       onClick={() => openQuoteModal(`Software: ${item.title}`)}
                       rightIcon={<ArrowRight className="w-4 h-4" />}
-                      className="border-white/15 text-slate-300 hover:border-brand-cyan/40 hover:text-white"
+                      className="border-slate-300 text-slate-800 hover:border-brand-blue hover:text-brand-blue hover:bg-blue-50 font-semibold"
                     >
                       Enquire
                     </Button>
@@ -1020,14 +1020,14 @@ export default function PricingPage() {
       </section>
 
       {/* ── SECTION 3: MOBILE APP DEVELOPMENT ───────────────────────────── */}
-      <section id="mobile-app-development" className="py-16 lg:py-24 bg-[#020714] border-t border-white/10 scroll-mt-24">
+      <section id="mobile-app-development" className="py-16 lg:py-24 bg-white border-t border-slate-200/80 scroll-mt-24">
         <Container>
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <span className="text-xs font-bold uppercase tracking-widest text-brand-cyan">Mobile Engineering</span>
-            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mt-1">
+            <span className="text-xs font-bold uppercase tracking-widest text-brand-blue">Mobile Engineering</span>
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 mt-1">
               Mobile App Development
             </h2>
-            <p className="text-slate-400 text-sm sm:text-base mt-3 leading-relaxed">
+            <p className="text-slate-600 text-sm sm:text-base mt-3 leading-relaxed">
               High-performance Android and iOS mobile applications published on Google Play Store &amp; Apple App Store.
             </p>
           </div>
@@ -1043,10 +1043,10 @@ export default function PricingPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: idx * 0.08 }}
-                  className={`relative bg-slate-900/70 rounded-3xl overflow-hidden transition-all duration-300 flex flex-col justify-between backdrop-blur-xl ${
+                  className={`relative rounded-3xl overflow-hidden transition-all duration-300 flex flex-col justify-between ${
                     isFeatured
-                      ? 'border-2 border-brand-cyan shadow-2xl shadow-cyan-950/50 ring-1 ring-brand-cyan/40 lg:-translate-y-3 z-10'
-                      : 'border border-white/10 hover:border-brand-cyan/40 shadow-xl hover:-translate-y-1.5'
+                      ? 'bg-white border-2 border-brand-blue shadow-xl shadow-blue-500/10 ring-1 ring-brand-blue/30 lg:-translate-y-3 z-10'
+                      : 'bg-slate-50/50 border border-slate-200 hover:border-brand-blue/40 shadow-sm hover:shadow-md hover:-translate-y-1.5'
                   }`}
                 >
                   {/* Top Accent Line */}
@@ -1057,8 +1057,8 @@ export default function PricingPage() {
                     <div
                       className={`absolute top-5 right-5 px-3 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
                         isFeatured
-                          ? 'bg-brand-cyan text-slate-950 font-bold'
-                          : 'bg-white/10 text-slate-300 border border-white/10'
+                          ? 'bg-brand-blue text-white font-bold shadow-sm'
+                          : 'bg-slate-100 text-slate-700 border border-slate-200'
                       }`}
                     >
                       {app.badge}
@@ -1068,59 +1068,59 @@ export default function PricingPage() {
                   <div className="p-5 sm:p-6">
                     {/* Header Icon + App Title */}
                     <div className="flex items-center gap-3 mb-2.5">
-                      <div className={`w-10 h-10 rounded-2xl border border-white/10 bg-white/5 flex items-center justify-center shrink-0 shadow-sm text-brand-cyan`}>
+                      <div className="w-10 h-10 rounded-2xl border border-blue-200 bg-blue-50 flex items-center justify-center shrink-0 shadow-xs text-brand-blue">
                         <IconComp className="w-5 h-5" />
                       </div>
                       <div>
-                        <h3 className="font-heading text-xl font-bold text-white">
+                        <h3 className="font-heading text-xl font-bold text-slate-900">
                           {app.title}
                         </h3>
-                        <span className="text-[10px] font-bold text-slate-400 block">
+                        <span className="text-[10px] font-bold text-slate-500 block">
                           Android &amp; iOS Apps
                         </span>
                       </div>
                     </div>
 
-                    <p className="text-xs text-slate-400 leading-relaxed">
+                    <p className="text-xs text-slate-600 leading-relaxed">
                       {app.desc}
                     </p>
 
                     {/* Tech Stack Chips */}
                     <div className="flex flex-wrap gap-1.5 my-2.5">
                       {app.techStack.map((tech, tIdx) => (
-                        <span key={tIdx} className="px-2 py-0.5 rounded-md bg-white/[0.04] text-slate-300 text-[10px] font-bold border border-white/5">
+                        <span key={tIdx} className="px-2 py-0.5 rounded-md bg-white text-slate-700 text-[10px] font-bold border border-slate-200 shadow-xs">
                           {tech}
                         </span>
                       ))}
                     </div>
 
                     {/* Price Block */}
-                    <div className="my-3 pt-3 border-t border-white/10">
+                    <div className="my-3 pt-3 border-t border-slate-200">
                       <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
                         Starting From
                       </span>
                       <span
                         className={`font-heading text-3xl sm:text-4xl font-extrabold tracking-tight ${
-                          isFeatured ? 'text-brand-cyan' : 'text-white'
+                          isFeatured ? 'text-brand-blue' : 'text-slate-900'
                         }`}
                       >
                         {app.price}
                       </span>
-                      <div className="mt-1.5 text-[10px] font-semibold text-slate-400 inline-flex items-center gap-1 bg-white/[0.04] px-2 py-0.5 rounded-md border border-white/5">
-                        <Clock className="w-3 h-3 text-amber-400" />
+                      <div className="mt-1.5 text-[10px] font-semibold text-slate-600 inline-flex items-center gap-1 bg-white px-2 py-0.5 rounded-md border border-slate-200 shadow-xs">
+                        <Clock className="w-3 h-3 text-amber-500" />
                         Est. {app.timeline}
                       </div>
                     </div>
 
                     {/* Features List */}
-                    <div className="border-t border-white/10 pt-3 mb-1">
-                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">
+                    <div className="border-t border-slate-200 pt-3 mb-1">
+                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-2">
                         Key Deliverables:
                       </span>
                       <ul className="space-y-2">
                         {app.features.map((feat, fIdx) => (
-                          <li key={fIdx} className="flex items-start gap-2 text-xs text-slate-300">
-                            <span className="p-0.5 rounded-full bg-emerald-500/20 text-emerald-400 mt-0.5 shrink-0 border border-emerald-500/30">
+                          <li key={fIdx} className="flex items-start gap-2 text-xs text-slate-700">
+                            <span className="p-0.5 rounded-full bg-emerald-50 text-emerald-600 mt-0.5 shrink-0 border border-emerald-200">
                               <Check className="w-2.5 h-2.5 stroke-[3]" />
                             </span>
                             <span className="font-medium">{feat}</span>
@@ -1131,15 +1131,15 @@ export default function PricingPage() {
                   </div>
 
                   {/* Card Bottom CTA Button */}
-                  <div className="p-5 sm:p-6 pt-0 border-t border-white/10 mt-auto">
+                  <div className="p-5 sm:p-6 pt-0 border-t border-slate-200 mt-auto">
                     <Button
                       variant={isFeatured ? 'primary' : 'outline'}
                       fullWidth
                       onClick={() => openQuoteModal(`Mobile App: ${app.title}`)}
                       className={
                         isFeatured
-                          ? 'bg-brand-cyan hover:bg-brand-cyan-light text-slate-950 font-bold shadow-lg shadow-cyan-950/50'
-                          : 'border-white/15 text-slate-300 hover:border-brand-cyan/40 hover:text-white'
+                          ? 'bg-brand-blue hover:bg-blue-600 text-white font-bold shadow-md shadow-blue-500/20'
+                          : 'border-slate-300 text-slate-800 hover:border-brand-blue hover:text-brand-blue hover:bg-blue-50 font-semibold'
                       }
                     >
                       Get Started
@@ -1151,21 +1151,21 @@ export default function PricingPage() {
           </div>
 
           {/* App Store Guarantee Banner */}
-          <div className="mt-12 p-5 sm:p-6 rounded-3xl bg-slate-900/80 border border-brand-cyan/30 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs sm:text-sm text-white backdrop-blur-xl shadow-xl">
+          <div className="mt-12 p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-blue-50 to-indigo-50/70 border border-blue-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs sm:text-sm text-slate-900 shadow-sm">
             <div className="flex items-center gap-3.5">
-              <div className="w-10 h-10 rounded-2xl bg-brand-cyan/10 border border-brand-cyan/20 text-brand-cyan flex items-center justify-center shrink-0">
+              <div className="w-10 h-10 rounded-2xl bg-blue-100 border border-blue-200 text-brand-blue flex items-center justify-center shrink-0">
                 <Smartphone className="w-5 h-5" />
               </div>
               <div>
-                <span className="font-bold text-white block text-sm">100% App Store Publishing Guarantee</span>
-                <span className="text-slate-400 text-xs">Full source code ownership, Play Store / App Store deployment help, and backend API setup.</span>
+                <span className="font-bold text-slate-900 block text-sm">100% App Store Publishing Guarantee</span>
+                <span className="text-slate-600 text-xs">Full source code ownership, Play Store / App Store deployment help, and backend API setup.</span>
               </div>
             </div>
             <Button
               variant="outline"
               size="sm"
               onClick={() => openQuoteModal('Mobile App Architecture Consultation')}
-              className="shrink-0 text-xs border-brand-cyan/30 text-brand-cyan hover:bg-brand-cyan/10"
+              className="shrink-0 text-xs border-brand-blue/30 text-brand-blue hover:bg-blue-100/50 font-semibold"
             >
               Consult App Architect
             </Button>
@@ -1174,14 +1174,14 @@ export default function PricingPage() {
       </section>
 
       {/* ── SECTION 4: BRANDING SERVICES ────────────────────────────────── */}
-      <section id="branding-services" className="py-16 lg:py-24 bg-[#03091e] border-t border-white/10 scroll-mt-24">
+      <section id="branding-services" className="py-16 lg:py-24 bg-slate-50/60 border-t border-slate-200/80 scroll-mt-24">
         <Container>
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <span className="text-xs font-bold uppercase tracking-widest text-brand-cyan">Identity &amp; Design</span>
-            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mt-1">
+            <span className="text-xs font-bold uppercase tracking-widest text-brand-blue">Identity &amp; Design</span>
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 mt-1">
               Corporate Branding Services
             </h2>
-            <p className="text-slate-400 text-sm sm:text-base mt-3 leading-relaxed">
+            <p className="text-slate-600 text-sm sm:text-base mt-3 leading-relaxed">
               Craft a distinct corporate identity with professional design systems, brand guidelines, and high-impact digital collaterals.
             </p>
           </div>
@@ -1197,18 +1197,18 @@ export default function PricingPage() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.3, delay: idx * 0.05 }}
                   onClick={() => openQuoteModal(`Branding: ${item.title}`)}
-                  className="bg-slate-900/70 rounded-3xl p-5 border border-white/10 hover:border-brand-cyan/40 shadow-xl hover:-translate-y-2 transition-all duration-300 text-center flex flex-col items-center justify-between group cursor-pointer overflow-hidden relative backdrop-blur-xl"
+                  className="bg-white rounded-3xl p-5 border border-slate-200 hover:border-brand-blue/40 shadow-sm hover:shadow-md hover:-translate-y-2 transition-all duration-300 text-center flex flex-col items-center justify-between group cursor-pointer overflow-hidden relative"
                 >
-                  <div className="h-1.5 w-full bg-gradient-to-r from-brand-cyan to-blue-500 absolute top-0 left-0" />
+                  <div className="h-1.5 w-full bg-gradient-to-r from-brand-blue to-blue-500 absolute top-0 left-0" />
                   
-                  <div className="w-12 h-12 rounded-2xl bg-brand-cyan/10 text-brand-cyan flex items-center justify-center my-2 group-hover:scale-110 group-hover:bg-brand-cyan group-hover:text-slate-950 transition-all duration-300 shadow-sm">
+                  <div className="w-12 h-12 rounded-2xl bg-blue-50 text-brand-blue flex items-center justify-center my-2 group-hover:scale-110 group-hover:bg-brand-blue group-hover:text-white transition-all duration-300 shadow-xs">
                     <IconComp className="w-6 h-6" />
                   </div>
-                  <h3 className="font-heading text-xs sm:text-sm font-bold text-white mb-3 group-hover:text-brand-cyan transition-colors">{item.title}</h3>
+                  <h3 className="font-heading text-xs sm:text-sm font-bold text-slate-900 mb-3 group-hover:text-brand-blue transition-colors">{item.title}</h3>
                   
-                  <div className="mt-auto pt-2.5 border-t border-white/10 w-full">
-                    <span className="text-[9px] text-slate-500 uppercase block font-bold">Starting From</span>
-                    <span className="font-heading text-sm sm:text-base font-extrabold text-brand-cyan">{item.price}</span>
+                  <div className="mt-auto pt-2.5 border-t border-slate-100 w-full">
+                    <span className="text-[9px] text-slate-400 uppercase block font-bold">Starting From</span>
+                    <span className="font-heading text-sm sm:text-base font-extrabold text-brand-blue">{item.price}</span>
                   </div>
                 </motion.div>
               )
@@ -1218,37 +1218,37 @@ export default function PricingPage() {
       </section>
 
       {/* ── SECTION 5: DIGITAL MARKETING ────────────────────────────────── */}
-      <section id="digital-marketing" className="py-16 lg:py-24 bg-[#020714] border-t border-white/10 scroll-mt-24">
+      <section id="digital-marketing" className="py-16 lg:py-24 bg-white border-t border-slate-200/80 scroll-mt-24">
         <Container>
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <span className="text-xs font-bold uppercase tracking-widest text-brand-cyan">Performance Growth</span>
-            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mt-1">
+            <span className="text-xs font-bold uppercase tracking-widest text-brand-blue">Performance Growth</span>
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 mt-1">
               Digital Marketing Retainers
             </h2>
-            <p className="text-slate-400 text-sm sm:text-base mt-3 leading-relaxed">
+            <p className="text-slate-600 text-sm sm:text-base mt-3 leading-relaxed">
               Drive qualified customer leads, rank #1 on Google for target keywords, and scale commercial ROI across Google &amp; Meta ad suites.
             </p>
 
             {/* Monthly vs Annual Toggle */}
             <div className="flex items-center justify-center gap-3 mt-6">
-              <span className={`text-xs font-bold uppercase tracking-wider ${!isAnnual ? 'text-white' : 'text-slate-400'}`}>
+              <span className={`text-xs font-bold uppercase tracking-wider ${!isAnnual ? 'text-slate-900' : 'text-slate-400'}`}>
                 Monthly Retainer
               </span>
               <button
                 type="button"
                 onClick={() => setIsAnnual(!isAnnual)}
-                className="relative w-14 h-7 rounded-full bg-slate-800 border border-white/20 p-1 transition-colors cursor-pointer"
+                className="relative w-14 h-7 rounded-full bg-slate-200 border border-slate-300 p-1 transition-colors cursor-pointer"
                 aria-label="Toggle annual discount"
               >
                 <div
-                  className={`w-5 h-5 rounded-full bg-brand-cyan transition-transform ${
+                  className={`w-5 h-5 rounded-full bg-brand-blue transition-transform ${
                     isAnnual ? 'translate-x-7' : 'translate-x-0'
                   }`}
                 />
               </button>
-              <span className={`text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 ${isAnnual ? 'text-brand-cyan' : 'text-slate-400'}`}>
+              <span className={`text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 ${isAnnual ? 'text-brand-blue font-bold' : 'text-slate-400'}`}>
                 Annual Contract
-                <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-black">
+                <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-black">
                   Save 20%
                 </span>
               </span>
@@ -1266,10 +1266,10 @@ export default function PricingPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: idx * 0.1 }}
-                  className={`relative bg-slate-900/70 rounded-3xl overflow-hidden transition-all duration-300 flex flex-col justify-between backdrop-blur-xl ${
+                  className={`relative rounded-3xl overflow-hidden transition-all duration-300 flex flex-col justify-between ${
                     isFeatured
-                      ? 'border-2 border-brand-cyan shadow-2xl shadow-cyan-950/50 ring-1 ring-brand-cyan/40 lg:-translate-y-3 z-10'
-                      : 'border border-white/10 hover:border-brand-cyan/40 shadow-xl hover:-translate-y-1.5'
+                      ? 'bg-white border-2 border-brand-blue shadow-xl shadow-blue-500/10 ring-1 ring-brand-blue/30 lg:-translate-y-3 z-10'
+                      : 'bg-slate-50/50 border border-slate-200 hover:border-brand-blue/40 shadow-sm hover:shadow-md hover:-translate-y-1.5'
                   }`}
                 >
                   {/* Top Accent Line */}
@@ -1280,8 +1280,8 @@ export default function PricingPage() {
                     <div
                       className={`absolute top-5 right-5 px-3 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
                         isFeatured
-                          ? 'bg-brand-cyan text-slate-950 font-bold'
-                          : 'bg-white/10 text-slate-300 border border-white/10'
+                          ? 'bg-brand-blue text-white font-bold shadow-sm'
+                          : 'bg-slate-100 text-slate-700 border border-slate-200'
                       }`}
                     >
                       {mkt.badge}
@@ -1291,32 +1291,32 @@ export default function PricingPage() {
                   <div className="p-5 sm:p-6">
                     {/* Header Icon + Service Title */}
                     <div className="flex items-center gap-3 mb-2.5">
-                      <div className={`w-11 h-11 rounded-2xl border border-white/10 bg-white/5 flex items-center justify-center shrink-0 shadow-sm text-brand-cyan`}>
+                      <div className="w-11 h-11 rounded-2xl border border-blue-200 bg-blue-50 flex items-center justify-center shrink-0 shadow-xs text-brand-blue">
                         <IconComp className="w-5.5 h-5.5" />
                       </div>
                       <div>
-                        <h3 className="font-heading text-xl font-bold text-white leading-snug">
+                        <h3 className="font-heading text-xl font-bold text-slate-900 leading-snug">
                           {mkt.title}
                         </h3>
-                        <span className="text-[10px] font-bold text-emerald-400 uppercase block">
+                        <span className="text-[10px] font-bold text-emerald-600 uppercase block">
                           Official Growth Retainer
                         </span>
                       </div>
                     </div>
 
-                    <p className="text-xs text-slate-400 leading-relaxed">
+                    <p className="text-xs text-slate-600 leading-relaxed">
                       {mkt.desc}
                     </p>
 
                     {/* Price Block */}
-                    <div className="my-3.5 pt-3 border-t border-white/10">
+                    <div className="my-3.5 pt-3 border-t border-slate-200">
                       <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
                         {isAnnual ? 'Annual Retainer (Billed Monthly)' : 'Monthly Retainer'}
                       </span>
                       <div className="flex items-baseline gap-2 mt-1 flex-wrap">
                         <span
                           className={`font-heading text-3xl sm:text-4xl font-extrabold tracking-tight ${
-                            isFeatured ? 'text-brand-cyan' : 'text-white'
+                            isFeatured ? 'text-brand-blue' : 'text-slate-900'
                           }`}
                         >
                           {isAnnual
@@ -1329,26 +1329,26 @@ export default function PricingPage() {
                               : mkt.price
                             : mkt.price}
                         </span>
-                        <span className="text-xs font-bold text-slate-300 bg-white/[0.05] px-2.5 py-0.5 rounded-md border border-white/10 shrink-0">
+                        <span className="text-xs font-bold text-slate-700 bg-white px-2.5 py-0.5 rounded-md border border-slate-200 shrink-0 shadow-xs">
                           {mkt.period}
                         </span>
                       </div>
                     </div>
 
                     {/* Grouped Deliverables List */}
-                    <div className="border-t border-white/10 pt-3 space-y-3">
+                    <div className="border-t border-slate-200 pt-3 space-y-3">
                       {mkt.groups.map((group, gIdx) => {
                         const GroupIcon = group.icon
                         return (
-                          <div key={gIdx} className="bg-white/[0.03] p-3 rounded-2xl border border-white/5">
-                            <span className="text-[10px] font-bold text-brand-cyan uppercase tracking-wider block mb-1.5 flex items-center gap-1.5">
-                              <GroupIcon className="w-3.5 h-3.5 text-blue-400" />
+                          <div key={gIdx} className="bg-white p-3 rounded-2xl border border-slate-200 shadow-xs">
+                            <span className="text-[10px] font-bold text-brand-blue uppercase tracking-wider block mb-1.5 flex items-center gap-1.5">
+                              <GroupIcon className="w-3.5 h-3.5 text-blue-600" />
                               {group.name}
                             </span>
                             <ul className="space-y-1.5">
                               {group.items.map((item, iIdx) => (
-                                <li key={iIdx} className="flex items-start gap-2 text-xs text-slate-300">
-                                  <span className="p-0.5 rounded-full bg-emerald-500/20 text-emerald-400 mt-0.5 shrink-0 border border-emerald-500/30">
+                                <li key={iIdx} className="flex items-start gap-2 text-xs text-slate-700">
+                                  <span className="p-0.5 rounded-full bg-emerald-50 text-emerald-600 mt-0.5 shrink-0 border border-emerald-200">
                                     <Check className="w-2.5 h-2.5 stroke-[3]" />
                                   </span>
                                   <span className="font-medium text-[11px] leading-snug">{item}</span>
@@ -1362,15 +1362,15 @@ export default function PricingPage() {
                   </div>
 
                   {/* Card Bottom CTA Button */}
-                  <div className="p-5 sm:p-6 pt-0 border-t border-white/10 mt-auto">
+                  <div className="p-5 sm:p-6 pt-0 border-t border-slate-200 mt-auto">
                     <Button
                       variant={isFeatured ? 'primary' : 'outline'}
                       fullWidth
                       onClick={() => openQuoteModal(`Digital Marketing: ${mkt.title}`)}
                       className={
                         isFeatured
-                          ? 'bg-brand-cyan hover:bg-brand-cyan-light text-slate-950 font-bold shadow-lg shadow-cyan-950/50'
-                          : 'border-white/15 text-slate-300 hover:border-brand-cyan/40 hover:text-white'
+                          ? 'bg-brand-blue hover:bg-blue-600 text-white font-bold shadow-md shadow-blue-500/20'
+                          : 'border-slate-300 text-slate-800 hover:border-brand-blue hover:text-brand-blue hover:bg-blue-50 font-semibold'
                       }
                     >
                       Choose {mkt.title}
@@ -1382,10 +1382,10 @@ export default function PricingPage() {
           </div>
 
           {/* Marketing Slogan Strip */}
-          <div className="mt-12 p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-blue-950/50 via-slate-900/80 to-cyan-950/50 border border-brand-cyan/30 text-white shadow-2xl relative overflow-hidden backdrop-blur-xl">
+          <div className="mt-12 p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white shadow-xl relative overflow-hidden">
             <div className="flex flex-col lg:flex-row items-center justify-between gap-6 relative z-10">
               <div>
-                <span className="text-[10px] font-bold uppercase tracking-widest text-brand-cyan bg-brand-cyan/10 border border-brand-cyan/20 px-3 py-1 rounded-full inline-block mb-2">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-blue-200 bg-white/10 border border-white/20 px-3 py-1 rounded-full inline-block mb-2">
                   Growth &amp; ROI Commitment
                 </span>
                 <h3 className="font-heading text-xl sm:text-2xl font-bold text-white">
@@ -1398,21 +1398,21 @@ export default function PricingPage() {
 
               {/* 4 Trust Highlights */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-                <div className="bg-white/5 p-2.5 rounded-xl border border-white/10 text-center">
-                  <span className="block font-bold text-brand-cyan">🎯 ROI Driven</span>
-                  <span className="text-[10px] text-slate-400">Meta &amp; Google Ads</span>
+                <div className="bg-white/10 p-2.5 rounded-xl border border-white/15 text-center">
+                  <span className="block font-bold text-blue-300">🎯 ROI Driven</span>
+                  <span className="text-[10px] text-slate-300">Meta &amp; Google Ads</span>
                 </div>
-                <div className="bg-white/5 p-2.5 rounded-xl border border-white/10 text-center">
-                  <span className="block font-bold text-emerald-400">👥 Dedicated Pod</span>
-                  <span className="text-[10px] text-slate-400">Growth Specialists</span>
+                <div className="bg-white/10 p-2.5 rounded-xl border border-white/15 text-center">
+                  <span className="block font-bold text-emerald-300">👥 Dedicated Pod</span>
+                  <span className="text-[10px] text-slate-300">Growth Specialists</span>
                 </div>
-                <div className="bg-white/5 p-2.5 rounded-xl border border-white/10 text-center">
-                  <span className="block font-bold text-amber-400">📈 Live Telemetry</span>
-                  <span className="text-[10px] text-slate-400">Weekly Reports</span>
+                <div className="bg-white/10 p-2.5 rounded-xl border border-white/15 text-center">
+                  <span className="block font-bold text-amber-300">📈 Live Telemetry</span>
+                  <span className="text-[10px] text-slate-300">Weekly Reports</span>
                 </div>
-                <div className="bg-white/5 p-2.5 rounded-xl border border-white/10 text-center">
-                  <span className="block font-bold text-purple-400">🎧 SLA Support</span>
-                  <span className="text-[10px] text-slate-400">Direct WhatsApp</span>
+                <div className="bg-white/10 p-2.5 rounded-xl border border-white/15 text-center">
+                  <span className="block font-bold text-purple-300">🎧 SLA Support</span>
+                  <span className="text-[10px] text-slate-300">Direct WhatsApp</span>
                 </div>
               </div>
             </div>
@@ -1421,14 +1421,14 @@ export default function PricingPage() {
       </section>
 
       {/* ── SECTION 6: HOSTING & MAINTENANCE ────────────────────────────── */}
-      <section id="hosting-maintenance" className="py-16 lg:py-24 bg-[#03091e] border-t border-white/10 scroll-mt-24">
+      <section id="hosting-maintenance" className="py-16 lg:py-24 bg-slate-50/60 border-t border-slate-200/80 scroll-mt-24">
         <Container>
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <span className="text-xs font-bold uppercase tracking-widest text-brand-cyan">Cloud Infrastructure</span>
-            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mt-1">
+            <span className="text-xs font-bold uppercase tracking-widest text-brand-blue">Cloud Infrastructure</span>
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 mt-1">
               Hosting &amp; Maintenance SLAs
             </h2>
-            <p className="text-slate-400 text-sm sm:text-base mt-3 leading-relaxed">
+            <p className="text-slate-600 text-sm sm:text-base mt-3 leading-relaxed">
               Enterprise cloud infrastructure, 99.8% uptime server monitoring, automated daily backups, and security patching.
             </p>
           </div>
@@ -1443,23 +1443,23 @@ export default function PricingPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.3, delay: idx * 0.05 }}
-                  className="bg-slate-900/70 rounded-3xl p-6 border border-white/10 hover:border-brand-cyan/40 shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group overflow-hidden relative backdrop-blur-xl"
+                  className="bg-white rounded-3xl p-6 border border-slate-200 hover:border-brand-blue/40 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group overflow-hidden relative"
                 >
-                  <div className="h-1.5 w-full bg-gradient-to-r from-brand-cyan to-blue-600 absolute top-0 left-0" />
+                  <div className="h-1.5 w-full bg-gradient-to-r from-brand-blue to-blue-600 absolute top-0 left-0" />
                   <div>
-                    <div className="w-12 h-12 rounded-2xl bg-brand-cyan/10 text-brand-cyan flex items-center justify-center mb-4 group-hover:bg-brand-cyan group-hover:text-slate-950 transition-colors duration-300 shadow-sm">
+                    <div className="w-12 h-12 rounded-2xl bg-blue-50 text-brand-blue flex items-center justify-center mb-4 group-hover:bg-brand-blue group-hover:text-white transition-colors duration-300 shadow-xs">
                       <IconComp className="w-6 h-6" />
                     </div>
-                    <h3 className="font-heading text-base font-bold text-white group-hover:text-brand-cyan transition-colors">
+                    <h3 className="font-heading text-base font-bold text-slate-900 group-hover:text-brand-blue transition-colors">
                       {feat.title}
                     </h3>
-                    <p className="text-xs text-slate-400 mt-2 leading-relaxed">{feat.desc}</p>
+                    <p className="text-xs text-slate-600 mt-2 leading-relaxed">{feat.desc}</p>
                   </div>
-                  <div className="mt-5 pt-4 border-t border-white/10 text-right">
+                  <div className="mt-5 pt-4 border-t border-slate-100 text-right">
                     <button
                       type="button"
                       onClick={() => openQuoteModal(`Hosting & Maintenance: ${feat.title}`)}
-                      className="text-xs font-bold text-brand-cyan hover:underline inline-flex items-center gap-1 transition-colors cursor-pointer"
+                      className="text-xs font-bold text-brand-blue hover:underline inline-flex items-center gap-1 transition-colors cursor-pointer"
                     >
                       Inquire Details <ArrowRight className="w-3.5 h-3.5" />
                     </button>
@@ -1471,15 +1471,15 @@ export default function PricingPage() {
         </Container>
       </section>
 
-      {/* ── SECTION 7: WHY CHOOSE HINDUSTAN PROJECTS IT SERVICES ────────── */}
-      <section id="why-choose-us" className="py-16 lg:py-24 bg-[#020714] border-t border-white/10 scroll-mt-24">
+      {/* ── SECTION 7: WHY CHOOSE SNAPTECH DIGITAL ────────── */}
+      <section id="why-choose-us" className="py-16 lg:py-24 bg-white border-t border-slate-200/80 scroll-mt-24">
         <Container>
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <span className="text-xs font-bold uppercase tracking-widest text-brand-cyan">The Snaptech Edge</span>
-            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mt-1">
-              Why Choose Hindustan Projects
+            <span className="text-xs font-bold uppercase tracking-widest text-brand-blue">The Snaptech Edge</span>
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 mt-1">
+              Why Choose SnapTech Digital
             </h2>
-            <p className="text-slate-400 text-sm sm:text-base mt-3 leading-relaxed">
+            <p className="text-slate-600 text-sm sm:text-base mt-3 leading-relaxed">
               We combine enterprise engineering caliber, deep industrial workflow understanding, and long-term client commitments.
             </p>
           </div>
@@ -1495,20 +1495,20 @@ export default function PricingPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.3, delay: idx * 0.05 }}
-                  className="relative bg-slate-900/70 rounded-3xl p-6 border border-white/10 hover:border-brand-cyan/40 shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between overflow-hidden backdrop-blur-xl"
+                  className="relative bg-slate-50/50 rounded-3xl p-6 border border-slate-200 hover:border-brand-blue/40 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between overflow-hidden"
                 >
-                  <span className="absolute top-4 right-4 text-xs font-mono font-bold text-white/20">
+                  <span className="absolute top-4 right-4 text-xs font-mono font-bold text-slate-300">
                     #{stepNum}
                   </span>
 
                   <div>
-                    <div className="w-12 h-12 rounded-2xl bg-brand-cyan/10 text-brand-cyan flex items-center justify-center mb-4 shadow-sm">
+                    <div className="w-12 h-12 rounded-2xl bg-blue-50 text-brand-blue flex items-center justify-center mb-4 shadow-xs">
                       <IconComp className="w-6 h-6" />
                     </div>
-                    <h3 className="font-heading text-base font-bold text-white mb-2">
+                    <h3 className="font-heading text-base font-bold text-slate-900 mb-2">
                       {item.title}
                     </h3>
-                    <p className="text-xs text-slate-400 leading-relaxed">{item.desc}</p>
+                    <p className="text-xs text-slate-600 leading-relaxed">{item.desc}</p>
                   </div>
                 </motion.div>
               )
@@ -1518,14 +1518,14 @@ export default function PricingPage() {
       </section>
 
       {/* ── SECTION 8: OUR DEVELOPMENT PROCESS ──────────────────────────── */}
-      <section id="development-process" className="py-16 lg:py-24 bg-[#03091e] border-t border-white/10 scroll-mt-24">
+      <section id="development-process" className="py-16 lg:py-24 bg-slate-50/60 border-t border-slate-200/80 scroll-mt-24">
         <Container>
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <span className="text-xs font-bold uppercase tracking-widest text-brand-cyan">Milestone Delivery</span>
-            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mt-1">
+            <span className="text-xs font-bold uppercase tracking-widest text-brand-blue">Milestone Delivery</span>
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 mt-1">
               Our 9-Step Engineering Lifecycle
             </h2>
-            <p className="text-slate-400 text-sm sm:text-base mt-3 leading-relaxed">
+            <p className="text-slate-600 text-sm sm:text-base mt-3 leading-relaxed">
               A structured roadmap ensuring complete transparency, regular client sprint reviews, and production-ready code.
             </p>
           </div>
@@ -1533,7 +1533,7 @@ export default function PricingPage() {
           {/* DESKTOP TIMELINE (Horizontal) */}
           <div className="hidden lg:block relative my-12">
             {/* Timeline Horizontal Gradient Line */}
-            <div className="absolute top-7 left-[4%] right-[4%] h-1 bg-gradient-to-r from-brand-cyan via-blue-500 to-indigo-500 rounded-full -z-0" />
+            <div className="absolute top-7 left-[4%] right-[4%] h-1 bg-gradient-to-r from-blue-300 via-brand-blue to-indigo-500 rounded-full -z-0" />
 
             <div className="grid grid-cols-9 gap-2 relative z-10">
               {PROCESS_STEPS.map((proc, idx) => (
@@ -1545,13 +1545,13 @@ export default function PricingPage() {
                   transition={{ duration: 0.3, delay: idx * 0.05 }}
                   className="flex flex-col items-center text-center group"
                 >
-                  <div className="w-14 h-14 rounded-full bg-slate-950 border-4 border-brand-cyan text-brand-cyan font-heading font-extrabold text-sm flex items-center justify-center shadow-lg group-hover:scale-115 group-hover:bg-brand-cyan group-hover:text-slate-950 transition-all duration-300">
+                  <div className="w-14 h-14 rounded-full bg-white border-4 border-brand-blue text-brand-blue font-heading font-extrabold text-sm flex items-center justify-center shadow-md group-hover:scale-115 group-hover:bg-brand-blue group-hover:text-white transition-all duration-300">
                     {proc.step}
                   </div>
-                  <h3 className="font-heading text-xs font-bold text-white mt-4 line-clamp-2 min-h-[32px] group-hover:text-brand-cyan transition-colors">
+                  <h3 className="font-heading text-xs font-bold text-slate-900 mt-4 line-clamp-2 min-h-[32px] group-hover:text-brand-blue transition-colors">
                     {proc.title}
                   </h3>
-                  <p className="text-[11px] text-slate-400 mt-1 leading-snug px-1">
+                  <p className="text-[11px] text-slate-600 mt-1 leading-snug px-1">
                     {proc.desc}
                   </p>
                 </motion.div>
@@ -1560,7 +1560,7 @@ export default function PricingPage() {
           </div>
 
           {/* MOBILE & TABLET TIMELINE (Vertical) */}
-          <div className="lg:hidden relative pl-6 border-l-4 border-brand-cyan/40 space-y-6 my-6 ml-4">
+          <div className="lg:hidden relative pl-6 border-l-4 border-brand-blue/40 space-y-6 my-6 ml-4">
             {PROCESS_STEPS.map((proc, idx) => (
               <motion.div
                 key={proc.step}
@@ -1568,16 +1568,16 @@ export default function PricingPage() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.3, delay: idx * 0.05 }}
-                className="relative pl-6 bg-slate-900/70 p-4 rounded-2xl border border-white/10 shadow-md backdrop-blur-xl"
+                className="relative pl-6 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm"
               >
                 {/* Step Circle Pin */}
-                <div className="absolute -left-[37px] top-4 w-9 h-9 rounded-full bg-slate-950 border-2 border-brand-cyan text-brand-cyan font-heading font-bold text-xs flex items-center justify-center shadow-md">
+                <div className="absolute -left-[37px] top-4 w-9 h-9 rounded-full bg-white border-2 border-brand-blue text-brand-blue font-heading font-bold text-xs flex items-center justify-center shadow-xs">
                   {proc.step}
                 </div>
-                <h3 className="font-heading text-base font-bold text-white">
+                <h3 className="font-heading text-base font-bold text-slate-900">
                   {proc.title}
                 </h3>
-                <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                <p className="text-xs text-slate-600 mt-1 leading-relaxed">
                   {proc.desc}
                 </p>
               </motion.div>
@@ -1587,14 +1587,14 @@ export default function PricingPage() {
       </section>
 
       {/* ── SECTION 9: FREQUENTLY ASKED QUESTIONS ───────────────────────── */}
-      <section id="faq-section" className="py-16 lg:py-24 bg-[#020714] border-t border-white/10 scroll-mt-24">
+      <section id="faq-section" className="py-16 lg:py-24 bg-white border-t border-slate-200/80 scroll-mt-24">
         <Container>
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <span className="text-xs font-bold uppercase tracking-widest text-brand-cyan">Clear Answers</span>
-            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mt-1">
+            <span className="text-xs font-bold uppercase tracking-widest text-brand-blue">Clear Answers</span>
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 mt-1">
               Frequently Asked Questions
             </h2>
-            <p className="text-slate-400 text-sm sm:text-base mt-3 leading-relaxed">
+            <p className="text-slate-600 text-sm sm:text-base mt-3 leading-relaxed">
               Clear answers to common questions about milestone billing, hosting ownership, upgrades, and support terms.
             </p>
           </div>
@@ -1610,19 +1610,19 @@ export default function PricingPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.3, delay: idx * 0.05 }}
-                  className={`bg-slate-900/70 rounded-2xl border transition-all duration-300 overflow-hidden backdrop-blur-xl ${
-                    isOpen ? 'border-brand-cyan/60 shadow-lg shadow-cyan-950/30' : 'border-white/10 hover:border-brand-cyan/30'
+                  className={`bg-slate-50/50 rounded-2xl border transition-all duration-300 overflow-hidden ${
+                    isOpen ? 'border-brand-blue/60 shadow-sm bg-white' : 'border-slate-200 hover:border-brand-blue/30'
                   }`}
                 >
                   <button
                     type="button"
                     onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
-                    className="w-full text-left px-6 py-5 flex items-center justify-between gap-4 font-heading font-bold text-base text-white hover:text-brand-cyan transition-colors focus:outline-none cursor-pointer"
+                    className="w-full text-left px-6 py-5 flex items-center justify-between gap-4 font-heading font-bold text-base text-slate-900 hover:text-brand-blue transition-colors focus:outline-none cursor-pointer"
                     aria-expanded={isOpen}
                   >
                     <span>{faq.question}</span>
                     <ChevronDown
-                      className={`w-5 h-5 text-brand-cyan shrink-0 transition-transform duration-300 ${
+                      className={`w-5 h-5 text-brand-blue shrink-0 transition-transform duration-300 ${
                         isOpen ? 'rotate-180' : ''
                       }`}
                     />
@@ -1636,7 +1636,7 @@ export default function PricingPage() {
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.3, ease: 'easeInOut' }}
                       >
-                        <div className="px-6 pb-5 pt-1 text-sm text-slate-300 leading-relaxed border-t border-white/10">
+                        <div className="px-6 pb-5 pt-1 text-sm text-slate-600 leading-relaxed border-t border-slate-200/80">
                           {faq.answer}
                         </div>
                       </motion.div>
@@ -1648,10 +1648,10 @@ export default function PricingPage() {
           </div>
 
           {/* Bottom Disclaimer Note */}
-          <div className="mt-14 max-w-3xl mx-auto text-center p-5 rounded-2xl bg-slate-900/60 border border-white/10 text-xs sm:text-sm text-slate-400 shadow-md flex items-center justify-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-brand-cyan shrink-0" />
+          <div className="mt-14 max-w-3xl mx-auto text-center p-5 rounded-2xl bg-blue-50/60 border border-blue-200 text-xs sm:text-sm text-slate-700 shadow-xs flex items-center justify-center gap-2">
+            <ShieldCheck className="w-5 h-5 text-brand-blue shrink-0" />
             <span>
-              <strong className="text-white">Transparent Pricing Policy: </strong>
+              <strong className="text-slate-900">Transparent Pricing Policy: </strong>
               All prices shown represent standardized base milestones. Final scope is itemized in your formal Statement of Work.
             </span>
           </div>
@@ -1659,19 +1659,19 @@ export default function PricingPage() {
       </section>
 
       {/* ── FINAL CTA BANNER ────────────────────────────────────────────── */}
-      <section className="py-16 lg:py-24 bg-gradient-to-r from-[#03091e] via-[#051438] to-[#03091e] border-t border-white/10 text-white relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-brand-cyan/15 rounded-full filter blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-brand-primary/20 rounded-full filter blur-3xl pointer-events-none" />
+      <section className="py-16 lg:py-24 bg-gradient-to-r from-[#0a1945] via-[#0D1B4B] to-[#0a1945] border-t border-blue-900 text-white relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-brand-blue/15 rounded-full filter blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-600/20 rounded-full filter blur-3xl pointer-events-none" />
         
         <Container>
           <div className="max-w-3xl mx-auto text-center relative z-10 px-2">
-            <span className="inline-block px-4 py-1.5 rounded-full bg-brand-cyan/10 border border-brand-cyan/30 text-brand-cyan text-xs font-bold uppercase tracking-widest mb-4">
+            <span className="inline-block px-4 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-200 text-xs font-bold uppercase tracking-widest mb-4">
               Get Custom Proposal
             </span>
             <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
               Ready to Architect Your Solution?
             </h2>
-            <p className="text-slate-400 text-base sm:text-lg mt-4 leading-relaxed max-w-xl mx-auto">
+            <p className="text-blue-100/80 text-base sm:text-lg mt-4 leading-relaxed max-w-xl mx-auto">
               Schedule a discovery session with our senior engineers and receive an itemized proposal within 24 hours.
             </p>
 
@@ -1681,7 +1681,7 @@ export default function PricingPage() {
                 size="lg"
                 onClick={() => openQuoteModal('Final CTA Banner - Get Free Quote')}
                 leftIcon={<Sparkles className="w-5 h-5" />}
-                className="w-full sm:w-auto bg-brand-cyan hover:bg-brand-cyan-light text-slate-950 font-bold shadow-xl shadow-cyan-950/50 cursor-pointer"
+                className="w-full sm:w-auto bg-brand-blue hover:bg-blue-600 text-white font-bold shadow-xl shadow-blue-950/50 cursor-pointer"
               >
                 Request Custom Proposal
               </Button>
@@ -1701,10 +1701,10 @@ export default function PricingPage() {
                 variant="secondary"
                 size="lg"
                 as="a"
-                href={`https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent('Hi Hindustan Projects! I want to discuss a new project.')}`}
+                href={`https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent('Hi SnapTech Digital! I want to discuss a new project.')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full sm:w-auto !bg-emerald-500 hover:!bg-emerald-400 !border-emerald-500 !text-slate-950 font-bold shadow-lg shadow-emerald-950/40"
+                className="w-full sm:w-auto !bg-emerald-600 hover:!bg-emerald-500 !border-emerald-600 !text-white font-bold shadow-lg shadow-emerald-950/40"
                 leftIcon={<MessageSquare className="w-5 h-5" />}
               >
                 WhatsApp Us
@@ -1726,40 +1726,40 @@ export default function PricingPage() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   onClick={() => setIsQuoteModalOpen(false)}
-                  className="fixed inset-0 bg-slate-950/85 backdrop-blur-md"
+                  className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm"
                 />
 
-                {/* Modal Card (Cyber Dark Glass) */}
+                {/* Modal Card (Clean Light Theme) */}
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95, y: 10 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95, y: 10 }}
                   transition={{ duration: 0.2, ease: 'easeOut' }}
-                  className="relative z-10 w-full max-w-lg bg-slate-900/95 rounded-3xl shadow-2xl p-6 sm:p-8 my-auto max-h-[90vh] overflow-y-auto border border-white/15 text-white backdrop-blur-2xl"
+                  className="relative z-10 w-full max-w-lg bg-white rounded-3xl shadow-2xl p-6 sm:p-8 my-auto max-h-[90vh] overflow-y-auto border border-slate-200 text-slate-900"
                 >
                   <button
                     type="button"
                     onClick={() => setIsQuoteModalOpen(false)}
-                    className="absolute top-4 right-4 p-2 text-slate-400 hover:text-white hover:bg-white/10 rounded-full transition-colors cursor-pointer"
+                    className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-full transition-colors cursor-pointer"
                   >
                     <X className="w-5 h-5" />
                   </button>
 
-                  <div className="mb-6 border-b border-white/10 pb-4">
-                    <span className="inline-block px-3.5 py-1 rounded-full bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/30 text-xs font-bold uppercase tracking-wider mb-2">
+                  <div className="mb-6 border-b border-slate-200 pb-4">
+                    <span className="inline-block px-3.5 py-1 rounded-full bg-blue-50 text-brand-blue border border-blue-200 text-xs font-bold uppercase tracking-wider mb-2">
                       Selected Plan: {selectedPlan}
                     </span>
-                    <h3 className="font-heading text-2xl font-extrabold text-white">
+                    <h3 className="font-heading text-2xl font-extrabold text-slate-900">
                       Request Technical Proposal
                     </h3>
-                    <p className="text-xs text-slate-400 mt-1">
+                    <p className="text-xs text-slate-600 mt-1">
                       Fill in your specifications below and an engineering architect will reach out within 2 hours.
                     </p>
                   </div>
 
                   <form onSubmit={handleQuoteSubmit} className="space-y-4">
                     <div>
-                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                      <label className="block text-[10px] font-bold text-slate-700 uppercase tracking-wider mb-1">
                         Full Name *
                       </label>
                       <input
@@ -1768,13 +1768,13 @@ export default function PricingPage() {
                         placeholder="e.g. Vikramaditya Sharma"
                         value={quoteForm.name}
                         onChange={(e) => setQuoteForm({ ...quoteForm, name: e.target.value })}
-                        className="w-full px-4 py-2.5 rounded-xl border border-white/15 bg-white/[0.04] text-white text-sm focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan/30 outline-none transition-all placeholder:text-slate-500"
+                        className="w-full px-4 py-2.5 rounded-xl border border-slate-300 bg-slate-50/50 text-slate-900 text-sm focus:border-brand-blue focus:ring-1 focus:ring-brand-blue/30 outline-none transition-all placeholder:text-slate-400"
                       />
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                        <label className="block text-[10px] font-bold text-slate-700 uppercase tracking-wider mb-1">
                           Email Address *
                         </label>
                         <input
@@ -1783,12 +1783,12 @@ export default function PricingPage() {
                           placeholder="vikram@enterprise.com"
                           value={quoteForm.email}
                           onChange={(e) => setQuoteForm({ ...quoteForm, email: e.target.value })}
-                          className="w-full px-4 py-2.5 rounded-xl border border-white/15 bg-white/[0.04] text-white text-sm focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan/30 outline-none transition-all placeholder:text-slate-500"
+                          className="w-full px-4 py-2.5 rounded-xl border border-slate-300 bg-slate-50/50 text-slate-900 text-sm focus:border-brand-blue focus:ring-1 focus:ring-brand-blue/30 outline-none transition-all placeholder:text-slate-400"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                        <label className="block text-[10px] font-bold text-slate-700 uppercase tracking-wider mb-1">
                           Phone / WhatsApp *
                         </label>
                         <input
@@ -1797,13 +1797,13 @@ export default function PricingPage() {
                           placeholder="+91 98765 43210"
                           value={quoteForm.phone}
                           onChange={(e) => setQuoteForm({ ...quoteForm, phone: e.target.value })}
-                          className="w-full px-4 py-2.5 rounded-xl border border-white/15 bg-white/[0.04] text-white text-sm focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan/30 outline-none transition-all placeholder:text-slate-500"
+                          className="w-full px-4 py-2.5 rounded-xl border border-slate-300 bg-slate-50/50 text-slate-900 text-sm focus:border-brand-blue focus:ring-1 focus:ring-brand-blue/30 outline-none transition-all placeholder:text-slate-400"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                      <label className="block text-[10px] font-bold text-slate-700 uppercase tracking-wider mb-1">
                         Project Scope &amp; Deliverables
                       </label>
                       <textarea
@@ -1811,7 +1811,7 @@ export default function PricingPage() {
                         placeholder="Briefly outline your requirements (e.g. 5-page portal, payment integration, custom ERP module)..."
                         value={quoteForm.message}
                         onChange={(e) => setQuoteForm({ ...quoteForm, message: e.target.value })}
-                        className="w-full px-4 py-2.5 rounded-xl border border-white/15 bg-white/[0.04] text-white text-sm focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan/30 outline-none transition-all resize-none placeholder:text-slate-500"
+                        className="w-full px-4 py-2.5 rounded-xl border border-slate-300 bg-slate-50/50 text-slate-900 text-sm focus:border-brand-blue focus:ring-1 focus:ring-brand-blue/30 outline-none transition-all resize-none placeholder:text-slate-400"
                       />
                     </div>
 
@@ -1821,7 +1821,7 @@ export default function PricingPage() {
                       fullWidth
                       loading={formSubmitting}
                       leftIcon={<Send className="w-4 h-4" />}
-                      className="bg-brand-cyan hover:bg-brand-cyan-light text-slate-950 font-bold shadow-lg shadow-cyan-950/50 py-3"
+                      className="bg-brand-blue hover:bg-blue-600 text-white font-bold shadow-lg shadow-blue-500/25 py-3 cursor-pointer"
                     >
                       Submit Technical Quote Request
                     </Button>

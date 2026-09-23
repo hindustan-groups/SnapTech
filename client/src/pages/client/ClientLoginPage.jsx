@@ -92,7 +92,7 @@ export default function ClientLoginPage() {
           </h1>
           <p className="mt-2 text-xs sm:text-sm text-slate-400 max-w-xs sm:max-w-sm mx-auto leading-relaxed">
             {isSetupMode
-              ? 'Establish a secure credential key to access your Hindustan Projects client dashboard.'
+              ? 'Establish a secure credential key to access your SnapTech Digital client dashboard.'
               : 'Sign in to monitor live project milestones, deliverables, and billing statements.'}
           </p>
         </div>
@@ -269,7 +269,7 @@ export default function ClientLoginPage() {
               className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-brand-cyan transition-colors"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Back to Hindustan Projects Main Site</span>
+              <span>Back to SnapTech Digital Main Site</span>
             </a>
           </div>
         </div>

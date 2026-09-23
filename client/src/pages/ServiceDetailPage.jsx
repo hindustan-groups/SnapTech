@@ -3,7 +3,7 @@
  * Styled in Snaptech's clean, high-impact light theme matching the Home Page.
  * Powered directly by the PostgreSQL database with zero static text locks.
  */
-import { useState, useMemo } from 'react'
+import { useState, useMemo, createElement } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import {
   ArrowLeft,
@@ -107,15 +107,13 @@ export default function ServiceDetailPage() {
   const [submitError, setSubmitError] = useState(false)
 
   const service = data?.data
-  const allServices = allServicesData?.data || []
   const cfg = settingsData?.data || {}
 
   const phone = cfg.phone || '+91 75970 00601'
   const contactEmail = cfg.email || 'info@snaptech.digital'
-  const whatsappNum = (cfg.whatsapp || cfg.phone || '919929120431').replace(/[^0-9]/g, '')
+  const whatsappNum = (cfg.whatsapp || cfg.phone || '917597000601').replace(/[^0-9]/g, '')
 
   const theme = getServiceTheme(slug)
-  const Icon = getServiceIcon(service?.icon || 'Globe')
 
   // Pure dynamic data extraction
   const keyFeatures = useMemo(() => {
@@ -167,8 +165,9 @@ export default function ServiceDetailPage() {
 
   // Sibling services (other available capabilities)
   const relatedServices = useMemo(() => {
-    return allServices.filter((s) => s.slug !== slug).slice(0, 3)
-  }, [allServices, slug])
+    const list = allServicesData?.data || []
+    return list.filter((s) => s.slug !== slug).slice(0, 3)
+  }, [allServicesData?.data, slug])
 
   const handleInquirySubmit = async (e) => {
     e.preventDefault()
@@ -270,7 +269,10 @@ export default function ServiceDetailPage() {
                 <div
                   className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${theme.color} flex items-center justify-center shadow-md shrink-0`}
                 >
-                  <Icon className="w-8 h-8 text-white" strokeWidth={1.8} />
+                  {createElement(getServiceIcon(service?.icon || 'Globe'), {
+                    className: 'w-8 h-8 text-white',
+                    strokeWidth: 1.8,
+                  })}
                 </div>
                 <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 leading-tight tracking-tight">
                   {service.title}

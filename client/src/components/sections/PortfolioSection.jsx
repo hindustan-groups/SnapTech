@@ -110,13 +110,13 @@ const PLACEHOLDER_PROJECTS = [
   },
 ]
 
-/* ── Project Detail Modal (Cyber-Navy Glassmorphic) ─────────────── */
+/* ── Project Detail Modal (Crisp Light Theme) ─────────────────── */
 export function ProjectModal({ project, onClose }) {
-  const gradColor = CATEGORY_COLORS[project.category] || 'from-brand-primary to-brand-cyan'
+  const gradColor = CATEGORY_COLORS[project.category] || 'from-brand-primary to-brand-blue'
 
   return createPortal(
     <motion.div
-      className="fixed inset-0 z-50 overflow-y-auto bg-[#020714]/85 backdrop-blur-xl"
+      className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/70 backdrop-blur-md"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -127,7 +127,7 @@ export function ProjectModal({ project, onClose }) {
 
         {/* Modal Content Box */}
         <motion.div
-          className="my-auto inline-block w-full max-w-3xl text-left align-middle bg-slate-950/95 rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.8)] overflow-hidden z-10 border border-brand-cyan/30 text-white"
+          className="my-auto inline-block w-full max-w-3xl text-left align-middle bg-white rounded-3xl shadow-2xl overflow-hidden z-10 border border-slate-200 text-slate-900"
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -139,7 +139,7 @@ export function ProjectModal({ project, onClose }) {
           {/* Close button */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 z-20 p-2.5 rounded-full bg-slate-900/80 backdrop-blur-md border border-white/20 text-white hover:bg-brand-primary hover:border-brand-cyan hover:rotate-90 transition-all duration-300 shadow-lg cursor-pointer"
+            className="absolute top-4 right-4 z-20 p-2.5 rounded-full bg-white/90 backdrop-blur-md border border-slate-200 text-slate-700 hover:bg-slate-100 hover:text-slate-900 hover:rotate-90 transition-all duration-300 shadow-md cursor-pointer"
             aria-label="Close modal"
           >
             <X className="w-4 h-4" />
@@ -153,7 +153,7 @@ export function ProjectModal({ project, onClose }) {
                 alt={project.title}
                 className="w-full h-full object-cover group-hover/image:scale-105 transition-transform duration-700 ease-out"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/30 to-transparent" />
 
               {/* Floating Badges */}
               <div className="absolute bottom-5 left-5 flex gap-2">
@@ -163,7 +163,7 @@ export function ProjectModal({ project, onClose }) {
                   {project.category}
                 </span>
                 {project.isFeatured && (
-                  <span className="px-3 py-1 rounded-full text-xs font-mono font-bold text-brand-cyan bg-brand-cyan/10 border border-brand-cyan/30 shadow-md">
+                  <span className="px-3 py-1 rounded-full text-xs font-mono font-bold text-brand-blue bg-white/95 border border-blue-200 shadow-md">
                     Enterprise Showcase
                   </span>
                 )}
@@ -173,7 +173,7 @@ export function ProjectModal({ project, onClose }) {
             <div
               className={`w-full h-44 bg-gradient-to-br ${gradColor} flex items-center justify-center`}
             >
-              <span className="font-heading text-5xl font-bold text-white/30">
+              <span className="font-heading text-5xl font-bold text-white/40">
                 {project.title[0]}
               </span>
             </div>
@@ -181,31 +181,31 @@ export function ProjectModal({ project, onClose }) {
 
           {/* Body Content */}
           <div className="p-6 sm:p-8">
-            <span className="text-[10px] font-mono font-bold text-brand-cyan uppercase tracking-widest block mb-1">
+            <span className="text-[10px] font-mono font-bold text-brand-blue uppercase tracking-widest block mb-1">
               // ARCHITECTURAL CASE STUDY
             </span>
             <h2
               id="modal-title"
-              className="font-heading text-2xl sm:text-3xl font-bold text-white mb-2 leading-tight"
+              className="font-heading text-2xl sm:text-3xl font-bold text-slate-900 mb-2 leading-tight"
             >
               {project.title}
             </h2>
-            <p className="text-xs text-slate-400 mb-6 flex items-center gap-1.5 font-mono">
-              <Tag className="w-3.5 h-3.5 text-brand-cyan" />
+            <p className="text-xs text-slate-500 mb-6 flex items-center gap-1.5 font-medium">
+              <Tag className="w-3.5 h-3.5 text-brand-blue" />
               {project.clientName}
             </p>
 
             {/* Performance/Result Achievements */}
             {project.result && (
-              <div className="flex items-center gap-3.5 p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 mb-6 shadow-[0_0_25px_rgba(16,185,129,0.1)]">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center shrink-0 shadow-md">
+              <div className="flex items-center gap-3.5 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 mb-6 shadow-xs">
+                <div className="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center shrink-0 shadow-sm">
                   <ArrowRight className="w-4 h-4 text-white" />
                 </div>
                 <div>
-                  <p className="text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-widest leading-none mb-1">
+                  <p className="text-[10px] font-mono font-bold text-emerald-800 uppercase tracking-wider leading-none mb-1">
                     Verified Production Impact
                   </p>
-                  <p className="text-sm font-bold text-white leading-snug">
+                  <p className="text-sm font-bold text-emerald-950 leading-snug">
                     {project.result}
                   </p>
                 </div>
@@ -213,22 +213,22 @@ export function ProjectModal({ project, onClose }) {
             )}
 
             {/* Two Column details grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-white/10">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-slate-100">
               <div className="md:col-span-2 space-y-3.5">
-                <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-brand-cyan flex items-center gap-1.5">
-                  <Code2 className="w-4 h-4 text-brand-cyan" />
+                <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
+                  <Code2 className="w-4 h-4 text-brand-blue" />
                   Technical Implementation
                 </h3>
-                <p className="text-sm text-slate-300 leading-relaxed font-light">{project.description}</p>
+                <p className="text-sm text-slate-600 leading-relaxed font-normal">{project.description}</p>
               </div>
 
               {/* Sidebar specs card */}
-              <div className="bg-slate-900/70 rounded-2xl p-5 border border-white/10 space-y-4 backdrop-blur-md">
+              <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-4">
                 <div>
                   <span className="block text-[9px] font-mono font-bold text-slate-400 uppercase tracking-wider mb-1">
                     Enterprise Partner
                   </span>
-                  <span className="text-xs font-semibold text-white leading-tight block">
+                  <span className="text-xs font-semibold text-slate-900 leading-tight block">
                     {project.clientName}
                   </span>
                 </div>
@@ -236,7 +236,7 @@ export function ProjectModal({ project, onClose }) {
                   <span className="block text-[9px] font-mono font-bold text-slate-400 uppercase tracking-wider mb-1">
                     Discipline
                   </span>
-                  <span className="text-xs font-mono font-semibold text-brand-cyan block">
+                  <span className="text-xs font-mono font-semibold text-brand-blue block">
                     {project.category}
                   </span>
                 </div>
@@ -249,7 +249,7 @@ export function ProjectModal({ project, onClose }) {
                       {project.technologies.map((t) => (
                         <span
                           key={t}
-                          className="px-2.5 py-1 bg-white/5 border border-brand-cyan/20 text-brand-cyan text-[10px] rounded-lg font-mono font-bold shadow-sm"
+                          className="px-2.5 py-1 bg-white border border-slate-200 text-slate-700 text-[10px] rounded-lg font-mono font-semibold shadow-xs"
                         >
                           {t}
                         </span>
@@ -263,7 +263,7 @@ export function ProjectModal({ project, onClose }) {
                       href={project.liveUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-1.5 w-full bg-gradient-to-r from-brand-primary to-brand-cyan hover:from-brand-primary-dark hover:to-brand-cyan-dark text-white text-xs font-bold py-2.5 px-3 rounded-xl shadow-md transition-all duration-300"
+                      className="flex items-center justify-center gap-1.5 w-full bg-brand-blue hover:bg-brand-blue-dark text-white text-xs font-bold py-2.5 px-3 rounded-xl shadow-md transition-all duration-300"
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
                       Visit Live Platform
@@ -282,18 +282,17 @@ export function ProjectModal({ project, onClose }) {
 
 /* ── Project Card ───────────────────────────────────────────────── */
 function ProjectCard({ project, onOpen }) {
-  const gradColor = CATEGORY_COLORS[project.category] || 'from-brand-primary to-brand-cyan'
+  const gradColor = CATEGORY_COLORS[project.category] || 'from-brand-primary to-brand-blue'
 
   return (
     <motion.div variants={fadeUp}>
       <article
-        className="group relative rounded-2xl border border-white/10 bg-slate-900/70 overflow-hidden cursor-pointer
-          backdrop-blur-xl hover:border-brand-cyan/50 hover:shadow-[0_0_35px_rgba(6,182,212,0.18)]
-          hover:-translate-y-1.5 transition-all duration-300 flex flex-col h-full"
+        className="group relative rounded-2xl border border-slate-200/90 bg-white overflow-hidden cursor-pointer
+          shadow-xs hover:border-brand-blue/50 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col h-full"
         onClick={() => onOpen(project)}
       >
         {/* Thumbnail */}
-        <div className="relative overflow-hidden h-52">
+        <div className="relative overflow-hidden h-52 bg-slate-100">
           {project.thumbnailUrl ? (
             <img
               src={project.thumbnailUrl}
@@ -311,21 +310,21 @@ function ProjectCard({ project, onOpen }) {
             </div>
           )}
           {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
 
           {/* Tech tags + description on hover */}
-          <div className="absolute inset-0 bg-[#020714]/90 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-5 backdrop-blur-md">
+          <div className="absolute inset-0 bg-slate-950/85 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-5 backdrop-blur-xs">
             <div className="flex flex-wrap gap-1.5 mb-2.5">
               {project.technologies?.slice(0, 4).map((tech) => (
                 <span
                   key={tech}
-                  className="text-[10px] bg-brand-cyan/10 border border-brand-cyan/30 text-brand-cyan px-2 py-0.5 rounded font-mono font-semibold uppercase tracking-wider"
+                  className="text-[10px] bg-white/10 border border-white/20 text-white px-2 py-0.5 rounded font-mono font-semibold uppercase tracking-wider"
                 >
                   {tech}
                 </span>
               ))}
             </div>
-            <p className="text-xs text-slate-300 line-clamp-3 leading-relaxed font-light">
+            <p className="text-xs text-slate-200 line-clamp-3 leading-relaxed font-light">
               {project.description}
             </p>
           </div>
@@ -333,12 +332,12 @@ function ProjectCard({ project, onOpen }) {
           {/* Badges (always visible top-left) */}
           <div className="absolute top-3.5 left-3.5 flex gap-2">
             <span
-              className={`px-2.5 py-1 rounded-full text-[10px] font-mono font-bold text-white bg-gradient-to-r ${gradColor} shadow-sm`}
+              className={`px-2.5 py-1 rounded-full text-[10px] font-mono font-bold text-white bg-gradient-to-r ${gradColor} shadow-xs`}
             >
               {project.category}
             </span>
             {project.isFeatured && (
-              <span className="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold text-brand-cyan bg-slate-950/80 border border-brand-cyan/30 shadow-sm backdrop-blur-md">
+              <span className="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold text-brand-blue bg-white/95 border border-blue-200 shadow-xs">
                 Featured
               </span>
             )}
@@ -348,23 +347,23 @@ function ProjectCard({ project, onOpen }) {
         {/* Card body */}
         <div className="p-5 flex-1 flex flex-col justify-between">
           <div>
-            <h3 className="font-heading text-lg font-bold text-white mb-1 line-clamp-1 group-hover:text-brand-cyan transition-colors duration-200">
+            <h3 className="font-heading text-lg font-bold text-slate-900 mb-1 line-clamp-1 group-hover:text-brand-blue transition-colors duration-200">
               {project.title}
             </h3>
-            <p className="text-xs text-slate-400 font-mono mb-3">{project.clientName}</p>
+            <p className="text-xs text-slate-500 font-medium mb-3">{project.clientName}</p>
 
             {/* Result pill */}
             {project.result && (
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 mb-4 w-fit">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0 animate-pulse" />
-                <span className="text-[11px] font-mono font-semibold text-emerald-300">{project.result}</span>
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 mb-4 w-fit">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0 animate-pulse" />
+                <span className="text-[11px] font-semibold text-emerald-800">{project.result}</span>
               </div>
             )}
           </div>
 
           {/* Action Footer */}
-          <div className="flex items-center justify-between border-t border-white/10 pt-3.5 mt-2">
-            <div className="flex items-center gap-1.5 text-xs font-semibold text-brand-cyan group-hover:text-white transition-colors">
+          <div className="flex items-center justify-between border-t border-slate-100 pt-3.5 mt-2">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-brand-blue group-hover:text-brand-blue-dark transition-colors">
               <span>View Case Study</span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </div>
@@ -374,7 +373,7 @@ function ProjectCard({ project, onOpen }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
-                className="flex items-center gap-1.5 text-[11px] font-mono font-bold text-brand-cyan hover:text-white bg-white/5 hover:bg-brand-cyan/20 border border-brand-cyan/20 px-2.5 py-1 rounded-lg transition-all"
+                className="flex items-center gap-1.5 text-[11px] font-mono font-bold text-slate-700 hover:text-brand-blue bg-slate-50 hover:bg-blue-50 border border-slate-200 px-2.5 py-1 rounded-lg transition-all"
               >
                 <ExternalLink className="w-3 h-3" />
                 Live Demo
@@ -401,23 +400,20 @@ export default function PortfolioSection() {
       : allProjects.filter((p) => p.category === activeCategory)
 
   return (
-    <section id="portfolio" className="py-20 bg-[#020714] relative border-b border-white/10" aria-labelledby="portfolio-heading">
-      {/* Background Radial Glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(14,165,233,0.1),rgba(255,255,255,0))] pointer-events-none" />
-
+    <section id="portfolio" className="py-20 bg-slate-50/60 relative border-b border-slate-200/80" aria-labelledby="portfolio-heading">
       <Container className="relative">
         {/* Section heading */}
         <div className="max-w-3xl mx-auto text-center mb-12">
-          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand-cyan/40 bg-brand-cyan/10 text-brand-cyan text-xs font-semibold uppercase tracking-widest mb-3">
-            <Sparkles className="w-3.5 h-3.5 text-brand-cyan" /> Verified Deployments
+          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-200 bg-blue-50 text-brand-blue text-xs font-bold uppercase tracking-wider mb-3">
+            <Sparkles className="w-3.5 h-3.5 text-brand-blue" /> Verified Deployments
           </span>
           <h2
             id="portfolio-heading"
-            className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4"
+            className="font-heading text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 mb-4"
           >
             Engineering Portfolio &amp; Case Studies
           </h2>
-          <p className="text-slate-400 max-w-xl mx-auto text-sm sm:text-base font-light">
+          <p className="text-slate-600 max-w-xl mx-auto text-sm sm:text-base font-normal">
             Real software systems delivered for ambitious businesses in Bhilwara, Rajasthan, and across India.
           </p>
         </div>
@@ -434,10 +430,10 @@ export default function PortfolioSection() {
               role="tab"
               aria-selected={activeCategory === cat}
               onClick={() => setActiveCategory(cat)}
-              className={`relative px-5 py-2 rounded-xl text-xs font-mono font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer border overflow-hidden active:scale-95 ${
+              className={`relative px-5 py-2 rounded-xl text-xs font-mono font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer border active:scale-95 ${
                 activeCategory === cat
-                  ? 'text-white border-brand-cyan/50 bg-gradient-to-r from-brand-primary to-brand-cyan shadow-[0_0_20px_rgba(6,182,212,0.35)]'
-                  : 'bg-slate-900/60 text-slate-400 border-white/10 hover:border-white/25 hover:text-white backdrop-blur-md'
+                  ? 'text-white border-brand-blue bg-brand-blue shadow-md'
+                  : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300 hover:text-slate-900 shadow-xs'
               }`}
             >
               <span className="relative z-10">{cat}</span>
@@ -456,7 +452,7 @@ export default function PortfolioSection() {
           >
             {isLoading
               ? Array.from({ length: 6 }).map((_, i) => (
-                  <div key={i} className="h-80 bg-slate-900/60 rounded-2xl border border-white/10 animate-pulse backdrop-blur-xl" />
+                  <div key={i} className="h-80 bg-slate-200/70 rounded-2xl border border-slate-200 animate-pulse" />
                 ))
               : filtered.map((p) => (
                   <ProjectCard key={p.id} project={p} onOpen={setSelectedProject} />
@@ -465,9 +461,9 @@ export default function PortfolioSection() {
         </AnimatePresence>
 
         {!isLoading && filtered.length === 0 && (
-          <div className="text-center py-16 p-8 rounded-2xl border border-white/10 bg-slate-900/40 max-w-md mx-auto">
-            <p className="text-lg font-bold text-white mb-2">No projects found</p>
-            <p className="text-slate-400 text-sm">
+          <div className="text-center py-16 p-8 rounded-2xl border border-slate-200 bg-white max-w-md mx-auto shadow-xs">
+            <p className="text-lg font-bold text-slate-900 mb-2">No projects found</p>
+            <p className="text-slate-500 text-sm">
               We are actively packaging new case studies in this vertical.
             </p>
           </div>

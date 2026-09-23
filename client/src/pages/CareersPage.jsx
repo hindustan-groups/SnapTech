@@ -27,10 +27,10 @@ const JOB_TYPE_LABELS = {
 }
 
 const JOB_TYPE_CLASSES = {
-  FULL_TIME: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20',
-  PART_TIME: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
-  INTERNSHIP: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-  CONTRACT: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+  FULL_TIME: 'bg-blue-50 text-brand-blue border-blue-200',
+  PART_TIME: 'bg-purple-50 text-purple-700 border-purple-200',
+  INTERNSHIP: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+  CONTRACT: 'bg-amber-50 text-amber-700 border-amber-200',
 }
 
 // Resilient default job catalog if database has few or fresh records
@@ -169,13 +169,13 @@ export default function CareersPage() {
     })
   }, [allJobs, selectedDept, searchQuery])
 
-  const whatsappNumber = (cfg.whatsapp || cfg.phone || '919414112057').replace(/[^0-9]/g, '')
+  const whatsappNumber = (cfg.whatsapp || cfg.phone || '917597000601').replace(/[^0-9]/g, '')
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
     'Hello Snaptech Hiring Team, I am reaching out regarding engineering and tech career opportunities.'
   )}`
 
   return (
-    <div className="min-h-screen bg-[#020714] text-slate-200">
+    <div className="min-h-screen bg-white text-slate-700">
       <SEO
         title="Careers & Engineering Opportunities — Snaptech | Hindustan Projects"
         description="Build high-performance cloud architectures, custom ERP systems, and AI platforms. Join Hindustan Projects IT Division (Snaptech) in Bhilwara or work remotely."
@@ -183,64 +183,63 @@ export default function CareersPage() {
         keywords="Snaptech careers, IT jobs Bhilwara, software engineer jobs, web developer careers, tech jobs Rajasthan, Hindustan Projects careers"
       />
 
-      {/* Hero Section - Cyber Navy Canvas */}
-      <section className="relative pt-28 sm:pt-36 lg:pt-40 pb-16 sm:pb-20 overflow-hidden border-b border-white/10">
+      {/* Hero Section - Light Clean Canvas */}
+      <section className="relative pt-28 sm:pt-36 lg:pt-40 pb-16 sm:pb-20 overflow-hidden bg-gradient-to-b from-blue-50/60 via-white to-slate-50/50 border-b border-slate-200/80">
         {/* Ambient Glows */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
-        <div className="absolute top-10 left-1/4 w-96 h-96 bg-brand-cyan/15 rounded-full blur-3xl -translate-y-1/2 pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-brand-primary/20 rounded-full blur-3xl translate-y-1/2 pointer-events-none" />
+        <div className="absolute top-10 left-1/4 w-96 h-96 bg-blue-100/60 rounded-full blur-3xl -translate-y-1/2 pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-indigo-50/70 rounded-full blur-3xl translate-y-1/2 pointer-events-none" />
 
         <Container className="relative text-center max-w-4xl">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-brand-cyan/30 bg-brand-cyan/10 text-brand-cyan text-xs font-semibold uppercase tracking-widest mb-6 backdrop-blur-md shadow-lg shadow-cyan-950/40">
-            <Sparkles className="w-3.5 h-3.5 text-brand-cyan animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-blue-200 bg-blue-50 text-brand-blue text-xs font-semibold uppercase tracking-widest mb-6 shadow-xs">
+            <Sparkles className="w-3.5 h-3.5 text-brand-blue animate-pulse" />
             Engineering &amp; Innovation Talent Hub
           </div>
 
-          <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight tracking-tight mb-6">
+          <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-tight tracking-tight mb-6">
             Build Mission-Critical Tech with{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan via-blue-400 to-indigo-400">
-              Snaptech
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue via-blue-600 to-indigo-600">
+              SnapTech
             </span>
           </h1>
 
-          <p className="text-slate-400 text-base sm:text-lg lg:text-xl leading-relaxed max-w-2xl mx-auto mb-10">
+          <p className="text-slate-600 text-base sm:text-lg lg:text-xl leading-relaxed max-w-2xl mx-auto mb-10">
             We are the technology division of{' '}
-            <span className="text-white font-semibold">Hindustan Projects Group</span>. We design,
+            <span className="text-slate-900 font-semibold">Hindustan Projects Group</span>. We design,
             code, and deploy high-availability enterprise platforms, custom ERPs, and cloud
             infrastructure.
           </p>
 
           {/* Quick Metrics Bar */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto pt-4">
-            <div className="p-4 rounded-2xl bg-slate-900/60 border border-white/10 backdrop-blur-md">
-              <div className="text-2xl sm:text-3xl font-extrabold text-brand-cyan font-mono">
+            <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs">
+              <div className="text-2xl sm:text-3xl font-extrabold text-brand-blue font-mono">
                 {cfg.stat_projects || '150+'}
               </div>
-              <div className="text-xs text-slate-400 mt-1 uppercase tracking-wider font-semibold">
+              <div className="text-xs text-slate-500 mt-1 uppercase tracking-wider font-semibold">
                 Systems Deployed
               </div>
             </div>
-            <div className="p-4 rounded-2xl bg-slate-900/60 border border-white/10 backdrop-blur-md">
-              <div className="text-2xl sm:text-3xl font-extrabold text-emerald-400 font-mono">
+            <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs">
+              <div className="text-2xl sm:text-3xl font-extrabold text-emerald-600 font-mono">
                 {cfg.stat_experience || '12+'}
               </div>
-              <div className="text-xs text-slate-400 mt-1 uppercase tracking-wider font-semibold">
+              <div className="text-xs text-slate-500 mt-1 uppercase tracking-wider font-semibold">
                 Years Legacy
               </div>
             </div>
-            <div className="p-4 rounded-2xl bg-slate-900/60 border border-white/10 backdrop-blur-md">
-              <div className="text-2xl sm:text-3xl font-extrabold text-purple-400 font-mono">
+            <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs">
+              <div className="text-2xl sm:text-3xl font-extrabold text-purple-600 font-mono">
                 Hybrid
               </div>
-              <div className="text-xs text-slate-400 mt-1 uppercase tracking-wider font-semibold">
+              <div className="text-xs text-slate-500 mt-1 uppercase tracking-wider font-semibold">
                 HQ &amp; Remote
               </div>
             </div>
-            <div className="p-4 rounded-2xl bg-slate-900/60 border border-white/10 backdrop-blur-md">
-              <div className="text-2xl sm:text-3xl font-extrabold text-amber-400 font-mono">
+            <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs">
+              <div className="text-2xl sm:text-3xl font-extrabold text-amber-600 font-mono">
                 Top 5%
               </div>
-              <div className="text-xs text-slate-400 mt-1 uppercase tracking-wider font-semibold">
+              <div className="text-xs text-slate-500 mt-1 uppercase tracking-wider font-semibold">
                 Talent Density
               </div>
             </div>
@@ -249,16 +248,16 @@ export default function CareersPage() {
       </section>
 
       {/* Why Join Us / Culture Pillars */}
-      <section className="py-16 sm:py-20 bg-[#03091e] border-b border-white/10 relative">
+      <section className="py-16 sm:py-20 bg-slate-50/60 border-b border-slate-200/80 relative">
         <Container>
           <div className="text-center max-w-2xl mx-auto mb-12">
-            <span className="text-xs font-bold uppercase tracking-widest text-brand-cyan">
+            <span className="text-xs font-bold uppercase tracking-widest text-brand-blue">
               Engineered for Growth
             </span>
-            <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-bold text-white mt-2">
-              Why Engineers Choose Snaptech
+            <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mt-2">
+              Why Engineers Choose SnapTech
             </h2>
-            <p className="text-slate-400 text-sm mt-3">
+            <p className="text-slate-600 text-sm mt-3">
               We skip corporate fluff and prioritize clean architecture, high autonomy, and real
               commercial impact.
             </p>
@@ -270,15 +269,15 @@ export default function CareersPage() {
               return (
                 <div
                   key={idx}
-                  className="group relative p-6 rounded-2xl bg-slate-900/60 border border-white/10 hover:border-brand-cyan/40 transition-all duration-300 hover:shadow-xl hover:shadow-cyan-950/30 hover:-translate-y-1"
+                  className="group relative p-6 rounded-2xl bg-white border border-slate-200 hover:border-brand-blue/40 transition-all duration-300 shadow-xs hover:shadow-md hover:-translate-y-1"
                 >
-                  <div className="w-12 h-12 rounded-xl bg-brand-cyan/10 border border-brand-cyan/20 flex items-center justify-center text-brand-cyan mb-5 group-hover:scale-110 transition-transform">
+                  <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-brand-blue mb-5 group-hover:scale-110 transition-transform">
                     <Icon className="w-6 h-6" />
                   </div>
-                  <h3 className="font-heading text-lg font-bold text-white mb-2">
+                  <h3 className="font-heading text-lg font-bold text-slate-900 mb-2">
                     {pillar.title}
                   </h3>
-                  <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                     {pillar.desc}
                   </p>
                 </div>
@@ -287,16 +286,16 @@ export default function CareersPage() {
           </div>
 
           {/* Perks Grid Banner */}
-          <div className="mt-12 p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-blue-950/40 via-slate-900/60 to-cyan-950/40 border border-white/10 backdrop-blur-xl">
+          <div className="mt-12 p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-blue-50 to-indigo-50/70 border border-blue-200 shadow-xs">
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
               <div className="max-w-md">
-                <span className="text-xs font-bold uppercase tracking-wider text-brand-cyan">
+                <span className="text-xs font-bold uppercase tracking-wider text-brand-blue">
                   Comprehensive Benefits
                 </span>
-                <h3 className="font-heading text-xl sm:text-2xl font-bold text-white mt-1">
+                <h3 className="font-heading text-xl sm:text-2xl font-bold text-slate-900 mt-1">
                   We invest in our builders
                 </h3>
-                <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                <p className="text-xs text-slate-600 mt-2 leading-relaxed">
                   Beyond competitive compensation, we ensure you have the tooling, peace of mind,
                   and environment to do the best work of your career.
                 </p>
@@ -306,9 +305,9 @@ export default function CareersPage() {
                 {PERKS.map((perk, i) => (
                   <div
                     key={i}
-                    className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-300"
+                    className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-700"
                   >
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                     <span>{perk}</span>
                   </div>
                 ))}
@@ -319,17 +318,17 @@ export default function CareersPage() {
       </section>
 
       {/* Open Positions Section */}
-      <section id="open-roles" className="py-16 sm:py-24 relative">
+      <section id="open-roles" className="py-16 sm:py-24 bg-white relative">
         <Container>
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 pb-6 border-b border-white/10">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 pb-6 border-b border-slate-200">
             <div>
-              <span className="text-xs font-bold uppercase tracking-widest text-brand-cyan">
+              <span className="text-xs font-bold uppercase tracking-widest text-brand-blue">
                 Active Openings
               </span>
-              <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-bold text-white mt-1">
+              <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mt-1">
                 Explore Available Roles
               </h2>
-              <p className="text-xs sm:text-sm text-slate-400 mt-1.5">
+              <p className="text-xs sm:text-sm text-slate-600 mt-1.5">
                 Join our agile engineering pods in Bhilwara HQ or across distributed hybrid setups.
               </p>
             </div>
@@ -342,7 +341,7 @@ export default function CareersPage() {
                 placeholder="Search roles or skills..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-slate-900/80 border border-white/15 focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan/30 rounded-xl pl-10 pr-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none transition-all"
+                className="w-full bg-slate-50 border border-slate-200 focus:border-brand-blue focus:ring-1 focus:ring-brand-blue/30 rounded-xl pl-10 pr-4 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none transition-all"
               />
             </div>
           </div>
@@ -360,16 +359,16 @@ export default function CareersPage() {
                   onClick={() => setSelectedDept(dept)}
                   className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer border ${
                     selectedDept === dept
-                      ? 'bg-brand-cyan text-slate-950 border-brand-cyan font-bold shadow-lg shadow-cyan-500/20'
-                      : 'bg-slate-900/60 text-slate-400 border-white/10 hover:border-white/25 hover:text-white'
+                      ? 'bg-brand-blue text-white border-brand-blue font-bold shadow-xs'
+                      : 'bg-slate-100 text-slate-700 border-slate-200 hover:border-slate-300 hover:text-slate-900'
                   }`}
                 >
                   {dept === 'ALL' ? 'All Roles' : dept}
                   <span
                     className={`ml-2 text-[10px] px-1.5 py-0.5 rounded-full ${
                       selectedDept === dept
-                        ? 'bg-slate-950/30 text-slate-950'
-                        : 'bg-white/10 text-slate-400'
+                        ? 'bg-white/20 text-white'
+                        : 'bg-slate-200 text-slate-600'
                     }`}
                   >
                     {count}
@@ -382,15 +381,15 @@ export default function CareersPage() {
           {/* Jobs Listing */}
           {isLoading ? (
             <div className="flex justify-center items-center py-24">
-              <div className="w-10 h-10 rounded-full border-2 border-brand-cyan border-t-transparent animate-spin" />
+              <div className="w-10 h-10 rounded-full border-2 border-brand-blue border-t-transparent animate-spin" />
             </div>
           ) : filteredJobs.length === 0 ? (
-            <div className="p-12 rounded-3xl bg-slate-900/50 border border-white/10 text-center max-w-xl mx-auto space-y-4">
-              <Briefcase className="w-10 h-10 text-slate-500 mx-auto" />
-              <h3 className="font-heading text-lg font-bold text-white">
+            <div className="p-12 rounded-3xl bg-slate-50 border border-slate-200 text-center max-w-xl mx-auto space-y-4">
+              <Briefcase className="w-10 h-10 text-slate-400 mx-auto" />
+              <h3 className="font-heading text-lg font-bold text-slate-900">
                 No matching positions found
               </h3>
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                 We couldn't find any openings matching your filter criteria. Submit a general resume
                 or reach out to our team directly.
               </p>
@@ -402,12 +401,12 @@ export default function CareersPage() {
                     setSelectedDept('ALL')
                     setSearchQuery('')
                   }}
-                  className="border-white/15 text-slate-300 hover:bg-white/5"
+                  className="border-slate-300 text-slate-700 hover:bg-slate-100"
                 >
                   Clear Filters
                 </Button>
                 <Link to="/careers/general-application">
-                  <Button variant="primary" size="sm" className="bg-brand-cyan text-slate-950">
+                  <Button variant="primary" size="sm" className="bg-brand-blue text-white hover:bg-blue-600">
                     General Application
                   </Button>
                 </Link>
@@ -417,16 +416,16 @@ export default function CareersPage() {
             <div className="grid grid-cols-1 gap-4">
               {filteredJobs.map((job) => {
                 const typeClass =
-                  JOB_TYPE_CLASSES[job.jobType] || 'bg-slate-800 text-slate-300 border-slate-700'
+                  JOB_TYPE_CLASSES[job.jobType] || 'bg-slate-100 text-slate-700 border-slate-200'
                 const typeLabel = JOB_TYPE_LABELS[job.jobType] || job.jobType
 
                 return (
                   <Link
                     key={job.id || job.slug}
                     to={`/careers/${job.slug}`}
-                    className="group relative block p-6 sm:p-7 rounded-2xl bg-slate-900/70 border border-white/10 hover:border-brand-cyan/40 hover:bg-slate-900/90 transition-all duration-300 hover:shadow-xl hover:shadow-cyan-950/20 overflow-hidden"
+                    className="group relative block p-6 sm:p-7 rounded-2xl bg-slate-50/50 hover:bg-white border border-slate-200 hover:border-brand-blue/40 transition-all duration-300 hover:shadow-md overflow-hidden"
                   >
-                    <div className="absolute top-0 left-0 w-1.5 h-full bg-transparent group-hover:bg-brand-cyan transition-all duration-300" />
+                    <div className="absolute top-0 left-0 w-1.5 h-full bg-transparent group-hover:bg-brand-blue transition-all duration-300" />
 
                     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pl-2 sm:pl-3">
                       <div className="space-y-3 max-w-3xl">
@@ -436,30 +435,30 @@ export default function CareersPage() {
                           >
                             {typeLabel}
                           </span>
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 bg-white/[0.05] border border-white/10 px-2.5 py-0.5 rounded">
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600 bg-slate-100 border border-slate-200 px-2.5 py-0.5 rounded">
                             {job.department}
                           </span>
                           {job.isFeatured && (
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded flex items-center gap-1">
-                              <Sparkles className="w-3 h-3" /> Priority Role
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded flex items-center gap-1">
+                              <Sparkles className="w-3 h-3 text-amber-500" /> Priority Role
                             </span>
                           )}
                         </div>
 
-                        <h3 className="font-heading text-lg sm:text-xl font-bold text-white group-hover:text-brand-cyan transition-colors">
+                        <h3 className="font-heading text-lg sm:text-xl font-bold text-slate-900 group-hover:text-brand-blue transition-colors">
                           {job.title}
                         </h3>
 
-                        <p className="text-xs sm:text-sm text-slate-400 line-clamp-2 leading-relaxed">
+                        <p className="text-xs sm:text-sm text-slate-600 line-clamp-2 leading-relaxed">
                           {job.description}
                         </p>
 
-                        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-slate-400 pt-1">
-                          <span className="flex items-center gap-1.5 text-slate-300">
-                            <MapPin className="w-3.5 h-3.5 text-brand-cyan" /> {job.location}
+                        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-slate-500 pt-1">
+                          <span className="flex items-center gap-1.5 text-slate-700">
+                            <MapPin className="w-3.5 h-3.5 text-brand-blue" /> {job.location}
                           </span>
-                          <span className="flex items-center gap-1.5 text-slate-300">
-                            <Clock className="w-3.5 h-3.5 text-brand-cyan" />{' '}
+                          <span className="flex items-center gap-1.5 text-slate-700">
+                            <Clock className="w-3.5 h-3.5 text-brand-blue" />{' '}
                             {job.experienceRequired}
                           </span>
                           {job.tags && job.tags.length > 0 && (
@@ -467,7 +466,7 @@ export default function CareersPage() {
                               {job.tags.slice(0, 4).map((tag, idx) => (
                                 <span
                                   key={idx}
-                                  className="text-[10px] bg-white/[0.03] text-slate-400 border border-white/5 px-2 py-0.5 rounded"
+                                  className="text-[10px] bg-slate-100 text-slate-600 border border-slate-200 px-2 py-0.5 rounded"
                                 >
                                   {tag}
                                 </span>
@@ -477,7 +476,7 @@ export default function CareersPage() {
                         </div>
                       </div>
 
-                      <div className="shrink-0 flex items-center gap-2 text-xs font-bold text-brand-cyan group-hover:translate-x-1.5 transition-transform">
+                      <div className="shrink-0 flex items-center gap-2 text-xs font-bold text-brand-blue group-hover:translate-x-1.5 transition-transform">
                         Explore &amp; Apply <ArrowRight className="w-4 h-4" />
                       </div>
                     </div>
@@ -488,16 +487,16 @@ export default function CareersPage() {
           )}
 
           {/* Bottom Open Pitch / General Application Card */}
-          <div className="mt-14 p-8 sm:p-10 rounded-3xl bg-gradient-to-r from-blue-950/40 via-slate-900/80 to-cyan-950/40 border border-brand-cyan/20 text-center relative overflow-hidden backdrop-blur-xl">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-brand-cyan/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="mt-14 p-8 sm:p-10 rounded-3xl bg-gradient-to-r from-[#0a1945] via-[#0D1B4B] to-[#0a1945] border border-blue-900 text-white text-center relative overflow-hidden shadow-xl">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-brand-blue/15 rounded-full blur-3xl pointer-events-none" />
             <div className="max-w-2xl mx-auto space-y-4 relative">
-              <div className="w-12 h-12 rounded-2xl bg-brand-cyan/10 border border-brand-cyan/30 flex items-center justify-center mx-auto text-brand-cyan">
+              <div className="w-12 h-12 rounded-2xl bg-blue-500/20 border border-blue-400/30 flex items-center justify-center mx-auto text-blue-200">
                 <Code2 className="w-6 h-6" />
               </div>
               <h3 className="font-heading text-xl sm:text-2xl font-bold text-white">
                 Don't see your specific specialization?
               </h3>
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+              <p className="text-xs sm:text-sm text-blue-100/80 leading-relaxed">
                 We are constantly expanding our core teams across React, Node, DevOps, AI, and
                 product design. If you are an exceptional engineer or builder, submit a general
                 application or chat directly with our engineering recruiters.
@@ -507,7 +506,7 @@ export default function CareersPage() {
                   <Button
                     variant="primary"
                     size="md"
-                    className="bg-brand-cyan hover:bg-brand-cyan-light text-slate-950 font-bold px-6 shadow-lg shadow-cyan-950/50"
+                    className="bg-brand-blue hover:bg-blue-600 text-white font-bold px-6 shadow-lg shadow-blue-950/50 cursor-pointer"
                   >
                     Submit General Resume <ArrowRight className="w-4 h-4 ml-1.5" />
                   </Button>
@@ -516,7 +515,7 @@ export default function CareersPage() {
                   href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 text-white text-xs font-semibold transition-colors"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 text-white text-xs font-semibold transition-colors"
                 >
                   <MessageSquare className="w-4 h-4 text-emerald-400" />
                   WhatsApp Talent Lead

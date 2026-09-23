@@ -35,102 +35,121 @@ const commentSchema = z.object({
 })
 
 const AVATAR_COLORS = [
-  'from-cyan-500 to-blue-700',
-  'from-blue-500 to-indigo-700',
-  'from-emerald-500 to-teal-700',
-  'from-violet-500 to-purple-700',
-  'from-amber-500 to-orange-700',
+  'from-blue-600 to-indigo-700',
+  'from-cyan-600 to-blue-700',
+  'from-emerald-600 to-teal-700',
+  'from-violet-600 to-purple-700',
+  'from-amber-600 to-orange-700',
 ]
 
 const FALLBACK_POST_DETAILS = {
-  'why-we-founded-hindustan-projects-enterprise-it': {
+  'why-we-built-snaptech-enterprise-it': {
     id: 'hp-blog-fallback-1',
-    title: "Why We Founded Hindustan Projects: Shifting Rajasthan's Businesses to Enterprise IT",
-    slug: 'why-we-founded-hindustan-projects-enterprise-it',
+    title: 'Why We Built SnapTech: Elevating Modern Businesses with Enterprise Cloud & Engineering',
+    slug: 'why-we-built-snaptech-enterprise-it',
     excerpt:
-      "In today's digital-first economy, we founded Hindustan Projects to bridge the gap between legacy paper workflows and high-performance custom software for businesses in Rajasthan and beyond.",
-    content: `<h2>Bridging the Digital Gap in Local Markets</h2>
-<p>Hindustan Projects was founded with a single, clear mission: to bring enterprise-grade web development, custom software engineering, and digital solutions to businesses across Rajasthan and India. For too long, small and mid-sized enterprises (SMEs) in growing hubs like Bhilwara, Udaipur, and Jodhpur had only two choices when going digital: expensive global consultancies or low-cost template builders who offer zero support and rigid structures.</p>
-<p>We realized that local industries—whether it is Bhilwara’s massive textile manufacturing units or Rajasthan's expanding retail and hospitality sectors—need custom, secure, and fast software systems tailored to their specific workflows. That is why we built Hindustan Projects.</p>
+      'In today’s digital-first economy, we engineered SnapTech Digital to bridge the gap between legacy workflows and high-performance custom cloud software for ambitious enterprises across India and global markets.',
+    content: `<h2>Bridging the Enterprise Digital Divide</h2>
+<p>SnapTech Digital was founded with a singular, resolute mission: to engineer bespoke, enterprise-grade cloud software, high-performance web systems, and AI-accelerated automations that deliver compounding business value. For years, growing companies faced an agonizing dilemma when going digital: choose rigid, vulnerability-prone generic templates with zero scalability, or hire prohibitively expensive consulting firms that move at glacial speed.</p>
+<p>We built SnapTech Digital to provide a high-velocity engineering alternative: dedicated technical architects, pure modern stacks, transparent pricing, and 100% intellectual property ownership from day one.</p>
 
-<h2>Moving Away From "Template" Culture</h2>
-<p>Many businesses buy off-the-shelf templates or generic WordPress setups. While they seem cheap at first, they quickly fail to scale. They are slow, vulnerable to security hacks, and force the business to adapt its real-world operations to fit a rigid website template.</p>
-<p>At Hindustan Projects, we do the exact opposite. We build custom applications using cutting-edge technologies like React, Node.js, and PostgreSQL. We design the software around your business operations, ensuring that the technology grows with you, rather than holding you back.</p>
+<h2>Moving Away From "Template" Fragility</h2>
+<p>Many organizations start with off-the-shelf page builders or generic CMS setups. While they appear convenient initially, they quickly fail to scale under high user volumes, incur heavy maintenance penalties, and expose businesses to critical security risks. Even worse, they force companies to contort their unique operational logic to fit rigid plugin ecosystems.</p>
+<p>At SnapTech Digital, we build bespoke applications utilizing modern frontend engines like React and Next.js paired with resilient microservices and secure database topologies (PostgreSQL, Redis, Node.js). We architect the software around your exact organizational workflows—ensuring technology accelerates your expansion rather than restricting it.</p>
 
-<h2>Our Commitment to Engineering Quality</h2>
-<p>When you partner with us, you are not just hiring a vendor; you are gaining a technology partner. We stand by four core commitments: complete transparency in billing, zero dependency on third-party templates, high-performance optimization, and dedicated post-launch support. We are here to build digital products that drive real revenue and efficiency for your brand.</p>`,
+<h2>Our Ironclad Engineering Guarantees</h2>
+<p>When you commission SnapTech Digital, you gain a dedicated technological ally. We adhere to five core operating commitments: complete transparent sprint accounting, zero third-party framework locks, 99.9% uptime architecture SLAs, rigorous automated security auditing, and continuous post-launch warranty support. We are here to craft resilient digital infrastructure that drives revenue and enterprise distinction.</p>`,
     featuredImageUrl:
       'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80',
     category: 'Company News',
-    tags: ['Hindustan Projects', 'mission', 'custom software', 'Rajasthan IT'],
-    authorName: 'Hindustan Projects Engineering Board',
+    tags: ['SnapTech Digital', 'Engineering', 'Custom Software', 'Cloud Architecture'],
+    authorName: 'SnapTech Engineering Team',
     status: 'PUBLISHED',
     isFeatured: true,
     publishedAt: '2026-07-08T00:00:00.000Z',
     readTime: 5,
-    viewCount: 320,
+    viewCount: 420,
+  },
+  'why-we-founded-hindustan-projects-enterprise-it': {
+    id: 'hp-blog-fallback-1-alias',
+    title: 'Why We Built SnapTech: Elevating Modern Businesses with Enterprise Cloud & Engineering',
+    slug: 'why-we-built-snaptech-enterprise-it',
+    excerpt:
+      'In today’s digital-first economy, we engineered SnapTech Digital to bridge the gap between legacy workflows and high-performance custom cloud software for ambitious enterprises across India and global markets.',
+    content: `<h2>Bridging the Enterprise Digital Divide</h2>
+<p>SnapTech Digital was founded with a singular, resolute mission: to engineer bespoke, enterprise-grade cloud software, high-performance web systems, and AI-accelerated automations that deliver compounding business value.</p>`,
+    featuredImageUrl:
+      'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80',
+    category: 'Company News',
+    tags: ['SnapTech Digital', 'Engineering', 'Custom Software'],
+    authorName: 'SnapTech Engineering Team',
+    status: 'PUBLISHED',
+    isFeatured: true,
+    publishedAt: '2026-07-08T00:00:00.000Z',
+    readTime: 5,
+    viewCount: 380,
   },
   'what-we-build-core-it-services-digital-solutions': {
     id: 'hp-blog-fallback-2',
     title: 'What We Build: A Deep Dive into Our Core IT Services & Digital Solutions',
     slug: 'what-we-build-core-it-services-digital-solutions',
     excerpt:
-      'Discover what we build. From responsive corporate portals and custom textile ERP inventory systems to mobile apps, we design custom digital systems that scale.',
-    content: `<h2>A Full-Suite Software Engineering Partner</h2>
-<p>Hindustan Projects is a comprehensive IT services provider. We design, code, secure, and manage high-performance software systems. Our capabilities span across three core pillars: custom web applications, specialized business ERP systems, and high-converting marketing platforms.</p>
+      'Discover what we build. From responsive corporate portals and custom ERP inventory engines to mobile apps, we design resilient digital systems that scale with enterprise growth.',
+    content: `<h2>A Comprehensive Software Engineering Practice</h2>
+<p>SnapTech Digital is a full-stack digital product engineering consultancy. We design, architect, deploy, and maintain mission-critical software systems across three core pillars: custom web applications, specialized enterprise resource planning (ERP) platforms, and native cross-platform mobile apps.</p>
 
-<h2>1. Custom Web Applications & SaaS Portals</h2>
-<p>We build responsive, fast, and feature-rich web applications tailored to your business goals. Utilizing modern frontend frameworks like React and NextJS combined with robust backend APIs (Node.js/Express), we ensure your system loads instantly and can handle thousands of concurrent users securely.</p>
+<h2>1. Custom Web Applications & SaaS Platforms</h2>
+<p>We engineer responsive, sub-second web platforms tailored to demanding commercial requirements. Utilizing cutting-edge frontend ecosystems combined with enterprise Node.js and Python microservices, we ensure your platform handles concurrent traffic effortlessly while providing seamless user experiences.</p>
 
-<h2>2. Specialized ERP & Internal Software</h2>
-<p>Internal operations are the heart of any business. We build custom dashboards, billing engines, custom CRMs, and supply chain tracking systems. Whether you need to track raw yarn inventory for a loom factory or automate invoice processing for a retail brand, we design software that eliminates manual Excel sheets and paperwork.</p>
+<h2>2. Specialized ERP & Internal Workflow Automation</h2>
+<p>Operational bottlenecks cripple growing enterprises. We design bespoke administrative dashboards, automated billing engines, real-time inventory management, and multi-warehouse supply chain trackers. Whether eliminating chaotic spreadsheets or coordinating supply chain milestones, our custom tools create operational clarity.</p>
 
-<h2>3. Mobile App Development</h2>
-<p>Bring your services directly to your clients' smartphones. We build cross-platform mobile apps using Flutter and React Native, delivering a native look and feel on both iOS and Android with a single codebase, saving you time and cost.</p>
+<h2>3. Native & Cross-Platform Mobile Applications</h2>
+<p>Deliver your services straight into your customers’ hands. We develop robust cross-platform mobile applications using Flutter and React Native, securing fluid native performance on both iOS and Android from a unified codebase—drastically reducing time-to-market and maintenance overhead.</p>
 
-<h2>4. Performance-Driven SEO & Cloud Security</h2>
-<p>A great software tool is only useful if your clients can find it. We integrate technical SEO, schema indexing, and fast-performance audits into every site we deploy, helping you rank on top of local searches and capture inbound leads organically.</p>`,
+<h2>4. Performance-Driven Technical SEO & Cloud Architecture</h2>
+<p>High-caliber software delivers maximum ROI when discovered by high-intent clients. We embed technical SEO schemas, structured data, Core Web Vitals optimization, and enterprise CDN routing into every deployment.</p>`,
     featuredImageUrl:
       'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80',
     category: 'Web Development',
-    tags: ['custom web apps', 'SaaS', 'ERP', 'mobile apps', 'digital engineering'],
-    authorName: 'Hindustan Projects Engineering Board',
+    tags: ['Custom Web Apps', 'SaaS', 'ERP', 'Mobile Apps', 'Digital Engineering'],
+    authorName: 'SnapTech Engineering Team',
     status: 'PUBLISHED',
     isFeatured: false,
     publishedAt: '2026-07-08T00:00:00.000Z',
     readTime: 4,
-    viewCount: 245,
+    viewCount: 310,
   },
   'how-we-work-transparent-software-development-journey': {
     id: 'hp-blog-fallback-3',
     title: 'How We Work: Our Step-by-Step Transparent Software Development Journey',
     slug: 'how-we-work-transparent-software-development-journey',
     excerpt:
-      'How do we bring your ideas to life? Read about our transparent 4-stage development lifecycle: Discovery, UI/UX Design, Robust Coding, and Support.',
-    content: `<h2>A Collaborative Approach with Zero Jargon</h2>
-<p>We believe that building software should be an exciting and stress-free journey for our clients. We do not hide behind complex technical jargon or surprise you with hidden maintenance fees. Our development lifecycle is divided into four transparent, structured stages to keep you involved every step of the way.</p>
+      'How do we bring your vision to life? Read about our transparent 4-stage development lifecycle: Architectural Discovery, UI/UX Prototyping, Agile Sprint Execution, and 24/7 SLA Support.',
+    content: `<h2>A Principled Approach with Absolute Transparency</h2>
+<p>We believe commissioning software should be an energizing and transparent partnership. We do not hide behind esoteric technical jargon or burden clients with surprise invoices. Our engineering lifecycle is segmented into four clear, milestone-driven phases.</p>
 
 <h2>Phase 1: Deep Discovery & Technical Scoping</h2>
-<p>Before writing a single line of code, our lead architects meet with your team to understand your current operational bottlenecks, user personas, and target growth metrics. We produce an exhaustive Blueprint & Specification document outlining exact milestones.</p>
+<p>Before writing a single line of production code, our technical leads evaluate your operational bottlenecks, security requirements, and growth projections. We formulate an exhaustive Technical Blueprint detailing system architecture, data models, and strict delivery milestones.</p>
 
 <h2>Phase 2: High-Fidelity UI/UX Prototyping</h2>
-<p>Next, our product designers build clickable, interactive Figma prototypes following modern cyber and enterprise design systems. You click through every screen on mobile and desktop before development begins.</p>
+<p>Our product designers construct interactive, clickable Figma prototypes honoring modern cyber-minimalist design principles. You inspect and validate every mobile and desktop workflow before engineering commences.</p>
 
-<h2>Phase 3: Agile Sprint Execution & QA</h2>
-<p>Our engineering pods build features in two-week agile sprints. Every sprint ends with an interactive demo on a private staging URL, followed by rigorous cross-browser and penetration testing.</p>
+<h2>Phase 3: Agile Sprint Execution & Automated QA</h2>
+<p>Our engineering squads ship features in two-week agile increments. Every sprint concludes with an interactive deployment on a private staging domain, accompanied by automated end-to-end regression suites and load testing.</p>
 
-<h2>Phase 4: Zero-Downtime Deployment & SLA Support</h2>
-<p>Once approved, we deploy your application to scalable cloud clusters with automated SSL, daily database backups, and 24/7 telemetry monitoring.</p>`,
+<h2>Phase 4: Zero-Downtime Deployment & Enterprise SLAs</h2>
+<p>Following final stakeholder sign-off, we launch your application onto containerized cloud infrastructure with automated SSL provisioning, hourly database snapshots, and real-time telemetry alerting.</p>`,
     featuredImageUrl:
       'https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=1200&q=80',
     category: 'Our Process',
-    tags: ['methodology', 'agile', 'quality assurance', 'deployment'],
-    authorName: 'Hindustan Projects Engineering Board',
+    tags: ['Methodology', 'Agile', 'Quality Assurance', 'Cloud SLAs'],
+    authorName: 'SnapTech Engineering Team',
     status: 'PUBLISHED',
     isFeatured: false,
     publishedAt: '2026-07-09T00:00:00.000Z',
     readTime: 6,
-    viewCount: 198,
+    viewCount: 260,
   },
 }
 
@@ -149,7 +168,7 @@ function ReadingProgressBar() {
   return (
     <div className="fixed top-0 left-0 right-0 z-[60] h-[3px] pointer-events-none">
       <div
-        className="h-full bg-gradient-to-r from-brand-cyan via-blue-500 to-indigo-500 transition-all duration-75 shadow-sm shadow-cyan-400"
+        className="h-full bg-gradient-to-r from-brand-blue via-blue-500 to-indigo-500 transition-all duration-75 shadow-xs shadow-blue-400"
         style={{ width: `${progress}%` }}
       />
     </div>
@@ -170,7 +189,7 @@ function BackToTop() {
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-      className="fixed bottom-8 right-6 z-50 w-11 h-11 bg-slate-900 border border-brand-cyan/40 text-brand-cyan rounded-full shadow-2xl hover:bg-brand-cyan hover:text-slate-950 transition-all flex items-center justify-center cursor-pointer shadow-cyan-950/50"
+      className="fixed bottom-8 right-6 z-50 w-11 h-11 bg-white border border-slate-200 text-brand-blue rounded-full shadow-lg hover:bg-brand-blue hover:text-white transition-all flex items-center justify-center cursor-pointer shadow-blue-900/10"
       aria-label="Back to top"
     >
       <ChevronUp className="w-5 h-5" />
@@ -201,17 +220,17 @@ function ShareButtons({ title, slug, compact = false }) {
     {
       label: 'LinkedIn',
       href: `https://www.linkedin.com/sharing/share-offsite/?url=${encoded}`,
-      bg: 'bg-[#0077b5]/20 text-[#00a0dc] border-[#0077b5]/40 hover:bg-[#0077b5] hover:text-white',
+      bg: 'bg-[#0077b5]/10 text-[#0077b5] border-[#0077b5]/30 hover:bg-[#0077b5] hover:text-white',
     },
     {
       label: 'X / Twitter',
       href: `https://twitter.com/intent/tweet?text=${text}&url=${encoded}`,
-      bg: 'bg-white/5 text-slate-300 border-white/10 hover:bg-white/15 hover:text-white',
+      bg: 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-800 hover:text-white',
     },
     {
       label: 'WhatsApp',
       href: `https://wa.me/?text=${text}%20${encoded}`,
-      bg: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500 hover:text-white',
+      bg: 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-600 hover:text-white',
     },
   ]
 
@@ -233,10 +252,10 @@ function ShareButtons({ title, slug, compact = false }) {
         <button
           onClick={copyLink}
           title="Copy link"
-          className="w-9 h-9 rounded-xl bg-slate-900 border border-white/10 text-slate-300 hover:text-brand-cyan hover:border-brand-cyan/40 flex items-center justify-center transition-all cursor-pointer"
+          className="w-9 h-9 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-brand-blue hover:border-brand-blue/50 flex items-center justify-center transition-all cursor-pointer shadow-xs"
         >
           {copied ? (
-            <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />
+            <CheckCircle className="w-3.5 h-3.5 text-emerald-600" />
           ) : (
             <Link2 className="w-3.5 h-3.5" />
           )}
@@ -247,8 +266,8 @@ function ShareButtons({ title, slug, compact = false }) {
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <span className="text-xs font-semibold text-slate-400 flex items-center gap-1.5 mr-1">
-        <Share2 className="w-3.5 h-3.5 text-brand-cyan" /> Share:
+      <span className="text-xs font-semibold text-slate-500 flex items-center gap-1.5 mr-1">
+        <Share2 className="w-3.5 h-3.5 text-brand-blue" /> Share:
       </span>
       {buttons.map(({ label, href, bg }) => (
         <a
@@ -263,11 +282,11 @@ function ShareButtons({ title, slug, compact = false }) {
       ))}
       <button
         onClick={copyLink}
-        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 border border-white/10 text-slate-300 hover:text-brand-cyan hover:border-brand-cyan/40 transition-all cursor-pointer"
+        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-white border border-slate-200 text-slate-700 hover:text-brand-blue hover:border-brand-blue/50 transition-all cursor-pointer shadow-xs"
       >
         {copied ? (
           <>
-            <CheckCircle className="w-3.5 h-3.5 text-emerald-400" /> Copied!
+            <CheckCircle className="w-3.5 h-3.5 text-emerald-600" /> Copied!
           </>
         ) : (
           <>
@@ -290,38 +309,38 @@ function RelatedCard({ post }) {
     : ''
   return (
     <Link to={`/blog/${post.slug}`} className="group block h-full">
-      <article className="bg-slate-900/70 rounded-2xl border border-white/10 overflow-hidden hover:border-brand-cyan/40 hover:shadow-xl hover:shadow-cyan-950/20 hover:-translate-y-1 transition-all duration-300 h-full flex flex-col backdrop-blur-xl">
-        <div className="relative h-44 bg-gradient-to-br from-blue-950 to-slate-950 overflow-hidden shrink-0">
+      <article className="bg-white rounded-2xl border border-slate-200/80 overflow-hidden hover:border-brand-blue/40 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full flex flex-col shadow-xs">
+        <div className="relative h-44 bg-slate-100 overflow-hidden shrink-0">
           {post.featuredImageUrl ? (
             <img
               src={post.featuredImageUrl}
               alt={post.title}
               loading="lazy"
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center">
-              <BookOpen className="w-10 h-10 text-brand-cyan/20" />
+            <div className="w-full h-full flex items-center justify-center bg-blue-50/50">
+              <BookOpen className="w-10 h-10 text-brand-blue/20" />
             </div>
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent" />
-          <span className="absolute top-3 left-3 text-[10px] font-bold bg-slate-900/90 text-brand-cyan border border-brand-cyan/30 px-2.5 py-1 rounded-full shadow-md">
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-60" />
+          <span className="absolute top-3 left-3 text-[10px] font-bold bg-white/95 text-brand-blue border border-blue-200/80 px-2.5 py-1 rounded-full shadow-xs">
             {post.category}
           </span>
         </div>
         <div className="p-5 flex flex-col flex-1">
-          <h3 className="font-heading font-bold text-white text-sm leading-snug mb-2 group-hover:text-brand-cyan transition-colors line-clamp-2 flex-1">
+          <h3 className="font-heading font-bold text-slate-900 text-sm leading-snug mb-2 group-hover:text-brand-blue transition-colors line-clamp-2 flex-1">
             {post.title}
           </h3>
-          <div className="flex items-center gap-3 text-[11px] text-slate-400 pt-3 border-t border-white/10 mt-auto">
+          <div className="flex items-center gap-3 text-[11px] text-slate-500 pt-3 border-t border-slate-100 mt-auto">
             {date && (
               <span className="flex items-center gap-1">
-                <Calendar className="w-3 h-3 text-brand-cyan" /> {date}
+                <Calendar className="w-3 h-3 text-brand-blue" /> {date}
               </span>
             )}
             {post.readTime && (
               <span className="flex items-center gap-1">
-                <Clock className="w-3 h-3 text-brand-cyan" /> {post.readTime} min
+                <Clock className="w-3 h-3 text-brand-blue" /> {post.readTime} min
               </span>
             )}
           </div>
@@ -351,8 +370,10 @@ export default function BlogPostPage() {
   const comments = commentsData?.data || []
   const relatedPosts = useMemo(() => {
     if (post?.relatedPosts?.length > 0) return post.relatedPosts
-    // Return other fallback posts
-    return Object.values(FALLBACK_POST_DETAILS).filter((p) => p.slug !== slug)
+    // Return other fallback posts (exclude current and duplicate aliases)
+    return Object.values(FALLBACK_POST_DETAILS).filter(
+      (p, idx, arr) => p.slug !== slug && arr.findIndex((x) => x.slug === p.slug) === idx
+    )
   }, [post, slug])
 
   const {
@@ -378,23 +399,23 @@ export default function BlogPostPage() {
   // ── Loading ────────────────────────────────────────────────
   if (isLoading && !post) {
     return (
-      <div className="min-h-screen bg-[#020714] text-slate-200">
-        <div className="h-[480px] bg-slate-900 animate-pulse border-b border-white/10" />
+      <div className="min-h-screen bg-slate-50/50 text-slate-800">
+        <div className="h-[480px] bg-slate-200 animate-pulse border-b border-slate-200" />
         <div className="py-14">
           <Container>
             <div className="flex flex-col lg:flex-row gap-10">
-              <div className="flex-1 bg-slate-900/60 rounded-3xl p-10 space-y-4 border border-white/10">
+              <div className="flex-1 bg-white rounded-3xl p-10 space-y-4 border border-slate-200/80 shadow-sm">
                 {Array.from({ length: 8 }).map((_, i) => (
                   <div
                     key={i}
-                    className="h-4 bg-white/[0.04] rounded animate-pulse"
+                    className="h-4 bg-slate-100 rounded animate-pulse"
                     style={{ width: `${50 + ((i * 7) % 45)}%` }}
                   />
                 ))}
               </div>
               <div className="w-full lg:w-72 space-y-4">
-                <div className="h-32 bg-slate-900/60 rounded-2xl border border-white/10 animate-pulse" />
-                <div className="h-44 bg-slate-900/60 rounded-2xl border border-white/10 animate-pulse" />
+                <div className="h-32 bg-white rounded-2xl border border-slate-200/80 animate-pulse shadow-sm" />
+                <div className="h-44 bg-white rounded-2xl border border-slate-200/80 animate-pulse shadow-sm" />
               </div>
             </div>
           </Container>
@@ -406,17 +427,17 @@ export default function BlogPostPage() {
   // ── Error / Not found ─────────────────────────────────────
   if ((isError || !post) && !FALLBACK_POST_DETAILS[slug]) {
     return (
-      <div className="min-h-screen pt-32 pb-20 bg-[#020714] text-slate-200 flex items-center justify-center">
-        <div className="text-center px-4 max-w-md bg-slate-900/80 border border-white/10 rounded-3xl p-8 shadow-2xl backdrop-blur-xl">
-          <div className="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mx-auto mb-5 text-amber-400">
+      <div className="min-h-screen pt-32 pb-20 bg-slate-50/50 text-slate-800 flex items-center justify-center">
+        <div className="text-center px-4 max-w-md bg-white border border-slate-200/80 rounded-3xl p-8 shadow-xl">
+          <div className="w-16 h-16 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center mx-auto mb-5 text-amber-600">
             <BookOpen className="w-8 h-8" />
           </div>
-          <h1 className="font-heading text-2xl font-bold text-white mb-2">Article Not Found</h1>
-          <p className="text-slate-400 text-xs sm:text-sm mb-6 leading-relaxed">
+          <h1 className="font-heading text-2xl font-bold text-slate-900 mb-2">Article Not Found</h1>
+          <p className="text-slate-600 text-xs sm:text-sm mb-6 leading-relaxed">
             The technical whitepaper you are looking for does not exist or has been relocated.
           </p>
           <Link to="/blog">
-            <button className="inline-flex items-center gap-2 bg-brand-cyan text-slate-950 px-6 py-3 rounded-xl text-xs font-bold shadow-lg shadow-cyan-950/50 hover:bg-brand-cyan-light transition-all cursor-pointer">
+            <button className="inline-flex items-center gap-2 bg-brand-blue text-white px-6 py-3 rounded-xl text-xs font-bold shadow-md shadow-blue-500/20 hover:bg-blue-600 transition-all cursor-pointer">
               <ArrowLeft className="w-4 h-4" /> Browse All Articles
             </button>
           </Link>
@@ -441,10 +462,10 @@ export default function BlogPostPage() {
     headline: post.title,
     description: post.excerpt,
     image: post.featuredImageUrl || `${SITE.url}/og-image.png`,
-    author: { '@type': 'Person', name: post.authorName || 'Hindustan Projects Engineering Board' },
+    author: { '@type': 'Person', name: post.authorName || 'SnapTech Engineering Team' },
     publisher: {
       '@type': 'Organization',
-      name: 'Hindustan Projects',
+      name: 'SnapTech Digital',
       logo: { '@type': 'ImageObject', url: `${SITE.url}/og-image.png` },
     },
     datePublished: post.publishedAt || post.createdAt,
@@ -453,9 +474,9 @@ export default function BlogPostPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#020714] text-slate-200 relative overflow-hidden">
+    <div className="min-h-screen bg-slate-50/50 text-slate-800 relative overflow-hidden">
       <SEO
-        title={`${metaTitle} | Snaptech — Hindustan Projects`}
+        title={`${metaTitle} | SnapTech Digital`}
         description={metaDescription}
         path={`/blog/${post.slug}`}
         ogImage={post.featuredImageUrl}
@@ -465,29 +486,31 @@ export default function BlogPostPage() {
       <ReadingProgressBar />
       <BackToTop />
 
-      {/* ── HERO — Cyber-Navy Canvas ── */}
-      <div className="relative w-full pt-28 pb-16 sm:pb-20 lg:pb-28 overflow-hidden border-b border-white/10">
+      {/* ── HERO — Light Canvas ── */}
+      <div className="relative w-full pt-28 pb-16 sm:pb-20 lg:pb-28 overflow-hidden border-b border-slate-200/80 bg-gradient-to-b from-blue-50/70 via-white to-slate-50/50">
         {/* Glows */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(14,165,233,0.18),transparent)] pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-brand-primary/20 rounded-full blur-3xl translate-y-1/2 pointer-events-none" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(27,110,243,0.08),transparent)] pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-blue-100/40 rounded-full blur-3xl translate-y-1/2 pointer-events-none" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a06_1px,transparent_1px),linear-gradient(to_bottom,#0f172a06_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
 
         <Container className="relative z-10">
           {/* Breadcrumb */}
           <motion.nav
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex items-center justify-center gap-2 text-xs text-slate-400 mb-8 flex-wrap"
+            className="flex items-center justify-center gap-2 text-xs text-slate-500 mb-8 flex-wrap"
           >
-            <Link to="/" className="hover:text-brand-cyan transition-colors">
+            <Link to="/" className="hover:text-brand-blue transition-colors">
               Home
             </Link>
-            <ChevronRight className="w-3 h-3 text-slate-600 shrink-0" />
-            <Link to="/blog" className="hover:text-brand-cyan transition-colors">
+            <ChevronRight className="w-3 h-3 text-slate-400 shrink-0" />
+            <Link to="/blog" className="hover:text-brand-blue transition-colors">
               Blog
             </Link>
-            <ChevronRight className="w-3 h-3 text-slate-600 shrink-0" />
-            <span className="text-slate-400 truncate max-w-[200px] sm:max-w-md">{post.title}</span>
+            <ChevronRight className="w-3 h-3 text-slate-400 shrink-0" />
+            <span className="text-slate-800 font-medium truncate max-w-[200px] sm:max-w-md">
+              {post.title}
+            </span>
           </motion.nav>
 
           <div className="max-w-3xl mx-auto text-center flex flex-col items-center">
@@ -495,9 +518,9 @@ export default function BlogPostPage() {
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center gap-2 text-[11px] font-bold text-brand-cyan bg-brand-cyan/10 border border-brand-cyan/30 px-3.5 py-1.5 rounded-full mb-5 backdrop-blur-md mx-auto"
+              className="inline-flex items-center gap-2 text-[11px] font-bold text-brand-blue bg-blue-50 border border-blue-200/80 px-3.5 py-1.5 rounded-full mb-5 shadow-xs mx-auto"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-brand-cyan animate-pulse shadow-sm shadow-cyan-400" />
+              <span className="w-1.5 h-1.5 rounded-full bg-brand-blue animate-pulse shadow-xs shadow-blue-400" />
               {post.category}
             </motion.div>
 
@@ -506,7 +529,7 @@ export default function BlogPostPage() {
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.08 }}
-              className="font-heading text-2xl sm:text-4xl lg:text-[2.6rem] font-extrabold text-white leading-[1.18] mb-5 tracking-tight text-center"
+              className="font-heading text-2xl sm:text-4xl lg:text-[2.6rem] font-extrabold text-slate-900 leading-[1.2] mb-5 tracking-tight text-center"
             >
               {post.title}
             </motion.h1>
@@ -516,7 +539,7 @@ export default function BlogPostPage() {
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.14 }}
-              className="text-slate-400 text-sm sm:text-base leading-relaxed mb-8 max-w-2xl text-center mx-auto"
+              className="text-slate-600 text-sm sm:text-base leading-relaxed mb-8 max-w-2xl text-center mx-auto"
             >
               {post.excerpt}
             </motion.p>
@@ -530,41 +553,40 @@ export default function BlogPostPage() {
             >
               {/* Author */}
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full overflow-hidden border border-brand-cyan/30 shadow-md bg-slate-950 shrink-0">
+                <div className="w-9 h-9 rounded-full overflow-hidden border border-blue-200/80 shadow-xs bg-white shrink-0">
                   <img
                     src="/logo-with-bg.png"
-                    alt="Hindustan Projects"
+                    alt="SnapTech Digital"
                     className="w-full h-full object-cover"
                   />
                 </div>
                 <div className="text-left">
-                  <p className="text-white font-semibold text-xs leading-none">
-                    {post.authorName || 'Hindustan Projects'}
+                  <p className="text-slate-900 font-semibold text-xs leading-none">
+                    {post.authorName || 'SnapTech Team'}
                   </p>
-                  <p className="text-brand-cyan text-[10px] mt-1 font-mono uppercase">
-                    IT DIVISION
+                  <p className="text-brand-blue text-[10px] mt-1 font-mono uppercase font-bold">
+                    ENGINEERING PRACTICE
                   </p>
                 </div>
               </div>
 
-              <div className="hidden sm:block w-px h-6 bg-white/10" />
+              <div className="hidden sm:block w-px h-6 bg-slate-200" />
 
               {/* Stats */}
-              <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-slate-400">
+              <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-slate-500">
                 {publishDate && (
                   <span className="flex items-center gap-1.5">
-                    <Calendar className="w-3.5 h-3.5 text-brand-cyan" /> {publishDate}
+                    <Calendar className="w-3.5 h-3.5 text-brand-blue" /> {publishDate}
                   </span>
                 )}
                 <span className="flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 text-brand-cyan" /> {post.readTime || 5} min read
+                  <Clock className="w-3.5 h-3.5 text-brand-blue" /> {post.readTime || 5} min read
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <Eye className="w-3.5 h-3.5 text-brand-cyan" /> {post.viewCount || 120} views
+                  <Eye className="w-3.5 h-3.5 text-brand-blue" /> {post.viewCount || 120} views
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <MessageSquare className="w-3.5 h-3.5 text-brand-cyan" /> {comments.length}{' '}
-                  comments
+                  <MessageSquare className="w-3.5 h-3.5 text-brand-blue" /> {comments.length} comments
                 </span>
               </div>
             </motion.div>
@@ -580,7 +602,7 @@ export default function BlogPostPage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.15 }}
-              className="rounded-3xl overflow-hidden shadow-2xl border border-white/15 bg-slate-900 w-full max-w-5xl mx-auto"
+              className="rounded-3xl overflow-hidden shadow-xl border border-slate-200/80 bg-white w-full max-w-5xl mx-auto"
             >
               <img
                 src={post.featuredImageUrl}
@@ -602,12 +624,12 @@ export default function BlogPostPage() {
               style={{ width: '40px' }}
             >
               <span
-                className="text-[10px] font-bold text-slate-500 uppercase tracking-widest"
+                className="text-[10px] font-bold text-slate-400 uppercase tracking-widest"
                 style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
               >
                 Share
               </span>
-              <div className="w-px h-8 bg-white/10" />
+              <div className="w-px h-8 bg-slate-200" />
               <ShareButtons title={post.title} slug={post.slug} compact={true} />
             </div>
 
@@ -620,25 +642,25 @@ export default function BlogPostPage() {
               className="flex-1 min-w-0"
             >
               {/* Article body card */}
-              <div className="bg-slate-900/75 rounded-3xl shadow-xl border border-white/10 overflow-hidden backdrop-blur-xl">
+              <div className="bg-white rounded-3xl shadow-sm border border-slate-200/80 overflow-hidden">
                 <div className="px-6 sm:px-10 lg:px-12 py-10 sm:py-12">
                   <div
-                    className="prose prose-invert prose-cyan max-w-none text-slate-300 prose-headings:text-white prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-tight prose-a:text-brand-cyan prose-strong:text-white prose-p:leading-relaxed prose-p:text-slate-300"
+                    className="prose prose-slate max-w-none text-slate-700 prose-headings:text-slate-900 prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-tight prose-a:text-brand-blue prose-strong:text-slate-900 prose-p:leading-relaxed prose-p:text-slate-600 prose-li:text-slate-600"
                     dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
                   />
                 </div>
 
                 {/* Article footer */}
-                <div className="px-6 sm:px-10 lg:px-12 py-7 border-t border-white/10 bg-slate-950/40 space-y-5">
+                <div className="px-6 sm:px-10 lg:px-12 py-7 border-t border-slate-100 bg-slate-50/50 space-y-5">
                   {/* Tags */}
                   {post.tags?.length > 0 && (
                     <div className="flex flex-wrap items-center gap-2">
-                      <Tag className="w-3.5 h-3.5 text-brand-cyan shrink-0" />
+                      <Tag className="w-3.5 h-3.5 text-brand-blue shrink-0" />
                       {post.tags.map((tag) => (
                         <Link
                           key={tag}
                           to={`/blog?search=${encodeURIComponent(tag)}`}
-                          className="text-[11px] font-bold bg-white/[0.04] hover:bg-brand-cyan hover:text-slate-950 text-slate-300 border border-white/10 px-3 py-1 rounded-full transition-all"
+                          className="text-[11px] font-bold bg-white hover:bg-brand-blue hover:text-white text-slate-700 border border-slate-200 px-3 py-1 rounded-full transition-all shadow-xs"
                         >
                           #{tag}
                         </Link>
@@ -651,7 +673,7 @@ export default function BlogPostPage() {
                     <ShareButtons title={post.title} slug={post.slug} />
                     <Link
                       to="/blog"
-                      className="inline-flex items-center gap-2 text-xs text-brand-cyan font-bold hover:gap-3 transition-all group shrink-0 uppercase tracking-wider"
+                      className="inline-flex items-center gap-2 text-xs text-brand-blue font-bold hover:gap-3 transition-all group shrink-0 uppercase tracking-wider"
                     >
                       <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
                       All Technical Insights
@@ -664,17 +686,17 @@ export default function BlogPostPage() {
               <div className="mt-12">
                 {/* Header */}
                 <div className="flex items-center gap-3 mb-8">
-                  <div className="w-10 h-10 rounded-2xl bg-brand-cyan/10 border border-brand-cyan/30 flex items-center justify-center shrink-0 text-brand-cyan">
+                  <div className="w-10 h-10 rounded-2xl bg-blue-50 border border-blue-200/80 flex items-center justify-center shrink-0 text-brand-blue">
                     <MessageSquare className="w-5 h-5" />
                   </div>
                   <div>
-                    <h2 className="font-heading text-xl font-bold text-white leading-none">
+                    <h2 className="font-heading text-xl font-bold text-slate-900 leading-none">
                       Technical Discussion
-                      <span className="ml-2 text-xs font-bold text-brand-cyan bg-brand-cyan/10 border border-brand-cyan/20 px-2 py-0.5 rounded-full align-middle">
+                      <span className="ml-2 text-xs font-bold text-brand-blue bg-blue-50 border border-blue-200/80 px-2 py-0.5 rounded-full align-middle">
                         {comments.length}
                       </span>
                     </h2>
-                    <p className="text-xs text-slate-400 mt-1">Join the engineering discussion</p>
+                    <p className="text-xs text-slate-500 mt-1">Join the engineering discussion</p>
                   </div>
                 </div>
 
@@ -687,20 +709,20 @@ export default function BlogPostPage() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: i * 0.05 }}
-                        className="bg-slate-900/60 rounded-2xl border border-white/10 p-5 sm:p-6 shadow-md backdrop-blur-md"
+                        className="bg-white rounded-2xl border border-slate-200/80 p-5 sm:p-6 shadow-xs"
                       >
                         <div className="flex items-start gap-4">
                           <div
                             className={`w-10 h-10 rounded-xl bg-gradient-to-br ${
                               AVATAR_COLORS[i % AVATAR_COLORS.length]
-                            } flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-md`}
+                            } flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-xs`}
                           >
                             {c.name[0].toUpperCase()}
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 flex-wrap mb-2">
-                              <span className="font-bold text-sm text-white">{c.name}</span>
-                              <span className="text-[10px] text-slate-400 bg-white/[0.05] border border-white/10 px-2 py-0.5 rounded-full">
+                              <span className="font-bold text-sm text-slate-900">{c.name}</span>
+                              <span className="text-[10px] text-slate-500 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-full">
                                 {new Date(c.createdAt).toLocaleDateString('en-IN', {
                                   day: 'numeric',
                                   month: 'short',
@@ -708,7 +730,7 @@ export default function BlogPostPage() {
                                 })}
                               </span>
                             </div>
-                            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                               {c.comment}
                             </p>
                           </div>
@@ -717,22 +739,22 @@ export default function BlogPostPage() {
                     ))}
                   </div>
                 ) : (
-                  <div className="bg-slate-900/40 rounded-2xl border border-dashed border-white/15 p-8 text-center mb-8">
-                    <MessageSquare className="w-8 h-8 text-slate-500 mx-auto mb-2" />
-                    <p className="font-bold text-white text-sm">No comments submitted yet</p>
-                    <p className="text-slate-400 text-xs mt-1">
+                  <div className="bg-white rounded-2xl border border-dashed border-slate-200 p-8 text-center mb-8">
+                    <MessageSquare className="w-8 h-8 text-slate-400 mx-auto mb-2" />
+                    <p className="font-bold text-slate-900 text-sm">No comments submitted yet</p>
+                    <p className="text-slate-500 text-xs mt-1">
                       Be the first engineer to share an insight or question!
                     </p>
                   </div>
                 )}
 
                 {/* Comment form */}
-                <div className="bg-slate-900/80 rounded-3xl border border-white/10 shadow-xl overflow-hidden backdrop-blur-xl">
-                  <div className="px-6 sm:px-8 py-5 border-b border-white/10 bg-white/[0.02]">
-                    <h3 className="font-heading font-bold text-white text-base sm:text-lg">
+                <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
+                  <div className="px-6 sm:px-8 py-5 border-b border-slate-100 bg-slate-50/50">
+                    <h3 className="font-heading font-bold text-slate-900 text-base sm:text-lg">
                       Leave a Technical Comment
                     </h3>
-                    <p className="text-xs text-slate-400 mt-0.5">
+                    <p className="text-xs text-slate-500 mt-0.5">
                       Submissions are reviewed before appearing publicly.
                     </p>
                   </div>
@@ -741,14 +763,14 @@ export default function BlogPostPage() {
                       <motion.div
                         initial={{ opacity: 0, scale: 0.96 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="flex items-start gap-3 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-5"
+                        className="flex items-start gap-3 bg-emerald-50 border border-emerald-200 rounded-2xl p-5"
                       >
-                        <div className="w-9 h-9 rounded-xl bg-emerald-500/20 flex items-center justify-center shrink-0">
-                          <CheckCircle className="w-5 h-5 text-emerald-400" />
+                        <div className="w-9 h-9 rounded-xl bg-emerald-100 flex items-center justify-center shrink-0">
+                          <CheckCircle className="w-5 h-5 text-emerald-600" />
                         </div>
                         <div>
-                          <p className="font-bold text-emerald-400 text-sm">Comment submitted!</p>
-                          <p className="text-emerald-300/80 text-xs mt-0.5 leading-relaxed">
+                          <p className="font-bold text-emerald-800 text-sm">Comment submitted!</p>
+                          <p className="text-emerald-700/80 text-xs mt-0.5 leading-relaxed">
                             Awaiting moderation — will appear once approved by our editorial team.
                           </p>
                         </div>
@@ -771,38 +793,38 @@ export default function BlogPostPage() {
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div>
-                            <label className="text-[10px] font-bold text-slate-400 block mb-1.5 uppercase tracking-wider">
+                            <label className="text-[10px] font-bold text-slate-700 block mb-1.5 uppercase tracking-wider">
                               Your Name *
                             </label>
                             <input
                               type="text"
                               {...register('name')}
                               placeholder="e.g. Rahul Verma"
-                              className={`w-full px-3.5 py-2.5 text-xs rounded-xl bg-white/[0.04] border text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-brand-cyan/40 focus:border-brand-cyan transition-all ${
-                                errors.name ? 'border-red-500 bg-red-500/5' : 'border-white/10'
+                              className={`w-full px-3.5 py-2.5 text-xs rounded-xl bg-white border text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-blue/30 focus:border-brand-blue transition-all ${
+                                errors.name ? 'border-red-500 bg-red-50/50' : 'border-slate-200'
                               }`}
                             />
                             {errors.name && (
-                              <p className="text-[10px] text-red-400 mt-1 flex items-center gap-1">
+                              <p className="text-[10px] text-red-500 mt-1 flex items-center gap-1">
                                 <AlertCircle className="w-3 h-3" />
                                 {errors.name.message}
                               </p>
                             )}
                           </div>
                           <div>
-                            <label className="text-[10px] font-bold text-slate-400 block mb-1.5 uppercase tracking-wider">
+                            <label className="text-[10px] font-bold text-slate-700 block mb-1.5 uppercase tracking-wider">
                               Email Address *
                             </label>
                             <input
                               type="email"
                               {...register('email')}
                               placeholder="e.g. rahul@domain.com"
-                              className={`w-full px-3.5 py-2.5 text-xs rounded-xl bg-white/[0.04] border text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-brand-cyan/40 focus:border-brand-cyan transition-all ${
-                                errors.email ? 'border-red-500 bg-red-500/5' : 'border-white/10'
+                              className={`w-full px-3.5 py-2.5 text-xs rounded-xl bg-white border text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-blue/30 focus:border-brand-blue transition-all ${
+                                errors.email ? 'border-red-500 bg-red-50/50' : 'border-slate-200'
                               }`}
                             />
                             {errors.email && (
-                              <p className="text-[10px] text-red-400 mt-1 flex items-center gap-1">
+                              <p className="text-[10px] text-red-500 mt-1 flex items-center gap-1">
                                 <AlertCircle className="w-3 h-3" />
                                 {errors.email.message}
                               </p>
@@ -811,19 +833,19 @@ export default function BlogPostPage() {
                         </div>
 
                         <div>
-                          <label className="text-[10px] font-bold text-slate-400 block mb-1.5 uppercase tracking-wider">
+                          <label className="text-[10px] font-bold text-slate-700 block mb-1.5 uppercase tracking-wider">
                             Your Comment *
                           </label>
                           <textarea
                             rows={4}
                             {...register('comment')}
                             placeholder="Share your thoughts, architectural feedback, or technical questions..."
-                            className={`w-full px-3.5 py-2.5 text-xs rounded-xl bg-white/[0.04] border text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-brand-cyan/40 focus:border-brand-cyan transition-all resize-none ${
-                              errors.comment ? 'border-red-500 bg-red-500/5' : 'border-white/10'
+                            className={`w-full px-3.5 py-2.5 text-xs rounded-xl bg-white border text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-blue/30 focus:border-brand-blue transition-all resize-none ${
+                              errors.comment ? 'border-red-500 bg-red-50/50' : 'border-slate-200'
                             }`}
                           />
                           {errors.comment && (
-                            <p className="text-[10px] text-red-400 mt-1 flex items-center gap-1">
+                            <p className="text-[10px] text-red-500 mt-1 flex items-center gap-1">
                               <AlertCircle className="w-3 h-3" />
                               {errors.comment.message}
                             </p>
@@ -831,7 +853,7 @@ export default function BlogPostPage() {
                         </div>
 
                         {submitMutation.isError && (
-                          <div className="flex items-center gap-2 text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">
+                          <div className="flex items-center gap-2 text-xs text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
                             <AlertCircle className="w-4 h-4 shrink-0" />
                             {submitMutation.error?.message ||
                               'Failed to submit. Please try again later.'}
@@ -842,12 +864,12 @@ export default function BlogPostPage() {
                           <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="inline-flex items-center gap-2 bg-brand-cyan hover:bg-brand-cyan-light text-slate-950 px-6 py-2.5 rounded-xl text-xs font-bold transition-all disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer shadow-lg shadow-cyan-950/40"
+                            className="inline-flex items-center gap-2 bg-brand-blue hover:bg-blue-600 text-white px-6 py-2.5 rounded-xl text-xs font-bold transition-all disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer shadow-md shadow-blue-500/20"
                           >
                             <Send className="w-3.5 h-3.5" />
                             {isSubmitting ? 'Posting…' : 'Submit Comment'}
                           </button>
-                          <p className="text-[10px] text-slate-400">
+                          <p className="text-[10px] text-slate-500">
                             Your email will never be published.
                           </p>
                         </div>
@@ -861,37 +883,37 @@ export default function BlogPostPage() {
             {/* ── SIDEBAR ──────────────────────────── */}
             <aside className="w-full lg:w-[280px] xl:w-[300px] shrink-0 space-y-5 lg:sticky lg:top-24">
               {/* Author Card */}
-              <div className="bg-slate-900/70 rounded-2xl border border-white/10 p-5 shadow-lg backdrop-blur-xl relative overflow-hidden">
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-cyan via-blue-500 to-transparent" />
-                <p className="text-[10px] font-bold text-brand-cyan uppercase tracking-widest mb-4">
+              <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs relative overflow-hidden">
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-blue via-indigo-500 to-transparent" />
+                <p className="text-[10px] font-bold text-brand-blue uppercase tracking-widest mb-4">
                   Engineering Contributor
                 </p>
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-11 h-11 rounded-xl overflow-hidden border border-brand-cyan/30 shadow-md bg-slate-950 shrink-0">
+                  <div className="w-11 h-11 rounded-xl overflow-hidden border border-blue-200/80 shadow-xs bg-white shrink-0">
                     <img
                       src="/logo-with-bg.png"
-                      alt="Hindustan Projects"
+                      alt="SnapTech Digital"
                       className="w-full h-full object-cover"
                     />
                   </div>
                   <div>
-                    <p className="font-bold text-white text-xs leading-none">
-                      {post.authorName || 'Hindustan Projects'}
+                    <p className="font-bold text-slate-900 text-xs leading-none">
+                      {post.authorName || 'SnapTech Team'}
                     </p>
-                    <p className="text-[10px] text-brand-cyan mt-1 font-mono uppercase">
-                      HINDUSTAN PROJECTS
+                    <p className="text-[10px] text-brand-blue mt-1 font-mono uppercase font-bold">
+                      SNAPTECH DIGITAL
                     </p>
                   </div>
                 </div>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Enterprise software engineers based in Bhilwara HQ. We build mission-critical
-                  platforms that drive commercial growth.
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Enterprise software engineers building mission-critical platforms that accelerate
+                  growth and scale.
                 </p>
               </div>
 
               {/* Article stats */}
-              <div className="bg-slate-900/70 rounded-2xl border border-white/10 p-5 shadow-lg backdrop-blur-xl">
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">
+              <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs">
+                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">
                   Telemetry &amp; Metadata
                 </p>
                 <div className="space-y-1">
@@ -925,12 +947,12 @@ export default function BlogPostPage() {
                     .map(({ icon: Icon, label, value }) => (
                       <div
                         key={label}
-                        className="flex items-center justify-between py-2 border-b border-white/5 last:border-0"
+                        className="flex items-center justify-between py-2 border-b border-slate-100 last:border-0"
                       >
-                        <span className="text-slate-400 text-xs flex items-center gap-1.5">
-                          <Icon className="w-3.5 h-3.5 text-brand-cyan" /> {label}
+                        <span className="text-slate-500 text-xs flex items-center gap-1.5">
+                          <Icon className="w-3.5 h-3.5 text-brand-blue" /> {label}
                         </span>
-                        <span className="font-semibold text-white text-xs">{value}</span>
+                        <span className="font-semibold text-slate-900 text-xs">{value}</span>
                       </div>
                     ))}
                 </div>
@@ -938,8 +960,8 @@ export default function BlogPostPage() {
 
               {/* Tags */}
               {post.tags?.length > 0 && (
-                <div className="bg-slate-900/70 rounded-2xl border border-white/10 p-5 shadow-lg backdrop-blur-xl">
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">
+                <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs">
+                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">
                     Indexed Tags
                   </p>
                   <div className="flex flex-wrap gap-1.5">
@@ -947,7 +969,7 @@ export default function BlogPostPage() {
                       <Link
                         key={tag}
                         to={`/blog?search=${encodeURIComponent(tag)}`}
-                        className="text-[10px] font-semibold bg-white/[0.04] hover:bg-brand-cyan hover:text-slate-950 text-slate-300 border border-white/10 px-2.5 py-1 rounded-lg transition-all"
+                        className="text-[10px] font-semibold bg-slate-50 hover:bg-brand-blue hover:text-white text-slate-700 border border-slate-200 px-2.5 py-1 rounded-lg transition-all"
                       >
                         #{tag}
                       </Link>
@@ -957,21 +979,21 @@ export default function BlogPostPage() {
               )}
 
               {/* Consultation CTA */}
-              <div className="relative bg-gradient-to-br from-blue-950/70 via-slate-900/90 to-cyan-950/70 rounded-2xl p-5 border border-brand-cyan/25 text-white shadow-xl overflow-hidden backdrop-blur-xl">
+              <div className="relative bg-gradient-to-br from-[#0D1B4B] to-blue-900 rounded-2xl p-5 text-white shadow-lg overflow-hidden">
                 <div className="relative">
-                  <div className="w-9 h-9 rounded-xl bg-brand-cyan/10 border border-brand-cyan/30 flex items-center justify-center mb-3 text-brand-cyan">
+                  <div className="w-9 h-9 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center mb-3 text-cyan-300">
                     <TrendingUp className="w-4 h-4" />
                   </div>
                   <h3 className="font-heading font-bold text-sm mb-1.5 leading-snug text-white">
                     Need Custom Software?
                   </h3>
-                  <p className="text-slate-300 text-xs leading-relaxed mb-4">
+                  <p className="text-blue-100/80 text-xs leading-relaxed mb-4">
                     High-performance web apps, custom ERPs, and cloud modernization for enterprise
                     leaders.
                   </p>
                   <Link
                     to="/contact"
-                    className="block w-full text-center bg-brand-cyan hover:bg-brand-cyan-light text-slate-950 font-bold text-xs py-2.5 rounded-xl transition-all shadow-lg shadow-cyan-950/50"
+                    className="block w-full text-center bg-brand-blue hover:bg-blue-600 text-white font-bold text-xs py-2.5 rounded-xl transition-all shadow-md shadow-blue-950/40"
                   >
                     Request Project Consultation
                   </Link>
@@ -981,7 +1003,7 @@ export default function BlogPostPage() {
               {/* Browse more */}
               <Link
                 to="/blog"
-                className="flex items-center gap-2 text-xs text-brand-cyan font-bold hover:gap-3 transition-all group px-1 uppercase tracking-wider"
+                className="flex items-center gap-2 text-xs text-brand-blue font-bold hover:gap-3 transition-all group px-1 uppercase tracking-wider"
               >
                 <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
                 Browse All Whitepapers
@@ -993,20 +1015,20 @@ export default function BlogPostPage() {
 
       {/* ── RELATED POSTS ── */}
       {relatedPosts.length > 0 && (
-        <section className="py-16 bg-[#03091e] border-t border-white/10">
+        <section className="py-16 bg-white border-t border-slate-200/80">
           <Container>
             <div className="flex items-end justify-between mb-8 gap-4">
               <div>
-                <p className="text-xs font-bold text-brand-cyan uppercase tracking-widest mb-1">
+                <p className="text-xs font-bold text-brand-blue uppercase tracking-widest mb-1">
                   Further Reading
                 </p>
-                <h2 className="font-heading text-2xl sm:text-3xl font-bold text-white">
+                <h2 className="font-heading text-2xl sm:text-3xl font-bold text-slate-900">
                   Related Insights
                 </h2>
               </div>
               <Link
                 to="/blog"
-                className="shrink-0 text-xs font-bold text-brand-cyan flex items-center gap-1 hover:gap-2 transition-all uppercase tracking-wider"
+                className="shrink-0 text-xs font-bold text-brand-blue flex items-center gap-1 hover:gap-2 transition-all uppercase tracking-wider"
               >
                 View all <ChevronRight className="w-4 h-4" />
               </Link>

@@ -47,17 +47,17 @@ function Field({ label, required, error, children, htmlFor }) {
     <div className="flex flex-col gap-2">
       <label
         htmlFor={htmlFor}
-        className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex justify-between items-center"
+        className="text-[11px] font-bold text-slate-700 uppercase tracking-wider flex justify-between items-center"
       >
         <span>
           {label}
-          {required && <span className="text-brand-cyan ml-0.5">*</span>}
+          {required && <span className="text-brand-blue ml-0.5">*</span>}
         </span>
       </label>
       {children}
       {error && (
         <p
-          className="text-xs text-red-400 flex items-center gap-1 font-semibold mt-0.5"
+          className="text-xs text-red-500 flex items-center gap-1 font-semibold mt-0.5"
           role="alert"
         >
           <AlertCircle className="w-3.5 h-3.5 shrink-0" />
@@ -68,39 +68,39 @@ function Field({ label, required, error, children, htmlFor }) {
   )
 }
 
-// ── Custom Input Class helper (Cyber Dark Glass) ───────────────
+// ── Custom Input Class helper (Crisp Light Mode) ───────────────
 const inputClass = (hasError) =>
   [
-    'w-full px-4 py-3 text-xs sm:text-sm text-white rounded-xl border bg-white/[0.04]',
-    'placeholder:text-slate-500 font-medium',
-    'focus:outline-none focus:ring-1 focus:ring-brand-cyan/40 focus:border-brand-cyan focus:bg-slate-900',
+    'w-full px-4 py-3 text-xs sm:text-sm text-slate-900 rounded-xl border bg-white',
+    'placeholder:text-slate-400 font-medium',
+    'focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue',
     'transition-all duration-200',
     hasError
-      ? 'border-red-500/80 focus:ring-red-500/20 focus:border-red-500 bg-red-500/5'
-      : 'border-white/10 hover:border-white/20 focus:border-brand-cyan',
+      ? 'border-red-500 focus:ring-red-500/20 focus:border-red-500 bg-red-50/20'
+      : 'border-slate-300 hover:border-slate-400 focus:border-brand-blue',
   ].join(' ')
 
 // ── Contact Info Cards ─────────────────────────────────────────
 function ContactInfoCard({ icon: Icon, label, value, href, borderColor }) {
   const inner = (
     <div className="flex items-start gap-4">
-      <span className="w-11 h-11 rounded-xl bg-brand-cyan/10 border border-brand-cyan/20 flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 group-hover:bg-brand-cyan group-hover:text-slate-950 transition-all duration-300">
+      <span className="w-11 h-11 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 group-hover:bg-brand-blue group-hover:text-white transition-all duration-300">
         <Icon
-          className="w-5 h-5 text-brand-cyan group-hover:text-slate-950 transition-colors duration-300"
-          strokeWidth={1.5}
+          className="w-5 h-5 text-brand-blue group-hover:text-white transition-colors duration-300"
+          strokeWidth={1.8}
         />
       </span>
       <div className="space-y-1">
-        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{label}</p>
-        <p className="text-xs sm:text-sm text-white font-bold group-hover:text-brand-cyan transition-colors duration-200 break-all sm:break-normal">
+        <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">{label}</p>
+        <p className="text-xs sm:text-sm text-slate-900 font-bold group-hover:text-brand-blue transition-colors duration-200 break-all sm:break-normal">
           {value}
         </p>
       </div>
     </div>
   )
 
-  const baseClass = `group p-5 rounded-2xl border bg-slate-900/70 shadow-lg backdrop-blur-xl hover:border-brand-cyan/40 hover:-translate-y-0.5 transition-all duration-300 border-l-4 ${
-    borderColor || 'border-l-brand-cyan border-white/10'
+  const baseClass = `group p-5 rounded-2xl border bg-white shadow-xs hover:shadow-md hover:border-brand-blue/40 hover:-translate-y-0.5 transition-all duration-300 border-l-4 ${
+    borderColor || 'border-l-brand-blue border-slate-200/90'
   }`
 
   if (href) {
@@ -253,9 +253,9 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#020714] text-slate-200">
+    <div className="min-h-screen bg-white text-slate-900 selection:bg-brand-blue/15 selection:text-brand-blue">
       <SEO
-        title="Contact Snaptech — IT Solutions & Architecture Consultation | Hindustan Projects"
+        title="Contact SnapTech — IT Solutions & Architecture Consultation | Hindustan Projects"
         description="Connect with Snaptech, the enterprise IT division of Hindustan Projects. Schedule a technical discovery session for custom software, web portals, mobile apps, or cloud systems."
         path="/contact"
         keywords="contact Snaptech, IT consultation Bhilwara, Hindustan Projects IT, hire software developers India, custom web development quote"
@@ -271,44 +271,44 @@ export default function ContactPage() {
       />
 
       {/* ── Page Hero Header ── */}
-      <section className="pt-28 sm:pt-36 lg:pt-40 pb-16 sm:pb-20 lg:pb-24 bg-[#020714] border-b border-white/10 relative overflow-hidden">
+      <section className="pt-28 sm:pt-36 lg:pt-40 pb-16 sm:pb-20 lg:pb-24 bg-gradient-to-b from-slate-50 via-white to-slate-50/50 border-b border-slate-200/80 relative overflow-hidden">
         {/* Ambient Grid & Glows */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:30px_30px] pointer-events-none" />
-        <div className="absolute top-0 right-0 w-96 h-96 bg-brand-cyan/15 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-10 w-96 h-96 bg-brand-primary/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a08_1px,transparent_1px),linear-gradient(to_bottom,#0f172a08_1px,transparent_1px)] bg-[size:30px_30px] pointer-events-none" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-100/60 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-10 w-96 h-96 bg-sky-100/50 rounded-full blur-3xl pointer-events-none" />
 
         <Container className="relative">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
             {/* Left text column */}
             <div className="lg:col-span-7 space-y-6">
-              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold text-brand-cyan bg-brand-cyan/10 border border-brand-cyan/30 backdrop-blur-md mb-2 shadow-lg shadow-cyan-950/40">
-                <span className="w-1.5 h-1.5 rounded-full bg-brand-cyan animate-pulse shadow-sm shadow-cyan-400" />
+              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold text-brand-blue bg-blue-50 border border-blue-200/80 shadow-xs mb-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-brand-blue animate-pulse" />
                 HINDUSTAN PROJECTS ENTERPRISE IT DIVISION
               </span>
-              <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight tracking-tight">
+              <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#0D1B4B] leading-tight tracking-tight">
                 Let&apos;s Architect Your{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan via-blue-400 to-indigo-400">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue via-blue-600 to-indigo-700">
                   Digital Engine
                 </span>
               </h1>
-              <p className="text-slate-400 text-base sm:text-lg max-w-2xl leading-relaxed">
+              <p className="text-slate-600 text-base sm:text-lg max-w-2xl leading-relaxed font-normal">
                 Looking for enterprise web platforms, custom ERPs, mobile engineering, or cloud
                 infrastructure? Connect directly with our lead software architects.
               </p>
 
               {/* Advanced Trust Blocks */}
               <div className="grid grid-cols-2 gap-4 pt-2 max-w-md">
-                <div className="p-4 rounded-2xl bg-slate-900/70 border border-white/10 backdrop-blur-md hover:border-brand-cyan/40 transition-colors duration-300">
-                  <p className="text-2xl font-black text-brand-cyan font-mono">
+                <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs hover:border-brand-blue/40 transition-colors duration-300">
+                  <p className="text-2xl font-black text-brand-blue font-mono">
                     {cfg.stat_projects || '150+'}
                   </p>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
+                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-1">
                     Deployments Complete
                   </p>
                 </div>
-                <div className="p-4 rounded-2xl bg-slate-900/70 border border-white/10 backdrop-blur-md hover:border-brand-cyan/40 transition-colors duration-300">
-                  <p className="text-2xl font-black text-emerald-400 font-mono">&lt; 2h</p>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
+                <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs hover:border-emerald-500/40 transition-colors duration-300">
+                  <p className="text-2xl font-black text-emerald-600 font-mono">&lt; 2h</p>
+                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-1">
                     First Response SLA
                   </p>
                 </div>
@@ -318,19 +318,19 @@ export default function ContactPage() {
             {/* Right graphic column */}
             <div className="hidden lg:flex lg:col-span-5 justify-center lg:justify-end relative h-[440px]">
               {/* Futuristic Glass Panel */}
-              <div className="absolute bottom-4 left-4 right-4 lg:left-12 lg:right-0 top-12 rounded-3xl bg-slate-900/60 border border-white/10 backdrop-blur-xl shadow-2xl overflow-hidden">
-                <div className="absolute inset-0 bg-[radial-gradient(#ffffff08_1px,transparent_1px)] [background-size:16px_16px]" />
-                <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-blue-500 via-cyan-400 to-indigo-500 animate-pulse" />
-                <div className="absolute -bottom-20 -right-20 w-64 h-64 rounded-full bg-cyan-500/10 blur-[80px]" />
+              <div className="absolute bottom-4 left-4 right-4 lg:left-12 lg:right-0 top-12 rounded-3xl bg-gradient-to-br from-blue-50/60 to-slate-100/80 border border-slate-200 shadow-xl overflow-hidden">
+                <div className="absolute inset-0 bg-[radial-gradient(#0f172a0a_1px,transparent_1px)] [background-size:16px_16px]" />
+                <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-blue-500 via-brand-blue to-indigo-500 animate-pulse" />
+                <div className="absolute -bottom-20 -right-20 w-64 h-64 rounded-full bg-blue-200/30 blur-[80px]" />
               </div>
 
               {/* Interactive orbit rings */}
               <div
-                className="absolute top-4 right-1/2 translate-x-1/2 lg:right-24 w-[280px] h-[280px] rounded-full border border-dashed border-cyan-400/20 animate-spin"
+                className="absolute top-4 right-1/2 translate-x-1/2 lg:right-24 w-[280px] h-[280px] rounded-full border border-dashed border-blue-400/30 animate-spin"
                 style={{ animationDuration: '30s' }}
               />
               <div
-                className="absolute top-12 right-1/2 translate-x-1/2 lg:right-28 w-[230px] h-[230px] rounded-full border border-dotted border-blue-500/20 animate-spin"
+                className="absolute top-12 right-1/2 translate-x-1/2 lg:right-28 w-[230px] h-[230px] rounded-full border border-dotted border-indigo-400/30 animate-spin"
                 style={{ animationDuration: '45s', animationDirection: 'reverse' }}
               />
 
@@ -339,36 +339,36 @@ export default function ContactPage() {
                 <img
                   src={contactHeroPerson}
                   alt="Customer Success Specialist"
-                  className="h-[380px] sm:h-[430px] object-contain bottom-0 filter drop-shadow-[0_20px_50px_rgba(0,0,0,0.8)] mix-blend-screen hover:scale-[1.02] transition-transform duration-300 ease-out select-none"
+                  className="h-[380px] sm:h-[430px] object-contain bottom-0 filter drop-shadow-xl hover:scale-[1.02] transition-transform duration-300 ease-out select-none"
                 />
 
                 {/* Overlapping Glass chat widget */}
                 <div
-                  className="absolute top-1/3 -left-6 z-20 bg-slate-900/90 border border-white/10 p-3.5 rounded-2xl shadow-2xl backdrop-blur-xl flex items-center gap-3 animate-bounce"
+                  className="absolute top-1/3 -left-6 z-20 bg-white/95 border border-slate-200 p-3.5 rounded-2xl shadow-xl flex items-center gap-3 animate-bounce"
                   style={{ animationDuration: '4s' }}
                 >
-                  <span className="w-8 h-8 rounded-full bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-brand-cyan">
+                  <span className="w-8 h-8 rounded-full bg-blue-50 border border-blue-200 flex items-center justify-center text-brand-blue">
                     <MessageCircle className="w-4 h-4" />
                   </span>
                   <div className="text-left">
-                    <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">
+                    <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">
                       ACTIVE ARCHITECTS
                     </p>
-                    <p className="text-xs font-bold text-white">How can we assist?</p>
+                    <p className="text-xs font-bold text-slate-900">How can we assist?</p>
                   </div>
                 </div>
 
                 {/* Overlapping Glass status indicator */}
-                <div className="absolute bottom-12 -right-6 z-20 bg-slate-900/90 border border-white/10 p-3.5 rounded-2xl shadow-2xl backdrop-blur-xl flex items-center gap-3">
+                <div className="absolute bottom-12 -right-6 z-20 bg-white/95 border border-slate-200 p-3.5 rounded-2xl shadow-xl flex items-center gap-3">
                   <span className="relative flex h-3 w-3">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
                   </span>
                   <div className="text-left">
-                    <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">
+                    <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">
                       DIRECT HEADQUARTERS
                     </p>
-                    <p className="text-xs font-bold text-white">Bhilwara, Rajasthan</p>
+                    <p className="text-xs font-bold text-slate-900">Bhilwara, Rajasthan</p>
                   </div>
                 </div>
               </div>
@@ -378,7 +378,7 @@ export default function ContactPage() {
       </section>
 
       {/* ── Main Content Grid ── */}
-      <section className="py-14 sm:py-20 lg:py-24 relative">
+      <section className="py-14 sm:py-20 lg:py-24 relative bg-white">
         <Container>
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 items-start">
             {/* ── Left Column: Contact Cards + WhatsApp + Map ── */}
@@ -390,13 +390,13 @@ export default function ContactPage() {
               className="lg:col-span-2 flex flex-col gap-6"
             >
               <motion.div variants={fadeUp}>
-                <span className="text-xs font-bold text-brand-cyan uppercase tracking-wider block mb-1">
+                <span className="text-xs font-bold text-brand-blue uppercase tracking-wider block mb-1">
                   Connect With Us
                 </span>
-                <h2 className="font-heading text-2xl sm:text-3xl font-bold text-white">
+                <h2 className="font-heading text-2xl sm:text-3xl font-extrabold text-[#0D1B4B]">
                   Headquarters &amp; Direct Channels
                 </h2>
-                <p className="text-xs sm:text-sm text-slate-400 mt-1 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
                   Reach out through your preferred channel for scoping, quote inquiries, or support.
                 </p>
               </motion.div>
@@ -406,21 +406,21 @@ export default function ContactPage() {
                   icon={MapPin}
                   label="Headquarters Address"
                   value={address}
-                  borderColor="border-l-brand-cyan"
+                  borderColor="border-l-brand-blue"
                 />
                 <ContactInfoCard
                   icon={Phone}
                   label="Direct Hotline"
                   value={phone}
                   href={`tel:${phone.replace(/\s+/g, '')}`}
-                  borderColor="border-l-blue-500"
+                  borderColor="border-l-blue-600"
                 />
                 <ContactInfoCard
                   icon={Mail}
                   label="Official Email"
                   value={email}
                   href={`mailto:${email}`}
-                  borderColor="border-l-indigo-500"
+                  borderColor="border-l-indigo-600"
                 />
               </motion.div>
 
@@ -428,30 +428,30 @@ export default function ContactPage() {
               <motion.div variants={fadeUp}>
                 <a
                   href={`https://wa.me/${whatsappNum}?text=${encodeURIComponent(
-                    cfg.whatsappMessage || "Hi Snaptech Team! I'd like to discuss an enterprise project."
+                    cfg.whatsappMessage || "Hi SnapTech Team! I'd like to discuss an enterprise project."
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group relative flex items-center gap-3 px-6 py-4 rounded-2xl border border-emerald-500/40
-                    text-slate-950 bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 hover:from-emerald-300 hover:to-cyan-300
+                  className="group relative flex items-center gap-3 px-6 py-4 rounded-2xl
+                    text-white bg-emerald-600 hover:bg-emerald-700
                     transition-all duration-300 font-bold text-sm w-full justify-center 
-                    shadow-lg shadow-emerald-950/40 hover:shadow-xl hover:shadow-emerald-900/50
+                    shadow-md hover:shadow-lg hover:shadow-emerald-600/20
                     hover:-translate-y-0.5 cursor-pointer overflow-hidden"
                   aria-label="Chat with us on WhatsApp"
                 >
-                  <MessageCircle className="w-5 h-5 shrink-0 animate-bounce text-slate-950" />
+                  <MessageCircle className="w-5 h-5 shrink-0" />
                   Chat Directly on WhatsApp
                 </a>
               </motion.div>
 
-              {/* Map Container (Cyber Dark Frame) */}
+              {/* Map Container */}
               <motion.div
                 variants={fadeUp}
-                className="rounded-2xl overflow-hidden border border-white/10 shadow-xl bg-slate-900/70 p-1.5 backdrop-blur-xl"
+                className="rounded-2xl overflow-hidden border border-slate-200 shadow-md bg-white p-1.5"
               >
                 <div className="rounded-xl overflow-hidden h-56 relative group">
                   <iframe
-                    title="Hindustan Projects Office Location — Bhilwara, Rajasthan"
+                    title="SnapTech Office Location — Bhilwara, Rajasthan"
                     src={(() => {
                       const raw = cfg.googleMapUrl
                       if (!raw)
@@ -468,13 +468,13 @@ export default function ContactPage() {
                     allowFullScreen=""
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
-                    className="brightness-90 contrast-125 invert hue-rotate-180 hover:invert-0 hover:hue-rotate-0 transition-all duration-500 ease-out"
+                    className="hover:scale-105 transition-transform duration-500 ease-out"
                   />
                 </div>
               </motion.div>
             </motion.aside>
 
-            {/* ── Right Column: Translucent Contact Form ── */}
+            {/* ── Right Column: Clean Light Contact Form ── */}
             <motion.div
               variants={fadeUp}
               initial="hidden"
@@ -482,44 +482,43 @@ export default function ContactPage() {
               viewport={{ once: true }}
               className="lg:col-span-3"
             >
-              <div className="bg-slate-900/80 rounded-3xl border border-white/10 shadow-2xl p-8 sm:p-10 relative overflow-hidden backdrop-blur-2xl">
+              <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-8 sm:p-10 relative overflow-hidden">
                 {/* Luminous Top Gradient */}
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-cyan via-blue-500 to-indigo-500" />
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-blue via-blue-600 to-indigo-600" />
 
                 {/* Success state */}
                 {submitState === 'success' ? (
                   <div className="flex flex-col items-center justify-center py-10 text-center gap-5">
-                    <span className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center shadow-lg shadow-emerald-950/40 text-emerald-400">
+                    <span className="w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center shadow-md text-emerald-600">
                       <CheckCircle className="w-8 h-8" />
                     </span>
                     <div>
-                      <h3 className="font-heading text-2xl font-bold text-white mb-2">
+                      <h3 className="font-heading text-2xl font-bold text-slate-900 mb-2">
                         Message Received!
                       </h3>
-                      <p className="text-slate-400 text-xs sm:text-sm max-w-sm leading-relaxed">
+                      <p className="text-slate-600 text-xs sm:text-sm max-w-sm leading-relaxed">
                         Thank you for reaching out. Our solution architects will review your project
                         needs and respond within 24 hours.
                       </p>
                     </div>
-                    <Button
-                      variant="primary"
-                      size="sm"
+                    <button
+                      type="button"
                       onClick={() => setSubmitState('idle')}
-                      className="bg-brand-cyan text-slate-950 font-bold"
+                      className="bg-brand-blue hover:bg-brand-blue-dark text-white font-bold px-6 py-2.5 rounded-xl text-xs shadow-md transition-all cursor-pointer"
                     >
                       Send Another Message
-                    </Button>
+                    </button>
                   </div>
                 ) : localLockout ? (
                   <div className="flex flex-col items-center justify-center py-10 text-center gap-5">
-                    <span className="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center shadow-inner text-amber-400">
+                    <span className="w-16 h-16 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center shadow-inner text-amber-600">
                       <AlertCircle className="w-8 h-8 animate-pulse" />
                     </span>
                     <div>
-                      <h3 className="font-heading text-2xl font-bold text-white mb-2">
+                      <h3 className="font-heading text-2xl font-bold text-slate-900 mb-2">
                         Submission Locked (24h)
                       </h3>
-                      <p className="text-slate-400 text-xs sm:text-sm max-w-sm leading-relaxed">
+                      <p className="text-slate-600 text-xs sm:text-sm max-w-sm leading-relaxed">
                         You have already submitted an inquiry in the last 24 hours. To prevent duplicate
                         tickets, our team is currently processing your active request.
                       </p>
@@ -527,14 +526,14 @@ export default function ContactPage() {
                   </div>
                 ) : (
                   <>
-                    <div className="mb-8 border-b border-white/10 pb-5">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-brand-cyan">
+                    <div className="mb-8 border-b border-slate-100 pb-5">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-brand-blue">
                         Direct Architectural Consultation
                       </span>
-                      <h2 className="font-heading text-2xl sm:text-3xl font-bold text-white mt-1 leading-tight">
+                      <h2 className="font-heading text-2xl sm:text-3xl font-extrabold text-[#0D1B4B] mt-1 leading-tight">
                         Send Project Brief
                       </h2>
-                      <p className="text-xs sm:text-sm text-slate-400 mt-1">
+                      <p className="text-xs sm:text-sm text-slate-600 mt-1">
                         Tell us about your technical goals, requirements, or operational bottlenecks.
                       </p>
                     </div>
@@ -614,17 +613,17 @@ export default function ContactPage() {
                         >
                           <select
                             id="serviceInterested"
-                            className={`${inputClass(Boolean(errors.serviceInterested))} bg-slate-900 cursor-pointer`}
+                            className={`${inputClass(Boolean(errors.serviceInterested))} bg-white text-slate-900 cursor-pointer`}
                             {...register('serviceInterested')}
                           >
-                            <option value="" className="bg-slate-900 text-slate-400">
+                            <option value="" className="text-slate-400">
                               — Select a technical domain —
                             </option>
                             {services.map((s) => (
                               <option
                                 key={s.id}
                                 value={s.title}
-                                className="bg-slate-900 text-white"
+                                className="text-slate-900"
                               >
                                 {s.title}
                               </option>
@@ -652,12 +651,12 @@ export default function ContactPage() {
                       {/* API error alert */}
                       {submitState === 'error' && apiError && (
                         <div
-                          className="px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/20 flex items-start gap-2.5"
+                          className="px-4 py-3 rounded-xl bg-red-50 border border-red-200 flex items-start gap-2.5"
                           role="alert"
                           aria-live="assertive"
                         >
-                          <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
-                          <p className="text-xs sm:text-sm font-semibold text-red-400">{apiError}</p>
+                          <AlertCircle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+                          <p className="text-xs sm:text-sm font-semibold text-red-600">{apiError}</p>
                         </div>
                       )}
 
@@ -666,11 +665,11 @@ export default function ContactPage() {
                         <button
                           type="submit"
                           disabled={submitState === 'loading'}
-                          className="w-full bg-brand-cyan hover:bg-brand-cyan-light text-slate-950 font-bold py-3.5 rounded-xl text-xs sm:text-sm transition-all shadow-lg shadow-cyan-950/50 active:scale-[0.99] cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2"
+                          className="w-full bg-brand-blue hover:bg-brand-blue-dark text-white font-bold py-3.5 rounded-xl text-xs sm:text-sm transition-all shadow-md hover:shadow-lg hover:shadow-brand-blue/20 active:scale-[0.99] cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2"
                         >
                           {submitState === 'loading' ? (
                             <>
-                              <div className="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
+                              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                               Transmitting Brief…
                             </>
                           ) : (
@@ -693,17 +692,17 @@ export default function ContactPage() {
       </section>
 
       {/* ── FAQ Accordion Section ── */}
-      <section className="py-20 bg-[#03091e] border-t border-white/10">
+      <section className="py-20 bg-slate-50/70 border-t border-slate-200/80">
         <Container>
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-12">
-              <span className="text-xs font-bold tracking-widest uppercase text-brand-cyan mb-2 block">
+              <span className="text-xs font-bold tracking-wider uppercase text-brand-blue mb-2 block">
                 Common Inquiries
               </span>
-              <h2 className="font-heading text-3xl font-bold text-white mb-3">
+              <h2 className="font-heading text-3xl font-extrabold text-slate-900 mb-3">
                 Frequently Asked Questions
               </h2>
-              <p className="text-slate-400 text-xs sm:text-sm max-w-md mx-auto leading-relaxed">
+              <p className="text-slate-600 text-xs sm:text-sm max-w-md mx-auto leading-relaxed">
                 Clear answers regarding project discovery, timelines, pricing models, and ongoing SLA maintenance.
               </p>
             </div>
@@ -716,17 +715,17 @@ export default function ContactPage() {
                 return (
                   <div
                     key={faq.id ?? idx}
-                    className="bg-slate-900/60 rounded-2xl border border-white/10 shadow-sm overflow-hidden transition-all duration-300 hover:border-brand-cyan/30"
+                    className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden transition-all duration-300 hover:border-brand-blue/40"
                   >
                     <button
                       onClick={() => toggleFaq(idx)}
-                      className="w-full flex items-center justify-between p-5 text-left font-heading font-bold text-white hover:text-brand-cyan transition-colors duration-200 cursor-pointer group"
+                      className="w-full flex items-center justify-between p-5 text-left font-heading font-bold text-slate-900 hover:text-brand-blue transition-colors duration-200 cursor-pointer group"
                       aria-expanded={isOpen}
                     >
                       <span className="text-sm sm:text-base leading-snug">{question}</span>
                       <span
-                        className={`p-1.5 rounded-full bg-white/[0.04] text-slate-400 group-hover:text-brand-cyan transition-transform duration-300 ${
-                          isOpen ? 'rotate-180 text-brand-cyan bg-brand-cyan/10' : ''
+                        className={`p-1.5 rounded-full bg-slate-100 text-slate-500 group-hover:text-brand-blue transition-transform duration-300 ${
+                          isOpen ? 'rotate-180 text-brand-blue bg-blue-50' : ''
                         }`}
                       >
                         <ChevronDown className="w-4 h-4" />
@@ -736,11 +735,11 @@ export default function ContactPage() {
                     <div
                       className={`transition-all duration-300 ease-in-out overflow-hidden ${
                         isOpen
-                          ? 'max-h-60 opacity-100 border-t border-white/10'
+                          ? 'max-h-60 opacity-100 border-t border-slate-100'
                           : 'max-h-0 opacity-0 pointer-events-none'
                       }`}
                     >
-                      <div className="p-5 text-xs sm:text-sm text-slate-300 leading-relaxed">
+                      <div className="p-5 text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
                         {answer}
                       </div>
                     </div>

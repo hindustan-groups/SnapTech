@@ -115,10 +115,10 @@ export default function Navbar() {
   const cleanPhone = phone.replace(/\s+/g, '')
 
   const rawWhatsapp = cfg.whatsapp
-  const validWhatsapp = rawWhatsapp && !rawWhatsapp.includes('99999') && !rawWhatsapp.includes('123456') ? rawWhatsapp : '+91 99291 20431'
+  const validWhatsapp = rawWhatsapp && !rawWhatsapp.includes('99999') && !rawWhatsapp.includes('123456') ? rawWhatsapp : '+91 75970 00601'
   const cleanWhatsapp = validWhatsapp.replace(/\D/g, '')
   const whatsappUrl = `https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent(
-    cfg.whatsappMessage || 'Hello Snaptech, I would like to consult for an enterprise IT project.'
+    cfg.whatsappMessage || 'Hello SnapTech Team, I would like to consult for an enterprise digital project.'
   )}`
 
   const getValidSocial = (val, fallback) => (val && val.trim() !== '#' && val.trim() !== '' ? val : fallback)

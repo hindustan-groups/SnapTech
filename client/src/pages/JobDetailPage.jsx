@@ -32,10 +32,10 @@ const JOB_TYPE_LABELS = {
 }
 
 const JOB_TYPE_CLASSES = {
-  FULL_TIME: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20',
-  PART_TIME: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
-  INTERNSHIP: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-  CONTRACT: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+  FULL_TIME: 'bg-blue-50 text-brand-blue border-blue-200',
+  PART_TIME: 'bg-purple-50 text-purple-700 border-purple-200',
+  INTERNSHIP: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+  CONTRACT: 'bg-amber-50 text-amber-700 border-amber-200',
 }
 
 const FALLBACK_ROLE_MAP = {
@@ -340,34 +340,34 @@ export default function JobDetailPage() {
     }
   }
 
-  const whatsappNumber = (cfg.whatsapp || cfg.phone || '919414112057').replace(/[^0-9]/g, '')
+  const whatsappNumber = (cfg.whatsapp || cfg.phone || '917597000601').replace(/[^0-9]/g, '')
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
     `Hello Snaptech Team, I am inquiring about the ${job?.title || 'Open Role'} position.`
   )}`
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#020714] flex justify-center items-center py-32">
-        <div className="w-10 h-10 rounded-full border-2 border-brand-cyan border-t-transparent animate-spin" />
+      <div className="min-h-screen bg-white flex justify-center items-center py-32">
+        <div className="w-10 h-10 rounded-full border-2 border-brand-blue border-t-transparent animate-spin" />
       </div>
     )
   }
 
   if ((error || !job) && !FALLBACK_ROLE_MAP[slug]) {
     return (
-      <div className="min-h-screen bg-[#020714] text-slate-200 py-32 flex items-center justify-center">
+      <div className="min-h-screen bg-white text-slate-700 py-32 flex items-center justify-center">
         <Container>
-          <div className="max-w-md mx-auto space-y-5 bg-slate-900/80 border border-white/10 rounded-3xl p-8 shadow-2xl text-center backdrop-blur-xl">
-            <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mx-auto text-amber-400">
+          <div className="max-w-md mx-auto space-y-5 bg-slate-50 border border-slate-200 rounded-3xl p-8 shadow-sm text-center">
+            <div className="w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center mx-auto text-amber-600">
               <AlertCircle className="w-8 h-8" />
             </div>
-            <h2 className="font-heading text-xl font-bold text-white">Job Posting Expired</h2>
-            <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
+            <h2 className="font-heading text-xl font-bold text-slate-900">Job Posting Expired</h2>
+            <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
               The careers posting you are looking for has expired or is no longer accepting
               responses.
             </p>
             <Link to="/careers" className="inline-block mt-2">
-              <Button variant="primary" size="sm" className="bg-brand-cyan text-slate-950 font-bold">
+              <Button variant="primary" size="sm" className="bg-brand-blue hover:bg-blue-600 text-white font-bold">
                 Browse Active Careers
               </Button>
             </Link>
@@ -379,7 +379,7 @@ export default function JobDetailPage() {
 
   const isGeneral = job.slug === 'general-application'
   const typeClass =
-    JOB_TYPE_CLASSES[job.jobType] || 'bg-slate-800 text-slate-300 border-slate-700'
+    JOB_TYPE_CLASSES[job.jobType] || 'bg-slate-100 text-slate-700 border-slate-200'
   const typeLabel = JOB_TYPE_LABELS[job.jobType] || job.jobType
 
   const jobPostingSchema = {
@@ -412,7 +412,7 @@ export default function JobDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#020714] text-slate-200 relative overflow-hidden">
+    <div className="min-h-screen bg-white text-slate-700 relative overflow-hidden">
       <SEO
         title={`${job.title} | Careers — Snaptech`}
         description={
@@ -424,28 +424,23 @@ export default function JobDetailPage() {
         schemas={[jobPostingSchema]}
       />
 
-      {/* Ambient background glows */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
-      <div className="absolute top-20 right-1/4 w-96 h-96 bg-brand-cyan/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/3 left-10 w-96 h-96 bg-brand-primary/15 rounded-full blur-3xl pointer-events-none" />
-
       <div className="pt-28 pb-16 sm:pt-36 sm:pb-20 relative">
         <Container className="relative">
           {/* Top Breadcrumb / Back Link */}
           <div className="flex items-center justify-between gap-4 mb-8">
             <Link
               to="/careers"
-              className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-brand-cyan transition-colors group"
+              className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-500 hover:text-brand-blue transition-colors group"
             >
-              <ArrowLeft className="w-4 h-4 text-brand-cyan group-hover:-translate-x-1 transition-transform" />{' '}
+              <ArrowLeft className="w-4 h-4 text-brand-blue group-hover:-translate-x-1 transition-transform" />{' '}
               Back to All Careers
             </Link>
 
             <button
               onClick={handleShare}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-xs text-slate-300 transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-xs text-slate-700 transition-colors cursor-pointer"
             >
-              <Share2 className="w-3.5 h-3.5 text-brand-cyan" />
+              <Share2 className="w-3.5 h-3.5 text-brand-blue" />
               {copied ? 'Link Copied!' : 'Share Role'}
             </button>
           </div>
@@ -454,37 +449,37 @@ export default function JobDetailPage() {
             {/* Left Column: Job Details */}
             <div className="lg:col-span-2 space-y-8">
               {/* Header Box */}
-              <div className="p-6 sm:p-8 rounded-3xl bg-slate-900/70 border border-white/10 backdrop-blur-xl shadow-xl space-y-6">
-                <div className="space-y-4 border-b border-white/10 pb-6">
+              <div className="p-6 sm:p-8 rounded-3xl bg-slate-50/50 border border-slate-200 shadow-sm space-y-6">
+                <div className="space-y-4 border-b border-slate-200 pb-6">
                   <div className="flex items-center gap-2.5 flex-wrap">
                     <span
                       className={`text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded border ${typeClass}`}
                     >
                       {typeLabel}
                     </span>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-300 bg-white/[0.05] border border-white/10 px-3 py-1 rounded">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600 bg-slate-100 border border-slate-200 px-3 py-1 rounded">
                       {job.department}
                     </span>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded flex items-center gap-1">
-                      <ShieldCheck className="w-3.5 h-3.5" /> Direct Hiring
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded flex items-center gap-1">
+                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" /> Direct Hiring
                     </span>
                   </div>
 
-                  <h1 className="font-heading text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+                  <h1 className="font-heading text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
                     {job.title}
                   </h1>
 
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-2">
-                    <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-300">
-                      <MapPin className="w-4 h-4 text-brand-cyan shrink-0" />
+                    <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600">
+                      <MapPin className="w-4 h-4 text-brand-blue shrink-0" />
                       <span>{job.location}</span>
                     </div>
-                    <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-300">
-                      <Briefcase className="w-4 h-4 text-brand-cyan shrink-0" />
+                    <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600">
+                      <Briefcase className="w-4 h-4 text-brand-blue shrink-0" />
                       <span>{job.experienceRequired}</span>
                     </div>
-                    <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-300 col-span-2 sm:col-span-1">
-                      <Calendar className="w-4 h-4 text-brand-cyan shrink-0" />
+                    <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 col-span-2 sm:col-span-1">
+                      <Calendar className="w-4 h-4 text-brand-blue shrink-0" />
                       <span>
                         Posted:{' '}
                         {new Date(job.createdAt).toLocaleDateString('en-IN', {
@@ -499,27 +494,27 @@ export default function JobDetailPage() {
 
                 {/* Description */}
                 <div className="space-y-3">
-                  <h2 className="font-heading text-base sm:text-lg font-bold text-white flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-brand-cyan animate-pulse" /> Role Overview
+                  <h2 className="font-heading text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-brand-blue animate-pulse" /> Role Overview
                   </h2>
-                  <p className="text-slate-300 text-sm sm:text-base leading-relaxed whitespace-pre-line">
+                  <p className="text-slate-600 text-sm sm:text-base leading-relaxed whitespace-pre-line">
                     {job.description}
                   </p>
                 </div>
 
                 {/* Responsibilities */}
                 {job.responsibilities?.length > 0 && (
-                  <div className="space-y-4 pt-3 border-t border-white/10">
-                    <h2 className="font-heading text-base sm:text-lg font-bold text-white">
+                  <div className="space-y-4 pt-3 border-t border-slate-200">
+                    <h2 className="font-heading text-base sm:text-lg font-bold text-slate-900">
                       Key Responsibilities &amp; Impact
                     </h2>
                     <ul className="space-y-3">
                       {job.responsibilities.map((resp, i) => (
                         <li
                           key={i}
-                          className="flex items-start gap-3 text-slate-300 text-xs sm:text-sm leading-relaxed"
+                          className="flex items-start gap-3 text-slate-600 text-xs sm:text-sm leading-relaxed"
                         >
-                          <span className="w-1.5 h-1.5 rounded-full bg-brand-cyan mt-2 shrink-0 shadow-sm shadow-cyan-400" />
+                          <span className="w-1.5 h-1.5 rounded-full bg-brand-blue mt-2 shrink-0 shadow-xs" />
                           <span>{resp}</span>
                         </li>
                       ))}
@@ -529,17 +524,17 @@ export default function JobDetailPage() {
 
                 {/* Requirements */}
                 {job.requirements?.length > 0 && (
-                  <div className="space-y-4 pt-3 border-t border-white/10">
-                    <h2 className="font-heading text-base sm:text-lg font-bold text-white">
+                  <div className="space-y-4 pt-3 border-t border-slate-200">
+                    <h2 className="font-heading text-base sm:text-lg font-bold text-slate-900">
                       Qualifications &amp; Ideal Capabilities
                     </h2>
                     <ul className="space-y-3">
                       {job.requirements.map((req, i) => (
                         <li
                           key={i}
-                          className="flex items-start gap-3 text-slate-300 text-xs sm:text-sm leading-relaxed"
+                          className="flex items-start gap-3 text-slate-600 text-xs sm:text-sm leading-relaxed"
                         >
-                          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                           <span>{req}</span>
                         </li>
                       ))}
@@ -549,16 +544,16 @@ export default function JobDetailPage() {
               </div>
 
               {/* Company Culture / Backed by Parent Group Card */}
-              <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-slate-900/80 via-blue-950/40 to-slate-900/80 border border-white/10 backdrop-blur-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+              <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-blue-50 to-indigo-50/70 border border-blue-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 shadow-xs">
                 <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-xs font-bold text-brand-cyan uppercase tracking-wider">
+                  <div className="flex items-center gap-2 text-xs font-bold text-brand-blue uppercase tracking-wider">
                     <Building2 className="w-4 h-4" />
                     Hindustan Projects Division
                   </div>
-                  <h3 className="font-heading text-lg font-bold text-white">
+                  <h3 className="font-heading text-lg font-bold text-slate-900">
                     Need clarification on this position?
                   </h3>
-                  <p className="text-xs text-slate-400 max-w-md leading-relaxed">
+                  <p className="text-xs text-slate-600 max-w-md leading-relaxed">
                     Have questions about team structure, compensation, or tech stack? Connect directly
                     with our hiring coordinators on WhatsApp.
                   </p>
@@ -568,7 +563,7 @@ export default function JobDetailPage() {
                   href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold transition-all shrink-0"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-700 text-xs font-bold transition-all shrink-0 shadow-xs"
                 >
                   <MessageSquare className="w-4 h-4" />
                   Ask via WhatsApp
@@ -578,20 +573,20 @@ export default function JobDetailPage() {
 
             {/* Right Column: Sticky Application Form */}
             <div className="lg:col-span-1">
-              <div className="sticky top-28 p-6 sm:p-7 rounded-3xl bg-slate-900/85 border border-white/10 shadow-2xl shadow-black/80 backdrop-blur-2xl relative overflow-hidden">
+              <div className="sticky top-28 p-6 sm:p-7 rounded-3xl bg-white border border-slate-200 shadow-xl relative overflow-hidden">
                 {/* Luminous Top Gradient Accent */}
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-cyan via-blue-500 to-indigo-500" />
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-blue via-blue-500 to-indigo-500" />
 
                 {applyMutation.isSuccess ? (
                   <div className="text-center py-8 space-y-4">
-                    <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto text-emerald-400 shadow-lg shadow-emerald-950/40">
+                    <div className="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center mx-auto text-emerald-600 shadow-sm">
                       <CheckCircle className="w-8 h-8" />
                     </div>
                     <div className="space-y-2">
-                      <h3 className="font-heading text-xl font-bold text-white">
+                      <h3 className="font-heading text-xl font-bold text-slate-900">
                         Application Submitted!
                       </h3>
-                      <p className="text-slate-400 text-xs leading-relaxed px-2">
+                      <p className="text-slate-600 text-xs leading-relaxed px-2">
                         Thank you for applying. Our talent acquisition team will review your resume
                         and reach out within 3 to 5 business days.
                       </p>
@@ -600,21 +595,21 @@ export default function JobDetailPage() {
                       variant="primary"
                       size="sm"
                       onClick={() => applyMutation.reset()}
-                      className="w-full mt-4 bg-brand-cyan text-slate-950 font-bold"
+                      className="w-full mt-4 bg-brand-blue hover:bg-blue-600 text-white font-bold"
                     >
                       Apply for Another Role
                     </Button>
                   </div>
                 ) : localLockout ? (
                   <div className="text-center py-8 space-y-4">
-                    <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mx-auto text-amber-400">
+                    <div className="w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center mx-auto text-amber-600">
                       <AlertCircle className="w-8 h-8 animate-pulse" />
                     </div>
                     <div className="space-y-2">
-                      <h3 className="font-heading text-lg font-bold text-white">
+                      <h3 className="font-heading text-lg font-bold text-slate-900">
                         Submission Locked (24h)
                       </h3>
-                      <p className="text-slate-400 text-xs leading-relaxed px-2">
+                      <p className="text-slate-600 text-xs leading-relaxed px-2">
                         You have already submitted an application for this role within the last 24
                         hours. Please wait for our recruiters to review your profile.
                       </p>
@@ -622,80 +617,80 @@ export default function JobDetailPage() {
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                    <div className="border-b border-white/10 pb-3 mb-2">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-brand-cyan">
+                    <div className="border-b border-slate-200 pb-3 mb-2">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-brand-blue">
                         Fast-Track Application
                       </span>
-                      <h3 className="font-heading text-lg font-bold text-white mt-0.5">
+                      <h3 className="font-heading text-lg font-bold text-slate-900 mt-0.5">
                         {isGeneral ? 'General Pitch' : 'Apply for Role'}
                       </h3>
                     </div>
 
                     {apiError && (
-                      <div className="flex items-start gap-2.5 p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-xs text-red-400">
-                        <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-red-400" />
+                      <div className="flex items-start gap-2.5 p-3 bg-red-50 border border-red-200 rounded-xl text-xs text-red-600">
+                        <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-red-600" />
                         <span>{apiError}</span>
                       </div>
                     )}
 
                     {/* Name */}
                     <div className="space-y-1.5">
-                      <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                      <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-700">
                         Full Name *
                       </label>
                       <input
                         type="text"
                         {...register('fullName')}
                         placeholder="e.g. Vikramaditya Sharma"
-                        className="w-full bg-white/[0.04] border border-white/10 focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan/30 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none transition-all"
+                        className="w-full bg-slate-50 border border-slate-300 focus:border-brand-blue focus:ring-1 focus:ring-brand-blue/30 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none transition-all"
                       />
                       {errors.fullName && (
-                        <p className="text-[10px] text-red-400">{errors.fullName.message}</p>
+                        <p className="text-[10px] text-red-500">{errors.fullName.message}</p>
                       )}
                     </div>
 
                     {/* Email */}
                     <div className="space-y-1.5">
-                      <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                      <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-700">
                         Email Address *
                       </label>
                       <input
                         type="email"
                         {...register('email')}
                         placeholder="e.g. vikram@domain.com"
-                        className="w-full bg-white/[0.04] border border-white/10 focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan/30 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none transition-all"
+                        className="w-full bg-slate-50 border border-slate-300 focus:border-brand-blue focus:ring-1 focus:ring-brand-blue/30 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none transition-all"
                       />
                       {errors.email && (
-                        <p className="text-[10px] text-red-400">{errors.email.message}</p>
+                        <p className="text-[10px] text-red-500">{errors.email.message}</p>
                       )}
                     </div>
 
                     {/* Phone */}
                     <div className="space-y-1.5">
-                      <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                      <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-700">
                         Phone / WhatsApp *
                       </label>
                       <input
                         type="tel"
                         {...register('phone')}
                         placeholder="e.g. +91 98765 43210"
-                        className="w-full bg-white/[0.04] border border-white/10 focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan/30 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none transition-all"
+                        className="w-full bg-slate-50 border border-slate-300 focus:border-brand-blue focus:ring-1 focus:ring-brand-blue/30 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none transition-all"
                       />
                       {errors.phone && (
-                        <p className="text-[10px] text-red-400">{errors.phone.message}</p>
+                        <p className="text-[10px] text-red-500">{errors.phone.message}</p>
                       )}
                     </div>
 
                     {/* Resume Upload */}
                     <div className="space-y-1.5">
-                      <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                      <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-700">
                         Upload Resume (PDF, DOC - Max 5MB) *
                       </label>
                       <div
                         className={`relative border border-dashed rounded-xl p-4 transition-all text-center ${
                           file
-                            ? 'border-emerald-500/50 bg-emerald-500/[0.05]'
-                            : 'border-white/15 hover:border-brand-cyan/40 bg-white/[0.02]'
+                            ? 'border-emerald-500 bg-emerald-50/50'
+                            : 'border-slate-300 hover:border-brand-blue/50 bg-slate-50/50'
                         }`}
                       >
                         <input
@@ -707,34 +702,34 @@ export default function JobDetailPage() {
                         <div className="space-y-1.5">
                           <Upload
                             className={`w-5 h-5 mx-auto ${
-                              file ? 'text-emerald-400 animate-bounce' : 'text-slate-400'
+                              file ? 'text-emerald-600 animate-bounce' : 'text-slate-400'
                             }`}
                           />
                           {file ? (
-                            <div className="flex items-center justify-center gap-1.5 text-xs text-emerald-400 font-bold max-w-full truncate px-2">
+                            <div className="flex items-center justify-center gap-1.5 text-xs text-emerald-700 font-bold max-w-full truncate px-2">
                               <FileText className="w-3.5 h-3.5 shrink-0" />
                               <span className="truncate">{file.name}</span>
                             </div>
                           ) : (
-                            <p className="text-[11px] text-slate-400 leading-normal">
+                            <p className="text-[11px] text-slate-500 leading-normal">
                               Click or drop resume file here
                             </p>
                           )}
                         </div>
                       </div>
-                      {fileError && <p className="text-[10px] text-red-400">{fileError}</p>}
+                      {fileError && <p className="text-[10px] text-red-500">{fileError}</p>}
                     </div>
 
                     {/* Cover Letter */}
                     <div className="space-y-1.5">
-                      <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                      <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-700">
                         Brief Note / Portfolio Link (Optional)
                       </label>
                       <textarea
                         rows="3"
                         {...register('coverLetter')}
                         placeholder="Highlight your standout achievements or GitHub/portfolio links..."
-                        className="w-full bg-white/[0.04] border border-white/10 focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan/30 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none transition-all resize-none"
+                        className="w-full bg-slate-50 border border-slate-300 focus:border-brand-blue focus:ring-1 focus:ring-brand-blue/30 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none transition-all resize-none"
                       />
                     </div>
 
@@ -752,11 +747,11 @@ export default function JobDetailPage() {
                     <button
                       type="submit"
                       disabled={applyMutation.isPending}
-                      className="w-full mt-2 bg-gradient-to-r from-brand-cyan to-blue-500 hover:from-brand-cyan-light hover:to-blue-400 text-slate-950 font-bold py-3 rounded-xl text-xs transition-all shadow-lg shadow-cyan-950/50 active:scale-[0.98] cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2"
+                      className="w-full mt-2 bg-brand-blue hover:bg-blue-600 text-white font-bold py-3 rounded-xl text-xs transition-all shadow-md shadow-blue-500/20 active:scale-[0.98] cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2"
                     >
                       {applyMutation.isPending ? (
                         <>
-                          <div className="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
+                          <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                           Submitting Application…
                         </>
                       ) : (

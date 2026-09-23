@@ -210,7 +210,7 @@ export default function ServicesPage() {
 
   const cfg = settingsData?.data || {}
   const phone = cfg.phone || '+91 75970 00601'
-  const whatsappNum = (cfg.whatsapp || cfg.phone || '919929120431').replace(/[^0-9]/g, '')
+  const whatsappNum = (cfg.whatsapp || cfg.phone || '917597000601').replace(/[^0-9]/g, '')
 
   // Extract dynamic categories with counters
   const categoryStats = useMemo(() => {
