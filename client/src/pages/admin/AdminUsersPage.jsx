@@ -524,7 +524,7 @@ export default function AdminUsersPage() {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="name@hindustanprojects.in"
+                    placeholder="name@snaptech.digital"
                     className={inputCls}
                     required
                   />

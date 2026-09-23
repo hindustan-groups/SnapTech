@@ -6,7 +6,7 @@ import { Router } from 'express'
 import prisma from '../config/db.js'
 
 const router = Router()
-const BASE = 'https://www.itservices.hindustanprojects.in'
+const BASE = process.env.CLIENT_URL || 'https://www.snaptech.digital'
 
 router.get('/', async (_req, res, next) => {
   try {
@@ -26,6 +26,7 @@ router.get('/', async (_req, res, next) => {
     const staticPages = [
       { path: '/', priority: '1.0', freq: 'weekly' },
       { path: '/services', priority: '0.9', freq: 'weekly' },
+      { path: '/pricing', priority: '0.9', freq: 'weekly' },
       { path: '/about', priority: '0.7', freq: 'monthly' },
       { path: '/portfolio', priority: '0.7', freq: 'weekly' },
       { path: '/contact', priority: '0.8', freq: 'monthly' },

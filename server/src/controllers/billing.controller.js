@@ -85,7 +85,7 @@ export const simulatePayment = async (req, res, next) => {
         projectName,
         milestoneTitle: milestone.title,
         amount: milestone.amount,
-        invoiceUrl: `https://it-services.hindustanprojects.in/client/invoices/${id}`,
+        invoiceUrl: `${process.env.CLIENT_URL || 'https://www.snaptech.digital'}/client/invoices/${id}`,
       })
 
       sendEmail({
@@ -213,7 +213,7 @@ export const updateBillingMilestone = async (req, res, next) => {
             projectName: fullMilestone.clientProject.projectTitle || 'Project',
             milestoneTitle: fullMilestone.title,
             amount: fullMilestone.amount,
-            invoiceUrl: `https://it-services.hindustanprojects.in/client/invoices/${id}`,
+            invoiceUrl: `${process.env.CLIENT_URL || 'https://www.snaptech.digital'}/client/invoices/${id}`,
           })
 
           sendEmail({

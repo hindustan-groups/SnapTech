@@ -208,7 +208,7 @@ export default function ShowcaseSection() {
                           <span className="w-2 h-2 rounded-full bg-green-500 inline-block" />
                         </div>
                         <div className="flex-1 max-w-[200px] mx-auto bg-slate-900 border border-slate-800 rounded-md py-0.5 px-3 text-[8px] text-gray-500 font-mono text-center truncate">
-                          https://portal.itservices.hindustanprojects.in
+                          https://portal.snaptech.digital
                         </div>
                       </div>
 
@@ -225,7 +225,7 @@ export default function ShowcaseSection() {
                         <div className="flex-1 bg-[#0b1329] text-white p-5 flex flex-col justify-between overflow-hidden relative font-sans">
                           {/* Header */}
                           <header className="flex justify-between items-center pb-3 border-b border-white/5 shrink-0">
-                            <span className="font-heading font-black text-[10px] text-brand-red-light tracking-widest uppercase">HP PORTAL</span>
+                            <span className="font-heading font-black text-[10px] text-brand-blue-light tracking-widest uppercase">SNAPTECH PORTAL</span>
                             <div className="flex gap-3 text-[8px] font-bold text-gray-400">
                               <span className="text-white">Overview</span>
                               <span>Integrations</span>
@@ -332,8 +332,8 @@ export default function ShowcaseSection() {
                           {/* Sidebar */}
                           <aside className="w-36 bg-[#04060b] text-slate-500 p-3.5 space-y-4 flex flex-col border-r border-white/5 shrink-0">
                             <div className="flex items-center gap-1.5">
-                              <div className="w-4 h-4 rounded-full bg-brand-red flex items-center justify-center text-white font-extrabold text-[8px]">H</div>
-                              <span className="text-[8px] font-black text-white tracking-widest uppercase">HIPRO CMS</span>
+                              <div className="w-4 h-4 rounded-full bg-brand-blue flex items-center justify-center text-white font-extrabold text-[8px]">S</div>
+                              <span className="text-[8px] font-black text-white tracking-widest uppercase">SNAPTECH CMS</span>
                             </div>
                             <nav className="space-y-1.5 text-[8px] font-bold flex-1">
                               <div className="flex items-center gap-2 text-white bg-white/5 rounded-lg px-2 py-1">
@@ -437,7 +437,7 @@ export default function ShowcaseSection() {
                           {/* Header */}
                           <header className="px-3.5 py-2 border-b border-white/5 flex items-center justify-between shrink-0">
                             <Menu className="w-3.5 h-3.5 text-slate-400" />
-                            <span className="font-heading font-black text-[9px] text-white tracking-widest uppercase">HP PAY</span>
+                            <span className="font-heading font-black text-[9px] text-white tracking-widest uppercase">SNAPTECH PAY</span>
                             <div className="relative">
                               <ShoppingCart className="w-3.5 h-3.5 text-slate-400" />
                               <span className="absolute -top-1 -right-1.5 bg-brand-red text-white w-2.5 h-2.5 rounded-full text-[5px] font-bold flex items-center justify-center">1</span>

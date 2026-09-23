@@ -99,11 +99,11 @@ const FIELD_GROUPS = [
   {
     label: 'Contact & Location Details',
     fields: [
-      { key: 'phone', label: 'Primary Contact Phone', placeholder: '+91 99291 20431', Icon: Phone },
+      { key: 'phone', label: 'Primary Contact Phone', placeholder: '+91 75970 00601', Icon: Phone },
       {
         key: 'whatsapp',
         label: 'WhatsApp Support Number',
-        placeholder: '+91 99291 20431',
+        placeholder: '+91 75970 00601',
         Icon: MessageCircle,
       },
       {
@@ -116,7 +116,7 @@ const FIELD_GROUPS = [
       {
         key: 'email',
         label: 'Public Support Email',
-        placeholder: 'info@hindustanprojects.com',
+        placeholder: 'info@snaptech.digital',
         Icon: Mail,
       },
       {
@@ -147,25 +147,25 @@ const FIELD_GROUPS = [
       {
         key: 'instagram',
         label: 'Instagram Profile URL',
-        placeholder: 'https://instagram.com/hindustanprojects',
+        placeholder: 'https://instagram.com/snaptech.digital',
         Icon: InstagramIcon,
       },
       {
         key: 'facebook',
         label: 'Facebook Page URL',
-        placeholder: 'https://facebook.com/snaptech.hindustanprojects',
+        placeholder: 'https://facebook.com/snaptech.digital',
         Icon: FacebookIcon,
       },
       {
         key: 'pinterest',
         label: 'Pinterest Profile URL',
-        placeholder: 'https://pinterest.com/snaptech_hp',
+        placeholder: 'https://pinterest.com/snaptech_digital',
         Icon: PinterestIcon,
       },
       {
         key: 'youtube',
         label: 'YouTube Channel URL',
-        placeholder: 'https://youtube.com/@snaptech-hindustanprojects',
+        placeholder: 'https://youtube.com/@snaptech-digital',
         Icon: YoutubeIcon,
       },
     ],
@@ -526,12 +526,12 @@ export default function AdminSiteSettingsPage() {
                       </div>
                       <div className="flex items-center gap-2.5 text-xs text-white/80">
                         <Phone className="w-3.5 h-3.5 text-white/50 shrink-0" />
-                        <span>{watched.phone || '+91 99291 20431'}</span>
+                        <span>{watched.phone || '+91 75970 00601'}</span>
                       </div>
                       <div className="flex items-center gap-2.5 text-xs text-white/80">
                         <Mail className="w-3.5 h-3.5 text-white/50 shrink-0" />
                         <span className="underline decoration-white/20">
-                          {watched.email || 'info@hindustanprojects.com'}
+                          {watched.email || 'info@snaptech.digital'}
                         </span>
                       </div>
                     </div>
@@ -564,11 +564,11 @@ export default function AdminSiteSettingsPage() {
                 {/* Header */}
                 <div className="bg-[#075E54] text-white px-4 py-3 flex items-center gap-3 shrink-0 shadow-sm">
                   <div className="relative w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center shrink-0 font-heading font-black text-xs text-white">
-                    HP
+                    ST
                     <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-400 border border-[#075E54]" />
                   </div>
                   <div>
-                    <p className="text-xs font-bold leading-none">Hindustan Projects Support</p>
+                    <p className="text-xs font-bold leading-none">SnapTech Digital Support</p>
                     <p className="text-[9px] text-white/70 mt-0.5 leading-none">
                       Typically replies in under 15 mins
                     </p>
@@ -581,7 +581,7 @@ export default function AdminSiteSettingsPage() {
                   <div className="bg-white rounded-r-xl rounded-bl-xl p-2.5 max-w-[85%] shadow-xs relative text-gray-800 leading-normal">
                     <p className="font-bold text-[10px] text-[#075E54] mb-0.5">Support Representative</p>
                     <p className="text-xs">
-                      Namaste! Welcome to Hindustan Projects. How can we assist with your IT project today?
+                      Namaste! Welcome to SnapTech Digital. How can we assist with your IT project today?
                     </p>
                     <span className="text-[8px] text-gray-400 float-right mt-1">10:00 AM</span>
                   </div>
@@ -608,7 +608,7 @@ export default function AdminSiteSettingsPage() {
                     <span>
                       WhatsApp Target:{' '}
                       <strong className="font-mono font-bold text-gray-900">
-                        {watched.whatsapp || '+91 99291 20431'}
+                        {watched.whatsapp || '+91 75970 00601'}
                       </strong>
                     </span>
                   </div>

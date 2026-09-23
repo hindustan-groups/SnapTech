@@ -79,6 +79,7 @@ export const corsOptions = cors({
       allowedOrigins.includes(origin) ||
       cleanOrigin.includes('vercel.app') ||
       cleanOrigin.includes('hindustanprojects.in') ||
+      cleanOrigin.includes('snaptech.digital') ||
       cleanOrigin.includes('localhost') ||
       cleanOrigin.includes('127.0.0.1') ||
       cleanOrigin.includes('192.168.') ||

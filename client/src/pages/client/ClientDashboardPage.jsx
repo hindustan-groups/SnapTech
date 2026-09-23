@@ -172,9 +172,9 @@ export default function ClientDashboardPage() {
   ]
 
   const cfg = settingsData?.data || {}
-  const rawPhone = cfg.phone || '+91 99291 20431'
+  const rawPhone = cfg.phone || '+91 75970 00601'
   const cleanPhone = rawPhone.replace(/[^0-9]/g, '')
-  const whatsappUrl = `https://wa.me/${cleanPhone}?text=Hi%20Hindustan%20Projects%20Team`
+  const whatsappUrl = `https://wa.me/${cleanPhone}?text=Hi%20SnapTech%20Team`
 
   const clientName = clientMe?.name || localStorage.getItem('hp_client_name') || 'Valued Client'
 

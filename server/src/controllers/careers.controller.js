@@ -229,7 +229,7 @@ export const submitApplication = async (req, res, next) => {
 
     // ── Send Email Notifications (non-blocking) ───────────────────
     // 1. Email to Admin
-    const adminEmail = env.ADMIN_EMAIL || 'info@hindustanprojects.com'
+    const adminEmail = env.ADMIN_EMAIL || 'info@snaptech.digital'
     const adminMail = jobAdminNotificationTemplate({
       jobTitle: job.title,
       name: fullName,

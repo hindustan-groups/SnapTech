@@ -204,7 +204,7 @@ async function checkErrorThresholdAlert() {
     if (errorCount >= 5 && Date.now() - lastAlertTime > 15 * 60 * 1000) {
       lastAlertTime = Date.now()
       
-      const adminEmail = process.env.ADMIN_EMAIL || 'info@hindustanprojects.com'
+      const adminEmail = process.env.ADMIN_EMAIL || 'info@snaptech.digital'
       const { sendEmail } = await import('../utils/mailer.js')
 
       sendEmail({

@@ -206,7 +206,7 @@ export function professionalEmailFooter(settings = {}) {
               </tr>
               <tr>
                 <td style="padding: 2px 8px 2px 0; white-space: nowrap;">&#127760;</td>
-                <td style="padding: 2px 0;"><a href="https://www.snaptech.hindustanprojects.in" style="color: #0066FF; text-decoration: none;">www.snaptech.hindustanprojects.in</a> &bull; <a href="https://www.hindustanprojects.in" style="color: #001D4A; text-decoration: none;">www.hindustanprojects.in</a></td>
+                <td style="padding: 2px 0;"><a href="https://www.snaptech.digital" style="color: #0066FF; text-decoration: none;">www.snaptech.digital</a> &bull; <a href="https://www.hindustanprojects.in" style="color: #001D4A; text-decoration: none;">www.hindustanprojects.in</a></td>
               </tr>
               <tr>
                 <td style="padding: 2px 8px 2px 0; white-space: nowrap;">&#128205;</td>
@@ -234,7 +234,7 @@ export function professionalEmailFooter(settings = {}) {
 
       <!-- Copyright -->
       <p style="margin: 12px 0 0; font-size: 10px; color: #9CA3AF; text-align: center;">
-        &copy; ${new Date().getFullYear()} Snaptech &bull; Hindustan Projects Group. All rights reserved. &nbsp;|&nbsp; Bhilwara, Rajasthan, India
+        &copy; ${new Date().getFullYear()} SnapTech Digital &bull; Hindustan Projects Group. All rights reserved. &nbsp;|&nbsp; Bhilwara, Rajasthan, India
       </p>
     </div>
   `
@@ -304,7 +304,7 @@ export function adminNotificationTemplate({ name, email, phone, message, service
         </div>
 
         <p style="margin-top: 24px; font-size: 12px; color: #9ca3af; text-align: center; border-top: 1px solid #e5e7eb; padding-top: 16px;">
-          This lead was submitted via the Snaptech portal (www.snaptech.hindustanprojects.in).
+          This lead was submitted via the SnapTech portal (www.snaptech.digital).
         </p>
       </div>
     `,
@@ -319,24 +319,24 @@ export function autoReplyTemplate({ name }) {
   const phone = process.env.SITE_PHONE || '+91 75970 00601'
   const email = process.env.EMAIL_FROM
     ? process.env.EMAIL_FROM.replace(/.*<(.+)>/, '$1')
-    : process.env.EMAIL_USER || 'info@hindustanprojects.com'
+    : process.env.EMAIL_USER || 'info@snaptech.digital'
   return {
-    subject: 'Thank you for contacting Snaptech — Hindustan Projects',
+    subject: 'Thank you for contacting SnapTech Digital — Hindustan Projects',
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
         <div style="background: #001D4A; padding: 20px; border-radius: 6px 6px 0 0; margin: -20px -20px 20px; text-align: center;">
           <h1 style="color: #ffffff; margin: 0; font-size: 24px;">
-            <span style="color: #0066FF;">Snap</span>tech
+            <span style="color: #0066FF;">Snap</span>Tech Digital
           </h1>
           <p style="color: #00D2FF; margin: 4px 0 0; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; font-weight: bold;">
-            A Hindustan Projects Venture &bull; Enterprise IT Division
+            A Hindustan Projects Enterprise &bull; Enterprise IT Division
           </p>
         </div>
 
         <p style="font-size: 16px; color: #1A1A1A;">Hi <strong>${name}</strong>,</p>
 
         <p style="font-size: 15px; color: #374151; line-height: 1.7;">
-          Thank you for reaching out to <strong>Snaptech</strong>! We've received your project inquiry and our solutions engineering team will contact you within <strong>24 hours</strong> with a detailed consultation.
+          Thank you for reaching out to <strong>SnapTech Digital</strong>! We've received your project inquiry and our solutions engineering team will contact you within <strong>24 hours</strong> with a detailed consultation.
         </p>
 
         <p style="font-size: 15px; color: #374151; line-height: 1.7;">
@@ -346,17 +346,17 @@ export function autoReplyTemplate({ name }) {
         <div style="margin: 20px 0; padding: 16px; background: #f0f6ff; border-radius: 6px; border-left: 4px solid #0066FF;">
           <p style="margin: 0 0 8px; font-size: 14px; color: #1A1A1A;">📞 <strong>Phone:</strong> ${phone}</p>
           <p style="margin: 0 0 8px; font-size: 14px; color: #1A1A1A;">📧 <strong>Email:</strong> ${email}</p>
-          <p style="margin: 0 0 8px; font-size: 14px; color: #1A1A1A;">🌐 <strong>Portal:</strong> <a href="https://www.snaptech.hindustanprojects.in" style="color: #0066FF;">www.snaptech.hindustanprojects.in</a></p>
+          <p style="margin: 0 0 8px; font-size: 14px; color: #1A1A1A;">🌐 <strong>Portal:</strong> <a href="https://www.snaptech.digital" style="color: #0066FF;">www.snaptech.digital</a></p>
           <p style="margin: 0; font-size: 14px; color: #1A1A1A;">🏢 <strong>Parent Group:</strong> <a href="https://www.hindustanprojects.in" style="color: #001D4A;">www.hindustanprojects.in</a></p>
         </div>
 
         <p style="font-size: 13px; color: #6B7280; margin-top: 24px; border-top: 1px solid #e5e7eb; padding-top: 16px; text-align: center;">
-          &copy; ${new Date().getFullYear()} Snaptech &bull; Hindustan Projects Group. All rights reserved.<br>
+          &copy; ${new Date().getFullYear()} SnapTech Digital &bull; Hindustan Projects Group. All rights reserved.<br>
           Bhilwara, Rajasthan, India
         </p>
       </div>
     `,
-    text: `Hi ${name},\n\nThank you for contacting Snaptech (Hindustan Projects)!\n\nWe've received your inquiry and our engineering team will get back to you within 24 hours.\n\nWebsite: https://www.snaptech.hindustanprojects.in\nParent Group: https://www.hindustanprojects.in\n\nRegards,\nSnaptech Solutions Team\nHindustan Projects Group`,
+    text: `Hi ${name},\n\nThank you for contacting SnapTech Digital (Hindustan Projects)!\n\nWe've received your inquiry and our engineering team will get back to you within 24 hours.\n\nWebsite: https://www.snaptech.digital\nParent Group: https://www.hindustanprojects.in\n\nRegards,\nSnapTech Digital Solutions Team\nHindustan Projects Group`,
   }
 }
 

@@ -63,7 +63,7 @@ export const createTicket = async (req, res, next) => {
         message: description,
       })
 
-      const adminEmail = env.EMAIL_USER || 'info@hindustanprojects.in'
+      const adminEmail = env.EMAIL_USER || 'info@snaptech.digital'
       sendEmail({
         to: adminEmail,
         subject: emailOptions.subject,
@@ -197,10 +197,10 @@ export const replyToTicketFromClient = async (req, res, next) => {
       subject: ticket.subject,
       senderName: client?.name || 'Client',
       message,
-      portalUrl: `https://it-services.hindustanprojects.in/admin/support/tickets/${ticket.id}`,
+      portalUrl: `${process.env.CLIENT_URL || 'https://www.snaptech.digital'}/admin/support/tickets/${ticket.id}`,
     })
 
-    const adminEmail = env.EMAIL_USER || 'info@hindustanprojects.in'
+    const adminEmail = env.EMAIL_USER || 'info@snaptech.digital'
     sendEmail({
       to: adminEmail,
       subject: emailOptions.subject,
@@ -355,7 +355,7 @@ export const replyToTicketFromAdmin = async (req, res, next) => {
         subject: ticket.subject,
         senderName: `${admin?.role || 'Staff Member'}`,
         message,
-        portalUrl: `https://it-services.hindustanprojects.in/client/support`,
+        portalUrl: `${process.env.CLIENT_URL || 'https://www.snaptech.digital'}/client/support`,
       })
 
       sendEmail({
@@ -481,7 +481,7 @@ export const assignTicket = async (req, res, next) => {
         category: ticket.category,
         clientName: ticket.client?.name || 'Client',
         assignedByRole: assigner?.role || 'Admin',
-        portalUrl: `https://it-services.hindustanprojects.in/admin/support`,
+        portalUrl: `${process.env.CLIENT_URL || 'https://www.snaptech.digital'}/admin/support`,
       })
       sendEmail({
         to: targetAdmin.email,

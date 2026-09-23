@@ -72,7 +72,7 @@ export const createAdminUser = async (req, res, next) => {
 
     // Fetch site settings for footer
     const settings = await fetchEmailFooterSettings(prisma)
-    const clientUrl = env.CLIENT_URL || 'https://it-services-hindustan-projects.vercel.app'
+    const clientUrl = env.CLIENT_URL || 'https://www.snaptech.digital'
     const rawPath = env.ADMIN_SECRET_PATH || 'admin-login'
     const loginPath = rawPath.startsWith('admin-') ? rawPath : `admin-${rawPath}`
     const loginUrl = `${clientUrl}/${loginPath}`
@@ -215,7 +215,7 @@ export const updateAdminUser = async (req, res, next) => {
     if (password && password.trim()) {
       const cleanPassword = password.trim()
       const settings = await fetchEmailFooterSettings(prisma)
-      const clientUrl = env.CLIENT_URL || 'https://it-services-hindustan-projects.vercel.app'
+      const clientUrl = env.CLIENT_URL || 'https://www.snaptech.digital'
       const rawPath = env.ADMIN_SECRET_PATH || 'admin-login'
       const loginPath = rawPath.startsWith('admin-') ? rawPath : `admin-${rawPath}`
       const loginUrl = `${clientUrl}/${loginPath}`
@@ -348,25 +348,25 @@ export const createClientUser = async (req, res, next) => {
       },
     })
 
-    const clientUrl = env.CLIENT_URL || 'https://it-services-hindustan-projects.vercel.app'
+    const clientUrl = env.CLIENT_URL || 'https://www.snaptech.digital'
     const inviteLink = `${clientUrl}/client/setup-password?token=${inviteToken}`
 
     const settings = await fetchEmailFooterSettings(prisma)
 
     await sendEmail({
       to: client.email,
-      subject: 'Welcome to Hindustan Projects Client Portal',
+      subject: 'Welcome to SnapTech Digital Client Portal',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
           <div style="background: #1A3E8C; padding: 20px; border-radius: 6px 6px 0 0; margin: -20px -20px 20px; text-align: center;">
-            <h1 style="color: #ffffff; margin: 0; font-size: 22px;"><span style="color: #E31E24;">Hindustan</span> Projects</h1>
-            <p style="color: #93c5fd; margin: 6px 0 0; font-size: 14px;">Client Portal Invitation</p>
+            <h1 style="color: #ffffff; margin: 0; font-size: 22px;"><span style="color: #0066FF;">SnapTech</span> Digital</h1>
+            <p style="color: #93c5fd; margin: 6px 0 0; font-size: 14px;">Client Portal Invitation &bull; Hindustan Projects</p>
           </div>
 
           <p style="font-size: 16px; color: #1A1A1A;">Hi <strong>${client.name}</strong>,</p>
 
           <p style="font-size: 15px; color: #374151; line-height: 1.7;">
-            Your client portal account has been created at <strong>Hindustan Projects</strong>. You can now track your project progress, view deliverables, and download shared files.
+            Your client portal account has been created at <strong>SnapTech Digital</strong>. You can now track your project progress, view deliverables, and download shared files.
           </p>
 
           <p style="font-size: 15px; color: #374151; line-height: 1.7;">
@@ -374,7 +374,7 @@ export const createClientUser = async (req, res, next) => {
           </p>
 
           <p style="text-align: center; margin: 30px 0;">
-            <a href="${inviteLink}" style="background-color: #E31E24; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block; font-size: 15px;">Set Up My Password</a>
+            <a href="${inviteLink}" style="background-color: #0066FF; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block; font-size: 15px;">Set Up My Password</a>
           </p>
 
           <div style="background: #fff8f0; border: 1px solid #fed7aa; border-radius: 6px; padding: 12px 16px; margin: 20px 0;">
@@ -386,7 +386,7 @@ export const createClientUser = async (req, res, next) => {
           ${professionalEmailFooter(settings)}
         </div>
       `,
-      text: `Hi ${client.name},\n\nYour Hindustan Projects client portal account has been created!\n\nSet up your password using the link below:\n${inviteLink}\n\nThis link expires in 7 days.\n\nHindustan Projects\nPhone: ${settings.phone || '+91 99291 20431'}\nWeb: www.itservices.hindustanprojects.in\nBhilwara, Rajasthan, India`
+      text: `Hi ${client.name},\n\nYour SnapTech Digital client portal account has been created!\n\nSet up your password using the link below:\n${inviteLink}\n\nThis link expires in 7 days.\n\nSnapTech Digital\nPhone: ${settings.phone || '+91 75970 00601'}\nWeb: www.snaptech.digital\nBhilwara, Rajasthan, India`
     }).catch((err) => {
       console.error('[invite-email] Failed to send invite:', err.message)
     })
@@ -450,25 +450,25 @@ export const updateClientUser = async (req, res, next) => {
     })
 
     if (resendInvite) {
-      const clientUrl = env.CLIENT_URL || 'https://it-services-hindustan-projects.vercel.app'
+      const clientUrl = env.CLIENT_URL || 'https://www.snaptech.digital'
       const inviteLink = `${clientUrl}/client/setup-password?token=${client.inviteToken}`
 
       const settings = await fetchEmailFooterSettings(prisma)
 
       await sendEmail({
         to: client.email,
-        subject: 'Set Up Your Hindustan Projects Client Portal Password',
+        subject: 'Set Up Your SnapTech Digital Client Portal Password',
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
             <div style="background: #1A3E8C; padding: 20px; border-radius: 6px 6px 0 0; margin: -20px -20px 20px; text-align: center;">
-              <h1 style="color: #ffffff; margin: 0; font-size: 22px;"><span style="color: #E31E24;">Hindustan</span> Projects</h1>
-              <p style="color: #93c5fd; margin: 6px 0 0; font-size: 14px;">Client Portal Setup</p>
+              <h1 style="color: #ffffff; margin: 0; font-size: 22px;"><span style="color: #0066FF;">SnapTech</span> Digital</h1>
+              <p style="color: #93c5fd; margin: 6px 0 0; font-size: 14px;">Client Portal Setup &bull; Hindustan Projects</p>
             </div>
 
             <p style="font-size: 16px; color: #1A1A1A;">Hi <strong>${client.name}</strong>,</p>
 
             <p style="font-size: 15px; color: #374151; line-height: 1.7;">
-              An administrator has requested to set up or reset your client portal password for your account at <strong>Hindustan Projects</strong>.
+              An administrator has requested to set up or reset your client portal password for your account at <strong>SnapTech Digital</strong>.
             </p>
 
             <p style="font-size: 15px; color: #374151; line-height: 1.7;">
@@ -476,7 +476,7 @@ export const updateClientUser = async (req, res, next) => {
             </p>
 
             <p style="text-align: center; margin: 30px 0;">
-              <a href="${inviteLink}" style="background-color: #E31E24; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block; font-size: 15px;">Set Up My Password</a>
+              <a href="${inviteLink}" style="background-color: #0066FF; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block; font-size: 15px;">Set Up My Password</a>
             </p>
 
             <div style="background: #fff8f0; border: 1px solid #fed7aa; border-radius: 6px; padding: 12px 16px; margin: 20px 0;">
@@ -488,7 +488,7 @@ export const updateClientUser = async (req, res, next) => {
             ${professionalEmailFooter(settings)}
           </div>
         `,
-        text: `Hi ${client.name},\n\nAn administrator has requested to set up or reset your client portal password. Set up your password using the link below:\n${inviteLink}\n\nThis link expires in 7 days.\n\nHindustan Projects\nPhone: ${settings.phone || '+91 99291 20431'}\nWeb: www.itservices.hindustanprojects.in\nBhilwara, Rajasthan, India`
+        text: `Hi ${client.name},\n\nAn administrator has requested to set up or reset your client portal password. Set up your password using the link below:\n${inviteLink}\n\nThis link expires in 7 days.\n\nSnapTech Digital\nPhone: ${settings.phone || '+91 75970 00601'}\nWeb: www.snaptech.digital\nBhilwara, Rajasthan, India`
       }).catch((err) => {
         console.error('[invite-email] Failed to send setup link:', err.message)
       })
@@ -543,28 +543,28 @@ export const resendClientWelcome = async (req, res, next) => {
       },
     })
 
-    const clientUrl = env.CLIENT_URL || 'https://it-services-hindustan-projects.vercel.app'
+    const clientUrl = env.CLIENT_URL || 'https://www.snaptech.digital'
     const inviteLink = `${clientUrl}/client/setup-password?token=${inviteToken}`
     const settings = await fetchEmailFooterSettings(prisma)
 
     await sendEmail({
       to: client.email,
-      subject: '🔑 Client Portal Access — Hindustan Projects',
+      subject: '🔑 Client Portal Access — SnapTech Digital',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
           <div style="background: #1A3E8C; padding: 20px; border-radius: 6px 6px 0 0; margin: -20px -20px 20px; text-align: center;">
-            <h1 style="color: #ffffff; margin: 0; font-size: 22px;"><span style="color: #E31E24;">Hindustan</span> Projects</h1>
-            <p style="color: #93c5fd; margin: 6px 0 0; font-size: 14px;">Client Portal — Access Link Resent</p>
+            <h1 style="color: #ffffff; margin: 0; font-size: 22px;"><span style="color: #0066FF;">SnapTech</span> Digital</h1>
+            <p style="color: #93c5fd; margin: 6px 0 0; font-size: 14px;">Client Portal &bull; Access Link Resent</p>
           </div>
 
           <p style="font-size: 16px; color: #1A1A1A;">Hi <strong>${client.name}</strong>,</p>
 
           <p style="font-size: 15px; color: #374151; line-height: 1.7;">
-            Your portal access link has been resent by the Hindustan Projects team. Click the button below to set up or reset your password and access your project dashboard:
+            Your portal access link has been resent by the SnapTech Digital team. Click the button below to set up or reset your password and access your project dashboard:
           </p>
 
           <p style="text-align: center; margin: 30px 0;">
-            <a href="${inviteLink}" style="background-color: #E31E24; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block; font-size: 15px;">Access My Client Portal</a>
+            <a href="${inviteLink}" style="background-color: #0066FF; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block; font-size: 15px;">Access My Client Portal</a>
           </p>
 
           <div style="background: #fff8f0; border: 1px solid #fed7aa; border-radius: 6px; padding: 12px 16px; margin: 20px 0;">
@@ -576,7 +576,7 @@ export const resendClientWelcome = async (req, res, next) => {
           ${professionalEmailFooter(settings)}
         </div>
       `,
-      text: `Hi ${client.name},\n\nYour Hindustan Projects client portal access link has been resent.\n\nSet up your password: ${inviteLink}\n\nThis link expires in 7 days.\n\nHindustan Projects\nWeb: www.itservices.hindustanprojects.in`,
+      text: `Hi ${client.name},\n\nYour SnapTech Digital client portal access link has been resent.\n\nSet up your password: ${inviteLink}\n\nThis link expires in 7 days.\n\nSnapTech Digital\nPhone: ${settings.phone || '+91 75970 00601'}\nWeb: www.snaptech.digital`,
     })
 
     await logActivity(req, 'UPDATE', 'Client', `Resent welcome/portal credentials to '${client.email}'`)

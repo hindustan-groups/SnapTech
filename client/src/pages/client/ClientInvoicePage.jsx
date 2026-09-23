@@ -82,25 +82,25 @@ export default function ClientInvoicePage() {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 pb-8 border-b border-white/10 print:border-gray-200">
           <div>
             <div className="flex items-baseline">
-              <span className="text-3xl font-black text-cyan-400 print:text-blue-700 tracking-tight font-heading">Hi</span>
-              <span className="text-3xl font-black text-red-400 print:text-red-600 tracking-tight font-heading">PRO</span>
+              <span className="text-3xl font-black text-cyan-400 print:text-blue-700 tracking-tight font-heading">Snap</span>
+              <span className="text-3xl font-black text-blue-500 print:text-blue-600 tracking-tight font-heading">tech</span>
             </div>
             <div className="text-[10px] font-bold text-cyan-400/80 print:text-blue-700 tracking-[0.2em] uppercase mt-0.5">
-              Hindustan Projects
+              SnapTech Digital &bull; A Hindustan Projects Enterprise
             </div>
             <div className="text-[8px] text-slate-400 print:text-gray-500 font-medium tracking-wide mt-1">
-              Engineering &bull; Construction &bull; Infrastructure
+              Software Engineering &bull; Cloud Infrastructure &bull; AI Solutions
             </div>
           </div>
           
           <div className="text-left sm:text-right text-[11px] text-slate-400 print:text-gray-600 space-y-1">
             <div className="flex items-center sm:justify-end gap-1.5 font-medium">
               <Globe className="w-3.5 h-3.5 text-cyan-400 print:text-gray-400" />
-              <span>www.itservices.hindustanprojects.in</span>
+              <span>www.snaptech.digital</span>
             </div>
             <div className="flex items-center sm:justify-end gap-1.5 font-medium">
               <Phone className="w-3.5 h-3.5 text-cyan-400 print:text-gray-400" />
-              <span>+91 99291 20431</span>
+              <span>+91 75970 00601</span>
             </div>
             <div className="flex items-center sm:justify-end gap-1.5 font-medium">
               <MapPin className="w-3.5 h-3.5 text-cyan-400 print:text-gray-400" />

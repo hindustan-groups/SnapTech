@@ -529,25 +529,25 @@ export const changePassword = async (req, res, next) => {
 
     // Send confirmation email notification to the staff/admin member
     const settings = await fetchEmailFooterSettings(prisma)
-    const clientUrl = env.CLIENT_URL || 'https://it-services-hindustan-projects.vercel.app'
+    const clientUrl = env.CLIENT_URL || 'https://www.snaptech.digital'
     const rawPath = env.ADMIN_SECRET_PATH || 'admin-login'
     const loginPath = rawPath.startsWith('admin-') ? rawPath : `admin-${rawPath}`
     const loginUrl = `${clientUrl}/${loginPath}`
 
     sendEmail({
       to: admin.email,
-      subject: 'Security Alert: Your Hindustan Projects Staff Password Was Changed',
+      subject: 'Security Alert: Your SnapTech Digital Staff Password Was Changed',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
           <div style="background: #1A3E8C; padding: 20px; border-radius: 6px 6px 0 0; margin: -20px -20px 20px; text-align: center;">
-            <h1 style="color: #ffffff; margin: 0; font-size: 22px;"><span style="color: #E31E24;">Hindustan</span> Projects</h1>
-            <p style="color: #93c5fd; margin: 6px 0 0; font-size: 14px;">Staff Portal Security Update</p>
+            <h1 style="color: #ffffff; margin: 0; font-size: 22px;"><span style="color: #0066FF;">SnapTech</span> Digital</h1>
+            <p style="color: #93c5fd; margin: 6px 0 0; font-size: 14px;">Staff Portal Security Update &bull; Hindustan Projects</p>
           </div>
 
           <p style="font-size: 16px; color: #1A1A1A;">Hello,</p>
 
           <p style="font-size: 15px; color: #374151; line-height: 1.7;">
-            The password for your staff account (<strong>${admin.email}</strong>) at <strong>Hindustan Projects</strong> was changed successfully.
+            The password for your staff account (<strong>${admin.email}</strong>) at <strong>SnapTech Digital</strong> was changed successfully.
           </p>
 
           <div style="background: #f0f4ff; border: 1px solid #c7d2fe; border-radius: 8px; padding: 16px 20px; margin: 20px 0;">

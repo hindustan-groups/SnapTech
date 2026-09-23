@@ -598,7 +598,7 @@ export default function AdminIntegrationPage() {
                 <div className="bg-violet-50/60 border border-violet-100 rounded-xl p-3.5 flex items-start gap-2.5 text-xs text-violet-800">
                   <Info className="w-4 h-4 shrink-0 mt-0.5 text-violet-600" />
                   <span className="leading-relaxed">
-                    Primary recommended email service for domain-verified emails (e.g. info@hindustanprojects.in). Free tier provides 3,000 emails/month. Obtain your API key from{' '}
+                    Primary recommended email service for domain-verified emails (e.g. info@snaptech.digital). Free tier provides 3,000 emails/month. Obtain your API key from{' '}
                     <a
                       href="https://resend.com/api-keys"
                       target="_blank"
@@ -670,7 +670,7 @@ export default function AdminIntegrationPage() {
                   <PlainInput
                     label="SMTP User / Email Address"
                     name="sys_smtp_user"
-                    placeholder="info@hindustanprojects.com"
+                    placeholder="info@snaptech.digital"
                     register={register}
                   />
                   <SecretInput
@@ -684,7 +684,7 @@ export default function AdminIntegrationPage() {
                 <PlainInput
                   label='Sender Name & Email ("From" Header)'
                   name="sys_smtp_from"
-                  placeholder={`"Hindustan Projects" <info@hindustanprojects.com>`}
+                  placeholder={`"SnapTech Digital" <info@snaptech.digital>`}
                   register={register}
                   description="Appears as sender address in recipient email inboxes."
                 />

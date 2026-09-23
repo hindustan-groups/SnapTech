@@ -172,7 +172,7 @@ export default function AdminSocialDraftsPage() {
     const proj = projects.find((p) => p.id === projId)
     if (!proj) return
     const tags = proj.technologies ? proj.technologies.map((t) => `#${t.replace(/\s+/g, '')}`).join(' ') : ''
-    const template = `🚀 Project Showcase: ${proj.title}\n\nClient: ${proj.clientName}\nCategory: ${proj.category}\n\n${proj.description}\n\nKey Stack: ${proj.technologies?.join(', ')}\n\n✨ Built & Delivered by Hindustan Projects team.\n🌐 Learn more: https://itservices.hindustanprojects.in/portfolio\n\n#HindustanProjects #${proj.category.replace(/\s+/g, '')} ${tags}`
+    const template = `🚀 Project Showcase: ${proj.title}\n\nClient: ${proj.clientName}\nCategory: ${proj.category}\n\n${proj.description}\n\nKey Stack: ${proj.technologies?.join(', ')}\n\n✨ Engineered & Delivered by SnapTech Digital squad.\n🌐 Learn more: https://www.snaptech.digital/portfolio\n\n#SnapTechDigital #${proj.category.replace(/\s+/g, '')} ${tags}`
     setDraftText(template)
     toast.info('Auto-filled caption template from portfolio project!')
   }

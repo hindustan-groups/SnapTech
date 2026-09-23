@@ -28,8 +28,8 @@ export const askQuestion = async (req, res, next) => {
     let isAnswered = false
 
     // ── STEP 1: Fetch dynamic site settings (phone, email, whatsapp) ─
-    let phoneVal = '+91 99999 99999'
-    let emailVal = 'info@hindustanprojects.com'
+    let phoneVal = '+91 75970 00601'
+    let emailVal = 'info@snaptech.digital'
     try {
       const rows = await prisma.siteSetting.findMany()
       const settings = {}

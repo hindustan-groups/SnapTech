@@ -362,10 +362,10 @@ let mockPartners = [
 ]
 
 let mockSettings = [
-  { key: 'phone', value: '+91 99999 99999' },
-  { key: 'whatsapp', value: '+91 99999 99999' },
-  { key: 'whatsappMessage', value: 'Hi! I visited your website and want to discuss a project.' },
-  { key: 'email', value: 'info@hindustanprojects.com' },
+  { key: 'phone', value: '+91 75970 00601' },
+  { key: 'whatsapp', value: '+91 75970 00601' },
+  { key: 'whatsappMessage', value: 'Hi SnapTech Team! I visited your website and want to discuss a project.' },
+  { key: 'email', value: 'info@snaptech.digital' },
   { key: 'address', value: 'Bhilwara, Rajasthan 311001, India' },
   { key: 'linkedin', value: '#' },
   { key: 'instagram', value: '#' },

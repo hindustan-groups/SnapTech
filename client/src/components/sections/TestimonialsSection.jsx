@@ -14,7 +14,7 @@ const PLACEHOLDER = [
     name: 'Aditya Sharma',
     role: 'Managing Director',
     company: 'Bhilwara Textiles Ltd.',
-    text: 'Hindustan Projects completely modernized our operations with their custom ERP and corporate portal. Their local availability combined with world-class engineering standard was exactly what we needed.',
+    text: 'SnapTech Digital completely modernized our operations with their custom ERP and corporate portal. Their local availability combined with world-class engineering standards was exactly what we needed.',
     rating: 5,
   },
   {
@@ -22,7 +22,7 @@ const PLACEHOLDER = [
     name: 'Meera Johar',
     role: 'Founder & CEO',
     company: 'Jaipur Crafts E-Store',
-    text: 'Dilshan and his team built our custom e-commerce platform and optimized our checkout flow. Within 3 months of launch, our conversion rates jumped by 42%.',
+    text: 'SnapTech and their engineering squad built our custom e-commerce platform and optimized our checkout flow. Within 3 months of launch, our conversion rates jumped by 42%.',
     rating: 5,
   },
   {
@@ -30,7 +30,7 @@ const PLACEHOLDER = [
     name: 'Rajesh Singhal',
     role: 'Owner',
     company: 'Singhal Marbles & Granites',
-    text: 'We tried multiple agencies but got zero leads. Hindustan Projects designed a targeted SEO and Google Ads strategy. Today we get 15+ high-quality inquiries every week.',
+    text: 'We tried multiple agencies but got zero leads. SnapTech Digital designed a targeted digital engineering and SEO growth strategy. Today we get 15+ high-quality inquiries every week.',
     rating: 5,
   },
   {

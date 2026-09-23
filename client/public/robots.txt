@@ -11,4 +11,4 @@ Disallow: /terms-of-service
 Disallow: /refund-policy
 
 # Sitemap location
-Sitemap: https://www.itservices.hindustanprojects.in/sitemap.xml
+Sitemap: https://www.snaptech.digital/sitemap.xml

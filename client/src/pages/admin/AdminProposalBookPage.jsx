@@ -5,7 +5,7 @@
  * Designed to Deloitte, IBM, Microsoft & Accenture Brand Guidelines.
  * 
  * Core Specifications:
- * - Document Codes: HP-IT-001 to HP-IT-009
+ * - Document Codes: ST-IT-001 to ST-IT-009
  * - Palette: Deep Navy #0A2540, Enterprise Red #D32F2F, Slate #1E293B, Cool Gray #64748B, Blueprint Grid #F1F5F9, Pure White #FFFFFF
  * - Geometry: 12-Column Technical Editorial Grid (A4 Portrait 210mm x 297mm @ 300 DPI)
  * - Vector Graphics: Technical Architectural Blueprint SVG Overlay + Outline Micro-Icons
@@ -124,10 +124,10 @@ export default function AdminProposalBookPage() {
     discount: '10,000',
     gstPercent: '18',
     paymentTerms: '50% Milestone Advance upon technical agreement, 50% upon final production deployment & approval.',
-    preparedBy: 'Hindustan Projects IT Services',
-    preparedByEmail: cfg.email || 'info@hindustanprojects.in',
+    preparedBy: 'SnapTech Digital Solutions',
+    preparedByEmail: cfg.email || 'info@snaptech.digital',
     preparedByPhone: cfg.phone || '+91 75970 00601',
-    preparedByWebsite: 'itservices.hindustanprojects.in',
+    preparedByWebsite: 'www.snaptech.digital',
     
     // Scope of Work Arrays
     scopeIncluded: [
@@ -720,7 +720,7 @@ export default function AdminProposalBookPage() {
           >
             
             {/* ─────────────────────────────────────────────────────────────────
-                PAGE 01: OFFICIAL PROFESSIONAL QUOTATION COVER (HP-IT-001)
+                PAGE 01: OFFICIAL PROFESSIONAL QUOTATION COVER (ST-IT-001)
                 ───────────────────────────────────────────────────────────────── */}
             <div className="a4-page bg-white text-[#1E293B] shadow-2xl rounded-sm p-8 flex flex-col justify-between relative overflow-hidden w-[210mm] min-h-[296.8mm] border border-slate-200">
               
@@ -728,7 +728,7 @@ export default function AdminProposalBookPage() {
 
               {/* Top Right Document Code Ribbon */}
               <div className="absolute top-0 right-0 bg-[#0A2540] text-white font-mono text-xs font-black px-6 py-2 rounded-bl-2xl shadow-md z-20">
-                HP-IT-001
+                ST-IT-001
               </div>
 
               {/* Architectural City Skyline & Technical Vector Graphic Overlay */}
@@ -924,16 +924,16 @@ export default function AdminProposalBookPage() {
               <div className="mt-4 bg-[#0A2540] text-white text-[9px] py-1.5 px-3 rounded-b-lg flex items-center justify-between font-mono relative z-10">
                 <div className="flex items-center gap-2">
                   <div className="w-0 h-0 border-t-[6px] border-t-transparent border-l-[10px] border-l-[#D32F2F] border-b-[6px] border-b-transparent" />
-                  <span>hindustanprojects.in</span>
+                  <span>snaptech.digital</span>
                 </div>
-                <div>HP-IT-001</div>
+                <div>ST-IT-001</div>
                 <div>Page 01</div>
               </div>
 
             </div>
 
             {/* ─────────────────────────────────────────────────────────────────
-                PAGE 02: CLIENT INFORMATION & PROJECT OVERVIEW (HP-IT-002 Exact Graphic Artwork)
+                PAGE 02: CLIENT INFORMATION & PROJECT OVERVIEW (ST-IT-002 Exact Graphic Artwork)
                 ───────────────────────────────────────────────────────────────── */}
             <div className="a4-page bg-white text-[#1E293B] shadow-2xl rounded-sm p-8 flex flex-col justify-between relative overflow-hidden w-[210mm] min-h-[296.8mm] border border-slate-200">
               <TechnicalWatermark />
@@ -974,7 +974,7 @@ export default function AdminProposalBookPage() {
 
                   <div className="border-2 border-[#0A2540] px-3 py-1 rounded-lg">
                     <span className="font-mono text-sm font-black text-[#0A2540]">
-                      HP-IT-002
+                      ST-IT-002
                     </span>
                   </div>
                 </div>
@@ -1211,7 +1211,7 @@ export default function AdminProposalBookPage() {
                           Quotation Prepared By
                         </span>
                         <span className="font-heading font-black text-slate-900 text-[10.5px]">
-                          Hindustan Projects IT Services
+                          SnapTech Digital Solutions
                         </span>
                       </div>
                     </div>
@@ -1264,7 +1264,7 @@ export default function AdminProposalBookPage() {
                     <span>🌐 {proposalData.preparedByWebsite}</span>
                   </div>
                   <div className="bg-[#D32F2F] text-white px-3 py-0.5 rounded font-black text-[10px]">
-                    HP-IT-002
+                    ST-IT-002
                   </div>
                   <div>Page 02 |</div>
                 </div>
@@ -1278,7 +1278,7 @@ export default function AdminProposalBookPage() {
             <div className="a4-page bg-white text-[#1E293B] shadow-2xl rounded-sm p-8 flex flex-col justify-between relative overflow-hidden w-[210mm] min-h-[296.8mm] border border-slate-200">
               <TechnicalWatermark />
               <div>
-                {renderHeader('HP-IT-003')}
+                {renderHeader('ST-IT-003')}
 
                 <h2 className="font-heading text-xl font-black text-[#0A2540] mb-4 flex items-center gap-2">
                   <FileText className="w-5 h-5 text-[#D32F2F]" />
@@ -1316,7 +1316,7 @@ export default function AdminProposalBookPage() {
                 </div>
               </div>
 
-              {renderFooter('HP-IT-003', '03')}
+              {renderFooter('ST-IT-003', '03')}
             </div>
 
             {/* ─────────────────────────────────────────────────────────────────
@@ -1325,7 +1325,7 @@ export default function AdminProposalBookPage() {
             <div className="a4-page bg-white text-[#1E293B] shadow-2xl rounded-sm p-8 flex flex-col justify-between relative overflow-hidden w-[210mm] min-h-[296.8mm] border border-slate-200">
               <TechnicalWatermark />
               <div>
-                {renderHeader('HP-IT-004')}
+                {renderHeader('ST-IT-004')}
 
                 <h2 className="font-heading text-xl font-black text-[#0A2540] mb-5 flex items-center gap-2">
                   <Cpu className="w-5 h-5 text-[#D32F2F]" />
@@ -1359,7 +1359,7 @@ export default function AdminProposalBookPage() {
                 </div>
               </div>
 
-              {renderFooter('HP-IT-004', '04')}
+              {renderFooter('ST-IT-004', '04')}
             </div>
 
             {/* ─────────────────────────────────────────────────────────────────
@@ -1368,7 +1368,7 @@ export default function AdminProposalBookPage() {
             <div className="a4-page bg-white text-[#1E293B] shadow-2xl rounded-sm p-8 flex flex-col justify-between relative overflow-hidden w-[210mm] min-h-[296.8mm] border border-slate-200">
               <TechnicalWatermark />
               <div>
-                {renderHeader('HP-IT-005')}
+                {renderHeader('ST-IT-005')}
 
                 <h2 className="font-heading text-xl font-black text-[#0A2540] mb-5 flex items-center gap-2">
                   <Clock className="w-5 h-5 text-[#D32F2F]" />
@@ -1393,7 +1393,7 @@ export default function AdminProposalBookPage() {
                 </div>
               </div>
 
-              {renderFooter('HP-IT-005', '05')}
+              {renderFooter('ST-IT-005', '05')}
             </div>
 
             {/* ─────────────────────────────────────────────────────────────────
@@ -1402,7 +1402,7 @@ export default function AdminProposalBookPage() {
             <div className="a4-page bg-white text-[#1E293B] shadow-2xl rounded-sm p-8 flex flex-col justify-between relative overflow-hidden w-[210mm] min-h-[296.8mm] border border-slate-200">
               <TechnicalWatermark />
               <div>
-                {renderHeader('HP-IT-006')}
+                {renderHeader('ST-IT-006')}
 
                 <h2 className="font-heading text-xl font-black text-[#0A2540] mb-5 flex items-center gap-2">
                   <FileText className="w-5 h-5 text-[#D32F2F]" />
@@ -1463,7 +1463,7 @@ export default function AdminProposalBookPage() {
                 </div>
               </div>
 
-              {renderFooter('HP-IT-006', '06')}
+              {renderFooter('ST-IT-006', '06')}
             </div>
 
             {/* ─────────────────────────────────────────────────────────────────
@@ -1472,7 +1472,7 @@ export default function AdminProposalBookPage() {
             <div className="a4-page bg-white text-[#1E293B] shadow-2xl rounded-sm p-8 flex flex-col justify-between relative overflow-hidden w-[210mm] min-h-[296.8mm] border border-slate-200">
               <TechnicalWatermark />
               <div>
-                {renderHeader('HP-IT-007')}
+                {renderHeader('ST-IT-007')}
 
                 <h2 className="font-heading text-xl font-black text-[#0A2540] mb-5 flex items-center gap-2">
                   <Shield className="w-5 h-5 text-[#D32F2F]" />
@@ -1489,7 +1489,7 @@ export default function AdminProposalBookPage() {
                 </div>
               </div>
 
-              {renderFooter('HP-IT-007', '07')}
+              {renderFooter('ST-IT-007', '07')}
             </div>
 
             {/* ─────────────────────────────────────────────────────────────────
@@ -1498,7 +1498,7 @@ export default function AdminProposalBookPage() {
             <div className="a4-page bg-white text-[#1E293B] shadow-2xl rounded-sm p-8 flex flex-col justify-between relative overflow-hidden w-[210mm] min-h-[296.8mm] border border-slate-200">
               <TechnicalWatermark />
               <div>
-                {renderHeader('HP-IT-008')}
+                {renderHeader('ST-IT-008')}
 
                 <h2 className="font-heading text-xl font-black text-[#0A2540] mb-5 flex items-center gap-2">
                   <CheckCircle2 className="w-5 h-5 text-[#D32F2F]" />
@@ -1507,7 +1507,7 @@ export default function AdminProposalBookPage() {
 
                 <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-[#1E293B] mb-8">
                   <p className="leading-relaxed font-semibold text-[11px]">
-                    By signing below, the Client confirms acceptance of the scope of work, technical specifications, commercial quotation, and legal terms outlined in Document Code <strong>HP-IT-001 through HP-IT-009</strong>.
+                    By signing below, the Client confirms acceptance of the scope of work, technical specifications, commercial quotation, and legal terms outlined in Document Code <strong>ST-IT-001 through ST-IT-009</strong>.
                   </p>
                 </div>
 
@@ -1551,7 +1551,7 @@ export default function AdminProposalBookPage() {
                 </div>
               </div>
 
-              {renderFooter('HP-IT-008', '08')}
+              {renderFooter('ST-IT-008', '08')}
             </div>
 
             {/* ─────────────────────────────────────────────────────────────────
@@ -1560,7 +1560,7 @@ export default function AdminProposalBookPage() {
             <div className="a4-page bg-white text-[#1E293B] shadow-2xl rounded-sm p-8 flex flex-col justify-between relative overflow-hidden w-[210mm] min-h-[296.8mm] border border-slate-200">
               <TechnicalWatermark />
               <div>
-                {renderHeader('HP-IT-009')}
+                {renderHeader('ST-IT-009')}
 
                 <div className="text-center my-10 max-w-xl mx-auto">
                   <span className="inline-block px-3 py-1 rounded-full bg-[#0A2540]/10 text-[#0A2540] font-mono text-xs font-bold uppercase tracking-widest mb-3">
@@ -1570,14 +1570,14 @@ export default function AdminProposalBookPage() {
                     We Look Forward to Building Your Digital Success
                   </h2>
                   <p className="text-slate-600 text-xs mt-3 leading-relaxed">
-                    Hindustan Projects IT Services is committed to delivering excellence, innovation, and long-term value for your business.
+                    SnapTech Digital Solutions is committed to delivering excellence, innovation, and long-term value for your business.
                   </p>
                 </div>
 
                 <div className="p-6 rounded-2xl bg-[#0A2540] text-white my-6 max-w-xl mx-auto shadow-xl">
                   <div className="grid grid-cols-3 gap-4 items-center">
                     <div className="col-span-2 space-y-2 text-xs">
-                      <h3 className="font-heading font-black text-base text-white mb-1">Hindustan Projects IT Services</h3>
+                      <h3 className="font-heading font-black text-base text-white mb-1">SnapTech Digital Solutions</h3>
                       <div className="flex items-center gap-2">
                         <Globe className="w-3.5 h-3.5 text-blue-300 shrink-0" />
                         <span>{proposalData.preparedByWebsite}</span>
@@ -1604,7 +1604,7 @@ export default function AdminProposalBookPage() {
                 </div>
               </div>
 
-              {renderFooter('HP-IT-009', '09')}
+              {renderFooter('ST-IT-009', '09')}
             </div>
 
           </div>

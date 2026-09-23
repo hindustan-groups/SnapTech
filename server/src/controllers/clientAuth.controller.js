@@ -135,19 +135,19 @@ export const setupClientPassword = async (req, res, next) => {
     setClientCookie(res, loginToken)
 
     // Send welcome + login details email with CORRECT login URL (/client-login not /client/login)
-    const clientUrl = env.CLIENT_URL || 'https://it-services-hindustan-projects.vercel.app'
+    const clientUrl = env.CLIENT_URL || 'https://www.snaptech.digital'
     const loginUrl = `${clientUrl}/client-login`
 
     const settings = await fetchEmailFooterSettings(prisma)
 
     sendEmail({
       to: updatedClient.email,
-      subject: 'Your Hindustan Projects Portal Account is Ready',
+      subject: 'Your SnapTech Digital Portal Account is Ready',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
           <div style="background: #1A3E8C; padding: 20px; border-radius: 6px 6px 0 0; margin: -20px -20px 20px; text-align: center;">
-            <h1 style="color: #ffffff; margin: 0; font-size: 22px;"><span style="color: #E31E24;">Hindustan</span> Projects</h1>
-            <p style="color: #93c5fd; margin: 6px 0 0; font-size: 14px;">Client Portal</p>
+            <h1 style="color: #ffffff; margin: 0; font-size: 22px;"><span style="color: #0066FF;">SnapTech</span> Digital</h1>
+            <p style="color: #93c5fd; margin: 6px 0 0; font-size: 14px;">Client Portal &bull; Hindustan Projects</p>
           </div>
 
           <p style="font-size: 16px; color: #1A1A1A;">Hi <strong>${updatedClient.name}</strong>,</p>
@@ -160,17 +160,17 @@ export const setupClientPassword = async (req, res, next) => {
             <p style="margin: 0 0 8px; font-size: 13px; color: #4B5563; text-transform: uppercase; letter-spacing: 0.05em; font-weight: bold;">Your Login Details</p>
             <p style="margin: 0 0 6px; font-size: 14px; color: #1A1A1A;"><strong>Email:</strong> ${updatedClient.email}</p>
             <p style="margin: 0 0 6px; font-size: 14px; color: #1A1A1A;"><strong>Password:</strong> The one you just set</p>
-            <p style="margin: 0; font-size: 14px; color: #1A1A1A;"><strong>Login URL:</strong> <a href="${loginUrl}" style="color: #1A3E8C;">${loginUrl}</a></p>
+            <p style="margin: 0; font-size: 14px; color: #1A1A1A;"><strong>Login URL:</strong> <a href="${loginUrl}" style="color: #0066FF;">${loginUrl}</a></p>
           </div>
 
           <p style="text-align: center; margin: 30px 0;">
-            <a href="${loginUrl}" style="background-color: #1A3E8C; color: white; padding: 12px 28px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block; font-size: 15px;">Go to My Dashboard</a>
+            <a href="${loginUrl}" style="background-color: #0066FF; color: white; padding: 12px 28px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block; font-size: 15px;">Go to My Dashboard</a>
           </p>
 
           ${professionalEmailFooter(settings)}
         </div>
       `,
-      text: `Hi ${updatedClient.name},\n\nYour client portal account is now active!\n\nLogin Details:\nEmail: ${updatedClient.email}\nPassword: The one you just set\nLogin URL: ${loginUrl}\n\nHindustan Projects\nPhone: ${settings.phone || '+91 99291 20431'}\nWeb: www.hindustanprojects.in\nBhilwara, Rajasthan, India`,
+      text: `Hi ${updatedClient.name},\n\nYour client portal account is now active!\n\nLogin Details:\nEmail: ${updatedClient.email}\nPassword: The one you just set\nLogin URL: ${loginUrl}\n\nSnapTech Digital\nPhone: ${settings.phone || '+91 75970 00601'}\nWeb: www.snaptech.digital\nBhilwara, Rajasthan, India`,
     }).catch((err) => {
       console.error('[welcome-email] Failed to send:', err.message)
     })

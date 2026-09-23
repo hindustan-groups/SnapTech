@@ -20,7 +20,7 @@ export function useSiteSettings() {
           d.phone = '+91 75970 00601'
         }
         if (!d.whatsapp || d.whatsapp.includes('99999') || d.whatsapp.includes('123456')) {
-          d.whatsapp = '+91 99291 20431'
+          d.whatsapp = '+91 75970 00601'
         }
         if (!d.email || d.email.includes('example.com') || d.email.includes('hindustanprojects.com')) {
           d.email = 'info@snaptech.digital'

@@ -107,10 +107,10 @@ export default function FaqSection() {
     )
   }, [allFaqs, searchQuery])
 
-  const rawWhatsapp = settings.whatsapp || '+91 99291 20431'
+  const rawWhatsapp = settings.whatsapp || '+91 75970 00601'
   const cleanWhatsapp = rawWhatsapp.replace(/\D/g, '')
   const whatsappUrl = `https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent(
-    settings.whatsappMessage || 'Hi Hindustan Projects, I have a question regarding an enterprise IT project.'
+    settings.whatsappMessage || 'Hi SnapTech Team, I have a question regarding an enterprise IT project.'
   )}`
 
   return (

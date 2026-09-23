@@ -125,7 +125,7 @@ export const createClientProject = async (req, res, next) => {
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; border: 1px solid #e2e8f0; border-radius: 16px;">
             <h2 style="color: #1e3a8a; margin-top: 0;">Project Setup: ${project.projectTitle}</h2>
             <p>Dear <strong>${project.client.name}</strong>,</p>
-            <p>Your new project portal workspace has been successfully created by Hindustan Projects:</p>
+            <p>Your new project portal workspace has been successfully created by SnapTech Digital:</p>
             <div style="background-color: #f8fafc; padding: 16px; border-radius: 12px; margin: 16px 0; border: 1px solid #cbd5e1;">
               <p style="margin: 6px 0;"><strong>Status:</strong> ${project.status}</p>
               <p style="margin: 6px 0;"><strong>Start Date:</strong> ${new Date(project.startDate).toLocaleDateString('en-IN')}</p>
@@ -134,9 +134,9 @@ export const createClientProject = async (req, res, next) => {
             </div>
             <p>Log into your Client Portal to track real-time progress, review milestone invoices, and access your project File Vault:</p>
             <div style="text-align: center; margin: 24px 0;">
-              <a href="https://itservices.hindustanprojects.in/client/projects/${project.id}" style="background-color: #2563eb; color: #ffffff; padding: 12px 28px; text-decoration: none; border-radius: 10px; font-weight: bold; display: inline-block;">View Project in Client Portal</a>
+              <a href="${process.env.CLIENT_URL || 'https://www.snaptech.digital'}/client/projects/${project.id}" style="background-color: #0066FF; color: #ffffff; padding: 12px 28px; text-decoration: none; border-radius: 10px; font-weight: bold; display: inline-block;">View Project in Client Portal</a>
             </div>
-            <p style="font-size: 11px; color: #64748b; margin-top: 24px; border-top: 1px solid #e2e8f0; padding-top: 12px;">Hindustan Projects IT Services — Corporate Office: Bhilwara, Rajasthan</p>
+            <p style="font-size: 11px; color: #64748b; margin-top: 24px; border-top: 1px solid #e2e8f0; padding-top: 12px;">SnapTech Digital &bull; A Hindustan Projects Enterprise — Bhilwara, Rajasthan</p>
           </div>
         `,
       }).catch((err) => console.error('[ClientProject/mailer] Client email failed:', err.message))
@@ -162,9 +162,9 @@ export const createClientProject = async (req, res, next) => {
             </div>
             <p>Please log into the admin panel to review the project details and start work:</p>
             <div style="text-align: center; margin: 24px 0;">
-              <a href="https://itservices.hindustanprojects.in/admin/client-projects" style="background-color: #1A3E8C; color: #ffffff; padding: 12px 28px; text-decoration: none; border-radius: 10px; font-weight: bold; display: inline-block;">Open Admin Panel</a>
+              <a href="${process.env.CLIENT_URL || 'https://www.snaptech.digital'}/admin/client-projects" style="background-color: #1A3E8C; color: #ffffff; padding: 12px 28px; text-decoration: none; border-radius: 10px; font-weight: bold; display: inline-block;">Open Admin Panel</a>
             </div>
-            <p style="font-size: 11px; color: #64748b; margin-top: 24px; border-top: 1px solid #e2e8f0; padding-top: 12px;">Hindustan Projects IT Services — Internal Assignment Notification</p>
+            <p style="font-size: 11px; color: #64748b; margin-top: 24px; border-top: 1px solid #e2e8f0; padding-top: 12px;">SnapTech Digital &bull; Internal Assignment Notification</p>
           </div>
         `,
       }).catch((err) => console.error('[ClientProject/mailer] Staff email failed:', err.message))
@@ -248,7 +248,7 @@ export const updateClientProject = async (req, res, next) => {
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; border: 1px solid #e2e8f0; border-radius: 16px;">
             <h2 style="color: #1e3a8a; margin-top: 0;">Project Update: ${project.projectTitle}</h2>
             <p>Dear <strong>${project.client.name}</strong>,</p>
-            <p>Your project progress and milestone status have been updated on the Hindustan Projects portal:</p>
+            <p>Your project progress and milestone status have been updated on the SnapTech Digital portal:</p>
             <div style="background-color: #f8fafc; padding: 16px; border-radius: 12px; margin: 16px 0; border: 1px solid #cbd5e1;">
               <p style="margin: 6px 0;"><strong>Status:</strong> ${project.status}</p>
               <p style="margin: 6px 0;"><strong>Completion Progress:</strong> ${project.progress}%</p>
@@ -257,9 +257,9 @@ export const updateClientProject = async (req, res, next) => {
             </div>
             <p>Check the latest deliverables, upload asset files, or review GST invoices inside your Client Portal:</p>
             <div style="text-align: center; margin: 24px 0;">
-              <a href="https://itservices.hindustanprojects.in/client/projects/${project.id}" style="background-color: #2563eb; color: #ffffff; padding: 12px 28px; text-decoration: none; border-radius: 10px; font-weight: bold; display: inline-block;">Open Client Portal Project</a>
+              <a href="${process.env.CLIENT_URL || 'https://www.snaptech.digital'}/client/projects/${project.id}" style="background-color: #0066FF; color: #ffffff; padding: 12px 28px; text-decoration: none; border-radius: 10px; font-weight: bold; display: inline-block;">Open Client Portal Project</a>
             </div>
-            <p style="font-size: 11px; color: #64748b; margin-top: 24px; border-top: 1px solid #e2e8f0; padding-top: 12px;">Hindustan Projects IT Services — Corporate Office: Bhilwara, Rajasthan</p>
+            <p style="font-size: 11px; color: #64748b; margin-top: 24px; border-top: 1px solid #e2e8f0; padding-top: 12px;">SnapTech Digital &bull; A Hindustan Projects Enterprise — Bhilwara, Rajasthan</p>
           </div>
         `,
       }).catch((err) => console.error('[ClientProject/mailer] Client email failed:', err.message))
@@ -284,9 +284,9 @@ export const updateClientProject = async (req, res, next) => {
               <p style="margin: 6px 0;"><strong>Priority:</strong> ${project.priority}</p>
             </div>
             <div style="text-align: center; margin: 24px 0;">
-              <a href="https://itservices.hindustanprojects.in/admin/client-projects" style="background-color: #1A3E8C; color: #ffffff; padding: 12px 28px; text-decoration: none; border-radius: 10px; font-weight: bold; display: inline-block;">Open Admin Panel</a>
+              <a href="${process.env.CLIENT_URL || 'https://www.snaptech.digital'}/admin/client-projects" style="background-color: #1A3E8C; color: #ffffff; padding: 12px 28px; text-decoration: none; border-radius: 10px; font-weight: bold; display: inline-block;">Open Admin Panel</a>
             </div>
-            <p style="font-size: 11px; color: #64748b; margin-top: 24px; border-top: 1px solid #e2e8f0; padding-top: 12px;">Hindustan Projects IT Services — Internal Assignment Notification</p>
+            <p style="font-size: 11px; color: #64748b; margin-top: 24px; border-top: 1px solid #e2e8f0; padding-top: 12px;">SnapTech Digital &bull; Internal Assignment Notification</p>
           </div>
         `,
       }).catch((err) => console.error('[ClientProject/mailer] Staff email failed:', err.message))
