@@ -17,11 +17,8 @@ export default function PortfolioPage() {
     { value: '3.4×', label: 'Average Client ROI', sub: 'Verified Telemetry', icon: TrendingUp },
   ]
 
-  const waNum = (
-    cfg.whatsapp ||
-    cfg.phone ||
-    '919999999999'
-  ).replace(/[^0-9]/g, '')
+  const rawWa = cfg.whatsapp || cfg.phone || ''
+  const waNum = (rawWa && !rawWa.includes('99999') && !rawWa.includes('123456') ? rawWa : '919929120431').replace(/[^0-9]/g, '')
 
   return (
     <div className="bg-[#020714] min-h-screen text-slate-100 selection:bg-brand-cyan/20 selection:text-brand-cyan">

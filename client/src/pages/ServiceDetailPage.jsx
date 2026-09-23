@@ -366,11 +366,8 @@ export default function ServiceDetailPage() {
   const { data: allData } = useServices()
 
   const { data: settingsData } = useSiteSettings()
-  const waNum = (
-    settingsData?.data?.whatsapp ||
-    settingsData?.data?.phone ||
-    '919999999999'
-  ).replace(/[^0-9]/g, '')
+  const rawWa = settingsData?.data?.whatsapp || settingsData?.data?.phone || ''
+  const waNum = (rawWa && !rawWa.includes('99999') && !rawWa.includes('123456') ? rawWa : '919929120431').replace(/[^0-9]/g, '')
 
   const service = data?.data || PLACEHOLDER_SERVICE_DETAILS[slug]
   const allServices = allData?.data?.length ? allData.data : PLACEHOLDER_SERVICES
@@ -709,7 +706,7 @@ export default function ServiceDetailPage() {
                   Direct Engineering Desk
                 </p>
                 <a
-                  href={`tel:${(settingsData?.data?.phone || '+919999999999').replace(/\s+/g, '')}`}
+                  href={`tel:${(settingsData?.data?.phone || '+91 75970 00601').replace(/\s+/g, '')}`}
                   className="flex items-center gap-3.5 group p-2.5 rounded-xl hover:bg-white/5 transition-all"
                 >
                   <div className="w-10 h-10 rounded-xl bg-brand-primary/20 border border-brand-primary/30 flex items-center justify-center shrink-0">
@@ -718,13 +715,13 @@ export default function ServiceDetailPage() {
                   <div>
                     <p className="text-[11px] text-slate-400 font-mono">Immediate Telephone</p>
                     <p className="text-sm font-semibold text-white group-hover:text-brand-cyan transition-colors">
-                      {settingsData?.data?.phone || '+91 99999 99999'}
+                      {settingsData?.data?.phone || '+91 75970 00601'}
                     </p>
                   </div>
                 </a>
 
                 <a
-                  href={`mailto:${settingsData?.data?.email || 'info@hindustanprojects.com'}`}
+                  href={`mailto:${settingsData?.data?.email || 'info@snaptech.digital'}`}
                   className="flex items-center gap-3.5 group p-2.5 rounded-xl hover:bg-white/5 transition-all"
                 >
                   <div className="w-10 h-10 rounded-xl bg-brand-cyan/15 border border-brand-cyan/30 flex items-center justify-center shrink-0">

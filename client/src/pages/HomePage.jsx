@@ -31,7 +31,7 @@ export default function HomePage() {
   const [submitting, setSubmitting] = useState(false)
   const { data: settingsData } = useSiteSettings()
   const cfg = settingsData?.data || {}
-  const phone = cfg.phone || '+91 99999 99999'
+  const phone = cfg.phone || '+91 75970 00601'
   const contactEmail = cfg.email || 'info@snaptech.digital'
 
   const handleSubmit = async (e) => {

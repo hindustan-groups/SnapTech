@@ -12,7 +12,35 @@ export function useFaqs() {
 export function useSiteSettings() {
   return useQuery({
     queryKey: ['site-settings'],
-    queryFn: () => api.get('/settings'),
+    queryFn: async () => {
+      const res = await api.get('/settings')
+      if (res?.data) {
+        const d = { ...res.data }
+        if (!d.phone || d.phone.includes('99999') || d.phone.includes('123456')) {
+          d.phone = '+91 75970 00601'
+        }
+        if (!d.whatsapp || d.whatsapp.includes('99999') || d.whatsapp.includes('123456')) {
+          d.whatsapp = '+91 99291 20431'
+        }
+        if (!d.email || d.email.includes('example.com') || d.email.includes('hindustanprojects.com')) {
+          d.email = 'info@snaptech.digital'
+        }
+        if (!d.instagram || d.instagram.trim() === '#' || d.instagram.trim() === '/') {
+          d.instagram = 'https://instagram.com/hindustanprojects'
+        }
+        if (!d.facebook || d.facebook.trim() === '#' || d.facebook.trim() === '/') {
+          d.facebook = 'https://facebook.com/hindustanprojects'
+        }
+        if (!d.linkedin || d.linkedin.trim() === '#' || d.linkedin.trim() === '/') {
+          d.linkedin = 'https://linkedin.com/company/hindustan-projects'
+        }
+        if (!d.pinterest || d.pinterest.trim() === '#' || d.pinterest.trim() === '/') {
+          d.pinterest = 'https://pinterest.com/hindustanprojects'
+        }
+        return { ...res, data: d }
+      }
+      return res
+    },
     staleTime: 10 * 60 * 1000,
   })
 }

@@ -29,15 +29,17 @@ export default function RootLayout() {
   const { data: settingsData } = useSiteSettings()
   const cfg = settingsData?.data || {}
 
-  const whatsapp = cfg.whatsapp || cfg.phone || '919999999999'
-  const whatsappNum = whatsapp.replace(/[^0-9]/g, '')
+  const rawWhatsapp = cfg.whatsapp || cfg.phone || ''
+  const whatsappNum = rawWhatsapp && !rawWhatsapp.includes('99999') && !rawWhatsapp.includes('123456')
+    ? rawWhatsapp.replace(/[^0-9]/g, '')
+    : '919929120431'
 
   return (
     <div className="min-h-screen bg-bg-base text-text-dark font-body flex flex-col relative">
       {/* ── Skip Navigation Link (Accessibility: WCAG 2.4.1) ── */}
       <a
         href="#main-content"
-        className="fixed top-3 left-3 z-[9999] -translate-y-20 focus:translate-y-0 transition-transform duration-150
+        className="fixed top-3 left-3 z-50 -translate-y-20 focus:translate-y-0 transition-transform duration-150
           bg-brand-blue text-white text-sm font-semibold px-4 py-2 rounded-md shadow-lg
           focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-brand-blue"
       >
