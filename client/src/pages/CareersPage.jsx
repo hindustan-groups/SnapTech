@@ -177,14 +177,14 @@ export default function CareersPage() {
   return (
     <div className="min-h-screen bg-white text-slate-700">
       <SEO
-        title="Careers & Engineering Opportunities — Snaptech | Hindustan Projects"
-        description="Build high-performance cloud architectures, custom ERP systems, and AI platforms. Join Hindustan Projects IT Division (Snaptech) in Bhilwara or work remotely."
+        title="Careers at SnapTech Digital — Join Our Team | Bhilwara, Rajasthan"
+        description="Explore open positions at SnapTech Digital. We hire web developers, UI/UX designers, and digital marketers. Work from our Bhilwara, Rajasthan office or remotely."
         path="/careers"
-        keywords="Snaptech careers, IT jobs Bhilwara, software engineer jobs, web developer careers, tech jobs Rajasthan, Hindustan Projects careers"
+        keywords="SnapTech Digital careers, IT jobs Bhilwara, software developer jobs Rajasthan, web developer careers, tech jobs India, digital marketing jobs"
       />
 
       {/* Hero Section - Light Clean Canvas */}
-      <section className="relative pt-28 sm:pt-36 lg:pt-40 pb-16 sm:pb-20 overflow-hidden bg-gradient-to-b from-blue-50/60 via-white to-slate-50/50 border-b border-slate-200/80">
+      <section className="relative pt-28 sm:pt-36 lg:pt-40 pb-16 sm:pb-20 overflow-hidden bg-linear-to-b from-blue-50/60 via-white to-slate-50/50 border-b border-slate-200/80">
         {/* Ambient Glows */}
         <div className="absolute top-10 left-1/4 w-96 h-96 bg-blue-100/60 rounded-full blur-3xl -translate-y-1/2 pointer-events-none" />
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-indigo-50/70 rounded-full blur-3xl translate-y-1/2 pointer-events-none" />
@@ -197,7 +197,7 @@ export default function CareersPage() {
 
           <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-tight tracking-tight mb-6">
             Build Mission-Critical Tech with{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue via-blue-600 to-indigo-600">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-brand-blue via-blue-600 to-indigo-600">
               SnapTech
             </span>
           </h1>
@@ -286,7 +286,7 @@ export default function CareersPage() {
           </div>
 
           {/* Perks Grid Banner */}
-          <div className="mt-12 p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-blue-50 to-indigo-50/70 border border-blue-200 shadow-xs">
+          <div className="mt-12 p-6 sm:p-8 rounded-3xl bg-linear-to-r from-blue-50 to-indigo-50/70 border border-blue-200 shadow-xs">
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
               <div className="max-w-md">
                 <span className="text-xs font-bold uppercase tracking-wider text-brand-blue">
@@ -487,7 +487,7 @@ export default function CareersPage() {
           )}
 
           {/* Bottom Open Pitch / General Application Card */}
-          <div className="mt-14 p-8 sm:p-10 rounded-3xl bg-gradient-to-r from-[#0a1945] via-[#0D1B4B] to-[#0a1945] border border-blue-900 text-white text-center relative overflow-hidden shadow-xl">
+          <div className="mt-14 p-8 sm:p-10 rounded-3xl bg-linear-to-r from-[#0a1945] via-[#0D1B4B] to-[#0a1945] border border-blue-900 text-white text-center relative overflow-hidden shadow-xl">
             <div className="absolute top-0 right-0 w-64 h-64 bg-brand-blue/15 rounded-full blur-3xl pointer-events-none" />
             <div className="max-w-2xl mx-auto space-y-4 relative">
               <div className="w-12 h-12 rounded-2xl bg-blue-500/20 border border-blue-400/30 flex items-center justify-center mx-auto text-blue-200">

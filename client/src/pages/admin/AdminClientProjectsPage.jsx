@@ -317,7 +317,7 @@ function ProjectForm({ initial, onSave, onCancel, loading, onAttachmentChange })
                     {preset}%
                   </button>
                 ))}
-                <span className="px-2.5 py-0.5 rounded-full bg-gradient-to-r from-brand-blue to-indigo-600 text-white font-mono font-bold text-[11px] ml-1 shadow-xs">
+                <span className="px-2.5 py-0.5 rounded-full bg-linear-to-r from-brand-blue to-indigo-600 text-white font-mono font-bold text-[11px] ml-1 shadow-xs">
                   {watchedProgress}%
                 </span>
               </div>
@@ -328,7 +328,7 @@ function ProjectForm({ initial, onSave, onCancel, loading, onAttachmentChange })
               <div className="overflow-hidden h-3 text-xs flex rounded-full bg-gray-150 border border-gray-200/80 shadow-inner">
                 <div
                   style={{ width: `${watchedProgress}%` }}
-                  className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-gradient-to-r from-brand-blue via-indigo-600 to-emerald-500 transition-all duration-300 rounded-full"
+                  className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-linear-to-r from-brand-blue via-indigo-600 to-emerald-500 transition-all duration-300 rounded-full"
                 />
               </div>
               <input
@@ -567,7 +567,7 @@ export default function AdminClientProjectsPage() {
     printWindow.document.write(`
       <html>
         <head>
-          <title>Client Projects Report — Hindustan Projects</title>
+          <title>Client Projects Report — SnapTech Digital</title>
           <style>
             @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
             body { font-family: 'Inter', sans-serif; padding: 40px; color: #1F2937; margin: 0; background: #fff; }
@@ -586,7 +586,7 @@ export default function AdminClientProjectsPage() {
           <div class="header">
             <div>
               <h1 class="title">Client Projects Summary Report</h1>
-              <p style="margin: 4px 0 0 0; font-size: 12px; color: #4B5563;">Hindustan Projects IT Services Vault</p>
+              <p style="margin: 4px 0 0 0; font-size: 12px; color: #4B5563;">SnapTech Digital Management Vault</p>
             </div>
             <div class="meta">
               <p style="margin:0;">Generated on: ${new Date().toLocaleDateString('en-IN')}</p>
@@ -630,7 +630,7 @@ export default function AdminClientProjectsPage() {
           </table>
 
           <div style="margin-top: 50px; text-align: center; font-size: 10px; color: #9CA3AF; border-top: 1px dashed #E5E7EB; padding-top: 20px;">
-            Hindustan Projects website backup and monitoring database report. Confidential.
+            SnapTech Digital projects management database report. Confidential.
           </div>
 
           <script>
@@ -724,7 +724,7 @@ export default function AdminClientProjectsPage() {
       <div className="space-y-6 max-w-7xl mx-auto pb-12">
 
         {/* ── Executive Dark Header Banner ────────────────────────── */}
-        <div className="bg-gradient-to-r from-slate-900 via-gray-900 to-brand-blue p-6 sm:p-8 rounded-3xl text-white shadow-xl relative overflow-hidden">
+        <div className="bg-linear-to-r from-slate-900 via-gray-900 to-brand-blue p-6 sm:p-8 rounded-3xl text-white shadow-xl relative overflow-hidden">
           <div className="absolute top-0 right-0 w-96 h-96 bg-brand-blue/20 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -1065,7 +1065,7 @@ export default function AdminClientProjectsPage() {
                       </div>
                       <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden border border-gray-150">
                         <div
-                          className="h-full bg-gradient-to-r from-brand-blue to-indigo-600 transition-all duration-300 rounded-full"
+                          className="h-full bg-linear-to-r from-brand-blue to-indigo-600 transition-all duration-300 rounded-full"
                           style={{ width: `${p.progress}%` }}
                         />
                       </div>

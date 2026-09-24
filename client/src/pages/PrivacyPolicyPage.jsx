@@ -17,7 +17,7 @@ export default function PrivacyPolicyPage() {
 
       <div className="bg-slate-50/50 min-h-screen pt-28 pb-16">
         {/* Header */}
-        <section className="relative py-14 bg-gradient-to-b from-blue-50/70 via-white to-slate-50/50 border-b border-slate-200/80 text-slate-900 overflow-hidden mb-12">
+        <section className="relative py-14 bg-linear-to-b from-blue-50/70 via-white to-slate-50/50 border-b border-slate-200/80 text-slate-900 overflow-hidden mb-12">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(27,110,243,0.08),transparent)] pointer-events-none" />
           <Container className="relative text-center space-y-4">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold text-brand-blue bg-blue-50 border border-blue-200/80 uppercase tracking-widest">

@@ -123,7 +123,7 @@ export default function AdminLoginPage() {
 
         {/* ── Left panel — Brand ── */}
         <div
-          className="hidden lg:flex flex-col justify-between w-[440px] shrink-0 p-10 relative overflow-hidden bg-[#03091e]/90 border-r border-white/10"
+          className="hidden lg:flex flex-col justify-between w-110 shrink-0 p-10 relative overflow-hidden bg-[#03091e]/90 border-r border-white/10"
         >
           {/* Grid pattern */}
           <div
@@ -147,7 +147,7 @@ export default function AdminLoginPage() {
               className="w-10 h-10 rounded-xl object-contain border border-white/10"
             />
             <div>
-              <p className="font-heading font-bold text-white text-base">Hindustan Projects</p>
+              <p className="font-heading font-bold text-white text-base">SnapTech Digital</p>
               <p className="text-cyan-400 text-xs font-semibold tracking-wider uppercase">Command Center</p>
             </div>
           </div>
@@ -160,7 +160,7 @@ export default function AdminLoginPage() {
               >
                 Manage Your
                 <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+                <span className="text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-blue-500">
                   Digital Architecture
                 </span>
               </h2>
@@ -188,7 +188,7 @@ export default function AdminLoginPage() {
 
           {/* Footer */}
           <div className="relative">
-            <p className="text-slate-500 text-xs">© {new Date().getFullYear()} Hindustan Projects &bull; Enterprise IT</p>
+            <p className="text-slate-500 text-xs">© {new Date().getFullYear()} SnapTech Digital &bull; Command Center</p>
           </div>
         </div>
 
@@ -204,7 +204,7 @@ export default function AdminLoginPage() {
                   className="w-9 h-9 rounded-xl object-contain border border-white/10"
                 />
                 <span className="font-heading font-bold text-xl text-white">
-                  Hindustan Projects
+                  SnapTech Digital
                 </span>
               </div>
             </div>
@@ -296,7 +296,7 @@ export default function AdminLoginPage() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold py-3 rounded-xl text-sm
+                    className="w-full bg-linear-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold py-3 rounded-xl text-sm
                       transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed
                       hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] cursor-pointer mt-2"
                   >
@@ -342,7 +342,7 @@ export default function AdminLoginPage() {
                   <button
                     type="submit"
                     disabled={otpLoading}
-                    className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold py-3 rounded-xl text-sm
+                    className="w-full bg-linear-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold py-3 rounded-xl text-sm
                       transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed
                       hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] cursor-pointer mt-2"
                   >

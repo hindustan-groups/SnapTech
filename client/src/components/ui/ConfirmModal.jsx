@@ -45,9 +45,9 @@ export default function ConfirmModal({
       : 'bg-blue-50 text-brand-blue border-blue-200 ring-4 ring-blue-50/50'
 
   const buttonStyle = isDanger
-    ? 'bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white shadow-md shadow-red-500/20'
+    ? 'bg-linear-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white shadow-md shadow-red-500/20'
     : isWarning
-      ? 'bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-700 hover:to-yellow-700 text-white shadow-md shadow-amber-500/20'
+      ? 'bg-linear-to-r from-amber-600 to-yellow-600 hover:from-amber-700 hover:to-yellow-700 text-white shadow-md shadow-amber-500/20'
       : 'bg-brand-blue hover:bg-brand-blue-hover text-white shadow-md'
 
   return (

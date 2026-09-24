@@ -181,12 +181,12 @@ export default function ClientDashboardPage() {
   return (
     <div className="space-y-8 text-white">
       {/* Personalized Welcome Hero Banner */}
-      <div className="relative rounded-3xl overflow-hidden p-6 md:p-8 bg-gradient-to-r from-blue-950/60 via-slate-900/80 to-cyan-950/60 border border-brand-cyan/30 text-white shadow-2xl backdrop-blur-xl">
+      <div className="relative rounded-3xl overflow-hidden p-6 md:p-8 bg-linear-to-r from-blue-950/60 via-slate-900/80 to-cyan-950/60 border border-brand-cyan/30 text-white shadow-2xl backdrop-blur-xl">
         <div className="absolute top-0 right-0 w-80 h-80 bg-brand-cyan/15 rounded-full blur-3xl pointer-events-none" />
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
             <span className="text-xs font-bold px-3.5 py-1 bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/20 rounded-full backdrop-blur-sm uppercase tracking-wider">
-              Client Portal &bull; {clientMe?.companyName || 'Hindustan Projects Partner'}
+              Client Portal &bull; {clientMe?.companyName || 'SnapTech Digital Partner'}
             </span>
             <h1 className="font-heading text-2xl md:text-3xl font-extrabold text-white mt-3 tracking-tight">
               Welcome back, <span className="text-brand-cyan">{clientName}</span>! 👋
@@ -205,7 +205,7 @@ export default function ClientDashboardPage() {
             </Link>
             <Link
               to="/client/billing"
-              className="px-4 py-2.5 bg-white/[0.06] hover:bg-white/[0.12] text-white font-semibold text-xs border border-white/15 rounded-xl transition-all flex items-center gap-2 cursor-pointer"
+              className="px-4 py-2.5 bg-white/6 hover:bg-white/12 text-white font-semibold text-xs border border-white/15 rounded-xl transition-all flex items-center gap-2 cursor-pointer"
             >
               <Wallet className="w-4 h-4" />
               Billing &amp; Invoices
@@ -250,7 +250,7 @@ export default function ClientDashboardPage() {
       </div>
 
       {/* Dynamic WhatsApp Support Banner */}
-      <div className="bg-gradient-to-r from-emerald-950/40 via-slate-900/80 to-cyan-950/40 border border-emerald-500/30 rounded-3xl p-5 md:p-6 text-white shadow-xl relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 backdrop-blur-xl">
+      <div className="bg-linear-to-r from-emerald-950/40 via-slate-900/80 to-cyan-950/40 border border-emerald-500/30 rounded-3xl p-5 md:p-6 text-white shadow-xl relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 backdrop-blur-xl">
         <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none" />
         <div className="space-y-1 relative z-10">
           <h4 className="font-heading font-bold text-base md:text-lg text-white">Need Immediate Technical Assistance?</h4>
@@ -318,7 +318,7 @@ export default function ClientDashboardPage() {
                       </div>
                       <div className="w-full bg-white/10 rounded-full h-2 overflow-hidden">
                         <div
-                          className="bg-gradient-to-r from-brand-cyan to-blue-500 h-2 rounded-full transition-all duration-500"
+                          className="bg-linear-to-r from-brand-cyan to-blue-500 h-2 rounded-full transition-all duration-500"
                           style={{ width: `${project.progress}%` }}
                         />
                       </div>
@@ -371,7 +371,7 @@ export default function ClientDashboardPage() {
       {selectedProjectFeedback && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 backdrop-blur-md p-4 animate-fadeIn">
           <div className="bg-slate-900/95 rounded-3xl border border-white/15 shadow-2xl max-w-md w-full overflow-hidden text-white backdrop-blur-2xl">
-            <div className="p-5 border-b border-white/10 bg-white/[0.02]">
+            <div className="p-5 border-b border-white/10 bg-white/2">
               <h3 className="font-heading font-bold text-white text-base flex items-center gap-2">
                 <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
                 <span>Submit Project Review</span>
@@ -414,7 +414,7 @@ export default function ClientDashboardPage() {
                     placeholder="e.g. Managing Director"
                     value={clientRole}
                     onChange={(e) => setClientRole(e.target.value)}
-                    className="w-full px-3 py-2 text-xs border border-white/15 rounded-xl focus:outline-none focus:ring-1 focus:ring-brand-cyan/30 focus:border-brand-cyan bg-white/[0.04] text-white placeholder:text-slate-500"
+                    className="w-full px-3 py-2 text-xs border border-white/15 rounded-xl focus:outline-none focus:ring-1 focus:ring-brand-cyan/30 focus:border-brand-cyan bg-white/4 text-white placeholder:text-slate-500"
                   />
                 </div>
                 <div>
@@ -424,7 +424,7 @@ export default function ClientDashboardPage() {
                     placeholder="e.g. Hindustan Groups"
                     value={clientCompany}
                     onChange={(e) => setClientCompany(e.target.value)}
-                    className="w-full px-3 py-2 text-xs border border-white/15 rounded-xl focus:outline-none focus:ring-1 focus:ring-brand-cyan/30 focus:border-brand-cyan bg-white/[0.04] text-white placeholder:text-slate-500"
+                    className="w-full px-3 py-2 text-xs border border-white/15 rounded-xl focus:outline-none focus:ring-1 focus:ring-brand-cyan/30 focus:border-brand-cyan bg-white/4 text-white placeholder:text-slate-500"
                   />
                 </div>
               </div>
@@ -438,7 +438,7 @@ export default function ClientDashboardPage() {
                   value={feedbackText}
                   onChange={(e) => setFeedbackText(e.target.value)}
                   placeholder="Tell us about the project quality, team communication, and overall execution..."
-                  className="w-full px-3 py-2 text-xs border border-white/15 rounded-xl focus:outline-none focus:ring-1 focus:ring-brand-cyan/30 focus:border-brand-cyan bg-white/[0.04] text-white placeholder:text-slate-500 resize-none"
+                  className="w-full px-3 py-2 text-xs border border-white/15 rounded-xl focus:outline-none focus:ring-1 focus:ring-brand-cyan/30 focus:border-brand-cyan bg-white/4 text-white placeholder:text-slate-500 resize-none"
                 />
               </div>
 
@@ -447,7 +447,7 @@ export default function ClientDashboardPage() {
                 <button
                   type="button"
                   onClick={() => setSelectedProjectFeedback(null)}
-                  className="px-4 py-2 border border-white/15 text-slate-300 rounded-xl text-xs font-bold hover:bg-white/[0.08] cursor-pointer transition-colors"
+                  className="px-4 py-2 border border-white/15 text-slate-300 rounded-xl text-xs font-bold hover:bg-white/8 cursor-pointer transition-colors"
                 >
                   Cancel
                 </button>

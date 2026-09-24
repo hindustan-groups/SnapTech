@@ -52,7 +52,7 @@ const getWhatsAppLink = (fullName, jobTitle, rawPhone) => {
     cleaned = '91' + cleaned
   }
   const text = encodeURIComponent(
-    `Hello ${fullName},\n\nThis is from Hindustan Projects. We reviewed your application for the "${jobTitle}" position. We would like to connect with you regarding the next steps.`
+    `Hello ${fullName},\n\nThis is from SnapTech Digital. We reviewed your application for the "${jobTitle}" position. We would like to connect with you regarding the next steps.`
   )
   return `https://wa.me/${cleaned}?text=${text}`
 }

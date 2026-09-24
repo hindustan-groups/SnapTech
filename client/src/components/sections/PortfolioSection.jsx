@@ -153,12 +153,12 @@ export function ProjectModal({ project, onClose }) {
                 alt={project.title}
                 className="w-full h-full object-cover group-hover/image:scale-105 transition-transform duration-700 ease-out"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/30 to-transparent" />
+              <div className="absolute inset-0 bg-linear-to-t from-slate-950/80 via-slate-950/30 to-transparent" />
 
               {/* Floating Badges */}
               <div className="absolute bottom-5 left-5 flex gap-2">
                 <span
-                  className={`px-3 py-1 rounded-full text-xs font-mono font-bold text-white bg-gradient-to-r ${gradColor} shadow-md`}
+                  className={`px-3 py-1 rounded-full text-xs font-mono font-bold text-white bg-linear-to-r ${gradColor} shadow-md`}
                 >
                   {project.category}
                 </span>
@@ -171,7 +171,7 @@ export function ProjectModal({ project, onClose }) {
             </div>
           ) : (
             <div
-              className={`w-full h-44 bg-gradient-to-br ${gradColor} flex items-center justify-center`}
+              className={`w-full h-44 bg-linear-to-br ${gradColor} flex items-center justify-center`}
             >
               <span className="font-heading text-5xl font-bold text-white/40">
                 {project.title[0]}
@@ -302,7 +302,7 @@ function ProjectCard({ project, onOpen }) {
             />
           ) : (
             <div
-              className={`w-full h-full bg-gradient-to-br ${gradColor} flex items-center justify-center`}
+              className={`w-full h-full bg-linear-to-br ${gradColor} flex items-center justify-center`}
             >
               <span className="font-heading text-5xl font-bold text-white/30">
                 {project.title[0]}
@@ -310,7 +310,7 @@ function ProjectCard({ project, onOpen }) {
             </div>
           )}
           {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-t from-slate-950/70 via-transparent to-transparent" />
 
           {/* Tech tags + description on hover */}
           <div className="absolute inset-0 bg-slate-950/85 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-5 backdrop-blur-xs">
@@ -332,7 +332,7 @@ function ProjectCard({ project, onOpen }) {
           {/* Badges (always visible top-left) */}
           <div className="absolute top-3.5 left-3.5 flex gap-2">
             <span
-              className={`px-2.5 py-1 rounded-full text-[10px] font-mono font-bold text-white bg-gradient-to-r ${gradColor} shadow-xs`}
+              className={`px-2.5 py-1 rounded-full text-[10px] font-mono font-bold text-white bg-linear-to-r ${gradColor} shadow-xs`}
             >
               {project.category}
             </span>

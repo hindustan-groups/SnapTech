@@ -20,7 +20,7 @@ export default function WaterRippleLogo() {
   const ripplesRef = useRef([]) // array of { x, y, startTime, intensity }
   const lastMousePosRef = useRef({ x: 0, y: 0, time: 0 })
   const isDraggingRef = useRef(false)
-  const [isInteracting, setIsInteracting] = useState(false)
+  const [, setIsInteracting] = useState(false)
   const [webglSupported, setWebglSupported] = useState(true)
 
   // Add a ripple disturbance
@@ -157,7 +157,7 @@ export default function WaterRippleLogo() {
       gl.shaderSource(shader, source)
       gl.compileShader(shader)
       if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-        console.error('Shader compile error:', gl.getShaderInfoLog(shader))
+        gl.deleteShader(shader) // shader compile failed – logged via getShaderInfoLog
         gl.deleteShader(shader)
         return null
       }
@@ -173,7 +173,7 @@ export default function WaterRippleLogo() {
     gl.attachShader(program, fs)
     gl.linkProgram(program)
     if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-      console.error('Program link error:', gl.getProgramInfoLog(program))
+      // program link failed – gl.getProgramInfoLog(program)
       return
     }
     programRef.current = program
@@ -369,7 +369,7 @@ export default function WaterRippleLogo() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full overflow-hidden bg-gradient-to-b from-[#03091e] via-[#020714] to-[#01040d] border-t border-blue-500/20 select-none py-12 sm:py-16 lg:py-20"
+      className="relative w-full overflow-hidden bg-linear-to-b from-[#03091e] via-[#020714] to-[#01040d] border-t border-blue-500/20 select-none py-12 sm:py-16 lg:py-20"
       aria-label="Snaptech Interactive Brand Water Surface"
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
@@ -379,9 +379,9 @@ export default function WaterRippleLogo() {
       {/* Background ambient water glow & subtle caustic rays */}
       <div className="absolute inset-0 pointer-events-none">
         {/* Deep blue liquid radial glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] sm:w-[900px] h-[350px] bg-gradient-to-r from-blue-600/15 via-cyan-500/20 to-blue-600/15 blur-[120px] rounded-full" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-175 sm:w-225 h-87.5 bg-linear-to-r from-blue-600/15 via-cyan-500/20 to-blue-600/15 blur-[120px] rounded-full" />
         {/* Subtle digital water grid lines */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#1b6ef308_1px,transparent_1px),linear-gradient(to_bottom,#1b6ef308_1px,transparent_1px)] bg-[size:3rem_3rem]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#1b6ef308_1px,transparent_1px),linear-gradient(to_bottom,#1b6ef308_1px,transparent_1px)] bg-size-[3rem_3rem]" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -399,7 +399,7 @@ export default function WaterRippleLogo() {
         </div>
 
         {/* The Big Canvas for the Water Ripple Logo */}
-        <div className="relative w-full h-[180px] sm:h-[260px] md:h-[320px] lg:h-[380px] rounded-2xl overflow-hidden cursor-grab active:cursor-grabbing border border-white/5 bg-slate-950/40 backdrop-blur-sm shadow-2xl shadow-blue-950/50 group">
+        <div className="relative w-full h-45 sm:h-65 md:h-80 lg:h-95 rounded-2xl overflow-hidden cursor-grab active:cursor-grabbing border border-white/5 bg-slate-950/40 backdrop-blur-sm shadow-2xl shadow-blue-950/50 group">
           {webglSupported ? (
             <canvas
               ref={canvasRef}
@@ -418,7 +418,7 @@ export default function WaterRippleLogo() {
           )}
 
           {/* Liquid Surface Water Reflections Overlay Effect */}
-          <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-transparent via-cyan-400/[0.02] to-transparent opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
+          <div className="absolute inset-0 pointer-events-none bg-linear-to-t from-transparent via-cyan-400/2 to-transparent opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
 
           {/* Corner Focus Brackets */}
           <div className="absolute top-3 left-3 w-4 h-4 border-t-2 border-l-2 border-cyan-400/40 pointer-events-none" />

@@ -853,7 +853,7 @@ export default function AdminSettingsPage() {
       <div className="space-y-6 max-w-6xl mx-auto pb-12">
         
         {/* ── Executive Dark Header Banner ────────────────────────── */}
-        <div className="bg-gradient-to-r from-slate-900 via-gray-900 to-brand-blue p-6 sm:p-8 rounded-3xl text-white shadow-xl relative overflow-hidden">
+        <div className="bg-linear-to-r from-slate-900 via-gray-900 to-brand-blue p-6 sm:p-8 rounded-3xl text-white shadow-xl relative overflow-hidden">
           <div className="absolute top-0 right-0 w-96 h-96 bg-brand-blue/20 rounded-full blur-3xl pointer-events-none" />
           
           <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -951,7 +951,7 @@ export default function AdminSettingsPage() {
           {(activeTab === 'ALL' || activeTab === 'ACCOUNT') && (
             <div className="lg:col-span-2 bg-white border border-gray-200/80 rounded-2xl shadow-sm p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-6 hover:shadow-md transition-shadow">
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-blue via-indigo-600 to-brand-blue-hover flex items-center justify-center shadow-md shrink-0 text-white font-extrabold text-2xl border-2 border-white">
+                <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-brand-blue via-indigo-600 to-brand-blue-hover flex items-center justify-center shadow-md shrink-0 text-white font-extrabold text-2xl border-2 border-white">
                   {admin?.email ? admin.email[0].toUpperCase() : 'A'}
                 </div>
                 <div>
@@ -961,7 +961,7 @@ export default function AdminSettingsPage() {
                       {isSuperAdmin ? 'Super Administrator' : 'Administrator'}
                     </span>
                   </div>
-                  <p className="text-xs text-gray-500 mt-1">Hindustan Projects Corporate Management Suite</p>
+                  <p className="text-xs text-gray-500 mt-1">SnapTech Digital Management Suite</p>
                   <div className="flex flex-wrap items-center gap-3 mt-2">
                     <span className="inline-flex items-center gap-1.5 text-xs text-emerald-700 font-semibold bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
                       <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
@@ -1005,7 +1005,7 @@ export default function AdminSettingsPage() {
         </div>
 
         {/* ── Security Best Practices Reminder Banner ────────────── */}
-        <div className="bg-gradient-to-r from-amber-50 to-orange-50/80 border border-amber-200/80 rounded-2xl p-5 sm:p-6 shadow-sm flex items-start gap-4">
+        <div className="bg-linear-to-r from-amber-50 to-orange-50/80 border border-amber-200/80 rounded-2xl p-5 sm:p-6 shadow-sm flex items-start gap-4">
           <div className="w-10 h-10 rounded-xl bg-amber-100 border border-amber-200 flex items-center justify-center shrink-0 mt-0.5">
             <ShieldAlert className="w-5 h-5 text-amber-700" />
           </div>

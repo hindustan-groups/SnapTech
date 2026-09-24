@@ -38,7 +38,7 @@ export default function WelcomePopup() {
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
           {/* Backdrop with Blur */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -57,9 +57,9 @@ export default function WelcomePopup() {
             className="bg-white rounded-3xl overflow-hidden shadow-2xl relative w-full max-w-lg z-10 border border-slate-200/90 flex flex-col"
           >
             {/* Top Decorative Gradient Cover */}
-            <div className="h-32 bg-gradient-to-r from-[#0D1B4B] via-[#122A6B] to-[#1B6EF3] p-6 flex items-center relative overflow-hidden shrink-0">
+            <div className="h-32 bg-linear-to-r from-[#0D1B4B] via-[#122A6B] to-[#1B6EF3] p-6 flex items-center relative overflow-hidden shrink-0">
               {/* Background Shapes & Grid */}
-              <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none" />
+              <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-size-[16px_16px] pointer-events-none" />
               <div className="absolute w-48 h-48 rounded-full bg-white/10 -top-12 -right-6 blur-lg pointer-events-none" />
               <div className="absolute w-32 h-32 rounded-full bg-brand-cyan/20 -bottom-8 -left-8 blur-md pointer-events-none" />
 

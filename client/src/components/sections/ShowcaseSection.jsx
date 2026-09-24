@@ -88,7 +88,7 @@ export default function ShowcaseSection() {
           </span>
           <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight">
             Experience Our{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary-light via-brand-cyan to-white">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-brand-primary-light via-brand-cyan to-white">
               Digital Craftsmanship
             </span>
           </h2>
@@ -169,7 +169,7 @@ export default function ShowcaseSection() {
           </div>
 
           {/* Right Column: 3D Device Container (Floating directly, no background card) */}
-          <div className="lg:col-span-7 flex justify-center items-center perspective-[1200px] min-h-[360px] sm:min-h-[460px]">
+          <div className="lg:col-span-7 flex justify-center items-center perspective-distant min-h-90 sm:min-h-115">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeTab}
@@ -199,7 +199,7 @@ export default function ShowcaseSection() {
                 {activeTab === 'web' && (
                   <div className="w-full mx-auto">
                     {/* Monitor Frame */}
-                    <div className="bg-slate-900 border-[10px] border-slate-950 rounded-t-3xl shadow-2xl overflow-hidden aspect-[16/9.8] flex flex-col ring-1 ring-white/10">
+                    <div className="bg-slate-900 border-10 border-slate-950 rounded-t-3xl shadow-2xl overflow-hidden aspect-16/9.8 flex flex-col ring-1 ring-white/10">
                       {/* Browser Chrome Header */}
                       <div className="bg-slate-950 px-4 py-2 flex items-center gap-2 border-b border-slate-800 shrink-0">
                         <div className="flex gap-1.5">
@@ -207,7 +207,7 @@ export default function ShowcaseSection() {
                           <span className="w-2 h-2 rounded-full bg-yellow-500 inline-block" />
                           <span className="w-2 h-2 rounded-full bg-green-500 inline-block" />
                         </div>
-                        <div className="flex-1 max-w-[200px] mx-auto bg-slate-900 border border-slate-800 rounded-md py-0.5 px-3 text-[8px] text-gray-500 font-mono text-center truncate">
+                        <div className="flex-1 max-w-50 mx-auto bg-slate-900 border border-slate-800 rounded-md py-0.5 px-3 text-[8px] text-gray-500 font-mono text-center truncate">
                           https://portal.snaptech.digital
                         </div>
                       </div>
@@ -254,7 +254,7 @@ export default function ShowcaseSection() {
                             </div>
 
                             {/* Right Panel (High-end Conversion SVG wave Chart) */}
-                            <div className="flex-1 bg-slate-900/60 border border-white/5 shadow-inner rounded-xl p-3 space-y-2 max-w-[200px]">
+                            <div className="flex-1 bg-slate-900/60 border border-white/5 shadow-inner rounded-xl p-3 space-y-2 max-w-50">
                               <div className="flex justify-between items-center">
                                 <span className="text-[8px] font-bold text-gray-300">Conversion Increase</span>
                                 <span className="text-[7px] font-bold text-emerald-400 bg-emerald-500/10 px-1 py-0.5 rounded">+340%</span>
@@ -287,8 +287,8 @@ export default function ShowcaseSection() {
                                   </defs>
                                 </svg>
                                 {/* Pulsing Dot */}
-                                <span className="absolute top-[8px] right-[4px] w-2 h-2 bg-cyan-400 rounded-full animate-ping" />
-                                <span className="absolute top-[10px] right-[6px] w-1 h-1 bg-cyan-300 rounded-full" />
+                                <span className="absolute top-2 right-1 w-2 h-2 bg-cyan-400 rounded-full animate-ping" />
+                                <span className="absolute top-2.5 right-1.5 w-1 h-1 bg-cyan-300 rounded-full" />
                               </div>
                               {/* Stats */}
                               <div className="flex justify-between text-[8px] text-gray-500 border-t border-white/5 pt-1.5">
@@ -312,7 +312,7 @@ export default function ShowcaseSection() {
                 {activeTab === 'saas' && (
                   <div className="w-full mx-auto">
                     {/* Laptop Screen Body */}
-                    <div className="bg-slate-900 border-[8px] border-slate-950 rounded-t-2xl shadow-2xl overflow-hidden aspect-[16/10] flex flex-col ring-1 ring-white/10">
+                    <div className="bg-slate-900 border-8 border-slate-950 rounded-t-2xl shadow-2xl overflow-hidden aspect-16/10 flex flex-col ring-1 ring-white/10">
                       {/* Notch Camera */}
                       <div className="bg-slate-950 h-4.5 flex justify-center items-center border-b border-slate-800 shrink-0 relative">
                         <div className="w-1.5 h-1.5 rounded-full bg-slate-900 border border-slate-800" />
@@ -417,9 +417,9 @@ export default function ShowcaseSection() {
 
                 {/* ── Tab 3: Mobile Application (iPhone) ── */}
                 {activeTab === 'mobile' && (
-                  <div className="relative mx-auto max-w-[240px] w-full">
+                  <div className="relative mx-auto max-w-60 w-full">
                     {/* Phone Frame */}
-                    <div className="bg-slate-900 border-[7px] border-slate-950 rounded-[38px] shadow-2xl overflow-hidden aspect-[9/18.5] flex flex-col relative ring-1 ring-white/10">
+                    <div className="bg-slate-900 border-7 border-slate-950 rounded-[38px] shadow-2xl overflow-hidden aspect-9/18.5 flex flex-col relative ring-1 ring-white/10">
                       {/* Dynamic Island Notch */}
                       <div className="absolute top-2 left-1/2 -translate-x-1/2 w-16 h-4 bg-slate-950 rounded-full z-30 flex items-center justify-end px-2" />
 
@@ -447,8 +447,8 @@ export default function ShowcaseSection() {
                           {/* Scroll Area */}
                           <div className="flex-1 overflow-y-auto px-3.5 py-3 space-y-4">
                             {/* Premium Gradient Wallet Card */}
-                            <div className="bg-gradient-to-tr from-brand-blue to-cyan-500 text-white rounded-xl p-3 shadow-md space-y-2 relative overflow-hidden">
-                              <div className="absolute right-[-10px] bottom-[-10px] w-14 h-14 rounded-full bg-white/10" />
+                            <div className="bg-linear-to-tr from-brand-blue to-cyan-500 text-white rounded-xl p-3 shadow-md space-y-2 relative overflow-hidden">
+                              <div className="absolute -right-2.5 -bottom-2.5 w-14 h-14 rounded-full bg-white/10" />
                               <div className="flex justify-between items-center">
                                 <span className="text-[6px] font-bold uppercase tracking-widest text-white/80">Corporate Wallet</span>
                                 <span className="text-[7px] font-bold bg-white/10 px-1 py-0.5 rounded">VISA</span>

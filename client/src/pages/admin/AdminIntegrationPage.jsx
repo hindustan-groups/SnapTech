@@ -100,7 +100,7 @@ function LockGate({ onUnlocked }) {
       <div className="w-full max-w-md">
         {/* Header Icon */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-tr from-slate-900 to-brand-blue text-white shadow-xl mb-4 border border-blue-400/20">
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-linear-to-tr from-slate-900 to-brand-blue text-white shadow-xl mb-4 border border-blue-400/20">
             <ShieldAlert className="w-10 h-10 text-blue-300" />
           </div>
           <h1 className="font-heading text-2xl font-extrabold text-gray-900 tracking-tight">
@@ -457,7 +457,7 @@ export default function AdminIntegrationPage() {
         <div className="space-y-6 max-w-4xl mx-auto pb-12">
           
           {/* Executive Dark Header Banner */}
-          <div className="bg-gradient-to-r from-slate-900 via-gray-900 to-brand-blue p-6 sm:p-8 rounded-3xl text-white shadow-xl relative overflow-hidden">
+          <div className="bg-linear-to-r from-slate-900 via-gray-900 to-brand-blue p-6 sm:p-8 rounded-3xl text-white shadow-xl relative overflow-hidden">
             <div className="absolute top-0 right-0 w-96 h-96 bg-brand-blue/20 rounded-full blur-3xl pointer-events-none" />
 
             <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -520,7 +520,7 @@ export default function AdminIntegrationPage() {
 
           {/* Loading / Error States */}
           {isLoading && (
-            <div className="min-h-[250px] flex items-center justify-center gap-2 bg-white rounded-2xl border border-gray-200">
+            <div className="min-h-62.5 flex items-center justify-center gap-2 bg-white rounded-2xl border border-gray-200">
               <Loader2 className="w-6 h-6 animate-spin text-brand-blue" />
               <span className="text-xs text-gray-500 font-bold">Decrypting integration keys...</span>
             </div>

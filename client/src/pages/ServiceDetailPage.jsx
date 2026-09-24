@@ -215,10 +215,10 @@ export default function ServiceDetailPage() {
   return (
     <div className="bg-slate-50/50 min-h-screen text-slate-900 selection:bg-blue-500/20 selection:text-[#1a3e8c]">
       <SEO
-        title={`${service.title} — Snaptech IT Solutions | Hindustan Projects`}
+        title={`${service.title} — SnapTech Digital | Bhilwara, Rajasthan`}
         description={service.shortDescription}
         path={`/services/${service.slug}`}
-        keywords={`${service.title}, Snaptech IT, ${service.title} enterprise, Hindustan Projects IT`}
+        keywords={`${service.title}, SnapTech Digital, ${service.title} agency, IT company Bhilwara, Rajasthan`}
         schemas={[
           serviceSchema({
             title: service.title,
@@ -237,7 +237,7 @@ export default function ServiceDetailPage() {
       {/* ── 1. Light Hero Header ────────────────────────────────────── */}
       <section className="relative pt-28 sm:pt-36 lg:pt-40 pb-16 sm:pb-20 overflow-hidden border-b border-slate-100 bg-white">
         {/* Ambient subtle background grid & blur */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000005_1px,transparent_1px),linear-gradient(to_bottom,#00000005_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000005_1px,transparent_1px),linear-gradient(to_bottom,#00000005_1px,transparent_1px)] bg-size-[40px_40px] pointer-events-none" />
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#1a3e8c]/5 rounded-full blur-[140px] pointer-events-none" />
         <div className="absolute bottom-0 left-10 w-80 h-80 bg-blue-400/5 rounded-full blur-[120px] pointer-events-none" />
 
@@ -267,7 +267,7 @@ export default function ServiceDetailPage() {
               {/* Icon + Title Row */}
               <div className="flex flex-col sm:flex-row sm:items-center gap-5 mb-6">
                 <div
-                  className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${theme.color} flex items-center justify-center shadow-md shrink-0`}
+                  className={`w-16 h-16 rounded-2xl bg-linear-to-br ${theme.color} flex items-center justify-center shadow-md shrink-0`}
                 >
                   {createElement(getServiceIcon(service?.icon || 'Globe'), {
                     className: 'w-8 h-8 text-white',
@@ -300,7 +300,7 @@ export default function ServiceDetailPage() {
                 <div className="flex items-center gap-2.5 px-4 py-2 rounded-xl bg-amber-50/70 border border-amber-200/80">
                   <Star className="w-4 h-4 text-amber-500" />
                   <span className="text-xs sm:text-sm text-slate-700">
-                    <strong className="text-amber-900">Hindustan Projects</strong> Backed
+                    <strong className="text-amber-900">Enterprise SLA</strong> Backed
                   </span>
                 </div>
               </div>
@@ -401,7 +401,7 @@ export default function ServiceDetailPage() {
                     >
                       <div className="flex items-center gap-3 sm:flex-col sm:items-center">
                         <div
-                          className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#0D1B4B] to-[#1B6EF3] flex items-center justify-center text-white font-heading font-extrabold text-base shrink-0 shadow-md"
+                          className="w-12 h-12 rounded-xl bg-linear-to-br from-[#0D1B4B] to-[#1B6EF3] flex items-center justify-center text-white font-heading font-extrabold text-base shrink-0 shadow-md"
                         >
                           {step.step || String(i + 1).padStart(2, '0')}
                         </div>
@@ -653,7 +653,7 @@ export default function ServiceDetailPage() {
               </div>
 
               {/* Direct Link to Pricing Page */}
-              <div className="rounded-2xl border border-blue-200/80 bg-gradient-to-br from-blue-50/70 to-indigo-50/50 p-6 shadow-sm">
+              <div className="rounded-2xl border border-blue-200/80 bg-linear-to-br from-blue-50/70 to-indigo-50/50 p-6 shadow-sm">
                 <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#1a3e8c] uppercase tracking-wider mb-2">
                   <BadgeCheck className="w-4 h-4 text-[#1a3e8c]" /> Transparent Pricing
                 </div>
@@ -680,7 +680,7 @@ export default function ServiceDetailPage() {
                 <ul className="space-y-3.5">
                   {[
                     { icon: Zap, text: 'Strict Sprint Milestones With Zero Slippage' },
-                    { icon: Shield, text: 'Hindustan Projects Enterprise Backing' },
+                    { icon: Shield, text: 'Enterprise Grade SLA & Quality' },
                     { icon: Users, text: 'Dedicated Lead Engineer & Scrum Master' },
                     { icon: Star, text: '30-Day Post-Launch Warranty Included' },
                   ].map((item) => (
@@ -729,7 +729,7 @@ export default function ServiceDetailPage() {
                       hover:border-blue-400 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 shadow-sm"
                   >
                     <div
-                      className={`w-11 h-11 rounded-xl bg-gradient-to-br ${relTheme.color} flex items-center justify-center mb-4 shadow-sm group-hover:scale-105 transition-transform duration-300 text-white`}
+                      className={`w-11 h-11 rounded-xl bg-linear-to-br ${relTheme.color} flex items-center justify-center mb-4 shadow-sm group-hover:scale-105 transition-transform duration-300 text-white`}
                     >
                       <RelIcon className="w-5 h-5 text-white" strokeWidth={1.8} />
                     </div>

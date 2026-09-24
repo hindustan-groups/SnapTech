@@ -31,7 +31,7 @@ export default function ClientMobileNavBar() {
   const isDashboardActive = location.pathname === '/client/dashboard' || location.pathname.startsWith('/client/projects/')
 
   return (
-    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 px-4 pb-4 pt-2 bg-gradient-to-t from-[#020714] via-[#020714]/80 to-transparent backdrop-blur-sm pointer-events-none">
+    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 px-4 pb-4 pt-2 bg-linear-to-t from-[#020714] via-[#020714]/80 to-transparent backdrop-blur-sm pointer-events-none">
       <nav className="max-w-md mx-auto flex items-center justify-around p-2.5 bg-slate-900/90 border border-white/10 rounded-2xl shadow-2xl shadow-cyan-950/50 backdrop-blur-xl pointer-events-auto">
         {/* Dashboard Tab */}
         <Link

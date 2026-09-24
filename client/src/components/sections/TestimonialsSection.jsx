@@ -78,7 +78,7 @@ function TestimonialCard({ t, index, isActive }) {
     >
       {/* Top brand accent */}
       <div
-        className={`absolute top-0 left-0 right-0 h-[3px] transition-opacity duration-300
+        className={`absolute top-0 left-0 right-0 h-0.75 transition-opacity duration-300
           ${isActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-60'}`}
         style={{ background: 'linear-gradient(90deg, #1B6EF3, #0D1B4B)' }}
       />

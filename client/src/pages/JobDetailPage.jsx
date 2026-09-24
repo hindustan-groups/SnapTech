@@ -174,7 +174,7 @@ const FALLBACK_ROLE_MAP = {
       'Don’t see an open role that matches your exact skillset? We are always on the lookout for world-class software engineers, cloud architects, UI/UX designers, and growth marketers. Submit your resume and portfolio.',
     responsibilities: [
       'Drive high-impact engineering, design, or growth initiatives tailored to your core strengths',
-      'Collaborate across teams to build and scale Hindustan Projects digital offerings',
+      'Collaborate across teams to build and scale SnapTech Digital offerings',
       'Continuously elevate our technical craft and operational excellence',
     ],
     requirements: [
@@ -414,10 +414,10 @@ export default function JobDetailPage() {
   return (
     <div className="min-h-screen bg-white text-slate-700 relative overflow-hidden">
       <SEO
-        title={`${job.title} | Careers — Snaptech`}
+        title={`${job.title} | Careers — SnapTech Digital`}
         description={
           job.description?.slice(0, 155) ||
-          `Apply for ${job.title} at Snaptech (Hindustan Projects IT Division). Join our growing tech team.`
+          `Apply for ${job.title} at SnapTech Digital. Join our growing tech team.`
         }
         path={`/careers/${job.slug}`}
         keywords={`${job.title} job Bhilwara, IT careers Rajasthan, ${job.department} jobs India, software developer careers`}
@@ -544,11 +544,11 @@ export default function JobDetailPage() {
               </div>
 
               {/* Company Culture / Backed by Parent Group Card */}
-              <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-blue-50 to-indigo-50/70 border border-blue-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 shadow-xs">
+              <div className="p-6 sm:p-8 rounded-3xl bg-linear-to-r from-blue-50 to-indigo-50/70 border border-blue-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 shadow-xs">
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 text-xs font-bold text-brand-blue uppercase tracking-wider">
                     <Building2 className="w-4 h-4" />
-                    Hindustan Projects Division
+                    SnapTech Digital Careers
                   </div>
                   <h3 className="font-heading text-lg font-bold text-slate-900">
                     Need clarification on this position?
@@ -575,7 +575,7 @@ export default function JobDetailPage() {
             <div className="lg:col-span-1">
               <div className="sticky top-28 p-6 sm:p-7 rounded-3xl bg-white border border-slate-200 shadow-xl relative overflow-hidden">
                 {/* Luminous Top Gradient Accent */}
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-blue via-blue-500 to-indigo-500" />
+                <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-brand-blue via-blue-500 to-indigo-500" />
 
                 {applyMutation.isSuccess ? (
                   <div className="text-center py-8 space-y-4">

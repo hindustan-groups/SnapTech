@@ -31,7 +31,7 @@ export function ToastProvider({ children }) {
       {children}
 
       {/* Floating Toast Portal Container */}
-      <div className="fixed top-5 right-5 z-[9999] flex flex-col gap-2.5 max-w-md w-full pointer-events-none px-4">
+      <div className="fixed top-5 right-5 z-9999 flex flex-col gap-2.5 max-w-md w-full pointer-events-none px-4">
         {toasts.map((t) => {
           let bg = 'bg-white border-gray-200 text-gray-800'
           let icon = <Info className="w-5 h-5 text-blue-500 shrink-0" />

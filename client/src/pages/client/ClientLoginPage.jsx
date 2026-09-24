@@ -76,9 +76,9 @@ export default function ClientLoginPage() {
   const isMatching = password.length > 0 && password === confirmPassword
 
   return (
-    <div className="min-h-[100dvh] bg-[#020714] relative overflow-hidden flex flex-col justify-center py-6 sm:py-12 px-4 sm:px-6 lg:px-8 selection:bg-brand-cyan/20 selection:text-brand-cyan">
+    <div className="min-h-dvh bg-[#020714] relative overflow-hidden flex flex-col justify-center py-6 sm:py-12 px-4 sm:px-6 lg:px-8 selection:bg-brand-cyan/20 selection:text-brand-cyan">
       {/* Ambient Glows */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-brand-primary/15 rounded-full blur-3xl pointer-events-none -z-10" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-125 h-125 bg-brand-primary/15 rounded-full blur-3xl pointer-events-none -z-10" />
       <div className="absolute bottom-10 right-1/4 w-80 h-80 bg-brand-cyan/10 rounded-full blur-3xl pointer-events-none -z-10" />
 
       <div className="w-full max-w-md mx-auto relative z-10">
@@ -131,14 +131,14 @@ export default function ClientLoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     disabled={loading}
-                    className="w-full pl-10 pr-11 py-3 sm:py-2.5 text-base sm:text-sm border border-white/15 rounded-xl bg-white/[0.04] text-white focus:bg-white/[0.08] focus:outline-none focus:ring-1 focus:ring-brand-cyan/30 focus:border-brand-cyan transition-all disabled:opacity-60 placeholder:text-slate-500"
+                    className="w-full pl-10 pr-11 py-3 sm:py-2.5 text-base sm:text-sm border border-white/15 rounded-xl bg-white/4 text-white focus:bg-white/8 focus:outline-none focus:ring-1 focus:ring-brand-cyan/30 focus:border-brand-cyan transition-all disabled:opacity-60 placeholder:text-slate-500"
                     placeholder="At least 8 characters"
                     autoComplete="new-password"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white min-h-[44px] min-w-[44px] justify-center cursor-pointer"
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white min-h-11 min-w-11 justify-center cursor-pointer"
                     aria-label={showPassword ? 'Hide password' : 'Show password'}
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -159,7 +159,7 @@ export default function ClientLoginPage() {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     disabled={loading}
-                    className="w-full pl-10 pr-11 py-3 sm:py-2.5 text-base sm:text-sm border border-white/15 rounded-xl bg-white/[0.04] text-white focus:bg-white/[0.08] focus:outline-none focus:ring-1 focus:ring-brand-cyan/30 focus:border-brand-cyan transition-all disabled:opacity-60 placeholder:text-slate-500"
+                    className="w-full pl-10 pr-11 py-3 sm:py-2.5 text-base sm:text-sm border border-white/15 rounded-xl bg-white/4 text-white focus:bg-white/8 focus:outline-none focus:ring-1 focus:ring-brand-cyan/30 focus:border-brand-cyan transition-all disabled:opacity-60 placeholder:text-slate-500"
                     placeholder="Re-enter new password"
                     autoComplete="new-password"
                   />
@@ -183,7 +183,7 @@ export default function ClientLoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full min-h-[46px] flex items-center justify-center py-3 px-4 border border-transparent rounded-xl shadow-lg shadow-cyan-950/50 text-sm font-bold text-slate-950 bg-brand-cyan hover:bg-brand-cyan-light active:scale-[0.99] focus:outline-none transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                className="w-full min-h-11.5 flex items-center justify-center py-3 px-4 border border-transparent rounded-xl shadow-lg shadow-cyan-950/50 text-sm font-bold text-slate-950 bg-brand-cyan hover:bg-brand-cyan-light active:scale-[0.99] focus:outline-none transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <span className="flex items-center gap-2">
@@ -211,7 +211,7 @@ export default function ClientLoginPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={loading}
-                    className="w-full pl-10 py-3 sm:py-2.5 text-base sm:text-sm border border-white/15 rounded-xl bg-white/[0.04] text-white focus:bg-white/[0.08] focus:outline-none focus:ring-1 focus:ring-brand-cyan/30 focus:border-brand-cyan transition-all disabled:opacity-60 placeholder:text-slate-500"
+                    className="w-full pl-10 py-3 sm:py-2.5 text-base sm:text-sm border border-white/15 rounded-xl bg-white/4 text-white focus:bg-white/8 focus:outline-none focus:ring-1 focus:ring-brand-cyan/30 focus:border-brand-cyan transition-all disabled:opacity-60 placeholder:text-slate-500"
                     placeholder="name@company.com"
                     autoComplete="email"
                   />
@@ -231,14 +231,14 @@ export default function ClientLoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     disabled={loading}
-                    className="w-full pl-10 pr-11 py-3 sm:py-2.5 text-base sm:text-sm border border-white/15 rounded-xl bg-white/[0.04] text-white focus:bg-white/[0.08] focus:outline-none focus:ring-1 focus:ring-brand-cyan/30 focus:border-brand-cyan transition-all disabled:opacity-60 placeholder:text-slate-500"
+                    className="w-full pl-10 pr-11 py-3 sm:py-2.5 text-base sm:text-sm border border-white/15 rounded-xl bg-white/4 text-white focus:bg-white/8 focus:outline-none focus:ring-1 focus:ring-brand-cyan/30 focus:border-brand-cyan transition-all disabled:opacity-60 placeholder:text-slate-500"
                     placeholder="••••••••"
                     autoComplete="current-password"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white min-h-[44px] min-w-[44px] justify-center cursor-pointer"
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white min-h-11 min-w-11 justify-center cursor-pointer"
                     aria-label={showPassword ? 'Hide password' : 'Show password'}
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -249,7 +249,7 @@ export default function ClientLoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full min-h-[46px] flex items-center justify-center py-3 px-4 border border-transparent rounded-xl shadow-lg shadow-cyan-950/50 text-sm font-bold text-slate-950 bg-brand-cyan hover:bg-brand-cyan-light active:scale-[0.99] focus:outline-none transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                className="w-full min-h-11.5 flex items-center justify-center py-3 px-4 border border-transparent rounded-xl shadow-lg shadow-cyan-950/50 text-sm font-bold text-slate-950 bg-brand-cyan hover:bg-brand-cyan-light active:scale-[0.99] focus:outline-none transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <span className="flex items-center gap-2">

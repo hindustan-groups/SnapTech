@@ -138,10 +138,10 @@ export default function AboutPage() {
   return (
     <div className="bg-white min-h-screen text-slate-900 selection:bg-brand-blue/15 selection:text-brand-blue">
       <SEO
-        title="About SnapTech — IT & Technology Division of Hindustan Projects Group"
-        description="Learn about Snaptech, the enterprise technology and software engineering company backed by Hindustan Projects Group. Custom Web Apps, Mobile, Cloud & AI."
+        title="About SnapTech Digital — Our Story, Team & Mission | Bhilwara, Rajasthan"
+        description="SnapTech Digital is a digital agency based in Bhilwara, Rajasthan. Learn about our story, our team, our values, and how we help businesses grow through technology."
         path="/about"
-        keywords="Snaptech, Hindustan Projects IT, technology company Bhilwara, software company Rajasthan, about Snaptech, IT solutions India"
+        keywords="SnapTech Digital, about us, digital agency Bhilwara, IT company Rajasthan, web development team, software company India"
         schemas={[
           {
             '@context': 'https://schema.org',
@@ -149,17 +149,17 @@ export default function AboutPage() {
             name: 'About Snaptech',
             url: 'https://www.snaptech.digital/about',
             description:
-              'Snaptech is the dedicated technology and digital transformation company of Hindustan Projects Group, delivering enterprise digital systems.',
+              'SnapTech Digital is the dedicated technology and digital transformation company of Hindustan Projects Group, delivering enterprise digital systems.',
           },
         ]}
       />
 
       {/* ── 1. Light Hero Header ────────────────────────────────────── */}
-      <section className="relative pt-28 sm:pt-36 lg:pt-40 pb-16 sm:pb-24 overflow-hidden border-b border-slate-200/80 bg-gradient-to-b from-slate-50 via-white to-slate-50/50">
+      <section className="relative pt-28 sm:pt-36 lg:pt-40 pb-16 sm:pb-24 overflow-hidden border-b border-slate-200/80 bg-linear-to-b from-slate-50 via-white to-slate-50/50">
         {/* Subtle mesh background */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a08_1px,transparent_1px),linear-gradient(to_bottom,#0f172a08_1px,transparent_1px)] bg-[size:48px_48px] pointer-events-none" />
-        <div className="absolute top-0 left-1/3 w-[500px] h-[500px] bg-blue-100/60 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-sky-100/50 rounded-full blur-[100px] translate-y-1/2 pointer-events-none" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a08_1px,transparent_1px),linear-gradient(to_bottom,#0f172a08_1px,transparent_1px)] bg-size-[48px_48px] pointer-events-none" />
+        <div className="absolute top-0 left-1/3 w-125 h-125 bg-blue-100/60 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-100 h-100 bg-sky-100/50 rounded-full blur-[100px] translate-y-1/2 pointer-events-none" />
 
         <Container className="relative">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -171,12 +171,12 @@ export default function AboutPage() {
               </div>
               <h1 className="font-heading text-4xl sm:text-5xl lg:text-[3.6rem] font-extrabold text-[#0D1B4B] leading-[1.12] mb-6">
                 Next-Gen IT Engineering With{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue via-blue-600 to-indigo-700">
+                <span className="text-transparent bg-clip-text bg-linear-to-r from-brand-blue via-blue-600 to-indigo-700">
                   Corporate Stability.
                 </span>
               </h1>
               <p className="text-slate-600 text-base sm:text-lg leading-relaxed mb-8 max-w-2xl font-normal">
-                SnapTech is the dedicated technology company of Hindustan Projects Group. We combine the agility of an elite software studio with the financial longevity, governance, and institutional backing of a premier corporate conglomerate.
+                SnapTech Digital is the dedicated technology company of Hindustan Projects Group. We combine the agility of an elite software studio with the financial longevity, governance, and institutional backing of a premier corporate conglomerate.
               </p>
 
               {/* Action Buttons */}
@@ -294,7 +294,7 @@ export default function AboutPage() {
                   className="w-full h-96 object-cover opacity-90 group-hover:scale-105 group-hover:opacity-100 transition-all duration-500"
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-slate-950/60 via-transparent to-transparent" />
 
                 {/* Badge bottom */}
                 <div className="absolute bottom-5 left-5 right-5 p-4 rounded-xl border border-slate-200 bg-white/95 backdrop-blur-md flex items-center justify-between shadow-lg">
@@ -323,13 +323,13 @@ export default function AboutPage() {
               </span>
               <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0D1B4B] mb-6 leading-tight">
                 Rooted in Rajasthan.{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue to-indigo-600">
+                <span className="text-transparent bg-clip-text bg-linear-to-r from-brand-blue to-indigo-600">
                   Executing Pan-India.
                 </span>
               </h2>
               <div className="space-y-4 text-slate-600 text-sm sm:text-base leading-relaxed font-normal mb-8">
                 <p>
-                  Hindustan Projects founded SnapTech with a clear institutional conviction: enterprise-caliber IT architecture should not be monopolized by Tier-1 metropolitan agencies charging inflated retainer costs with opaque delivery timelines.
+                  Hindustan Projects founded SnapTech Digital with a clear institutional conviction: enterprise-caliber IT architecture should not be monopolized by Tier-1 metropolitan agencies charging inflated retainer costs with opaque delivery timelines.
                 </p>
                 <p>
                   We recognized that growing industrial enterprises and innovative startups require a dependable, permanent technology partner — one with real corporate accountability, localized leadership, and world-class engineering discipline.
@@ -424,7 +424,7 @@ export default function AboutPage() {
 
           <div className="relative max-w-3xl mx-auto">
             {/* Luminous Vertical Spine */}
-            <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-brand-blue via-blue-400 to-transparent hidden sm:block shadow-xs" />
+            <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-linear-to-b from-brand-blue via-blue-400 to-transparent hidden sm:block shadow-xs" />
 
             <div className="space-y-8">
               {(milestonesLoading ? Array.from({ length: 4 }) : milestones).map((m, i) =>
@@ -503,7 +503,7 @@ export default function AboutPage() {
                     >
                       {/* Avatar */}
                       <div className="relative mb-5 mx-auto w-24 h-24 flex items-center justify-center">
-                        <div className="relative p-1 rounded-full bg-gradient-to-tr from-brand-blue to-cyan-400">
+                        <div className="relative p-1 rounded-full bg-linear-to-tr from-brand-blue to-cyan-400">
                           {member.photoUrl ? (
                             <img
                               src={member.photoUrl}
@@ -559,7 +559,7 @@ export default function AboutPage() {
       {/* ── 7. Group Consultation CTA ───────────────────────────────── */}
       <section className="relative py-20 sm:py-24 overflow-hidden bg-slate-50">
         <Container className="relative">
-          <div className="max-w-4xl mx-auto rounded-3xl border border-slate-800 bg-gradient-to-br from-[#0D1B4B] via-[#102A66] to-[#0A1840] p-8 sm:p-12 lg:p-16 text-center shadow-2xl text-white">
+          <div className="max-w-4xl mx-auto rounded-3xl border border-slate-800 bg-linear-to-br from-[#0D1B4B] via-[#102A66] to-[#0A1840] p-8 sm:p-12 lg:p-16 text-center shadow-2xl text-white">
             <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-blue-400/40 bg-blue-400/10 text-blue-200 text-xs font-semibold uppercase tracking-wider mb-6">
               <Sparkles className="w-3.5 h-3.5 text-brand-cyan" />
               Direct Group Engagement

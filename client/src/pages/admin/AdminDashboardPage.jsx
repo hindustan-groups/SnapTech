@@ -622,7 +622,7 @@ export default function AdminDashboardPage() {
               </h1>
               <p className="text-white/60 text-sm">
                 Here's an overview of your{' '}
-                <span className="text-white/80 font-semibold">Hindustan Projects</span> website.
+                <span className="text-white/80 font-semibold">SnapTech Digital</span> platform.
               </p>
             </div>
 
@@ -1079,7 +1079,7 @@ export default function AdminDashboardPage() {
             {/* Progress bar */}
             <div className="w-full h-1.5 bg-gray-100 rounded-full mb-4 overflow-hidden">
               <div
-                className="h-full bg-gradient-to-r from-brand-blue to-blue-400 rounded-full transition-all duration-500"
+                className="h-full bg-linear-to-r from-brand-blue to-blue-400 rounded-full transition-all duration-500"
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
@@ -1100,7 +1100,7 @@ export default function AdminDashboardPage() {
                         }`}
                     >
                       {item.completed ? (
-                        <Check className="w-3 h-3 stroke-[3]" />
+                        <Check className="w-3 h-3 stroke-3" />
                       ) : (
                         <span className="text-[9px] font-bold">
                           {i + 1}

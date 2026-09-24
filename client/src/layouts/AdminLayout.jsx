@@ -320,7 +320,7 @@ export default function AdminLayout() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-10 h-10 border-[3px] border-brand-blue border-t-transparent rounded-full animate-spin" />
+          <div className="w-10 h-10 border-3 border-brand-blue border-t-transparent rounded-full animate-spin" />
           <p className="text-sm text-gray-400">Loading admin panel…</p>
         </div>
       </div>
@@ -436,7 +436,7 @@ export default function AdminLayout() {
         {/* ── User + logout ── */}
         <div className="px-3 pb-4 border-t border-white/10 pt-3 shrink-0">
           <div className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-white/5 mb-1">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-brand-red to-orange-400 flex items-center justify-center text-white font-bold text-xs shrink-0">
+            <div className="w-8 h-8 rounded-full bg-linear-to-br from-brand-red to-orange-400 flex items-center justify-center text-white font-bold text-xs shrink-0">
               {admin.email[0].toUpperCase()}
             </div>
             <div className="flex-1 min-w-0">
@@ -516,7 +516,7 @@ export default function AdminLayout() {
 
             {/* Floating Dropdown Results */}
             {searchOpen && searchResults && (
-              <div className="absolute left-0 mt-1.5 w-[360px] bg-white border border-gray-200 rounded-xl shadow-xl z-50 overflow-hidden flex flex-col max-h-[400px]">
+              <div className="absolute left-0 mt-1.5 w-[360px] bg-white border border-gray-200 rounded-xl shadow-xl z-50 overflow-hidden flex flex-col max-h-100">
                 <div className="px-4 py-2 border-b border-gray-150 bg-gray-50 text-[10px] font-bold text-gray-400 uppercase tracking-wider">
                   Search Results
                 </div>
@@ -645,7 +645,7 @@ export default function AdminLayout() {
             <div ref={avatarRef} className="relative">
               <button
                 onClick={() => setAvatarOpen(!avatarOpen)}
-                className="w-9 h-9 rounded-full bg-gradient-to-br from-brand-blue to-[#0f2660]
+                className="w-9 h-9 rounded-full bg-linear-to-br from-brand-blue to-[#0f2660]
                 flex items-center justify-center text-white font-bold text-sm border-2 border-white shadow-sm
                 hover:opacity-90 transition-opacity focus:outline-none"
               >

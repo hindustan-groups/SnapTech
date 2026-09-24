@@ -112,7 +112,7 @@ export default function ClientBillingPage() {
         </div>
         <div className="w-full h-3 bg-slate-800 rounded-full overflow-hidden border border-white/5">
           <div
-            className="h-full bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full shadow-[0_0_12px_rgba(6,182,212,0.5)] transition-all duration-500"
+            className="h-full bg-linear-to-r from-cyan-500 to-blue-600 rounded-full shadow-[0_0_12px_rgba(6,182,212,0.5)] transition-all duration-500"
             style={{ width: `${paidPct}%` }}
           />
         </div>
@@ -228,7 +228,7 @@ export default function ClientBillingPage() {
                         <button
                           onClick={() => handlePay(m.id)}
                           disabled={payMutation.isPending}
-                          className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black rounded-xl text-xs font-bold shadow-[0_0_15px_rgba(6,182,212,0.3)] disabled:opacity-50 transition-all cursor-pointer shrink-0"
+                          className="px-4 py-2 bg-linear-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black rounded-xl text-xs font-bold shadow-[0_0_15px_rgba(6,182,212,0.3)] disabled:opacity-50 transition-all cursor-pointer shrink-0"
                         >
                           Simulate Pay
                         </button>

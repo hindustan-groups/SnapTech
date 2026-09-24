@@ -68,11 +68,11 @@ export default function HomePage() {
   return (
     <>
       <SEO
-        title="Snaptech — IT & Technology Solutions | Hindustan Projects Group"
-        description="Looking for IT Solutions? Search. Discover. Connect with Snaptech — the enterprise technology and digital innovation wing of Hindustan Projects Group."
+        title="SnapTech Digital — Web & App Development Agency | Bhilwara, Rajasthan"
+        description="SnapTech Digital builds enterprise websites, web apps, and mobile apps. Full-service digital agency based in Bhilwara, Rajasthan. Get a free project consultation."
         path="/"
         schemas={[organizationSchema(), localBusinessSchema()]}
-        keywords="Snaptech, Hindustan Projects IT, IT company Bhilwara, web development Rajasthan, mobile app development India, cloud DevOps, AI automation, enterprise software"
+        keywords="SnapTech Digital, IT company Bhilwara, web development Rajasthan, mobile app development India, web design agency, digital marketing Bhilwara, software company Rajasthan"
       />
       <HeroSection />
 
@@ -140,7 +140,7 @@ export default function HomePage() {
             <div className="lg:col-span-6 max-w-md lg:ml-auto w-full">
               <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden group hover:border-[#1a3e8c]/30 transition-all">
                 {/* Top brand gradient line */}
-                <div className="absolute top-0 left-0 right-0 h-[3px]" style={{ background: 'linear-gradient(90deg, #1a3e8c, #e31e24)' }} />
+                <div className="absolute top-0 left-0 right-0 h-0.75" style={{ background: 'linear-gradient(90deg, #1a3e8c, #e31e24)' }} />
 
                 <div className="space-y-4">
                   {submitted ? (

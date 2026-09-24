@@ -518,10 +518,10 @@ export default function PricingPage() {
   return (
     <>
       <SEO
-        title="Pricing & Packages"
-        description="Affordable IT Solutions for Startups, Local Businesses and Enterprises. Transparent pricing for Web Development, Software, Mobile Apps, Branding and Digital Marketing."
+        title="Pricing & Packages — Transparent IT Service Costs | SnapTech Digital"
+        description="Transparent, affordable pricing for web development, app development, SEO, and digital marketing. SnapTech Digital offers packages for startups, SMEs, and enterprises."
         path="/pricing"
-        keywords="Snaptech pricing, IT services pricing, website packages, software development cost, mobile app pricing India, enterprise ERP pricing, Hindustan Projects IT"
+        keywords="SnapTech Digital pricing, website development cost India, app development packages, digital marketing pricing, affordable IT services Bhilwara"
         schemas={[
           breadcrumbSchema([
             { name: 'Home', path: '/' },
@@ -532,7 +532,7 @@ export default function PricingPage() {
       />
 
       {/* ── HERO SECTION ──────────────────────────────────────────────── */}
-      <section className="relative pt-28 pb-16 lg:pt-36 lg:pb-24 overflow-hidden bg-gradient-to-b from-blue-50/60 via-white to-slate-50/50 border-b border-slate-200/80">
+      <section className="relative pt-28 pb-16 lg:pt-36 lg:pb-24 overflow-hidden bg-linear-to-b from-blue-50/60 via-white to-slate-50/50 border-b border-slate-200/80">
         <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-100/60 rounded-full filter blur-3xl pointer-events-none -z-10 animate-pulse" />
         <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-indigo-50/70 rounded-full filter blur-3xl pointer-events-none -z-10" />
 
@@ -557,7 +557,7 @@ export default function PricingPage() {
               className="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.12]"
             >
               Pricing &amp;{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue via-blue-600 to-indigo-600">
+              <span className="text-transparent bg-clip-text bg-linear-to-r from-brand-blue via-blue-600 to-indigo-600">
                 Enterprise Packages
               </span>
             </motion.h1>
@@ -606,7 +606,7 @@ export default function PricingPage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 leftIcon={<MessageSquare className="w-5 h-5" />}
-                className="w-full sm:w-auto !bg-emerald-600 hover:!bg-emerald-500 !border-emerald-600 !text-white font-bold shadow-md shadow-emerald-600/20"
+                className="w-full sm:w-auto bg-emerald-600! hover:bg-emerald-500! border-emerald-600! text-white! font-bold shadow-md shadow-emerald-600/20"
               >
                 WhatsApp Us
               </Button>
@@ -721,7 +721,7 @@ export default function PricingPage() {
                   transition={{ duration: 0.3, delay: idx * 0.04 }}
                   className="bg-white rounded-2xl p-4 border border-slate-200/80 hover:border-brand-blue/40 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group relative overflow-hidden"
                 >
-                  <div className="h-1 w-full bg-gradient-to-r from-brand-blue to-blue-500 absolute top-0 left-0" />
+                  <div className="h-1 w-full bg-linear-to-r from-brand-blue to-blue-500 absolute top-0 left-0" />
                   <div>
                     <div className="flex items-center justify-between gap-2 mb-2">
                       <div className="w-8 h-8 rounded-xl bg-blue-50 text-brand-blue flex items-center justify-center group-hover:bg-brand-blue group-hover:text-white transition-colors">
@@ -777,7 +777,7 @@ export default function PricingPage() {
                   }`}
                 >
                   {/* Top Colored Gradient Accent Line */}
-                  <div className={`h-2 w-full bg-gradient-to-r ${pkg.headerGradient}`} />
+                  <div className={`h-2 w-full bg-linear-to-r ${pkg.headerGradient}`} />
 
                   {/* Floating Popular / Category Badge */}
                   {pkg.badge && (
@@ -849,7 +849,7 @@ export default function PricingPage() {
                         {pkg.features.map((feature, fIdx) => (
                           <li key={fIdx} className="flex items-start gap-2 text-xs text-slate-700">
                             <span className="p-0.5 rounded-full bg-emerald-50 text-emerald-600 mt-0.5 shrink-0 border border-emerald-200">
-                              <Check className="w-2.5 h-2.5 stroke-[3]" />
+                              <Check className="w-2.5 h-2.5 stroke-3" />
                             </span>
                             <span className="font-medium">{feature}</span>
                           </li>
@@ -891,7 +891,7 @@ export default function PricingPage() {
             </div>
 
             <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
-              <table className="w-full text-left text-xs border-collapse min-w-[650px]">
+              <table className="w-full text-left text-xs border-collapse min-w-162.5">
                 <thead>
                   <tr className="border-b border-slate-200 bg-slate-50/70">
                     <th className="p-4 font-heading text-slate-800 font-bold text-sm w-2/5">Deliverables &amp; Specifications</th>
@@ -918,7 +918,7 @@ export default function PricingPage() {
                       <td className="p-4 text-center text-slate-600">
                         {typeof row.starter === 'boolean' ? (
                           row.starter ? (
-                            <span className="inline-flex p-1 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200"><Check className="w-3 h-3 stroke-[3]" /></span>
+                            <span className="inline-flex p-1 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200"><Check className="w-3 h-3 stroke-3" /></span>
                           ) : (
                             <span className="text-slate-400 font-bold">—</span>
                           )
@@ -929,7 +929,7 @@ export default function PricingPage() {
                       <td className="p-4 text-center bg-blue-50/30 border-x border-blue-100 text-brand-blue font-semibold">
                         {typeof row.business === 'boolean' ? (
                           row.business ? (
-                            <span className="inline-flex p-1 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200"><Check className="w-3 h-3 stroke-[3]" /></span>
+                            <span className="inline-flex p-1 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200"><Check className="w-3 h-3 stroke-3" /></span>
                           ) : (
                             <span className="text-slate-400 font-bold">—</span>
                           )
@@ -940,7 +940,7 @@ export default function PricingPage() {
                       <td className="p-4 text-center text-slate-600">
                         {typeof row.enterprise === 'boolean' ? (
                           row.enterprise ? (
-                            <span className="inline-flex p-1 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200"><Check className="w-3 h-3 stroke-[3]" /></span>
+                            <span className="inline-flex p-1 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200"><Check className="w-3 h-3 stroke-3" /></span>
                           ) : (
                             <span className="text-slate-400 font-bold">—</span>
                           )
@@ -982,9 +982,9 @@ export default function PricingPage() {
                   transition={{ duration: 0.4, delay: idx * 0.08 }}
                   className="bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand-blue/40 shadow-sm hover:shadow-md hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group"
                 >
-                  <div className={`h-2 w-full bg-gradient-to-r ${item.color}`} />
+                  <div className={`h-2 w-full bg-linear-to-r ${item.color}`} />
                   <div className="p-5 sm:p-6">
-                    <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${item.color} text-white flex items-center justify-center mb-4 shadow-sm group-hover:scale-110 transition-transform duration-300`}>
+                    <div className={`w-12 h-12 rounded-2xl bg-linear-to-br ${item.color} text-white flex items-center justify-center mb-4 shadow-sm group-hover:scale-110 transition-transform duration-300`}>
                       <IconComp className="w-6 h-6" />
                     </div>
 
@@ -1050,7 +1050,7 @@ export default function PricingPage() {
                   }`}
                 >
                   {/* Top Accent Line */}
-                  <div className={`h-2 w-full bg-gradient-to-r ${app.headerGradient}`} />
+                  <div className={`h-2 w-full bg-linear-to-r ${app.headerGradient}`} />
 
                   {/* Floating Popular Badge */}
                   {app.badge && (
@@ -1121,7 +1121,7 @@ export default function PricingPage() {
                         {app.features.map((feat, fIdx) => (
                           <li key={fIdx} className="flex items-start gap-2 text-xs text-slate-700">
                             <span className="p-0.5 rounded-full bg-emerald-50 text-emerald-600 mt-0.5 shrink-0 border border-emerald-200">
-                              <Check className="w-2.5 h-2.5 stroke-[3]" />
+                              <Check className="w-2.5 h-2.5 stroke-3" />
                             </span>
                             <span className="font-medium">{feat}</span>
                           </li>
@@ -1151,7 +1151,7 @@ export default function PricingPage() {
           </div>
 
           {/* App Store Guarantee Banner */}
-          <div className="mt-12 p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-blue-50 to-indigo-50/70 border border-blue-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs sm:text-sm text-slate-900 shadow-sm">
+          <div className="mt-12 p-5 sm:p-6 rounded-3xl bg-linear-to-r from-blue-50 to-indigo-50/70 border border-blue-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs sm:text-sm text-slate-900 shadow-sm">
             <div className="flex items-center gap-3.5">
               <div className="w-10 h-10 rounded-2xl bg-blue-100 border border-blue-200 text-brand-blue flex items-center justify-center shrink-0">
                 <Smartphone className="w-5 h-5" />
@@ -1199,7 +1199,7 @@ export default function PricingPage() {
                   onClick={() => openQuoteModal(`Branding: ${item.title}`)}
                   className="bg-white rounded-3xl p-5 border border-slate-200 hover:border-brand-blue/40 shadow-sm hover:shadow-md hover:-translate-y-2 transition-all duration-300 text-center flex flex-col items-center justify-between group cursor-pointer overflow-hidden relative"
                 >
-                  <div className="h-1.5 w-full bg-gradient-to-r from-brand-blue to-blue-500 absolute top-0 left-0" />
+                  <div className="h-1.5 w-full bg-linear-to-r from-brand-blue to-blue-500 absolute top-0 left-0" />
                   
                   <div className="w-12 h-12 rounded-2xl bg-blue-50 text-brand-blue flex items-center justify-center my-2 group-hover:scale-110 group-hover:bg-brand-blue group-hover:text-white transition-all duration-300 shadow-xs">
                     <IconComp className="w-6 h-6" />
@@ -1273,7 +1273,7 @@ export default function PricingPage() {
                   }`}
                 >
                   {/* Top Accent Line */}
-                  <div className={`h-2 w-full bg-gradient-to-r ${mkt.headerGradient}`} />
+                  <div className={`h-2 w-full bg-linear-to-r ${mkt.headerGradient}`} />
 
                   {/* Badge */}
                   {mkt.badge && (
@@ -1349,7 +1349,7 @@ export default function PricingPage() {
                               {group.items.map((item, iIdx) => (
                                 <li key={iIdx} className="flex items-start gap-2 text-xs text-slate-700">
                                   <span className="p-0.5 rounded-full bg-emerald-50 text-emerald-600 mt-0.5 shrink-0 border border-emerald-200">
-                                    <Check className="w-2.5 h-2.5 stroke-[3]" />
+                                    <Check className="w-2.5 h-2.5 stroke-3" />
                                   </span>
                                   <span className="font-medium text-[11px] leading-snug">{item}</span>
                                 </li>
@@ -1382,7 +1382,7 @@ export default function PricingPage() {
           </div>
 
           {/* Marketing Slogan Strip */}
-          <div className="mt-12 p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white shadow-xl relative overflow-hidden">
+          <div className="mt-12 p-6 sm:p-8 rounded-3xl bg-linear-to-r from-blue-900 via-indigo-900 to-slate-900 text-white shadow-xl relative overflow-hidden">
             <div className="flex flex-col lg:flex-row items-center justify-between gap-6 relative z-10">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-widest text-blue-200 bg-white/10 border border-white/20 px-3 py-1 rounded-full inline-block mb-2">
@@ -1445,7 +1445,7 @@ export default function PricingPage() {
                   transition={{ duration: 0.3, delay: idx * 0.05 }}
                   className="bg-white rounded-3xl p-6 border border-slate-200 hover:border-brand-blue/40 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group overflow-hidden relative"
                 >
-                  <div className="h-1.5 w-full bg-gradient-to-r from-brand-blue to-blue-600 absolute top-0 left-0" />
+                  <div className="h-1.5 w-full bg-linear-to-r from-brand-blue to-blue-600 absolute top-0 left-0" />
                   <div>
                     <div className="w-12 h-12 rounded-2xl bg-blue-50 text-brand-blue flex items-center justify-center mb-4 group-hover:bg-brand-blue group-hover:text-white transition-colors duration-300 shadow-xs">
                       <IconComp className="w-6 h-6" />
@@ -1533,7 +1533,7 @@ export default function PricingPage() {
           {/* DESKTOP TIMELINE (Horizontal) */}
           <div className="hidden lg:block relative my-12">
             {/* Timeline Horizontal Gradient Line */}
-            <div className="absolute top-7 left-[4%] right-[4%] h-1 bg-gradient-to-r from-blue-300 via-brand-blue to-indigo-500 rounded-full -z-0" />
+            <div className="absolute top-7 left-[4%] right-[4%] h-1 bg-linear-to-r from-blue-300 via-brand-blue to-indigo-500 rounded-full z-0" />
 
             <div className="grid grid-cols-9 gap-2 relative z-10">
               {PROCESS_STEPS.map((proc, idx) => (
@@ -1548,7 +1548,7 @@ export default function PricingPage() {
                   <div className="w-14 h-14 rounded-full bg-white border-4 border-brand-blue text-brand-blue font-heading font-extrabold text-sm flex items-center justify-center shadow-md group-hover:scale-115 group-hover:bg-brand-blue group-hover:text-white transition-all duration-300">
                     {proc.step}
                   </div>
-                  <h3 className="font-heading text-xs font-bold text-slate-900 mt-4 line-clamp-2 min-h-[32px] group-hover:text-brand-blue transition-colors">
+                  <h3 className="font-heading text-xs font-bold text-slate-900 mt-4 line-clamp-2 min-h-8 group-hover:text-brand-blue transition-colors">
                     {proc.title}
                   </h3>
                   <p className="text-[11px] text-slate-600 mt-1 leading-snug px-1">
@@ -1571,7 +1571,7 @@ export default function PricingPage() {
                 className="relative pl-6 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm"
               >
                 {/* Step Circle Pin */}
-                <div className="absolute -left-[37px] top-4 w-9 h-9 rounded-full bg-white border-2 border-brand-blue text-brand-blue font-heading font-bold text-xs flex items-center justify-center shadow-xs">
+                <div className="absolute -left-9.25 top-4 w-9 h-9 rounded-full bg-white border-2 border-brand-blue text-brand-blue font-heading font-bold text-xs flex items-center justify-center shadow-xs">
                   {proc.step}
                 </div>
                 <h3 className="font-heading text-base font-bold text-slate-900">
@@ -1659,7 +1659,7 @@ export default function PricingPage() {
       </section>
 
       {/* ── FINAL CTA BANNER ────────────────────────────────────────────── */}
-      <section className="py-16 lg:py-24 bg-gradient-to-r from-[#0a1945] via-[#0D1B4B] to-[#0a1945] border-t border-blue-900 text-white relative overflow-hidden">
+      <section className="py-16 lg:py-24 bg-linear-to-r from-[#0a1945] via-[#0D1B4B] to-[#0a1945] border-t border-blue-900 text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-brand-blue/15 rounded-full filter blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-600/20 rounded-full filter blur-3xl pointer-events-none" />
         
@@ -1691,7 +1691,7 @@ export default function PricingPage() {
                 size="lg"
                 as="a"
                 href={`tel:${cleanPhone}`}
-                className="w-full sm:w-auto !text-white !border-white/20 hover:!bg-white/10 hover:!border-white/40"
+                className="w-full sm:w-auto text-white! border-white/20! hover:bg-white/10! hover:border-white/40!"
                 leftIcon={<Phone className="w-5 h-5" />}
               >
                 Call Architects
@@ -1704,7 +1704,7 @@ export default function PricingPage() {
                 href={`https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent('Hi SnapTech Digital! I want to discuss a new project.')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full sm:w-auto !bg-emerald-600 hover:!bg-emerald-500 !border-emerald-600 !text-white font-bold shadow-lg shadow-emerald-950/40"
+                className="w-full sm:w-auto bg-emerald-600! hover:bg-emerald-500! border-emerald-600! text-white! font-bold shadow-lg shadow-emerald-950/40"
                 leftIcon={<MessageSquare className="w-5 h-5" />}
               >
                 WhatsApp Us
@@ -1719,7 +1719,7 @@ export default function PricingPage() {
         createPortal(
           <AnimatePresence>
             {isQuoteModalOpen && (
-              <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+              <div className="fixed inset-0 z-99999 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
                 {/* Dark blur backdrop */}
                 <motion.div
                   initial={{ opacity: 0 }}

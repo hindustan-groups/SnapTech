@@ -124,7 +124,7 @@ function BlogCard({ post }) {
               <BookOpen className="w-12 h-12 text-brand-blue/30" />
             </div>
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-60" />
+          <div className="absolute inset-0 bg-linear-to-t from-slate-900/60 via-transparent to-transparent opacity-60" />
           {/* Category badge */}
           <span className="absolute top-3 left-3 text-[10px] font-bold px-3 py-1 rounded-full bg-white/95 text-brand-blue border border-blue-200/80 backdrop-blur-md shadow-sm">
             {post.category}
@@ -177,7 +177,7 @@ function FeaturedCard({ post }) {
       <article className="relative rounded-3xl overflow-hidden bg-white border border-slate-200/80 shadow-md hover:shadow-xl hover:border-brand-blue/40 transition-all duration-300">
         <div className="grid grid-cols-1 lg:grid-cols-2">
           {/* Image */}
-          <div className="relative h-64 lg:h-auto min-h-[300px] bg-slate-100 overflow-hidden">
+          <div className="relative h-64 lg:h-auto min-h-75 bg-slate-100 overflow-hidden">
             {post.featuredImageUrl ? (
               <img
                 src={post.featuredImageUrl}
@@ -282,10 +282,10 @@ export default function BlogPage() {
       />
 
       {/* Hero — Pure Light Theme */}
-      <section className="relative overflow-hidden pt-28 sm:pt-36 lg:pt-40 pb-16 sm:pb-24 border-b border-slate-200/80 bg-gradient-to-b from-blue-50/70 via-white to-slate-50/50">
+      <section className="relative overflow-hidden pt-28 sm:pt-36 lg:pt-40 pb-16 sm:pb-24 border-b border-slate-200/80 bg-linear-to-b from-blue-50/70 via-white to-slate-50/50">
         {/* Background Gradients & Dot Canvas */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(27,110,243,0.08),transparent),radial-gradient(ellipse_50%_50%_at_10%_80%,rgba(14,165,233,0.06),transparent)] pointer-events-none" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a06_1px,transparent_1px),linear-gradient(to_bottom,#0f172a06_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a06_1px,transparent_1px),linear-gradient(to_bottom,#0f172a06_1px,transparent_1px)] bg-size-[32px_32px] pointer-events-none" />
         <div className="absolute top-10 right-1/4 w-96 h-96 bg-blue-100/50 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-indigo-100/40 rounded-full blur-3xl pointer-events-none" />
 
@@ -317,7 +317,7 @@ export default function BlogPage() {
                 className="font-heading text-3xl sm:text-5xl lg:text-5xl xl:text-6xl font-extrabold text-slate-900 leading-[1.12] mb-5 tracking-tight"
               >
                 Engineering{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue via-blue-600 to-indigo-600">
+                <span className="text-transparent bg-clip-text bg-linear-to-r from-brand-blue via-blue-600 to-indigo-600">
                   That Powers
                 </span>{' '}
                 Scale
@@ -392,7 +392,7 @@ export default function BlogPage() {
               transition={{ duration: 0.75, delay: 0.3, ease: 'easeOut' }}
               className="hidden lg:flex items-center justify-center relative overflow-visible"
             >
-              <div className="relative w-[420px] h-[460px] xl:w-[460px] xl:h-[500px]">
+              <div className="relative w-105 h-115 xl:w-115 xl:h-125">
                 {/* Outer slow-spinning ring */}
                 <div className="absolute inset-0 rounded-full border border-slate-200/80 animate-[spin_40s_linear_infinite]" />
 

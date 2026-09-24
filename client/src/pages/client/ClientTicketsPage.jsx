@@ -27,7 +27,7 @@ const STATUS_BADGES = {
 }
 
 const inputCls =
-  'w-full px-3 py-2 text-sm border border-white/15 rounded-xl bg-white/[0.04] text-white focus:bg-white/[0.08] focus:outline-none focus:ring-1 focus:ring-brand-cyan/30 focus:border-brand-cyan transition-all placeholder:text-slate-500'
+  'w-full px-3 py-2 text-sm border border-white/15 rounded-xl bg-white/4 text-white focus:bg-white/8 focus:outline-none focus:ring-1 focus:ring-brand-cyan/30 focus:border-brand-cyan transition-all placeholder:text-slate-500'
 
 export default function ClientTicketsPage() {
   const { data: tickets = [], isLoading: loadingList } = useClientTickets()
@@ -139,7 +139,7 @@ export default function ClientTicketsPage() {
         </div>
         <button
           onClick={() => setShowCreateModal(true)}
-          className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold rounded-xl text-xs hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all cursor-pointer"
+          className="flex items-center gap-2 px-4 py-2.5 bg-linear-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold rounded-xl text-xs hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           <span>New Ticket</span>
@@ -149,11 +149,11 @@ export default function ClientTicketsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         {/* Ticket List Panel */}
         <div className={`lg:col-span-1 bg-[#03091e]/90 border border-white/10 rounded-2xl overflow-hidden backdrop-blur-xl shadow-xl ${selectedTicketId ? 'hidden lg:block' : 'block'}`}>
-          <div className="p-4 border-b border-white/10 bg-white/[0.02]">
+          <div className="p-4 border-b border-white/10 bg-white/2">
             <h3 className="text-sm font-bold text-white">Ticket Registry</h3>
           </div>
 
-          <div className="divide-y divide-white/5 max-h-[600px] overflow-y-auto">
+          <div className="divide-y divide-white/5 max-h-150 overflow-y-auto">
             {tickets.length === 0 ? (
               <div className="p-8 text-center text-slate-500">
                 <MessageSquare className="w-10 h-10 mx-auto mb-2 opacity-40" />
@@ -164,7 +164,7 @@ export default function ClientTicketsPage() {
                 <button
                   key={t.id}
                   onClick={() => setSelectedTicketId(t.id)}
-                  className={`w-full text-left p-4 hover:bg-white/[0.04] transition-colors flex flex-col gap-2 ${
+                  className={`w-full text-left p-4 hover:bg-white/4 transition-colors flex flex-col gap-2 ${
                     selectedTicketId === t.id ? 'bg-cyan-500/10 border-r-4 border-cyan-400' : ''
                   }`}
                 >
@@ -192,11 +192,11 @@ export default function ClientTicketsPage() {
         </div>
 
         {/* Ticket Chat Message Panel */}
-        <div className={`lg:col-span-2 bg-[#03091e]/90 border border-white/10 rounded-2xl overflow-hidden backdrop-blur-xl shadow-xl flex flex-col min-h-[450px] lg:min-h-[550px] ${selectedTicketId ? 'block' : 'hidden lg:flex justify-center items-center text-center p-12'}`}>
+        <div className={`lg:col-span-2 bg-[#03091e]/90 border border-white/10 rounded-2xl overflow-hidden backdrop-blur-xl shadow-xl flex flex-col min-h-112.5 lg:min-h-137.5 ${selectedTicketId ? 'block' : 'hidden lg:flex justify-center items-center text-center p-12'}`}>
           {selectedTicketId ? (
             <>
               {/* Detail Header */}
-              <div className="p-4 border-b border-white/10 bg-white/[0.02] flex items-center justify-between gap-3 shrink-0">
+              <div className="p-4 border-b border-white/10 bg-white/2 flex items-center justify-between gap-3 shrink-0">
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => setSelectedTicketId(null)}
@@ -221,7 +221,7 @@ export default function ClientTicketsPage() {
               </div>
 
               {/* Chat Thread Messages */}
-              <div className="flex-1 p-4 space-y-4 overflow-y-auto min-h-[250px] max-h-[380px] bg-[#020714]/60">
+              <div className="flex-1 p-4 space-y-4 overflow-y-auto min-h-62.5 max-h-95 bg-[#020714]/60">
                 {loadingDetail ? (
                   <div className="flex justify-center items-center h-full">
                     <div className="w-6 h-6 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin" />
@@ -240,7 +240,7 @@ export default function ClientTicketsPage() {
                         <div
                           className={`p-3.5 rounded-2xl text-xs leading-relaxed ${
                             isSelf
-                              ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-black font-medium rounded-tr-none shadow-md shadow-cyan-500/10'
+                              ? 'bg-linear-to-r from-cyan-500 to-blue-600 text-black font-medium rounded-tr-none shadow-md shadow-cyan-500/10'
                               : 'bg-slate-900/90 border border-white/10 text-slate-100 rounded-tl-none shadow-sm'
                           }`}
                         >
@@ -256,7 +256,7 @@ export default function ClientTicketsPage() {
                                 href={msg.fileUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="font-bold underline truncate max-w-[180px] hover:opacity-85"
+                                className="font-bold underline truncate max-w-45 hover:opacity-85"
                                 title={msg.fileName}
                               >
                                 {msg.fileName || 'View Attachment'}
@@ -326,7 +326,7 @@ export default function ClientTicketsPage() {
                     <button
                       type="submit"
                       disabled={replyMutation.isPending || isUploading}
-                      className="p-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold rounded-xl shadow-sm hover:shadow-[0_0_15px_rgba(6,182,212,0.4)] transition-all disabled:opacity-50 cursor-pointer flex items-center justify-center min-w-[38px]"
+                      className="p-2.5 bg-linear-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold rounded-xl shadow-sm hover:shadow-[0_0_15px_rgba(6,182,212,0.4)] transition-all disabled:opacity-50 cursor-pointer flex items-center justify-center min-w-9.5"
                     >
                       {isUploading ? (
                         <div className="w-3.5 h-3.5 border-2 border-black border-t-transparent rounded-full animate-spin" />
@@ -367,7 +367,7 @@ export default function ClientTicketsPage() {
       {showCreateModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
           <div className="bg-[#03091e] rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden border border-white/10">
-            <div className="p-4 border-b border-white/10 flex justify-between items-center bg-white/[0.02]">
+            <div className="p-4 border-b border-white/10 flex justify-between items-center bg-white/2">
               <h3 className="font-heading text-sm font-bold text-white flex items-center gap-2">
                 <AlertCircle className="w-4 h-4 text-cyan-400" />
                 <span>Submit Support Inquiry</span>
@@ -481,7 +481,7 @@ export default function ClientTicketsPage() {
                 <button
                   type="submit"
                   disabled={createMutation.isPending || isUploading}
-                  className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold rounded-xl text-xs shadow-sm hover:shadow-[0_0_15px_rgba(6,182,212,0.4)] transition-all disabled:opacity-50 cursor-pointer flex items-center gap-2"
+                  className="px-4 py-2 bg-linear-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold rounded-xl text-xs shadow-sm hover:shadow-[0_0_15px_rgba(6,182,212,0.4)] transition-all disabled:opacity-50 cursor-pointer flex items-center gap-2"
                 >
                   {isUploading ? (
                     <>

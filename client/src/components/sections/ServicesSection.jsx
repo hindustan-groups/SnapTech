@@ -44,7 +44,7 @@ function ServiceCard({ service, index }) {
     >
       {/* Gradient border top line */}
       <div
-        className="absolute top-0 left-0 right-0 h-[3px] rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        className="absolute top-0 left-0 right-0 h-0.75 rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
         style={{ background: `linear-gradient(90deg, ${accent.border}, ${accent.border}80, ${accent.border})` }}
       />
 
@@ -136,8 +136,8 @@ export default function ServicesSection() {
       aria-labelledby="services-heading"
     >
       {/* Subtle background decorations */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#1a3e8c]/4 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#e31e24]/4 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-0 right-0 w-150 h-150 bg-[#1a3e8c]/4 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-125 h-125 bg-[#e31e24]/4 rounded-full blur-[120px] pointer-events-none" />
 
       <Container className="relative z-10">
         {/* Section heading */}

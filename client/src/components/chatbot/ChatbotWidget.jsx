@@ -42,7 +42,7 @@ export function ChatbotWidget() {
     {
       id: 0,
       sender: 'bot',
-      text: '👋 Hello! Welcome to **Hindustan Projects**. How can I help you today? Ask me about our services, pricing, timings, or contact info.',
+      text: '👋 Hello! Welcome to **SnapTech Digital**. How can I help you today? Ask me about our services, pricing, timings, or contact info.',
       isAnswered: true,
     },
   ])
@@ -130,7 +130,7 @@ export function ChatbotWidget() {
               </div>
               <div>
                 <p style={{ color: '#ffffff', fontWeight: 700, fontSize: 14, margin: 0, lineHeight: 1.3 }}>
-                  Hindustan Projects
+                  SnapTech Digital
                 </p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 2 }}>
                   <span style={{ width: 7, height: 7, borderRadius: '50%', backgroundColor: '#4ade80', display: 'inline-block' }} />

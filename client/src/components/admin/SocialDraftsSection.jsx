@@ -55,7 +55,7 @@ export function SocialDraftsSection() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[400px] overflow-y-auto pr-1">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-100 overflow-y-auto pr-1">
         {drafts.map((draft) => (
           <div
             key={draft.id}

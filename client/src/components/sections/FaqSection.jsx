@@ -36,7 +36,7 @@ const FALLBACK_FAQS = [
   {
     id: '6',
     question: 'Do you work with clients across India and internationally?',
-    answer: 'Absolutely. While rooted in Rajasthan as part of Hindustan Projects, we engineer digital infrastructure for enterprises across India, the Middle East, and worldwide via streamlined remote workflows.',
+    answer: 'Absolutely. While headquartered in Bhilwara, Rajasthan, we engineer digital solutions for businesses across India, the Middle East, and worldwide via streamlined remote workflows — with dedicated project managers and real-time communication.',
   },
 ]
 

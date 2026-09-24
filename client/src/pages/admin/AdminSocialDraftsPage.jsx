@@ -211,7 +211,7 @@ export default function AdminSocialDraftsPage() {
       <div className="space-y-6 max-w-7xl mx-auto pb-12">
 
         {/* ── Executive Dark Header Banner ────────────────────────── */}
-        <div className="bg-gradient-to-r from-slate-900 via-gray-900 to-brand-blue p-6 sm:p-8 rounded-3xl text-white shadow-xl relative overflow-hidden">
+        <div className="bg-linear-to-r from-slate-900 via-gray-900 to-brand-blue p-6 sm:p-8 rounded-3xl text-white shadow-xl relative overflow-hidden">
           <div className="absolute top-0 right-0 w-96 h-96 bg-brand-blue/20 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -422,7 +422,7 @@ export default function AdminSocialDraftsPage() {
                     )}
 
                     {/* Caption Preview box */}
-                    <pre className="text-xs text-gray-800 bg-gray-50/70 p-4 rounded-2xl font-mono whitespace-pre-wrap max-h-[160px] overflow-y-auto mb-4 border border-gray-150 leading-relaxed shadow-inner">
+                    <pre className="text-xs text-gray-800 bg-gray-50/70 p-4 rounded-2xl font-mono whitespace-pre-wrap max-h-40 overflow-y-auto mb-4 border border-gray-150 leading-relaxed shadow-inner">
                       {draft.text}
                     </pre>
 
@@ -588,7 +588,7 @@ export default function AdminSocialDraftsPage() {
                     rows={6}
                     value={draftText}
                     onChange={(e) => setDraftText(e.target.value)}
-                    placeholder="🔥 Excited to share our new service launch at Hindustan Projects! #webdevelopment #digitalmarketing"
+                    placeholder="🔥 Excited to share our new service launch at SnapTech Digital! #webdevelopment #digitalmarketing"
                     required
                     className="w-full text-xs text-gray-800 p-3.5 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-blue/20 resize-none leading-relaxed font-sans bg-gray-50/50 focus:bg-white"
                   />
@@ -636,10 +636,10 @@ export default function AdminSocialDraftsPage() {
               <div className="bg-white rounded-2xl border border-gray-200 p-4 shadow-sm space-y-3">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-brand-blue text-white flex items-center justify-center font-bold text-sm">
-                    HP
+                    ST
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-gray-900">Hindustan Projects</p>
+                    <p className="text-xs font-bold text-gray-900">SnapTech Digital</p>
                     <p className="text-[10px] text-gray-400">IT Services &amp; Digital Agency • Promoted</p>
                   </div>
                 </div>

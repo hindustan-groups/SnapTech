@@ -724,34 +724,6 @@ async function main() {
   })
   console.log('Seeded admin: ' + adminEmail)
 
-  // Legal Pages
-  const legalPages = [
-    {
-      pageType: 'PRIVACY_POLICY',
-      title: 'Privacy Policy',
-      content: `<h2>1. Information We Collect</h2><p>We collect information you provide directly to us, such as when you submit a contact form, request a quote, or apply for a job. This includes your name, email, phone number, and any other details you share.</p><h2>2. How We Use Your Information</h2><p>We use your information to respond to inquiries, deliver our IT services, send updates, and improve website performance.</p><h2>3. Data Protection</h2><p>We implement secure industry-standard measures to protect your personal data from unauthorized access or disclosure.</p>`,
-      updatedBy: adminRecord.id,
-    },
-    {
-      pageType: 'TERMS_OF_SERVICE',
-      title: 'Terms of Service',
-      content: `<h2>1. Services Rendered</h2><p>Hindustan Projects provides custom software, web development, digital marketing, and IT consulting services. All projects are subject to agreed milestones and deliverables.</p><h2>2. Payments & Fees</h2><p>Invoices are generated based on the project scope and payment schedule. Payments must be made within the specified timeframes to avoid service suspension.</p><h2>3. Intellectual Property</h2><p>Upon final payment, the ownership of the custom code and deliverables is transferred to the client, while we retain rights to reusable modules.</p>`,
-      updatedBy: adminRecord.id,
-    },
-    {
-      pageType: 'REFUND_POLICY',
-      title: 'Refund Policy',
-      content: `<h2>1. Service-Based Projects</h2><p>As our projects involve custom design and engineering resources, payments made for milestone deliverables are generally non-refundable once work has commenced.</p><h2>2. Cancellation Policy</h2><p>Clients may cancel a project at any stage. Any work completed up to the date of cancellation will be invoiced and is payable by the client.</p><h2>3. Issues and Support</h2><p>If you encounter any bugs or quality issues, we provide a 30-day post-launch support period to resolve them free of charge.</p>`,
-      updatedBy: adminRecord.id,
-    },
-  ]
-  for (const lp of legalPages) {
-    const existing = await prisma.legalPage.findUnique({ where: { pageType: lp.pageType } })
-    if (!existing) {
-      await prisma.legalPage.create({ data: lp })
-    }
-  }console.log('Seeded ' + legalPages.length + ' legal pages')
-
   // Blog Posts (3 sample posts for IT services company)
   const blogPosts = [
     {
@@ -866,7 +838,7 @@ async function main() {
       status: 'PUBLISHED',
       isFeatured: false,
       publishedAt: new Date('2026-07-08'),
-      metaTitle: 'Bhilwara\'s Trusted IT & Web Development Agency | Hindustan Projects',
+      metaTitle: 'Bhilwara\'s Trusted IT & Web Development Agency | SnapTech Digital',
       metaDescription: 'We are proud to be based in Bhilwara, Rajasthan. Learn how we help local manufacturing, textiles, and retail brands scale using modern software.',
       viewCount: 143,
     },
@@ -879,6 +851,248 @@ async function main() {
     }
   }
   console.log('Seeded ' + blogPosts.length + ' blog posts')
+
+  // ── Legal Pages ──────────────────────────────────────────────────────────
+  const legalPages = [
+    {
+      pageType: 'PRIVACY_POLICY',
+      title: 'Privacy Policy',
+      lastUpdated: new Date('2025-01-01'),
+      content: `
+<h2>1. Introduction</h2>
+<p>SnapTech Digital ("we", "our", or "us"), operated by SnapTech Digital (a digital services company based in Bhilwara, Rajasthan, India), is committed to protecting your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your data when you visit <strong>www.snaptech.digital</strong> or use our services.</p>
+<p>By using our website or services, you agree to the collection and use of information as described in this policy.</p>
+
+<h2>2. Information We Collect</h2>
+<h3>Information You Provide Directly</h3>
+<ul>
+  <li><strong>Contact & Inquiry Forms:</strong> Name, email address, phone number, company name, project details.</li>
+  <li><strong>Client Portal Registration:</strong> Name, email, password (stored securely as a hashed value).</li>
+  <li><strong>Job Applications:</strong> Resume/CV, educational background, work experience, cover letter.</li>
+  <li><strong>Support Tickets:</strong> Issue descriptions, attachments, communication history.</li>
+</ul>
+<h3>Information Collected Automatically</h3>
+<ul>
+  <li><strong>Usage Data:</strong> Pages visited, time spent, referral source, browser type, operating system.</li>
+  <li><strong>Device Information:</strong> IP address (anonymized), device type, screen resolution.</li>
+  <li><strong>Cookies:</strong> Session cookies for authentication; preference cookies for UI settings. We do not use advertising cookies.</li>
+</ul>
+
+<h2>3. How We Use Your Information</h2>
+<ul>
+  <li>To respond to inquiries, contact form submissions, and support requests.</li>
+  <li>To provide and manage our services, including the client portal and project tracking.</li>
+  <li>To send project updates, invoices, and service-related communications.</li>
+  <li>To process job applications and communicate with candidates.</li>
+  <li>To improve our website content and service offerings.</li>
+  <li>To comply with applicable legal obligations in India.</li>
+</ul>
+
+<h2>4. Legal Basis for Processing (GDPR)</h2>
+<p>If you are located in the European Economic Area, our legal basis for processing your information includes: your consent, the performance of a contract with you, compliance with legal obligations, and our legitimate business interests.</p>
+
+<h2>5. Data Sharing & Disclosure</h2>
+<p>We do <strong>not sell</strong> your personal data to any third party. We may share your data with:</p>
+<ul>
+  <li><strong>Service Providers:</strong> Neon (database hosting), Cloudinary (file storage), Resend (email delivery) — bound by confidentiality agreements.</li>
+  <li><strong>Legal Requirements:</strong> When required by law, court order, or competent government authority in India.</li>
+  <li><strong>Business Transfers:</strong> In the event of a merger, acquisition, or asset sale, your data may be transferred with prior notice.</li>
+</ul>
+
+<h2>6. Data Retention</h2>
+<p>We retain your personal data only as long as necessary for the purposes stated in this policy or as required by applicable law. Contact lead data is retained for 3 years; client project data is retained for the duration of the contract plus 5 years.</p>
+
+<h2>7. Your Rights</h2>
+<p>You have the right to:</p>
+<ul>
+  <li>Access the personal data we hold about you.</li>
+  <li>Request correction of inaccurate data.</li>
+  <li>Request deletion of your data (subject to legal retention requirements).</li>
+  <li>Withdraw consent for marketing communications at any time.</li>
+  <li>Lodge a complaint with your local data protection authority.</li>
+</ul>
+<p>To exercise these rights, email us at <a href="mailto:info@snaptech.digital">info@snaptech.digital</a>.</p>
+
+<h2>8. Security</h2>
+<p>We implement industry-standard security measures including TLS/HTTPS encryption, bcrypt password hashing, JWT token-based authentication, and role-based access controls. No method of transmission over the Internet is 100% secure; we strive to use commercially acceptable means to protect your data.</p>
+
+<h2>9. Cookies</h2>
+<p>Our website uses strictly necessary cookies for authentication and session management. We do not use third-party tracking or advertising cookies. You may disable cookies in your browser settings, but this may affect certain site features.</p>
+
+<h2>10. Third-Party Links</h2>
+<p>Our website may contain links to external sites. We are not responsible for the privacy practices or content of those sites. We encourage you to review their privacy policies.</p>
+
+<h2>11. Children's Privacy</h2>
+<p>Our services are not directed to individuals under 18 years of age. We do not knowingly collect personal data from minors.</p>
+
+<h2>12. Changes to This Policy</h2>
+<p>We may update this Privacy Policy periodically. We will notify you of significant changes by updating the "Last Updated" date at the top of this page. Continued use of our services after changes constitutes acceptance.</p>
+
+<h2>13. Contact Us</h2>
+<p>For privacy-related questions or to exercise your rights, contact us at:</p>
+<ul>
+  <li><strong>Email:</strong> <a href="mailto:info@snaptech.digital">info@snaptech.digital</a></li>
+  <li><strong>Phone:</strong> +91 75970 00601</li>
+  <li><strong>Address:</strong> SnapTech Digital, Bhilwara, Rajasthan 311001, India</li>
+</ul>
+      `,
+    },
+    {
+      pageType: 'TERMS_OF_SERVICE',
+      title: 'Terms of Service',
+      lastUpdated: new Date('2025-01-01'),
+      content: `
+<h2>1. Acceptance of Terms</h2>
+<p>By accessing or using the website <strong>www.snaptech.digital</strong> or engaging SnapTech Digital for any services, you agree to be bound by these Terms of Service ("Terms"). If you do not agree, please do not use our website or services.</p>
+
+<h2>2. Services Offered</h2>
+<p>SnapTech Digital provides digital services including, but not limited to:</p>
+<ul>
+  <li>Website design and development</li>
+  <li>Web application development</li>
+  <li>Mobile-responsive UI/UX design</li>
+  <li>Digital marketing support</li>
+  <li>IT consulting and technical advisory</li>
+  <li>Maintenance, hosting support, and SLA-based contracts</li>
+</ul>
+
+<h2>3. Client Responsibilities</h2>
+<p>As a client, you agree to:</p>
+<ul>
+  <li>Provide accurate and complete project requirements in a timely manner.</li>
+  <li>Supply all necessary content, assets, credentials, and approvals when requested.</li>
+  <li>Designate a single point of contact for communication unless otherwise agreed.</li>
+  <li>Make timely payments as per agreed invoices and milestones.</li>
+  <li>Not use deliverables for any illegal, fraudulent, or harmful purpose.</li>
+</ul>
+
+<h2>4. Intellectual Property</h2>
+<p>Upon full payment of all outstanding invoices:</p>
+<ul>
+  <li>All custom code, designs, and deliverables created specifically for your project will be assigned to you.</li>
+  <li>SnapTech Digital retains ownership of any pre-existing proprietary frameworks, components, or tools used in delivering services.</li>
+  <li>SnapTech Digital reserves the right to showcase completed work in our portfolio unless explicitly agreed otherwise in writing.</li>
+</ul>
+
+<h2>5. Payment Terms</h2>
+<ul>
+  <li>All projects require a minimum <strong>30% advance payment</strong> before work begins.</li>
+  <li>Remaining payments are tied to milestones as outlined in the signed project agreement.</li>
+  <li>Late payments beyond 15 days may incur a 2% monthly interest charge.</li>
+  <li>Disputed invoices must be raised within 7 days of receipt. Silence implies acceptance.</li>
+</ul>
+
+<h2>6. Project Timelines</h2>
+<p>Estimated delivery timelines are provided in good faith. Delays caused by client-side factors (late content delivery, delayed approvals, change requests) are not our responsibility and may adjust the delivery schedule accordingly.</p>
+
+<h2>7. Limitation of Liability</h2>
+<p>To the maximum extent permitted by applicable law, SnapTech Digital shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including loss of profits or data, arising out of your use of our services. Our total liability for any claim shall not exceed the total fees paid by you in the 3 months preceding the claim.</p>
+
+<h2>8. Confidentiality</h2>
+<p>Both parties agree to keep confidential any proprietary or sensitive information shared during the engagement and not to disclose it to third parties without prior written consent, except as required by law.</p>
+
+<h2>9. Termination</h2>
+<p>Either party may terminate a project engagement with <strong>15 days written notice</strong>. Upon termination:</p>
+<ul>
+  <li>You will be invoiced for all work completed up to the termination date.</li>
+  <li>Deliverables for completed and paid milestones will be handed over.</li>
+  <li>Work-in-progress will be provided in its current state after full payment of outstanding amounts.</li>
+</ul>
+
+<h2>10. Governing Law</h2>
+<p>These Terms are governed by the laws of <strong>India</strong>. Any disputes arising from or related to these Terms shall be subject to the exclusive jurisdiction of the courts in <strong>Bhilwara, Rajasthan, India</strong>.</p>
+
+<h2>11. Modifications</h2>
+<p>We reserve the right to modify these Terms at any time. Updated Terms will be posted on this page with a revised date. Continued use of our services after modifications constitutes acceptance of the new Terms.</p>
+
+<h2>12. Contact</h2>
+<p>For questions about these Terms, contact us at:</p>
+<ul>
+  <li><strong>Email:</strong> <a href="mailto:info@snaptech.digital">info@snaptech.digital</a></li>
+  <li><strong>Phone:</strong> +91 75970 00601</li>
+  <li><strong>Address:</strong> SnapTech Digital, Bhilwara, Rajasthan 311001, India</li>
+</ul>
+      `,
+    },
+    {
+      pageType: 'REFUND_POLICY',
+      title: 'Refund Policy',
+      lastUpdated: new Date('2025-01-01'),
+      content: `
+<h2>1. Overview</h2>
+<p>At SnapTech Digital, we are committed to delivering high-quality digital solutions and ensuring client satisfaction. This Refund Policy outlines the conditions under which refunds may be issued for our services.</p>
+<p>By engaging SnapTech Digital for any service, you agree to this Refund Policy.</p>
+
+<h2>2. Nature of Services</h2>
+<p>Our services are primarily <strong>custom, time-based professional services</strong> — including web design, web development, digital marketing, and IT consulting. Once work commences on a project milestone, the resources and time invested cannot be reclaimed, which affects our refund eligibility criteria.</p>
+
+<h2>3. Advance Payments (Deposits)</h2>
+<ul>
+  <li>Advance/deposit payments (typically 30%–50% of the project value) are <strong>non-refundable</strong> once the project kick-off meeting has occurred and work has commenced.</li>
+  <li>If a project is cancelled by the client before the kick-off meeting, a full refund of any advance paid may be requested within 7 days of payment.</li>
+</ul>
+
+<h2>4. Milestone-Based Payments</h2>
+<ul>
+  <li>Payments made against a completed and delivered milestone are <strong>non-refundable</strong>.</li>
+  <li>If a milestone has been partially completed at the time of cancellation, a pro-rated charge for work completed will apply, and any excess amount paid will be refunded.</li>
+</ul>
+
+<h2>5. Eligible Refund Scenarios</h2>
+<p>A refund may be considered in the following circumstances:</p>
+<ul>
+  <li>SnapTech Digital is <strong>unable to deliver</strong> the agreed-upon scope of work due to internal resource constraints or technical inability — and a workable alternative cannot be provided.</li>
+  <li>A <strong>duplicate payment</strong> was made in error — the duplicate amount will be refunded within 7 business days.</li>
+  <li>Work has <strong>not commenced</strong> on a paid milestone, and the client wishes to cancel the engagement.</li>
+</ul>
+
+<h2>6. Non-Refundable Items</h2>
+<p>The following are explicitly non-refundable:</p>
+<ul>
+  <li>Advance / deposit payments after kick-off.</li>
+  <li>Payments for completed and delivered milestones.</li>
+  <li>Domain registration, hosting fees, or third-party software license fees procured on the client's behalf.</li>
+  <li>Rush / expedited project fees.</li>
+  <li>Payments for maintenance retainer contracts already in progress.</li>
+</ul>
+
+<h2>7. Change of Mind</h2>
+<p>Refunds are <strong>not provided</strong> for a simple change of mind, change in business direction, or decision to use a different vendor after work has begun.</p>
+
+<h2>8. Dispute Resolution</h2>
+<p>If you are dissatisfied with a deliverable, we encourage you to first raise your concerns through our support channels. We are committed to resolving genuine quality issues through revisions as per the agreed revision policy in your project contract. Refund requests not covered by the above policy are reviewed on a case-by-case basis by our management team.</p>
+
+<h2>9. How to Request a Refund</h2>
+<p>To initiate a refund request:</p>
+<ol>
+  <li>Email us at <a href="mailto:info@snaptech.digital">info@snaptech.digital</a> with the subject line: <strong>"Refund Request – [Your Project Name]"</strong>.</li>
+  <li>Include your invoice number, payment date, and reason for the request.</li>
+  <li>Our team will respond within <strong>3–5 business days</strong> with a decision.</li>
+  <li>Approved refunds will be processed to the original payment method within <strong>7–10 business days</strong>.</li>
+</ol>
+
+<h2>10. Governing Law</h2>
+<p>This Refund Policy is governed by the laws of India. Disputes shall be subject to the jurisdiction of courts in Bhilwara, Rajasthan, India.</p>
+
+<h2>11. Contact Us</h2>
+<p>For refund enquiries, please contact:</p>
+<ul>
+  <li><strong>Email:</strong> <a href="mailto:info@snaptech.digital">info@snaptech.digital</a></li>
+  <li><strong>Phone:</strong> +91 75970 00601</li>
+  <li><strong>Address:</strong> SnapTech Digital, Bhilwara, Rajasthan 311001, India</li>
+</ul>
+      `,
+    },
+  ]
+
+  for (const lp of legalPages) {
+    await prisma.legalPage.upsert({
+      where: { pageType: lp.pageType },
+      update: { title: lp.title, content: lp.content, lastUpdated: lp.lastUpdated },
+      create: lp,
+    })
+  }
+  console.log('Seeded ' + legalPages.length + ' legal pages')
 
   console.log('Seeding complete.')
 }

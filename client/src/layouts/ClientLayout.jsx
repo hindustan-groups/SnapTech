@@ -52,7 +52,7 @@ export default function ClientLayout() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#020714]">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-10 h-10 border-[3px] border-brand-cyan border-t-transparent rounded-full animate-spin" />
+          <div className="w-10 h-10 border-3 border-brand-cyan border-t-transparent rounded-full animate-spin" />
           <p className="text-sm font-semibold text-slate-400">Loading Client Portal…</p>
         </div>
       </div>
@@ -111,7 +111,7 @@ export default function ClientLayout() {
                   transition-all duration-200 group ${
                     isActive
                       ? 'bg-brand-cyan/15 text-white font-bold border border-brand-cyan/30 shadow-lg shadow-cyan-950/30'
-                      : 'text-slate-400 hover:bg-white/[0.05] hover:text-white'
+                      : 'text-slate-400 hover:bg-white/5 hover:text-white'
                   }`}
               >
                 {isActive && (
@@ -133,7 +133,7 @@ export default function ClientLayout() {
         <div className="p-4 border-t border-white/10 shrink-0 space-y-1.5">
           <button
             onClick={() => setShowTermsModal(true)}
-            className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:bg-white/[0.05] hover:text-brand-cyan transition-colors cursor-pointer"
+            className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:bg-white/5 hover:text-brand-cyan transition-colors cursor-pointer"
           >
             <FileText className="w-4 h-4 text-brand-cyan" />
             <span>Portal Terms &amp; SLA Rules</span>
@@ -155,7 +155,7 @@ export default function ClientLayout() {
           <div className="flex items-center gap-4">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden p-1.5 text-slate-400 hover:text-white hover:bg-white/[0.08] rounded-xl transition-colors cursor-pointer"
+              className="lg:hidden p-1.5 text-slate-400 hover:text-white hover:bg-white/8 rounded-xl transition-colors cursor-pointer"
               aria-label="Open sidebar"
             >
               <Menu className="w-6 h-6" />
@@ -169,7 +169,7 @@ export default function ClientLayout() {
             {/* Notification Bell */}
             <button
               onClick={() => navigate('/client/support')}
-              className="relative p-2 rounded-xl bg-white/[0.04] border border-white/10 hover:bg-white/[0.08] text-slate-300 hover:text-white transition-all cursor-pointer"
+              className="relative p-2 rounded-xl bg-white/4 border border-white/10 hover:bg-white/8 text-slate-300 hover:text-white transition-all cursor-pointer"
               title={unreadTicketsCount > 0 ? `${unreadTicketsCount} unread ticket update(s)` : 'No new notifications'}
             >
               <Bell className={`w-4 h-4 ${unreadTicketsCount > 0 ? 'text-brand-cyan animate-pulse' : 'text-slate-400'}`} />
@@ -182,7 +182,7 @@ export default function ClientLayout() {
 
             <button
               onClick={() => setShowTermsModal(true)}
-              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-slate-300 hover:text-white text-xs font-semibold transition-all cursor-pointer"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/4 hover:bg-white/8 border border-white/10 text-slate-300 hover:text-white text-xs font-semibold transition-all cursor-pointer"
             >
               <FileText className="w-3.5 h-3.5 text-brand-cyan" />
               <span>SLA Rules &amp; Terms</span>
@@ -215,20 +215,20 @@ export default function ClientLayout() {
                     Client Portal SLA Rules &amp; Terms
                   </h3>
                   <p className="text-xs text-slate-400 mt-0.5">
-                    Hindustan Projects official client engagement guidelines &amp; policies
+                    SnapTech Digital official client engagement guidelines &amp; policies
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => setShowTermsModal(false)}
-                className="p-2 text-slate-400 hover:text-white hover:bg-white/[0.08] rounded-xl transition-all cursor-pointer"
+                className="p-2 text-slate-400 hover:text-white hover:bg-white/8 rounded-xl transition-all cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <div className="space-y-4 text-sm text-slate-300 leading-relaxed">
-              <div className="bg-white/[0.03] border border-white/10 p-4 rounded-2xl space-y-2">
+              <div className="bg-white/3 border border-white/10 p-4 rounded-2xl space-y-2">
                 <h4 className="font-bold text-brand-cyan flex items-center gap-2 text-sm">
                   <CheckCircle2 className="w-4 h-4 text-brand-cyan shrink-0" />
                   1. Service Level Agreement (SLA) &amp; Support SLA
@@ -238,7 +238,7 @@ export default function ClientLayout() {
                 </p>
               </div>
 
-              <div className="bg-white/[0.03] border border-white/10 p-4 rounded-2xl space-y-2">
+              <div className="bg-white/3 border border-white/10 p-4 rounded-2xl space-y-2">
                 <h4 className="font-bold text-emerald-400 flex items-center gap-2 text-sm">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
                   2. Intellectual Property (IP) &amp; Source Code Transfer
@@ -248,7 +248,7 @@ export default function ClientLayout() {
                 </p>
               </div>
 
-              <div className="bg-white/[0.03] border border-white/10 p-4 rounded-2xl space-y-2">
+              <div className="bg-white/3 border border-white/10 p-4 rounded-2xl space-y-2">
                 <h4 className="font-bold text-amber-400 flex items-center gap-2 text-sm">
                   <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
                   3. Milestone Billing &amp; GST Tax Invoice Compliance
@@ -258,7 +258,7 @@ export default function ClientLayout() {
                 </p>
               </div>
 
-              <div className="bg-white/[0.03] border border-white/10 p-4 rounded-2xl space-y-2">
+              <div className="bg-white/3 border border-white/10 p-4 rounded-2xl space-y-2">
                 <h4 className="font-bold text-purple-400 flex items-center gap-2 text-sm">
                   <CheckCircle2 className="w-4 h-4 text-purple-400 shrink-0" />
                   4. Project Asset Upload Guidelines

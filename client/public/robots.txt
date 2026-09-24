@@ -1,14 +1,26 @@
 User-agent: *
 Allow: /
 
-# Block admin and API from crawlers
+# Block admin suite, client portal dashboards, and internal API routes
 Disallow: /admin/
+Disallow: /client/
 Disallow: /api/
 
-# Block legal utility pages (low SEO value)
-Disallow: /privacy-policy
-Disallow: /terms-of-service
-Disallow: /refund-policy
+# Search Engine & AI Answer Engine Crawlers (SEO / AEO / EEO)
+User-agent: Googlebot
+Allow: /
 
-# Sitemap location
+User-agent: Bingbot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+# Official XML Sitemap
 Sitemap: https://www.snaptech.digital/sitemap.xml

@@ -7,13 +7,13 @@
 import { Helmet } from 'react-helmet-async'
 
 export const SITE = {
-  name: 'Snaptech',
-  alternateName: 'Snaptech — Technology Division of Hindustan Projects',
-  parentName: 'Hindustan Projects',
-  parentUrl: 'https://www.hindustanprojects.in',
+  name: 'SnapTech Digital',
+  alternateName: 'SnapTech Digital — Web & App Development Agency',
+  parentName: 'SnapTech Digital',
+  parentUrl: 'https://www.snaptech.digital',
   url: 'https://www.snaptech.digital',
   description:
-    'Looking for IT Solutions? Search. Discover. Connect with Snaptech — the enterprise technology and digital innovation wing of Hindustan Projects Group. Custom Web Applications, Mobile Apps, Cloud & AI Automation.',
+    'SnapTech Digital is a full-service digital agency based in Bhilwara, Rajasthan. We build enterprise websites, web apps, and mobile apps — and deliver digital marketing, SEO, and IT consulting services across India.',
   phone: '+91 7597000601',
   email: 'info@snaptech.digital',
   address: {
@@ -29,12 +29,12 @@ export const SITE = {
   twitterHandle: '@snaptechdigital',
   founded: '2019',
   keywords:
-    'Snaptech, Hindustan Projects IT, IT solutions Bhilwara, web development Rajasthan, mobile app development India, cloud DevOps, AI automation, enterprise software, custom CRM',
+    'SnapTech Digital, IT company Bhilwara, web development Rajasthan, mobile app development India, digital marketing, SEO services, web design agency, software company Rajasthan',
   sameAs: [
-    'https://www.instagram.com/hindustanprojects',
-    'https://www.facebook.com/hindustanprojects',
-    'https://pinterest.com/hindustanprojects',
-    'https://www.linkedin.com/company/hindustan-projects',
+    'https://www.instagram.com/snaptechdigital',
+    'https://www.facebook.com/snaptechdigital',
+    'https://www.linkedin.com/company/snaptechdigital',
+    'https://twitter.com/snaptechdigital',
   ],
 }
 
@@ -116,6 +116,14 @@ export function localBusinessSchema() {
       'Custom ERP & CRM Platforms',
       'Technical SEO & Digital Growth',
     ],
+    openingHoursSpecification: [
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+        opens: '09:00',
+        closes: '18:00',
+      },
+    ],
     areaServed: [
       { '@type': 'City', name: 'Bhilwara' },
       { '@type': 'State', name: 'Rajasthan' },
@@ -135,6 +143,10 @@ export function websiteSchema() {
     alternateName: SITE.alternateName,
     description: SITE.description,
     inLanguage: 'en-IN',
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', 'h2', 'p'],
+    },
     potentialAction: {
       '@type': 'SearchAction',
       target: {

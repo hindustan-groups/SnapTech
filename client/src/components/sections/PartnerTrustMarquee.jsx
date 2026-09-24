@@ -54,7 +54,7 @@ export default function PartnerTrustMarquee() {
       aria-label="Enterprise Accreditations & Partners"
     >
       {/* Background ambient subtle gradient */}
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-50/40 via-transparent to-red-50/30 pointer-events-none" />
+      <div className="absolute inset-0 bg-linear-to-r from-blue-50/40 via-transparent to-red-50/30 pointer-events-none" />
 
       {/* ── Top Strip: Enterprise Trust Badges ── */}
       <Container className="relative mb-8">
@@ -95,8 +95,8 @@ export default function PartnerTrustMarquee() {
       {/* ── Bottom Strip: Infinite Horizontal Running Marquee ── */}
       <div className="relative w-full overflow-hidden select-none">
         {/* Left & Right gradient vignettes to smooth out marquee entry/exit */}
-        <div className="absolute top-0 bottom-0 left-0 w-16 sm:w-28 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
-        <div className="absolute top-0 bottom-0 right-0 w-16 sm:w-28 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
+        <div className="absolute top-0 bottom-0 left-0 w-16 sm:w-28 bg-linear-to-r from-white to-transparent z-10 pointer-events-none" />
+        <div className="absolute top-0 bottom-0 right-0 w-16 sm:w-28 bg-linear-to-l from-white to-transparent z-10 pointer-events-none" />
 
         <div className="flex w-max animate-marquee hover:[animation-play-state:paused] gap-4 sm:gap-6 py-2">
           {marqueeList.map((p, index) => (

@@ -52,12 +52,12 @@ function LogoEmblem({ isLarge = false }) {
     <div className="flex items-center gap-3">
       <img
         src={snaptechLogo}
-        alt="Snaptech - Hindustan Projects IT"
+        alt="SnapTech Digital — Enterprise IT"
         className={isLarge ? "h-11 object-contain" : "h-8.5 object-contain"}
       />
       <div className="border-l border-slate-300 pl-2.5 hidden sm:block">
         <span className="text-[7.5px] font-black text-[#001D4A] tracking-wider uppercase block">
-          A HINDUSTAN PROJECTS ENTERPRISE
+          SNAPTECH DIGITAL ENTERPRISE
         </span>
         <span className="text-[7px] font-bold text-[#0066FF] tracking-widest uppercase block">
           IT &amp; SOFTWARE ENGINEERING DIVISION
@@ -86,7 +86,7 @@ function TechnicalWatermark() {
       {/* Security Diagonal Watermark */}
       <div className="absolute inset-0 flex items-center justify-center opacity-[0.02] pointer-events-none select-none rotate-[-35deg] z-0">
         <span className="font-heading font-black text-6xl text-[#0A2540] uppercase tracking-widest text-center leading-tight">
-          HINDUSTAN PROJECTS IT SERVICES<br />CONFIDENTIAL PROPOSAL
+          SNAPTECH DIGITAL<br />CONFIDENTIAL PROPOSAL
         </span>
       </div>
     </>
@@ -117,7 +117,7 @@ export default function AdminProposalBookPage() {
     clientPhone: '+91 98765 43210',
     clientAddress: 'Plot 42, Cyber Tech Park, Sector 62, Noida, UP',
     projectName: 'High-Performance E-Commerce & ERP Ecosystem',
-    quotationNumber: 'HPIT-2026-089',
+    quotationNumber: 'STD-2026-089',
     date: new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }),
     validTill: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }),
     currency: 'INR (₹)',
@@ -170,11 +170,11 @@ export default function AdminProposalBookPage() {
     // Legal Terms
     legalTerms: [
       { id: 'lt1', title: '1. Source Code Ownership & Intellectual Property', text: 'Upon final settlement of the grand total payment, complete source code ownership, intellectual property rights, and codebase copyright belong exclusively to the Client.' },
-      { id: 'lt2', title: '2. Bug-Free Code Warranty & Technical Guarantee', text: 'Hindustan Projects IT Services provides a 100% bug-free code warranty. Any technical glitch or coding anomaly discovered post-delivery will be rectified at zero cost.' },
+      { id: 'lt2', title: '2. Bug-Free Code Warranty & Technical Guarantee', text: 'SnapTech Digital provides a 100% bug-free code warranty. Any technical glitch or coding anomaly discovered post-delivery will be rectified at zero cost.' },
       { id: 'lt3', title: '3. Technical Support & SLA', text: 'Complimentary technical support covers bug fixes, server monitoring, and minor text adjustments for the designated package duration.' },
       { id: 'lt4', title: '4. Project Timelines & Client Responsibilities', text: 'Delivery timelines are contingent upon prompt client feedback and provision of necessary media assets (logos, content, credentials).' },
       { id: 'lt5', title: '5. Confidentiality & Non-Disclosure (NDA)', text: 'Both parties agree to treat all business data, customer lists, API keys, and technical documentation as strictly confidential.' },
-      { id: 'lt6', title: '6. Limitation of Liability', text: 'Hindustan Projects IT Services is not liable for indirect or consequential damages arising from third-party server downtimes or API policy alterations.' },
+      { id: 'lt6', title: '6. Limitation of Liability', text: 'SnapTech Digital is not liable for indirect or consequential damages arising from third-party server downtimes or API policy alterations.' },
     ],
   })
 
@@ -869,7 +869,7 @@ export default function AdminProposalBookPage() {
                     PREPARED BY
                   </span>
                   <h4 className="font-heading font-black text-xs text-[#0A2540]">
-                    HINDUSTAN PROJECTS IT SERVICES
+                    SNAPTECH DIGITAL
                   </h4>
                   <div className="space-y-0.5 text-[10px] text-slate-600 mt-1.5 font-medium">
                     <p className="flex items-center gap-2">🌐 {proposalData.preparedByWebsite}</p>
@@ -923,7 +923,7 @@ export default function AdminProposalBookPage() {
               {/* Bottom Solid Footer Bar */}
               <div className="mt-4 bg-[#0A2540] text-white text-[9px] py-1.5 px-3 rounded-b-lg flex items-center justify-between font-mono relative z-10">
                 <div className="flex items-center gap-2">
-                  <div className="w-0 h-0 border-t-[6px] border-t-transparent border-l-[10px] border-l-[#D32F2F] border-b-[6px] border-b-transparent" />
+                  <div className="w-0 h-0 border-t-[6px] border-t-transparent border-l-10 border-l-[#D32F2F] border-b-[6px] border-b-transparent" />
                   <span>snaptech.digital</span>
                 </div>
                 <div>ST-IT-001</div>
@@ -950,7 +950,7 @@ export default function AdminProposalBookPage() {
                           Hi<span className="text-[#D32F2F]">Pro</span>
                         </div>
                         <span className="text-[8px] font-bold text-[#0A2540] tracking-wider block mt-0.5">
-                          HINDUSTAN PROJECTS
+                          SNAPTECH DIGITAL
                         </span>
                         <span className="text-[7px] font-extrabold text-[#D32F2F] tracking-widest uppercase block">
                           — IT SERVICES —
@@ -961,14 +961,14 @@ export default function AdminProposalBookPage() {
 
                   <div className="text-center">
                     <h2 className="font-heading font-black text-xl text-[#0A2540] tracking-tight">
-                      HINDUSTAN PROJECTS
+                      SNAPTECH DIGITAL
                     </h2>
                     <div className="flex items-center justify-center gap-2 mt-0.5">
-                      <div className="w-12 h-[1px] bg-[#D32F2F]" />
+                      <div className="w-12 h-px bg-[#D32F2F]" />
                       <span className="text-xs font-black text-[#D32F2F] tracking-widest uppercase">
                         IT SERVICES
                       </span>
-                      <div className="w-12 h-[1px] bg-[#D32F2F]" />
+                      <div className="w-12 h-px bg-[#D32F2F]" />
                     </div>
                   </div>
 
@@ -1533,7 +1533,7 @@ export default function AdminProposalBookPage() {
                       <span className="text-[9px] font-extrabold text-[#0A2540] uppercase tracking-wider block mb-1">
                         VENDOR AUTHORIZED SIGNATORY
                       </span>
-                      <h3 className="font-heading font-black text-xs text-[#0A2540]">Hindustan Projects IT Services</h3>
+                      <h3 className="font-heading font-black text-xs text-[#0A2540]">SnapTech Digital</h3>
                     </div>
 
                     <div className="my-auto self-center">

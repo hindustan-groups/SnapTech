@@ -68,7 +68,7 @@ export default function ClientInvoicePage() {
         </Link>
         <button
           onClick={handlePrint}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold rounded-xl text-xs shadow-md hover:shadow-[0_0_15px_rgba(6,182,212,0.4)] cursor-pointer transition-all hover:scale-[1.02]"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-linear-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold rounded-xl text-xs shadow-md hover:shadow-[0_0_15px_rgba(6,182,212,0.4)] cursor-pointer transition-all hover:scale-[1.02]"
         >
           <Printer className="w-4 h-4" />
           <span>Print / Save as PDF</span>
@@ -86,7 +86,7 @@ export default function ClientInvoicePage() {
               <span className="text-3xl font-black text-blue-500 print:text-blue-600 tracking-tight font-heading">tech</span>
             </div>
             <div className="text-[10px] font-bold text-cyan-400/80 print:text-blue-700 tracking-[0.2em] uppercase mt-0.5">
-              SnapTech Digital &bull; A Hindustan Projects Enterprise
+              SnapTech Digital &bull; Enterprise IT Solutions
             </div>
             <div className="text-[8px] text-slate-400 print:text-gray-500 font-medium tracking-wide mt-1">
               Software Engineering &bull; Cloud Infrastructure &bull; AI Solutions
@@ -184,7 +184,7 @@ export default function ClientInvoicePage() {
             <div className="pt-2">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-cyan-500/10 print:bg-blue-50 text-cyan-300 print:text-blue-700 border border-cyan-500/20 print:border-blue-100 rounded-lg text-[10px] font-bold">
                 <CheckCircle className="w-3.5 h-3.5 text-cyan-400 print:text-blue-700" />
-                <span>Verified Hindustan Projects Digital Receipt</span>
+                <span>Verified SnapTech Digital Receipt</span>
               </span>
             </div>
           </div>
@@ -214,7 +214,7 @@ export default function ClientInvoicePage() {
         {/* Invoice Footer */}
         <div className="mt-12 pt-6 border-t border-white/10 print:border-gray-200 text-center space-y-2">
           <p className="text-xs text-slate-400 print:text-gray-500 font-medium">
-            Thank you for partnering with Hindustan Projects. We look forward to working with you again.
+            Thank you for partnering with SnapTech Digital. We look forward to working with you again.
           </p>
           <div className="flex justify-center items-center gap-1.5 text-[10px] text-slate-500 print:text-gray-400 font-bold uppercase tracking-wider">
             <FileText className="w-3.5 h-3.5" />

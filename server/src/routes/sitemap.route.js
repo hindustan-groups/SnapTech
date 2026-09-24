@@ -10,7 +10,7 @@ const BASE = process.env.CLIENT_URL || 'https://www.snaptech.digital'
 
 router.get('/', async (_req, res, next) => {
   try {
-    const [services, blogPosts] = await Promise.all([
+    const [services, blogPosts, jobs] = await Promise.all([
       prisma.service.findMany({
         where: { isActive: true },
         select: { slug: true, updatedAt: true },
@@ -20,6 +20,11 @@ router.get('/', async (_req, res, next) => {
         where: { status: 'PUBLISHED' },
         select: { slug: true, publishedAt: true, updatedAt: true },
         orderBy: { publishedAt: 'desc' },
+      }),
+      prisma.jobPosting.findMany({
+        where: { isActive: true },
+        select: { slug: true, updatedAt: true },
+        orderBy: { updatedAt: 'desc' },
       }),
     ])
 
@@ -32,9 +37,9 @@ router.get('/', async (_req, res, next) => {
       { path: '/contact', priority: '0.8', freq: 'monthly' },
       { path: '/careers', priority: '0.6', freq: 'weekly' },
       { path: '/blog', priority: '0.8', freq: 'daily' },
-      { path: '/privacy-policy', priority: '0.3', freq: 'yearly' },
-      { path: '/terms-of-service', priority: '0.3', freq: 'yearly' },
-      { path: '/refund-policy', priority: '0.3', freq: 'yearly' },
+      { path: '/privacy-policy', priority: '0.4', freq: 'yearly' },
+      { path: '/terms-of-service', priority: '0.4', freq: 'yearly' },
+      { path: '/refund-policy', priority: '0.4', freq: 'yearly' },
     ]
 
     const servicePages = services.map((s) => ({
@@ -51,7 +56,14 @@ router.get('/', async (_req, res, next) => {
       lastmod: (p.updatedAt || p.publishedAt)?.toISOString().split('T')[0],
     }))
 
-    const allPages = [...staticPages, ...servicePages, ...blogPages]
+    const jobPages = jobs.map((j) => ({
+      path: `/careers/${j.slug}`,
+      priority: '0.6',
+      freq: 'weekly',
+      lastmod: j.updatedAt.toISOString().split('T')[0],
+    }))
+
+    const allPages = [...staticPages, ...servicePages, ...blogPages, ...jobPages]
     const today = new Date().toISOString().split('T')[0]
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>

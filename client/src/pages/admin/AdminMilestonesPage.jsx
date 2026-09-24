@@ -201,7 +201,7 @@ export default function AdminMilestonesPage() {
           ) : (
             <div className="relative">
               {/* Timeline line */}
-              <div className="absolute left-[27px] top-6 bottom-6 w-px bg-gradient-to-b from-brand-blue/30 via-brand-blue/15 to-transparent hidden sm:block" />
+              <div className="absolute left-[27px] top-6 bottom-6 w-px bg-linear-to-b from-brand-blue/30 via-brand-blue/15 to-transparent hidden sm:block" />
 
               <div className="space-y-2">
                 {items.map((m) => (
@@ -211,7 +211,7 @@ export default function AdminMilestonesPage() {
                   >
                     <div className="p-4 flex items-center gap-4">
                       {/* Year Badge */}
-                      <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-brand-blue to-brand-blue/80 flex flex-col items-center justify-center shrink-0 shadow-sm">
+                      <div className="w-14 h-14 rounded-xl bg-linear-to-br from-brand-blue to-brand-blue/80 flex flex-col items-center justify-center shrink-0 shadow-sm">
                         <span className="text-white font-bold text-sm leading-tight">{m.year}</span>
                       </div>
 

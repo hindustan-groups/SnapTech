@@ -67,7 +67,7 @@ export default function ClientProjectDetailPage() {
         <AlertTriangle className="w-12 h-12 text-red-400 mx-auto mb-3" />
         <h3 className="text-lg font-bold text-white font-heading">Failed to load project</h3>
         <p className="text-sm text-slate-400 mt-1">This project does not exist or you do not have permission to view it.</p>
-        <Link to="/client/dashboard" className="mt-6 inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-bold rounded-xl text-black bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 transition-all shadow-[0_0_15px_rgba(6,182,212,0.3)]">
+        <Link to="/client/dashboard" className="mt-6 inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-bold rounded-xl text-black bg-linear-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 transition-all shadow-[0_0_15px_rgba(6,182,212,0.3)]">
           Back to Dashboard
         </Link>
       </div>
@@ -133,7 +133,7 @@ export default function ClientProjectDetailPage() {
           </div>
           <div className="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden border border-white/5">
             <div
-              className="bg-gradient-to-r from-cyan-500 to-blue-600 h-2.5 rounded-full shadow-[0_0_12px_rgba(6,182,212,0.5)] transition-all duration-500"
+              className="bg-linear-to-r from-cyan-500 to-blue-600 h-2.5 rounded-full shadow-[0_0_12px_rgba(6,182,212,0.5)] transition-all duration-500"
               style={{ width: `${project.progress}%` }}
             />
           </div>
@@ -277,7 +277,7 @@ export default function ClientProjectDetailPage() {
                           <button
                             onClick={() => handlePay(m.id)}
                             disabled={payMutation.isPending}
-                            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black text-xs font-bold rounded-xl transition-all cursor-pointer shadow-sm hover:shadow-[0_0_15px_rgba(6,182,212,0.3)] disabled:opacity-50"
+                            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-linear-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black text-xs font-bold rounded-xl transition-all cursor-pointer shadow-sm hover:shadow-[0_0_15px_rgba(6,182,212,0.3)] disabled:opacity-50"
                           >
                             <span>Simulate Pay</span>
                           </button>
@@ -311,7 +311,7 @@ export default function ClientProjectDetailPage() {
                 const isDone = task.status === 'DONE'
 
                 return (
-                  <div key={task.id} className="p-4 md:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 hover:bg-white/[0.03] transition-colors">
+                  <div key={task.id} className="p-4 md:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 hover:bg-white/3 transition-colors">
                     <div className="flex items-start gap-3">
                       <div className="mt-0.5 shrink-0">
                         {isDone ? (

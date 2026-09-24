@@ -77,14 +77,14 @@ export default function HeroSection() {
   }
 
   // Dynamic values with elegant enterprise defaults
-  const eyebrowText = cfg.hero_eyebrow || 'A Hindustan Projects Enterprise'
+  const eyebrowText = cfg.hero_eyebrow || 'Bhilwara-Based Digital Agency'
   const divisionText = cfg.hero_division || 'Engineering & IT Division'
   const titlePrefix = cfg.hero_title_prefix || 'Looking for'
-  const tagline = cfg.tagline || 'Search. Discover. Connect with Snaptech.'
+  const tagline = cfg.tagline || 'Build. Grow. Succeed with SnapTech Digital.'
   const domainPlaceholder = cfg.hero_domain || 'www.snaptech.digital'
   const whatsappNumber = (cfg.whatsapp || '917597000601').replace(/[^0-9]/g, '')
   const whatsappMsg = encodeURIComponent(
-    cfg.whatsappMessage || 'Hello Snaptech, I am interested in Enterprise IT Solutions.'
+    cfg.whatsappMessage || 'Hello SnapTech, I am interested in your digital services.'
   )
   const heroImage = cfg.hero_image_url || snaptechSocialBanner
 
@@ -106,21 +106,21 @@ export default function HeroSection() {
   return (
     <section
       id="home"
-      className="relative flex flex-col overflow-hidden isolate min-h-[100vh] bg-white text-slate-900"
-      aria-label="Hindustan Projects IT Solutions Hero"
+      className="relative flex flex-col overflow-hidden isolate min-h-screen bg-white text-slate-900"
+      aria-label="SnapTech Digital — Web & App Development Agency Hero"
     >
       {/* ── Background: Clean Light Surface with Subtle Accents ── */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-white via-slate-50/60 to-white">
+      <div className="absolute inset-0 -z-10 bg-linear-to-b from-white via-slate-50/60 to-white">
         {/* Subtle grid pattern */}
-        <div className="absolute inset-0 opacity-[0.35] bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:24px_24px]" aria-hidden="true" />
+        <div className="absolute inset-0 opacity-[0.35] bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] bg-size-[24px_24px]" aria-hidden="true" />
 
         {/* Soft Brand Glows */}
         <div
-          className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] rounded-full bg-blue-100/50 blur-[120px] pointer-events-none"
+          className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-150 h-100 rounded-full bg-blue-100/50 blur-[120px] pointer-events-none"
           aria-hidden="true"
         />
         <div
-          className="absolute top-1/3 right-0 w-[450px] h-[450px] rounded-full bg-red-100/40 blur-[130px] pointer-events-none"
+          className="absolute top-1/3 right-0 w-112.5 h-112.5 rounded-full bg-red-100/40 blur-[130px] pointer-events-none"
           aria-hidden="true"
         />
       </div>
@@ -297,12 +297,12 @@ export default function HeroSection() {
                     <div className="rounded-xl overflow-hidden bg-slate-100 shadow-inner relative group border border-slate-200">
                       <img
                         src={heroImage}
-                        alt="Hindustan Projects IT Solutions"
+                        alt="SnapTech Digital — Web & App Development"
                         className="w-full h-auto object-cover block transition-transform duration-500 group-hover:scale-[1.02]"
                       />
                     </div>
                   ) : (
-                    <div className="rounded-xl p-4 bg-slate-50 border border-slate-200 font-mono text-xs space-y-3 min-h-[220px] flex flex-col justify-between">
+                    <div className="rounded-xl p-4 bg-slate-50 border border-slate-200 font-mono text-xs space-y-3 min-h-55 flex flex-col justify-between">
                       <div className="space-y-2">
                         <div className="flex items-center justify-between text-slate-600 border-b border-slate-200 pb-2">
                           <span className="flex items-center gap-1.5 text-brand-blue font-bold">
@@ -347,7 +347,7 @@ export default function HeroSection() {
                         Enterprise Guarantee
                       </p>
                       <p className="text-xs font-bold text-slate-900">
-                        Backed by Hindustan Projects Group
+                        ISO-Aligned Delivery Standards
                       </p>
                     </div>
                   </div>

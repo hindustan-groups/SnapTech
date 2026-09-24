@@ -163,7 +163,7 @@ export default function Footer() {
         <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-brand-cyan/5 rounded-full blur-3xl pointer-events-none" />
 
         {/* ── Parent Group Ecosystem Strip ── */}
-        <div className="border-b border-white/10 bg-white/[0.02]">
+        <div className="border-b border-white/10 bg-white/2">
           <Container>
             <div className="py-3.5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
               <div className="flex items-center gap-2 text-slate-300 flex-wrap">
@@ -171,8 +171,8 @@ export default function Footer() {
                   Corporate Group
                 </span>
                 <span>
-                  Snaptech is the dedicated IT & digital transformation company of{' '}
-                  <strong className="text-white">Hindustan Projects Group</strong>.
+                  SnapTech Digital is a full-service digital agency based in{' '}
+                  <strong className="text-white">Bhilwara, Rajasthan, India</strong>.
                 </span>
               </div>
               <a
@@ -181,7 +181,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 text-brand-cyan hover:text-white font-medium transition-colors shrink-0"
               >
-                <span>{cfg.parent_company_url ? cfg.parent_company_url.replace(/^https?:\/\//, '') : 'hindustanprojects.in'}</span>
+                <span>{cfg.parent_company_url ? cfg.parent_company_url.replace(/^https?:\/\//, '') : 'snaptech.digital'}</span>
                 <ExternalLink className="w-3.5 h-3.5" />
               </a>
             </div>
@@ -189,7 +189,7 @@ export default function Footer() {
         </div>
 
         {/* ── Trust Badges Strip ── */}
-        <div className="border-b border-white/5 bg-white/[0.01]">
+        <div className="border-b border-white/5 bg-white/1">
           <Container>
             <div className="py-3 flex items-center justify-center gap-6 sm:gap-10 flex-wrap">
               {TRUST_BADGES.map((b) => (
@@ -219,7 +219,7 @@ export default function Footer() {
               >
                 <img
                   src={snaptechLogoWhite}
-                  alt="Snaptech - IT & Technology Solutions"
+                  alt="SnapTech Digital — Web & App Development"
                   className="h-10 lg:h-11 w-auto object-contain"
                 />
               </Link>
@@ -370,7 +370,7 @@ export default function Footer() {
 
                 {/* WhatsApp CTA */}
                 <a
-                  href="https://wa.me/917597000601?text=Hi%20Snaptech%20Team%2C%20I%20am%20looking%20for%20IT%20Solutions."
+                  href="https://wa.me/917597000601?text=Hi%20SnapTech%20Team%2C%20I%20am%20interested%20in%20your%20digital%20services."
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 hover:border-emerald-400/50 text-xs font-semibold transition-colors mt-2"
@@ -393,7 +393,7 @@ export default function Footer() {
           <div className="border-t border-white/10 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
             <div className="flex flex-col sm:flex-row items-center gap-2">
               <p>
-                © {year} <strong className="text-white">Snaptech</strong> — A Hindustan Projects Enterprise. All rights reserved.
+                © {year} <strong className="text-white">SnapTech Digital</strong>. All rights reserved.
               </p>
             </div>
             <div className="flex flex-wrap gap-4 text-slate-400 justify-center">

@@ -77,7 +77,7 @@ export default function WhyUsSection() {
             <motion.div variants={fadeUp}>
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1a3e8c]/10 border border-[#1a3e8c]/20 text-[#1a3e8c] text-xs font-mono font-bold uppercase tracking-widest mb-4">
                 <Award className="w-3.5 h-3.5" />
-                <span>The Snaptech Advantage</span>
+                <span>The SnapTech Digital Advantage</span>
               </div>
               <h2
                 id="whyus-heading"
@@ -90,7 +90,7 @@ export default function WhyUsSection() {
               </h2>
               <p className="text-slate-500 text-sm sm:text-base leading-relaxed mt-4 max-w-xl">
                 We bridge high-velocity engineering with corporate-grade stability. 
-                Here is why corporate enterprises and fast-growing founders across India trust Snaptech.
+                Here is why growing businesses and enterprises across India trust SnapTech Digital.
               </p>
             </motion.div>
 
@@ -189,7 +189,7 @@ export default function WhyUsSection() {
                 <div className="border-t border-slate-200 pt-4">
                   <div className="flex items-center gap-2.5 text-xs text-slate-600">
                     <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                    <span>Backed by Hindustan Projects Group Governance</span>
+                    <span>ISO-aligned delivery standards with full IP handover</span>
                   </div>
                 </div>
               </div>

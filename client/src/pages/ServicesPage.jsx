@@ -249,16 +249,16 @@ export default function ServicesPage() {
     { icon: Zap, label: 'Deployment Velocity', value: '2–4 Weeks Sprint', sub: 'Production Ready' },
     { icon: Shield, label: 'Enterprise Security', value: '100% Zero Defect', sub: 'ISO SLA Standards' },
     { icon: Clock, label: 'Active Support', value: '24/7 Engineering Desk', sub: 'Instant Escalation' },
-    { icon: Users, label: 'Group Backed', value: `${cfg.stat_clients || '50'}+ Enterprises`, sub: 'Hindustan Projects' },
+    { icon: Users, label: 'Client Trust', value: `${cfg.stat_clients || '50'}+ Enterprises`, sub: 'SnapTech Digital' },
   ]
 
   return (
     <div className="bg-slate-50/50 min-h-screen text-slate-900 selection:bg-blue-500/20 selection:text-[#1a3e8c]">
       <SEO
-        title="Enterprise IT Solutions & Services — Snaptech | Hindustan Projects"
-        description="Explore Snaptech's full-suite IT capabilities: custom web applications, native mobile apps, cloud architecture, AI automation, enterprise CRM, and SEO engineering."
+        title="Web & App Development Services — SnapTech Digital | Bhilwara, Rajasthan"
+        description="SnapTech Digital offers website development, mobile app development, UI/UX design, digital marketing, SEO, and IT consulting. Serving businesses across India."
         path="/services"
-        keywords="Snaptech, Hindustan Projects IT, enterprise IT services, custom web development, mobile app development, cloud architecture, AI automation India"
+        keywords="SnapTech Digital services, web development Bhilwara, mobile app development India, UI UX design, digital marketing Rajasthan, SEO services, IT consulting"
         schemas={[
           breadcrumbSchema([
             { name: 'Home', path: '/' },
@@ -278,7 +278,7 @@ export default function ServicesPage() {
       {/* ── 1. Light Hero Header ───────────────────────────────────── */}
       <section className="relative pt-28 sm:pt-36 lg:pt-40 pb-16 sm:pb-24 overflow-hidden border-b border-slate-100 bg-white">
         {/* Subtle dot/grid background & soft ambient blurs */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000005_1px,transparent_1px),linear-gradient(to_bottom,#00000005_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000005_1px,transparent_1px),linear-gradient(to_bottom,#00000005_1px,transparent_1px)] bg-size-[40px_40px] pointer-events-none" />
         <div className="absolute top-1/4 right-0 w-96 h-96 bg-[#1a3e8c]/5 rounded-full blur-[140px] pointer-events-none" />
         <div className="absolute bottom-0 left-10 w-80 h-80 bg-blue-400/5 rounded-full blur-[120px] pointer-events-none" />
 
@@ -292,13 +292,13 @@ export default function ServicesPage() {
               </div>
               <h1 className="font-heading text-4xl sm:text-5xl lg:text-[3.5rem] font-extrabold text-slate-900 leading-[1.12] mb-6 tracking-tight">
                 Next-Gen IT Services{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0D1B4B] via-[#1a3e8c] to-[#2563eb]">
+                <span className="text-transparent bg-clip-text bg-linear-to-r from-[#0D1B4B] via-[#1a3e8c] to-[#2563eb]">
                   Engineered For Scale.
                 </span>
               </h1>
               <p className="text-slate-600 text-base sm:text-lg leading-relaxed mb-8 max-w-2xl">
                 From high-concurrency cloud systems and resilient mobile apps to AI automation and high-ROI technical SEO — 
-                Snaptech delivers battle-tested engineering governed by Hindustan Projects Group.
+                SnapTech Digital delivers battle-tested engineering with enterprise-grade reliability and strict SLA standards.
               </p>
 
               {/* Action Buttons */}
@@ -344,7 +344,7 @@ export default function ServicesPage() {
                         className="flex items-center justify-between p-3 rounded-xl border border-slate-100 bg-slate-50/70 hover:bg-blue-50/50 hover:border-blue-200/80 transition-all group"
                       >
                         <div className="flex items-center gap-3">
-                          <div className={`w-9 h-9 rounded-lg bg-gradient-to-br ${c.gradient} flex items-center justify-center shrink-0 shadow-sm`}>
+                          <div className={`w-9 h-9 rounded-lg bg-linear-to-br ${c.gradient} flex items-center justify-center shrink-0 shadow-sm`}>
                             <Icon className="w-4 h-4 text-white" strokeWidth={2} />
                           </div>
                           <div>
@@ -516,7 +516,7 @@ export default function ServicesPage() {
 
                         {/* Icon */}
                         <div
-                          className={`relative w-14 h-14 rounded-2xl bg-gradient-to-br ${c.gradient} flex items-center justify-center mb-5 shadow-md group-hover:scale-105 transition-transform duration-300`}
+                          className={`relative w-14 h-14 rounded-2xl bg-linear-to-br ${c.gradient} flex items-center justify-center mb-5 shadow-md group-hover:scale-105 transition-transform duration-300`}
                         >
                           <Icon className="w-7 h-7 text-white" strokeWidth={1.8} />
                         </div>
@@ -615,7 +615,7 @@ export default function ServicesPage() {
       {/* ── 4. Direct Pricing Packages Banner ───────────────────────── */}
       <section className="py-12 bg-white border-t border-b border-slate-100 relative overflow-hidden">
         <Container className="relative">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-8 sm:p-10 rounded-3xl bg-gradient-to-r from-[#0D1B4B] via-[#11235A] to-[#1a3e8c] text-white shadow-xl shadow-blue-900/10">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-8 sm:p-10 rounded-3xl bg-linear-to-r from-[#0D1B4B] via-[#11235A] to-[#1a3e8c] text-white shadow-xl shadow-blue-900/10">
             <div className="space-y-2 text-center md:text-left">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-white text-xs font-mono font-bold uppercase tracking-wider">
                 <BadgeCheck className="w-3.5 h-3.5 text-cyan-300" /> Transparent Investment Packages
@@ -697,7 +697,7 @@ export default function ServicesPage() {
                 className="p-6 rounded-2xl border border-slate-200/90 bg-slate-50/70 relative group hover:border-blue-300 hover:bg-white hover:shadow-lg transition-all duration-300"
               >
                 <div className="flex items-center justify-between mb-5">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#0D1B4B] to-[#1B6EF3] flex items-center justify-center font-heading font-extrabold text-white text-lg shadow-md">
+                  <div className="w-12 h-12 rounded-xl bg-linear-to-br from-[#0D1B4B] to-[#1B6EF3] flex items-center justify-center font-heading font-extrabold text-white text-lg shadow-md">
                     {p.step}
                   </div>
                   <span className="text-[11px] font-mono text-slate-700 font-bold px-2.5 py-1 rounded-md bg-white border border-slate-200">

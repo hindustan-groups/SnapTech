@@ -24,17 +24,17 @@ export default function PortfolioPage() {
     <div className="bg-white min-h-screen text-slate-900 selection:bg-brand-blue/15 selection:text-brand-blue">
       <SEO
         title={`Portfolio — ${cfg.stat_projects || '50'}+ Projects Delivered | SnapTech Digital`}
-        description="Explore Snaptech portfolio — enterprise projects delivered across web applications, cloud architecture, native mobile apps, and custom software."
+        description="Explore SnapTech Digital portfolio — enterprise projects delivered across web applications, cloud architecture, native mobile apps, and custom software."
         path="/portfolio"
-        keywords="Snaptech portfolio, web development portfolio, IT projects, software engineering case studies, Hindustan Projects IT"
+        keywords="SnapTech Digital portfolio, web development portfolio, IT projects Bhilwara, software engineering case studies, full stack development India"
       />
 
       {/* ── 1. Light Hero ────────────────────────────────────────── */}
-      <section className="relative pt-28 sm:pt-36 lg:pt-40 pb-0 overflow-hidden bg-gradient-to-b from-slate-50 via-white to-slate-50/50 border-b border-slate-200/80 flex flex-col justify-between">
+      <section className="relative pt-28 sm:pt-36 lg:pt-40 pb-0 overflow-hidden bg-linear-to-b from-slate-50 via-white to-slate-50/50 border-b border-slate-200/80 flex flex-col justify-between">
         {/* Subtle geometric pattern & ambient glows */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a08_1px,transparent_1px),linear-gradient(to_bottom,#0f172a08_1px,transparent_1px)] bg-[size:48px_48px] pointer-events-none" />
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-blue-100/60 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-sky-100/50 rounded-full blur-[100px] translate-y-1/2 pointer-events-none" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a08_1px,transparent_1px),linear-gradient(to_bottom,#0f172a08_1px,transparent_1px)] bg-size-[48px_48px] pointer-events-none" />
+        <div className="absolute top-0 left-1/4 w-125 h-125 bg-blue-100/60 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-100 h-100 bg-sky-100/50 rounded-full blur-[100px] translate-y-1/2 pointer-events-none" />
 
         <Container className="relative h-full flex flex-col justify-end">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-end">
@@ -46,7 +46,7 @@ export default function PortfolioPage() {
               </span>
               <h1 className="font-heading text-4xl sm:text-5xl lg:text-[3.6rem] font-extrabold text-[#0D1B4B] leading-[1.12] mb-6">
                 Our Work,{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue via-blue-600 to-indigo-700">
+                <span className="text-transparent bg-clip-text bg-linear-to-r from-brand-blue via-blue-600 to-indigo-700">
                   Our Engineering.
                 </span>
               </h1>
@@ -93,7 +93,7 @@ export default function PortfolioPage() {
                   <img
                     src={portfolioHeroNewFit}
                     alt="SnapTech Technology Executive"
-                    className="w-full aspect-[3/4] object-cover object-center block"
+                    className="w-full aspect-3/4 object-cover object-center block"
                     style={{ display: 'block', marginBottom: '-1px' }}
                   />
                 </div>
@@ -154,7 +154,7 @@ export default function PortfolioPage() {
       {/* ── 4. Project Commissioning Banner ──────────────────────────── */}
       <section className="relative py-20 sm:py-24 overflow-hidden bg-slate-50">
         <Container className="relative">
-          <div className="max-w-4xl mx-auto rounded-3xl border border-slate-800 bg-gradient-to-br from-[#0D1B4B] via-[#102A66] to-[#0A1840] p-8 sm:p-12 lg:p-16 text-center shadow-2xl text-white">
+          <div className="max-w-4xl mx-auto rounded-3xl border border-slate-800 bg-linear-to-br from-[#0D1B4B] via-[#102A66] to-[#0A1840] p-8 sm:p-12 lg:p-16 text-center shadow-2xl text-white">
             <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-blue-400/40 bg-blue-400/10 text-blue-200 text-xs font-semibold uppercase tracking-wider mb-6">
               <Sparkles className="w-3.5 h-3.5 text-brand-cyan" />
               Direct Engineering Scoping

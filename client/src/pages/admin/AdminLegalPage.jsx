@@ -175,7 +175,7 @@ export default function AdminLegalPage() {
                   >
                     P
                   </button>
-                  <div className="h-4 w-[1px] bg-gray-200 mx-1" />
+                  <div className="h-4 w-px bg-gray-200 mx-1" />
                   <button
                     onClick={() => executeCommand('bold')}
                     title="Bold"
@@ -212,7 +212,7 @@ export default function AdminLegalPage() {
                   dangerouslySetInnerHTML={{
                     __html: DOMPurify.sanitize(currentPage?.content || ''),
                   }}
-                  className="p-6 min-h-[350px] max-h-[500px] overflow-y-auto focus:outline-none prose prose-slate max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:text-brand-blue prose-p:leading-relaxed"
+                  className="p-6 min-h-87.5 max-h-125 overflow-y-auto focus:outline-none prose prose-slate max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:text-brand-blue prose-p:leading-relaxed"
                   style={{ minHeight: '350px' }}
                 />
               </div>

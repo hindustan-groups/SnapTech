@@ -64,7 +64,7 @@ function ProcessStep({ step, index }) {
 
       {/* Icon bubble */}
       <div
-        className={`relative w-[72px] h-[72px] rounded-2xl ${step.color} border border-slate-200 flex items-center justify-center mb-6 z-10
+        className={`relative w-18 h-18 rounded-2xl ${step.color} border border-slate-200 flex items-center justify-center mb-6 z-10
           shadow-sm group-hover:shadow-lg group-hover:scale-110 transition-all duration-300`}
         onMouseEnter={(e) => { e.currentTarget.style.boxShadow = `0 12px 32px ${step.glow}` }}
         onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '' }}
@@ -81,7 +81,7 @@ function ProcessStep({ step, index }) {
       </div>
 
       {/* Content */}
-      <div className="max-w-[220px]">
+      <div className="max-w-55">
         <div
           className="text-[10px] font-mono font-bold uppercase tracking-widest mb-2 px-2.5 py-1 rounded-full inline-block border"
           style={{ color: step.border, background: `${step.border}15`, borderColor: `${step.border}30` }}
@@ -97,7 +97,7 @@ function ProcessStep({ step, index }) {
       {/* Connector arrow (not on last step) */}
       {!isLast && (
         <div className="hidden lg:flex absolute top-9 left-[calc(50%+48px)] right-[calc(-50%+48px)] items-center justify-center z-0 pointer-events-none">
-          <div className="flex-1 h-[1px] bg-gradient-to-r from-[#1a3e8c]/30 via-[#e31e24]/30 to-slate-200" />
+          <div className="flex-1 h-px bg-linear-to-r from-[#1a3e8c]/30 via-[#e31e24]/30 to-slate-200" />
           <ArrowRight className="w-4 h-4 text-[#1a3e8c] shrink-0 -ml-1" />
         </div>
       )}

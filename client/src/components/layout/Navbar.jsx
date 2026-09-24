@@ -213,7 +213,7 @@ export default function Navbar() {
                 rel="noopener noreferrer"
                 className="font-bold text-brand-blue hover:text-brand-red inline-flex items-center gap-1 transition-colors group/parent"
               >
-                <span>Hindustan Projects Group</span>
+                <span>SnapTech Digital</span>
                 <svg className="w-3 h-3 opacity-75 group-hover/parent:translate-x-0.5 group-hover/parent:-translate-y-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                 </svg>
@@ -266,7 +266,7 @@ export default function Navbar() {
 
       {/* ── Main Navigation Bar ── */}
       <Container>
-        <nav className="flex items-center justify-between h-16 lg:h-[70px]" aria-label="Main navigation">
+        <nav className="flex items-center justify-between h-16 lg:h-17.5" aria-label="Main navigation">
 
           {/* Brand Logo */}
           <Link
@@ -321,7 +321,7 @@ export default function Navbar() {
                     {/* ── Mega Menu ── */}
                     {megaOpen && (
                       <div
-                        className="mega-menu absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[620px] bg-white rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.15)] border border-slate-200 overflow-hidden text-slate-800"
+                        className="mega-menu absolute top-full left-1/2 -translate-x-1/2 mt-2 w-155 bg-white rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.15)] border border-slate-200 overflow-hidden text-slate-800"
                         onMouseEnter={handleMegaEnter}
                         onMouseLeave={handleMegaLeave}
                       >
@@ -463,7 +463,7 @@ export default function Navbar() {
                 snaptech.digital
               </span>
               <p className="text-xs text-slate-600 mb-2.5 leading-relaxed">
-                IT & Digital Solutions — Hindustan Projects Group
+                IT & Digital Solutions — Bhilwara, Rajasthan
               </p>
               <a
                 href={parentUrl}

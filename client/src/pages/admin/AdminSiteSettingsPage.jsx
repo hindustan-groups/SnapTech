@@ -182,7 +182,7 @@ const FIELD_GROUPS = [
       {
         key: 'hero_division',
         label: 'Enterprise Division Tag',
-        placeholder: 'Hindustan Projects — Enterprise IT Division',
+        placeholder: 'SnapTech Digital — Enterprise IT Division',
         Icon: Type,
       },
       {
@@ -224,7 +224,7 @@ const FIELD_GROUPS = [
       {
         key: 'company_name',
         label: 'Company Brand Name',
-        placeholder: 'Snaptech — Hindustan Projects',
+        placeholder: 'SnapTech Digital',
         Icon: Type,
       },
       {
@@ -332,7 +332,7 @@ export default function AdminSiteSettingsPage() {
       <div className="space-y-6 max-w-6xl mx-auto pb-12">
         
         {/* ── Executive Dark Header Banner ────────────────────────── */}
-        <div className="bg-gradient-to-r from-slate-900 via-gray-900 to-brand-blue p-6 sm:p-8 rounded-3xl text-white shadow-xl relative overflow-hidden">
+        <div className="bg-linear-to-r from-slate-900 via-gray-900 to-brand-blue p-6 sm:p-8 rounded-3xl text-white shadow-xl relative overflow-hidden">
           <div className="absolute top-0 right-0 w-96 h-96 bg-brand-blue/20 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -382,7 +382,7 @@ export default function AdminSiteSettingsPage() {
                 </div>
               ))}
             </div>
-            <div className="lg:col-span-5 h-[400px] bg-white border border-gray-200 rounded-2xl animate-pulse shadow-sm" />
+            <div className="lg:col-span-5 h-100 bg-white border border-gray-200 rounded-2xl animate-pulse shadow-sm" />
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -504,7 +504,7 @@ export default function AdminSiteSettingsPage() {
                           className="w-6 h-6 object-contain bg-white/10 rounded border border-white/20 p-0.5"
                         />
                         <span className="font-heading font-black text-base tracking-tight text-white">
-                          Hindustan Projects
+                          SnapTech Digital
                         </span>
                       </div>
                       <p className="text-xs text-white/70 italic leading-relaxed font-light max-w-sm">
@@ -552,7 +552,7 @@ export default function AdminSiteSettingsPage() {
                         </span>
                       </div>
                       <span className="text-[10px] text-white/40 font-medium">
-                        © {new Date().getFullYear()} Hindustan Projects
+                        © {new Date().getFullYear()} SnapTech Digital
                       </span>
                     </div>
                   </div>
@@ -619,7 +619,7 @@ export default function AdminSiteSettingsPage() {
               </div>
 
               {/* Guidance Notice */}
-              <div className="bg-gradient-to-r from-blue-50/80 to-indigo-50/80 border border-blue-200/80 rounded-2xl p-4 shadow-xs flex items-start gap-3">
+              <div className="bg-linear-to-r from-blue-50/80 to-indigo-50/80 border border-blue-200/80 rounded-2xl p-4 shadow-xs flex items-start gap-3">
                 <Sparkles className="w-4 h-4 text-brand-blue shrink-0 mt-0.5" />
                 <p className="text-xs text-gray-600 leading-relaxed">
                   Settings modified here update live footers, contact page maps, and floating WhatsApp widgets immediately across the web app.

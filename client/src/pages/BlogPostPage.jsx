@@ -166,9 +166,9 @@ function ReadingProgressBar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
   return (
-    <div className="fixed top-0 left-0 right-0 z-[60] h-[3px] pointer-events-none">
+    <div className="fixed top-0 left-0 right-0 z-60 h-0.75 pointer-events-none">
       <div
-        className="h-full bg-gradient-to-r from-brand-blue via-blue-500 to-indigo-500 transition-all duration-75 shadow-xs shadow-blue-400"
+        className="h-full bg-linear-to-r from-brand-blue via-blue-500 to-indigo-500 transition-all duration-75 shadow-xs shadow-blue-400"
         style={{ width: `${progress}%` }}
       />
     </div>
@@ -323,7 +323,7 @@ function RelatedCard({ post }) {
               <BookOpen className="w-10 h-10 text-brand-blue/20" />
             </div>
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-60" />
+          <div className="absolute inset-0 bg-linear-to-t from-slate-900/60 via-transparent to-transparent opacity-60" />
           <span className="absolute top-3 left-3 text-[10px] font-bold bg-white/95 text-brand-blue border border-blue-200/80 px-2.5 py-1 rounded-full shadow-xs">
             {post.category}
           </span>
@@ -400,7 +400,7 @@ export default function BlogPostPage() {
   if (isLoading && !post) {
     return (
       <div className="min-h-screen bg-slate-50/50 text-slate-800">
-        <div className="h-[480px] bg-slate-200 animate-pulse border-b border-slate-200" />
+        <div className="h-120 bg-slate-200 animate-pulse border-b border-slate-200" />
         <div className="py-14">
           <Container>
             <div className="flex flex-col lg:flex-row gap-10">
@@ -487,11 +487,11 @@ export default function BlogPostPage() {
       <BackToTop />
 
       {/* ── HERO — Light Canvas ── */}
-      <div className="relative w-full pt-28 pb-16 sm:pb-20 lg:pb-28 overflow-hidden border-b border-slate-200/80 bg-gradient-to-b from-blue-50/70 via-white to-slate-50/50">
+      <div className="relative w-full pt-28 pb-16 sm:pb-20 lg:pb-28 overflow-hidden border-b border-slate-200/80 bg-linear-to-b from-blue-50/70 via-white to-slate-50/50">
         {/* Glows */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(27,110,243,0.08),transparent)] pointer-events-none" />
         <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-blue-100/40 rounded-full blur-3xl translate-y-1/2 pointer-events-none" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a06_1px,transparent_1px),linear-gradient(to_bottom,#0f172a06_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a06_1px,transparent_1px),linear-gradient(to_bottom,#0f172a06_1px,transparent_1px)] bg-size-[32px_32px] pointer-events-none" />
 
         <Container className="relative z-10">
           {/* Breadcrumb */}
@@ -508,7 +508,7 @@ export default function BlogPostPage() {
               Blog
             </Link>
             <ChevronRight className="w-3 h-3 text-slate-400 shrink-0" />
-            <span className="text-slate-800 font-medium truncate max-w-[200px] sm:max-w-md">
+            <span className="text-slate-800 font-medium truncate max-w-50 sm:max-w-md">
               {post.title}
             </span>
           </motion.nav>
@@ -607,7 +607,7 @@ export default function BlogPostPage() {
               <img
                 src={post.featuredImageUrl}
                 alt={post.title}
-                className="w-full h-auto max-h-[480px] object-cover block"
+                className="w-full h-auto max-h-120 object-cover block"
               />
             </motion.div>
           </Container>
@@ -713,7 +713,7 @@ export default function BlogPostPage() {
                       >
                         <div className="flex items-start gap-4">
                           <div
-                            className={`w-10 h-10 rounded-xl bg-gradient-to-br ${
+                            className={`w-10 h-10 rounded-xl bg-linear-to-br ${
                               AVATAR_COLORS[i % AVATAR_COLORS.length]
                             } flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-xs`}
                           >
@@ -881,10 +881,10 @@ export default function BlogPostPage() {
             </motion.article>
 
             {/* ── SIDEBAR ──────────────────────────── */}
-            <aside className="w-full lg:w-[280px] xl:w-[300px] shrink-0 space-y-5 lg:sticky lg:top-24">
+            <aside className="w-full lg:w-70 xl:w-75 shrink-0 space-y-5 lg:sticky lg:top-24">
               {/* Author Card */}
               <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs relative overflow-hidden">
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-blue via-indigo-500 to-transparent" />
+                <div className="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-brand-blue via-indigo-500 to-transparent" />
                 <p className="text-[10px] font-bold text-brand-blue uppercase tracking-widest mb-4">
                   Engineering Contributor
                 </p>
@@ -979,7 +979,7 @@ export default function BlogPostPage() {
               )}
 
               {/* Consultation CTA */}
-              <div className="relative bg-gradient-to-br from-[#0D1B4B] to-blue-900 rounded-2xl p-5 text-white shadow-lg overflow-hidden">
+              <div className="relative bg-linear-to-br from-[#0D1B4B] to-blue-900 rounded-2xl p-5 text-white shadow-lg overflow-hidden">
                 <div className="relative">
                   <div className="w-9 h-9 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center mb-3 text-cyan-300">
                     <TrendingUp className="w-4 h-4" />

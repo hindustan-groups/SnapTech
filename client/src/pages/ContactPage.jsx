@@ -123,7 +123,7 @@ function ContactInfoCard({ icon: Icon, label, value, href, borderColor }) {
 const FAQ_FALLBACK = [
   {
     id: '1',
-    question: 'What IT services does Hindustan Projects (Snaptech) specialize in?',
+    question: 'What IT services does SnapTech Digital specialize in?',
     answer:
       'We architect and engineer enterprise custom web portals, mobile applications (iOS/Android), custom textile & manufacturing ERP solutions, scalable cloud infrastructure, and AI workflow automations.',
   },
@@ -170,7 +170,7 @@ export default function ContactPage() {
   const cfg = settingsData?.data || {}
   const phone = cfg.phone || '+91 94141 12057'
   const email = cfg.email || 'info@snaptech.digital'
-  const address = cfg.address || 'Hindustan Projects Division, Bhilwara, Rajasthan 311001, India'
+  const address = cfg.address || 'SnapTech Digital, Bhilwara, Rajasthan 311001, India'
   const whatsapp = cfg.whatsapp || cfg.phone || '919414112057'
   const whatsappNum = whatsapp.replace(/[^0-9]/g, '')
 
@@ -255,10 +255,10 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen bg-white text-slate-900 selection:bg-brand-blue/15 selection:text-brand-blue">
       <SEO
-        title="Contact SnapTech — IT Solutions & Architecture Consultation | Hindustan Projects"
-        description="Connect with Snaptech, the enterprise IT division of Hindustan Projects. Schedule a technical discovery session for custom software, web portals, mobile apps, or cloud systems."
+        title="Contact SnapTech Digital — Get a Free Project Quote | Bhilwara, Rajasthan"
+        description="Get in touch with SnapTech Digital. Request a free consultation for website development, app development, or digital marketing. Based in Bhilwara, serving clients across India."
         path="/contact"
-        keywords="contact Snaptech, IT consultation Bhilwara, Hindustan Projects IT, hire software developers India, custom web development quote"
+        keywords="contact SnapTech Digital, IT consultation Bhilwara, hire web developers India, get a quote, digital agency contact, software development inquiry"
         schemas={[
           breadcrumbSchema([
             { name: 'Home', path: '/' },
@@ -271,9 +271,9 @@ export default function ContactPage() {
       />
 
       {/* ── Page Hero Header ── */}
-      <section className="pt-28 sm:pt-36 lg:pt-40 pb-16 sm:pb-20 lg:pb-24 bg-gradient-to-b from-slate-50 via-white to-slate-50/50 border-b border-slate-200/80 relative overflow-hidden">
+      <section className="pt-28 sm:pt-36 lg:pt-40 pb-16 sm:pb-20 lg:pb-24 bg-linear-to-b from-slate-50 via-white to-slate-50/50 border-b border-slate-200/80 relative overflow-hidden">
         {/* Ambient Grid & Glows */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a08_1px,transparent_1px),linear-gradient(to_bottom,#0f172a08_1px,transparent_1px)] bg-[size:30px_30px] pointer-events-none" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a08_1px,transparent_1px),linear-gradient(to_bottom,#0f172a08_1px,transparent_1px)] bg-size-[30px_30px] pointer-events-none" />
         <div className="absolute top-0 right-0 w-96 h-96 bg-blue-100/60 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-10 w-96 h-96 bg-sky-100/50 rounded-full blur-3xl pointer-events-none" />
 
@@ -283,11 +283,11 @@ export default function ContactPage() {
             <div className="lg:col-span-7 space-y-6">
               <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold text-brand-blue bg-blue-50 border border-blue-200/80 shadow-xs mb-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-brand-blue animate-pulse" />
-                HINDUSTAN PROJECTS ENTERPRISE IT DIVISION
+                SNAPTECH DIGITAL IT & MEDIA DIVISION
               </span>
               <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#0D1B4B] leading-tight tracking-tight">
                 Let&apos;s Architect Your{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue via-blue-600 to-indigo-700">
+                <span className="text-transparent bg-clip-text bg-linear-to-r from-brand-blue via-blue-600 to-indigo-700">
                   Digital Engine
                 </span>
               </h1>
@@ -316,30 +316,30 @@ export default function ContactPage() {
             </div>
 
             {/* Right graphic column */}
-            <div className="hidden lg:flex lg:col-span-5 justify-center lg:justify-end relative h-[440px]">
+            <div className="hidden lg:flex lg:col-span-5 justify-center lg:justify-end relative h-110">
               {/* Futuristic Glass Panel */}
-              <div className="absolute bottom-4 left-4 right-4 lg:left-12 lg:right-0 top-12 rounded-3xl bg-gradient-to-br from-blue-50/60 to-slate-100/80 border border-slate-200 shadow-xl overflow-hidden">
-                <div className="absolute inset-0 bg-[radial-gradient(#0f172a0a_1px,transparent_1px)] [background-size:16px_16px]" />
-                <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-blue-500 via-brand-blue to-indigo-500 animate-pulse" />
+              <div className="absolute bottom-4 left-4 right-4 lg:left-12 lg:right-0 top-12 rounded-3xl bg-linear-to-br from-blue-50/60 to-slate-100/80 border border-slate-200 shadow-xl overflow-hidden">
+                <div className="absolute inset-0 bg-[radial-gradient(#0f172a0a_1px,transparent_1px)] bg-size-[16px_16px]" />
+                <div className="absolute top-0 left-0 w-full h-0.75 bg-linear-to-r from-blue-500 via-brand-blue to-indigo-500 animate-pulse" />
                 <div className="absolute -bottom-20 -right-20 w-64 h-64 rounded-full bg-blue-200/30 blur-[80px]" />
               </div>
 
               {/* Interactive orbit rings */}
               <div
-                className="absolute top-4 right-1/2 translate-x-1/2 lg:right-24 w-[280px] h-[280px] rounded-full border border-dashed border-blue-400/30 animate-spin"
+                className="absolute top-4 right-1/2 translate-x-1/2 lg:right-24 w-70 h-70 rounded-full border border-dashed border-blue-400/30 animate-spin"
                 style={{ animationDuration: '30s' }}
               />
               <div
-                className="absolute top-12 right-1/2 translate-x-1/2 lg:right-28 w-[230px] h-[230px] rounded-full border border-dotted border-indigo-400/30 animate-spin"
+                className="absolute top-12 right-1/2 translate-x-1/2 lg:right-28 w-57.5 h-57.5 rounded-full border border-dotted border-indigo-400/30 animate-spin"
                 style={{ animationDuration: '45s', animationDirection: 'reverse' }}
               />
 
               {/* Blended specialist portrait */}
-              <div className="relative h-full w-full max-w-[340px] flex items-end justify-center z-10">
+              <div className="relative h-full w-full max-w-85 flex items-end justify-center z-10">
                 <img
                   src={contactHeroPerson}
                   alt="Customer Success Specialist"
-                  className="h-[380px] sm:h-[430px] object-contain bottom-0 filter drop-shadow-xl hover:scale-[1.02] transition-transform duration-300 ease-out select-none"
+                  className="h-95 sm:h-107.5 object-contain bottom-0 filter drop-shadow-xl hover:scale-[1.02] transition-transform duration-300 ease-out select-none"
                 />
 
                 {/* Overlapping Glass chat widget */}
@@ -484,7 +484,7 @@ export default function ContactPage() {
             >
               <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-8 sm:p-10 relative overflow-hidden">
                 {/* Luminous Top Gradient */}
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-blue via-blue-600 to-indigo-600" />
+                <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-brand-blue via-blue-600 to-indigo-600" />
 
                 {/* Success state */}
                 {submitState === 'success' ? (

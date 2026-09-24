@@ -175,7 +175,7 @@ export default function AdminTicketsPage() {
       <div className="space-y-6 max-w-7xl mx-auto pb-12">
         
         {/* ── Executive Dark Header Banner ────────────────────────── */}
-        <div className="bg-gradient-to-r from-slate-900 via-gray-900 to-brand-blue p-6 sm:p-8 rounded-3xl text-white shadow-xl relative overflow-hidden">
+        <div className="bg-linear-to-r from-slate-900 via-gray-900 to-brand-blue p-6 sm:p-8 rounded-3xl text-white shadow-xl relative overflow-hidden">
           <div className="absolute top-0 right-0 w-96 h-96 bg-brand-blue/20 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -388,7 +388,7 @@ export default function AdminTicketsPage() {
           </div>
 
           {/* Right Panel: Ticket Message Thread & Assignment Bar */}
-          <div className={`lg:col-span-2 bg-white border border-gray-200/80 rounded-3xl overflow-hidden shadow-sm flex flex-col min-h-[480px] lg:min-h-[620px] ${selectedTicketId ? 'block' : 'hidden lg:flex justify-center items-center text-center p-12'}`}>
+          <div className={`lg:col-span-2 bg-white border border-gray-200/80 rounded-3xl overflow-hidden shadow-sm flex flex-col min-h-120 lg:min-h-[620px] ${selectedTicketId ? 'block' : 'hidden lg:flex justify-center items-center text-center p-12'}`}>
             {selectedTicketId ? (
               <>
                 {/* Detail Header Bar */}
@@ -438,7 +438,7 @@ export default function AdminTicketsPage() {
                     <div className="flex items-center gap-2 pt-2 border-t border-gray-200/60">
                       <UserCheck className="w-4 h-4 text-gray-400 shrink-0" />
                       <span className="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider whitespace-nowrap">Assign Desk Lead:</span>
-                      <div className="relative flex-1 max-w-[280px]">
+                      <div className="relative flex-1 max-w-70">
                         <select
                           value={ticketDetail?.assignedAdminId || ''}
                           onChange={(e) => handleAssignChange(e.target.value)}
@@ -469,7 +469,7 @@ export default function AdminTicketsPage() {
                 </div>
 
                 {/* Chat Thread Message Stream */}
-                <div className="flex-1 p-4 sm:p-6 space-y-4 overflow-y-auto min-h-[300px] max-h-[420px] bg-slate-50/50">
+                <div className="flex-1 p-4 sm:p-6 space-y-4 overflow-y-auto min-h-75 max-h-[420px] bg-slate-50/50">
                   {loadingDetail ? (
                     <div className="flex justify-center items-center h-full py-12">
                       <div className="w-8 h-8 border-2 border-brand-blue border-t-transparent rounded-full animate-spin" />
@@ -490,7 +490,7 @@ export default function AdminTicketsPage() {
                           <div
                             className={`p-4 rounded-2xl text-xs sm:text-sm leading-relaxed ${
                               isSelf
-                                ? 'bg-gradient-to-r from-brand-blue to-blue-700 text-white rounded-tr-none shadow-md'
+                                ? 'bg-linear-to-r from-brand-blue to-blue-700 text-white rounded-tr-none shadow-md'
                                 : 'bg-white border border-gray-200/90 text-gray-900 rounded-tl-none shadow-xs'
                             }`}
                           >
@@ -508,7 +508,7 @@ export default function AdminTicketsPage() {
                                   href={msg.fileUrl}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="font-bold underline truncate max-w-[200px] hover:opacity-85"
+                                  className="font-bold underline truncate max-w-50 hover:opacity-85"
                                   title={msg.fileName}
                                 >
                                   {msg.fileName || 'Download File Attachment'}
@@ -565,7 +565,7 @@ export default function AdminTicketsPage() {
         </div>
 
         {/* ── Guidance Banner ─────────────────────────────────── */}
-        <div className="bg-gradient-to-r from-blue-50/80 via-slate-50/50 to-blue-50/80 border border-blue-200/80 rounded-2xl p-5 shadow-sm flex items-start gap-4">
+        <div className="bg-linear-to-r from-blue-50/80 via-slate-50/50 to-blue-50/80 border border-blue-200/80 rounded-2xl p-5 shadow-sm flex items-start gap-4">
           <div className="w-10 h-10 rounded-xl bg-blue-100 border border-blue-200 flex items-center justify-center shrink-0 mt-0.5">
             <Sparkles className="w-5 h-5 text-brand-blue" />
           </div>

@@ -11,7 +11,7 @@ const ECOSYSTEM_PILLARS = [
   {
     icon: Cpu,
     title: 'Technology & Cloud Division',
-    desc: 'Snaptech serves as the dedicated IT software wing, building mission-critical web applications, SaaS platforms, and mobile apps.',
+    desc: 'SnapTech Digital serves as the dedicated IT software wing, building mission-critical web applications, SaaS platforms, and mobile apps.',
   },
   {
     icon: Globe,
@@ -50,7 +50,7 @@ export default function ParentGroupSection() {
             </span>
           </h2>
           <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
-            Hindustan Projects IT Services bridges heavy industrial engineering with high-velocity digital intelligence. 
+            SnapTech Digital bridges heavy industrial engineering with high-velocity digital intelligence. 
             We provide scalable software, cloud, and digital solutions with the unmatched trustworthiness of our parent enterprise.
           </p>
         </div>
@@ -81,7 +81,7 @@ export default function ParentGroupSection() {
         </div>
 
         {/* Parent Website Cross-Link Banner */}
-        <div className="rounded-2xl bg-gradient-to-r from-blue-50/80 via-white to-red-50/40 p-6 sm:p-8 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
+        <div className="rounded-2xl bg-linear-to-r from-blue-50/80 via-white to-red-50/40 p-6 sm:p-8 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
           <div className="space-y-1 text-center sm:text-left">
             <span className="text-[11px] font-mono uppercase tracking-widest text-brand-red font-bold block">
               Official Corporate Gateway

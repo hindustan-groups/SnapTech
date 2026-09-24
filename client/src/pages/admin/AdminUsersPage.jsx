@@ -329,7 +329,7 @@ export default function AdminUsersPage() {
       <div className="space-y-6 max-w-6xl mx-auto pb-12">
         
         {/* ── Executive Dark Header Banner ────────────────────────── */}
-        <div className="bg-gradient-to-r from-slate-900 via-gray-900 to-brand-blue p-6 sm:p-8 rounded-3xl text-white shadow-xl relative overflow-hidden">
+        <div className="bg-linear-to-r from-slate-900 via-gray-900 to-brand-blue p-6 sm:p-8 rounded-3xl text-white shadow-xl relative overflow-hidden">
           <div className="absolute top-0 right-0 w-96 h-96 bg-brand-blue/20 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -1146,7 +1146,7 @@ export default function AdminUsersPage() {
         )}
 
         {/* ── Security & Guidance Card ───────────────────────────── */}
-        <div className="bg-gradient-to-r from-blue-50/80 via-purple-50/50 to-blue-50/80 border border-blue-200/80 rounded-2xl p-5 shadow-sm flex items-start gap-4">
+        <div className="bg-linear-to-r from-blue-50/80 via-purple-50/50 to-blue-50/80 border border-blue-200/80 rounded-2xl p-5 shadow-sm flex items-start gap-4">
           <div className="w-10 h-10 rounded-xl bg-blue-100 border border-blue-200 flex items-center justify-center shrink-0 mt-0.5">
             <Sparkles className="w-5 h-5 text-brand-blue" />
           </div>

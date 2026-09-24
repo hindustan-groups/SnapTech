@@ -158,7 +158,7 @@ function RichEditor({ value, onChange, label }) {
           <textarea
             value={value || ''}
             onChange={(e) => onChange(e.target.value)}
-            className="w-full p-4 min-h-[300px] max-h-[500px] focus:outline-none font-mono text-xs bg-slate-900 text-slate-100 resize-none border-0 block"
+            className="w-full p-4 min-h-75 max-h-125 focus:outline-none font-mono text-xs bg-slate-900 text-slate-100 resize-none border-0 block"
             placeholder="Paste HTML code here..."
           />
         ) : (
@@ -168,7 +168,7 @@ function RichEditor({ value, onChange, label }) {
             suppressContentEditableWarning
             onInput={() => onChange(editorRef.current?.innerHTML || '')}
             onBlur={() => onChange(editorRef.current?.innerHTML || '')}
-            className="p-4 min-h-[300px] max-h-[500px] overflow-y-auto focus:outline-none prose prose-slate max-w-none prose-sm prose-headings:font-heading prose-p:leading-relaxed"
+            className="p-4 min-h-75 max-h-125 overflow-y-auto focus:outline-none prose prose-slate max-w-none prose-sm prose-headings:font-heading prose-p:leading-relaxed"
           />
         )}
       </div>
@@ -198,7 +198,7 @@ function PostEditor({ postId, initial, onSave, onCancel, loading }) {
     defaultValues: {
       title: '', slug: '', excerpt: '', content: '',
       featuredImageUrl: '', category: 'Web Development',
-      tags: '', authorName: 'Hindustan Projects',
+      tags: '', authorName: 'SnapTech Digital',
       status: 'DRAFT', metaTitle: '', metaDescription: '',
       isFeatured: false,
     },
@@ -341,7 +341,7 @@ function PostEditor({ postId, initial, onSave, onCancel, loading }) {
           {/* Author */}
           <div className="bg-white border border-gray-200 rounded-xl p-4">
             <label className="text-xs font-semibold text-gray-600 block mb-2">Author Name</label>
-            <input {...register('authorName')} className={inputCls} placeholder="Hindustan Projects" />
+            <input {...register('authorName')} className={inputCls} placeholder="SnapTech Digital" />
           </div>
 
           {/* Tags */}
@@ -570,7 +570,7 @@ export default function AdminBlogPage() {
                     const StatusIcon = STATUS_ICONS[post.status] || FileText
                     return (
                       <tr key={post.id} className="hover:bg-gray-50/50 transition-colors">
-                        <td className="px-5 py-4 max-w-[280px]">
+                        <td className="px-5 py-4 max-w-70">
                           <div className="flex items-start gap-2">
                             <div className="flex-1 min-w-0">
                               <p className="font-semibold text-sm text-gray-900 line-clamp-1">{post.title}</p>

@@ -139,7 +139,7 @@ export default function FeaturedProjects() {
                     >
                       {/* Project Visual Thumbnail */}
                       <div className="overflow-hidden relative h-52 bg-slate-900">
-                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent z-10 pointer-events-none" />
+                        <div className="absolute inset-0 bg-linear-to-t from-slate-950/60 via-transparent to-transparent z-10 pointer-events-none" />
                         <img
                           src={projectImg}
                           alt={p.title}

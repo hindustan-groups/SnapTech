@@ -297,7 +297,7 @@ export default function AdminLeadsPage() {
                         <td className="px-5 py-4">
                           <div className="flex items-center gap-2.5">
                             <div
-                              className="w-8 h-8 rounded-full bg-gradient-to-br from-brand-blue to-blue-400
+                              className="w-8 h-8 rounded-full bg-linear-to-br from-brand-blue to-blue-400
                             flex items-center justify-center text-white text-xs font-bold shrink-0"
                             >
                               {lead.name?.[0]?.toUpperCase() || '?'}
@@ -468,7 +468,7 @@ export default function AdminLeadsPage() {
                           {selectedLead.phone}
                         </a>
                         <a
-                          href={`https://wa.me/${selectedLead.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hello ${selectedLead.name}, thank you for contacting Hindustan Projects regarding ${selectedLead.serviceInterested || 'your query'}. We received your message: "${selectedLead.message.slice(0, 50)}..."`)}`}
+                          href={`https://wa.me/${selectedLead.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hello ${selectedLead.name}, thank you for contacting SnapTech Digital regarding ${selectedLead.serviceInterested || 'your query'}. We received your message: "${selectedLead.message.slice(0, 50)}..."`)}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1 text-[10px] bg-green-500 hover:bg-green-600 text-white font-semibold px-2 py-0.5 rounded-lg transition-colors cursor-pointer"

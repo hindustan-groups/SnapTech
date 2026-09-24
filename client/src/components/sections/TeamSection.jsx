@@ -24,14 +24,14 @@ function Avatar({ name }) {
   return (
     <div className="relative mb-5 mx-auto w-24 h-24 flex items-center justify-center z-10">
       {/* Soft backdrop blur glow */}
-      <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-brand-blue via-transparent to-brand-red blur-md opacity-20 group-hover:opacity-55 group-hover:scale-115 transition-all duration-500" />
+      <div className="absolute inset-0 rounded-full bg-linear-to-tr from-brand-blue via-transparent to-brand-red blur-md opacity-20 group-hover:opacity-55 group-hover:scale-115 transition-all duration-500" />
       
       {/* Gradient Ring Wrapper */}
-      <div className="relative w-full h-full p-[3px] rounded-full bg-gradient-to-tr from-brand-blue/20 via-slate-200 to-brand-red/20 group-hover:from-brand-blue group-hover:via-brand-blue-light group-hover:to-brand-red transition-all duration-500 shadow-sm flex items-center justify-center">
+      <div className="relative w-full h-full p-0.75 rounded-full bg-linear-to-tr from-brand-blue/20 via-slate-200 to-brand-red/20 group-hover:from-brand-blue group-hover:via-brand-blue-light group-hover:to-brand-red transition-all duration-500 shadow-sm flex items-center justify-center">
         {/* White spacer ring */}
-        <div className="w-full h-full p-[2px] rounded-full bg-white flex items-center justify-center">
+        <div className="w-full h-full p-0.5 rounded-full bg-white flex items-center justify-center">
           <div className="w-full h-full rounded-full bg-[#1a3e8c]/5 flex items-center justify-center border border-slate-100 shadow-inner group-hover:scale-105 transition-transform duration-500">
-            <span className="font-heading text-lg font-extrabold bg-gradient-to-tr from-[#1a3e8c] to-[#3b6fd4] bg-clip-text text-transparent">
+            <span className="font-heading text-lg font-extrabold bg-linear-to-tr from-[#1a3e8c] to-[#3b6fd4] bg-clip-text text-transparent">
               {initials}
             </span>
           </div>
@@ -46,17 +46,17 @@ function TeamCard({ member }) {
     <motion.div variants={fadeUp}>
       <div className="relative overflow-hidden p-6 text-center group border border-slate-200 bg-white hover:border-[#1a3e8c]/30 hover:shadow-xl transition-all duration-300 rounded-2xl flex flex-col justify-between h-full">
         {/* Subtle brand glow on hover */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 bg-gradient-to-b from-[#1a3e8c]/5 to-transparent blur-2xl rounded-full pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 bg-linear-to-b from-[#1a3e8c]/5 to-transparent blur-2xl rounded-full pointer-events-none" />
 
         <div>
           {member.photoUrl ? (
             <div className="relative mb-5 mx-auto w-24 h-24 flex items-center justify-center z-10">
               {/* Soft backdrop blur glow */}
-              <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#1a3e8c] via-transparent to-[#e31e24] blur-md opacity-10 group-hover:opacity-30 group-hover:scale-110 transition-all duration-500" />
+              <div className="absolute inset-0 rounded-full bg-linear-to-tr from-[#1a3e8c] via-transparent to-[#e31e24] blur-md opacity-10 group-hover:opacity-30 group-hover:scale-110 transition-all duration-500" />
 
               {/* Gradient Ring Wrapper */}
-              <div className="relative p-[3px] rounded-full bg-gradient-to-tr from-[#1a3e8c]/40 via-white to-[#e31e24]/40 group-hover:from-[#1a3e8c] group-hover:via-white group-hover:to-[#e31e24] transition-all duration-500 shadow-sm">
-                <div className="p-[2px] rounded-full bg-white">
+              <div className="relative p-0.75 rounded-full bg-linear-to-tr from-[#1a3e8c]/40 via-white to-[#e31e24]/40 group-hover:from-[#1a3e8c] group-hover:via-white group-hover:to-[#e31e24] transition-all duration-500 shadow-sm">
+                <div className="p-0.5 rounded-full bg-white">
                   <img
                     src={member.photoUrl}
                     alt={member.name}
@@ -111,7 +111,7 @@ const PLACEHOLDER_TEAM = [
     id: '1',
     name: 'Mohammad Dilshan',
     role: 'Founder & Technical Director',
-    bio: 'Enterprise technology architect leading digital transformation for Hindustan Projects Group and corporate clients globally.',
+    bio: 'Enterprise technology architect leading digital transformation for SnapTech Digital and corporate clients globally.',
     photoUrl:
       'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&q=80&auto=format&fit=crop',
     linkedinUrl: 'https://linkedin.com',

@@ -431,7 +431,7 @@ export default function AdminHelpPage() {
       <div className="space-y-6 max-w-6xl mx-auto pb-12">
         
         {/* ── Executive Dark Header Banner ────────────────────────── */}
-        <div className="bg-gradient-to-r from-slate-900 via-gray-900 to-brand-blue p-6 sm:p-8 rounded-3xl text-white shadow-xl relative overflow-hidden">
+        <div className="bg-linear-to-r from-slate-900 via-gray-900 to-brand-blue p-6 sm:p-8 rounded-3xl text-white shadow-xl relative overflow-hidden">
           <div className="absolute top-0 right-0 w-96 h-96 bg-brand-blue/20 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10 space-y-5">
@@ -448,7 +448,7 @@ export default function AdminHelpPage() {
                     </span>
                   </div>
                   <p className="text-gray-300 text-xs sm:text-sm mt-0.5">
-                    Comprehensive user guide and operational manual for Hindustan Projects Admin Portal.
+                    Comprehensive user guide and operational manual for SnapTech Digital Admin Portal.
                   </p>
                 </div>
               </div>
@@ -698,7 +698,7 @@ export default function AdminHelpPage() {
         </div>
 
         {/* ── Developer Support Footer ──────────────────────────── */}
-        <div className="bg-gradient-to-r from-blue-50/80 via-indigo-50/50 to-blue-50/80 border border-blue-200/80 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-5 shadow-sm">
+        <div className="bg-linear-to-r from-blue-50/80 via-indigo-50/50 to-blue-50/80 border border-blue-200/80 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-5 shadow-sm">
           <div className="space-y-1 text-center sm:text-left">
             <h4 className="font-heading text-base font-bold text-brand-blue flex items-center gap-2 justify-center sm:justify-start">
               <span>Need Direct Developer Assistance?</span>
