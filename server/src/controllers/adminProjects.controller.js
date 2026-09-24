@@ -53,6 +53,11 @@ export const createProject = async (req, res, next) => {
       category,
       isFeatured,
       liveUrl,
+      result,
+      duration,
+      challenge,
+      solution,
+      features,
     } = req.body
     const project = await prisma.project.create({
       data: {
@@ -61,11 +66,16 @@ export const createProject = async (req, res, next) => {
         clientName,
         description,
         thumbnailUrl,
-        images: images ?? [],
-        technologies: technologies ?? [],
+        images: Array.isArray(images) ? images : [],
+        technologies: Array.isArray(technologies) ? technologies : [],
         category,
         isFeatured: isFeatured ?? false,
         liveUrl,
+        result: result || null,
+        duration: duration || null,
+        challenge: challenge || null,
+        solution: solution || null,
+        features: Array.isArray(features) ? features : [],
       },
     })
     if (project.isFeatured) {
@@ -85,7 +95,17 @@ export const createProject = async (req, res, next) => {
 export const updateProject = async (req, res, next) => {
   try {
     const { id } = req.params
-    const project = await prisma.project.update({ where: { id }, data: req.body })
+    const data = { ...req.body }
+    if (data.images && !Array.isArray(data.images)) {
+      data.images = []
+    }
+    if (data.technologies && !Array.isArray(data.technologies)) {
+      data.technologies = []
+    }
+    if (data.features && !Array.isArray(data.features)) {
+      data.features = []
+    }
+    const project = await prisma.project.update({ where: { id }, data })
     if (project.isFeatured) {
       await generateSocialDraft(project).catch((err) =>
         console.error('[SocialDraft] Generation failed:', err.message)

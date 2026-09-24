@@ -53,6 +53,12 @@ model Project {
   category     String   // e.g. "Web", "Marketing", "Branding"
   isFeatured   Boolean  @default(false)
   liveUrl      String?
+  // Rich architectural case study fields
+  result       String?  // e.g. "3.4× Conversion Growth in 60 Days"
+  duration     String?  // e.g. "6 Weeks Delivery"
+  challenge    String?  // Bottlenecks & architectural challenge
+  solution     String?  // Technical solution & execution strategy
+  features     String[] @default([]) // Deliverables & key features
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   socialDrafts SocialPostDraft[]

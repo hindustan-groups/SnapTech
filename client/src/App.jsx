@@ -59,6 +59,7 @@ const ServicesPage = lazyWithRetry(() => import('@/pages/ServicesPage'))
 const ServiceDetailPage = lazyWithRetry(() => import('@/pages/ServiceDetailPage'))
 const AboutPage = lazyWithRetry(() => import('@/pages/AboutPage'))
 const PortfolioPage = lazyWithRetry(() => import('@/pages/PortfolioPage'))
+const ProjectDetailPage = lazyWithRetry(() => import('@/pages/ProjectDetailPage'))
 const BlogPage = lazyWithRetry(() => import('@/pages/BlogPage'))
 const BlogPostPage = lazyWithRetry(() => import('@/pages/BlogPostPage'))
 const ContactPage = lazyWithRetry(() => import('@/pages/ContactPage'))
@@ -548,6 +549,22 @@ export default function App() {
             element={
               <Suspense fallback={<PageFallback />}>
                 <PortfolioPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/portfolio/:slug"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <ProjectDetailPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/projects/:slug"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <ProjectDetailPage />
               </Suspense>
             }
           />

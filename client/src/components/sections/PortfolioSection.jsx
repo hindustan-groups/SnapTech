@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
+import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ExternalLink, ArrowRight, Code2, Tag, Sparkles, CheckCircle2, Award } from 'lucide-react'
 import { Container, Button } from '@/components/ui'
@@ -240,6 +241,16 @@ export function ProjectModal({ project, onClose }) {
                     {project.category}
                   </span>
                 </div>
+                {project.duration && (
+                  <div>
+                    <span className="block text-[9px] font-mono font-bold text-slate-400 uppercase tracking-wider mb-1">
+                      Timeline
+                    </span>
+                    <span className="text-xs font-semibold text-slate-800 block">
+                      {project.duration}
+                    </span>
+                  </div>
+                )}
                 {project.technologies?.length > 0 && (
                   <div>
                     <span className="block text-[9px] font-mono font-bold text-slate-400 uppercase tracking-wider mb-2">
@@ -257,19 +268,44 @@ export function ProjectModal({ project, onClose }) {
                     </div>
                   </div>
                 )}
-                {project.liveUrl && (
-                  <div className="pt-2">
+                {project.images?.length > 0 && (
+                  <div>
+                    <span className="block text-[9px] font-mono font-bold text-slate-400 uppercase tracking-wider mb-2">
+                      Screenshots ({project.images.length})
+                    </span>
+                    <div className="flex gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+                      {project.images.slice(0, 3).map((img, i) => (
+                        <img
+                          key={i}
+                          src={img}
+                          alt="Screenshot"
+                          className="w-14 h-10 rounded-lg object-cover border border-slate-200 shrink-0"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+                <div className="pt-2 space-y-2">
+                  <Link
+                    to={`/portfolio/${project.slug}`}
+                    onClick={onClose}
+                    className="flex items-center justify-center gap-1.5 w-full bg-[#0D1B4B] hover:bg-brand-blue text-white text-xs font-bold py-2.5 px-3 rounded-xl shadow-md transition-all duration-300"
+                  >
+                    <span>View Full Case Study</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                  {project.liveUrl && (
                     <a
                       href={project.liveUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-1.5 w-full bg-brand-blue hover:bg-brand-blue-dark text-white text-xs font-bold py-2.5 px-3 rounded-xl shadow-md transition-all duration-300"
+                      className="flex items-center justify-center gap-1.5 w-full bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold py-2.5 px-3 rounded-xl transition-all duration-300"
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
                       Visit Live Platform
                     </a>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             </div>
           </div>

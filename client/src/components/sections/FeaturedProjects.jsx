@@ -194,19 +194,29 @@ export default function FeaturedProjects() {
                               </p>
                             </div>
 
-                            {/* Tech stack chips */}
-                            {p.technologies && p.technologies.length > 0 && (
-                              <div className="flex flex-wrap gap-1.5 pt-3 border-t border-slate-100">
-                                {p.technologies.slice(0, 3).map((t) => (
-                                  <span
-                                    key={t}
-                                    className="text-[10px] px-2 py-0.5 rounded-md bg-slate-50 text-slate-600 font-mono border border-slate-200"
-                                  >
-                                    {t}
-                                  </span>
-                                ))}
-                              </div>
-                            )}
+                            {/* Tech stack chips & Action */}
+                            <div className="flex items-center justify-between pt-3.5 border-t border-slate-100 mt-2">
+                              <span className="text-xs font-bold text-[#1a3e8c] group-hover:translate-x-1 transition-transform flex items-center gap-1">
+                                Case Study <ArrowRight className="w-3.5 h-3.5" />
+                              </span>
+                              {p.technologies && p.technologies.length > 0 && (
+                                <div className="flex flex-wrap gap-1">
+                                  {p.technologies.slice(0, 2).map((t) => (
+                                    <span
+                                      key={t}
+                                      className="text-[10px] px-2 py-0.5 rounded-md bg-slate-50 text-slate-600 font-mono border border-slate-200"
+                                    >
+                                      {t}
+                                    </span>
+                                  ))}
+                                  {p.technologies.length > 2 && (
+                                    <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-slate-50 text-slate-400 font-mono border border-slate-200">
+                                      +{p.technologies.length - 2}
+                                    </span>
+                                  )}
+                                </div>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </motion.div>
@@ -292,18 +302,23 @@ export default function FeaturedProjects() {
                               </p>
                             </div>
 
-                            {p.technologies && p.technologies.length > 0 && (
-                              <div className="flex flex-wrap gap-1 pt-3 border-t border-slate-100">
-                                {p.technologies.slice(0, 3).map((t) => (
-                                  <span
-                                    key={t}
-                                    className="text-[9px] px-2 py-0.5 rounded-md bg-slate-50 text-slate-600 font-mono border border-slate-200"
-                                  >
-                                    {t}
-                                  </span>
-                                ))}
-                              </div>
-                            )}
+                            <div className="flex items-center justify-between pt-3 border-t border-slate-100 mt-1">
+                              <span className="text-[11px] font-bold text-[#1a3e8c] flex items-center gap-1">
+                                Case Study <ArrowRight className="w-3 h-3" />
+                              </span>
+                              {p.technologies && p.technologies.length > 0 && (
+                                <div className="flex flex-wrap gap-1">
+                                  {p.technologies.slice(0, 2).map((t) => (
+                                    <span
+                                      key={t}
+                                      className="text-[9px] px-2 py-0.5 rounded-md bg-slate-50 text-slate-600 font-mono border border-slate-200"
+                                    >
+                                      {t}
+                                    </span>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
                           </div>
                         </div>
                       )

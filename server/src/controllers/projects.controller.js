@@ -24,10 +24,18 @@ export const getAllProjects = async (req, res, next) => {
         clientName: true,
         description: true,
         thumbnailUrl: true,
+        images: true,
         technologies: true,
         category: true,
         isFeatured: true,
+        liveUrl: true,
+        result: true,
+        duration: true,
+        challenge: true,
+        solution: true,
+        features: true,
         createdAt: true,
+        updatedAt: true,
       },
     })
     res.setHeader('Cache-Control', CACHE_FRESH)
