@@ -354,6 +354,9 @@ export default function ContactPage() {
                       src={contactArchitectHero}
                       alt="SnapTech Solution Architect & Technical Consultation Desk"
                       className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
+                      loading="eager"
+                      fetchPriority="high"
+                      decoding="async"
                     />
 
                     {/* Gradient shading at bottom for text contrast */}
