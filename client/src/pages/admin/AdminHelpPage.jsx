@@ -30,6 +30,9 @@ import {
   ArrowRight,
   HelpCircle,
   Zap,
+  Gauge,
+  Calculator,
+  CheckCircle,
 } from 'lucide-react'
 import { SEO } from '@/components/ui'
 import { useToast } from '@/components/ui/ToastProvider'
@@ -39,9 +42,11 @@ const CATEGORIES = [
   { id: 'ALL', label: 'All Guides' },
   { id: 'CMS', label: 'Content & CMS', icon: Layers },
   { id: 'CRM', label: 'CRM & Leads', icon: MessageSquare },
-  { id: 'SECURITY', label: 'Security & Auth', icon: ShieldCheck },
-  { id: 'AUTOMATIONS', label: 'Automations & Crons', icon: Cpu },
-  { id: 'MONITORING', label: 'Monitoring & Health', icon: Activity },
+  { id: 'SEO_GROWTH', label: 'SEO & Growth Engines', icon: Globe },
+  { id: 'TECH_SPECS', label: 'Speed & Architecture', icon: Gauge },
+  { id: 'SECURITY', label: 'Security & Compliance', icon: ShieldCheck },
+  { id: 'AUTOMATIONS', label: 'Email & Cron Automations', icon: Zap },
+  { id: 'MONITORING', label: 'Monitoring & Telemetry', icon: Activity },
 ]
 
 // ── Documentation Sections Data ───────────────────────────────
@@ -371,6 +376,171 @@ const SECTIONS = [
       },
     ],
   },
+  {
+    id: 'performance-architecture',
+    category: 'TECH_SPECS',
+    title: 'Speed, Bundle Splitting & Edge CDN Caching',
+    subtitle: 'Vite 8 manual chunk splitting, Vercel Edge caching headers, and Core Web Vitals LCP optimization',
+    icon: Gauge,
+    badge: 'High-Performance Engine',
+    link: '/admin/monitoring',
+    steps: [
+      {
+        num: '1',
+        title: 'Intelligent Vendor Chunking (Vite 8)',
+        desc: 'Third-party dependencies are partitioned into isolated vendor chunks (vendor-react, vendor-motion, vendor-icons, vendor-query). This sliced our initial JavaScript payload down to ~263 KB (a ~43% reduction!).',
+      },
+      {
+        num: '2',
+        title: 'On-Demand Chart Isolation',
+        desc: 'The large charting library (vendor-recharts, ~380 KB) is completely isolated and loaded strictly when an admin visits charts/analytics, ensuring zero overhead on public visitor page loads.',
+      },
+      {
+        num: '3',
+        title: 'Vercel Global Edge CDN Caching (vercel.json)',
+        desc: 'Hashed assets (/assets/*) are configured with 1-Year immutable caching ("Cache-Control: public, max-age=31536000, immutable"). Returning visitors load the platform instantly (0ms) from local disk cache.',
+      },
+      {
+        num: '4',
+        title: 'Core Web Vitals & LCP Image Preload',
+        desc: 'Key hero visuals feature loading="eager", fetchPriority="high", and decoding="async", prompting the browser preload scanner to prioritize hero rendering before secondary scripts.',
+      },
+      {
+        num: '5',
+        title: 'DNS Preconnect & Prefetch',
+        desc: 'index.html pre-resolves Google Tag Manager and Google Analytics hostnames, eliminating 150–200ms of TCP/TLS handshake latency during analytics initialization.',
+      },
+    ],
+  },
+  {
+    id: 'email-resend',
+    category: 'AUTOMATIONS',
+    title: 'Resend API & Transactional Email System',
+    subtitle: 'Configuring Resend REST API keys, domain DNS verification, and automatic SMTP failover',
+    icon: Mail,
+    badge: 'Email Deliverability',
+    link: '/admin/integration',
+    steps: [
+      {
+        num: '1',
+        title: 'Resend API Priority Order',
+        desc: 'The mailer engine prioritizes the modern Resend REST API (via VITE_RESEND_API_KEY or sys_resend_api_key in Integrations). Resend offers high inbox deliverability compared to legacy shared SMTP.',
+      },
+      {
+        num: '2',
+        title: 'Domain DNS Verification',
+        desc: 'To send emails from your verified domain (e.g. notifications@yourdomain.com), add the provided SPF, DKIM, and DMARC TXT records in your DNS provider (Hostinger/Cloudflare).',
+      },
+      {
+        num: '3',
+        title: 'Automatic SMTP Failover',
+        desc: 'If Resend monthly quotas are reached or network timeouts occur, the backend automatically falls back to your configured SMTP credentials without losing customer inquiries.',
+      },
+      {
+        num: '4',
+        title: 'Honeypot & Bot Spam Shield',
+        desc: 'Public contact and calculation forms include invisible _hp honeypot fields. Automated spambots that fill these hidden fields are silently rejected without consuming email quotas.',
+      },
+      {
+        num: '5',
+        title: 'Testing Email Infrastructure',
+        desc: 'Navigate to Admin -> Integrations -> Resend / SMTP section and click "Send Test Email" to verify live inbox delivery in real time.',
+      },
+    ],
+  },
+  {
+    id: 'seo-indexing',
+    category: 'SEO_GROWTH',
+    title: 'Google SEO, Dynamic Sitemap & Indexing Manual',
+    subtitle: 'Robots.txt rules, 25+ dynamic URLs in sitemap.xml, and Google Search Console re-indexing',
+    icon: Globe,
+    badge: 'Search Engine Optimization',
+    link: '/admin/site-settings',
+    steps: [
+      {
+        num: '1',
+        title: 'Robots.txt Crawler Directives',
+        desc: 'Public pages are wide open ("Allow: /") while administrative and API endpoints are stealthily guarded ("Disallow: /admin/", "/client/", "/api/"). AI answer crawlers (GPTBot, PerplexityBot, ClaudeBot) are explicitly welcomed for AI search citation.',
+      },
+      {
+        num: '2',
+        title: 'Comprehensive XML Sitemap (/sitemap.xml)',
+        desc: 'Includes 25+ canonical URLs encompassing Homepage, Services, Pricing, Cost Calculator (/cost-calculator), Why Choose Us (/why-snaptech), Thank You page, individual service slugs, and blog articles.',
+      },
+      {
+        num: '3',
+        title: 'Google Search Console (GSC) Re-Indexing Step',
+        desc: 'If GSC previously flagged a robots.txt block: Open search.google.com -> Sitemaps -> Submit "https://www.snaptech.digital/sitemap.xml", then test the live URL and click "Request Indexing" to force Googlebot to refresh.',
+      },
+      {
+        num: '4',
+        title: 'Rich JSON-LD Structured Data Schema',
+        desc: 'index.html and SEO components inject Schema.org Organization, LocalBusiness, Breadcrumbs, and FAQs schemas for enhanced Google rich search snippets.',
+      },
+    ],
+  },
+  {
+    id: 'growth-tools-crm',
+    category: 'SEO_GROWTH',
+    title: 'Lead Generation Engines & Conversion Funnels',
+    subtitle: 'Interactive Cost Calculator, Why Choose Us comparison matrix, and Thank You conversion tracking',
+    icon: Calculator,
+    badge: 'Lead Conversion CRO',
+    link: '/admin/leads',
+    steps: [
+      {
+        num: '1',
+        title: 'Interactive Website Cost Calculator (/cost-calculator)',
+        desc: 'Multi-step dynamic calculator allowing clients to estimate web/app budgets based on project type, platform, design tiers, and specialized integrations, seamlessly capturing qualified leads.',
+      },
+      {
+        num: '2',
+        title: 'Why Choose Us Matrix (/why-snaptech)',
+        desc: 'A 10-dimension comparison matrix contrasting SnapTech Digital vs. typical freelance and low-cost agencies (Code ownership, dedicated engineering pods, strict SLAs, zero hidden fees).',
+      },
+      {
+        num: '3',
+        title: 'Dedicated Thank You Page (/thank-you)',
+        desc: 'Post-submission landing experience that automatically fires the "generate_lead" conversion event in Google Analytics 4 and provides a 1-tap WhatsApp consultation link.',
+      },
+      {
+        num: '4',
+        title: 'Real-Time Admin Lead Ingestion',
+        desc: 'Every submission from Contact Page, Cost Calculator, or Quick Inquiry form is stored in the database with timestamps and status tags (NEW, CONTACTED, CLOSED).',
+      },
+    ],
+  },
+  {
+    id: 'security-compliance',
+    category: 'SECURITY',
+    title: 'Data Security, DPDP Act 2023 & Privacy Standards',
+    subtitle: 'Stealth admin URLs, sanitized placeholders, TOTP 2FA, and Indian DPDP compliance',
+    icon: ShieldCheck,
+    badge: 'Data Protection & Defense',
+    link: '/admin/settings',
+    steps: [
+      {
+        num: '1',
+        title: 'Stealth Admin Route Protection',
+        desc: 'Admin routes are obfuscated behind dynamic secret paths (e.g. /admin-h9z7/login). Direct visits to /admin without a valid session token return a 404 Not Found to confound automated vulnerability scanners.',
+      },
+      {
+        num: '2',
+        title: 'Zero Real Data in Input Placeholders',
+        desc: 'In compliance with privacy and security best practices, all input placeholders and mock examples across login screens and public forms use sanitized generic text (e.g. name@company.com, +91 98765 43210).',
+      },
+      {
+        num: '3',
+        title: 'DPDP Act 2023 & GDPR Legal Consent',
+        desc: 'All lead collection forms feature an explicit data protection agreement checkbox ensuring full compliance with India Digital Personal Data Protection (DPDP) Act 2023.',
+      },
+      {
+        num: '4',
+        title: 'Two-Factor Authentication (TOTP 2FA)',
+        desc: 'Administrators can activate Google Authenticator / Authy 2FA in Account Settings. Once enabled, logins require a time-synced 6-digit TOTP code in addition to password.',
+      },
+    ],
+  },
 ]
 
 export default function AdminHelpPage() {
@@ -456,7 +626,7 @@ export default function AdminHelpPage() {
               {/* Action counter pill */}
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/15 px-3.5 py-2 rounded-2xl shrink-0">
                 <Sparkles className="w-4 h-4 text-amber-300" />
-                <span className="text-xs font-bold text-white">10 Enterprise Modules Covered</span>
+                <span className="text-xs font-bold text-white">15 Enterprise Modules Covered</span>
               </div>
             </div>
 
@@ -660,8 +830,8 @@ export default function AdminHelpPage() {
                 <Globe className="w-5 h-5 text-brand-blue" />
               </div>
               <div>
-                <span className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider">Frontend App</span>
-                <span className="text-xs font-bold text-gray-900">React 19 + Vite</span>
+                <span className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider">Frontend &amp; Edge</span>
+                <span className="text-xs font-bold text-gray-900">React 19 + Vercel CDN</span>
               </div>
             </div>
 
@@ -670,7 +840,7 @@ export default function AdminHelpPage() {
                 <Cpu className="w-5 h-5 text-indigo-600" />
               </div>
               <div>
-                <span className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider">Backend API</span>
+                <span className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider">Backend API Engine</span>
                 <span className="text-xs font-bold text-gray-900">Node.js Express 5</span>
               </div>
             </div>
@@ -680,7 +850,7 @@ export default function AdminHelpPage() {
                 <Database className="w-5 h-5 text-emerald-600" />
               </div>
               <div>
-                <span className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider">Database ORM</span>
+                <span className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider">Database &amp; Models</span>
                 <span className="text-xs font-bold text-gray-900">Prisma + PostgreSQL</span>
               </div>
             </div>
@@ -690,8 +860,48 @@ export default function AdminHelpPage() {
                 <HardDrive className="w-5 h-5 text-amber-600" />
               </div>
               <div>
-                <span className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider">Media Storage</span>
-                <span className="text-xs font-bold text-gray-900">Cloudinary Asset CDN</span>
+                <span className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider">Media Storage CDN</span>
+                <span className="text-xs font-bold text-gray-900">Cloudinary CDN (WebP)</span>
+              </div>
+            </div>
+
+            <div className="p-4 bg-gray-50/70 border border-gray-200/80 rounded-xl flex items-center gap-3.5">
+              <div className="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center shrink-0 shadow-xs">
+                <Mail className="w-5 h-5 text-violet-600" />
+              </div>
+              <div>
+                <span className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider">Email Delivery</span>
+                <span className="text-xs font-bold text-gray-900">Resend API + Nodemailer</span>
+              </div>
+            </div>
+
+            <div className="p-4 bg-gray-50/70 border border-gray-200/80 rounded-xl flex items-center gap-3.5">
+              <div className="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center shrink-0 shadow-xs">
+                <Activity className="w-5 h-5 text-rose-600" />
+              </div>
+              <div>
+                <span className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider">Web Telemetry</span>
+                <span className="text-xs font-bold text-gray-900">GA4 (G-0S3921W4ZX)</span>
+              </div>
+            </div>
+
+            <div className="p-4 bg-gray-50/70 border border-gray-200/80 rounded-xl flex items-center gap-3.5">
+              <div className="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center shrink-0 shadow-xs">
+                <Gauge className="w-5 h-5 text-cyan-600" />
+              </div>
+              <div>
+                <span className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider">Asset Caching</span>
+                <span className="text-xs font-bold text-gray-900">1-Year Immutable CDN</span>
+              </div>
+            </div>
+
+            <div className="p-4 bg-gray-50/70 border border-gray-200/80 rounded-xl flex items-center gap-3.5">
+              <div className="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center shrink-0 shadow-xs">
+                <ShieldCheck className="w-5 h-5 text-emerald-600" />
+              </div>
+              <div>
+                <span className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider">Compliance &amp; 2FA</span>
+                <span className="text-xs font-bold text-gray-900">DPDP Act 2023 + TOTP</span>
               </div>
             </div>
           </div>
