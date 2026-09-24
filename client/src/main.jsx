@@ -81,7 +81,7 @@ async function initializeAnalytics() {
       const data = await res.json()
       const settings = data?.data || {}
 
-      if (settings.sys_ga_measurement_id) {
+      if (settings.sys_ga_measurement_id && !window.gtag) {
         const gaId = settings.sys_ga_measurement_id
         const script = document.createElement('script')
         script.async = true
