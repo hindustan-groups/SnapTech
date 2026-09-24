@@ -135,7 +135,7 @@ export default function AdminBackupPage() {
       a.href = url
       const fileExtensions = { json: 'json', sql: 'sql', html: 'html' }
       const ext = fileExtensions[format] || 'json'
-      a.download = `hindustan-projects-backup-${new Date().toISOString().slice(0, 10)}.${ext}`
+      a.download = `snaptech-digital-backup-${new Date().toISOString().slice(0, 10)}.${ext}`
       document.body.appendChild(a)
       a.click()
       document.body.removeChild(a)
@@ -374,7 +374,7 @@ export default function AdminBackupPage() {
             <p className="text-center text-[11px] text-gray-500 font-medium">
               Output Filename Target:{' '}
               <code className="bg-white border border-gray-200 px-2 py-0.5 rounded font-mono text-[11px] text-brand-blue font-bold">
-                hindustan-projects-backup-{new Date().toISOString().slice(0, 10)}.{format}
+                snaptech-digital-backup-{new Date().toISOString().slice(0, 10)}.{format}
               </code>
             </p>
           </div>

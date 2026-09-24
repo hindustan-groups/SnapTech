@@ -68,6 +68,9 @@ const PrivacyPolicyPage = lazyWithRetry(() => import('@/pages/PrivacyPolicyPage'
 const TermsOfServicePage = lazyWithRetry(() => import('@/pages/TermsOfServicePage'))
 const RefundPolicyPage = lazyWithRetry(() => import('@/pages/RefundPolicyPage'))
 const PricingPage = lazyWithRetry(() => import('@/pages/PricingPage'))
+const CostCalculatorPage = lazyWithRetry(() => import('@/pages/CostCalculatorPage'))
+const ThankYouPage = lazyWithRetry(() => import('@/pages/ThankYouPage'))
+const WhyChooseUsPage = lazyWithRetry(() => import('@/pages/WhyChooseUsPage'))
 const NotFoundPage = lazyWithRetry(() => import('@/pages/NotFoundPage'))
 
 // ── Admin pages — lazy loaded ──────────────────────────────────
@@ -497,6 +500,38 @@ export default function App() {
             element={
               <Suspense fallback={<PageFallback />}>
                 <PricingPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/cost-calculator"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <CostCalculatorPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/thank-you"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <ThankYouPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/why-snaptech"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <WhyChooseUsPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/why-us"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <WhyChooseUsPage />
               </Suspense>
             }
           />

@@ -21,6 +21,8 @@ const QUICK_LINKS = [
   { label: 'Home', href: '/' },
   { label: 'IT Services', href: '/services' },
   { label: 'Pricing & Packages', href: '/pricing' },
+  { label: 'Cost Calculator', href: '/cost-calculator' },
+  { label: 'Why SnapTech', href: '/why-snaptech' },
   { label: 'About Snaptech', href: '/about' },
   { label: 'Portfolio / Case Studies', href: '/portfolio' },
   { label: 'Tech Blog & Insights', href: '/blog' },
@@ -41,7 +43,7 @@ const SOCIAL_LINKS = [
   {
     label: 'Instagram',
     key: 'instagram',
-    fallback: 'https://instagram.com/hindustanprojects',
+    fallback: 'https://instagram.com/snaptech.digital',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4.5 h-4.5">
         <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
@@ -53,7 +55,7 @@ const SOCIAL_LINKS = [
   {
     label: 'Facebook',
     key: 'facebook',
-    fallback: 'https://facebook.com/hindustanprojects',
+    fallback: 'https://facebook.com/snaptech.digital',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4.5 h-4.5">
         <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
@@ -63,7 +65,7 @@ const SOCIAL_LINKS = [
   {
     label: 'LinkedIn',
     key: 'linkedin',
-    fallback: 'https://linkedin.com/company/hindustan-projects',
+    fallback: 'https://linkedin.com/company/snaptech-digital',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4.5 h-4.5">
         <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
@@ -75,7 +77,7 @@ const SOCIAL_LINKS = [
   {
     label: 'Pinterest',
     key: 'pinterest',
-    fallback: 'https://pinterest.com/hindustanprojects',
+    fallback: 'https://pinterest.com/snaptechdigital',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4.5 h-4.5">
         <line x1="12" y1="9" x2="12" y2="22" />

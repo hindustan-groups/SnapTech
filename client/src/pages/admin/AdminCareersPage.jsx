@@ -235,7 +235,7 @@ export default function AdminCareersPage() {
     link.setAttribute('href', encodedUri)
     link.setAttribute(
       'download',
-      `Hindustan_Projects_Job_Applications_${new Date().toISOString().split('T')[0]}.csv`
+      `SnapTech_Digital_Job_Applications_${new Date().toISOString().split('T')[0]}.csv`
     )
     document.body.appendChild(link)
     link.click()

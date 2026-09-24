@@ -8,7 +8,13 @@ import snaptechLogoWhite from '@/assets/snaptech-logo-white.png'
  * When the user moves or drags their mouse across the logo, realistic water
  * ripples and fluid refraction distort the logo like touching a crystal-clear pool of water.
  */
-export default function WaterRippleLogo() {
+export default function WaterRippleLogo({
+  variant = 'full', // 'full' | 'card' | 'compact'
+  className = '',
+  canvasHeightClass = '',
+  showCues = true,
+  showBottomCaption = true,
+}) {
   const containerRef = useRef(null)
   const canvasRef = useRef(null)
   const glRef = useRef(null)
@@ -366,10 +372,67 @@ export default function WaterRippleLogo() {
     return () => clearInterval(interval)
   }, [addRipple])
 
+  if (variant === 'card' || variant === 'compact') {
+    return (
+      <div
+        ref={containerRef}
+        className={`relative w-full overflow-hidden select-none rounded-2xl border border-white/10 bg-slate-950/60 backdrop-blur-md shadow-2xl group ${className}`}
+        aria-label="Snaptech Interactive Brand Water Surface"
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerLeave={handlePointerUp}
+      >
+        {/* Background ambient water glow & subtle caustic rays */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-36 bg-linear-to-r from-blue-600/20 via-cyan-500/25 to-blue-600/20 blur-3xl rounded-full" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#1b6ef310_1px,transparent_1px),linear-gradient(to_bottom,#1b6ef310_1px,transparent_1px)] bg-[size:2rem_2rem]" />
+        </div>
+
+        {showCues && (
+          <div className="relative z-10 flex items-center justify-between px-3 pt-2.5 pb-1">
+            <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-400/20 text-[10px] font-mono font-semibold text-cyan-300">
+              <Waves className="w-3 h-3 text-cyan-400 animate-pulse" />
+              <span>Fluid Simulation</span>
+            </div>
+            <span className="text-[10px] text-slate-400 font-mono">Touch &amp; drag for ripples</span>
+          </div>
+        )}
+
+        <div className={`relative w-full ${canvasHeightClass || 'h-36 sm:h-44'} overflow-hidden cursor-grab active:cursor-grabbing`}>
+          {webglSupported ? (
+            <canvas
+              ref={canvasRef}
+              className="w-full h-full block touch-none"
+              style={{ display: 'block' }}
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center p-4">
+              <img
+                src={snaptechLogoWhite}
+                alt="Snaptech Logo"
+                className="max-h-[70%] w-auto object-contain"
+              />
+            </div>
+          )}
+          {/* Subtle liquid shine */}
+          <div className="absolute inset-0 pointer-events-none bg-linear-to-t from-transparent via-cyan-400/5 to-transparent opacity-60 group-hover:opacity-100 transition-opacity" />
+        </div>
+
+        {showBottomCaption && (
+          <div className="relative z-10 px-3 pb-2 flex items-center justify-between text-[9px] text-slate-400 font-mono">
+            <span>// SNAPTECH WATER DYNAMICS</span>
+            <span className="text-cyan-400 font-semibold">60 FPS REAL-TIME</span>
+          </div>
+        )}
+      </div>
+    )
+  }
+
   return (
     <section
       ref={containerRef}
-      className="relative w-full overflow-hidden bg-linear-to-b from-[#03091e] via-[#020714] to-[#01040d] border-t border-blue-500/20 select-none py-12 sm:py-16 lg:py-20"
+      className={`relative w-full overflow-hidden bg-linear-to-b from-[#03091e] via-[#020714] to-[#01040d] border-t border-blue-500/20 select-none py-12 sm:py-16 lg:py-20 ${className}`}
       aria-label="Snaptech Interactive Brand Water Surface"
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}

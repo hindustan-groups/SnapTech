@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -159,6 +159,7 @@ const FAQ_FALLBACK = [
 
 // ── Main Page Component ────────────────────────────────────────
 export default function ContactPage() {
+  const navigate = useNavigate()
   const [submitState, setSubmitState] = useState('idle')
   const [apiError, setApiError] = useState('')
   const [activeFaq, setActiveFaq] = useState(null)
@@ -245,12 +246,16 @@ export default function ContactPage() {
         setLocalLockout(true)
         setSubmitState('success')
         reset()
+        // Seamless transition to dedicated Thank You experience
+        setTimeout(() => {
+          navigate(`/thank-you?source=contact&name=${encodeURIComponent(data.name || '')}`)
+        }, 1200)
       } catch (err) {
         setSubmitState('error')
         setApiError(err.message || 'Something went wrong. Please try again.')
       }
     },
-    [reset]
+    [reset, navigate]
   )
 
   const toggleFaq = (idx) => {

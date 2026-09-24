@@ -181,7 +181,7 @@ function EmailForm({ currentEmail, onEmailUpdated }) {
             <input
               type="email"
               {...register('newEmail')}
-              placeholder="e.g. admin@hindustanprojects.com"
+              placeholder="e.g. admin@snaptech.digital"
               className={`w-full pl-10 pr-4 py-2.5 text-xs sm:text-sm border rounded-xl bg-gray-50/50 focus:bg-white
                 focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue
                 transition-all ${errors.newEmail ? 'border-red-400 bg-red-50/30' : 'border-gray-200'}`}
@@ -882,7 +882,7 @@ export default function AdminSettingsPage() {
                   {isSuperAdmin ? 'SUPER ADMIN' : admin?.role || 'ADMIN'}
                 </span>
               </div>
-              <p className="text-xs sm:text-sm font-bold text-white truncate">{admin?.email || 'admin@hindustanprojects.com'}</p>
+              <p className="text-xs sm:text-sm font-bold text-white truncate">{admin?.email || 'admin@snaptech.digital'}</p>
               
               <div className="pt-1 flex items-center justify-between border-t border-white/10 text-xs">
                 <span className="text-gray-300">Security Score:</span>

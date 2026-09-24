@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
@@ -7,6 +8,7 @@ import {
   Sparkles,
   Phone,
   MessageSquare,
+  Calculator,
   ShieldCheck,
   Zap,
   Clock,
@@ -601,6 +603,17 @@ export default function PricingPage() {
               <Button
                 variant="secondary"
                 size="lg"
+                as={Link}
+                to="/cost-calculator"
+                leftIcon={<Calculator className="w-5 h-5 text-cyan-600" />}
+                className="w-full sm:w-auto bg-cyan-50 hover:bg-cyan-100 text-cyan-700 border border-cyan-200 font-bold transition-all cursor-pointer"
+              >
+                Cost Calculator
+              </Button>
+
+              <Button
+                variant="secondary"
+                size="lg"
                 as="a"
                 href={`https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent('Hi SnapTech Digital! I would like to discuss project packages & pricing.')}`}
                 target="_blank"
@@ -611,6 +624,15 @@ export default function PricingPage() {
                 WhatsApp Us
               </Button>
             </motion.div>
+
+            {/* Comparison Callout Link */}
+            <div className="mt-4 flex items-center justify-center gap-1.5 text-xs text-slate-500">
+              <span>Evaluating engineering partners?</span>
+              <Link to="/why-snaptech" className="text-brand-blue font-semibold hover:underline inline-flex items-center gap-1">
+                <span>See SnapTech vs Freelancers vs Agencies</span>
+                <ArrowRight className="w-3 h-3" />
+              </Link>
+            </div>
 
             {/* Trust Badges Strip */}
             <motion.div

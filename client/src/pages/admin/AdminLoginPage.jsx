@@ -9,6 +9,7 @@ import { z } from 'zod'
 import { Eye, EyeOff, AlertCircle, Mail, Lock, ShieldCheck, KeyRound } from 'lucide-react'
 import { api } from '@/utils/api'
 import { SEO } from '@/components/ui'
+import WaterRippleLogo from '@/components/ui/WaterRippleLogo'
 import NotFoundPage from '@/pages/NotFoundPage'
 
 const schema = z.object({
@@ -142,8 +143,8 @@ export default function AdminLoginPage() {
           {/* Logo */}
           <div className="relative flex items-center gap-3">
             <img
-              src="/logo-with-bg.png"
-              alt="Logo"
+              src="/snaptech-icon.png"
+              alt="SnapTech Digital"
               className="w-10 h-10 rounded-xl object-contain border border-white/10"
             />
             <div>
@@ -152,29 +153,40 @@ export default function AdminLoginPage() {
             </div>
           </div>
 
+          {/* Interactive Fluid Canvas in Left Brand Column */}
+          <div className="relative my-2">
+            <WaterRippleLogo
+              variant="card"
+              canvasHeightClass="h-38"
+              showCues={true}
+              showBottomCaption={true}
+              className="border-cyan-500/30"
+            />
+          </div>
+
           {/* Center content */}
           <div className="relative space-y-6">
             <div>
               <h2
                 className="text-white font-heading text-3xl font-bold leading-tight mb-3"
               >
-                Manage Your
+                Enterprise
                 <br />
                 <span className="text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-blue-500">
-                  Digital Architecture
+                  Command Center
                 </span>
               </h2>
               <p className="text-slate-400 text-sm leading-relaxed">
-                Control services, client projects, leads, team members, and enterprise settings — all in real time.
+                Control services, client projects, leads, team members, cost calculations, and cloud settings — all in real time.
               </p>
             </div>
 
             {/* Feature bullets */}
             <div className="space-y-3">
               {[
-                'Real-time lead telemetry & CRM tracking',
-                'Client portal milestones & deliverable vault',
-                'Dynamic services, pricing & proposal generation',
+                'Real-time lead CRM & cost calculator telemetry',
+                'Transactional email delivery via Resend API',
+                'Multi-tier 2FA & enterprise JWT authorization',
               ].map((text) => (
                 <div key={text} className="flex items-center gap-3">
                   <div className="w-5 h-5 rounded-full bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center shrink-0">
@@ -196,11 +208,11 @@ export default function AdminLoginPage() {
         <div className="flex-1 flex items-center justify-center p-6 lg:p-12 relative z-10">
           <div className="w-full max-w-md">
             {/* Mobile logo */}
-            <div className="lg:hidden text-center mb-8">
+            <div className="lg:hidden text-center mb-6">
               <div className="inline-flex items-center gap-2.5">
                 <img
-                  src="/logo-with-bg.png"
-                  alt="Logo"
+                  src="/snaptech-icon.png"
+                  alt="SnapTech Digital"
                   className="w-9 h-9 rounded-xl object-contain border border-white/10"
                 />
                 <span className="font-heading font-bold text-xl text-white">
@@ -211,8 +223,19 @@ export default function AdminLoginPage() {
 
             {/* Card */}
             <div className="bg-[#03091e]/90 rounded-2xl border border-white/10 shadow-2xl backdrop-blur-xl p-8">
-              <div className="mb-8">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 mb-4">
+              {/* Interactive Fluid Water Logo at top of form */}
+              <div className="mb-6">
+                <WaterRippleLogo
+                  variant="card"
+                  canvasHeightClass="h-28"
+                  showCues={false}
+                  showBottomCaption={false}
+                  className="border-cyan-500/30 shadow-lg shadow-cyan-950/40"
+                />
+              </div>
+
+              <div className="mb-6">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 mb-3">
                   <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
                   <span className="text-xs font-semibold text-cyan-400">Secure Admin Access</span>
                 </div>
@@ -240,7 +263,7 @@ export default function AdminLoginPage() {
                         className={`w-full pl-9 pr-3.5 py-3 text-sm border rounded-xl focus:outline-none
                           focus:ring-1 focus:ring-cyan-500/40 focus:border-cyan-500/50 transition-all text-white placeholder:text-slate-500
                           ${errors.email ? 'border-red-500/50 bg-red-500/10' : 'border-white/10 bg-slate-900/80 focus:bg-slate-900'}`}
-                        placeholder="admin@hindustanprojects.com"
+                        placeholder="admin@snaptech.digital"
                         {...register('email')}
                       />
                     </div>

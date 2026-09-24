@@ -170,7 +170,7 @@ export default function AdminLeadsPage() {
     link.setAttribute('href', encodedUri)
     link.setAttribute(
       'download',
-      `Hindustan_Projects_Leads_${new Date().toISOString().split('T')[0]}.csv`
+      `SnapTech_Digital_Leads_${new Date().toISOString().split('T')[0]}.csv`
     )
     document.body.appendChild(link)
     link.click()

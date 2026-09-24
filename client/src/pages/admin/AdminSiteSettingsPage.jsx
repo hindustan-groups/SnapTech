@@ -141,7 +141,7 @@ const FIELD_GROUPS = [
       {
         key: 'linkedin',
         label: 'LinkedIn Page URL',
-        placeholder: 'https://linkedin.com/company/hindustan-projects',
+        placeholder: 'https://linkedin.com/company/snaptech-digital',
         Icon: LinkedinIcon,
       },
       {
