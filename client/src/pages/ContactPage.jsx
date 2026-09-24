@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -13,7 +14,7 @@ import {
   AlertCircle,
   ChevronDown,
 } from 'lucide-react'
-import { Container, Button, SEO } from '@/components/ui'
+import { Container, SEO } from '@/components/ui'
 import { useServices } from '@/hooks/useServices'
 import { useFaqs, useSiteSettings } from '@/hooks/useContent'
 import { api } from '@/utils/api'
@@ -38,6 +39,9 @@ const contactSchema = z.object({
     .string()
     .min(10, 'Message must be at least 10 characters.')
     .max(2000, 'Message is too long (max 2000 characters).'),
+  consent: z
+    .boolean()
+    .refine((val) => val === true, 'You must agree to the Privacy Policy to submit your inquiry.'),
   _hp: z.string().optional(), // honeypot
 })
 
@@ -187,6 +191,7 @@ export default function ContactPage() {
       phone: '',
       serviceInterested: '',
       message: '',
+      consent: false,
       _hp: '',
     },
   })
@@ -659,6 +664,35 @@ export default function ContactPage() {
                           <p className="text-xs sm:text-sm font-semibold text-red-600">{apiError}</p>
                         </div>
                       )}
+
+                      {/* User Permission / Privacy Consent Checkbox (DPDP & GDPR Compliant) */}
+                      <div className="pt-1">
+                        <label className="flex items-start gap-2.5 cursor-pointer select-none">
+                          <input
+                            type="checkbox"
+                            id="contact-consent"
+                            className="mt-0.5 h-4 w-4 rounded border-slate-300 text-brand-blue focus:ring-brand-blue/30 cursor-pointer"
+                            {...register('consent')}
+                          />
+                          <span className="text-[11px] sm:text-xs text-slate-600 leading-relaxed">
+                            I consent to SnapTech Digital collecting and processing my contact details in accordance with the{' '}
+                            <Link
+                              to="/privacy-policy"
+                              target="_blank"
+                              className="text-brand-blue font-semibold hover:underline"
+                            >
+                              Privacy Policy
+                            </Link>{' '}
+                            to respond to my project inquiry.
+                          </span>
+                        </label>
+                        {errors.consent && (
+                          <p className="text-xs text-red-500 font-semibold flex items-center gap-1 mt-1.5">
+                            <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                            {errors.consent.message}
+                          </p>
+                        )}
+                      </div>
 
                       {/* Submit Button */}
                       <div className="pt-2">

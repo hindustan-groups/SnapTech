@@ -190,6 +190,9 @@ const applySchema = z.object({
   email: z.string().email('Valid email address is required'),
   phone: z.string().min(10, 'Valid contact number is required'),
   coverLetter: z.string().optional(),
+  consent: z
+    .boolean()
+    .refine((val) => val === true, 'You must agree to the Privacy Policy to submit your application.'),
   _hp: z.string().optional(),
 })
 
@@ -218,6 +221,7 @@ export default function JobDetailPage() {
       email: '',
       phone: '',
       coverLetter: '',
+      consent: false,
       _hp: '',
     },
   })
@@ -303,8 +307,8 @@ export default function JobDetailPage() {
                 .catch(reject)
             })
           })
-        } catch (err) {
-          console.error('[reCAPTCHA] Failed to get token:', err)
+        } catch {
+          // Silent fallback for reCAPTCHA failure
         }
       }
 
@@ -742,6 +746,34 @@ export default function JobDetailPage() {
                         placeholder="Do not fill this"
                         {...register('_hp')}
                       />
+                    </div>
+
+                    {/* User Permission / Privacy Consent Checkbox (DPDP & GDPR Compliant) */}
+                    <div className="pt-1">
+                      <label className="flex items-start gap-2 cursor-pointer select-none">
+                        <input
+                          type="checkbox"
+                          id="career-consent"
+                          className="mt-0.5 h-3.5 w-3.5 rounded border-slate-300 text-brand-blue focus:ring-brand-blue/30 cursor-pointer"
+                          {...register('consent')}
+                        />
+                        <span className="text-[10px] text-slate-600 leading-relaxed">
+                          I consent to SnapTech Digital storing my application and resume for recruitment purposes in accordance with the{' '}
+                          <Link
+                            to="/privacy-policy"
+                            target="_blank"
+                            className="text-brand-blue font-semibold hover:underline"
+                          >
+                            Privacy Policy
+                          </Link>.
+                        </span>
+                      </label>
+                      {errors.consent && (
+                        <p className="text-[10px] text-red-500 font-semibold flex items-center gap-1 mt-1">
+                          <AlertCircle className="w-3 h-3 shrink-0" />
+                          {errors.consent.message}
+                        </p>
+                      )}
                     </div>
 
                     <button

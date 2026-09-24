@@ -22,6 +22,7 @@ function ScrollToTop() {
 
 import { useTrafficTracker } from '@/hooks/useTrafficTracker'
 import WelcomePopup from '@/components/ui/WelcomePopup'
+import CookieConsent from '@/components/ui/CookieConsent'
 
 export default function RootLayout() {
   useTrafficTracker() // Track page visit count on each navigation
@@ -56,6 +57,9 @@ export default function RootLayout() {
       
       {/* Premium First-time Visitor Welcome Modal */}
       <WelcomePopup />
+
+      {/* User Cookie & Privacy Consent Notice (DPDP / GDPR Compliance) */}
+      <CookieConsent />
 
       {/* Floating WhatsApp Chat Widget (moved to bottom-24) */}
       <a
