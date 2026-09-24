@@ -5,9 +5,9 @@
  * - Clean corporate white cards with brand color accents
  * - Reveal-on-scroll animation
  */
-import { createElement, useEffect, useRef } from 'react'
+import { createElement, useEffect, useRef, useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Sparkles, Layers } from 'lucide-react'
+import { ArrowRight, Sparkles, Layers, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Container } from '@/components/ui'
 import { ServiceCardSkeleton } from '@/components/ui/Skeleton'
 import { useServices } from '@/hooks/useServices'
@@ -23,15 +23,15 @@ const CARD_ACCENTS = [
   { icon: 'text-[#e31e24]', bg: 'bg-[#e31e24]/10', glow: 'rgba(227,30,36,0.12)', border: '#e31e24' },
 ]
 
-function ServiceCard({ service, index }) {
+function ServiceCard({ service, index, isMobile = false }) {
   const accent = CARD_ACCENTS[index % CARD_ACCENTS.length]
 
   return (
     <Link
       to={`/services/${service.slug}`}
-      className="reveal group relative flex flex-col bg-white border border-slate-200 rounded-2xl p-6 no-underline
+      className={`reveal group relative flex flex-col bg-white border border-slate-200 rounded-2xl p-6 no-underline
         transition-all duration-300 hover:border-transparent hover:-translate-y-1.5 shadow-sm
-        hover:shadow-xl overflow-hidden"
+        hover:shadow-xl overflow-hidden ${isMobile ? 'h-full justify-between' : ''}`}
       style={{ transitionDelay: `${index * 60}ms` }}
       onMouseEnter={(e) => {
         e.currentTarget.style.boxShadow = `0 20px 48px ${accent.glow}, 0 4px 12px rgba(0,0,0,0.08)`
@@ -82,7 +82,7 @@ function ServiceCard({ service, index }) {
 
       {/* Learn More CTA */}
       <span
-        className="inline-flex items-center gap-1.5 text-sm font-semibold transition-all duration-200"
+        className="inline-flex items-center gap-1.5 text-sm font-semibold transition-all duration-200 mt-auto"
         style={{ color: accent.border }}
       >
         <span>Explore Service</span>
@@ -91,15 +91,6 @@ function ServiceCard({ service, index }) {
     </Link>
   )
 }
-
-const PLACEHOLDER_SERVICES = [
-  { id: '1', title: 'Web Development', slug: 'web-development', icon: 'Code2', tag: 'High-Velocity', shortDescription: 'Custom, responsive web portals built with React 19, Node.js & microservices. Optimised for sub-second speeds, enterprise security & high conversions.' },
-  { id: '2', title: 'Mobile App Development', slug: 'mobile-app-development', icon: 'Smartphone', tag: 'Cross-Platform', shortDescription: 'Native iOS and Android mobile applications built on Flutter and React Native with seamless cloud sync and offline data support.' },
-  { id: '3', title: 'IT Consulting & Strategy', slug: 'it-consulting-strategy', icon: 'Lightbulb', tag: 'Advisory', shortDescription: 'Strategic corporate IT advisory, legacy modernization, and technical due diligence to scale engineering teams and infrastructure.' },
-  { id: '4', title: 'Cloud DevOps & AWS Architecture', slug: 'cloud-devops', icon: 'Cloud', tag: '99.9% Uptime', shortDescription: 'Resilient cloud infrastructure setup, automated CI/CD pipelines, Docker containerization, and AWS / Azure multi-region deployment.' },
-  { id: '5', title: 'Custom ERP & SaaS Systems', slug: 'custom-erp-saas', icon: 'Database', tag: 'Enterprise', shortDescription: 'Tailored enterprise resource planning, CRM, and internal workflows engineered to eliminate operational bottlenecks and data silos.' },
-  { id: '6', title: 'AI Automation & Data Workflows', slug: 'ai-automation', icon: 'Cpu', tag: 'Next-Gen', shortDescription: 'Intelligent process automation, LLM pipeline integrations, predictive analytics, and automated reporting systems for enterprise scale.' },
-]
 
 /* Scroll reveal hook */
 function useReveal(selector = '.reveal') {
@@ -128,11 +119,35 @@ export default function ServicesSection() {
   const { data, isLoading } = useServices()
   const services = Array.isArray(data?.data) ? data.data : []
   const containerRef = useReveal()
+  const mobileScrollRef = useRef(null)
+  const [activeMobileIdx, setActiveMobileIdx] = useState(0)
+
+  const displayServices = services.slice(0, 6)
+
+  // Track active item during mobile horizontal scroll
+  const handleMobileScroll = useCallback(() => {
+    if (!mobileScrollRef.current) return
+    const { scrollLeft, clientWidth } = mobileScrollRef.current
+    const itemWidth = clientWidth * 0.84 + 16 // approximate card width + gap
+    const idx = Math.round(scrollLeft / itemWidth)
+    setActiveMobileIdx(Math.min(Math.max(0, idx), displayServices.length - 1))
+  }, [displayServices.length])
+
+  // Scroll to specific index on mobile
+  const scrollMobile = (idx) => {
+    if (!mobileScrollRef.current) return
+    const container = mobileScrollRef.current
+    const cards = container.children
+    if (cards[idx]) {
+      cards[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+      setActiveMobileIdx(idx)
+    }
+  }
 
   return (
     <section
       id="services"
-      className="py-24 bg-slate-50 relative overflow-hidden isolate border-t border-slate-100"
+      className="py-20 sm:py-24 bg-slate-50 relative overflow-hidden isolate border-t border-slate-100"
       aria-labelledby="services-heading"
     >
       {/* Subtle background decorations */}
@@ -141,7 +156,7 @@ export default function ServicesSection() {
 
       <Container className="relative z-10">
         {/* Section heading */}
-        <div className="reveal text-center mb-16 max-w-3xl mx-auto">
+        <div className="reveal text-center mb-10 sm:mb-16 max-w-3xl mx-auto">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1a3e8c]/10 border border-[#1a3e8c]/20 text-[#1a3e8c] text-xs font-bold uppercase tracking-widest mb-4">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Enterprise Technology Capabilities</span>
@@ -152,27 +167,93 @@ export default function ServicesSection() {
               Scalability & Growth
             </span>
           </h2>
-          <p className="text-slate-500 text-base sm:text-lg leading-relaxed">
+          <p className="text-slate-500 text-sm sm:text-base leading-relaxed">
             Snaptech delivers mission-critical software solutions — from responsive corporate portals and cloud DevOps
             to native mobile applications and intelligent automation systems.
           </p>
         </div>
 
-        {/* Service Cards Grid */}
-        <div ref={containerRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 reveal-stagger">
+        {/* ── Desktop & Tablet Grid (sm: screens and up) ── */}
+        <div ref={containerRef} className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-6 reveal-stagger">
           {isLoading && services.length === 0
             ? Array.from({ length: 6 }).map((_, i) => (
                 <div key={i} className={i >= 3 ? 'hidden sm:block' : 'block'}>
                   <ServiceCardSkeleton />
                 </div>
               ))
-            : services.slice(0, 6).map((service, index) => (
+            : displayServices.map((service, index) => (
                 <ServiceCard key={service.id} service={service} index={index} />
               ))}
         </div>
 
+        {/* ── Mobile Horizontal Snap Carousel (< sm: screens) ── */}
+        <div className="sm:hidden">
+          {isLoading && services.length === 0 ? (
+            <div className="p-4 bg-white rounded-2xl border border-slate-200 animate-pulse h-64" />
+          ) : (
+            <>
+              {/* Mobile Swipe Bar Header */}
+              <div className="flex items-center justify-between mb-3 px-1">
+                <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+                  <span className="w-2 h-2 rounded-full bg-brand-blue animate-pulse" />
+                  <span>Swipe to explore ({activeMobileIdx + 1}/{displayServices.length})</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={() => scrollMobile(activeMobileIdx - 1)}
+                    disabled={activeMobileIdx === 0}
+                    className="w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-600 disabled:opacity-30 disabled:cursor-not-allowed shadow-2xs cursor-pointer active:scale-95 transition-all"
+                    aria-label="Previous service"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => scrollMobile(activeMobileIdx + 1)}
+                    disabled={activeMobileIdx === displayServices.length - 1}
+                    className="w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-600 disabled:opacity-30 disabled:cursor-not-allowed shadow-2xs cursor-pointer active:scale-95 transition-all"
+                    aria-label="Next service"
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Horizontal Scroll Track */}
+              <div
+                ref={mobileScrollRef}
+                onScroll={handleMobileScroll}
+                className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-4 px-4 no-scrollbar scroll-smooth"
+              >
+                {displayServices.map((service, index) => (
+                  <div key={service.id} className="w-[84vw] max-w-[320px] shrink-0 snap-center">
+                    <ServiceCard service={service} index={index} isMobile />
+                  </div>
+                ))}
+              </div>
+
+              {/* Mobile Indicator Dots */}
+              <div className="flex justify-center items-center gap-1.5 mt-2">
+                {displayServices.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => scrollMobile(i)}
+                    className="p-1 min-w-5 min-h-5 flex items-center justify-center cursor-pointer"
+                    aria-label={`Go to service ${i + 1}`}
+                  >
+                    <span
+                      className={`h-1.5 rounded-full transition-all duration-300 block ${
+                        activeMobileIdx === i ? 'w-6 bg-brand-blue shadow-xs' : 'w-1.5 bg-slate-300'
+                      }`}
+                    />
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+
         {/* Bottom Explorer Action */}
-        <div className="mt-14 text-center">
+        <div className="mt-12 sm:mt-14 text-center">
           <Link
             to="/services"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white hover:bg-[#1a3e8c] border border-slate-200 hover:border-[#1a3e8c] text-slate-700 hover:text-white text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-200 group shadow-sm"
@@ -186,3 +267,4 @@ export default function ServicesSection() {
     </section>
   )
 }
+

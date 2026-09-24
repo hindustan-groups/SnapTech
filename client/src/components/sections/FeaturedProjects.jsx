@@ -2,10 +2,10 @@
  * FeaturedProjects — Homepage section showing top 3 featured projects.
  * Links to full portfolio page.
  */
-import { useState } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Container } from '@/components/ui'
 import { useProjects } from '@/hooks/useProjects'
 import { fadeUp, staggerContainer, viewportOnce } from '@/utils/motion'
@@ -74,13 +74,33 @@ const PLACEHOLDER_FEATURED = [
 export default function FeaturedProjects() {
   const [selectedProject, setSelectedProject] = useState(null)
   const { data, isLoading } = useProjects({ featured: true })
+  const mobileScrollRef = useRef(null)
+  const [activeMobileIdx, setActiveMobileIdx] = useState(0)
 
   const projects = Array.isArray(data?.data) ? data.data.slice(0, 3) : []
+
+  const handleMobileScroll = useCallback(() => {
+    if (!mobileScrollRef.current) return
+    const { scrollLeft, clientWidth } = mobileScrollRef.current
+    const itemWidth = clientWidth * 0.86 + 16
+    const idx = Math.round(scrollLeft / itemWidth)
+    setActiveMobileIdx(Math.min(Math.max(0, idx), projects.length - 1))
+  }, [projects.length])
+
+  const scrollMobile = (idx) => {
+    if (!mobileScrollRef.current) return
+    const container = mobileScrollRef.current
+    const cards = container.children
+    if (cards[idx]) {
+      cards[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+      setActiveMobileIdx(idx)
+    }
+  }
 
   return (
     <section
       id="portfolio"
-      className="py-24 bg-white border-t border-slate-100 relative overflow-hidden isolate"
+      className="py-20 sm:py-24 bg-white border-t border-slate-100 relative overflow-hidden isolate"
       aria-labelledby="featured-heading"
     >
       {/* Subtle background decorations */}
@@ -93,7 +113,7 @@ export default function FeaturedProjects() {
           whileInView="visible"
           viewport={viewportOnce}
           variants={fadeUp}
-          className="text-center mb-16 max-w-3xl mx-auto"
+          className="text-center mb-10 sm:mb-16 max-w-3xl mx-auto"
         >
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1a3e8c]/10 border border-[#1a3e8c]/20 text-[#1a3e8c] text-xs font-mono font-bold uppercase tracking-widest mb-4">
             <span>Enterprise Case Studies</span>
@@ -104,7 +124,7 @@ export default function FeaturedProjects() {
               Cloud Deployments
             </span>
           </h2>
-          <p className="text-slate-500 text-base sm:text-lg leading-relaxed">
+          <p className="text-slate-500 text-sm sm:text-base leading-relaxed">
             Real-world digital transformations engineered for industry leaders, textile conglomerates, and high-growth ventures.
           </p>
         </motion.div>
@@ -117,92 +137,212 @@ export default function FeaturedProjects() {
             </p>
           </div>
         ) : (
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={viewportOnce}
-            className="grid grid-cols-1 sm:grid-cols-3 gap-6"
-          >
-            {isLoading
-              ? Array.from({ length: 3 }).map((_, i) => (
-                  <div key={i} className="h-80 bg-slate-100 border border-slate-200 rounded-2xl animate-pulse" />
-                ))
-            : projects.map((p) => {
-                const projectImg =
-                  p.thumbnailUrl?.trim() ||
-                  PROJECT_DEFAULT_IMAGES[p.slug] ||
-                  CATEGORY_DEFAULT_IMAGES[p.category] ||
-                  CATEGORY_DEFAULT_IMAGES.Web
+          <>
+            {/* ── Desktop & Tablet Grid (sm: screens and up) ── */}
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewportOnce}
+              className="hidden sm:grid sm:grid-cols-3 gap-6"
+            >
+              {isLoading
+                ? Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="h-80 bg-slate-100 border border-slate-200 rounded-2xl animate-pulse" />
+                  ))
+                : projects.map((p) => {
+                    const projectImg =
+                      p.thumbnailUrl?.trim() ||
+                      PROJECT_DEFAULT_IMAGES[p.slug] ||
+                      CATEGORY_DEFAULT_IMAGES[p.category] ||
+                      CATEGORY_DEFAULT_IMAGES.Web
 
-                return (
-                  <motion.div key={p.id} variants={fadeUp}>
-                    <div
-                      className="overflow-hidden group cursor-pointer border border-slate-200 bg-white rounded-2xl hover:border-[#1a3e8c]/40 hover:shadow-xl transition-all duration-300 flex flex-col h-full"
-                      onClick={() => setSelectedProject(p)}
-                    >
-                      {/* Project Visual Thumbnail */}
-                      <div className="overflow-hidden relative h-52 bg-slate-900">
-                        <div className="absolute inset-0 bg-linear-to-t from-slate-950/60 via-transparent to-transparent z-10 pointer-events-none" />
-                        <img
-                          src={projectImg}
-                          alt={p.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          loading="lazy"
-                        />
-                      </div>
-
-                      {/* Card Content Body */}
-                      <div className="p-6 flex flex-col flex-1 justify-between bg-white">
-                        <div>
-                          <div className="flex items-center justify-between gap-2 mb-3">
-                            <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-[#1a3e8c]">
-                              {p.category}
-                            </span>
-                            <span className="text-[11px] font-mono text-slate-500 font-medium">
-                              {p.clientName}
-                            </span>
+                    return (
+                      <motion.div key={p.id} variants={fadeUp}>
+                        <div
+                          className="overflow-hidden group cursor-pointer border border-slate-200 bg-white rounded-2xl hover:border-[#1a3e8c]/40 hover:shadow-xl transition-all duration-300 flex flex-col h-full"
+                          onClick={() => setSelectedProject(p)}
+                        >
+                          {/* Project Visual Thumbnail */}
+                          <div className="overflow-hidden relative h-52 bg-slate-900">
+                            <div className="absolute inset-0 bg-linear-to-t from-slate-950/60 via-transparent to-transparent z-10 pointer-events-none" />
+                            <img
+                              src={projectImg}
+                              alt={p.title}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                              loading="lazy"
+                            />
                           </div>
 
-                          <h3 className="font-heading text-lg font-bold text-slate-900 group-hover:text-[#1a3e8c] transition-colors duration-200 mb-2">
-                            {p.title}
-                          </h3>
-                          <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed mb-4">
-                            {p.description}
-                          </p>
+                          {/* Card Content Body */}
+                          <div className="p-6 flex flex-col flex-1 justify-between bg-white">
+                            <div>
+                              <div className="flex items-center justify-between gap-2 mb-3">
+                                <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-[#1a3e8c]">
+                                  {p.category}
+                                </span>
+                                <span className="text-[11px] font-mono text-slate-500 font-medium">
+                                  {p.clientName}
+                                </span>
+                              </div>
+
+                              <h3 className="font-heading text-lg font-bold text-slate-900 group-hover:text-[#1a3e8c] transition-colors duration-200 mb-2">
+                                {p.title}
+                              </h3>
+                              <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed mb-4">
+                                {p.description}
+                              </p>
+                            </div>
+
+                            {/* Tech stack chips */}
+                            {p.technologies && p.technologies.length > 0 && (
+                              <div className="flex flex-wrap gap-1.5 pt-3 border-t border-slate-100">
+                                {p.technologies.slice(0, 3).map((t) => (
+                                  <span
+                                    key={t}
+                                    className="text-[10px] px-2 py-0.5 rounded-md bg-slate-50 text-slate-600 font-mono border border-slate-200"
+                                  >
+                                    {t}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
+                          </div>
                         </div>
+                      </motion.div>
+                    )
+                  })}
+            </motion.div>
 
-                        {/* Tech stack chips */}
-                        {p.technologies && p.technologies.length > 0 && (
-                          <div className="flex flex-wrap gap-1.5 pt-3 border-t border-slate-100">
-                            {p.technologies.slice(0, 3).map((t) => (
-                              <span
-                                key={t}
-                                className="text-[10px] px-2 py-0.5 rounded-md bg-slate-50 text-slate-600 font-mono border border-slate-200"
-                              >
-                                {t}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                      </div>
+            {/* ── Mobile Horizontal Snap Carousel (< sm: screens) ── */}
+            <div className="sm:hidden">
+              {isLoading ? (
+                <div className="h-72 bg-slate-100 border border-slate-200 rounded-2xl animate-pulse" />
+              ) : (
+                <>
+                  <div className="flex items-center justify-between mb-3 px-1">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+                      <span className="w-2 h-2 rounded-full bg-brand-blue animate-pulse" />
+                      <span>Swipe to explore ({activeMobileIdx + 1}/{projects.length})</span>
                     </div>
-                  </motion.div>
-                )
-              })}
-        </motion.div>
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        onClick={() => scrollMobile(activeMobileIdx - 1)}
+                        disabled={activeMobileIdx === 0}
+                        className="w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-600 disabled:opacity-30 disabled:cursor-not-allowed shadow-2xs active:scale-95 transition-all cursor-pointer"
+                        aria-label="Previous project"
+                      >
+                        <ChevronLeft className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => scrollMobile(activeMobileIdx + 1)}
+                        disabled={activeMobileIdx === projects.length - 1}
+                        className="w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-600 disabled:opacity-30 disabled:cursor-not-allowed shadow-2xs active:scale-95 transition-all cursor-pointer"
+                        aria-label="Next project"
+                      >
+                        <ChevronRight className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+
+                  <div
+                    ref={mobileScrollRef}
+                    onScroll={handleMobileScroll}
+                    className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-4 px-4 no-scrollbar scroll-smooth"
+                  >
+                    {projects.map((p) => {
+                      const projectImg =
+                        p.thumbnailUrl?.trim() ||
+                        PROJECT_DEFAULT_IMAGES[p.slug] ||
+                        CATEGORY_DEFAULT_IMAGES[p.category] ||
+                        CATEGORY_DEFAULT_IMAGES.Web
+
+                      return (
+                        <div
+                          key={p.id}
+                          className="w-[86vw] max-w-[340px] shrink-0 snap-center overflow-hidden cursor-pointer border border-slate-200 bg-white rounded-2xl shadow-sm flex flex-col"
+                          onClick={() => setSelectedProject(p)}
+                        >
+                          <div className="overflow-hidden relative h-48 bg-slate-900">
+                            <div className="absolute inset-0 bg-linear-to-t from-slate-950/60 via-transparent to-transparent z-10 pointer-events-none" />
+                            <img
+                              src={projectImg}
+                              alt={p.title}
+                              className="w-full h-full object-cover"
+                              loading="lazy"
+                            />
+                          </div>
+
+                          <div className="p-5 flex flex-col flex-1 justify-between bg-white">
+                            <div>
+                              <div className="flex items-center justify-between gap-2 mb-2">
+                                <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-50 border border-blue-200 text-[#1a3e8c]">
+                                  {p.category}
+                                </span>
+                                <span className="text-[10px] font-mono text-slate-500 font-medium truncate max-w-[140px]">
+                                  {p.clientName}
+                                </span>
+                              </div>
+
+                              <h3 className="font-heading text-base font-bold text-slate-900 mb-1.5 line-clamp-1">
+                                {p.title}
+                              </h3>
+                              <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed mb-3">
+                                {p.description}
+                              </p>
+                            </div>
+
+                            {p.technologies && p.technologies.length > 0 && (
+                              <div className="flex flex-wrap gap-1 pt-3 border-t border-slate-100">
+                                {p.technologies.slice(0, 3).map((t) => (
+                                  <span
+                                    key={t}
+                                    className="text-[9px] px-2 py-0.5 rounded-md bg-slate-50 text-slate-600 font-mono border border-slate-200"
+                                  >
+                                    {t}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+
+                  <div className="flex justify-center items-center gap-1.5 mt-2">
+                    {projects.map((_, i) => (
+                      <button
+                        key={i}
+                        onClick={() => scrollMobile(i)}
+                        className="p-1 min-w-5 min-h-5 flex items-center justify-center cursor-pointer"
+                        aria-label={`Go to project ${i + 1}`}
+                      >
+                        <span
+                          className={`h-1.5 rounded-full transition-all duration-300 block ${
+                            activeMobileIdx === i ? 'w-6 bg-brand-blue shadow-xs' : 'w-1.5 bg-slate-300'
+                          }`}
+                        />
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+          </>
         )}
 
         {/* High-Contrast Visible Case Studies CTA Button */}
-        <div className="text-center mt-14">
+        <div className="text-center mt-12 sm:mt-14">
           <Link
             to="/portfolio"
-            className="inline-flex items-center gap-2.5 px-8 py-4 rounded-xl bg-[#0D1B4B] hover:bg-[#1B6EF3] text-white text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-300 group shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:scale-[0.98]"
+            className="inline-flex items-center gap-2.5 px-7 sm:px-8 py-3.5 sm:py-4 rounded-xl bg-[#0D1B4B] hover:bg-[#1B6EF3] text-white text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-300 group shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:scale-[0.98]"
           >
             <span>Explore Complete Enterprise Case Studies</span>
             <ArrowRight className="w-4 h-4 text-[#38bdf8] group-hover:translate-x-1.5 transition-transform" />
           </Link>
         </div>
+
       </Container>
 
       {selectedProject && (

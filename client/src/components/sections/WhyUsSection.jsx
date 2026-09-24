@@ -3,6 +3,7 @@
  * Seamless Cyber-Navy Glassmorphic design.
  * 100% Dynamic data from useSiteSettings with high-impact enterprise SLA pillars.
  */
+import { useState, useRef, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import {
   ShieldCheck,
@@ -14,6 +15,8 @@ import {
   Zap,
   CheckCircle2,
   Award,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Container } from '@/components/ui'
@@ -54,10 +57,31 @@ export default function WhyUsSection() {
   const statClients = cfg.stat_clients || '40'
   const statExperience = cfg.stat_experience || '5'
 
+  const mobileScrollRef = useRef(null)
+  const [activeMobileIdx, setActiveMobileIdx] = useState(0)
+
+  const handleMobileScroll = useCallback(() => {
+    if (!mobileScrollRef.current) return
+    const { scrollLeft, clientWidth } = mobileScrollRef.current
+    const itemWidth = clientWidth * 0.78 + 12
+    const idx = Math.round(scrollLeft / itemWidth)
+    setActiveMobileIdx(Math.min(Math.max(0, idx), ENTERPRISE_DIFFERENTIATORS.length - 1))
+  }, [])
+
+  const scrollMobile = (idx) => {
+    if (!mobileScrollRef.current) return
+    const container = mobileScrollRef.current
+    const cards = container.children
+    if (cards[idx]) {
+      cards[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+      setActiveMobileIdx(idx)
+    }
+  }
+
   return (
     <section
       id="why-us"
-      className="py-24 bg-white border-t border-slate-100 relative overflow-hidden isolate"
+      className="py-20 sm:py-24 bg-white border-t border-slate-100 relative overflow-hidden isolate"
       aria-labelledby="whyus-heading"
     >
       {/* Subtle ambient decorations */}
@@ -65,7 +89,7 @@ export default function WhyUsSection() {
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#e31e24]/5 rounded-full blur-[140px] pointer-events-none" />
 
       <Container className="relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           {/* ── Left Column: Value Pillars ── */}
           <motion.div
             className="lg:col-span-7 space-y-6"
@@ -94,8 +118,8 @@ export default function WhyUsSection() {
               </p>
             </motion.div>
 
-            {/* 4 Cards Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+            {/* ── Desktop & Tablet 2x2 Cards Grid (sm: screens and up) ── */}
+            <div className="hidden sm:grid sm:grid-cols-2 gap-4 pt-2">
               {ENTERPRISE_DIFFERENTIATORS.map((item) => {
                 const Icon = item.icon
                 return (
@@ -123,6 +147,84 @@ export default function WhyUsSection() {
                   </motion.div>
                 )
               })}
+            </div>
+
+            {/* ── Mobile Horizontal Snap Carousel (< sm: screens) ── */}
+            <div className="sm:hidden pt-2">
+              <div className="flex items-center justify-between mb-3 px-1">
+                <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+                  <span className="w-2 h-2 rounded-full bg-brand-blue animate-pulse" />
+                  <span>The Advantage ({activeMobileIdx + 1}/{ENTERPRISE_DIFFERENTIATORS.length})</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={() => scrollMobile(activeMobileIdx - 1)}
+                    disabled={activeMobileIdx === 0}
+                    className="w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-600 disabled:opacity-30 disabled:cursor-not-allowed shadow-2xs active:scale-95 transition-all cursor-pointer"
+                    aria-label="Previous advantage"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => scrollMobile(activeMobileIdx + 1)}
+                    disabled={activeMobileIdx === ENTERPRISE_DIFFERENTIATORS.length - 1}
+                    className="w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-600 disabled:opacity-30 disabled:cursor-not-allowed shadow-2xs active:scale-95 transition-all cursor-pointer"
+                    aria-label="Next advantage"
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+              <div
+                ref={mobileScrollRef}
+                onScroll={handleMobileScroll}
+                className="flex overflow-x-auto snap-x snap-mandatory gap-3 pb-3 -mx-4 px-4 no-scrollbar scroll-smooth"
+              >
+                {ENTERPRISE_DIFFERENTIATORS.map((item) => {
+                  const Icon = item.icon
+                  return (
+                    <div
+                      key={item.title}
+                      className="w-[78vw] max-w-[280px] shrink-0 snap-center p-5 rounded-2xl bg-slate-50 border border-slate-200 shadow-sm flex flex-col justify-between"
+                    >
+                      <div>
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="w-10 h-10 rounded-xl bg-[#1a3e8c]/10 border border-[#1a3e8c]/20 text-[#1a3e8c] flex items-center justify-center">
+                            <Icon className="w-5 h-5" />
+                          </div>
+                          <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#1a3e8c]/10 border border-[#1a3e8c]/20 text-[#1a3e8c]">
+                            {item.badge}
+                          </span>
+                        </div>
+                        <h3 className="font-heading text-base font-bold text-slate-800 mb-2">
+                          {item.title}
+                        </h3>
+                        <p className="text-xs text-slate-500 leading-relaxed">
+                          {item.desc}
+                        </p>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+
+              <div className="flex justify-center items-center gap-1.5 mt-2">
+                {ENTERPRISE_DIFFERENTIATORS.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => scrollMobile(i)}
+                    className="p-1 min-w-5 min-h-5 flex items-center justify-center cursor-pointer"
+                    aria-label={`Go to advantage ${i + 1}`}
+                  >
+                    <span
+                      className={`h-1.5 rounded-full transition-all duration-300 block ${
+                        activeMobileIdx === i ? 'w-6 bg-brand-blue shadow-xs' : 'w-1.5 bg-slate-300'
+                      }`}
+                    />
+                  </button>
+                ))}
+              </div>
             </div>
 
             <motion.div variants={fadeUp} className="pt-2">

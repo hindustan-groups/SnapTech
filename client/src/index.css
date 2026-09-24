@@ -835,3 +835,15 @@ button, a, [role='button'], label[for], select {
   .float-chip, .float-chip-delayed { animation: none; }
   .btn-neon { animation: none; }
 }
+
+/* ────────────────────────────────────────────────────────────────
+   MOBILE HORIZONTAL SCROLL CAROUSEL UTILITIES
+   ──────────────────────────────────────────────────────────────── */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+

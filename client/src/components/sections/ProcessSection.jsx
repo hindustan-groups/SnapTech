@@ -1,11 +1,6 @@
-/**
- * ProcessSection — Animated timeline stepper (no Framer Motion)
- * Features: scroll-reveal, animated connector line, step number ghosts, icon glow on hover
- * Clean corporate white theme matching the HiPRO Design System
- */
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import { Container } from '@/components/ui'
-import { Search, Compass, Cpu, Rocket, ArrowRight, Workflow } from 'lucide-react'
+import { Search, Compass, Cpu, Rocket, ArrowRight, Workflow, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 const STEPS = [
@@ -107,6 +102,26 @@ function ProcessStep({ step, index }) {
 
 export default function ProcessSection() {
   const containerRef = useRef(null)
+  const mobileScrollRef = useRef(null)
+  const [activeMobileIdx, setActiveMobileIdx] = useState(0)
+
+  const handleMobileScroll = useCallback(() => {
+    if (!mobileScrollRef.current) return
+    const { scrollLeft, clientWidth } = mobileScrollRef.current
+    const itemWidth = clientWidth * 0.82 + 16
+    const idx = Math.round(scrollLeft / itemWidth)
+    setActiveMobileIdx(Math.min(Math.max(0, idx), STEPS.length - 1))
+  }, [])
+
+  const scrollMobile = (idx) => {
+    if (!mobileScrollRef.current) return
+    const container = mobileScrollRef.current
+    const cards = container.children
+    if (cards[idx]) {
+      cards[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+      setActiveMobileIdx(idx)
+    }
+  }
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -129,7 +144,7 @@ export default function ProcessSection() {
   return (
     <section
       id="process"
-      className="py-24 bg-slate-50 border-t border-slate-100 relative overflow-hidden isolate"
+      className="py-20 sm:py-24 bg-slate-50 border-t border-slate-100 relative overflow-hidden isolate"
       aria-labelledby="process-heading"
     >
       {/* Subtle background decorations */}
@@ -138,7 +153,7 @@ export default function ProcessSection() {
 
       <Container className="relative z-10">
         {/* Heading */}
-        <div className="reveal text-center mb-20 max-w-2xl mx-auto">
+        <div className="reveal text-center mb-10 sm:mb-20 max-w-2xl mx-auto">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1a3e8c]/10 border border-[#1a3e8c]/20 text-[#1a3e8c] text-xs font-bold uppercase tracking-widest mb-4">
             <Workflow className="w-3.5 h-3.5" />
             <span>Execution Methodology</span>
@@ -147,17 +162,111 @@ export default function ProcessSection() {
             How We{' '}
             <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(135deg, #1a3e8c, #e31e24)' }}>Build & Deliver</span>
           </h2>
-          <p className="text-slate-500 text-base leading-relaxed">
+          <p className="text-slate-500 text-sm sm:text-base leading-relaxed">
             A transparent, sprint-driven engineering roadmap from initial architecture blueprinting to a resilient, high-converting digital product.
           </p>
         </div>
 
-        {/* Steps grid */}
-        <div ref={containerRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-6 relative">
+        {/* ── Desktop & Tablet Grid (md: screens and up) ── */}
+        <div ref={containerRef} className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-6 relative">
           {STEPS.map((step, index) => (
             <ProcessStep key={step.step} step={step} index={index} />
           ))}
         </div>
+
+        {/* ── Mobile Horizontal Snap Carousel (< md: screens) ── */}
+        <div className="md:hidden">
+          <div className="flex items-center justify-between mb-4 px-1">
+            <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+              <span className="w-2 h-2 rounded-full bg-brand-blue animate-pulse" />
+              <span>Roadmap (Step {activeMobileIdx + 1} of {STEPS.length})</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <button
+                onClick={() => scrollMobile(activeMobileIdx - 1)}
+                disabled={activeMobileIdx === 0}
+                className="w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-600 disabled:opacity-30 disabled:cursor-not-allowed shadow-2xs active:scale-95 transition-all cursor-pointer"
+                aria-label="Previous step"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => scrollMobile(activeMobileIdx + 1)}
+                disabled={activeMobileIdx === STEPS.length - 1}
+                className="w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-600 disabled:opacity-30 disabled:cursor-not-allowed shadow-2xs active:scale-95 transition-all cursor-pointer"
+                aria-label="Next step"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          <div
+            ref={mobileScrollRef}
+            onScroll={handleMobileScroll}
+            className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-4 px-4 no-scrollbar scroll-smooth"
+          >
+            {STEPS.map((step, index) => {
+              const Icon = step.icon
+              return (
+                <div
+                  key={step.step}
+                  className="w-[82vw] max-w-[300px] shrink-0 snap-center p-6 bg-white rounded-2xl border border-slate-200 shadow-sm relative flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="flex items-center justify-between mb-4">
+                      <div
+                        className={`w-14 h-14 rounded-xl ${step.color} border border-slate-200 flex items-center justify-center shadow-xs`}
+                      >
+                        <Icon className="w-6 h-6" strokeWidth={1.75} />
+                      </div>
+                      <span className="font-heading text-4xl font-black text-slate-200 leading-none">
+                        {step.step}
+                      </span>
+                    </div>
+
+                    <div
+                      className="text-[10px] font-mono font-bold uppercase tracking-widest mb-2 px-2 py-0.5 rounded-full inline-block border"
+                      style={{ color: step.border, background: `${step.border}15`, borderColor: `${step.border}30` }}
+                    >
+                      {step.detail}
+                    </div>
+
+                    <h3 className="font-heading text-base font-bold text-slate-900 mb-2">
+                      {step.title}
+                    </h3>
+                    <p className="text-xs text-slate-600 leading-relaxed">
+                      {step.desc}
+                    </p>
+                  </div>
+
+                  <div className="pt-4 border-t border-slate-100 mt-4 flex items-center justify-between text-xs text-slate-400 font-mono">
+                    <span>Phase 0{index + 1}</span>
+                    <span className="font-bold" style={{ color: step.border }}>{index === 3 ? 'Production' : 'Sprint Milestone'}</span>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+
+          <div className="flex justify-center items-center gap-1.5 mt-2">
+            {STEPS.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => scrollMobile(i)}
+                className="p-1 min-w-5 min-h-5 flex items-center justify-center cursor-pointer"
+                aria-label={`Go to step ${i + 1}`}
+              >
+                <span
+                  className={`h-1.5 rounded-full transition-all duration-300 block ${
+                    activeMobileIdx === i ? 'w-6 bg-brand-blue shadow-xs' : 'w-1.5 bg-slate-300'
+                  }`}
+                />
+              </button>
+            ))}
+          </div>
+        </div>
+
 
         {/* Bottom CTA */}
         <div className="reveal text-center mt-16">
