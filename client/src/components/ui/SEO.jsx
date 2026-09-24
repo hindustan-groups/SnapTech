@@ -255,6 +255,7 @@ export default function SEO({
       <meta name="description" content={desc} />
       <meta name="keywords" content={keywords || SITE.keywords} />
       <link rel="canonical" href={canonical} />
+      <meta name="google-site-verification" content="aQTpp5twOD60d6OQNZbm3XraAC4f2siBbSk6r4RzVLM" />
       {noIndex ? (
         <meta name="robots" content="noindex,nofollow" />
       ) : (
