@@ -711,7 +711,7 @@ export default function AdminHelpPage() {
 
           <div className="flex items-center gap-2 shrink-0">
             <button
-              onClick={() => copyToClipboard('dilsedilshan1@gmail.com')}
+              onClick={() => copyToClipboard('support@snaptech.digital')}
               className="flex items-center gap-1.5 bg-white border border-gray-300 hover:bg-gray-50 text-gray-800 font-bold px-3.5 py-2.5 rounded-xl text-xs transition-all shadow-xs cursor-pointer"
             >
               {copiedEmail ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Mail className="w-3.5 h-3.5 text-brand-blue" />}
@@ -719,7 +719,7 @@ export default function AdminHelpPage() {
             </button>
 
             <a
-              href="https://wa.me/917742467106"
+              href="https://wa.me/919414112057?text=Hi%20SnapTech%20Support,%20I%20need%20developer%20assistance"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition-all shadow-xs"

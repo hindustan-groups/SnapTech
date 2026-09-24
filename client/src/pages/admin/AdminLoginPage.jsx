@@ -263,7 +263,7 @@ export default function AdminLoginPage() {
                         className={`w-full pl-9 pr-3.5 py-3 text-sm border rounded-xl focus:outline-none
                           focus:ring-1 focus:ring-cyan-500/40 focus:border-cyan-500/50 transition-all text-white placeholder:text-slate-500
                           ${errors.email ? 'border-red-500/50 bg-red-500/10' : 'border-white/10 bg-slate-900/80 focus:bg-slate-900'}`}
-                        placeholder="admin@snaptech.digital"
+                        placeholder="name@company.com"
                         {...register('email')}
                       />
                     </div>

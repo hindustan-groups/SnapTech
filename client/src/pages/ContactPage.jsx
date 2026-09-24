@@ -15,7 +15,6 @@ import {
   ChevronDown,
   ShieldCheck,
   Zap,
-  Sparkles,
 } from 'lucide-react'
 import { Container, SEO } from '@/components/ui'
 import { useServices } from '@/hooks/useServices'
@@ -371,10 +370,10 @@ export default function ContactPage() {
                       <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                       <div className="text-left">
                         <p className="text-[9px] font-mono text-cyan-300 font-bold uppercase tracking-wider leading-none">
-                          LEAD ARCHITECT
+                          DIRECT DESK
                         </p>
                         <p className="text-[11px] font-bold text-white leading-none mt-0.5">
-                          Mohmmad Dilshan
+                          Lead Solutions Architect
                         </p>
                       </div>
                     </div>

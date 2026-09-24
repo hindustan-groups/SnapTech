@@ -589,7 +589,7 @@ export default function CostCalculator({ compact = false }) {
                         required
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        placeholder="Dilshan Sharma"
+                        placeholder="e.g. Rajesh Kumar"
                         className="w-full px-4 py-2.5 bg-slate-950/60 border border-white/10 rounded-xl text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
                       />
                     </div>
@@ -600,11 +600,11 @@ export default function CostCalculator({ compact = false }) {
                           Work Email *
                         </label>
                         <input
-                          type="email"
+                           type="email"
                           required
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                          placeholder="dilshan@company.com"
+                          placeholder="name@company.com"
                           className="w-full px-4 py-2.5 bg-slate-950/60 border border-white/10 rounded-xl text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
                         />
                       </div>
@@ -618,7 +618,7 @@ export default function CostCalculator({ compact = false }) {
                           required
                           value={formData.phone}
                           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                          placeholder="+91 94141 12057"
+                          placeholder="+91 98765 43210"
                           className="w-full px-4 py-2.5 bg-slate-950/60 border border-white/10 rounded-xl text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
                         />
                       </div>
