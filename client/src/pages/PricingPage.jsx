@@ -592,7 +592,7 @@ export default function PricingPage() {
             >
               <button
                 type="button"
-                onClick={() => openQuoteModal('Hero CTA - Free Quote')}
+                onClick={() => openQuoteModal('Custom Project Proposal')}
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-brand-blue hover:bg-blue-600 active:bg-blue-700 text-white font-bold text-sm shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer group"
               >
                 <Sparkles className="w-4 h-4 text-blue-200 group-hover:rotate-12 transition-transform" />
@@ -1695,7 +1695,7 @@ export default function PricingPage() {
               <Button
                 variant="primary"
                 size="lg"
-                onClick={() => openQuoteModal('Final CTA Banner - Get Free Quote')}
+                onClick={() => openQuoteModal('Custom Project Proposal')}
                 leftIcon={<Sparkles className="w-5 h-5" />}
                 className="w-full sm:w-auto bg-brand-blue hover:bg-blue-600 text-white font-bold shadow-xl shadow-blue-950/50 cursor-pointer"
               >
@@ -1762,9 +1762,14 @@ export default function PricingPage() {
                   </button>
 
                   <div className="mb-6 border-b border-slate-200 pb-4">
-                    <span className="inline-block px-3.5 py-1 rounded-full bg-blue-50 text-brand-blue border border-blue-200 text-xs font-bold uppercase tracking-wider mb-2">
-                      Selected Plan: {selectedPlan}
-                    </span>
+                    {selectedPlan &&
+                      !selectedPlan.includes('CTA') &&
+                      !selectedPlan.includes('General') &&
+                      !selectedPlan.includes('Custom') && (
+                        <span className="inline-block px-3.5 py-1 rounded-full bg-blue-50 text-brand-blue border border-blue-200 text-xs font-bold uppercase tracking-wider mb-2">
+                          {selectedPlan}
+                        </span>
+                      )}
                     <h3 className="font-heading text-2xl font-extrabold text-slate-900">
                       Request Technical Proposal
                     </h3>
