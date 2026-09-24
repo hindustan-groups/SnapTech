@@ -1,18 +1,19 @@
 User-agent: *
 Allow: /
-
-# Block admin suite, client portal dashboards, and internal API routes
 Disallow: /admin/
+Disallow: /admin-*
 Disallow: /client/
 Disallow: /api/
 
-# Search Engine & AI Answer Engine Crawlers (SEO / AEO / EEO)
+# Search Engine Crawlers
 User-agent: Googlebot
 Allow: /
+Disallow: /admin/
+Disallow: /admin-*
+Disallow: /client/
+Disallow: /api/
 
-User-agent: Bingbot
-Allow: /
-
+# AI Search & Answer Engine Crawlers (AEO / GEO)
 User-agent: GPTBot
 Allow: /
 
