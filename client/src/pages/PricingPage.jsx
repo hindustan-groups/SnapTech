@@ -588,41 +588,35 @@ export default function PricingPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4"
+              className="mt-8 flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4"
             >
-              <Button
-                variant="primary"
-                size="lg"
+              <button
+                type="button"
                 onClick={() => openQuoteModal('Hero CTA - Free Quote')}
-                leftIcon={<Sparkles className="w-5 h-5" />}
-                className="w-full sm:w-auto bg-brand-blue hover:bg-blue-600 text-white font-bold shadow-lg shadow-blue-500/25 transition-all cursor-pointer"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-brand-blue hover:bg-blue-600 active:bg-blue-700 text-white font-bold text-sm shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer group"
               >
-                Request Custom Quote
-              </Button>
+                <Sparkles className="w-4 h-4 text-blue-200 group-hover:rotate-12 transition-transform" />
+                <span>Request Custom Quote</span>
+              </button>
 
-              <Button
-                variant="secondary"
-                size="lg"
-                as={Link}
+              <Link
                 to="/cost-calculator"
-                leftIcon={<Calculator className="w-5 h-5 text-cyan-600" />}
-                className="w-full sm:w-auto bg-cyan-50 hover:bg-cyan-100 text-cyan-700 border border-cyan-200 font-bold transition-all cursor-pointer"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-white hover:bg-blue-50/70 active:bg-blue-100/70 text-slate-800 hover:text-brand-blue border border-slate-200 hover:border-blue-300 font-bold text-sm shadow-xs hover:shadow transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer group"
               >
-                Cost Calculator
-              </Button>
+                <Calculator className="w-4 h-4 text-brand-blue group-hover:scale-110 transition-transform" />
+                <span>Estimate Project Cost</span>
+                <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-brand-blue group-hover:translate-x-0.5 transition-all" />
+              </Link>
 
-              <Button
-                variant="secondary"
-                size="lg"
-                as="a"
+              <a
                 href={`https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent('Hi SnapTech Digital! I would like to discuss project packages & pricing.')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                leftIcon={<MessageSquare className="w-5 h-5" />}
-                className="w-full sm:w-auto bg-emerald-600! hover:bg-emerald-500! border-emerald-600! text-white! font-bold shadow-md shadow-emerald-600/20"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-bold text-sm shadow-md shadow-emerald-600/20 hover:shadow-lg hover:shadow-emerald-600/30 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer group"
               >
-                WhatsApp Us
-              </Button>
+                <MessageSquare className="w-4 h-4 text-emerald-100 group-hover:scale-110 transition-transform" />
+                <span>WhatsApp Us</span>
+              </a>
             </motion.div>
 
             {/* Comparison Callout Link */}
