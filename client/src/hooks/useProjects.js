@@ -10,7 +10,7 @@ export function useProjects(filters = {}) {
   return useQuery({
     queryKey: ['projects', filters],
     queryFn: () => api.get(`/projects${qs ? `?${qs}` : ''}`),
-    staleTime: 5 * 60 * 1000,
+    staleTime: 0,
   })
 }
 
@@ -19,6 +19,6 @@ export function useProject(slug) {
     queryKey: ['projects', slug],
     queryFn: () => api.get(`/projects/${slug}`),
     enabled: Boolean(slug),
-    staleTime: 5 * 60 * 1000,
+    staleTime: 0,
   })
 }

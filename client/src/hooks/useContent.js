@@ -5,7 +5,7 @@ export function useFaqs() {
   return useQuery({
     queryKey: ['faqs'],
     queryFn: () => api.get('/faqs'),
-    staleTime: 10 * 60 * 1000,
+    staleTime: 0,
   })
 }
 
@@ -41,7 +41,7 @@ export function useSiteSettings() {
       }
       return res
     },
-    staleTime: 10 * 60 * 1000,
+    staleTime: 0,
   })
 }
 
@@ -49,7 +49,7 @@ export function useMilestones() {
   return useQuery({
     queryKey: ['milestones'],
     queryFn: () => api.get('/milestones'),
-    staleTime: 10 * 60 * 1000,
+    staleTime: 0,
   })
 }
 
@@ -57,7 +57,7 @@ export function usePartners() {
   return useQuery({
     queryKey: ['partners'],
     queryFn: () => api.get('/partners'),
-    staleTime: 10 * 60 * 1000,
+    staleTime: 0,
   })
 }
 
@@ -66,7 +66,7 @@ export function useLegalPage(pageType) {
   return useQuery({
     queryKey: ['legal-page', pageType],
     queryFn: () => api.get(`/legal/${pageType}`).then((r) => r.data),
-    staleTime: 5 * 60 * 1000,
+    staleTime: 0,
   })
 }
 

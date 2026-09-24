@@ -147,7 +147,7 @@ const PLACEHOLDER_TEAM = [
 
 export default function TeamSection() {
   const { data, isLoading } = useTeam()
-  const members = data?.data?.length ? data.data : isLoading ? [] : PLACEHOLDER_TEAM
+  const members = Array.isArray(data?.data) ? data.data : []
 
   return (
     <section
@@ -181,17 +181,26 @@ export default function TeamSection() {
           </p>
         </motion.div>
 
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={viewportOnce}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
-        >
-          {isLoading
-            ? Array.from({ length: 4 }).map((_, i) => <ServiceCardSkeleton key={i} />)
-            : members.map((m, index) => <TeamCard key={m.id} member={m} index={index} />)}
-        </motion.div>
+        {members.length === 0 && !isLoading ? (
+          <div className="text-center py-12 p-8 rounded-2xl border border-slate-200 bg-white max-w-md mx-auto shadow-xs">
+            <p className="text-base font-bold text-slate-800 mb-1">No team members listed</p>
+            <p className="text-slate-500 text-xs">
+              Leadership profiles added from the Admin Panel will appear here.
+            </p>
+          </div>
+        ) : (
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+          >
+            {isLoading
+              ? Array.from({ length: 4 }).map((_, i) => <ServiceCardSkeleton key={i} />)
+              : members.map((m, index) => <TeamCard key={m.id} member={m} index={index} />)}
+          </motion.div>
+        )}
       </Container>
     </section>
   )

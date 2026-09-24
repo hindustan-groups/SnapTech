@@ -95,6 +95,7 @@ export default function AdminLeadsPage() {
     mutationFn: ({ id, ...payload }) => api.patch(`/admin/leads/${id}`, payload),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['admin-leads'] })
+      qc.invalidateQueries({ queryKey: ['admin-stats'] })
       toast.success('Lead updated successfully!')
     },
     onError: (err) => {
@@ -106,6 +107,8 @@ export default function AdminLeadsPage() {
     mutationFn: (id) => api.delete(`/admin/leads/${id}`),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['admin-leads'] })
+      qc.invalidateQueries({ queryKey: ['admin-stats'] })
+      qc.invalidateQueries({ queryKey: ['admin-recycle-bin'] })
       setSelectedLead(null)
       toast.info('Lead deleted.')
     },

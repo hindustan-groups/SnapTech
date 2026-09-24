@@ -75,11 +75,7 @@ export default function FeaturedProjects() {
   const [selectedProject, setSelectedProject] = useState(null)
   const { data, isLoading } = useProjects({ featured: true })
 
-  const projects = data?.data?.length
-    ? data.data.slice(0, 3)
-    : isLoading
-      ? []
-      : PLACEHOLDER_FEATURED
+  const projects = Array.isArray(data?.data) ? data.data.slice(0, 3) : []
 
   return (
     <section
@@ -113,17 +109,25 @@ export default function FeaturedProjects() {
           </p>
         </motion.div>
 
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={viewportOnce}
-          className="grid grid-cols-1 sm:grid-cols-3 gap-6"
-        >
-          {isLoading
-            ? Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="h-80 bg-slate-100 border border-slate-200 rounded-2xl animate-pulse" />
-              ))
+        {projects.length === 0 && !isLoading ? (
+          <div className="text-center py-12 p-8 rounded-2xl border border-slate-200 bg-slate-50/70 max-w-md mx-auto shadow-xs">
+            <p className="text-base font-bold text-slate-800 mb-1">No featured projects yet</p>
+            <p className="text-slate-500 text-xs">
+              Projects marked as "Featured" in the Admin Panel will automatically appear here.
+            </p>
+          </div>
+        ) : (
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+            className="grid grid-cols-1 sm:grid-cols-3 gap-6"
+          >
+            {isLoading
+              ? Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="h-80 bg-slate-100 border border-slate-200 rounded-2xl animate-pulse" />
+                ))
             : projects.map((p) => {
                 const projectImg =
                   p.thumbnailUrl?.trim() ||
@@ -187,6 +191,7 @@ export default function FeaturedProjects() {
                 )
               })}
         </motion.div>
+        )}
 
         {/* High-Contrast Visible Case Studies CTA Button */}
         <div className="text-center mt-14">

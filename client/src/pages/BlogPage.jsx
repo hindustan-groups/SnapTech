@@ -245,11 +245,9 @@ export default function BlogPage() {
   const { data: catData } = useBlogCategories()
   const categories = catData?.data || []
 
-  // Ensure rich posts list using fallbacks if database is sparse
   const posts = useMemo(() => {
-    const raw = data?.data || []
-    if (raw.length > 0) return raw
-    return FALLBACK_POSTS
+    if (Array.isArray(data?.data)) return data.data
+    return []
   }, [data?.data])
 
   const pagination = data?.pagination || { pages: 1 }

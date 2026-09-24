@@ -137,15 +137,11 @@ export default function CareersPage() {
   const [selectedDept, setSelectedDept] = useState('ALL')
   const [searchQuery, setSearchQuery] = useState('')
 
-  // Merge DB jobs with fallbacks to guarantee rich career catalog
   const allJobs = useMemo(() => {
-    const dbJobs = (data?.data || []).filter((j) => j.slug !== 'general-application')
-    if (dbJobs.length === 0) return FALLBACK_JOBS
-
-    // If db has jobs, make sure slugs match or merge
-    const dbSlugs = new Set(dbJobs.map((j) => j.slug))
-    const extraFallbacks = FALLBACK_JOBS.filter((f) => !dbSlugs.has(f.slug))
-    return [...dbJobs, ...extraFallbacks]
+    if (Array.isArray(data?.data)) {
+      return data.data.filter((j) => j.slug !== 'general-application')
+    }
+    return []
   }, [data?.data])
 
   // Get unique departments

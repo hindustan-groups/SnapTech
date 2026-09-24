@@ -392,7 +392,7 @@ export default function PortfolioSection() {
   const [selectedProject, setSelectedProject] = useState(null)
 
   const { data, isLoading } = useProjects()
-  const allProjects = data?.data?.length ? data.data : isLoading ? [] : PLACEHOLDER_PROJECTS
+  const allProjects = Array.isArray(data?.data) ? data.data : []
 
   const filtered =
     activeCategory === 'All'

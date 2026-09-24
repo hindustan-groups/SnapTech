@@ -125,7 +125,7 @@ function TestimonialCard({ t, index, isActive }) {
 
 export default function TestimonialsSection() {
   const { data, isLoading } = useTestimonials()
-  const testimonials = data?.data?.length ? data.data : isLoading ? [] : PLACEHOLDER
+  const testimonials = Array.isArray(data?.data) ? data.data : []
   const [currentIndex, setCurrentIndex] = useState(0)
 
   // Auto-advance every 5s
@@ -198,7 +198,14 @@ export default function TestimonialsSection() {
         </div>
 
         {/* Cards grid */}
-        {isLoading ? (
+        {testimonials.length === 0 && !isLoading ? (
+          <div className="text-center py-12 p-8 rounded-2xl border border-slate-200 bg-white max-w-md mx-auto shadow-xs">
+            <p className="text-base font-bold text-slate-800 mb-1">No client reviews yet</p>
+            <p className="text-slate-500 text-xs">
+              Client testimonials and feedback approved from the Admin Panel will appear here.
+            </p>
+          </div>
+        ) : isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {Array.from({ length: 3 }).map((_, i) => (
               <div key={i} className="bg-white border border-slate-200 rounded-2xl p-8 h-64 animate-pulse" />

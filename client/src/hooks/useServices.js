@@ -5,7 +5,7 @@ export function useServices() {
   return useQuery({
     queryKey: ['services'],
     queryFn: () => api.get('/services'),
-    staleTime: 5 * 60 * 1000,
+    staleTime: 0,
   })
 }
 
@@ -14,6 +14,6 @@ export function useService(slug) {
     queryKey: ['services', slug],
     queryFn: () => api.get(`/services/${slug}`),
     enabled: Boolean(slug),
-    staleTime: 5 * 60 * 1000,
+    staleTime: 0,
   })
 }

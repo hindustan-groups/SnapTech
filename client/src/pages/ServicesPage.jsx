@@ -203,10 +203,9 @@ export default function ServicesPage() {
   const [activeCategory, setActiveCategory] = useState('All')
 
   const services = useMemo(() => {
-    if (data?.data?.length) return data.data
-    if (isLoading) return []
-    return FALLBACK_SERVICES
-  }, [data, isLoading])
+    if (Array.isArray(data?.data)) return data.data
+    return []
+  }, [data])
 
   const cfg = settingsData?.data || {}
   const phone = cfg.phone || '+91 75970 00601'

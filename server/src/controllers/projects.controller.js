@@ -1,7 +1,6 @@
 import prisma from '../config/db.js'
 
-const CACHE_SHORT = 'public, max-age=300, stale-while-revalidate=60' // 5 min
-const CACHE_LONG = 'public, max-age=3600, stale-while-revalidate=300' // 1 hour
+const CACHE_FRESH = 'no-cache, must-revalidate'
 
 /**
  * GET /api/projects
@@ -31,7 +30,7 @@ export const getAllProjects = async (req, res, next) => {
         createdAt: true,
       },
     })
-    res.setHeader('Cache-Control', CACHE_SHORT)
+    res.setHeader('Cache-Control', CACHE_FRESH)
     res.json({ status: 'ok', data: projects })
   } catch (err) {
     next(err)
@@ -50,7 +49,7 @@ export const getProjectBySlug = async (req, res, next) => {
     if (!project) {
       return res.status(404).json({ status: 'error', message: 'Project not found.' })
     }
-    res.setHeader('Cache-Control', CACHE_LONG)
+    res.setHeader('Cache-Control', CACHE_FRESH)
     res.json({ status: 'ok', data: project })
   } catch (err) {
     next(err)

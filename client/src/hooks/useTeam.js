@@ -5,6 +5,6 @@ export function useTeam() {
   return useQuery({
     queryKey: ['team'],
     queryFn: () => api.get('/team'),
-    staleTime: 10 * 60 * 1000,
+    staleTime: 0,
   })
 }

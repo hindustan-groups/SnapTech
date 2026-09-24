@@ -191,6 +191,7 @@ export default function AdminTestimonialsPage() {
     mutationFn: (d) => api.post('/admin/testimonials', d),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['admin-testimonials'] })
+      qc.invalidateQueries({ queryKey: ['testimonials'] })
       setShowForm(false)
     },
   })
@@ -199,13 +200,17 @@ export default function AdminTestimonialsPage() {
     mutationFn: ({ id, ...d }) => api.patch(`/admin/testimonials/${id}`, d),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['admin-testimonials'] })
+      qc.invalidateQueries({ queryKey: ['testimonials'] })
       setEditing(null)
     },
   })
 
   const deleteM = useMutation({
     mutationFn: (id) => api.delete(`/admin/testimonials/${id}`),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['admin-testimonials'] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['admin-testimonials'] })
+      qc.invalidateQueries({ queryKey: ['testimonials'] })
+    },
   })
 
   return (

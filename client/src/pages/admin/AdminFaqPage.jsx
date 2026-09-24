@@ -92,6 +92,7 @@ export default function AdminFaqPage() {
     mutationFn: (d) => api.post('/admin/faqs', d),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['admin-faqs'] })
+      qc.invalidateQueries({ queryKey: ['faqs'] })
       setShowForm(false)
     },
   })
@@ -99,12 +100,16 @@ export default function AdminFaqPage() {
     mutationFn: ({ id, ...d }) => api.patch(`/admin/faqs/${id}`, d),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['admin-faqs'] })
+      qc.invalidateQueries({ queryKey: ['faqs'] })
       setEditing(null)
     },
   })
   const deleteM = useMutation({
     mutationFn: (id) => api.delete(`/admin/faqs/${id}`),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['admin-faqs'] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['admin-faqs'] })
+      qc.invalidateQueries({ queryKey: ['faqs'] })
+    },
   })
 
   // ── Chatbot Inquiries ──────────────────────────────────────────

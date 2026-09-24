@@ -286,6 +286,7 @@ export default function AdminServicesPage() {
     mutationFn: (data) => api.post('/admin/services', data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['admin-services'] })
+      qc.invalidateQueries({ queryKey: ['services'] })
       setShowForm(false)
     },
   })
@@ -293,12 +294,16 @@ export default function AdminServicesPage() {
     mutationFn: ({ id, ...data }) => api.patch(`/admin/services/${id}`, data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['admin-services'] })
+      qc.invalidateQueries({ queryKey: ['services'] })
       setEditing(null)
     },
   })
   const deleteMutation = useMutation({
     mutationFn: (id) => api.delete(`/admin/services/${id}`),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['admin-services'] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['admin-services'] })
+      qc.invalidateQueries({ queryKey: ['services'] })
+    },
   })
 
   return (

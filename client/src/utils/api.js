@@ -32,10 +32,26 @@ async function request(path, options = {}) {
     delete headers['Content-Type']
   }
 
-  const res = await fetch(`${BASE_URL}${path}`, {
+  const { params, ...fetchOptions } = options
+  let url = `${BASE_URL}${path}`
+
+  if (params && typeof params === 'object') {
+    const searchParams = new URLSearchParams()
+    Object.entries(params).forEach(([key, val]) => {
+      if (val !== undefined && val !== null && val !== '') {
+        searchParams.append(key, val)
+      }
+    })
+    const qs = searchParams.toString()
+    if (qs) {
+      url += (url.includes('?') ? '&' : '?') + qs
+    }
+  }
+
+  const res = await fetch(url, {
     headers,
     credentials: 'include', // sends httpOnly cookies for admin auth
-    ...options,
+    ...fetchOptions,
   })
 
   const json = await res.json().catch(() => ({}))

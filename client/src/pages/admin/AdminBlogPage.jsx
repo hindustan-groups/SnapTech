@@ -406,6 +406,8 @@ export default function AdminBlogPage() {
     mutationFn: (data) => api.post('/admin/blog', data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['admin-blog-posts'] })
+      qc.invalidateQueries({ queryKey: ['blog-posts'] })
+      qc.invalidateQueries({ queryKey: ['blog-categories'] })
       qc.invalidateQueries({ queryKey: ['admin-stats'] })
       setSaveStatus({ ok: true, msg: 'Post created successfully.' })
       setView('list')
@@ -418,6 +420,8 @@ export default function AdminBlogPage() {
     mutationFn: ({ id, ...data }) => api.patch(`/admin/blog/${id}`, data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['admin-blog-posts'] })
+      qc.invalidateQueries({ queryKey: ['blog-posts'] })
+      qc.invalidateQueries({ queryKey: ['blog-categories'] })
       qc.invalidateQueries({ queryKey: ['admin-stats'] })
       setSaveStatus({ ok: true, msg: 'Post updated successfully.' })
       setView('list')
@@ -431,6 +435,8 @@ export default function AdminBlogPage() {
     mutationFn: (id) => api.delete(`/admin/blog/${id}`),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['admin-blog-posts'] })
+      qc.invalidateQueries({ queryKey: ['blog-posts'] })
+      qc.invalidateQueries({ queryKey: ['blog-categories'] })
       qc.invalidateQueries({ queryKey: ['admin-stats'] })
     },
   })

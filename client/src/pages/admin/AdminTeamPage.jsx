@@ -161,6 +161,7 @@ export default function AdminTeamPage() {
     mutationFn: (data) => api.post('/admin/team', data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['admin-team'] })
+      qc.invalidateQueries({ queryKey: ['team'] })
       setShowForm(false)
     },
   })
@@ -169,13 +170,17 @@ export default function AdminTeamPage() {
     mutationFn: ({ id, ...data }) => api.patch(`/admin/team/${id}`, data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['admin-team'] })
+      qc.invalidateQueries({ queryKey: ['team'] })
       setEditing(null)
     },
   })
 
   const deleteMutation = useMutation({
     mutationFn: (id) => api.delete(`/admin/team/${id}`),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['admin-team'] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['admin-team'] })
+      qc.invalidateQueries({ queryKey: ['team'] })
+    },
   })
 
   return (

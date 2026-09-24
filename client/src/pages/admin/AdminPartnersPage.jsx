@@ -84,6 +84,7 @@ export default function AdminPartnersPage() {
     mutationFn: (d) => api.post('/admin/partners', d),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['admin-partners'] })
+      qc.invalidateQueries({ queryKey: ['partners'] })
       setShowForm(false)
     },
   })
@@ -91,12 +92,16 @@ export default function AdminPartnersPage() {
     mutationFn: ({ id, ...d }) => api.patch(`/admin/partners/${id}`, d),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['admin-partners'] })
+      qc.invalidateQueries({ queryKey: ['partners'] })
       setEditing(null)
     },
   })
   const deleteM = useMutation({
     mutationFn: (id) => api.delete(`/admin/partners/${id}`),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['admin-partners'] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['admin-partners'] })
+      qc.invalidateQueries({ queryKey: ['partners'] })
+    },
   })
 
   return (

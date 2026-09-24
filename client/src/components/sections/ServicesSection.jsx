@@ -126,7 +126,7 @@ function useReveal(selector = '.reveal') {
 
 export default function ServicesSection() {
   const { data, isLoading } = useServices()
-  const services = data?.data?.length ? data.data : isLoading ? [] : PLACEHOLDER_SERVICES
+  const services = Array.isArray(data?.data) ? data.data : []
   const containerRef = useReveal()
 
   return (

@@ -5,6 +5,6 @@ export function useTestimonials() {
   return useQuery({
     queryKey: ['testimonials'],
     queryFn: () => api.get('/testimonials'),
-    staleTime: 10 * 60 * 1000,
+    staleTime: 0,
   })
 }

@@ -204,6 +204,8 @@ export default function AdminProjectsPage() {
     mutationFn: (data) => api.post('/admin/projects', data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['admin-projects'] })
+      qc.invalidateQueries({ queryKey: ['projects'] })
+      qc.invalidateQueries({ queryKey: ['admin-stats'] })
       setShowForm(false)
     },
   })
@@ -212,13 +214,19 @@ export default function AdminProjectsPage() {
     mutationFn: ({ id, ...data }) => api.patch(`/admin/projects/${id}`, data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['admin-projects'] })
+      qc.invalidateQueries({ queryKey: ['projects'] })
+      qc.invalidateQueries({ queryKey: ['admin-stats'] })
       setEditing(null)
     },
   })
 
   const deleteMutation = useMutation({
     mutationFn: (id) => api.delete(`/admin/projects/${id}`),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['admin-projects'] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['admin-projects'] })
+      qc.invalidateQueries({ queryKey: ['projects'] })
+      qc.invalidateQueries({ queryKey: ['admin-stats'] })
+    },
   })
 
   const filteredProjects = projects.filter((p) => {

@@ -95,8 +95,8 @@ export default function FaqSection() {
 
   const settings = settingsData?.data || {}
   const allFaqs = useMemo(
-    () => faqsData?.data?.length ? faqsData.data : isLoading ? [] : FALLBACK_FAQS,
-    [faqsData, isLoading]
+    () => Array.isArray(faqsData?.data) ? faqsData.data : [],
+    [faqsData]
   )
 
   const faqs = useMemo(() => {
@@ -183,20 +183,29 @@ export default function FaqSection() {
             </div>
 
             <div className="reveal space-y-3.5">
-              {isLoading
-                ? Array.from({ length: 4 }).map((_, i) => (
-                    <div key={i} className="h-16 bg-slate-100 border border-slate-200 rounded-2xl shimmer" />
-                  ))
-                : faqs.map((faq, idx) => (
-                    <FaqItem
-                      key={faq.id}
-                      question={faq.question}
-                      answer={faq.answer}
-                      isOpen={openIndex === idx}
-                      onToggle={() => setOpenIndex(openIndex === idx ? -1 : idx)}
-                      index={idx}
-                    />
-                  ))}
+              {faqs.length === 0 && !isLoading ? (
+                <div className="text-center py-10 p-6 rounded-2xl border border-slate-200 bg-white">
+                  <p className="text-sm font-bold text-slate-800 mb-1">No FAQs found</p>
+                  <p className="text-slate-500 text-xs">
+                    Questions and answers published from the Admin Panel will appear here.
+                  </p>
+                </div>
+              ) : isLoading ? (
+                Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className="h-16 bg-slate-100 border border-slate-200 rounded-2xl shimmer" />
+                ))
+              ) : (
+                faqs.map((faq, idx) => (
+                  <FaqItem
+                    key={faq.id}
+                    question={faq.question}
+                    answer={faq.answer}
+                    isOpen={openIndex === idx}
+                    onToggle={() => setOpenIndex(openIndex === idx ? -1 : idx)}
+                    index={idx}
+                  />
+                ))
+              )}
             </div>
           </div>
         </div>
