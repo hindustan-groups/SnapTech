@@ -13,6 +13,9 @@ import {
   CheckCircle,
   AlertCircle,
   ChevronDown,
+  ShieldCheck,
+  Zap,
+  Sparkles,
 } from 'lucide-react'
 import { Container, SEO } from '@/components/ui'
 import { useServices } from '@/hooks/useServices'
@@ -20,7 +23,7 @@ import { useFaqs, useSiteSettings } from '@/hooks/useContent'
 import { api } from '@/utils/api'
 import { faqSchema, breadcrumbSchema } from '@/components/ui/SEO'
 import { fadeUp, staggerContainer } from '@/utils/motion'
-import contactHeroPerson from '@/assets/contact_hero_person.webp'
+import contactArchitectHero from '@/assets/contact_architect_hero.jpg'
 
 // ── Zod validation schema ─────────────────────────────────────
 const contactSchema = z.object({
@@ -325,60 +328,113 @@ export default function ContactPage() {
               </div>
             </div>
 
-            {/* Right graphic column */}
-            <div className="hidden lg:flex lg:col-span-5 justify-center lg:justify-end relative h-110">
-              {/* Futuristic Glass Panel */}
-              <div className="absolute bottom-4 left-4 right-4 lg:left-12 lg:right-0 top-12 rounded-3xl bg-linear-to-br from-blue-50/60 to-slate-100/80 border border-slate-200 shadow-xl overflow-hidden">
-                <div className="absolute inset-0 bg-[radial-gradient(#0f172a0a_1px,transparent_1px)] bg-size-[16px_16px]" />
-                <div className="absolute top-0 left-0 w-full h-0.75 bg-linear-to-r from-blue-500 via-brand-blue to-indigo-500 animate-pulse" />
-                <div className="absolute -bottom-20 -right-20 w-64 h-64 rounded-full bg-blue-200/30 blur-[80px]" />
-              </div>
+            {/* Right graphic column — High-Tech Solution Architect Consultation Desk */}
+            <div className="lg:col-span-5 flex flex-col justify-center">
+              <div className="relative mx-auto w-full max-w-md lg:max-w-none">
+                {/* Outer Glass Card */}
+                <div className="relative rounded-3xl bg-white/90 border border-slate-200/90 shadow-2xl p-3 sm:p-4 backdrop-blur-xl overflow-hidden group">
+                  {/* Subtle Top Status Header */}
+                  <div className="flex items-center justify-between px-3 py-2 mb-3 rounded-xl bg-slate-50 border border-slate-200/80 text-[11px] font-mono">
+                    <div className="flex items-center gap-2">
+                      <span className="relative flex h-2.5 w-2.5">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
+                      </span>
+                      <span className="text-slate-800 font-bold uppercase tracking-wider text-[10px] sm:text-[11px]">
+                        CONSULTATION DESK // ACTIVE
+                      </span>
+                    </div>
+                    <span className="text-[10px] font-bold text-brand-blue bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200/60">
+                      &lt; 2H SLA GUARANTEE
+                    </span>
+                  </div>
 
-              {/* Interactive orbit rings */}
-              <div
-                className="absolute top-4 right-1/2 translate-x-1/2 lg:right-24 w-70 h-70 rounded-full border border-dashed border-blue-400/30 animate-spin"
-                style={{ animationDuration: '30s' }}
-              />
-              <div
-                className="absolute top-12 right-1/2 translate-x-1/2 lg:right-28 w-57.5 h-57.5 rounded-full border border-dotted border-indigo-400/30 animate-spin"
-                style={{ animationDuration: '45s', animationDirection: 'reverse' }}
-              />
+                  {/* Main Portrait Frame with Tech Overlay */}
+                  <div className="relative rounded-2xl overflow-hidden bg-slate-950 aspect-4/3 sm:aspect-square shadow-inner border border-slate-200">
+                    <img
+                      src={contactArchitectHero}
+                      alt="SnapTech Solution Architect & Technical Consultation Desk"
+                      className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
+                    />
 
-              {/* Blended specialist portrait */}
-              <div className="relative h-full w-full max-w-85 flex items-end justify-center z-10">
-                <img
-                  src={contactHeroPerson}
-                  alt="Customer Success Specialist"
-                  className="h-95 sm:h-107.5 object-contain bottom-0 filter drop-shadow-xl hover:scale-[1.02] transition-transform duration-300 ease-out select-none"
-                />
+                    {/* Gradient shading at bottom for text contrast */}
+                    <div className="absolute inset-0 bg-linear-to-t from-slate-950/85 via-slate-950/20 to-transparent pointer-events-none" />
 
-                {/* Overlapping Glass chat widget */}
-                <div
-                  className="absolute top-1/3 -left-6 z-20 bg-white/95 border border-slate-200 p-3.5 rounded-2xl shadow-xl flex items-center gap-3 animate-bounce"
-                  style={{ animationDuration: '4s' }}
-                >
-                  <span className="w-8 h-8 rounded-full bg-blue-50 border border-blue-200 flex items-center justify-center text-brand-blue">
-                    <MessageCircle className="w-4 h-4" />
-                  </span>
-                  <div className="text-left">
-                    <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">
-                      ACTIVE ARCHITECTS
-                    </p>
-                    <p className="text-xs font-bold text-slate-900">How can we assist?</p>
+                    {/* Corner Tech Accents */}
+                    <div className="absolute top-2.5 left-2.5 w-4 h-4 border-t-2 border-l-2 border-cyan-400/80 pointer-events-none z-20" />
+                    <div className="absolute top-2.5 right-2.5 w-4 h-4 border-t-2 border-r-2 border-cyan-400/80 pointer-events-none z-20" />
+                    <div className="absolute bottom-2.5 left-2.5 w-4 h-4 border-b-2 border-l-2 border-cyan-400/80 pointer-events-none z-20" />
+                    <div className="absolute bottom-2.5 right-2.5 w-4 h-4 border-b-2 border-r-2 border-cyan-400/80 pointer-events-none z-20" />
+
+                    {/* Top Left Floating Tag: Direct Architect On Duty */}
+                    <div className="absolute top-4 left-4 z-10 flex items-center gap-2.5 bg-slate-950/85 border border-cyan-500/30 backdrop-blur-md px-3 py-1.5 rounded-xl shadow-xl">
+                      <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                      <div className="text-left">
+                        <p className="text-[9px] font-mono text-cyan-300 font-bold uppercase tracking-wider leading-none">
+                          LEAD ARCHITECT
+                        </p>
+                        <p className="text-[11px] font-bold text-white leading-none mt-0.5">
+                          Mohmmad Dilshan
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Top Right Floating Tag: Mutual NDA */}
+                    <div className="absolute top-4 right-4 z-10 flex items-center gap-1.5 bg-slate-950/85 border border-white/15 backdrop-blur-md px-2.5 py-1.5 rounded-xl shadow-xl">
+                      <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
+                      <span className="text-[10px] font-mono font-semibold text-slate-200">
+                        NDA Protected
+                      </span>
+                    </div>
+
+                    {/* Bottom Content Inside Image */}
+                    <div className="absolute bottom-4 left-4 right-4 z-10 space-y-2">
+                      <div className="flex flex-wrap items-center gap-1.5 text-[10px] font-mono font-semibold">
+                        <span className="bg-slate-950/85 text-cyan-300 px-2 py-0.5 rounded-md border border-cyan-500/25 backdrop-blur-sm">
+                          Full-Stack Cloud
+                        </span>
+                        <span className="bg-slate-950/85 text-blue-300 px-2 py-0.5 rounded-md border border-blue-500/25 backdrop-blur-sm">
+                          Mobile &amp; Web
+                        </span>
+                        <span className="bg-slate-950/85 text-emerald-300 px-2 py-0.5 rounded-md border border-emerald-500/25 backdrop-blur-sm">
+                          Custom ERP
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Quick-Connect Action Bar below image */}
+                  <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
+                    <div className="text-left">
+                      <p className="text-[10px] text-slate-500 font-mono font-bold uppercase">
+                        HEADQUARTERS DESK
+                      </p>
+                      <p className="text-xs font-bold text-slate-800">
+                        Bhilwara &bull; IST (UTC +5:30)
+                      </p>
+                    </div>
+
+                    <a
+                      href={`https://wa.me/${whatsappNum}?text=${encodeURIComponent('Hi SnapTech Digital, I would like to speak directly with a Solution Architect about my project.')}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold shadow-md shadow-emerald-500/20 transition-all cursor-pointer"
+                    >
+                      <MessageCircle className="w-3.5 h-3.5" />
+                      <span>WhatsApp Direct</span>
+                    </a>
                   </div>
                 </div>
 
-                {/* Overlapping Glass status indicator */}
-                <div className="absolute bottom-12 -right-6 z-20 bg-white/95 border border-slate-200 p-3.5 rounded-2xl shadow-xl flex items-center gap-3">
-                  <span className="relative flex h-3 w-3">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
-                  </span>
-                  <div className="text-left">
-                    <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">
-                      DIRECT HEADQUARTERS
-                    </p>
-                    <p className="text-xs font-bold text-slate-900">Bhilwara, Rajasthan</p>
+                {/* Sub Trust Guarantees */}
+                <div className="mt-3 grid grid-cols-2 gap-2 text-center text-[11px] font-medium text-slate-500">
+                  <div className="flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg bg-slate-50 border border-slate-200">
+                    <ShieldCheck className="w-3.5 h-3.5 text-brand-blue" />
+                    <span>Strict Mutual NDA</span>
+                  </div>
+                  <div className="flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg bg-slate-50 border border-slate-200">
+                    <Zap className="w-3.5 h-3.5 text-amber-500" />
+                    <span>100% Code Ownership</span>
                   </div>
                 </div>
               </div>
