@@ -30,19 +30,37 @@ function getStrategy() {
 }
 
 // ── Resend sender ──────────────────────────────────────────────
-async function sendViaResend({ to, subject, html, text, attachments }) {
-  const apiKey = process.env.RESEND_API_KEY || env.RESEND_API_KEY
+export async function sendViaResend({ to, subject, html, text, attachments }) {
+  const apiKey = (process.env.RESEND_API_KEY || env.RESEND_API_KEY || '').trim()
+  if (!apiKey) throw new Error('RESEND_API_KEY is not configured.')
   const resend = new Resend(apiKey)
 
-  // Ensure from always has a display name like "Snaptech Digital <email>"
-  const rawFrom = process.env.EMAIL_FROM || env.EMAIL_FROM || 'Snaptech Digital <info@snaptech.digital>'
-  const from = rawFrom.includes('<')
-    ? rawFrom
-    : `Snaptech Digital <${rawFrom}>`
+  let rawFrom = (process.env.EMAIL_FROM || env.EMAIL_FROM || '').trim()
+  if (!rawFrom) {
+    rawFrom = 'SnapTech Digital <onboarding@resend.dev>'
+  }
+  const from = rawFrom.includes('<') ? rawFrom : `SnapTech Digital <${rawFrom}>`
 
-  const { data, error } = await resend.emails.send({ from, to, subject, html, text, attachments })
-  if (error) throw new Error(error.message || 'Resend send failed')
-  return { messageId: data?.id }
+  try {
+    const { data, error } = await resend.emails.send({ from, to, subject, html, text, attachments })
+    if (error) {
+      // If error is domain verification related, retry with onboarding@resend.dev
+      if (
+        error.message?.includes('domain') ||
+        error.message?.includes('verify') ||
+        error.message?.includes('onboarding@resend.dev')
+      ) {
+        const fallbackFrom = 'SnapTech Digital <onboarding@resend.dev>'
+        const retryResult = await resend.emails.send({ from: fallbackFrom, to, subject, html, text, attachments })
+        if (retryResult.error) throw new Error(retryResult.error.message || 'Resend send failed')
+        return { messageId: retryResult.data?.id }
+      }
+      throw new Error(error.message || 'Resend send failed')
+    }
+    return { messageId: data?.id }
+  } catch (err) {
+    throw new Error(err.message || 'Resend send failed', { cause: err })
+  }
 }
 
 // ── Nodemailer SMTP sender ─────────────────────────────────────

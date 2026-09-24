@@ -331,16 +331,13 @@ export const testSmtpConnection = async (req, res, next) => {
     }
 
     const targetEmail =
+      process.env.EMAIL_TO ||
+      env.EMAIL_TO ||
+      req.admin?.email ||
       process.env.EMAIL_USER ||
       env.EMAIL_USER ||
-      (process.env.EMAIL_FROM || env.EMAIL_FROM || '').replace(/.*<(.+)>/, '$1')
-
-    if (!targetEmail) {
-      return res.status(400).json({
-        status: 'error',
-        message: 'Set SMTP User (or EMAIL_FROM) so the test email has a destination.',
-      })
-    }
+      (process.env.EMAIL_FROM || env.EMAIL_FROM || '').replace(/.*<(.+)>/, '$1') ||
+      'info@snaptech.digital'
 
     const emailPayload = {
       to: targetEmail,
