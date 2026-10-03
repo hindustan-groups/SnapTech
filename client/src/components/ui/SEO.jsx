@@ -5,6 +5,7 @@
  * Supports: Organization, LocalBusiness, Service, FAQPage, BreadcrumbList, JobPosting
  * Canonical source of truth: Site Settings from DB -> Fallback safe technical defaults
  */
+import { useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useSiteSettings } from '@/hooks/useContent'
 
@@ -310,6 +311,19 @@ export default function SEO({
   }
 
   const allSchemas = [...defaultSchemas, ...schemas.filter(Boolean)]
+
+  // Synchronize static fallback tags in index.html to reflect dynamic route canonical
+  useEffect(() => {
+    if (typeof document === 'undefined') return
+    const canonicalTags = document.querySelectorAll('link[rel="canonical"]')
+    canonicalTags.forEach((tag) => {
+      tag.href = canonical
+    })
+    const ogUrls = document.querySelectorAll('meta[property="og:url"]')
+    ogUrls.forEach((tag) => {
+      tag.content = canonical
+    })
+  }, [canonical])
 
   return (
     <Helmet>

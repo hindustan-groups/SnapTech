@@ -895,36 +895,36 @@ export default function PricingPage() {
                   {/* Top Colored Gradient Accent Line */}
                   <div className={`h-2 w-full bg-linear-to-r ${pkg.headerGradient}`} />
 
-                  {/* Floating Popular / Category Badge */}
-                  {pkg.badge && (
-                    <div
-                      className={`absolute top-5 right-5 px-3 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                        pkg.isPopular
-                          ? 'bg-brand-blue text-white shadow-sm'
-                          : 'bg-slate-100 text-slate-700 border border-slate-200'
-                      }`}
-                    >
-                      {pkg.badge}
-                    </div>
-                  )}
-
                   <div className="p-5 sm:p-6">
-                    {/* Header Icon + Name */}
-                    <div className="flex items-center gap-3 mb-2.5">
+                    {/* Header Row: Icon + Badge */}
+                    <div className="flex items-center justify-between gap-2 mb-3">
                       <div className="w-10 h-10 rounded-2xl border border-blue-200 flex items-center justify-center shrink-0 shadow-xs bg-blue-50 text-brand-blue">
                         <IconComp className="w-5 h-5" />
                       </div>
-                      <div>
-                        <h3 className="font-heading text-xl font-bold text-slate-900">
-                          {pkg.name}
-                        </h3>
-                        <span className="text-[10px] font-bold text-emerald-600 block">
-                          ✔ Verified Tier
+                      {pkg.badge && (
+                        <span
+                          className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 ${
+                            pkg.isPopular
+                              ? 'bg-brand-blue text-white shadow-xs'
+                              : 'bg-slate-100 text-slate-700 border border-slate-200'
+                          }`}
+                        >
+                          {pkg.badge}
                         </span>
-                      </div>
+                      )}
                     </div>
 
-                    <p className="text-xs text-slate-600 leading-relaxed">
+                    {/* Title + Verified Tier */}
+                    <div className="mb-2.5">
+                      <h3 className="font-heading text-xl font-bold text-slate-900 leading-tight">
+                        {pkg.name}
+                      </h3>
+                      <span className="text-[10px] font-bold text-emerald-600 block mt-0.5">
+                        ✔ Verified Tier
+                      </span>
+                    </div>
+
+                    <p className="text-xs text-slate-600 leading-relaxed min-h-9">
                       {pkg.description}
                     </p>
 
@@ -1168,36 +1168,36 @@ export default function PricingPage() {
                   {/* Top Accent Line */}
                   <div className={`h-2 w-full bg-linear-to-r ${app.headerGradient}`} />
 
-                  {/* Floating Popular Badge */}
-                  {app.badge && (
-                    <div
-                      className={`absolute top-5 right-5 px-3 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                        isFeatured
-                          ? 'bg-brand-blue text-white font-bold shadow-sm'
-                          : 'bg-slate-100 text-slate-700 border border-slate-200'
-                      }`}
-                    >
-                      {app.badge}
-                    </div>
-                  )}
-
                   <div className="p-5 sm:p-6">
-                    {/* Header Icon + App Title */}
-                    <div className="flex items-center gap-3 mb-2.5">
+                    {/* Header Row: Icon + Badge */}
+                    <div className="flex items-center justify-between gap-2 mb-3">
                       <div className="w-10 h-10 rounded-2xl border border-blue-200 bg-blue-50 flex items-center justify-center shrink-0 shadow-xs text-brand-blue">
                         <IconComp className="w-5 h-5" />
                       </div>
-                      <div>
-                        <h3 className="font-heading text-xl font-bold text-slate-900">
-                          {app.title}
-                        </h3>
-                        <span className="text-[10px] font-bold text-slate-500 block">
-                          Android &amp; iOS Apps
+                      {app.badge && (
+                        <span
+                          className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 ${
+                            isFeatured
+                              ? 'bg-brand-blue text-white font-bold shadow-xs'
+                              : 'bg-slate-100 text-slate-700 border border-slate-200'
+                          }`}
+                        >
+                          {app.badge}
                         </span>
-                      </div>
+                      )}
                     </div>
 
-                    <p className="text-xs text-slate-600 leading-relaxed">
+                    {/* App Title & Subtitle */}
+                    <div className="mb-2.5">
+                      <h3 className="font-heading text-xl font-bold text-slate-900 leading-tight">
+                        {app.title}
+                      </h3>
+                      <span className="text-[10px] font-bold text-slate-500 block mt-0.5">
+                        Android &amp; iOS Apps
+                      </span>
+                    </div>
+
+                    <p className="text-xs text-slate-600 leading-relaxed min-h-9">
                       {app.desc}
                     </p>
 
@@ -1391,36 +1391,36 @@ export default function PricingPage() {
                   {/* Top Accent Line */}
                   <div className={`h-2 w-full bg-linear-to-r ${mkt.headerGradient}`} />
 
-                  {/* Badge */}
-                  {mkt.badge && (
-                    <div
-                      className={`absolute top-5 right-5 px-3 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                        isFeatured
-                          ? 'bg-brand-blue text-white font-bold shadow-sm'
-                          : 'bg-slate-100 text-slate-700 border border-slate-200'
-                      }`}
-                    >
-                      {mkt.badge}
-                    </div>
-                  )}
-
                   <div className="p-5 sm:p-6">
-                    {/* Header Icon + Service Title */}
-                    <div className="flex items-center gap-3 mb-2.5">
+                    {/* Header Row: Icon + Badge */}
+                    <div className="flex items-center justify-between gap-2 mb-3">
                       <div className="w-11 h-11 rounded-2xl border border-blue-200 bg-blue-50 flex items-center justify-center shrink-0 shadow-xs text-brand-blue">
                         <IconComp className="w-5.5 h-5.5" />
                       </div>
-                      <div>
-                        <h3 className="font-heading text-xl font-bold text-slate-900 leading-snug">
-                          {mkt.title}
-                        </h3>
-                        <span className="text-[10px] font-bold text-emerald-600 uppercase block">
-                          Official Growth Retainer
+                      {mkt.badge && (
+                        <span
+                          className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 ${
+                            isFeatured
+                              ? 'bg-brand-blue text-white font-bold shadow-xs'
+                              : 'bg-slate-100 text-slate-700 border border-slate-200'
+                          }`}
+                        >
+                          {mkt.badge}
                         </span>
-                      </div>
+                      )}
                     </div>
 
-                    <p className="text-xs text-slate-600 leading-relaxed">
+                    {/* Service Title & Retainer Subtitle */}
+                    <div className="mb-2.5">
+                      <h3 className="font-heading text-xl font-bold text-slate-900 leading-tight">
+                        {mkt.title}
+                      </h3>
+                      <span className="text-[10px] font-bold text-emerald-600 uppercase block mt-0.5">
+                        Official Growth Retainer
+                      </span>
+                    </div>
+
+                    <p className="text-xs text-slate-600 leading-relaxed min-h-9">
                       {mkt.desc}
                     </p>
 
