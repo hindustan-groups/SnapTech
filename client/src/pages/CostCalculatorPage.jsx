@@ -44,8 +44,8 @@ export default function CostCalculatorPage() {
       <SEO
         title="Interactive Website Cost Calculator &amp; Pricing Estimator"
         description="Estimate website, custom SaaS web app, and e-commerce platform development costs instantly with SnapTech Digital's transparent engineering calculator."
+        path="/cost-calculator"
         keywords="website cost calculator india, web development pricing, software development cost estimator, snaptech digital pricing"
-        canonical="https://www.snaptech.digital/cost-calculator"
       />
 
       <div className="bg-bg-base text-text-primary min-h-screen pt-24 pb-20 selection:bg-cyan-500 selection:text-black">

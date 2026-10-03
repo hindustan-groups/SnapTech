@@ -20,7 +20,7 @@ import {
 } from 'lucide-react'
 import { useState } from 'react'
 import { useClientMe, useClientLogout, useClientTickets } from '@/hooks/useClientPortal'
-import { ClientMobileNavBar } from '@/components/ui'
+import ClientMobileNavBar from '@/components/ui/ClientMobileNavBar'
 
 export default function ClientLayout() {
   const navigate = useNavigate()

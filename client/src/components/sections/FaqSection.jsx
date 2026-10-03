@@ -172,6 +172,8 @@ export default function FaqSection() {
             {/* Search input */}
             <div className="relative mb-5">
               <input
+                id="faq-search-input"
+                name="faqSearch"
                 type="search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}

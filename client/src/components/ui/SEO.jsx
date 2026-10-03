@@ -272,6 +272,7 @@ export default function SEO({
   title,
   description,
   path = '',
+  canonical: customCanonical,
   noIndex = false,
   ogType = 'website',
   ogImage,
@@ -290,7 +291,9 @@ export default function SEO({
     : (cfg.default_seo_title || `${companyName} — IT Services Company in Bhilwara, Rajasthan`)
     
   const desc = description || cfg.default_seo_description || SITE.description
-  const canonical = `${SITE.url}${path}`
+  const canonical = customCanonical
+    ? (customCanonical.startsWith('http') ? customCanonical : `${SITE.url}${customCanonical.startsWith('/') ? '' : '/'}${customCanonical}`)
+    : `${SITE.url}${path}`
   const image = ogImage || cfg.og_image_url || SITE.ogImage
 
   // Default schemas on every page using live Site Settings

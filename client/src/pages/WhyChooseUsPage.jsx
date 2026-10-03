@@ -102,8 +102,8 @@ export default function WhyChooseUsPage() {
       <SEO
         title="Why Choose SnapTech Digital | Agency vs Freelancer Comparison"
         description="Discover why leading brands choose SnapTech Digital over traditional agencies and freelancers. 100% code ownership, sub-second speed, and transparent fixed milestone pricing."
+        path="/why-snaptech"
         keywords="why snaptech digital, best web agency india, web development agency comparison, software engineering partner"
-        canonical="https://www.snaptech.digital/why-snaptech"
       />
 
       <div className="bg-bg-base text-text-primary min-h-screen pt-24 pb-20 selection:bg-cyan-500 selection:text-black">
