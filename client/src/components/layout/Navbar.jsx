@@ -211,7 +211,7 @@ export default function Navbar() {
                 rel="noopener noreferrer"
                 className="font-bold text-brand-blue hover:text-brand-red inline-flex items-center gap-1 transition-colors group/parent"
               >
-                <span>SnapTech Digital</span>
+                <span>{cfg.parent_company_name || 'Hindustan Projects Group'}</span>
                 <svg className="w-3 h-3 opacity-75 group-hover/parent:translate-x-0.5 group-hover/parent:-translate-y-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                 </svg>

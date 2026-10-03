@@ -17,6 +17,7 @@ import {
   RefreshCw,
   Sparkles,
   Save,
+  Building2,
 } from 'lucide-react'
 import { api } from '@/utils/api'
 import { SEO } from '@/components/ui'
@@ -226,6 +227,12 @@ const FIELD_GROUPS = [
         label: 'Company Brand Name',
         placeholder: 'SnapTech Digital',
         Icon: Type,
+      },
+      {
+        key: 'parent_company_name',
+        label: 'Parent Group Company Name',
+        placeholder: 'Hindustan Projects Group',
+        Icon: Building2,
       },
       {
         key: 'parent_company_url',

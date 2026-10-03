@@ -29,7 +29,7 @@ export default function ParentGroupSection() {
   const { data: settingsData } = useSiteSettings()
   const cfg = settingsData?.data || {}
   const parentUrl = cfg.parent_company_url || 'https://www.hindustanprojects.in'
-  const companyBrand = cfg.company_name || 'Hindustan Projects Group'
+  const parentName = cfg.parent_company_name || 'Hindustan Projects Group'
 
   return (
     <section id="group-ecosystem" className="py-20 bg-slate-50 text-slate-900 relative overflow-hidden isolate border-b border-slate-200" aria-labelledby="parent-group-heading">
@@ -46,7 +46,7 @@ export default function ParentGroupSection() {
           <h2 id="parent-group-heading" className="font-heading text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight mb-4">
             The Digital &amp; Technology Powerhouse of{' '}
             <span className="text-brand-blue">
-              {companyBrand}
+              {parentName}
             </span>
           </h2>
           <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
@@ -87,7 +87,7 @@ export default function ParentGroupSection() {
               Official Corporate Gateway
             </span>
             <h4 className="font-heading text-lg sm:text-xl font-bold text-slate-900">
-              Explore {companyBrand}
+              Explore {parentName}
             </h4>
             <p className="text-xs text-slate-600">
               Discover engineering milestones, pre-engineered buildings, infrastructure ventures, and group portfolio.

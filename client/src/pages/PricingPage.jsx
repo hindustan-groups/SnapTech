@@ -537,13 +537,19 @@ export default function PricingPage() {
         headerGradient: p.colorGradient || (p.isPopular ? 'from-brand-primary via-blue-600 to-brand-navy' : 'from-blue-600 via-sky-600 to-indigo-700'),
         iconBg: p.isPopular ? 'bg-blue-50 text-brand-primary border-blue-200' : 'bg-blue-50 text-blue-600 border-blue-200',
         desc: p.description || '',
-        groups: p.groups || [
-          {
-            name: 'Features & Deliverables',
-            icon: Palette,
-            items: p.features || [],
-          },
-        ],
+        groups: (p.groups && Array.isArray(p.groups) && p.groups.length > 0)
+          ? p.groups.map((g, gIdx) => ({
+              name: g.name,
+              icon: [Palette, Search, TrendingUp, Layers][gIdx % 4] || Palette,
+              items: g.items || [],
+            }))
+          : [
+              {
+                name: 'Features & Deliverables',
+                icon: Palette,
+                items: p.features || [],
+              },
+            ],
       }))
     }
     return MARKETING_SERVICES
@@ -1448,7 +1454,7 @@ export default function PricingPage() {
                     {/* Grouped Deliverables List */}
                     <div className="border-t border-slate-200 pt-3 space-y-3">
                       {mkt.groups.map((group, gIdx) => {
-                        const GroupIcon = group.icon
+                        const GroupIcon = group.icon || Palette
                         return (
                           <div key={gIdx} className="bg-white p-3 rounded-2xl border border-slate-200 shadow-xs">
                             <span className="text-[10px] font-bold text-brand-blue uppercase tracking-wider block mb-1.5 flex items-center gap-1.5">
