@@ -9,6 +9,7 @@ import {
 } from 'lucide-react'
 import { Container, SEO } from '@/components/ui'
 import CostCalculator from '@/components/calculator/CostCalculator'
+import { useSiteSettings } from '@/hooks/useContent'
 
 const CALCULATOR_FAQS = [
   {
@@ -30,6 +31,14 @@ const CALCULATOR_FAQS = [
 ]
 
 export default function CostCalculatorPage() {
+  const { data: settingsData } = useSiteSettings()
+  const cfg = settingsData?.data || {}
+  const rawWa = cfg.whatsapp || cfg.phone || '+91 8209604849'
+  const cleanWa = rawWa.replace(/\D/g, '')
+  const whatsappUrl = `https://wa.me/${cleanWa}?text=${encodeURIComponent(
+    'Hi SnapTech Digital, I have a custom project requirement'
+  )}`
+
   return (
     <>
       <SEO
@@ -165,7 +174,7 @@ export default function CostCalculatorPage() {
                   </p>
                 </div>
                 <a
-                  href="https://wa.me/919414112057?text=Hi%20SnapTech%20Digital,%20I%20have%20a%20custom%20project%20requirement"
+                  href={whatsappUrl}
                   target="_blank"
                   rel="noreferrer"
                   className="px-5 py-2.5 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-heading font-bold text-xs shrink-0 transition-all shadow-md shadow-cyan-500/20 flex items-center gap-2 cursor-pointer"

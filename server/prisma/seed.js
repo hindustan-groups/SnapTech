@@ -342,7 +342,7 @@ async function main() {
         'A full-stack e-commerce platform with inventory management, payment integration, and admin dashboard. Increased online sales by 3x within 60 days.',
       thumbnailUrl: '',
       images: [],
-      liveUrl: 'https://demo.hindustanprojects.com/ecommerce',
+      liveUrl: null,
     },
     {
       id: 'proj-2',
@@ -356,7 +356,7 @@ async function main() {
         'Multi-channel digital marketing campaign achieving 3x ROI within 3 months. Conversion rates improved by 42% through targeted campaigns.',
       thumbnailUrl: '',
       images: [],
-      liveUrl: 'https://demo.hindustanprojects.com/campaign',
+      liveUrl: null,
     },
     {
       id: 'proj-3',
@@ -398,7 +398,7 @@ async function main() {
         'Responsive website with online menu, table booking, and local SEO. Restaurant now ranks #1 on Google for restaurant in Bhilwara.',
       thumbnailUrl: '',
       images: [],
-      liveUrl: 'https://demo.hindustanprojects.com/restaurant',
+      liveUrl: null,
     },
     {
       id: 'proj-6',
@@ -426,7 +426,7 @@ async function main() {
         'Real-time GPS tracking and booking mobile app for a regional logistics provider. Available on iOS & Android with push notifications and driver management.',
       thumbnailUrl: '',
       images: [],
-      liveUrl: 'https://demo.hindustanprojects.com/logistics',
+      liveUrl: null,
     },
   ]
   for (const p of projects) {
@@ -441,7 +441,7 @@ async function main() {
       name: 'Mohammad Dilshan',
       role: 'Founder & CEO',
       order: 1,
-      bio: 'Tech entrepreneur dedicated to empowering local & global businesses with premium digital solutions. Founded Hindustan Projects to bring world-class IT to Bhilwara.',
+      bio: 'Tech entrepreneur and founder of SnapTech Digital, dedicated to empowering local and global businesses with premium digital solutions and enterprise IT systems.',
       photoUrl: '',
       linkedinUrl: '#',
     },
@@ -485,7 +485,7 @@ async function main() {
       name: 'Aditya Sharma',
       role: 'Managing Director',
       company: 'Bhilwara Textiles Ltd.',
-      text: 'Hindustan Projects completely modernized our operations with their custom ERP and corporate portal. Their local availability combined with world-class engineering was exactly what we needed.',
+      text: 'SnapTech Digital completely modernized our operations with their custom ERP and corporate portal. Their local availability combined with world-class engineering was exactly what we needed.',
       rating: 5,
       order: 1,
       isActive: true,
@@ -505,7 +505,7 @@ async function main() {
       name: 'Rajesh Singhal',
       role: 'Owner',
       company: 'Singhal Marbles & Granites',
-      text: 'We tried multiple marketing agencies but got zero leads. Hindustan Projects designed a targeted SEO and Google Ads strategy. Today we get 15+ high-quality inquiries every week.',
+      text: 'We tried multiple marketing agencies but got zero leads. SnapTech Digital designed a targeted SEO and Google Ads strategy. Today we get 15+ high-quality inquiries every week.',
       rating: 5,
       order: 3,
       isActive: true,
@@ -569,8 +569,8 @@ async function main() {
 
   // Site Settings
   const settings = [
-    { key: 'phone', value: '+91 75970 00601' },
-    { key: 'whatsapp', value: '+91 75970 00601' },
+    { key: 'phone', value: '+91 8209604849' },
+    { key: 'whatsapp', value: '+91 8209604849' },
     { key: 'email', value: 'info@snaptech.digital' },
     { key: 'address', value: 'Bhilwara, Rajasthan 311001, India' },
     { key: 'linkedin', value: 'https://www.linkedin.com/company/snaptech-digital' },
@@ -596,7 +596,7 @@ async function main() {
       id: 'ms-1',
       year: '2019',
       title: 'Founded',
-      desc: 'Hindustan Projects was born in Bhilwara with a mission to bring world-class IT to local businesses.',
+      desc: 'SnapTech Digital is founded in Bhilwara, Rajasthan with a mission to deliver world-class bespoke IT and digital solutions to growing businesses.',
       order: 1,
     },
     {
@@ -728,28 +728,28 @@ async function main() {
   const blogPosts = [
     {
       id: 'hp-blog-1',
-      title: 'Why We Founded Hindustan Projects: Shifting Rajasthan\'s Businesses to Enterprise IT',
-      slug: 'why-we-founded-hindustan-projects-enterprise-it',
-      excerpt: 'In today\'s digital-first economy, we founded Hindustan Projects to bridge the gap between legacy paper workflows and high-performance custom software for businesses in Rajasthan and beyond.',
+      title: 'Why We Built SnapTech Digital: Shifting Rajasthan\'s Businesses to Enterprise IT',
+      slug: 'why-we-built-snaptech-digital-enterprise-it',
+      excerpt: 'In today\'s digital-first economy, we built SnapTech Digital to bridge the gap between legacy paper workflows and high-performance custom software for businesses in Rajasthan and beyond.',
       content: `<h2>Bridging the Digital Gap in Local Markets</h2>
-<p>Hindustan Projects was founded with a single, clear mission: to bring enterprise-grade web development, custom software engineering, and digital solutions to businesses across Rajasthan and India. For too long, small and mid-sized enterprises (SMEs) in growing hubs like Bhilwara, Udaipur, and Jodhpur had only two choices when going digital: expensive global consultancies or low-cost template builders who offer zero support and rigid structures.</p>
-<p>We realized that local industries—whether it is Bhilwara’s massive textile manufacturing units or Rajasthan's expanding retail and hospitality sectors—need custom, secure, and fast software systems tailored to their specific workflows. That is why we built Hindustan Projects.</p>
+<p>SnapTech Digital was founded with a single, clear mission: to bring enterprise-grade web development, custom software engineering, and digital solutions to businesses across Rajasthan and India. For too long, small and mid-sized enterprises (SMEs) in growing hubs like Bhilwara, Udaipur, and Jodhpur had only two choices when going digital: expensive global consultancies or low-cost template builders who offer zero support and rigid structures.</p>
+<p>We realized that local industries—whether it is Bhilwara's massive textile manufacturing units or Rajasthan's expanding retail and hospitality sectors—need custom, secure, and fast software systems tailored to their specific workflows. That is why we built SnapTech Digital.</p>
 
 <h2>Moving Away From "Template" Culture</h2>
 <p>Many businesses buy off-the-shelf templates or generic WordPress setups. While they seem cheap at first, they quickly fail to scale. They are slow, vulnerable to security hacks, and force the business to adapt its real-world operations to fit a rigid website template.</p>
-<p>At Hindustan Projects, we do the exact opposite. We build custom applications using cutting-edge technologies like React, Node.js, and PostgreSQL. We design the software around your business operations, ensuring that the technology grows with you, rather than holding you back.</p>
+<p>At SnapTech Digital, we do the exact opposite. We build custom applications using cutting-edge technologies like React, Node.js, and PostgreSQL. We design the software around your business operations, ensuring that the technology grows with you, rather than holding you back.</p>
 
 <h2>Our Commitment to Quality</h2>
 <p>When you partner with us, you are not just hiring a vendor; you are gaining a technology partner. We stand by four core commitments: complete transparency in billing, zero dependency on third-party templates, high-performance optimization, and dedicated post-launch support. We are here to build digital products that drive real revenue and efficiency for your brand.</p>`,
       featuredImageUrl: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80',
       category: 'Company News',
-      tags: ['SnapTech Digital', 'Hindustan Projects', 'mission', 'custom software', 'Rajasthan IT'],
+      tags: ['SnapTech Digital', 'mission', 'custom software', 'Rajasthan IT'],
       authorName: 'SnapTech Digital Team',
       status: 'PUBLISHED',
       isFeatured: true,
       publishedAt: new Date('2026-07-08'),
-      metaTitle: 'Why We Founded Hindustan Projects | Rajasthan\'s Custom Software Agency',
-      metaDescription: 'Read our founding story. We started Hindustan Projects to bridge the gap between legacy systems and modern custom software for businesses in Rajasthan.',
+      metaTitle: 'Why We Built SnapTech Digital | Rajasthan\'s Custom Software Agency',
+      metaDescription: 'Read our founding story. We built SnapTech Digital to bridge the gap between legacy systems and modern custom software for businesses in Rajasthan.',
       viewCount: 152,
     },
     {
@@ -758,7 +758,7 @@ async function main() {
       slug: 'what-we-build-core-it-services-digital-solutions',
       excerpt: 'Discover what we build. From responsive corporate portals and custom textile ERP inventory systems to mobile apps, we design custom digital systems that scale.',
       content: `<h2>A Full-Suite Software Engineering Partner</h2>
-<p>Hindustan Projects is a comprehensive IT services provider. We design, code, secure, and manage high-performance software systems. Our capabilities span across three core pillars: custom web applications, specialized business ERP systems, and high-converting marketing platforms.</p>
+<p>SnapTech Digital is a comprehensive IT services provider. We design, code, secure, and manage high-performance software systems. Our capabilities span across three core pillars: custom web applications, specialized business ERP systems, and high-converting marketing platforms.</p>
 
 <h2>1. Custom Web Applications & SaaS Portals</h2>
 <p>We build responsive, fast, and feature-rich web applications tailored to your business goals. Utilizing modern frontend frameworks like React and NextJS combined with robust backend APIs (Node.js/Express), we ensure your system loads instantly and can handle thousands of concurrent users securely.</p>
@@ -778,7 +778,7 @@ async function main() {
       status: 'PUBLISHED',
       isFeatured: false,
       publishedAt: new Date('2026-07-08'),
-      metaTitle: 'Our Core IT & Software Development Services | Hindustan Projects',
+      metaTitle: 'Our Core IT & Software Development Services | SnapTech Digital',
       metaDescription: 'Explore what we build. From responsive corporate portals to custom ERP inventory systems and mobile dashboards, we design custom systems that scale.',
       viewCount: 98,
     },
@@ -808,7 +808,7 @@ async function main() {
       status: 'PUBLISHED',
       isFeatured: false,
       publishedAt: new Date('2026-07-08'),
-      metaTitle: 'Our Software Development Process | Hindustan Projects',
+      metaTitle: 'Our Software Development Process | SnapTech Digital',
       metaDescription: 'How do we bring your ideas to life? Read about our transparent 4-stage process: Discovery, UX Design, Robust Coding, and Support.',
       viewCount: 112,
     },
@@ -818,7 +818,7 @@ async function main() {
       slug: 'rooted-in-bhilwara-local-industries-global-tech',
       excerpt: 'We are proud to be based in Bhilwara, Rajasthan. Learn how we help local manufacturing, textile loom mills, and retail brands scale using modern software.',
       content: `<h2>Proudly Based in Rajasthan's Textile Capital</h2>
-<p>Hindustan Projects is proud to call Bhilwara, Rajasthan, our home base. As the textile capital of the state, Bhilwara has a rich heritage of industrial entrepreneurship. However, as the global economy transitions to digital-first systems, local mills, retail hubs, and real estate brands need local technology partners who understand their market and can support them face-to-face.</p>
+<p>SnapTech Digital is proud to call Bhilwara, Rajasthan, our home base. As the textile capital of the state, Bhilwara has a rich heritage of industrial entrepreneurship. However, as the global economy transitions to digital-first systems, local mills, retail hubs, and real estate brands need local technology partners who understand their market and can support them face-to-face.</p>
 <p>Being local allows us to visit your mills, audit your warehouses, and collaborate directly with your team in Hindi and English. We combine this local availability with global coding and performance standards.</p>
 
 <h2>Helping Local Sectors Scale Globally</h2>
@@ -932,7 +932,7 @@ async function main() {
 <p>For privacy-related questions or to exercise your rights, contact us at:</p>
 <ul>
   <li><strong>Email:</strong> <a href="mailto:info@snaptech.digital">info@snaptech.digital</a></li>
-  <li><strong>Phone:</strong> +91 75970 00601</li>
+  <li><strong>Phone:</strong> +91 8209604849</li>
   <li><strong>Address:</strong> SnapTech Digital, Bhilwara, Rajasthan 311001, India</li>
 </ul>
       `,
@@ -1009,7 +1009,7 @@ async function main() {
 <p>For questions about these Terms, contact us at:</p>
 <ul>
   <li><strong>Email:</strong> <a href="mailto:info@snaptech.digital">info@snaptech.digital</a></li>
-  <li><strong>Phone:</strong> +91 75970 00601</li>
+  <li><strong>Phone:</strong> +91 8209604849</li>
   <li><strong>Address:</strong> SnapTech Digital, Bhilwara, Rajasthan 311001, India</li>
 </ul>
       `,
@@ -1078,7 +1078,7 @@ async function main() {
 <p>For refund enquiries, please contact:</p>
 <ul>
   <li><strong>Email:</strong> <a href="mailto:info@snaptech.digital">info@snaptech.digital</a></li>
-  <li><strong>Phone:</strong> +91 75970 00601</li>
+  <li><strong>Phone:</strong> +91 8209604849</li>
   <li><strong>Address:</strong> SnapTech Digital, Bhilwara, Rajasthan 311001, India</li>
 </ul>
       `,

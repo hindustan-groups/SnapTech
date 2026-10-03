@@ -217,7 +217,7 @@ async function checkErrorThresholdAlert() {
             <p>Something may be broken on the website. Please check the Admin Monitoring Dashboard immediately.</p>
             <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 20px 0;" />
             <p style="font-size: 13px; color: #6B7280; text-align: center;">
-              Sent automatically by Hindustan Projects Website Monitoring Service
+              Sent automatically by SnapTech Digital Website Monitoring Service
             </p>
           </div>
         `,

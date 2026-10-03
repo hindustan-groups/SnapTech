@@ -42,117 +42,6 @@ const AVATAR_COLORS = [
   'from-amber-600 to-orange-700',
 ]
 
-const FALLBACK_POST_DETAILS = {
-  'why-we-built-snaptech-enterprise-it': {
-    id: 'hp-blog-fallback-1',
-    title: 'Why We Built SnapTech: Elevating Modern Businesses with Enterprise Cloud & Engineering',
-    slug: 'why-we-built-snaptech-enterprise-it',
-    excerpt:
-      'In today’s digital-first economy, we engineered SnapTech Digital to bridge the gap between legacy workflows and high-performance custom cloud software for ambitious enterprises across India and global markets.',
-    content: `<h2>Bridging the Enterprise Digital Divide</h2>
-<p>SnapTech Digital was founded with a singular, resolute mission: to engineer bespoke, enterprise-grade cloud software, high-performance web systems, and AI-accelerated automations that deliver compounding business value. For years, growing companies faced an agonizing dilemma when going digital: choose rigid, vulnerability-prone generic templates with zero scalability, or hire prohibitively expensive consulting firms that move at glacial speed.</p>
-<p>We built SnapTech Digital to provide a high-velocity engineering alternative: dedicated technical architects, pure modern stacks, transparent pricing, and 100% intellectual property ownership from day one.</p>
-
-<h2>Moving Away From "Template" Fragility</h2>
-<p>Many organizations start with off-the-shelf page builders or generic CMS setups. While they appear convenient initially, they quickly fail to scale under high user volumes, incur heavy maintenance penalties, and expose businesses to critical security risks. Even worse, they force companies to contort their unique operational logic to fit rigid plugin ecosystems.</p>
-<p>At SnapTech Digital, we build bespoke applications utilizing modern frontend engines like React and Next.js paired with resilient microservices and secure database topologies (PostgreSQL, Redis, Node.js). We architect the software around your exact organizational workflows—ensuring technology accelerates your expansion rather than restricting it.</p>
-
-<h2>Our Ironclad Engineering Guarantees</h2>
-<p>When you commission SnapTech Digital, you gain a dedicated technological ally. We adhere to five core operating commitments: complete transparent sprint accounting, zero third-party framework locks, 99.9% uptime architecture SLAs, rigorous automated security auditing, and continuous post-launch warranty support. We are here to craft resilient digital infrastructure that drives revenue and enterprise distinction.</p>`,
-    featuredImageUrl:
-      'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80',
-    category: 'Company News',
-    tags: ['SnapTech Digital', 'Engineering', 'Custom Software', 'Cloud Architecture'],
-    authorName: 'SnapTech Engineering Team',
-    status: 'PUBLISHED',
-    isFeatured: true,
-    publishedAt: '2026-07-08T00:00:00.000Z',
-    readTime: 5,
-    viewCount: 420,
-  },
-  'why-we-founded-hindustan-projects-enterprise-it': {
-    id: 'hp-blog-fallback-1-alias',
-    title: 'Why We Built SnapTech: Elevating Modern Businesses with Enterprise Cloud & Engineering',
-    slug: 'why-we-built-snaptech-enterprise-it',
-    excerpt:
-      'In today’s digital-first economy, we engineered SnapTech Digital to bridge the gap between legacy workflows and high-performance custom cloud software for ambitious enterprises across India and global markets.',
-    content: `<h2>Bridging the Enterprise Digital Divide</h2>
-<p>SnapTech Digital was founded with a singular, resolute mission: to engineer bespoke, enterprise-grade cloud software, high-performance web systems, and AI-accelerated automations that deliver compounding business value.</p>`,
-    featuredImageUrl:
-      'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80',
-    category: 'Company News',
-    tags: ['SnapTech Digital', 'Engineering', 'Custom Software'],
-    authorName: 'SnapTech Engineering Team',
-    status: 'PUBLISHED',
-    isFeatured: true,
-    publishedAt: '2026-07-08T00:00:00.000Z',
-    readTime: 5,
-    viewCount: 380,
-  },
-  'what-we-build-core-it-services-digital-solutions': {
-    id: 'hp-blog-fallback-2',
-    title: 'What We Build: A Deep Dive into Our Core IT Services & Digital Solutions',
-    slug: 'what-we-build-core-it-services-digital-solutions',
-    excerpt:
-      'Discover what we build. From responsive corporate portals and custom ERP inventory engines to mobile apps, we design resilient digital systems that scale with enterprise growth.',
-    content: `<h2>A Comprehensive Software Engineering Practice</h2>
-<p>SnapTech Digital is a full-stack digital product engineering consultancy. We design, architect, deploy, and maintain mission-critical software systems across three core pillars: custom web applications, specialized enterprise resource planning (ERP) platforms, and native cross-platform mobile apps.</p>
-
-<h2>1. Custom Web Applications & SaaS Platforms</h2>
-<p>We engineer responsive, sub-second web platforms tailored to demanding commercial requirements. Utilizing cutting-edge frontend ecosystems combined with enterprise Node.js and Python microservices, we ensure your platform handles concurrent traffic effortlessly while providing seamless user experiences.</p>
-
-<h2>2. Specialized ERP & Internal Workflow Automation</h2>
-<p>Operational bottlenecks cripple growing enterprises. We design bespoke administrative dashboards, automated billing engines, real-time inventory management, and multi-warehouse supply chain trackers. Whether eliminating chaotic spreadsheets or coordinating supply chain milestones, our custom tools create operational clarity.</p>
-
-<h2>3. Native & Cross-Platform Mobile Applications</h2>
-<p>Deliver your services straight into your customers’ hands. We develop robust cross-platform mobile applications using Flutter and React Native, securing fluid native performance on both iOS and Android from a unified codebase—drastically reducing time-to-market and maintenance overhead.</p>
-
-<h2>4. Performance-Driven Technical SEO & Cloud Architecture</h2>
-<p>High-caliber software delivers maximum ROI when discovered by high-intent clients. We embed technical SEO schemas, structured data, Core Web Vitals optimization, and enterprise CDN routing into every deployment.</p>`,
-    featuredImageUrl:
-      'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80',
-    category: 'Web Development',
-    tags: ['Custom Web Apps', 'SaaS', 'ERP', 'Mobile Apps', 'Digital Engineering'],
-    authorName: 'SnapTech Engineering Team',
-    status: 'PUBLISHED',
-    isFeatured: false,
-    publishedAt: '2026-07-08T00:00:00.000Z',
-    readTime: 4,
-    viewCount: 310,
-  },
-  'how-we-work-transparent-software-development-journey': {
-    id: 'hp-blog-fallback-3',
-    title: 'How We Work: Our Step-by-Step Transparent Software Development Journey',
-    slug: 'how-we-work-transparent-software-development-journey',
-    excerpt:
-      'How do we bring your vision to life? Read about our transparent 4-stage development lifecycle: Architectural Discovery, UI/UX Prototyping, Agile Sprint Execution, and 24/7 SLA Support.',
-    content: `<h2>A Principled Approach with Absolute Transparency</h2>
-<p>We believe commissioning software should be an energizing and transparent partnership. We do not hide behind esoteric technical jargon or burden clients with surprise invoices. Our engineering lifecycle is segmented into four clear, milestone-driven phases.</p>
-
-<h2>Phase 1: Deep Discovery & Technical Scoping</h2>
-<p>Before writing a single line of production code, our technical leads evaluate your operational bottlenecks, security requirements, and growth projections. We formulate an exhaustive Technical Blueprint detailing system architecture, data models, and strict delivery milestones.</p>
-
-<h2>Phase 2: High-Fidelity UI/UX Prototyping</h2>
-<p>Our product designers construct interactive, clickable Figma prototypes honoring modern cyber-minimalist design principles. You inspect and validate every mobile and desktop workflow before engineering commences.</p>
-
-<h2>Phase 3: Agile Sprint Execution & Automated QA</h2>
-<p>Our engineering squads ship features in two-week agile increments. Every sprint concludes with an interactive deployment on a private staging domain, accompanied by automated end-to-end regression suites and load testing.</p>
-
-<h2>Phase 4: Zero-Downtime Deployment & Enterprise SLAs</h2>
-<p>Following final stakeholder sign-off, we launch your application onto containerized cloud infrastructure with automated SSL provisioning, hourly database snapshots, and real-time telemetry alerting.</p>`,
-    featuredImageUrl:
-      'https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=1200&q=80',
-    category: 'Our Process',
-    tags: ['Methodology', 'Agile', 'Quality Assurance', 'Cloud SLAs'],
-    authorName: 'SnapTech Engineering Team',
-    status: 'PUBLISHED',
-    isFeatured: false,
-    publishedAt: '2026-07-09T00:00:00.000Z',
-    readTime: 6,
-    viewCount: 260,
-  },
-}
-
 // ── Reading Progress Bar ───────────────────────────────────────
 function ReadingProgressBar() {
   const [progress, setProgress] = useState(0)
@@ -360,21 +249,10 @@ export default function BlogPostPage() {
   const { data: commentsData } = useBlogComments(slug)
   const submitMutation = useSubmitComment(slug)
 
-  // Resolve article from DB or fallback catalog
-  const post = useMemo(() => {
-    if (data?.data) return data.data
-    if (slug && FALLBACK_POST_DETAILS[slug]) return FALLBACK_POST_DETAILS[slug]
-    return null
-  }, [data?.data, slug])
-
+  // Resolve article from DB
+  const post = data?.data || null
   const comments = commentsData?.data || []
-  const relatedPosts = useMemo(() => {
-    if (post?.relatedPosts?.length > 0) return post.relatedPosts
-    // Return other fallback posts (exclude current and duplicate aliases)
-    return Object.values(FALLBACK_POST_DETAILS).filter(
-      (p, idx, arr) => p.slug !== slug && arr.findIndex((x) => x.slug === p.slug) === idx
-    )
-  }, [post, slug])
+  const relatedPosts = post?.relatedPosts || []
 
   const {
     register,
@@ -425,7 +303,7 @@ export default function BlogPostPage() {
   }
 
   // ── Error / Not found ─────────────────────────────────────
-  if ((isError || !post) && !FALLBACK_POST_DETAILS[slug]) {
+  if (isError || (!isLoading && !post)) {
     return (
       <div className="min-h-screen pt-32 pb-20 bg-slate-50/50 text-slate-800 flex items-center justify-center">
         <div className="text-center px-4 max-w-md bg-white border border-slate-200/80 rounded-3xl p-8 shadow-xl">

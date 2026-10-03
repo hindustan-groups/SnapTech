@@ -118,11 +118,31 @@ export default function Footer() {
   const [subState, setSubState] = useState('idle') // idle | loading | success | error
 
   const cfg = settingsData?.data || {}
-  const phone = cfg.phone || '+91 75970 00601'
+  const phone = cfg.phone || '+91 8209604849'
   const contactEmail = cfg.email || 'info@snaptech.digital'
   const address = cfg.address || 'Bhilwara, Rajasthan 311001, India'
 
-  const socials = SOCIAL_LINKS.map((s) => {
+  const rawWa = cfg.whatsapp || cfg.phone || '+91 8209604849'
+  const cleanWa = rawWa.replace(/\D/g, '')
+  const whatsappUrl = cleanWa
+    ? `https://wa.me/${cleanWa}?text=${encodeURIComponent(cfg.whatsappMessage || 'Hi SnapTech Team, I am interested in your digital services.')}`
+    : '#'
+
+  const trustBadges = [
+    `${cfg.stat_projects || '50'}+ Projects`,
+    `${cfg.stat_clients || '40'}+ Clients`,
+    `${cfg.stat_sla || '99.9'}% Uptime`,
+    'Pan-India',
+  ]
+
+  const socials = SOCIAL_LINKS.filter((s) => {
+    const val = cfg[s.key]
+    // If linkedin hasn't been created yet, do not render a dead link
+    if (s.key === 'linkedin' && (!val || val.trim() === '#' || val.trim() === '')) {
+      return false
+    }
+    return Boolean(val || s.fallback)
+  }).map((s) => {
     const val = cfg[s.key]
     const isValid = val && val.trim() !== '#' && val.trim() !== ''
     return {
@@ -372,7 +392,7 @@ export default function Footer() {
 
                 {/* WhatsApp CTA */}
                 <a
-                  href="https://wa.me/917597000601?text=Hi%20SnapTech%20Team%2C%20I%20am%20interested%20in%20your%20digital%20services."
+                  href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 hover:border-emerald-400/50 text-xs font-semibold transition-colors mt-2"

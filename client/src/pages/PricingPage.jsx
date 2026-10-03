@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -45,7 +45,7 @@ import {
 } from 'lucide-react'
 import { Container, Button, SEO } from '@/components/ui'
 import { breadcrumbSchema, faqSchema } from '@/components/ui/SEO'
-import { useSiteSettings } from '@/hooks/useContent'
+import { useSiteSettings, usePricingPackages } from '@/hooks/useContent'
 import { useContact } from '@/hooks/useContact'
 import { useToast } from '@/components/ui/ToastProvider'
 
@@ -267,7 +267,7 @@ const BRANDING_SERVICES = [
   { title: 'ID Card Design', price: '₹999', icon: UserCheck },
 ]
 
-// ── 5. Digital Marketing (Official Hindustan Projects Brochure Packages) ────
+// ── 5. Digital Marketing Packages ────
 const MARKETING_SERVICES = [
   {
     title: 'Basic Package',
@@ -446,14 +446,108 @@ const FAQS = [
 
 export default function PricingPage() {
   const { data: settingsData } = useSiteSettings()
+  const { data: dbPackages } = usePricingPackages()
   const toast = useToast()
   const contactMutation = useContact()
 
   const cfg = settingsData?.data || {}
-  const phone = cfg.phone || '+91 75970 00601'
-  const whatsapp = cfg.whatsapp || cfg.phone || '+91 75970 00601'
+  const phone = cfg.phone || '+91 8209604849'
+  const whatsapp = cfg.whatsapp || cfg.phone || '+91 8209604849'
   const cleanPhone = phone.replace(/[^0-9+]/g, '')
   const cleanWhatsapp = whatsapp.replace(/[^0-9]/g, '')
+
+  // Memoized dynamic packages derived from database
+  const websitePackages = useMemo(() => {
+    const fromDb = dbPackages?.filter((p) => (p.category || '').toLowerCase() === 'web')
+    if (fromDb && fromDb.length > 0) {
+      return fromDb.map((p, idx) => ({
+        name: p.title,
+        icon: [Rocket, Zap, Crown, Building2][idx % 4],
+        badge: p.badge,
+        isPopular: Boolean(p.isPopular),
+        headerGradient: p.colorGradient || (p.isPopular ? 'from-brand-primary via-blue-600 to-brand-navy' : 'from-blue-600 via-indigo-600 to-blue-700'),
+        iconBg: p.isPopular ? 'bg-blue-50 text-brand-primary border-blue-200' : 'bg-blue-50 text-blue-600 border-blue-200',
+        price: p.price,
+        priceSubtitle: p.priceSubtitle || p.period || 'Starting From',
+        delivery: p.delivery || p.timeline || '5–7 Days',
+        support: p.support || '1 Month Free Support',
+        description: p.description || '',
+        features: p.features || [],
+      }))
+    }
+    return WEBSITE_PACKAGES
+  }, [dbPackages])
+
+  const softwareServices = useMemo(() => {
+    const fromDb = dbPackages?.filter((p) => (p.category || '').toLowerCase() === 'software')
+    if (fromDb && fromDb.length > 0) {
+      return fromDb.map((p, idx) => ({
+        title: p.title,
+        price: p.price,
+        icon: [FileText, Layers, UserCheck, Cpu, Award, ShieldCheck][idx % 6],
+        desc: p.description || '',
+        color: p.colorGradient || 'from-blue-500 to-indigo-600',
+      }))
+    }
+    return SOFTWARE_SERVICES
+  }, [dbPackages])
+
+  const appPackages = useMemo(() => {
+    const fromDb = dbPackages?.filter((p) => (p.category || '').toLowerCase() === 'mobile')
+    if (fromDb && fromDb.length > 0) {
+      return fromDb.map((p, idx) => ({
+        title: p.title,
+        icon: [Smartphone, Zap, Cpu, Building2][idx % 4],
+        price: p.price,
+        badge: p.badge || (p.isPopular ? 'Most Demanded' : 'Mobile App'),
+        isPopular: Boolean(p.isPopular),
+        headerGradient: p.colorGradient || (p.isPopular ? 'from-brand-primary via-blue-600 to-brand-navy' : 'from-blue-600 via-sky-600 to-indigo-600'),
+        iconBg: p.isPopular ? 'bg-blue-50 text-brand-primary border-blue-200' : 'bg-blue-50 text-blue-600 border-blue-200',
+        timeline: p.timeline || p.delivery || '15–20 Days',
+        desc: p.description || '',
+        techStack: p.techStack?.length > 0 ? p.techStack : ['Android & iOS', 'Flutter / RN', 'REST API'],
+        features: p.features || [],
+      }))
+    }
+    return APP_PACKAGES
+  }, [dbPackages])
+
+  const brandingServices = useMemo(() => {
+    const fromDb = dbPackages?.filter((p) => (p.category || '').toLowerCase() === 'branding')
+    if (fromDb && fromDb.length > 0) {
+      return fromDb.map((p, idx) => ({
+        title: p.title,
+        price: p.price,
+        icon: [Palette, FileText, FileText, Globe, Layers, UserCheck][idx % 6],
+      }))
+    }
+    return BRANDING_SERVICES
+  }, [dbPackages])
+
+  const marketingServices = useMemo(() => {
+    const fromDb = dbPackages?.filter((p) => (p.category || '').toLowerCase() === 'marketing')
+    if (fromDb && fromDb.length > 0) {
+      return fromDb.map((p, idx) => ({
+        title: p.title,
+        icon: [Rocket, TrendingUp, Award][idx % 3],
+        price: p.price,
+        period: p.period || '/ month',
+        badge: p.badge || (p.isPopular ? 'MOST POPULAR' : 'GROWTH PLAN'),
+        isPopular: Boolean(p.isPopular),
+        headerGradient: p.colorGradient || (p.isPopular ? 'from-brand-primary via-blue-600 to-brand-navy' : 'from-blue-600 via-sky-600 to-indigo-700'),
+        iconBg: p.isPopular ? 'bg-blue-50 text-brand-primary border-blue-200' : 'bg-blue-50 text-blue-600 border-blue-200',
+        desc: p.description || '',
+        groups: p.groups || [
+          {
+            name: 'Features & Deliverables',
+            icon: Palette,
+            items: p.features || [],
+          },
+        ],
+      }))
+    }
+    return MARKETING_SERVICES
+  }, [dbPackages])
 
   // Modal quote state
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false)
@@ -777,7 +871,7 @@ export default function PricingPage() {
 
           {/* Pricing Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 items-stretch">
-            {WEBSITE_PACKAGES.map((pkg, idx) => {
+            {websitePackages.map((pkg, idx) => {
               const IconComp = pkg.icon
               return (
                 <motion.div
@@ -987,7 +1081,7 @@ export default function PricingPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {SOFTWARE_SERVICES.map((item, idx) => {
+            {softwareServices.map((item, idx) => {
               const IconComp = item.icon
               return (
                 <motion.div
@@ -1049,7 +1143,7 @@ export default function PricingPage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 items-stretch">
-            {APP_PACKAGES.map((app, idx) => {
+            {appPackages.map((app, idx) => {
               const IconComp = app.icon
               const isFeatured = app.isPopular
               return (
@@ -1203,7 +1297,7 @@ export default function PricingPage() {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6">
-            {BRANDING_SERVICES.map((item, idx) => {
+            {brandingServices.map((item, idx) => {
               const IconComp = item.icon
               return (
                 <motion.div
@@ -1272,7 +1366,7 @@ export default function PricingPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-stretch">
-            {MARKETING_SERVICES.map((mkt, idx) => {
+            {marketingServices.map((mkt, idx) => {
               const IconComp = mkt.icon
               const isFeatured = mkt.isPopular
               return (

@@ -87,10 +87,10 @@ function TeamCard({ member }) {
         </div>
       </div>
 
-      {member.linkedinUrl && (
+      {member.linkedinUrl && member.linkedinUrl !== '#' && !member.linkedinUrl.includes('hindustanprojects') && (
         <div className="flex justify-center pt-3 border-t border-slate-100 mt-auto">
           <a
-            href={member.linkedinUrl && member.linkedinUrl !== '#' ? member.linkedinUrl : 'https://www.linkedin.com/company/hindustanprojects/'}
+            href={member.linkedinUrl}
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`${member.name} on LinkedIn`}

@@ -929,7 +929,7 @@ export default function AdminHelpPage() {
             </button>
 
             <a
-              href="https://wa.me/919414112057?text=Hi%20SnapTech%20Support,%20I%20need%20developer%20assistance"
+              href="https://wa.me/918209604849?text=Hi%20SnapTech%20Support,%20I%20need%20developer%20assistance"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition-all shadow-xs"

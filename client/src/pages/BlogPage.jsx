@@ -18,7 +18,7 @@ import { Container, SEO } from '@/components/ui'
 import { useBlogPosts, useBlogCategories } from '@/hooks/useBlog'
 import { fadeUp, staggerContainer } from '@/utils/motion'
 
-const BLOG_CATEGORIES = [
+const DEFAULT_CATEGORIES = [
   'Web Development',
   'Digital Marketing',
   'IT Consulting',
@@ -27,57 +27,6 @@ const BLOG_CATEGORIES = [
   'Company News',
   'Our Process',
   'Local Growth',
-]
-
-const FALLBACK_POSTS = [
-  {
-    id: 'hp-blog-fallback-1',
-    title: 'Why We Built SnapTech: Elevating Modern Businesses with Enterprise Cloud & Engineering',
-    slug: 'why-we-built-snaptech-enterprise-it',
-    excerpt:
-      'In today’s digital-first economy, we engineered SnapTech Digital to bridge the gap between legacy workflows and high-performance custom cloud software for ambitious enterprises across India and global markets.',
-    featuredImageUrl:
-      'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80',
-    category: 'Company News',
-    tags: ['SnapTech Digital', 'Engineering', 'Custom Software', 'Cloud Architecture'],
-    authorName: 'SnapTech Engineering Team',
-    isFeatured: true,
-    publishedAt: '2026-07-08T00:00:00.000Z',
-    readTime: 5,
-    viewCount: 340,
-  },
-  {
-    id: 'hp-blog-fallback-2',
-    title: 'What We Build: A Deep Dive into Our Core IT Services & Digital Solutions',
-    slug: 'what-we-build-core-it-services-digital-solutions',
-    excerpt:
-      'Discover what we build. From responsive corporate portals and custom ERP inventory engines to mobile apps, we design resilient digital systems that scale with enterprise growth.',
-    featuredImageUrl:
-      'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80',
-    category: 'Web Development',
-    tags: ['Custom Web Apps', 'SaaS', 'ERP', 'Mobile Apps'],
-    authorName: 'SnapTech Engineering Team',
-    isFeatured: false,
-    publishedAt: '2026-07-08T00:00:00.000Z',
-    readTime: 4,
-    viewCount: 285,
-  },
-  {
-    id: 'hp-blog-fallback-3',
-    title: 'How We Work: Our Step-by-Step Transparent Software Development Journey',
-    slug: 'how-we-work-transparent-software-development-journey',
-    excerpt:
-      'How do we bring your vision to life? Read about our transparent 4-stage development lifecycle: Architectural Discovery, UI/UX Prototyping, Agile Sprint Execution, and 24/7 SLA Support.',
-    featuredImageUrl:
-      'https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=800&q=80',
-    category: 'Our Process',
-    tags: ['Methodology', 'Agile', 'Quality Assurance', 'Cloud SLAs'],
-    authorName: 'SnapTech Engineering Team',
-    isFeatured: false,
-    publishedAt: '2026-07-09T00:00:00.000Z',
-    readTime: 6,
-    viewCount: 220,
-  },
 ]
 
 function BlogCardSkeleton() {
@@ -508,19 +457,23 @@ export default function BlogPage() {
             >
               All Articles
             </button>
-            {BLOG_CATEGORIES.map((cat) => {
-              const count = categories.find((c) => c.name === cat)?.count || 0
+            {(categories.length > 0
+              ? categories
+              : DEFAULT_CATEGORIES.map((c) => ({ name: c, count: 0 }))
+            ).map((catObj) => {
+              const catName = typeof catObj === 'string' ? catObj : catObj.name
+              const count = typeof catObj === 'object' ? catObj.count : 0
               return (
                 <button
-                  key={cat}
-                  onClick={() => handleCategory(cat)}
+                  key={catName}
+                  onClick={() => handleCategory(catName)}
                   className={`shrink-0 px-4 py-2 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
-                    category === cat
+                    category === catName
                       ? 'bg-brand-blue text-white border-brand-blue shadow-sm shadow-blue-500/20'
                       : 'bg-slate-100 text-slate-600 border-slate-200/80 hover:bg-slate-200/60 hover:text-slate-900'
                   }`}
                 >
-                  {cat} {count > 0 && <span className="opacity-75 ml-1">({count})</span>}
+                  {catName} {count > 0 && <span className="opacity-75 ml-1">({count})</span>}
                 </button>
               )
             })}

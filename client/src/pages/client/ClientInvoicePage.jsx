@@ -100,7 +100,7 @@ export default function ClientInvoicePage() {
             </div>
             <div className="flex items-center sm:justify-end gap-1.5 font-medium">
               <Phone className="w-3.5 h-3.5 text-cyan-400 print:text-gray-400" />
-              <span>+91 75970 00601</span>
+              <span>+91 8209604849</span>
             </div>
             <div className="flex items-center sm:justify-end gap-1.5 font-medium">
               <MapPin className="w-3.5 h-3.5 text-cyan-400 print:text-gray-400" />

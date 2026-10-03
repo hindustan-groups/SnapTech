@@ -74,16 +74,23 @@ export const corsOptions = cors({
       return callback(null, true)
     }
 
-    const cleanOrigin = origin.toLowerCase()
+    const allowedStaticOrigins = [
+      'https://snaptech.digital',
+      'https://www.snaptech.digital',
+      'https://hindustanprojects.in',
+      'https://www.hindustanprojects.in',
+      ...allowedOrigins,
+    ]
+
+    if (allowedStaticOrigins.includes(origin)) {
+      return callback(null, true)
+    }
+
+    // Allow legitimate Vercel preview deploys for this project only
     if (
-      allowedOrigins.includes(origin) ||
-      cleanOrigin.includes('vercel.app') ||
-      cleanOrigin.includes('hindustanprojects.in') ||
-      cleanOrigin.includes('snaptech.digital') ||
-      cleanOrigin.includes('localhost') ||
-      cleanOrigin.includes('127.0.0.1') ||
-      cleanOrigin.includes('192.168.') ||
-      cleanOrigin.includes('10.')
+      /^https:\/\/snaptech(-[a-z0-9-]+)?\.vercel\.app$/.test(origin) ||
+      /^https:\/\/snaptechdigital(-[a-z0-9-]+)?\.vercel\.app$/.test(origin) ||
+      /^https:\/\/hindustan-projects(-[a-z0-9-]+)?\.vercel\.app$/.test(origin)
     ) {
       return callback(null, true)
     }

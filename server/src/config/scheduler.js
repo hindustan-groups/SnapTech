@@ -38,7 +38,7 @@ export function initScheduler() {
 
       if (overdueLeads.length > 0) {
         const admins = await prisma.admin.findMany({ select: { email: true } })
-        const recipients = admins.map((a) => a.email).join(', ') || env.EMAIL_USER || 'admin@hindustanprojects.com'
+        const recipients = admins.map((a) => a.email).join(', ') || env.EMAIL_USER
         const secretPath = process.env.ADMIN_SECRET_PATH || 'hp9z7k5w8v3q2m4x'
         const adminUrl = `${env.CLIENT_URL}/admin-${secretPath}`
 
@@ -72,7 +72,7 @@ export function initScheduler() {
 
       if (staleLeads.length > 0) {
         const admins = await prisma.admin.findMany({ select: { email: true } })
-        const recipients = admins.map((a) => a.email).join(', ') || env.EMAIL_USER || 'admin@hindustanprojects.com'
+        const recipients = admins.map((a) => a.email).join(', ') || env.EMAIL_USER
         const secretPath = process.env.ADMIN_SECRET_PATH || 'hp9z7k5w8v3q2m4x'
         const adminUrl = `${env.CLIENT_URL}/admin-${secretPath}`
 
@@ -129,7 +129,7 @@ export function initScheduler() {
       })
 
       const admins = await prisma.admin.findMany({ select: { email: true } })
-      const recipients = admins.map((a) => a.email).join(', ') || env.EMAIL_USER || 'admin@hindustanprojects.com'
+      const recipients = admins.map((a) => a.email).join(', ') || env.EMAIL_USER
 
       const mailOptions = weeklySummaryReportTemplate({
         stats: {
@@ -156,7 +156,7 @@ export function initScheduler() {
   cron.schedule('0 2 * * *', async () => {
     console.log('[Scheduler] Running Automated Database Backup...')
     const admins = await prisma.admin.findMany({ select: { email: true } })
-    const recipients = admins.map((a) => a.email).join(', ') || env.EMAIL_USER || 'admin@hindustanprojects.com'
+    const recipients = admins.map((a) => a.email).join(', ') || env.EMAIL_USER
 
     try {
       const services = await prisma.service.findMany()
@@ -176,7 +176,7 @@ export function initScheduler() {
 
       const backupJson = JSON.stringify(backupData, null, 2)
       const dateStr = new Date().toISOString().split('T')[0]
-      const filename = `hindustan_projects_backup_${dateStr}.json`
+      const filename = `snaptech_backup_${dateStr}.json`
 
       await sendEmail({
         to: recipients,
@@ -188,7 +188,7 @@ export function initScheduler() {
               <p style="color: #93c5fd; margin: 4px 0 0; font-size: 14px;">Automated snapshot generated successfully</p>
             </div>
             <p style="font-size: 15px; color: #374151; margin-top: 20px;">
-              Please find attached the lightweight JSON export of Hindustan Projects critical tables:
+              Please find attached the lightweight JSON export of SnapTech Digital's critical tables:
             </p>
             <ul style="font-size: 14px; color: #4B5563; line-height: 1.6;">
               <li><strong>Services:</strong> ${services.length} rows</li>
@@ -198,7 +198,7 @@ export function initScheduler() {
               <li><strong>Contact Leads:</strong> ${contactLeads.length} rows</li>
             </ul>
             <p style="font-size: 12px; color: #9ca3af; text-align: center; border-top: 1px solid #e5e7eb; padding-top: 15px; margin-top: 25px;">
-              © Hindustan Projects. Automated Backup Service.
+              © SnapTech Digital. Automated Backup Service.
             </p>
           </div>
         `,

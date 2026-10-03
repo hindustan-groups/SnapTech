@@ -33,7 +33,7 @@ const PLACEHOLDER_PROJECTS = [
   },
   {
     id: '7',
-    title: 'Hindustan Fleet Telematics Mobile App',
+    title: 'Enterprise Fleet Telematics Mobile App',
     clientName: 'Regional Transport & Logistics Hub',
     category: 'App',
     isFeatured: true,

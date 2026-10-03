@@ -109,9 +109,9 @@ export default function ServiceDetailPage() {
   const service = data?.data
   const cfg = settingsData?.data || {}
 
-  const phone = cfg.phone || '+91 75970 00601'
+  const phone = cfg.phone || '+91 8209604849'
   const contactEmail = cfg.email || 'info@snaptech.digital'
-  const whatsappNum = (cfg.whatsapp || cfg.phone || '917597000601').replace(/[^0-9]/g, '')
+  const whatsappNum = (cfg.whatsapp || cfg.phone || '918209604849').replace(/[^0-9]/g, '')
 
   const theme = getServiceTheme(slug)
 
@@ -538,7 +538,7 @@ export default function ServiceDetailPage() {
                           required
                           value={clientName}
                           onChange={(e) => setClientName(e.target.value)}
-                          placeholder="e.g. Rahul Sharma"
+                          placeholder="Your Name"
                           className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:border-[#1a3e8c] focus:ring-2 focus:ring-[#1a3e8c]/10 transition-all"
                         />
                       </div>

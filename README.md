@@ -19,7 +19,7 @@
 **SnapTech Digital** is a full-service digital agency based in **Bhilwara, Rajasthan, India**, delivering enterprise-grade web applications, digital marketing solutions, and IT consulting services.
 
 📍 **Address:** Bhilwara, Rajasthan 311001, India  
-📞 **Phone:** +91 75970 00601  
+📞 **Phone:** +91 8209604849  
 📧 **Email:** info@snaptech.digital  
 🌐 **Website:** https://www.snaptech.digital
 
@@ -234,7 +234,7 @@ npm test
 
 - 🌐 Website: [snaptech.digital](https://www.snaptech.digital)
 - 📧 Email: [info@snaptech.digital](mailto:info@snaptech.digital)
-- 📞 Phone: +91 75970 00601
+- 📞 Phone: +91 8209604849
 - 📍 Location: Bhilwara, Rajasthan 311001, India
 
 ---

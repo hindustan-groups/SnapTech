@@ -33,69 +33,6 @@ const JOB_TYPE_CLASSES = {
   CONTRACT: 'bg-amber-50 text-amber-700 border-amber-200',
 }
 
-// Resilient default job catalog if database has few or fresh records
-const FALLBACK_JOBS = [
-  {
-    id: 'jp-fallback-1',
-    title: 'Senior Full-Stack Engineer (React & Node.js)',
-    slug: 'full-stack-developer',
-    department: 'Engineering',
-    location: 'Bhilwara HQ / Hybrid',
-    jobType: 'FULL_TIME',
-    experienceRequired: '2 - 5 Years',
-    description:
-      'Architect enterprise-grade web applications, mission-critical internal portals, and resilient microservices using React, Node.js, and PostgreSQL.',
-    tags: ['React', 'Node.js', 'PostgreSQL', 'TailwindCSS', 'Docker'],
-  },
-  {
-    id: 'jp-fallback-2',
-    title: 'DevOps & Cloud Infrastructure Specialist',
-    slug: 'devops-cloud-specialist',
-    department: 'Cloud & Infrastructure',
-    location: 'Remote / Bhilwara',
-    jobType: 'FULL_TIME',
-    experienceRequired: '3+ Years',
-    description:
-      'Manage multi-region cloud deployments, automated CI/CD deployment pipelines, automated zero-downtime monitoring, and Kubernetes orchestration.',
-    tags: ['AWS', 'Docker', 'CI/CD', 'Linux', 'Security'],
-  },
-  {
-    id: 'jp-fallback-3',
-    title: 'Digital Marketing & Growth Associate',
-    slug: 'social-media-associate',
-    department: 'Marketing & Growth',
-    location: 'Remote / Bhilwara',
-    jobType: 'INTERNSHIP',
-    experienceRequired: 'Freshers / 1 Year',
-    description:
-      'Drive data-driven client marketing campaigns, high-converting social media creatives, conversion optimization, and brand performance metrics.',
-    tags: ['Meta Ads', 'SEO', 'Content Strategy', 'Analytics'],
-  },
-  {
-    id: 'jp-fallback-4',
-    title: 'Enterprise UI/UX Product Designer',
-    slug: 'ui-ux-product-designer',
-    department: 'Design',
-    location: 'Remote / Hybrid',
-    jobType: 'FULL_TIME',
-    experienceRequired: '2 - 4 Years',
-    description:
-      'Craft cutting-edge glassmorphic design systems, responsive web apps, and intuitive user journeys for our enterprise ERP and fintech clients.',
-    tags: ['Figma', 'Design Systems', 'Micro-interactions', 'Wireframing'],
-  },
-  {
-    id: 'jp-fallback-5',
-    title: 'AI Solutions & Automation Engineer',
-    slug: 'ai-automation-engineer',
-    department: 'Engineering',
-    location: 'Bhilwara HQ / Hybrid',
-    jobType: 'FULL_TIME',
-    experienceRequired: '1 - 3 Years',
-    description:
-      'Build intelligent workflow automations, conversational LLM assistants, and document analysis pipelines integrated with client ERPs.',
-    tags: ['Python', 'LangChain', 'OpenAI/Gemini', 'REST APIs'],
-  },
-]
 
 const CULTURE_PILLARS = [
   {
@@ -142,7 +79,7 @@ export default function CareersPage() {
       return data.data.filter((j) => j.slug !== 'general-application')
     }
     return []
-  }, [data?.data])
+  }, [data])
 
   // Get unique departments
   const departments = useMemo(() => {
@@ -165,7 +102,7 @@ export default function CareersPage() {
     })
   }, [allJobs, selectedDept, searchQuery])
 
-  const whatsappNumber = (cfg.whatsapp || cfg.phone || '917597000601').replace(/[^0-9]/g, '')
+  const whatsappNumber = (cfg.whatsapp || cfg.phone || '918209604849').replace(/[^0-9]/g, '')
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
     'Hello Snaptech Hiring Team, I am reaching out regarding engineering and tech career opportunities.'
   )}`

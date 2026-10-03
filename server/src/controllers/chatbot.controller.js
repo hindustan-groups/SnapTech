@@ -28,7 +28,7 @@ export const askQuestion = async (req, res, next) => {
     let isAnswered = false
 
     // ── STEP 1: Fetch dynamic site settings (phone, email, whatsapp) ─
-    let phoneVal = '+91 75970 00601'
+    let phoneVal = '+91 8209604849'
     let emailVal = 'info@snaptech.digital'
     try {
       const rows = await prisma.siteSetting.findMany()
@@ -101,7 +101,7 @@ export const askQuestion = async (req, res, next) => {
         answer = `⏰ **Business Hours:**\n\nMonday – Saturday: **10:00 AM to 7:00 PM IST**\n\nWe are closed on Sundays and national holidays. For urgent matters, drop us a WhatsApp at ${phoneVal}!`
         isAnswered = true
       } else if (pricing.some((k) => clean.includes(k))) {
-        answer = '💰 **Pricing at Hindustan Projects** depends on the project scope.\n\n• Simple landing page: starting ₹15,000\n• Business website: ₹25,000–₹60,000\n• Custom web/mobile app, ERP, or SaaS: quoted individually\n\nContact us for a free detailed estimate — we\'ll tailor it to your exact requirements!'
+        answer = '💰 **Pricing at SnapTech Digital** depends on the project scope.\n\n• Simple landing page: starting ₹15,000\n• Business website: ₹25,000–₹60,000\n• Custom web/mobile app, ERP, or SaaS: quoted individually\n\nContact us for a free detailed estimate — we\'ll tailor it to your exact requirements!'
         isAnswered = true
       } else if (services.some((k) => clean.includes(k))) {
         answer = '🛠️ **Our Services include:**\n\n• Web Development (React, Node.js, PHP, WordPress)\n• Mobile App Development (Flutter, React Native)\n• Custom Software & ERP Systems\n• UI/UX Design & Branding\n• Digital Marketing & SEO\n• E-Commerce Solutions\n\nVisit our Services page for full details!'
@@ -113,7 +113,7 @@ export const askQuestion = async (req, res, next) => {
         answer = '🎨 **Our Portfolio** showcases projects across web, mobile, ERP, and branding.\n\nVisit the **Portfolio** section on our website to see our latest client work with live demos!'
         isAnswered = true
       } else if (careers.some((k) => clean.includes(k))) {
-        answer = '💼 **We\'re hiring!** Hindustan Projects regularly posts openings for developers, designers, and marketing roles.\n\nCheck the **Careers** page on our website for current openings and apply directly!'
+        answer = '💼 **We\'re hiring!** SnapTech Digital regularly posts openings for developers, designers, and marketing roles.\n\nCheck the **Careers** page on our website for current openings and apply directly!'
         isAnswered = true
       }
     }

@@ -2,7 +2,7 @@
  * TestimonialsSection — Single centered spotlight card with smooth auto-rotation,
  * pause-on-hover, drag/swipe support, animated progress indicator, and mobile-first design.
  */
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Container } from '@/components/ui'
@@ -90,6 +90,10 @@ export default function TestimonialsSection() {
   const [isPaused, setIsPaused] = useState(false)
   const [progress, setProgress] = useState(0)
 
+  // Derive a safe index during render — avoids setState-in-effect cascade
+  const safeIndex =
+    testimonials.length > 0 ? Math.min(currentIndex, testimonials.length - 1) : 0
+
   const slideDuration = 6000 // 6 seconds per review
   const progressStep = 50 // update progress every 50ms
 
@@ -130,12 +134,7 @@ export default function TestimonialsSection() {
     return () => clearInterval(interval)
   }, [testimonials.length, isPaused, handleNext, slideDuration])
 
-  // Reset current index if list length shrinks
-  useEffect(() => {
-    if (currentIndex >= testimonials.length && testimonials.length > 0) {
-      setCurrentIndex(0)
-    }
-  }, [testimonials.length, currentIndex])
+  // No effect needed — safeIndex clamps the display index at render time
 
   // Touch / Drag swipe handler for mobile
   const handleDragEnd = (_, { offset, velocity }) => {
@@ -149,7 +148,7 @@ export default function TestimonialsSection() {
     }
   }
 
-  const currentTestimonial = testimonials[currentIndex]
+  const currentTestimonial = testimonials[safeIndex]
 
   return (
     <section

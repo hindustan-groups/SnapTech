@@ -111,7 +111,7 @@ export const submitProjectFeedback = async (req, res, next) => {
         data: {
           name: project.client?.name || project.clientName,
           role: role || 'Client Partner',
-          company: companyName || 'Hindustan Projects Partner',
+          company: companyName || 'SnapTech Digital Partner',
           text,
           rating: parseInt(rating),
           avatarUrl: null, // default

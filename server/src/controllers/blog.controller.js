@@ -373,7 +373,7 @@ export const adminCreatePost = async (req, res, next) => {
         featuredImageUrl: featuredImageUrl || null,
         category: category || 'Company News',
         tags: Array.isArray(tags) ? tags : [],
-        authorName: authorName || req.admin?.email || 'Hindustan Projects',
+        authorName: authorName || req.admin?.email || 'SnapTech Digital Team',
         authorId: req.admin?.id || null,
         status: status || 'DRAFT',
         metaTitle: metaTitle?.trim() || null,

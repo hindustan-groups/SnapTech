@@ -436,7 +436,7 @@ model BlogPost {
   featuredImageUrl String?
   category         String         // e.g. "Web Development", "Digital Marketing"
   tags             String[]
-  authorName       String         @default("Hindustan Projects")
+  authorName       String         @default("SnapTech Digital Team")
   authorId         String?        // Reference to Admin id
   status           BlogPostStatus @default(DRAFT)
   metaTitle        String?
@@ -666,5 +666,38 @@ model BillingMilestone {
 
   @@index([clientProjectId])
   @@map("billing_milestones")
+}
+
+// ─────────────────────────────────────────────────────────────────
+// PricingPackage — Live pricing tiers & service packages for CMS
+// ─────────────────────────────────────────────────────────────────
+model PricingPackage {
+  id            String   @id @default(cuid())
+  category      String   // "web" | "mobile" | "software" | "marketing" | "branding"
+  title         String   // Package or Service name
+  slug          String?  @unique
+  price         String   // e.g. "₹7,999", "₹14,999", "Custom Quote"
+  period        String?  // e.g. "/ month", "/ year"
+  priceSubtitle String?  // e.g. "Starting From", "Tailored for You"
+  badge         String?  // e.g. "Best for Small Business", "Most Popular"
+  isPopular     Boolean  @default(false)
+  delivery      String?  // e.g. "5–7 Days"
+  timeline      String?  // e.g. "15–20 Days"
+  support       String?  // e.g. "1 Month Free Support"
+  description   String?  // Rich description
+  features      String[] // Feature bullet points
+  techStack     String[] // e.g. ["Flutter", "React Native"]
+  groups        Json?    // Optional structured grouping (e.g. for marketing categories)
+  colorGradient String?  // Header color styling class
+  ctaText       String?  @default("Choose Plan")
+  ctaUrl        String?
+  order         Int      @default(0)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([category, isActive, order])
+  @@index([slug])
+  @@map("pricing_packages")
 }
 

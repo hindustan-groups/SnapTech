@@ -82,7 +82,7 @@ export default function HeroSection() {
   const titlePrefix = cfg.hero_title_prefix || 'Looking for'
   const tagline = cfg.tagline || 'Build. Grow. Succeed with SnapTech Digital.'
   const domainPlaceholder = cfg.hero_domain || 'www.snaptech.digital'
-  const whatsappNumber = (cfg.whatsapp || '917597000601').replace(/[^0-9]/g, '')
+  const whatsappNumber = (cfg.whatsapp || '918209604849').replace(/[^0-9]/g, '')
   const whatsappMsg = encodeURIComponent(
     cfg.whatsappMessage || 'Hello SnapTech, I am interested in your digital services.'
   )

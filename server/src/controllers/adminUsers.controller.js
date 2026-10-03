@@ -80,18 +80,18 @@ export const createAdminUser = async (req, res, next) => {
     // Send invitation email
     sendEmail({
       to: user.email,
-      subject: `Your Hindustan Projects ${role} Account is Ready`,
+      subject: `Your SnapTech Digital ${role} Account is Ready`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
           <div style="background: #1A3E8C; padding: 20px; border-radius: 6px 6px 0 0; margin: -20px -20px 20px; text-align: center;">
-            <h1 style="color: #ffffff; margin: 0; font-size: 22px;"><span style="color: #E31E24;">Hindustan</span> Projects</h1>
+            <h1 style="color: #ffffff; margin: 0; font-size: 22px;"><span style="color: #00D2FF;">Snap</span>Tech Digital</h1>
             <p style="color: #93c5fd; margin: 6px 0 0; font-size: 14px;">Staff Portal Account Setup</p>
           </div>
 
           <p style="font-size: 16px; color: #1A1A1A;">Hello,</p>
 
           <p style="font-size: 15px; color: #374151; line-height: 1.7;">
-            A new account has been created for you as a <strong>${role}</strong> member at <strong>Hindustan Projects</strong>. You can now log in to the administrative portal to manage website details, projects, leads, and clients.
+            A new account has been created for you as a <strong>${role}</strong> member at <strong>SnapTech Digital</strong>. You can now log in to the administrative portal to manage website details, projects, leads, and clients.
           </p>
 
           <div style="background: #f0f4ff; border: 1px solid #c7d2fe; border-radius: 8px; padding: 16px 20px; margin: 20px 0;">
@@ -108,7 +108,7 @@ export const createAdminUser = async (req, res, next) => {
           ${professionalEmailFooter(settings)}
         </div>
       `,
-      text: `Hello,\n\nA new administrative account has been created for you as a ${role} member at Hindustan Projects.\n\nCredentials:\nEmail: ${user.email}\nPassword: ${password}\nPortal URL: ${loginUrl}\n\nPlease keep these details secure.\n\nHindustan Projects Team`
+      text: `Hello,\n\nA new administrative account has been created for you as a ${role} member at SnapTech Digital.\n\nCredentials:\nEmail: ${user.email}\nPassword: ${password}\nPortal URL: ${loginUrl}\n\nPlease keep these details secure.\n\nSnapTech Digital Team`
     }).catch((err) => {
       console.error('[staff-email] Failed to send credentials email:', err.message)
     })
@@ -222,18 +222,18 @@ export const updateAdminUser = async (req, res, next) => {
 
       sendEmail({
         to: user.email,
-        subject: 'Your Hindustan Projects Staff Password Has Been Reset',
+        subject: 'Your SnapTech Digital Staff Password Has Been Reset',
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
             <div style="background: #1A3E8C; padding: 20px; border-radius: 6px 6px 0 0; margin: -20px -20px 20px; text-align: center;">
-              <h1 style="color: #ffffff; margin: 0; font-size: 22px;"><span style="color: #E31E24;">Hindustan</span> Projects</h1>
+              <h1 style="color: #ffffff; margin: 0; font-size: 22px;"><span style="color: #00D2FF;">Snap</span>Tech Digital</h1>
               <p style="color: #93c5fd; margin: 6px 0 0; font-size: 14px;">Staff Portal Security Update</p>
             </div>
 
             <p style="font-size: 16px; color: #1A1A1A;">Hello,</p>
 
             <p style="font-size: 15px; color: #374151; line-height: 1.7;">
-              An administrator has reset the password for your <strong>${user.role}</strong> account at <strong>Hindustan Projects</strong>.
+              An administrator has reset the password for your <strong>${user.role}</strong> account at <strong>SnapTech Digital</strong>.
             </p>
 
             <div style="background: #f0f4ff; border: 1px solid #c7d2fe; border-radius: 8px; padding: 16px 20px; margin: 20px 0;">
@@ -250,7 +250,7 @@ export const updateAdminUser = async (req, res, next) => {
             ${professionalEmailFooter(settings)}
           </div>
         `,
-        text: `Hello,\n\nYour Hindustan Projects staff account password has been reset by an administrator.\n\nUpdated Credentials:\nEmail: ${user.email}\nPassword: ${password}\nPortal URL: ${loginUrl}\n\nPlease keep these details secure.\n\nHindustan Projects Team`
+        text: `Hello,\n\nYour SnapTech Digital staff account password has been reset by an administrator.\n\nUpdated Credentials:\nEmail: ${user.email}\nPassword: ${password}\nPortal URL: ${loginUrl}\n\nPlease keep these details secure.\n\nSnapTech Digital Team`
       }).catch((err) => {
         console.error('[staff-email] Failed to send password reset email:', err.message)
       })
@@ -360,7 +360,7 @@ export const createClientUser = async (req, res, next) => {
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
           <div style="background: #1A3E8C; padding: 20px; border-radius: 6px 6px 0 0; margin: -20px -20px 20px; text-align: center;">
             <h1 style="color: #ffffff; margin: 0; font-size: 22px;"><span style="color: #0066FF;">SnapTech</span> Digital</h1>
-            <p style="color: #93c5fd; margin: 6px 0 0; font-size: 14px;">Client Portal Invitation &bull; Hindustan Projects</p>
+            <p style="color: #93c5fd; margin: 6px 0 0; font-size: 14px;">Client Portal Invitation &bull; SnapTech Digital</p>
           </div>
 
           <p style="font-size: 16px; color: #1A1A1A;">Hi <strong>${client.name}</strong>,</p>
@@ -386,7 +386,7 @@ export const createClientUser = async (req, res, next) => {
           ${professionalEmailFooter(settings)}
         </div>
       `,
-      text: `Hi ${client.name},\n\nYour SnapTech Digital client portal account has been created!\n\nSet up your password using the link below:\n${inviteLink}\n\nThis link expires in 7 days.\n\nSnapTech Digital\nPhone: ${settings.phone || '+91 75970 00601'}\nWeb: www.snaptech.digital\nBhilwara, Rajasthan, India`
+      text: `Hi ${client.name},\n\nYour SnapTech Digital client portal account has been created!\n\nSet up your password using the link below:\n${inviteLink}\n\nThis link expires in 7 days.\n\nSnapTech Digital\nPhone: ${settings.phone || '+91 8209604849'}\nWeb: www.snaptech.digital\nBhilwara, Rajasthan, India`
     }).catch((err) => {
       console.error('[invite-email] Failed to send invite:', err.message)
     })
@@ -462,7 +462,7 @@ export const updateClientUser = async (req, res, next) => {
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
             <div style="background: #1A3E8C; padding: 20px; border-radius: 6px 6px 0 0; margin: -20px -20px 20px; text-align: center;">
               <h1 style="color: #ffffff; margin: 0; font-size: 22px;"><span style="color: #0066FF;">SnapTech</span> Digital</h1>
-              <p style="color: #93c5fd; margin: 6px 0 0; font-size: 14px;">Client Portal Setup &bull; Hindustan Projects</p>
+              <p style="color: #93c5fd; margin: 6px 0 0; font-size: 14px;">Client Portal Setup &bull; SnapTech Digital</p>
             </div>
 
             <p style="font-size: 16px; color: #1A1A1A;">Hi <strong>${client.name}</strong>,</p>
@@ -488,7 +488,7 @@ export const updateClientUser = async (req, res, next) => {
             ${professionalEmailFooter(settings)}
           </div>
         `,
-        text: `Hi ${client.name},\n\nAn administrator has requested to set up or reset your client portal password. Set up your password using the link below:\n${inviteLink}\n\nThis link expires in 7 days.\n\nSnapTech Digital\nPhone: ${settings.phone || '+91 75970 00601'}\nWeb: www.snaptech.digital\nBhilwara, Rajasthan, India`
+        text: `Hi ${client.name},\n\nAn administrator has requested to set up or reset your client portal password. Set up your password using the link below:\n${inviteLink}\n\nThis link expires in 7 days.\n\nSnapTech Digital\nPhone: ${settings.phone || '+91 8209604849'}\nWeb: www.snaptech.digital\nBhilwara, Rajasthan, India`
       }).catch((err) => {
         console.error('[invite-email] Failed to send setup link:', err.message)
       })
@@ -576,7 +576,7 @@ export const resendClientWelcome = async (req, res, next) => {
           ${professionalEmailFooter(settings)}
         </div>
       `,
-      text: `Hi ${client.name},\n\nYour SnapTech Digital client portal access link has been resent.\n\nSet up your password: ${inviteLink}\n\nThis link expires in 7 days.\n\nSnapTech Digital\nPhone: ${settings.phone || '+91 75970 00601'}\nWeb: www.snaptech.digital`,
+      text: `Hi ${client.name},\n\nYour SnapTech Digital client portal access link has been resent.\n\nSet up your password: ${inviteLink}\n\nThis link expires in 7 days.\n\nSnapTech Digital\nPhone: ${settings.phone || '+91 8209604849'}\nWeb: www.snaptech.digital`,
     })
 
     await logActivity(req, 'UPDATE', 'Client', `Resent welcome/portal credentials to '${client.email}'`)

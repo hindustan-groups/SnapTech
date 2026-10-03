@@ -13,7 +13,7 @@ export default function ClientMobileNavBar() {
   const { data: settingsData } = useSiteSettings()
 
   const cfg = settingsData?.data || {}
-  const rawPhone = cfg.phone || '+91 75970 00601'
+  const rawPhone = cfg.phone || '+91 8209604849'
   const cleanPhone = rawPhone.replace(/[^0-9]/g, '')
   const whatsappUrl = `https://wa.me/${cleanPhone}?text=Hi%20SnapTech%20Team,%20I%20have%20a%20query%20regarding%20my%20project.`
 

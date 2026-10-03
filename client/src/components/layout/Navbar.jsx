@@ -110,22 +110,20 @@ export default function Navbar() {
 
   const cfg = settingsData?.data || {}
   const parentUrl = cfg.parent_company_url || 'https://www.hindustanprojects.in'
-  const rawPhone = cfg.phone
-  const phone = rawPhone && !rawPhone.includes('99999') && !rawPhone.includes('123456') ? rawPhone : '+91 75970 00601'
+  const rawPhone = cfg.phone || '+91 8209604849'
+  const phone = rawPhone
   const cleanPhone = phone.replace(/\s+/g, '')
 
-  const rawWhatsapp = cfg.whatsapp
-  const validWhatsapp = rawWhatsapp && !rawWhatsapp.includes('99999') && !rawWhatsapp.includes('123456') ? rawWhatsapp : '+91 75970 00601'
-  const cleanWhatsapp = validWhatsapp.replace(/\D/g, '')
+  const rawWhatsapp = cfg.whatsapp || cfg.phone || '+91 8209604849'
+  const cleanWhatsapp = rawWhatsapp.replace(/\D/g, '')
   const whatsappUrl = `https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent(
     cfg.whatsappMessage || 'Hello SnapTech Team, I would like to consult for an enterprise digital project.'
   )}`
 
-  const getValidSocial = (val, fallback) => (val && val.trim() !== '#' && val.trim() !== '' ? val : fallback)
-  const instagram = getValidSocial(cfg.instagram, 'https://instagram.com/hindustanprojects')
-  const facebook = getValidSocial(cfg.facebook, 'https://facebook.com/hindustanprojects')
-  const linkedin = getValidSocial(cfg.linkedin, 'https://linkedin.com/company/hindustan-projects')
-  const pinterest = getValidSocial(cfg.pinterest, 'https://pinterest.com/hindustanprojects')
+  const instagram = cfg.instagram || 'https://instagram.com/snaptech.digital'
+  const facebook = cfg.facebook || 'https://facebook.com/snaptech.digital'
+  const linkedin = cfg.linkedin && cfg.linkedin.trim() !== '#' && cfg.linkedin.trim() !== '' ? cfg.linkedin : null
+  const pinterest = cfg.pinterest || 'https://pinterest.com/snaptech.digital'
 
   // Construct dynamic services or fallback
   const servicesList = servicesData?.data?.length
@@ -543,13 +541,21 @@ export default function Navbar() {
               WhatsApp Priority Desk
             </a>
             <div className="flex justify-center gap-4 pt-2 text-xs text-slate-500">
-              <a href={instagram} target="_blank" rel="noopener noreferrer" className="hover:text-brand-blue transition-colors">Instagram</a>
-              <span>•</span>
-              <a href={facebook} target="_blank" rel="noopener noreferrer" className="hover:text-brand-blue transition-colors">Facebook</a>
-              <span>•</span>
-              <a href={linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-brand-blue transition-colors">LinkedIn</a>
-              <span>•</span>
-              <a href={pinterest} target="_blank" rel="noopener noreferrer" className="hover:text-brand-blue transition-colors">Pinterest</a>
+              {instagram && <a href={instagram} target="_blank" rel="noopener noreferrer" className="hover:text-brand-blue transition-colors">Instagram</a>}
+              {instagram && facebook && <span>•</span>}
+              {facebook && <a href={facebook} target="_blank" rel="noopener noreferrer" className="hover:text-brand-blue transition-colors">Facebook</a>}
+              {linkedin && (
+                <>
+                  <span>•</span>
+                  <a href={linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-brand-blue transition-colors">LinkedIn</a>
+                </>
+              )}
+              {pinterest && (
+                <>
+                  <span>•</span>
+                  <a href={pinterest} target="_blank" rel="noopener noreferrer" className="hover:text-brand-blue transition-colors">Pinterest</a>
+                </>
+              )}
             </div>
           </div>
         </div>

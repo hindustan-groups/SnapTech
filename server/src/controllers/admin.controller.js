@@ -122,7 +122,7 @@ export const adminLogin = async (req, res, next) => {
         if (attempts === 5) {
           sendEmail({
             to: admin.email,
-            subject: 'Hindustan Projects Admin Account Locked',
+            subject: 'SnapTech Digital Admin Account Locked',
             html: `
               <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
                 <h2 style="color: #E31E24;">Security Alert: Account Locked</h2>
@@ -191,7 +191,7 @@ export const adminLogin = async (req, res, next) => {
 
       sendEmail({
         to: admin.email,
-        subject: 'New Admin Login Detected - Hindustan Projects',
+        subject: 'New Admin Login Detected - SnapTech Digital',
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
             <h2>Security Notice: Successful Login</h2>
@@ -295,7 +295,7 @@ export const setup2FA = async (req, res, next) => {
 
     // Generate secret
     const secret = speakeasy.generateSecret({
-      name: `Hindustan Projects (${admin.email})`
+      name: `SnapTech Digital (${admin.email})`
     })
 
     // Save secret temporarily in DB (but keep twoFactorEnabled = false until verified)
@@ -541,7 +541,7 @@ export const changePassword = async (req, res, next) => {
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
           <div style="background: #1A3E8C; padding: 20px; border-radius: 6px 6px 0 0; margin: -20px -20px 20px; text-align: center;">
             <h1 style="color: #ffffff; margin: 0; font-size: 22px;"><span style="color: #0066FF;">SnapTech</span> Digital</h1>
-            <p style="color: #93c5fd; margin: 6px 0 0; font-size: 14px;">Staff Portal Security Update &bull; Hindustan Projects</p>
+            <p style="color: #93c5fd; margin: 6px 0 0; font-size: 14px;">Staff Portal Security Update &bull; SnapTech Digital</p>
           </div>
 
           <p style="font-size: 16px; color: #1A1A1A;">Hello,</p>
@@ -564,7 +564,7 @@ export const changePassword = async (req, res, next) => {
           ${professionalEmailFooter(settings)}
         </div>
       `,
-      text: `Hello,\n\nYour password for Hindustan Projects staff portal (${admin.email}) was changed successfully.\nPortal URL: ${loginUrl}\n\nIf you did not perform this change, please contact support immediately.\n\nHindustan Projects Team`
+      text: `Hello,\n\nYour password for SnapTech Digital staff portal (${admin.email}) was changed successfully.\nPortal URL: ${loginUrl}\n\nIf you did not perform this change, please contact support immediately.\n\nSnapTech Digital Team`
     }).catch((err) => {
       console.error('[staff-email] Failed to send password change notification email:', err.message)
     })

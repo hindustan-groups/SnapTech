@@ -68,6 +68,10 @@
       "destination": "https://api.snaptech.digital/api/:path*"
     },
     {
+      "source": "/sitemap.xml",
+      "destination": "https://api.snaptech.digital/sitemap.xml"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

@@ -72,33 +72,40 @@ createRoot(document.getElementById('root')).render(
   </StrictMode>
 )
 
-// Load optional Google Analytics 4 asynchronously in the background
+// Load Google Analytics 4 dynamically (non-admin, single initialization)
 async function initializeAnalytics() {
+  if (typeof window === 'undefined') return
+  if (window.location.pathname.startsWith('/admin') || window.location.pathname.startsWith('/client')) {
+    return
+  }
+
   try {
     const BASE = import.meta.env.VITE_API_URL || '/api'
     const res = await fetch(`${BASE}/settings`)
+    let gaId = null
     if (res.ok) {
       const data = await res.json()
-      const settings = data?.data || {}
+      gaId = data?.data?.sys_ga_measurement_id
+    }
+    if (!gaId && import.meta.env.PROD) {
+      gaId = 'G-0S3921W4ZX'
+    }
 
-      if (settings.sys_ga_measurement_id && !window.gtag) {
-        const gaId = settings.sys_ga_measurement_id
-        const script = document.createElement('script')
-        script.async = true
-        script.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`
-        document.head.appendChild(script)
+    if (gaId && !window.gtag) {
+      const script = document.createElement('script')
+      script.async = true
+      script.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`
+      document.head.appendChild(script)
 
-        window.dataLayer = window.dataLayer || []
-        window.gtag = function () {
-          window.dataLayer.push(arguments)
-        }
-        window.gtag('js', new Date())
-        window.gtag('config', gaId, { page_path: window.location.pathname })
-        console.log('[GA4] Loaded successfully in the background')
+      window.dataLayer = window.dataLayer || []
+      window.gtag = function () {
+        window.dataLayer.push(arguments)
       }
+      window.gtag('js', new Date())
+      window.gtag('config', gaId, { page_path: window.location.pathname })
     }
   } catch (err) {
-    console.warn('[main] Failed to fetch GA4 config:', err.message)
+    console.warn('[main] Failed to initialize GA4:', err.message)
   }
 }
 

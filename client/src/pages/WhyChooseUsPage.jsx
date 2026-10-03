@@ -13,6 +13,7 @@ import {
   HeartHandshake,
 } from 'lucide-react'
 import { Container, SEO } from '@/components/ui'
+import { useSiteSettings } from '@/hooks/useContent'
 
 const COMPARISON_ROWS = [
   {
@@ -88,6 +89,14 @@ const COMPARISON_ROWS = [
 ]
 
 export default function WhyChooseUsPage() {
+  const { data: settingsData } = useSiteSettings()
+  const cfg = settingsData?.data || {}
+  const rawWa = cfg.whatsapp || cfg.phone || '+91 8209604849'
+  const cleanWa = rawWa.replace(/\D/g, '')
+  const whatsappUrl = `https://wa.me/${cleanWa}?text=${encodeURIComponent(
+    'Hi SnapTech Digital, I would like to discuss my project scope'
+  )}`
+
   return (
     <>
       <SEO
@@ -289,7 +298,7 @@ export default function WhyChooseUsPage() {
                 </Link>
 
                 <a
-                  href="https://wa.me/919414112057?text=Hi%20SnapTech%20Digital,%20I%20would%20like%20to%20discuss%20my%20project%20scope"
+                  href={whatsappUrl}
                   target="_blank"
                   rel="noreferrer"
                   className="w-full sm:w-auto px-6 py-3 rounded-xl bg-white/10 hover:bg-white/15 text-white font-heading font-bold text-xs sm:text-sm transition-all border border-white/15 flex items-center justify-center gap-2"

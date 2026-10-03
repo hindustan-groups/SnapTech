@@ -151,7 +151,7 @@ export const createClientProject = async (req, res, next) => {
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; border: 1px solid #e2e8f0; border-radius: 16px;">
             <h2 style="color: #1e3a8a; margin-top: 0;">You have been assigned a new project!</h2>
             <p>Hi <strong>${assignedTo}</strong>,</p>
-            <p>You have been assigned as the lead on a new client project at Hindustan Projects:</p>
+            <p>You have been assigned as the lead on a new client project at SnapTech Digital:</p>
             <div style="background-color: #f0f9ff; padding: 16px; border-radius: 12px; margin: 16px 0; border: 1px solid #bae6fd;">
               <p style="margin: 6px 0;"><strong>Project:</strong> ${project.projectTitle}</p>
               <p style="margin: 6px 0;"><strong>Client:</strong> ${project.clientName}</p>

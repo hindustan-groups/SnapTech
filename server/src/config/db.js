@@ -28,7 +28,7 @@ const applyPagination = (list, args) => {
 // ── High-Fidelity Mock Datasets ──────────────────────────────
 let mockAdmin = {
   id: 'admin-mock-1',
-  email: 'admin@hindustanprojects.com',
+  email: 'info@snaptech.digital',
   // Dev-only mock hash — never used in production (real DB is used when DATABASE_URL points to Neon/Postgres)
   passwordHash:
     process.env.MOCK_ADMIN_HASH || '$2b$10$W4FZyhOY50gqDQJrvqERbeZPWyyr7dKdvRwzO2vwua7nPmuoqECKO',
@@ -159,7 +159,7 @@ let mockProjects = [
       'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=1200&q=80&auto=format&fit=crop',
     ],
-    liveUrl: 'https://demo.hindustanprojects.com/ecommerce',
+    liveUrl: null,
     result: '3.4× Conversion Growth in 60 Days',
     duration: '8 Weeks Delivery',
     challenge: 'The legacy portal suffered from 4.8s page loads, peak-season checkout crashes, and disconnected inventory ledgers across regional warehouses.',
@@ -189,7 +189,7 @@ let mockProjects = [
       'https://images.unsplash.com/photo-1533750349088-cd871a92f312?w=1200&q=80&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80&auto=format&fit=crop',
     ],
-    liveUrl: 'https://demo.hindustanprojects.com/campaign',
+    liveUrl: null,
     result: '3.8× Verified ROAS in Quarter 1',
     duration: 'Continuous SLA',
     challenge: 'High customer acquisition cost (CAC) on generic PPC campaigns and low organic visibility against national retail aggregators.',
@@ -325,7 +325,7 @@ let mockJobApplications = [
     phone: '9876543210',
     resumeUrl: 'https://res.cloudinary.com/demo/image/upload/v1580000000/sample_resume.pdf',
     coverLetter:
-      'I am highly passionate about full-stack development and would love to work with Hindustan Projects.',
+      'I am highly passionate about full-stack development and would love to work with SnapTech Digital.',
     status: 'NEW',
     createdAt: new Date(),
   },
@@ -356,7 +356,7 @@ let mockTestimonials = [
     name: 'Ramesh Kumawat',
     company: 'Kumawat Textiles, Bhilwara',
     content:
-      'Hindustan Projects delivered our web platform on time. Excellent development quality and support.',
+      'SnapTech Digital delivered our web platform on time. Excellent development quality and support.',
     rating: 5,
     avatarUrl: null,
   },
@@ -392,7 +392,7 @@ let mockMilestones = [
     id: 'ms-1',
     year: '2019',
     title: 'Founded',
-    desc: 'Hindustan Projects was born in Bhilwara with a mission to bring world-class IT to local businesses.',
+    desc: 'SnapTech Digital is founded in Bhilwara, Rajasthan with a mission to deliver world-class bespoke IT and digital solutions to growing businesses.',
     order: 1,
   },
   {
@@ -415,8 +415,8 @@ let mockPartners = [
 ]
 
 let mockSettings = [
-  { key: 'phone', value: '+91 75970 00601' },
-  { key: 'whatsapp', value: '+91 75970 00601' },
+  { key: 'phone', value: '+91 8209604849' },
+  { key: 'whatsapp', value: '+91 8209604849' },
   { key: 'whatsappMessage', value: 'Hi SnapTech Team! I visited your website and want to discuss a project.' },
   { key: 'email', value: 'info@snaptech.digital' },
   { key: 'address', value: 'Bhilwara, Rajasthan 311001, India' },
@@ -448,7 +448,7 @@ let mockLegalPages = [
     id: 'lp-terms',
     pageType: 'TERMS_OF_SERVICE',
     title: 'Terms of Service',
-    content: `<h2>1. Services Rendered</h2><p>Hindustan Projects provides custom software, web development, digital marketing, and IT consulting services. All projects are subject to agreed milestones and deliverables.</p><h2>2. Payments & Fees</h2><p>Invoices are generated based on the project scope and payment schedule. Payments must be made within the specified timeframes to avoid service suspension.</p><h2>3. Intellectual Property</h2><p>Upon final payment, the ownership of the custom code and deliverables is transferred to the client, while we retain rights to reusable modules.</p>`,
+    content: `<h2>1. Services Rendered</h2><p>SnapTech Digital provides custom software, web development, digital marketing, and IT consulting services. All projects are subject to agreed milestones and deliverables.</p><h2>2. Payments & Fees</h2><p>Invoices are generated based on the project scope and payment schedule. Payments must be made within the specified timeframes to avoid service suspension.</p><h2>3. Intellectual Property</h2><p>Upon final payment, the ownership of the custom code and deliverables is transferred to the client, while we retain rights to reusable modules.</p>`,
     lastUpdated: new Date(),
     updatedBy: 'admin-mock-1',
   },
@@ -539,7 +539,7 @@ let mockActivityLogs = [
   {
     id: 'act-1',
     adminId: 'admin-mock-1',
-    adminEmail: 'admin@hindustanprojects.com',
+    adminEmail: 'info@snaptech.digital',
     action: 'CREATE',
     entity: 'ClientProject',
     details: "Created project 'E-Commerce Website' for client 'Ramesh Textiles'",
@@ -1354,7 +1354,7 @@ const requiredPages = [
       id: 'lp-terms',
       pageType: 'TERMS_OF_SERVICE',
       title: 'Terms of Service',
-      content: `<h2>1. Services Rendered</h2><p>Hindustan Projects provides custom software, web development, digital marketing, and IT consulting services. All projects are subject to agreed milestones and deliverables.</p><h2>2. Payments & Fees</h2><p>Invoices are generated based on the project scope and payment schedule. Payments must be made within the specified timeframes to avoid service suspension.</p><h2>3. Intellectual Property</h2><p>Upon final payment, the ownership of the custom code and deliverables is transferred to the client, while we retain rights to reusable modules.</p>`,
+      content: `<h2>1. Services Rendered</h2><p>SnapTech Digital provides custom software, web development, digital marketing, and IT consulting services. All projects are subject to agreed milestones and deliverables.</p><h2>2. Payments & Fees</h2><p>Invoices are generated based on the project scope and payment schedule. Payments must be made within the specified timeframes to avoid service suspension.</p><h2>3. Intellectual Property</h2><p>Upon final payment, the ownership of the custom code and deliverables is transferred to the client, while we retain rights to reusable modules.</p>`,
       lastUpdated: new Date(),
       updatedBy: 'admin-mock-1',
     },

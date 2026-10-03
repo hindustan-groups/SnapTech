@@ -18,7 +18,7 @@ export default function PortfolioPage() {
   ]
 
   const rawWa = cfg.whatsapp || cfg.phone || ''
-  const waNum = (rawWa && !rawWa.includes('99999') && !rawWa.includes('123456') ? rawWa : '917597000601').replace(/[^0-9]/g, '')
+  const waNum = (rawWa && !rawWa.includes('99999') && !rawWa.includes('123456') ? rawWa : '918209604849').replace(/[^0-9]/g, '')
 
   return (
     <div className="bg-white min-h-screen text-slate-900 selection:bg-brand-blue/15 selection:text-brand-blue">

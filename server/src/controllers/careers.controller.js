@@ -54,7 +54,7 @@ export const getJobBySlug = async (req, res, next) => {
           jobType: 'FULL_TIME',
           experienceRequired: 'Any experience',
           description:
-            'Submit your resume for general consideration for future openings at Hindustan Projects.',
+            'Submit your resume for general consideration for future openings at SnapTech Digital.',
           responsibilities: [
             'Support various projects as needed',
             'Collaborate with the team on software, design, or marketing goals',
@@ -150,7 +150,7 @@ export const submitApplication = async (req, res, next) => {
           jobType: 'FULL_TIME',
           experienceRequired: 'Any experience',
           description:
-            'Submit your resume for general consideration for future openings at Hindustan Projects.',
+            'Submit your resume for general consideration for future openings at SnapTech Digital.',
           responsibilities: [
             'Support various projects as needed',
             'Collaborate with the team on software, design, or marketing goals',

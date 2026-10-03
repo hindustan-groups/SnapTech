@@ -50,7 +50,7 @@ const FALLBACK_MILESTONES = [
     id: '1',
     year: '2019',
     title: 'Founding & Group Alignment',
-    desc: 'Hindustan Projects establishes its dedicated IT & Digital Transformation Division in Bhilwara, Rajasthan to deliver world-class technology.',
+    desc: 'SnapTech Digital is founded in Bhilwara, Rajasthan to deliver world-class bespoke cloud and digital engineering solutions.',
   },
   {
     id: '2',
@@ -78,33 +78,6 @@ const FALLBACK_MILESTONES = [
   },
 ]
 
-const FALLBACK_TEAM = [
-  {
-    id: '1',
-    name: 'Rahul Sharma',
-    role: 'Managing Director & CEO',
-    bio: 'Technologist with over a decade of leadership in distributed web architecture and corporate technology strategy.',
-  },
-  {
-    id: '2',
-    name: 'Priya Singh',
-    role: 'Head of Engineering',
-    bio: 'Full-stack engineering veteran specializing in React/Node.js microservices, database sharding, and cloud pipelines.',
-  },
-  {
-    id: '3',
-    name: 'Amit Verma',
-    role: 'Chief Technology Architect',
-    bio: 'Cloud and DevOps specialist driving high-availability AWS/GCP clusters and sub-second API execution.',
-  },
-  {
-    id: '4',
-    name: 'Sneha Joshi',
-    role: 'Lead UI/UX & Design Systems',
-    bio: 'Award-winning product designer creating high-fidelity interactive user experiences and scalable design tokens.',
-  },
-]
-
 function LinkedInIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5" aria-hidden="true">
@@ -118,7 +91,7 @@ export default function AboutPage() {
   const { data: milestonesData, isLoading: milestonesLoading } = useMilestones()
   const { data: settingsData } = useSiteSettings()
 
-  const team = teamData?.data?.length ? teamData.data : teamLoading ? [] : FALLBACK_TEAM
+  const team = teamData?.data?.length ? teamData.data : []
   const milestones = milestonesData?.data?.length
     ? milestonesData.data
     : milestonesLoading
@@ -133,7 +106,7 @@ export default function AboutPage() {
     { value: `${cfg.stat_cities || '3'}+`, label: 'Corporate Hubs', sub: 'Pan-India Reach', icon: MapPin },
   ]
 
-  const parentUrl = cfg.parent_company_url || 'https://hindustanprojects.com'
+  const parentUrl = cfg.parent_company_url || 'https://www.hindustanprojects.in'
 
   return (
     <div className="bg-white min-h-screen text-slate-900 selection:bg-brand-blue/15 selection:text-brand-blue">
@@ -482,11 +455,17 @@ export default function AboutPage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {teamLoading
-              ? Array.from({ length: 4 }).map((_, i) => (
-                  <div key={i} className="h-72 bg-slate-200/70 rounded-2xl border border-slate-200 animate-pulse" />
-                ))
-              : team.map((member) => {
+            {teamLoading ? (
+              Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="h-72 bg-slate-200/70 rounded-2xl border border-slate-200 animate-pulse" />
+              ))
+            ) : team.length === 0 ? (
+              <div className="col-span-full text-center py-10 bg-white rounded-2xl border border-slate-200/80 p-8 shadow-xs">
+                <Users className="w-8 h-8 text-brand-blue mx-auto mb-2 opacity-50" />
+                <p className="text-slate-600 text-sm font-semibold">Leadership and technical team profiles will be updated shortly.</p>
+              </div>
+            ) : (
+              team.map((member) => {
                   const initials = member.name
                     .split(' ')
                     .map((n) => n[0])
@@ -551,7 +530,8 @@ export default function AboutPage() {
                       )}
                     </div>
                   )
-                })}
+                })
+            )}
           </div>
         </Container>
       </section>

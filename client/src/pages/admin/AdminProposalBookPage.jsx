@@ -104,11 +104,18 @@ export default function AdminProposalBookPage() {
   const [sidebarOpen, setSidebarOpen] = useState(true)
 
   // Saved Proposals State
-  const [savedProposals, setSavedProposals] = useState([])
+  const [savedProposals, setSavedProposals] = useState(() => {
+    try {
+      const stored = typeof window !== 'undefined' ? localStorage.getItem('HP_SAVED_PROPOSALS') : null
+      return stored ? JSON.parse(stored) : []
+    } catch {
+      return []
+    }
+  })
   const [selectedProposalId, setSelectedProposalId] = useState('')
 
   // 100% Editable Proposal Model
-  const [proposalData, setProposalData] = useState({
+  const [proposalData, setProposalData] = useState(() => ({
     id: 'prop-default',
     clientCompany: 'AURA ENTERPRISES PVT LTD',
     contactPerson: 'Mr. Rajesh Sharma',
@@ -126,7 +133,7 @@ export default function AdminProposalBookPage() {
     paymentTerms: '50% Milestone Advance upon technical agreement, 50% upon final production deployment & approval.',
     preparedBy: 'SnapTech Digital Solutions',
     preparedByEmail: cfg.email || 'info@snaptech.digital',
-    preparedByPhone: cfg.phone || '+91 75970 00601',
+    preparedByPhone: cfg.phone || '+91 8209604849',
     preparedByWebsite: 'www.snaptech.digital',
     
     // Scope of Work Arrays
@@ -176,19 +183,7 @@ export default function AdminProposalBookPage() {
       { id: 'lt5', title: '5. Confidentiality & Non-Disclosure (NDA)', text: 'Both parties agree to treat all business data, customer lists, API keys, and technical documentation as strictly confidential.' },
       { id: 'lt6', title: '6. Limitation of Liability', text: 'SnapTech Digital is not liable for indirect or consequential damages arising from third-party server downtimes or API policy alterations.' },
     ],
-  })
-
-  // LocalStorage Persistence
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem('HP_SAVED_PROPOSALS')
-      if (stored) {
-        setSavedProposals(JSON.parse(stored))
-      }
-    } catch (err) {
-      console.error(err)
-    }
-  }, [])
+  }))
 
   const handleSaveProposal = () => {
     const newId = proposalData.id || `prop-${Date.now()}`

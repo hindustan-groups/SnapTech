@@ -1,20 +1,22 @@
 /* eslint-disable react-refresh/only-export-components */
 /**
- * SEO.jsx — Complete SEO component
+ * SEO.jsx — Complete Database-Connected SEO component
  * Handles: title, meta, OG, Twitter Cards, canonical, JSON-LD schemas
- * Supports: Organization, LocalBusiness, Service, FAQPage, BreadcrumbList
+ * Supports: Organization, LocalBusiness, Service, FAQPage, BreadcrumbList, JobPosting
+ * Canonical source of truth: Site Settings from DB -> Fallback safe technical defaults
  */
 import { Helmet } from 'react-helmet-async'
+import { useSiteSettings } from '@/hooks/useContent'
 
 export const SITE = {
   name: 'SnapTech Digital',
   alternateName: 'SnapTech Digital — Web & App Development Agency',
-  parentName: 'SnapTech Digital',
-  parentUrl: 'https://www.snaptech.digital',
+  parentName: 'Hindustan Projects',
+  parentUrl: 'https://www.hindustanprojects.in',
   url: 'https://www.snaptech.digital',
   description:
     'SnapTech Digital is a full-service digital agency based in Bhilwara, Rajasthan. We build enterprise websites, web apps, and mobile apps — and deliver digital marketing, SEO, and IT consulting services across India.',
-  phone: '+91 7597000601',
+  phone: '+91 8209604849',
   email: 'info@snaptech.digital',
   address: {
     street: 'Bhilwara',
@@ -33,70 +35,93 @@ export const SITE = {
   sameAs: [
     'https://www.instagram.com/snaptechdigital',
     'https://www.facebook.com/snaptechdigital',
-    'https://www.linkedin.com/company/snaptechdigital',
-    'https://twitter.com/snaptechdigital',
   ],
 }
 
 // ── JSON-LD Schemas ────────────────────────────────────────────
 
-export function organizationSchema() {
+export function organizationSchema(cfg = {}) {
+  const name = cfg.company_name || SITE.name
+  const parentName = cfg.parent_company_name || SITE.parentName
+  const parentUrl = cfg.parent_company_url || SITE.parentUrl
+  const phone = cfg.phone || SITE.phone
+  const email = cfg.email || SITE.email
+  const logo = cfg.logo_url || SITE.logo
+
+  const sameAs = [
+    cfg.instagram || 'https://www.instagram.com/snaptechdigital',
+    cfg.facebook || 'https://www.facebook.com/snaptechdigital',
+    cfg.linkedin,
+    cfg.twitter,
+  ].filter((url) => Boolean(url) && url !== '#' && !url.includes('hindustan-projects'))
+
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     '@id': `${SITE.url}/#organization`,
-    name: SITE.name,
+    name,
     alternateName: SITE.alternateName,
     url: SITE.url,
     logo: {
       '@type': 'ImageObject',
-      url: SITE.logo,
+      url: logo,
     },
     parentOrganization: {
       '@type': 'Organization',
-      name: SITE.parentName,
-      url: SITE.parentUrl,
+      name: parentName,
+      url: parentUrl,
     },
-    description: SITE.description,
+    description: cfg.default_seo_description || SITE.description,
     foundingDate: SITE.founded,
     contactPoint: {
       '@type': 'ContactPoint',
-      telephone: SITE.phone,
-      email: SITE.email,
+      telephone: phone,
+      email,
       contactType: 'customer service',
       availableLanguage: ['English', 'Hindi'],
       areaServed: 'IN',
     },
     address: {
       '@type': 'PostalAddress',
-      streetAddress: SITE.address.street,
+      streetAddress: cfg.address || SITE.address.street,
       addressLocality: SITE.address.city,
       addressRegion: SITE.address.state,
       postalCode: SITE.address.postalCode,
       addressCountry: SITE.address.country,
     },
-    sameAs: SITE.sameAs,
+    sameAs,
   }
 }
 
-export function localBusinessSchema() {
+export function localBusinessSchema(cfg = {}) {
+  const name = cfg.company_name || SITE.name
+  const phone = cfg.phone || SITE.phone
+  const email = cfg.email || SITE.email
+  const image = cfg.og_image_url || SITE.ogImage
+
+  const sameAs = [
+    cfg.instagram || 'https://www.instagram.com/snaptechdigital',
+    cfg.facebook || 'https://www.facebook.com/snaptechdigital',
+    cfg.linkedin,
+  ].filter((url) => Boolean(url) && url !== '#' && !url.includes('hindustan-projects'))
+
   return {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
     '@id': `${SITE.url}/#localbusiness`,
-    name: SITE.name,
-    image: SITE.ogImage,
+    name,
+    image,
     url: SITE.url,
-    telephone: SITE.phone,
-    email: SITE.email,
-    description: SITE.description,
-    priceRange: '$$',
+    telephone: phone,
+    email,
+    description: cfg.default_seo_description || SITE.description,
+    priceRange: '₹₹',
     currenciesAccepted: 'INR',
     paymentAccepted: 'Cash, Credit Card, Bank Transfer, UPI',
     openingHours: 'Mo-Sa 09:00-18:00',
     address: {
       '@type': 'PostalAddress',
-      streetAddress: SITE.address.street,
+      streetAddress: cfg.address || SITE.address.street,
       addressLocality: SITE.address.city,
       addressRegion: SITE.address.state,
       postalCode: SITE.address.postalCode,
@@ -107,7 +132,7 @@ export function localBusinessSchema() {
       latitude: SITE.geo.lat,
       longitude: SITE.geo.lng,
     },
-    hasMap: `https://www.google.com/maps?q=${SITE.geo.lat},${SITE.geo.lng}`,
+    hasMap: cfg.google_maps_url || `https://www.google.com/maps?q=${SITE.geo.lat},${SITE.geo.lng}`,
     knowsAbout: [
       'Custom Web Applications',
       'Native Mobile Apps (iOS & Android)',
@@ -129,19 +154,20 @@ export function localBusinessSchema() {
       { '@type': 'State', name: 'Rajasthan' },
       { '@type': 'Country', name: 'India' },
     ],
-    sameAs: SITE.sameAs,
+    sameAs,
   }
 }
 
-export function websiteSchema() {
+export function websiteSchema(cfg = {}) {
+  const name = cfg.company_name || SITE.name
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     '@id': `${SITE.url}/#website`,
     url: SITE.url,
-    name: SITE.name,
+    name,
     alternateName: SITE.alternateName,
-    description: SITE.description,
+    description: cfg.default_seo_description || SITE.description,
     inLanguage: 'en-IN',
     speakable: {
       '@type': 'SpeakableSpecification',
@@ -210,6 +236,36 @@ export function breadcrumbSchema(items) {
   }
 }
 
+export function jobPostingSchema(job) {
+  if (!job) return null
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'JobPosting',
+    title: job.title,
+    description: job.description || (job.responsibilities || []).join('\n') || '',
+    datePosted: job.createdAt || new Date().toISOString(),
+    validThrough: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString(),
+    employmentType: job.jobType || 'FULL_TIME',
+    hiringOrganization: {
+      '@type': 'Organization',
+      name: SITE.name,
+      sameAs: SITE.url,
+      logo: SITE.logo,
+    },
+    jobLocation: {
+      '@type': 'Place',
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: job.location || SITE.address.street,
+        addressLocality: SITE.address.city,
+        addressRegion: SITE.address.state,
+        postalCode: SITE.address.postalCode,
+        addressCountry: SITE.address.country,
+      },
+    },
+  }
+}
+
 // ── Main SEO Component ─────────────────────────────────────────
 
 export default function SEO({
@@ -223,21 +279,26 @@ export default function SEO({
   keywords,
   breadcrumbs,
 }) {
-  const fullTitle = title
-    ? title.includes(SITE.name)
-      ? title
-      : `${title} | ${SITE.name} — IT Services, Bhilwara`
-    : `${SITE.name} — IT Services Company in Bhilwara, Rajasthan`
-  const desc = description || SITE.description
-  const canonical = `${SITE.url}${path}`
-  const image = ogImage || SITE.ogImage
+  const { data: settingsData } = useSiteSettings()
+  const cfg = settingsData?.data || {}
 
-  // Default schemas on every page
-  const defaultSchemas = [organizationSchema(), websiteSchema()]
+  const companyName = cfg.company_name || SITE.name
+  const fullTitle = title
+    ? title.includes(companyName)
+      ? title
+      : `${title} | ${companyName} — IT Services, Bhilwara`
+    : (cfg.default_seo_title || `${companyName} — IT Services Company in Bhilwara, Rajasthan`)
+    
+  const desc = description || cfg.default_seo_description || SITE.description
+  const canonical = `${SITE.url}${path}`
+  const image = ogImage || cfg.og_image_url || SITE.ogImage
+
+  // Default schemas on every page using live Site Settings
+  const defaultSchemas = [organizationSchema(cfg), websiteSchema(cfg)]
 
   // Add LocalBusiness on home and contact pages
   if (path === '/' || path === '/contact') {
-    defaultSchemas.push(localBusinessSchema())
+    defaultSchemas.push(localBusinessSchema(cfg))
   }
 
   // Add breadcrumb if provided
@@ -245,7 +306,7 @@ export default function SEO({
     defaultSchemas.push(breadcrumbSchema(breadcrumbs))
   }
 
-  const allSchemas = [...defaultSchemas, ...schemas]
+  const allSchemas = [...defaultSchemas, ...schemas.filter(Boolean)]
 
   return (
     <Helmet>
@@ -270,7 +331,7 @@ export default function SEO({
       <meta property="og:description" content={desc} />
       <meta property="og:type" content={ogType} />
       <meta property="og:url" content={canonical} />
-      <meta property="og:site_name" content={SITE.name} />
+      <meta property="og:site_name" content={companyName} />
       <meta property="og:image" content={image} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />

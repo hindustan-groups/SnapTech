@@ -4,18 +4,23 @@ import { motion } from 'framer-motion'
 import {
   CheckCircle2,
   Sparkles,
-  ArrowRight,
   MessageSquare,
   Clock,
   ShieldCheck,
   Home,
   Briefcase,
   Layers,
-  FileCheck,
 } from 'lucide-react'
 import { Container, SEO } from '@/components/ui'
+import { useSiteSettings } from '@/hooks/useContent'
 
 export default function ThankYouPage() {
+  const { data: settingsData } = useSiteSettings()
+  const cfg = settingsData?.data || {}
+  const rawWa = cfg.whatsapp || cfg.phone || '+91 8209604849'
+  const cleanWa = rawWa.replace(/\D/g, '')
+  const phoneDisplay = cfg.phone || '+91 8209604849'
+
   const [searchParams] = useSearchParams()
   const source = searchParams.get('source') || 'general'
   const estimate = searchParams.get('estimate') || ''
@@ -162,13 +167,13 @@ export default function ThankYouPage() {
               </div>
 
               <a
-                href={`https://wa.me/919414112057?text=${prefilledWhatsappMsg}`}
+                href={`https://wa.me/${cleanWa}?text=${prefilledWhatsappMsg}`}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-heading font-bold text-xs transition-all shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 cursor-pointer"
               >
                 <MessageSquare className="w-4 h-4" />
-                <span>Chat on WhatsApp Now (+91 94141 12057)</span>
+                <span>Chat on WhatsApp Now ({phoneDisplay})</span>
               </a>
             </motion.div>
 

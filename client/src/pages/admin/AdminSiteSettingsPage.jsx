@@ -99,11 +99,11 @@ const FIELD_GROUPS = [
   {
     label: 'Contact & Location Details',
     fields: [
-      { key: 'phone', label: 'Primary Contact Phone', placeholder: '+91 75970 00601', Icon: Phone },
+      { key: 'phone', label: 'Primary Contact Phone', placeholder: '+91 8209604849', Icon: Phone },
       {
         key: 'whatsapp',
         label: 'WhatsApp Support Number',
-        placeholder: '+91 75970 00601',
+        placeholder: '+91 8209604849',
         Icon: MessageCircle,
       },
       {
@@ -526,7 +526,7 @@ export default function AdminSiteSettingsPage() {
                       </div>
                       <div className="flex items-center gap-2.5 text-xs text-white/80">
                         <Phone className="w-3.5 h-3.5 text-white/50 shrink-0" />
-                        <span>{watched.phone || '+91 75970 00601'}</span>
+                        <span>{watched.phone || '+91 8209604849'}</span>
                       </div>
                       <div className="flex items-center gap-2.5 text-xs text-white/80">
                         <Mail className="w-3.5 h-3.5 text-white/50 shrink-0" />
@@ -608,7 +608,7 @@ export default function AdminSiteSettingsPage() {
                     <span>
                       WhatsApp Target:{' '}
                       <strong className="font-mono font-bold text-gray-900">
-                        {watched.whatsapp || '+91 75970 00601'}
+                        {watched.whatsapp || '+91 8209604849'}
                       </strong>
                     </span>
                   </div>

@@ -20,9 +20,9 @@ const SECRET_PATH = process.env.ADMIN_SECRET_PATH
 const LOGIN_URL = `/api/admin/${SECRET_PATH}/login`
 
 // ── Test credentials matching the mock DB in db.js ─────────────
-// Mock DB has: admin@hindustanprojects.com with hash for password "Admin@123456"
+// Mock DB has: info@snaptech.digital with hash for password "Admin@123456"
 // The mock hash in db.js is for this password when MOCK_ADMIN_HASH not set
-const VALID_EMAIL = 'admin@hindustanprojects.com'
+const VALID_EMAIL = 'info@snaptech.digital'
 const VALID_PASSWORD = 'Admin@123456'
 
 // ─────────────────────────────────────────────────────────────

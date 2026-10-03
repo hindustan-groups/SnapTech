@@ -78,8 +78,8 @@ export default function ProjectDetailPage() {
 
   const project = projectRes?.data
   const cfg = settingsData?.data || {}
-  const rawWa = cfg.whatsapp || cfg.phone || ''
-  const waNum = (rawWa && !rawWa.includes('99999') && !rawWa.includes('123456') ? rawWa : '917597000601').replace(/[^0-9]/g, '')
+  const rawWa = cfg.whatsapp || cfg.phone || '+91 8209604849'
+  const waNum = rawWa.replace(/\D/g, '')
 
   // All gallery images (thumbnail + additional screenshots)
   const galleryImages = useMemo(() => {

@@ -172,7 +172,7 @@ export default function ClientDashboardPage() {
   ]
 
   const cfg = settingsData?.data || {}
-  const rawPhone = cfg.phone || '+91 75970 00601'
+  const rawPhone = cfg.phone || '+91 8209604849'
   const cleanPhone = rawPhone.replace(/[^0-9]/g, '')
   const whatsappUrl = `https://wa.me/${cleanPhone}?text=Hi%20SnapTech%20Team`
 

@@ -2,10 +2,15 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Sparkles, PhoneCall, ArrowRight, ShieldCheck, Code2, MessageSquare, Cpu } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { useSiteSettings } from '@/hooks/useContent'
 
 export default function WelcomePopup() {
   const [isOpen, setIsOpen] = useState(false)
   const navigate = useNavigate()
+  const { data: settingsData } = useSiteSettings()
+  const cfg = settingsData?.data || {}
+  const rawWa = cfg.whatsapp || cfg.phone || '+91 8209604849'
+  const cleanWa = rawWa.replace(/\D/g, '')
 
   useEffect(() => {
     // Check if the user has already seen the popup in this session/device
@@ -32,7 +37,8 @@ export default function WelcomePopup() {
   const handleWhatsApp = () => {
     setIsOpen(false)
     localStorage.setItem('hp_welcome_seen', 'true')
-    window.open('https://wa.me/917597000601?text=Hi%20SnapTech%20Team,%20I%20want%20to%20consult%20about%20a%20software/web%20project.', '_blank', 'noopener,noreferrer')
+    const msg = encodeURIComponent('Hi SnapTech Team, I want to consult about a software/web project.')
+    window.open(`https://wa.me/${cleanWa}?text=${msg}`, '_blank', 'noopener,noreferrer')
   }
 
   return (

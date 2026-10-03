@@ -175,10 +175,10 @@ export default function ContactPage() {
 
   const { data: settingsData } = useSiteSettings()
   const cfg = settingsData?.data || {}
-  const phone = cfg.phone || '+91 94141 12057'
+  const phone = cfg.phone || '+91 8209604849'
   const email = cfg.email || 'info@snaptech.digital'
   const address = cfg.address || 'SnapTech Digital, Bhilwara, Rajasthan 311001, India'
-  const whatsapp = cfg.whatsapp || cfg.phone || '919414112057'
+  const whatsapp = cfg.whatsapp || cfg.phone || '+91 8209604849'
   const whatsappNum = whatsapp.replace(/[^0-9]/g, '')
 
   const {

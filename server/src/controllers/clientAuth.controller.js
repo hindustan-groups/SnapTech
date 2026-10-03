@@ -147,7 +147,7 @@ export const setupClientPassword = async (req, res, next) => {
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
           <div style="background: #1A3E8C; padding: 20px; border-radius: 6px 6px 0 0; margin: -20px -20px 20px; text-align: center;">
             <h1 style="color: #ffffff; margin: 0; font-size: 22px;"><span style="color: #0066FF;">SnapTech</span> Digital</h1>
-            <p style="color: #93c5fd; margin: 6px 0 0; font-size: 14px;">Client Portal &bull; Hindustan Projects</p>
+            <p style="color: #93c5fd; margin: 6px 0 0; font-size: 14px;">Client Portal &bull; SnapTech Digital</p>
           </div>
 
           <p style="font-size: 16px; color: #1A1A1A;">Hi <strong>${updatedClient.name}</strong>,</p>
@@ -170,7 +170,7 @@ export const setupClientPassword = async (req, res, next) => {
           ${professionalEmailFooter(settings)}
         </div>
       `,
-      text: `Hi ${updatedClient.name},\n\nYour client portal account is now active!\n\nLogin Details:\nEmail: ${updatedClient.email}\nPassword: The one you just set\nLogin URL: ${loginUrl}\n\nSnapTech Digital\nPhone: ${settings.phone || '+91 75970 00601'}\nWeb: www.snaptech.digital\nBhilwara, Rajasthan, India`,
+      text: `Hi ${updatedClient.name},\n\nYour client portal account is now active!\n\nLogin Details:\nEmail: ${updatedClient.email}\nPassword: The one you just set\nLogin URL: ${loginUrl}\n\nSnapTech Digital\nPhone: ${settings.phone || '+91 8209604849'}\nWeb: www.snaptech.digital\nBhilwara, Rajasthan, India`,
     }).catch((err) => {
       console.error('[welcome-email] Failed to send:', err.message)
     })

@@ -27,7 +27,7 @@ export const healthCheck = async (_req, res) => {
   res.status(isHealthy ? 200 : 503).json({
     status: isHealthy ? 'ok' : 'error',
     timestamp: new Date().toISOString(),
-    service: 'hindustan-projects-api',
+    service: 'snaptech-api',
     database: dbStatus,
     memoryUsage: formattedMemory,
   })

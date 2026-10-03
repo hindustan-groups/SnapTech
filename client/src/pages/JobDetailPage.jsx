@@ -38,153 +38,6 @@ const JOB_TYPE_CLASSES = {
   CONTRACT: 'bg-amber-50 text-amber-700 border-amber-200',
 }
 
-const FALLBACK_ROLE_MAP = {
-  'full-stack-developer': {
-    id: 'jp-fallback-1',
-    title: 'Senior Full-Stack Engineer (React & Node.js)',
-    slug: 'full-stack-developer',
-    department: 'Engineering',
-    location: 'Bhilwara HQ / Hybrid',
-    jobType: 'FULL_TIME',
-    experienceRequired: '2 - 5 Years',
-    createdAt: '2025-01-15T00:00:00.000Z',
-    description:
-      'Architect enterprise-grade web applications, mission-critical internal portals, and resilient microservices using React, Node.js, and PostgreSQL. You will work directly with senior architects to deploy high-throughput solutions for group subsidiaries and national clients.',
-    responsibilities: [
-      'Design, build, and maintain high-performance, reusable, and reliable React and Node.js code',
-      'Architect robust PostgreSQL and Prisma database schemas with optimized querying and index tuning',
-      'Build secure RESTful APIs and WebSocket feeds with JWT authentication, role-based access, and rate limiting',
-      'Collaborate directly with cross-functional engineering teams, UI/UX designers, and executive stakeholders',
-      'Optimize front-end and backend workloads for sub-second latency and high availability',
-    ],
-    requirements: [
-      '2+ years of professional full-stack development experience with modern JavaScript / TypeScript',
-      'Deep proficiency in React (hooks, context, state management, Vite/Next.js) and Tailwind CSS',
-      'Hands-on experience building backend microservices with Node.js, Express, and relational databases',
-      'Solid grasp of Git workflows, CI/CD pipelines, Docker containerization, and cloud deployments',
-      'Strong analytical problem-solving skills and passion for writing clean, maintainable code',
-    ],
-  },
-  'devops-cloud-specialist': {
-    id: 'jp-fallback-2',
-    title: 'DevOps & Cloud Infrastructure Specialist',
-    slug: 'devops-cloud-specialist',
-    department: 'Cloud & Infrastructure',
-    location: 'Remote / Bhilwara',
-    jobType: 'FULL_TIME',
-    experienceRequired: '3+ Years',
-    createdAt: '2025-02-01T00:00:00.000Z',
-    description:
-      'Manage multi-region cloud deployments, automated CI/CD deployment pipelines, automated zero-downtime monitoring, and Kubernetes orchestration. You will ensure our enterprise hosting infrastructure maintains 99.9% uptime SLA.',
-    responsibilities: [
-      'Design, provision, and maintain secure AWS/GCP cloud environments using Infrastructure as Code (Terraform)',
-      'Construct automated CI/CD pipelines for automated testing, linting, Docker packaging, and zero-downtime releases',
-      'Implement unified observability, central logging (ELK / Loki), and Prometheus + Grafana alerting',
-      'Harden containerized environments and enforce zero-trust network policies and vulnerability scanning',
-    ],
-    requirements: [
-      '3+ years experience administering Linux cloud servers and containerized production environments',
-      'Proven expertise with Docker, Kubernetes, Nginx reverse proxies, and automated SSL orchestration',
-      'Strong scripting skills in Bash, Python, or Go for infrastructure automation',
-      'Working knowledge of cloud security standards, VPC peering, and automated database backups',
-    ],
-  },
-  'social-media-associate': {
-    id: 'jp-fallback-3',
-    title: 'Digital Marketing & Growth Associate',
-    slug: 'social-media-associate',
-    department: 'Marketing & Growth',
-    location: 'Remote / Bhilwara',
-    jobType: 'INTERNSHIP',
-    experienceRequired: 'Freshers / 1 Year',
-    createdAt: '2025-02-10T00:00:00.000Z',
-    description:
-      'Drive data-driven client marketing campaigns, high-converting social media creatives, conversion optimization, and brand performance metrics. Ideal for proactive marketers passionate about digital growth and visual storytelling.',
-    responsibilities: [
-      'Produce engaging visual and motion assets for LinkedIn, Instagram, and Twitter using Canva / Figma',
-      'Draft persuasive marketing copy, case study writeups, and client press releases',
-      'Run and optimize targeted Meta and Google ad campaigns to generate qualified enterprise leads',
-      'Analyze weekly traffic metrics, engagement rates, and inbound conversion funnels',
-    ],
-    requirements: [
-      'Demonstrated portfolio or proof-of-work in digital marketing, copywriting, or visual design',
-      'Familiarity with marketing analytics tools (Google Analytics 4, Meta Business Suite, Search Console)',
-      'Fluent verbal and written communication in English and Hindi',
-      'Self-driven mentality with keen interest in tech sector developments and B2B growth',
-    ],
-  },
-  'ui-ux-product-designer': {
-    id: 'jp-fallback-4',
-    title: 'Enterprise UI/UX Product Designer',
-    slug: 'ui-ux-product-designer',
-    department: 'Design',
-    location: 'Remote / Hybrid',
-    jobType: 'FULL_TIME',
-    experienceRequired: '2 - 4 Years',
-    createdAt: '2025-02-15T00:00:00.000Z',
-    description:
-      'Craft cutting-edge glassmorphic design systems, responsive web apps, and intuitive user journeys for our enterprise ERP and fintech clients.',
-    responsibilities: [
-      'Create high-fidelity wireframes, interactive prototypes, and design tokens in Figma',
-      'Develop scalable cyber and glassmorphic component libraries for modern web and mobile apps',
-      'Conduct user journey mapping, UX audits, and usability testing sessions with stakeholders',
-      'Work closely with front-end React engineers to guarantee pixel-perfect UI execution',
-    ],
-    requirements: [
-      '2+ years in UI/UX design with a strong portfolio showcasing responsive web apps and dashboards',
-      'Deep mastery of Figma (auto-layout, components, variants, design systems, and prototyping)',
-      'Understanding of modern CSS, flexbox/grid layout paradigms, and web accessibility standards',
-      'Exceptional visual taste with emphasis on typography, dark mode aesthetics, and micro-interactions',
-    ],
-  },
-  'ai-automation-engineer': {
-    id: 'jp-fallback-5',
-    title: 'AI Solutions & Automation Engineer',
-    slug: 'ai-automation-engineer',
-    department: 'Engineering',
-    location: 'Bhilwara HQ / Hybrid',
-    jobType: 'FULL_TIME',
-    experienceRequired: '1 - 3 Years',
-    createdAt: '2025-03-01T00:00:00.000Z',
-    description:
-      'Build intelligent workflow automations, conversational LLM assistants, and document analysis pipelines integrated with client ERPs.',
-    responsibilities: [
-      'Develop LLM-powered business agents, document parsing workflows, and semantic search systems',
-      'Integrate AI services (OpenAI, Anthropic, Gemini, Hugging Face) into production enterprise platforms',
-      'Construct automated data ingestion pipelines, vector embeddings stores, and retrieval mechanisms',
-      'Ensure safety guardrails, prompt optimization, and token cost efficiency across all deployments',
-    ],
-    requirements: [
-      'Strong hands-on Python experience and familiarity with LangChain, LlamaIndex, or LiteLLM',
-      'Practical understanding of vector databases (Chroma, Pinecone, pgvector) and RAG architectures',
-      'Experience with RESTful API integration and cloud hosting (AWS / GCP / Modal)',
-      'Curiosity and fast learner mindset in the rapidly evolving generative AI landscape',
-    ],
-  },
-  'general-application': {
-    id: 'jp-fallback-general',
-    title: 'General Talent Application',
-    slug: 'general-application',
-    department: 'All Departments',
-    location: 'Bhilwara HQ / Remote',
-    jobType: 'FULL_TIME',
-    experienceRequired: 'Any Experience Level',
-    createdAt: '2025-01-01T00:00:00.000Z',
-    description:
-      'Don’t see an open role that matches your exact skillset? We are always on the lookout for world-class software engineers, cloud architects, UI/UX designers, and growth marketers. Submit your resume and portfolio.',
-    responsibilities: [
-      'Drive high-impact engineering, design, or growth initiatives tailored to your core strengths',
-      'Collaborate across teams to build and scale SnapTech Digital offerings',
-      'Continuously elevate our technical craft and operational excellence',
-    ],
-    requirements: [
-      'Demonstrated expertise and passion in your field of practice',
-      'Strong problem-solving instincts and clear communication',
-      'Alignment with high-performance, ownership-driven culture',
-    ],
-  },
-}
-
 const applySchema = z.object({
   fullName: z.string().min(2, 'Full Name is required'),
   email: z.string().email('Valid email address is required'),
@@ -226,12 +79,8 @@ export default function JobDetailPage() {
     },
   })
 
-  // Resolve job from DB or fallback catalog
-  const job = useMemo(() => {
-    if (data?.data) return data.data
-    if (slug && FALLBACK_ROLE_MAP[slug]) return FALLBACK_ROLE_MAP[slug]
-    return null
-  }, [data?.data, slug])
+  // Resolve job from DB
+  const job = data?.data || null
 
   useEffect(() => {
     if (job?.slug) {
@@ -344,7 +193,7 @@ export default function JobDetailPage() {
     }
   }
 
-  const whatsappNumber = (cfg.whatsapp || cfg.phone || '917597000601').replace(/[^0-9]/g, '')
+  const whatsappNumber = (cfg.whatsapp || cfg.phone || '918209604849').replace(/[^0-9]/g, '')
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
     `Hello Snaptech Team, I am inquiring about the ${job?.title || 'Open Role'} position.`
   )}`
@@ -357,7 +206,7 @@ export default function JobDetailPage() {
     )
   }
 
-  if ((error || !job) && !FALLBACK_ROLE_MAP[slug]) {
+  if (error || (!isLoading && !job)) {
     return (
       <div className="min-h-screen bg-white text-slate-700 py-32 flex items-center justify-center">
         <Container>

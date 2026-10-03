@@ -14,7 +14,7 @@ const FALLBACK_ENTERPRISE_PARTNERS = [
   { id: '4', name: 'Bhilwara Infotech Solutions' },
   { id: '5', name: 'Shree Cement Logistics' },
   { id: '6', name: 'Mewar Polytex Industries' },
-  { id: '7', name: 'Hindustan Heavy Engineering' },
+  { id: '7', name: 'Precision Heavy Engineering' },
   { id: '8', name: 'Apex Digital Logistics' },
 ]
 

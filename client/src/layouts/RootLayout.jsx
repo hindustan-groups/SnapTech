@@ -33,7 +33,7 @@ export default function RootLayout() {
   const rawWhatsapp = cfg.whatsapp || cfg.phone || ''
   const whatsappNum = rawWhatsapp && !rawWhatsapp.includes('99999') && !rawWhatsapp.includes('123456')
     ? rawWhatsapp.replace(/[^0-9]/g, '')
-    : '917597000601'
+    : '918209604849'
 
   return (
     <div className="min-h-screen bg-bg-base text-text-dark font-body flex flex-col relative">

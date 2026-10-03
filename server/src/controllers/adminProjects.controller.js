@@ -20,7 +20,7 @@ async function generateSocialDraft(project) {
     ? project.technologies.map((t) => `#${t.replace(/[^a-zA-Z0-9]/g, '')}`).join(' ')
     : '#TechSolutions'
 
-  const caption = `🚀 NEW FEATURED PROJECT: ${project.title} 🚀\n\nWe are thrilled to showcase our latest work! We recently delivered this high-performance ${project.category} solution for our esteemed client, ${project.clientName}.\n\n🛠️ Technologies: ${project.technologies?.join(', ') || 'Modern Stack'}\n\n🔗 Live link: ${project.liveUrl || 'https://hindustanprojects.com'}\n\n#HindustanProjects #WebDevelopment #SoftwareEngineering #Portfolio ${techHashtags}`
+  const caption = `🚀 NEW FEATURED PROJECT: ${project.title} 🚀\n\nWe are thrilled to showcase our latest work! We recently delivered this high-performance ${project.category} solution for our esteemed client, ${project.clientName}.\n\n🛠️ Technologies: ${project.technologies?.join(', ') || 'Modern Stack'}\n\n🔗 Live link: ${project.liveUrl || 'https://www.snaptech.digital'}\n\n#SnapTechDigital #SnapTech #WebDevelopment #SoftwareEngineering #Portfolio ${techHashtags}`
 
   await prisma.socialPostDraft.create({
     data: {

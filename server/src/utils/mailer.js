@@ -176,8 +176,8 @@ export async function sendEmail(options) {
  * Accepts settings object from SiteSetting DB so values stay updated from admin panel.
  */
 export function professionalEmailFooter(settings = {}) {
-  const phone    = settings.phone    || '+91 75970 00601'
-  const whatsapp = settings.whatsapp || '+91 75970 00601'
+  const phone    = settings.phone    || '+91 8209604849'
+  const whatsapp = settings.whatsapp || '+91 8209604849'
   const address  = settings.address  || 'Bhilwara – 311001, Rajasthan, India'
   const linkedin  = settings.linkedin  || null
   const facebook  = settings.facebook  || null
@@ -290,7 +290,7 @@ export function adminNotificationTemplate({ name, email, phone, message, service
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
         <div style="background: #001D4A; padding: 20px; border-radius: 6px 6px 0 0; margin: -20px -20px 20px;">
           <h1 style="color: #ffffff; margin: 0; font-size: 20px;">New IT Project Lead</h1>
-          <p style="color: #00D2FF; margin: 4px 0 0; font-size: 14px; font-weight: bold;">Snaptech &bull; Hindustan Projects IT Services</p>
+          <p style="color: #00D2FF; margin: 4px 0 0; font-size: 14px; font-weight: bold;">SnapTech Digital &bull; IT Services</p>
         </div>
 
         <table style="width: 100%; border-collapse: collapse;">
@@ -334,12 +334,12 @@ export function adminNotificationTemplate({ name, email, phone, message, service
  * Auto-reply email — sent to the user confirming their submission.
  */
 export function autoReplyTemplate({ name }) {
-  const phone = process.env.SITE_PHONE || '+91 75970 00601'
+  const phone = process.env.SITE_PHONE || '+91 8209604849'
   const email = process.env.EMAIL_FROM
     ? process.env.EMAIL_FROM.replace(/.*<(.+)>/, '$1')
     : process.env.EMAIL_USER || 'info@snaptech.digital'
   return {
-    subject: 'Thank you for contacting SnapTech Digital — Hindustan Projects',
+    subject: 'Thank you for contacting SnapTech Digital',
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
         <div style="background: #001D4A; padding: 20px; border-radius: 6px 6px 0 0; margin: -20px -20px 20px; text-align: center;">
@@ -397,7 +397,7 @@ export function jobAdminNotificationTemplate({
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
         <div style="background: #1A3E8C; padding: 20px; border-radius: 6px 6px 0 0; margin: -20px -20px 20px;">
           <h1 style="color: #ffffff; margin: 0; font-size: 20px;">New Job Application</h1>
-          <p style="color: #93c5fd; margin: 4px 0 0; font-size: 14px;">Hindustan Projects Careers</p>
+          <p style="color: #93c5fd; margin: 4px 0 0; font-size: 14px;">SnapTech Digital Careers</p>
         </div>
 
         <table style="width: 100%; border-collapse: collapse;">
@@ -442,36 +442,36 @@ export function jobAdminNotificationTemplate({
  */
 export function jobApplicantConfirmationTemplate({ name, jobTitle }) {
   return {
-    subject: `Application Received: ${jobTitle} at Hindustan Projects`,
+    subject: `Application Received: ${jobTitle} at SnapTech Digital`,
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
-        <div style="background: #1A3E8C; padding: 20px; border-radius: 6px 6px 0 0; margin: -20px -20px 20px; text-align: center;">
+        <div style="background: #001D4A; padding: 20px; border-radius: 6px 6px 0 0; margin: -20px -20px 20px; text-align: center;">
           <h1 style="color: #ffffff; margin: 0; font-size: 22px;">
-            <span style="color: #E31E24;">Hindustan </span>Projects
+            <span style="color: #0066FF;">SnapTech </span>Digital
           </h1>
         </div>
 
         <p style="font-size: 16px; color: #1A1A1A;">Dear <strong>${name}</strong>,</p>
 
         <p style="font-size: 15px; color: #374151; line-height: 1.7;">
-          Thank you for applying for the <strong>${jobTitle}</strong> position at Hindustan Projects. We have successfully received your job application and resume.
+          Thank you for applying for the <strong>${jobTitle}</strong> position at SnapTech Digital. We have successfully received your job application and resume.
         </p>
 
         <p style="font-size: 15px; color: #374151; line-height: 1.7;">
-          Our HR team is currently reviewing applications. If your profile matches our requirements, we will contact you within <strong>24 hours</strong>.
+          Our Talent Acquisition team is currently reviewing applications. If your profile matches our requirements, we will contact you within <strong>24 hours</strong>.
         </p>
 
         <p style="font-size: 15px; color: #374151; line-height: 1.7;">
-          We appreciate your interest in building a career with Hindustan Projects!
+          We appreciate your interest in building a career with SnapTech Digital!
         </p>
 
         <p style="font-size: 13px; color: #6B7280; margin-top: 24px; border-top: 1px solid #e5e7eb; padding-top: 16px; text-align: center;">
-          © ${new Date().getFullYear()} Hindustan Projects. All rights reserved.<br>
+          &copy; ${new Date().getFullYear()} SnapTech Digital. All rights reserved.<br>
           Bhilwara, Rajasthan, India
         </p>
       </div>
     `,
-    text: `Dear ${name},\n\nThank you for applying for the ${jobTitle} position at Hindustan Projects!\n\nWe have successfully received your application. Our recruitment team will review it and get back to you within 24 hours.\n\nBest regards,\nHindustan Projects HR Team`,
+    text: `Dear ${name},\n\nThank you for applying for the ${jobTitle} position at SnapTech Digital!\n\nWe have successfully received your application. Our talent team will review it and get back to you within 24 hours.\n\nBest regards,\nSnapTech Digital Talent Team`,
   }
 }
 
@@ -584,7 +584,7 @@ export function weeklySummaryReportTemplate({ stats }) {
   `).join('')
 
   return {
-    subject: `📊 Weekly Summary Report — Hindustan Projects`,
+    subject: `📊 Weekly Summary Report — SnapTech Digital`,
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
         <div style="background: #1A3E8C; padding: 20px; border-radius: 6px 6px 0 0; margin: -20px -20px 20px; text-align: center;">
@@ -619,7 +619,7 @@ export function weeklySummaryReportTemplate({ stats }) {
         </table>
 
         <p style="margin-top: 30px; font-size: 12px; color: #9ca3af; text-align: center; border-top: 1px solid #e5e7eb; padding-top: 15px;">
-          This automated report was generated by Hindustan Projects.
+          This automated report was generated by SnapTech Digital.
         </p>
       </div>
     `,
@@ -667,7 +667,7 @@ export function clientPaymentSuccessTemplate({ clientName, projectName, mileston
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
         <div style="background: #1A3E8C; padding: 20px; border-radius: 6px 6px 0 0; margin: -20px -20px 20px; text-align: center;">
           <h1 style="color: #ffffff; margin: 0; font-size: 22px;">Payment Receipt</h1>
-          <p style="color: #93c5fd; margin: 4px 0 0; font-size: 14px;">Hindustan Projects billing system</p>
+          <p style="color: #93c5fd; margin: 4px 0 0; font-size: 14px;">SnapTech Digital Billing System</p>
         </div>
 
         <p style="font-size: 16px; color: #1A1A1A;">Dear <strong>${clientName}</strong>,</p>
@@ -698,7 +698,7 @@ export function clientPaymentSuccessTemplate({ clientName, projectName, mileston
         </p>
       </div>
     `,
-    text: `Dear ${clientName},\n\nThank you for your payment!\n\nWe have processed ₹${amount.toLocaleString('en-IN')} for milestone "${milestoneTitle}" under project "${projectName}".\n\nDownload Link: ${invoiceUrl}\n\nBest regards,\nHindustan Projects Billing Team`,
+    text: `Dear ${clientName},\n\nThank you for your payment!\n\nWe have processed ₹${amount.toLocaleString('en-IN')} for milestone "${milestoneTitle}" under project "${projectName}".\n\nDownload Link: ${invoiceUrl}\n\nBest regards,\nSnapTech Digital Billing Team`,
   }
 }
 
@@ -712,7 +712,7 @@ export function supportTicketCreatedTemplate({ clientName, ticketId, subject, ca
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
         <div style="background: #1A3E8C; padding: 20px; border-radius: 6px 6px 0 0; margin: -20px -20px 20px; text-align: center;">
           <h1 style="color: #ffffff; margin: 0; font-size: 20px;">New Support Ticket</h1>
-          <p style="color: #93c5fd; margin: 4px 0 0; font-size: 14px;">Hindustan Projects Helpdesk</p>
+          <p style="color: #93c5fd; margin: 4px 0 0; font-size: 14px;">SnapTech Digital Helpdesk</p>
         </div>
 
         <p style="font-size: 15px; color: #1A1A1A;">Hello Admin/Support Team,</p>
@@ -751,7 +751,7 @@ export function ticketAssignmentTemplate({ adminEmail, ticketId, subject, catego
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
         <div style="background: linear-gradient(135deg, #1A3E8C, #1e4db7); padding: 20px; border-radius: 6px 6px 0 0; margin: -20px -20px 20px; text-align: center;">
           <h1 style="color: #ffffff; margin: 0; font-size: 20px;">Ticket Assigned to You</h1>
-          <p style="color: #93c5fd; margin: 4px 0 0; font-size: 14px;">Hindustan Projects Support Desk</p>
+          <p style="color: #93c5fd; margin: 4px 0 0; font-size: 14px;">SnapTech Digital Support Desk</p>
         </div>
 
         <p style="font-size: 15px; color: #1A1A1A;">Hello <strong>${adminEmail}</strong>,</p>
@@ -792,7 +792,7 @@ export function supportTicketReplyTemplate({ recipientName, ticketId, subject, s
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
         <div style="background: #1A3E8C; padding: 20px; border-radius: 6px 6px 0 0; margin: -20px -20px 20px; text-align: center;">
           <h1 style="color: #ffffff; margin: 0; font-size: 20px;">Ticket Reply Received</h1>
-          <p style="color: #93c5fd; margin: 4px 0 0; font-size: 14px;">Hindustan Projects Helpdesk</p>
+          <p style="color: #93c5fd; margin: 4px 0 0; font-size: 14px;">SnapTech Digital Helpdesk</p>
         </div>
 
         <p style="font-size: 15px; color: #1A1A1A;">Dear <strong>${recipientName}</strong>,</p>

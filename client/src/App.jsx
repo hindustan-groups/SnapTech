@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import RootLayout from '@/layouts/RootLayout'
 import GlobalClickRipple from '@/components/ui/GlobalClickRipple'
 import { ToastProvider } from '@/components/ui/ToastProvider'
@@ -384,11 +384,7 @@ export default function App() {
           />
           <Route
             index
-            element={
-              <Suspense fallback={<PageFallback />}>
-                <NotFoundPage />
-              </Suspense>
-            }
+            element={<Navigate to="/admin/dashboard" replace />}
           />
         </Route>
 

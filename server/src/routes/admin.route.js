@@ -134,6 +134,13 @@ import {
   resendClientWelcome,
 } from '../controllers/adminUsers.controller.js'
 import { globalSearch } from '../controllers/adminSearch.controller.js'
+import {
+  adminListPricing,
+  adminCreatePricing,
+  adminUpdatePricing,
+  adminBulkUpdatePricing,
+  adminDeletePricing,
+} from '../controllers/pricing.controller.js'
 
 // ── CMS Validation Schemas ─────────────────────────────────────
 
@@ -354,10 +361,30 @@ const blogPostUpdateValidation = [
   body('isFeatured').optional().isBoolean().toBoolean(),
 ]
 
+// Pricing Packages
+const pricingCreateValidation = [
+  body('category').trim().notEmpty().withMessage('Category is required.').isLength({ max: 50 }),
+  body('title').trim().notEmpty().withMessage('Title is required.').isLength({ max: 150 }),
+  body('price').trim().notEmpty().withMessage('Price is required.').isLength({ max: 50 }),
+  body('features').optional().isArray(),
+  body('isPopular').optional().isBoolean().toBoolean(),
+  body('isActive').optional().isBoolean().toBoolean(),
+  body('order').optional().isInt({ min: 0 }).toInt(),
+]
+
+const pricingUpdateValidation = [
+  body('category').optional().trim().notEmpty().withMessage('Category cannot be empty.').isLength({ max: 50 }),
+  body('title').optional().trim().notEmpty().withMessage('Title cannot be empty.').isLength({ max: 150 }),
+  body('price').optional().trim().notEmpty().withMessage('Price cannot be empty.').isLength({ max: 50 }),
+  body('features').optional().isArray(),
+  body('isPopular').optional().isBoolean().toBoolean(),
+  body('isActive').optional().isBoolean().toBoolean(),
+  body('order').optional().isInt({ min: 0 }).toInt(),
+]
+
 const router = Router()
 
-// Dynamic admin login route based on secret path
-const envSecret = process.env.ADMIN_SECRET_PATH || 'h9z7'
+const envSecret = process.env.ADMIN_SECRET_PATH || 'admin-portal'
 const strippedSecret = envSecret.startsWith('admin-') ? envSecret.slice(6) : envSecret
 
 const loginPaths = Array.from(
@@ -366,16 +393,6 @@ const loginPaths = Array.from(
     `/${envSecret}/login`,
     `/${strippedSecret}`,
     `/${strippedSecret}/login`,
-    `/h9z7`,
-    `/h9z7/login`,
-    `/admin-h9z7`,
-    `/admin-h9z7/login`,
-    `/hp`,
-    `/hp/login`,
-    `/admin-hp`,
-    `/admin-hp/login`,
-    `/secure-hp-portal-2026`,
-    `/secure-hp-portal-2026/login`,
     `/login`,
     '/',
     '',
@@ -560,11 +577,37 @@ router.patch(
 )
 router.delete('/faqs/:id', verifyToken, requireRole('SUPER_ADMIN'), deleteFaq)
 
+// ── Pricing Packages ───────────────────────────────────────────
+router.get('/pricing', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), adminListPricing)
+router.post(
+  '/pricing',
+  verifyToken,
+  requireRole('ADMIN', 'SUPER_ADMIN'),
+  pricingCreateValidation,
+  validateRequest,
+  adminCreatePricing
+)
+router.put(
+  '/pricing/bulk',
+  verifyToken,
+  requireRole('ADMIN', 'SUPER_ADMIN'),
+  adminBulkUpdatePricing
+)
+router.patch(
+  '/pricing/:id',
+  verifyToken,
+  requireRole('ADMIN', 'SUPER_ADMIN'),
+  pricingUpdateValidation,
+  validateRequest,
+  adminUpdatePricing
+)
+router.delete('/pricing/:id', verifyToken, requireRole('SUPER_ADMIN'), adminDeletePricing)
+
 // ── Site Settings ──────────────────────────────────────────────
 router.patch('/settings', verifyToken, requireRole('SUPER_ADMIN'), updateSettings)
 
 // ── Admin & Staff User Management ──────────────────────────────
-router.get('/users', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN', 'STAFF'), listAdminUsers)
+router.get('/users', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), listAdminUsers)
 router.post('/users', verifyToken, requireRole('SUPER_ADMIN'), createAdminUser)
 router.patch('/users/:id', verifyToken, requireRole('SUPER_ADMIN'), updateAdminUser)
 router.delete('/users/:id', verifyToken, requireRole('SUPER_ADMIN'), deleteAdminUser)

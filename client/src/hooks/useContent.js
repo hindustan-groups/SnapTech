@@ -14,34 +14,9 @@ export function useSiteSettings() {
     queryKey: ['site-settings'],
     queryFn: async () => {
       const res = await api.get('/settings')
-      if (res?.data) {
-        const d = { ...res.data }
-        if (!d.phone || d.phone.includes('99999') || d.phone.includes('123456')) {
-          d.phone = '+91 75970 00601'
-        }
-        if (!d.whatsapp || d.whatsapp.includes('99999') || d.whatsapp.includes('123456')) {
-          d.whatsapp = '+91 75970 00601'
-        }
-        if (!d.email || d.email.includes('example.com') || d.email.includes('hindustanprojects.com')) {
-          d.email = 'info@snaptech.digital'
-        }
-        if (!d.instagram || d.instagram.trim() === '#' || d.instagram.trim() === '/') {
-          d.instagram = 'https://instagram.com/hindustanprojects'
-        }
-        if (!d.facebook || d.facebook.trim() === '#' || d.facebook.trim() === '/') {
-          d.facebook = 'https://facebook.com/hindustanprojects'
-        }
-        if (!d.linkedin || d.linkedin.trim() === '#' || d.linkedin.trim() === '/') {
-          d.linkedin = 'https://linkedin.com/company/hindustan-projects'
-        }
-        if (!d.pinterest || d.pinterest.trim() === '#' || d.pinterest.trim() === '/') {
-          d.pinterest = 'https://pinterest.com/hindustanprojects'
-        }
-        return { ...res, data: d }
-      }
       return res
     },
-    staleTime: 0,
+    staleTime: 60 * 1000,
   })
 }
 
@@ -88,6 +63,70 @@ export function useUpdateLegalPage() {
     onSuccess: (_, variables) => {
       qc.invalidateQueries({ queryKey: ['admin-legal-pages'] })
       qc.invalidateQueries({ queryKey: ['legal-page', variables.pageType] })
+    },
+  })
+}
+
+// ── Pricing Packages Hooks ─────────────────────────────────────
+export function usePricingPackages(category) {
+  return useQuery({
+    queryKey: ['pricing-packages', category || 'all'],
+    queryFn: () => {
+      const url = category ? `/pricing?category=${category}` : '/pricing'
+      return api.get(url).then((r) => r.data)
+    },
+    staleTime: 60 * 1000,
+  })
+}
+
+export function useAdminPricing() {
+  return useQuery({
+    queryKey: ['admin-pricing'],
+    queryFn: () => api.get('/admin/pricing').then((r) => r.data),
+    staleTime: 0,
+  })
+}
+
+export function useCreatePricingPackage() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (data) => api.post('/admin/pricing', data).then((r) => r.data),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['admin-pricing'] })
+      qc.invalidateQueries({ queryKey: ['pricing-packages'] })
+    },
+  })
+}
+
+export function useUpdatePricingPackage() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, ...data }) => api.patch(`/admin/pricing/${id}`, data).then((r) => r.data),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['admin-pricing'] })
+      qc.invalidateQueries({ queryKey: ['pricing-packages'] })
+    },
+  })
+}
+
+export function useBulkUpdatePricingPackages() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (packages) => api.put('/admin/pricing/bulk', { packages }).then((r) => r.data),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['admin-pricing'] })
+      qc.invalidateQueries({ queryKey: ['pricing-packages'] })
+    },
+  })
+}
+
+export function useDeletePricingPackage() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (id) => api.delete(`/admin/pricing/${id}`).then((r) => r.data),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['admin-pricing'] })
+      qc.invalidateQueries({ queryKey: ['pricing-packages'] })
     },
   })
 }

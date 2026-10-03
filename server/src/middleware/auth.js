@@ -70,7 +70,7 @@ export const requireRole =
  * if the request lacks a valid token.
  */
 export const hideAdminRoutes = (req, res, next) => {
-  const envSecret = process.env.ADMIN_SECRET_PATH || 'secure-hp-portal-2026'
+  const envSecret = process.env.ADMIN_SECRET_PATH || 'admin-portal'
   const strippedSecret = envSecret.startsWith('admin-') ? envSecret.slice(6) : envSecret
   const prefixedSecret = envSecret.startsWith('admin-') ? envSecret : `admin-${envSecret}`
 
@@ -84,16 +84,6 @@ export const hideAdminRoutes = (req, res, next) => {
     `/api/admin/${strippedSecret}`,
     `/api/admin/${prefixedSecret}/login`,
     `/api/admin/${prefixedSecret}`,
-    `/api/admin/h9z7/login`,
-    `/api/admin/h9z7`,
-    `/api/admin/admin-h9z7/login`,
-    `/api/admin/admin-h9z7`,
-    `/api/admin/hp/login`,
-    `/api/admin/hp`,
-    `/api/admin/admin-hp/login`,
-    `/api/admin/admin-hp`,
-    `/api/admin/secure-hp-portal-2026/login`,
-    `/api/admin/secure-hp-portal-2026`,
     `/api/admin/login`,
     `/api/admin`,
     `/api/admin/logout`,
