@@ -1,12 +1,24 @@
 /**
- * Admin Login Page — Premium branded login screen (light theme) with 2FA support
+ * Admin Login Page — Ultra-modern Glassmorphic Command Center Authentication
  */
 import { useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Eye, EyeOff, AlertCircle, Mail, Lock, ShieldCheck, KeyRound } from 'lucide-react'
+import {
+  Eye,
+  EyeOff,
+  AlertCircle,
+  Mail,
+  Lock,
+  ShieldCheck,
+  KeyRound,
+  ArrowLeft,
+  Cpu,
+  Shield,
+  Activity,
+} from 'lucide-react'
 import { api } from '@/utils/api'
 import { SEO } from '@/components/ui'
 import WaterRippleLogo from '@/components/ui/WaterRippleLogo'
@@ -115,288 +127,343 @@ export default function AdminLoginPage() {
   return (
     <>
       <SEO title="Admin Login" noIndex />
-      <div
-        className="min-h-screen flex bg-[#020714] text-white selection:bg-cyan-500 selection:text-black relative overflow-hidden"
-      >
-        {/* Background ambient orbs */}
-        <div className="absolute top-1/4 left-1/3 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-10 right-10 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="h-screen w-full relative flex items-center justify-center p-3 sm:p-4 lg:p-6 overflow-hidden bg-white text-slate-900 selection:bg-blue-500 selection:text-white">
+        {/* ── Soft Ethereal Ambient Light Blooms (Light Theme) ── */}
+        <div className="absolute -top-24 -left-20 w-xl h-144 bg-sky-400/15 rounded-full blur-[140px] pointer-events-none animate-pulse" />
+        <div className="absolute top-1/4 -right-24 w-160 h-160 bg-blue-500/12 rounded-full blur-[160px] pointer-events-none" />
+        <div className="absolute -bottom-24 left-1/4 w-136 h-136 bg-indigo-400/10 rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-120 h-120 bg-cyan-300/15 rounded-full blur-[120px] pointer-events-none" />
 
-        {/* ── Left panel — Brand ── */}
+        {/* Ambient Subtle Architectural Light Grid */}
         <div
-          className="hidden lg:flex flex-col justify-between w-110 shrink-0 p-10 relative overflow-hidden bg-[#03091e]/90 border-r border-white/10"
-        >
-          {/* Grid pattern */}
-          <div
-            className="absolute inset-0 opacity-10"
-            style={{
-              backgroundImage:
-                'linear-gradient(to right,#fff 1px,transparent 1px),linear-gradient(to bottom,#fff 1px,transparent 1px)',
-              backgroundSize: '32px 32px',
-            }}
-          />
+          className="absolute inset-0 opacity-[0.04] pointer-events-none"
+          style={{
+            backgroundImage:
+              'linear-gradient(to right,#0f172a 1px,transparent 1px),linear-gradient(to bottom,#0f172a 1px,transparent 1px)',
+            backgroundSize: '48px 48px',
+            maskImage: 'radial-gradient(ellipse at center, white 40%, transparent 80%)',
+            WebkitMaskImage: 'radial-gradient(ellipse at center, white 40%, transparent 80%)',
+          }}
+        />
 
-          {/* Glow orbs */}
-          <div className="absolute top-20 left-10 w-48 h-48 bg-cyan-500/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-20 right-0 w-64 h-64 bg-blue-600/10 rounded-full blur-3xl" />
+        {/* ── Main Frosted White Glass Island Deck ── */}
+        <div className="w-full max-w-4xl max-h-[94vh] rounded-3xl backdrop-blur-3xl bg-white/80 border border-white/90 shadow-[0_25px_70px_-15px_rgba(15,23,42,0.08),0_0_0_1px_rgba(226,232,240,0.8),inset_0_1px_2px_rgba(255,255,255,0.9)] overflow-hidden grid lg:grid-cols-12 relative z-10 transition-all">
+          {/* Specular top rim light highlight */}
+          <div className="absolute inset-x-0 top-0 h-0.5 bg-linear-to-r from-transparent via-blue-500/40 to-transparent pointer-events-none z-20" />
 
-          {/* Logo */}
-          <div className="relative flex items-center gap-3">
-            <img
-              src="/snaptech-icon.png"
-              alt="SnapTech Digital"
-              className="w-10 h-10 rounded-xl object-contain border border-white/10"
-            />
-            <div>
-              <p className="font-heading font-bold text-white text-base">SnapTech Digital</p>
-              <p className="text-cyan-400 text-xs font-semibold tracking-wider uppercase">Command Center</p>
-            </div>
-          </div>
-
-          {/* Interactive Fluid Canvas in Left Brand Column */}
-          <div className="relative my-2">
-            <WaterRippleLogo
-              variant="card"
-              canvasHeightClass="h-38"
-              showCues={true}
-              showBottomCaption={true}
-              className="border-cyan-500/30"
-            />
-          </div>
-
-          {/* Center content */}
-          <div className="relative space-y-6">
-            <div>
-              <h2
-                className="text-white font-heading text-3xl font-bold leading-tight mb-3"
-              >
-                Enterprise
-                <br />
-                <span className="text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-blue-500">
-                  Command Center
-                </span>
-              </h2>
-              <p className="text-slate-400 text-sm leading-relaxed">
-                Control services, client projects, leads, team members, cost calculations, and cloud settings — all in real time.
-              </p>
-            </div>
-
-            {/* Feature bullets */}
-            <div className="space-y-3">
-              {[
-                'Real-time lead CRM & cost calculator telemetry',
-                'Transactional email delivery via Resend API',
-                'Multi-tier 2FA & enterprise JWT authorization',
-              ].map((text) => (
-                <div key={text} className="flex items-center gap-3">
-                  <div className="w-5 h-5 rounded-full bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center shrink-0">
-                    <div className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-                  </div>
-                  <p className="text-slate-300 text-sm">{text}</p>
+          {/* ── Left Column — Brand & Interactive Fluid Showcase (Desktop) ── */}
+          <div className="hidden lg:flex lg:col-span-6 p-5 sm:p-6 lg:p-7 flex-col justify-between border-r border-slate-200/70 bg-linear-to-b from-slate-50/80 via-white/70 to-blue-50/30 backdrop-blur-2xl relative">
+            {/* Top Brand Bar */}
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-white border border-slate-200/90 p-1.5 shadow-xs backdrop-blur-xl flex items-center justify-center shrink-0">
+                  <img
+                    src="/snaptech-icon.png"
+                    alt="SnapTech Digital"
+                    className="w-full h-full object-contain"
+                  />
                 </div>
-              ))}
-            </div>
-          </div>
+                <div>
+                  <p className="font-heading font-bold text-slate-900 text-sm tracking-tight leading-tight">
+                    SnapTech Digital
+                  </p>
+                  <p className="text-blue-600 text-[10px] font-semibold tracking-wider uppercase">
+                    Command Center
+                  </p>
+                </div>
+              </div>
 
-          {/* Footer */}
-          <div className="relative">
-            <p className="text-slate-500 text-xs">© {new Date().getFullYear()} SnapTech Digital &bull; Command Center</p>
-          </div>
-        </div>
-
-        {/* ── Right panel — Form ── */}
-        <div className="flex-1 flex items-center justify-center p-6 lg:p-12 relative z-10">
-          <div className="w-full max-w-md">
-            {/* Mobile logo */}
-            <div className="lg:hidden text-center mb-6">
-              <div className="inline-flex items-center gap-2.5">
-                <img
-                  src="/snaptech-icon.png"
-                  alt="SnapTech Digital"
-                  className="w-9 h-9 rounded-xl object-contain border border-white/10"
-                />
-                <span className="font-heading font-bold text-xl text-white">
-                  SnapTech Digital
+              {/* Live operational status pill */}
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-700 text-[10px] font-semibold backdrop-blur-xl shadow-xs">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
                 </span>
+                Active Node
               </div>
             </div>
 
-            {/* Card */}
-            <div className="bg-[#03091e]/90 rounded-2xl border border-white/10 shadow-2xl backdrop-blur-xl p-8">
-              {/* Interactive Fluid Water Logo at top of form */}
-              <div className="mb-6">
-                <WaterRippleLogo
-                  variant="card"
-                  canvasHeightClass="h-28"
-                  showCues={false}
-                  showBottomCaption={false}
-                  className="border-cyan-500/30 shadow-lg shadow-cyan-950/40"
-                />
-              </div>
-
-              <div className="mb-6">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 mb-3">
-                  <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
-                  <span className="text-xs font-semibold text-cyan-400">Secure Admin Access</span>
-                </div>
-                <h1 className="font-heading text-2xl font-bold text-white">
-                  {tempToken ? 'Two-Factor Authentication' : 'Welcome Back'}
-                </h1>
-                <p className="text-sm text-slate-400 mt-1">
-                  {tempToken ? 'Enter your 6-digit Google Authenticator code' : 'Sign in to access your administrative command center'}
+            {/* Middle Section: Title, Fluid Ripple Logo & Presentation */}
+            <div className="my-2.5 space-y-2.5">
+              <div>
+                <h2 className="text-slate-900 font-heading text-lg sm:text-xl font-extrabold leading-tight mb-1">
+                  Enterprise{' '}
+                  <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-600 via-indigo-600 to-cyan-600">
+                    Command Console
+                  </span>
+                </h2>
+                <p className="text-slate-600 text-[11px] leading-relaxed line-clamp-2">
+                  Unified operational dashboard for client accounts, CRM leads, live telemetry, and secure cloud management.
                 </p>
               </div>
 
-              {!tempToken ? (
-                // ── Email/Password Form ──
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
-                  {/* Email */}
-                  <div>
-                    <label className="text-xs font-semibold text-slate-300 block mb-1.5 uppercase tracking-wide">
-                      Email Address
-                    </label>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-                      <input
-                        type="email"
-                        autoComplete="email"
-                        className={`w-full pl-9 pr-3.5 py-3 text-sm border rounded-xl focus:outline-none
-                          focus:ring-1 focus:ring-cyan-500/40 focus:border-cyan-500/50 transition-all text-white placeholder:text-slate-500
-                          ${errors.email ? 'border-red-500/50 bg-red-500/10' : 'border-white/10 bg-slate-900/80 focus:bg-slate-900'}`}
-                        placeholder="name@company.com"
-                        {...register('email')}
-                      />
-                    </div>
-                    {errors.email && (
-                      <p className="text-xs text-red-400 mt-1.5 flex items-center gap-1">
-                        <AlertCircle className="w-3 h-3" /> {errors.email.message}
-                      </p>
-                    )}
-                  </div>
+              {/* Interactive Fluid Canvas inside Inset Deck */}
+              <div className="relative rounded-2xl border border-slate-200/80 bg-slate-950/90 backdrop-blur-xl p-1.5 shadow-md overflow-hidden">
+                <WaterRippleLogo
+                  variant="card"
+                  canvasHeightClass="h-24 sm:h-26"
+                  showCues={false}
+                  showBottomCaption={false}
+                  className="border-transparent"
+                />
+              </div>
 
-                  {/* Password */}
-                  <div>
-                    <label className="text-xs font-semibold text-slate-300 block mb-1.5 uppercase tracking-wide">
-                      Password
-                    </label>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-                      <input
-                        type={showPass ? 'text' : 'password'}
-                        autoComplete="current-password"
-                        className={`w-full pl-9 pr-10 py-3 text-sm border rounded-xl focus:outline-none
-                          focus:ring-1 focus:ring-cyan-500/40 focus:border-cyan-500/50 transition-all text-white placeholder:text-slate-500
-                          ${errors.password ? 'border-red-500/50 bg-red-500/10' : 'border-white/10 bg-slate-900/80 focus:bg-slate-900'}`}
-                        placeholder="••••••••••••"
-                        {...register('password')}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPass((v) => !v)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors cursor-pointer"
-                      >
-                        {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                      </button>
+              {/* Sleek Frosted Feature Micro-cards */}
+              <div className="grid gap-1.5">
+                {[
+                  {
+                    icon: Activity,
+                    title: 'Real-time Lead CRM & Telemetry',
+                    desc: 'Live inquiry pipeline & estimate tracker',
+                  },
+                  {
+                    icon: Shield,
+                    title: '2FA & Enterprise JWT Security',
+                    desc: 'Time-synced TOTP authorization & access control',
+                  },
+                  {
+                    icon: Cpu,
+                    title: 'Automated Resend Delivery',
+                    desc: 'High-speed proposal dispatch & security alerts',
+                  },
+                ].map(({ icon: Icon, title, desc }) => (
+                  <div
+                    key={title}
+                    className="flex items-center gap-2 p-2 rounded-xl bg-white/80 hover:bg-white border border-slate-200/70 shadow-xs hover:shadow-sm hover:border-blue-300 transition-all duration-200"
+                  >
+                    <div className="w-6 h-6 rounded-lg bg-blue-50 border border-blue-200/60 flex items-center justify-center shrink-0 text-blue-600 shadow-xs">
+                      <Icon className="w-3 h-3" />
                     </div>
-                    {errors.password && (
-                      <p className="text-xs text-red-400 mt-1.5 flex items-center gap-1">
-                        <AlertCircle className="w-3 h-3" /> {errors.password.message}
-                      </p>
-                    )}
+                    <div className="min-w-0 flex-1">
+                      <p className="text-slate-800 text-[11px] font-semibold truncate leading-tight">{title}</p>
+                      <p className="text-slate-500 text-[10px] truncate leading-tight">{desc}</p>
+                    </div>
                   </div>
+                ))}
+              </div>
+            </div>
 
-                  {/* API error */}
-                  {error && (
-                    <div
-                      className="flex items-center gap-2.5 text-sm text-red-300 bg-red-500/10
-                      border border-red-500/30 rounded-xl px-4 py-3"
-                    >
-                      <AlertCircle className="w-4 h-4 shrink-0" />
-                      {error}
-                    </div>
+            {/* Bottom Footer Info */}
+            <div className="pt-2 border-t border-slate-200/70 flex items-center justify-between text-[10px] text-slate-400">
+              <span>© {new Date().getFullYear()} SnapTech Digital</span>
+              <span className="text-blue-600 font-mono font-medium">v2.6 Enterprise</span>
+            </div>
+          </div>
+
+          {/* ── Right Column — Glass Login Form ── */}
+          <div className="lg:col-span-6 p-5 sm:p-7 lg:p-8 flex flex-col justify-center bg-white/60 backdrop-blur-3xl relative">
+            {/* Mobile Header (Shown on < lg screens) */}
+            <div className="lg:hidden flex items-center justify-between gap-3 pb-4 mb-4 border-b border-slate-200/80">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-white border border-slate-200 p-1 flex items-center justify-center shrink-0 shadow-xs">
+                  <img
+                    src="/snaptech-icon.png"
+                    alt="SnapTech Digital"
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+                <div>
+                  <p className="font-heading font-bold text-slate-900 text-xs leading-tight">
+                    SnapTech Digital
+                  </p>
+                  <p className="text-blue-600 text-[9px] font-semibold tracking-wider uppercase">
+                    Command Center
+                  </p>
+                </div>
+              </div>
+              <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-[9px] font-semibold">
+                <span className="h-1 w-1 rounded-full bg-emerald-500" />
+                Live
+              </div>
+            </div>
+
+            {/* Frosted Gateway Badge */}
+            <div className="mb-4">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50/90 border border-blue-200/80 text-blue-700 text-[11px] font-semibold backdrop-blur-xl mb-2 shadow-xs">
+                <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
+                <span>{tempToken ? 'Two-Factor Authentication' : 'Secure Admin Gateway'}</span>
+              </div>
+              <h1 className="font-heading text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
+                {tempToken ? 'Verify Identity' : 'Welcome Back'}
+              </h1>
+              <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                {tempToken
+                  ? 'Enter the 6-digit TOTP code from Google Authenticator or Authy.'
+                  : 'Enter your administrative credentials to unlock the console.'}
+              </p>
+            </div>
+
+            {!tempToken ? (
+              // ── Email/Password Form ──
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-3.5" noValidate>
+                {/* Email Address */}
+                <div>
+                  <label className="text-[11px] font-bold text-slate-700 block mb-1.5 uppercase tracking-wider">
+                    Email Address
+                  </label>
+                  <div
+                    className={`relative flex items-center rounded-xl border backdrop-blur-xl transition-all duration-200 shadow-xs
+                      ${
+                        errors.email
+                          ? 'border-red-400 bg-red-50/50 ring-2 ring-red-200'
+                          : 'border-slate-200 bg-white/90 hover:bg-white hover:border-slate-300 focus-within:bg-white focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/15'
+                      }`}
+                  >
+                    <Mail className="absolute left-3.5 w-4 h-4 text-slate-400 pointer-events-none" />
+                    <input
+                      type="email"
+                      autoComplete="email"
+                      className="w-full pl-10 pr-3.5 py-2.5 text-xs sm:text-sm bg-transparent text-slate-900 placeholder:text-slate-400 focus:outline-none font-medium"
+                      placeholder="admin@snaptech.digital"
+                      {...register('email')}
+                    />
+                  </div>
+                  {errors.email && (
+                    <p className="text-[11px] text-red-600 mt-1 flex items-center gap-1 font-medium">
+                      <AlertCircle className="w-3 h-3 shrink-0" /> {errors.email.message}
+                    </p>
                   )}
+                </div>
 
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full bg-linear-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold py-3 rounded-xl text-sm
-                      transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed
-                      hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] cursor-pointer mt-2"
+                {/* Password */}
+                <div>
+                  <label className="text-[11px] font-bold text-slate-700 block mb-1.5 uppercase tracking-wider">
+                    Password
+                  </label>
+                  <div
+                    className={`relative flex items-center rounded-xl border backdrop-blur-xl transition-all duration-200 shadow-xs
+                      ${
+                        errors.password
+                          ? 'border-red-400 bg-red-50/50 ring-2 ring-red-200'
+                          : 'border-slate-200 bg-white/90 hover:bg-white hover:border-slate-300 focus-within:bg-white focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/15'
+                      }`}
                   >
-                    {loading ? (
-                      <span className="flex items-center justify-center gap-2">
-                        <span className="w-4 h-4 border-2 border-black/40 border-t-black rounded-full animate-spin" />
-                        Signing in…
-                      </span>
-                    ) : (
-                      'Sign In to Command Center'
-                    )}
-                  </button>
-                </form>
-              ) : (
-                // ── 2FA Verification Form ──
-                <form onSubmit={handleOtpSubmit} className="space-y-5">
-                  <div>
-                    <label className="text-xs font-semibold text-slate-300 block mb-1.5 uppercase tracking-wide">
-                      Verification Code
-                    </label>
-                    <div className="relative">
-                      <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-                      <input
-                        type="text"
-                        maxLength={6}
-                        pattern="[0-9]*"
-                        inputMode="numeric"
-                        className={`w-full pl-9 pr-3.5 py-3 text-sm border rounded-xl focus:outline-none
-                          focus:ring-1 focus:ring-cyan-500/40 focus:border-cyan-500/50 bg-slate-900/80 text-white placeholder:text-slate-500 transition-all
-                          ${otpError ? 'border-red-500/50 bg-red-500/10' : 'border-white/10'}`}
-                        placeholder="000000"
-                        value={otpCode}
-                        onChange={(e) => setOtpCode(e.target.value.replace(/[^0-9]/g, ''))}
-                      />
-                    </div>
-                    {otpError && (
-                      <p className="text-xs text-red-400 mt-1.5 flex items-center gap-1">
-                        <AlertCircle className="w-3 h-3" /> {otpError}
-                      </p>
-                    )}
+                    <Lock className="absolute left-3.5 w-4 h-4 text-slate-400 pointer-events-none" />
+                    <input
+                      type={showPass ? 'text' : 'password'}
+                      autoComplete="current-password"
+                      className="w-full pl-10 pr-10 py-2.5 text-xs sm:text-sm bg-transparent text-slate-900 placeholder:text-slate-400 focus:outline-none font-medium"
+                      placeholder="••••••••••••"
+                      {...register('password')}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPass((v) => !v)}
+                      className="absolute right-2.5 p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 active:scale-95 transition-all cursor-pointer"
+                      aria-label={showPass ? 'Hide password' : 'Show password'}
+                    >
+                      {showPass ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                    </button>
                   </div>
+                  {errors.password && (
+                    <p className="text-[11px] text-red-600 mt-1 flex items-center gap-1 font-medium">
+                      <AlertCircle className="w-3 h-3 shrink-0" /> {errors.password.message}
+                    </p>
+                  )}
+                </div>
 
-                  <button
-                    type="submit"
-                    disabled={otpLoading}
-                    className="w-full bg-linear-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold py-3 rounded-xl text-sm
-                      transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed
-                      hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] cursor-pointer mt-2"
+                {/* API Error Notification */}
+                {error && (
+                  <div className="flex items-center gap-2 text-xs text-red-700 bg-red-50 border border-red-200 rounded-xl px-3 py-2 shadow-xs">
+                    <AlertCircle className="w-3.5 h-3.5 shrink-0 text-red-500" />
+                    <span className="font-medium">{error}</span>
+                  </div>
+                )}
+
+                {/* Submit Button */}
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full relative overflow-hidden bg-linear-to-r from-blue-600 via-blue-500 to-cyan-500 hover:from-blue-700 hover:via-blue-600 hover:to-cyan-600 text-white font-bold py-2.5 px-5 rounded-xl text-xs sm:text-sm transition-all duration-300 shadow-[0_4px_16px_rgba(37,99,235,0.25)] hover:shadow-[0_6px_22px_rgba(37,99,235,0.35)] active:scale-[0.99] cursor-pointer mt-2 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed tracking-wide group"
+                >
+                  <span className="absolute inset-0 w-1/2 h-full bg-white/20 skew-x-12 -translate-x-full group-hover:translate-x-[300%] transition-transform duration-1000 ease-out pointer-events-none" />
+
+                  {loading ? (
+                    <span className="flex items-center justify-center gap-2 relative z-10">
+                      <span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                      Authenticating…
+                    </span>
+                  ) : (
+                    <span className="relative z-10 font-bold">Unlock Command Center</span>
+                  )}
+                </button>
+              </form>
+            ) : (
+              // ── 2FA Verification Form ──
+              <form onSubmit={handleOtpSubmit} className="space-y-3.5">
+                <div>
+                  <label className="text-[11px] font-bold text-slate-700 block mb-1.5 uppercase tracking-wider">
+                    6-Digit Verification Code
+                  </label>
+                  <div
+                    className={`relative flex items-center rounded-xl border backdrop-blur-xl transition-all duration-200 shadow-xs
+                      ${
+                        otpError
+                          ? 'border-red-400 bg-red-50/50 ring-2 ring-red-200'
+                          : 'border-slate-200 bg-white/90 hover:bg-white hover:border-slate-300 focus-within:bg-white focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/15'
+                      }`}
                   >
-                    {otpLoading ? (
-                      <span className="flex items-center justify-center gap-2">
-                        <span className="w-4 h-4 border-2 border-black/40 border-t-black rounded-full animate-spin" />
-                        Verifying OTP…
-                      </span>
-                    ) : (
-                      'Verify & Access'
-                    )}
-                  </button>
+                    <KeyRound className="absolute left-3.5 w-4 h-4 text-slate-400 pointer-events-none" />
+                    <input
+                      type="text"
+                      maxLength={6}
+                      pattern="[0-9]*"
+                      inputMode="numeric"
+                      className="w-full pl-10 pr-4 py-2.5 text-base sm:text-lg tracking-[0.4em] text-center font-mono font-bold bg-transparent text-slate-900 placeholder:text-slate-400 focus:outline-none"
+                      placeholder="000000"
+                      value={otpCode}
+                      onChange={(e) => setOtpCode(e.target.value.replace(/[^0-9]/g, ''))}
+                    />
+                  </div>
+                  {otpError && (
+                    <p className="text-[11px] text-red-600 mt-1 flex items-center gap-1 font-medium">
+                      <AlertCircle className="w-3 h-3 shrink-0" /> {otpError}
+                    </p>
+                  )}
+                </div>
 
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setTempToken(null)
-                      setOtpCode('')
-                      setOtpError('')
-                    }}
-                    className="w-full text-slate-400 hover:text-cyan-400 text-xs font-semibold py-2 text-center block mt-1 transition-colors cursor-pointer"
-                  >
-                    Back to password login
-                  </button>
-                </form>
-              )}
+                <button
+                  type="submit"
+                  disabled={otpLoading}
+                  className="w-full relative overflow-hidden bg-linear-to-r from-blue-600 via-blue-500 to-cyan-500 hover:from-blue-700 hover:via-blue-600 hover:to-cyan-600 text-white font-bold py-2.5 px-5 rounded-xl text-xs sm:text-sm transition-all duration-300 shadow-[0_4px_16px_rgba(37,99,235,0.25)] hover:shadow-[0_6px_22px_rgba(37,99,235,0.35)] active:scale-[0.99] cursor-pointer mt-2 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed group"
+                >
+                  <span className="absolute inset-0 w-1/2 h-full bg-white/20 skew-x-12 -translate-x-full group-hover:translate-x-[300%] transition-transform duration-1000 ease-out pointer-events-none" />
+                  {otpLoading ? (
+                    <span className="flex items-center justify-center gap-2 relative z-10">
+                      <span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                      Verifying Token…
+                    </span>
+                  ) : (
+                    <span className="relative z-10 font-bold">Verify & Open Session</span>
+                  )}
+                </button>
 
-              {/* Footer */}
-              <div className="mt-6 pt-5 border-t border-white/10 flex items-center justify-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
-                <p className="text-xs text-slate-400">Secured with 2FA & JWT enterprise authentication</p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setTempToken(null)
+                    setOtpCode('')
+                    setOtpError('')
+                  }}
+                  className="w-full text-slate-500 hover:text-blue-600 text-[11px] font-semibold py-1.5 text-center block transition-colors cursor-pointer"
+                >
+                  Back to password login
+                </button>
+              </form>
+            )}
+
+            {/* Divider and Return to Home */}
+            <div className="mt-5 pt-3.5 border-t border-slate-200/70 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px]">
+              <Link
+                to="/"
+                className="inline-flex items-center gap-1.5 text-slate-500 hover:text-blue-600 transition-colors group"
+              >
+                <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
+                <span>Return to Public Site</span>
+              </Link>
+              <div className="flex items-center gap-1.5 text-slate-400 text-[10px]">
+                <ShieldCheck className="w-3 h-3 text-blue-600" />
+                <span>2FA Protected Endpoint</span>
               </div>
             </div>
           </div>

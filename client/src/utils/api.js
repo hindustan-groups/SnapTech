@@ -54,13 +54,29 @@ async function request(path, options = {}) {
     ...fetchOptions,
   })
 
-  const json = await res.json().catch(() => ({}))
-
-  if (!res.ok) {
-    throw new ApiError(json.message || 'Something went wrong', res.status)
+  let data = {}
+  try {
+    const text = await res.text()
+    if (text && text.trim().length > 0) {
+      try {
+        data = JSON.parse(text)
+      } catch {
+        data = { message: text }
+      }
+    }
+  } catch {
+    data = {}
   }
 
-  return json
+  if (!res.ok) {
+    const defaultMsg =
+      res.status === 502 || res.status === 504
+        ? 'Backend server is offline (Check port 5000)'
+        : 'Something went wrong'
+    throw new ApiError(data?.message || defaultMsg, res.status)
+  }
+
+  return data
 }
 
 export const api = {
