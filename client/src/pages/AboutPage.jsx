@@ -44,40 +44,6 @@ const VALUES = [
   },
 ]
 
-// Fallbacks (shown if DB empty)
-const FALLBACK_MILESTONES = [
-  {
-    id: '1',
-    year: '2019',
-    title: 'Founding & Group Alignment',
-    desc: 'SnapTech Digital is founded in Bhilwara, Rajasthan to deliver world-class bespoke cloud and digital engineering solutions.',
-  },
-  {
-    id: '2',
-    year: '2021',
-    title: 'Enterprise Delivery Milestone',
-    desc: 'Delivered mission-critical web platforms and digital commerce infrastructure for 25+ regional businesses.',
-  },
-  {
-    id: '3',
-    year: '2023',
-    title: 'Multi-Cloud & Mobile Expansion',
-    desc: 'Launched dedicated practice verticals in AWS/GCP Cloud DevOps, Flutter/React Native mobile engineering, and SEO automation.',
-  },
-  {
-    id: '4',
-    year: '2024',
-    title: 'National Enterprise Scale',
-    desc: 'Crossed 50+ enterprise deliverables across India with zero downtime SLAs and 99.8% client retention.',
-  },
-  {
-    id: '5',
-    year: '2025',
-    title: 'Snaptech Ecosystem Expansion',
-    desc: 'Accelerating AI workflow automation, enterprise ERP integrations, and global digital modernization for enterprises.',
-  },
-]
-
 function LinkedInIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5" aria-hidden="true">
@@ -92,11 +58,7 @@ export default function AboutPage() {
   const { data: settingsData } = useSiteSettings()
 
   const team = teamData?.data?.length ? teamData.data : []
-  const milestones = milestonesData?.data?.length
-    ? milestonesData.data
-    : milestonesLoading
-      ? []
-      : FALLBACK_MILESTONES
+  const milestones = Array.isArray(milestonesData?.data) ? milestonesData.data : []
   const cfg = settingsData?.data || {}
 
   const stats = [
@@ -381,63 +343,65 @@ export default function AboutPage() {
       </section>
 
       {/* ── 5. Corporate Milestones & Evolution Timeline ────────────── */}
-      <section className="py-16 sm:py-20 lg:py-24 bg-white relative">
-        <Container>
-          <div className="max-w-3xl mx-auto text-center mb-16">
-            <span className="text-xs font-mono font-bold tracking-wider uppercase text-brand-blue mb-3 block">
-              // VERIFIED TRACK RECORD
-            </span>
-            <h2 className="font-heading text-3xl sm:text-4xl font-extrabold text-slate-900 mb-4">
-              Key Milestones in Our Evolution
-            </h2>
-            <p className="text-slate-600 text-sm sm:text-base font-normal">
-              From our inception to becoming a multi-disciplinary enterprise technology practice.
-            </p>
-          </div>
-
-          <div className="relative max-w-3xl mx-auto">
-            {/* Luminous Vertical Spine */}
-            <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-linear-to-b from-brand-blue via-blue-400 to-transparent hidden sm:block shadow-xs" />
-
-            <div className="space-y-8">
-              {(milestonesLoading ? Array.from({ length: 4 }) : milestones).map((m, i) =>
-                milestonesLoading ? (
-                  <div key={i} className="flex gap-6">
-                    <div className="hidden sm:block w-16 h-16 rounded-full bg-slate-200 animate-pulse shrink-0" />
-                    <div className="flex-1 h-20 bg-slate-100 rounded-2xl border border-slate-200 animate-pulse" />
-                  </div>
-                ) : (
-                  <div key={m.id || i} className="flex gap-6 group">
-                    {/* Node Marker */}
-                    <div className="hidden sm:flex flex-col items-center shrink-0">
-                      <div className="w-16 h-16 rounded-2xl border border-blue-200 bg-white flex flex-col items-center justify-center shadow-md group-hover:border-brand-blue group-hover:bg-blue-50 transition-all duration-300">
-                        <span className="text-xs font-mono font-extrabold text-brand-blue leading-none">
-                          {m.year}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Milestone Card */}
-                    <div className="flex-1 rounded-2xl border border-slate-200/90 bg-slate-50/70 p-6 shadow-xs group-hover:border-brand-blue/40 group-hover:bg-white group-hover:shadow-md transition-all duration-300">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="sm:hidden text-xs font-mono font-bold text-brand-blue">
-                          {m.year} //
-                        </span>
-                        <h3 className="font-heading text-base sm:text-lg font-bold text-slate-900 group-hover:text-brand-blue transition-colors">
-                          {m.title}
-                        </h3>
-                      </div>
-                      <p className="text-sm text-slate-600 leading-relaxed font-normal">
-                        {m.desc}
-                      </p>
-                    </div>
-                  </div>
-                )
-              )}
+      {(milestonesLoading || milestones.length > 0) && (
+        <section className="py-16 sm:py-20 lg:py-24 bg-white relative">
+          <Container>
+            <div className="max-w-3xl mx-auto text-center mb-16">
+              <span className="text-xs font-mono font-bold tracking-wider uppercase text-brand-blue mb-3 block">
+                // VERIFIED TRACK RECORD
+              </span>
+              <h2 className="font-heading text-3xl sm:text-4xl font-extrabold text-slate-900 mb-4">
+                Key Milestones in Our Evolution
+              </h2>
+              <p className="text-slate-600 text-sm sm:text-base font-normal">
+                From our inception to becoming a multi-disciplinary enterprise technology practice.
+              </p>
             </div>
-          </div>
-        </Container>
-      </section>
+
+            <div className="relative max-w-3xl mx-auto">
+              {/* Luminous Vertical Spine */}
+              <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-linear-to-b from-brand-blue via-blue-400 to-transparent hidden sm:block shadow-xs" />
+
+              <div className="space-y-8">
+                {(milestonesLoading ? Array.from({ length: 4 }) : milestones).map((m, i) =>
+                  milestonesLoading ? (
+                    <div key={i} className="flex gap-6">
+                      <div className="hidden sm:block w-16 h-16 rounded-full bg-slate-200 animate-pulse shrink-0" />
+                      <div className="flex-1 h-20 bg-slate-100 rounded-2xl border border-slate-200 animate-pulse" />
+                    </div>
+                  ) : (
+                    <div key={m.id || i} className="flex gap-6 group">
+                      {/* Node Marker */}
+                      <div className="hidden sm:flex flex-col items-center shrink-0">
+                        <div className="w-16 h-16 rounded-2xl border border-blue-200 bg-white flex flex-col items-center justify-center shadow-md group-hover:border-brand-blue group-hover:bg-blue-50 transition-all duration-300">
+                          <span className="text-xs font-mono font-extrabold text-brand-blue leading-none">
+                            {m.year}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Milestone Card */}
+                      <div className="flex-1 rounded-2xl border border-slate-200/90 bg-slate-50/70 p-6 shadow-xs group-hover:border-brand-blue/40 group-hover:bg-white group-hover:shadow-md transition-all duration-300">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="sm:hidden text-xs font-mono font-bold text-brand-blue">
+                            {m.year} //
+                          </span>
+                          <h3 className="font-heading text-base sm:text-lg font-bold text-slate-900 group-hover:text-brand-blue transition-colors">
+                            {m.title}
+                          </h3>
+                        </div>
+                        <p className="text-sm text-slate-600 leading-relaxed font-normal">
+                          {m.desc}
+                        </p>
+                      </div>
+                    </div>
+                  )
+                )}
+              </div>
+            </div>
+          </Container>
+        </section>
+      )}
 
       {/* ── 6. Leadership & Engineering Squad ───────────────────────── */}
       <section className="py-16 sm:py-20 lg:py-24 bg-slate-50/60 border-t border-b border-slate-200/80 relative">

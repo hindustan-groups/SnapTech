@@ -263,7 +263,7 @@ export default function AdminMilestonesPage() {
           ) : (
             <div className="relative">
               {/* Timeline line */}
-              <div className="absolute left-[27px] top-6 bottom-6 w-px bg-linear-to-b from-brand-blue/30 via-brand-blue/15 to-transparent hidden sm:block" />
+              <div className="absolute left-6.75 top-6 bottom-6 w-px bg-linear-to-b from-brand-blue/30 via-brand-blue/15 to-transparent hidden sm:block" />
 
               <div className="space-y-2">
                 {items.map((m) => (
