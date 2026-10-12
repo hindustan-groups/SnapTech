@@ -109,7 +109,15 @@ export const getMilestones = async (_req, res, next) => {
 }
 export const createMilestone = async (req, res, next) => {
   try {
-    const m = await prisma.milestone.create({ data: req.body })
+    const { year, title, desc, order = 0 } = req.body
+    const m = await prisma.milestone.create({
+      data: {
+        year: String(year),
+        title: String(title),
+        desc: String(desc),
+        order: Number(order) || 0,
+      },
+    })
     
     await logActivity(req, 'CREATE', 'Milestone', `Created milestone: '${m.year} - ${m.title}'`)
     
@@ -120,7 +128,19 @@ export const createMilestone = async (req, res, next) => {
 }
 export const updateMilestone = async (req, res, next) => {
   try {
-    const m = await prisma.milestone.update({ where: { id: req.params.id }, data: req.body })
+    const { id } = req.params
+    const { year, title, desc, order } = req.body
+
+    const updateData = {}
+    if (year !== undefined) updateData.year = String(year)
+    if (title !== undefined) updateData.title = String(title)
+    if (desc !== undefined) updateData.desc = String(desc)
+    if (order !== undefined) updateData.order = Number(order) || 0
+
+    const m = await prisma.milestone.update({
+      where: { id },
+      data: updateData,
+    })
     
     await logActivity(req, 'UPDATE', 'Milestone', `Updated milestone: '${m.year} - ${m.title}'`)
     
@@ -133,10 +153,11 @@ export const deleteMilestone = async (req, res, next) => {
   try {
     const { id } = req.params
     const m = await prisma.milestone.findUnique({ where: { id } })
-    if (m) {
-      await prisma.milestone.delete({ where: { id } })
-      await logActivity(req, 'DELETE', 'Milestone', `Deleted milestone: '${m.year} - ${m.title}'`)
+    if (!m) {
+      return res.status(404).json({ status: 'error', message: 'Milestone not found.' })
     }
+    await prisma.milestone.delete({ where: { id } })
+    await logActivity(req, 'DELETE', 'Milestone', `Deleted milestone: '${m.year} - ${m.title}'`)
     res.json({ status: 'ok', message: 'Deleted.' })
   } catch (err) {
     next(err)

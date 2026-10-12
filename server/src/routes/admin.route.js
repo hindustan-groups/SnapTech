@@ -646,7 +646,7 @@ router.patch(
   validateRequest,
   updateMilestone
 )
-router.delete('/milestones/:id', verifyToken, requireRole('SUPER_ADMIN'), deleteMilestone)
+router.delete('/milestones/:id', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), deleteMilestone)
 
 // ── Partners ───────────────────────────────────────────────────
 router.get('/partners', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), listPartners)
@@ -666,7 +666,7 @@ router.patch(
   validateRequest,
   updatePartner
 )
-router.delete('/partners/:id', verifyToken, requireRole('SUPER_ADMIN'), deletePartner)
+router.delete('/partners/:id', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), deletePartner)
 
 // ── Careers ────────────────────────────────────────────────────
 router.get('/careers', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), listJobPostings)
@@ -726,7 +726,7 @@ router.get('/users/list-assignable', verifyToken, requireRole('ADMIN', 'SUPER_AD
 router.get('/client-projects/:id/billing', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN', 'STAFF'), listProjectBillingMilestones)
 router.post('/client-projects/:id/billing', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), createBillingMilestone)
 router.patch('/billing/:id', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), updateBillingMilestone)
-router.delete('/billing/:id', verifyToken, requireRole('SUPER_ADMIN'), deleteBillingMilestone)
+router.delete('/billing/:id', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), deleteBillingMilestone)
 
 // ── Blog Posts ─────────────────────────────────────────────────
 router.get('/blog', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), adminListPosts)
