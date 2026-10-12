@@ -21,6 +21,7 @@ import {
   Languages,
   Headphones,
   Info,
+  Sparkles,
 } from 'lucide-react'
 import { api } from '@/utils/api'
 
@@ -219,40 +220,41 @@ export default function CostCalculator({ compact = false }) {
   }
 
   return (
-    <div className={`w-full max-w-5xl mx-auto ${compact ? '' : 'p-4 sm:p-6 lg:p-8'}`}>
-      {/* ── Top Header / Stepper Progress ── */}
-      <div className="bg-slate-900/90 border border-white/10 rounded-2xl p-6 sm:p-8 shadow-2xl backdrop-blur-xl mb-6 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-60 h-60 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
+    <div className={`w-full max-w-5xl mx-auto ${compact ? '' : 'p-2 sm:p-4 lg:p-6'}`}>
+      {/* ── Top Header / Live Estimate Bar ── */}
+      <div className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-sm relative overflow-hidden mb-6 sm:mb-8">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-blue-100/40 rounded-full blur-3xl pointer-events-none -mr-16 -mt-16" />
+        <div className="absolute bottom-0 left-0 w-60 h-60 bg-indigo-50/50 rounded-full blur-3xl pointer-events-none -ml-16 -mb-16" />
 
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-6 relative z-10">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-200/80 pb-6 relative z-10">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-400/20 text-xs font-semibold text-cyan-400 mb-2">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-xs font-bold text-brand-blue mb-2.5 shadow-2xs">
               <Calculator className="w-3.5 h-3.5" />
               <span>Transparent Project Estimator</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-heading font-extrabold text-white">
-              Instant Website &amp; App Cost Calculator
+            <h2 className="text-2xl sm:text-3xl font-heading font-extrabold text-[#0D1B4B] tracking-tight">
+              Interactive Scope &amp; Cost Calculator
             </h2>
-            <p className="text-sm text-slate-400 mt-1">
-              Configure your desired scope, features, and timeline for a real-time engineering estimate.
+            <p className="text-sm text-slate-600 mt-1.5 max-w-xl">
+              Configure your desired architecture, page depth, and delivery velocity for a real-time engineering estimate.
             </p>
           </div>
 
           {/* Running Live Total Display */}
-          <div className="bg-slate-950/80 border border-cyan-500/30 rounded-2xl p-4 sm:px-6 text-right shrink-0">
-            <p className="text-[11px] font-mono uppercase tracking-wider text-slate-400">Estimated Investment</p>
-            <p className="text-2xl sm:text-3xl font-heading font-extrabold text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-blue-400">
+          <div className="bg-linear-to-br from-blue-50/90 via-indigo-50/40 to-white border border-blue-200/90 rounded-2xl p-4 sm:px-6 text-right shrink-0 shadow-xs">
+            <p className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-bold">Estimated Investment</p>
+            <p className="text-2xl sm:text-3xl font-heading font-extrabold text-transparent bg-clip-text bg-linear-to-r from-brand-blue via-blue-600 to-indigo-700">
               ₹{currentCalculation.grandTotal.toLocaleString('en-IN')}
             </p>
-            <p className="text-[10px] text-cyan-400/80 font-mono mt-0.5">
-              {currentCalculation.velocityObj.time} &bull; GST Applicable
+            <p className="text-[11px] text-slate-500 font-medium mt-0.5 flex items-center justify-end gap-1.5">
+              <Clock className="w-3 h-3 text-brand-blue" />
+              <span>{currentCalculation.velocityObj.time} &bull; Fixed-Price Scope</span>
             </p>
           </div>
         </div>
 
         {/* Stepper Tabs */}
-        <div className="grid grid-cols-5 gap-2 mt-6 relative z-10">
+        <div className="grid grid-cols-5 gap-2 sm:gap-3 mt-6 relative z-10">
           {[
             { num: 1, label: 'Archetype' },
             { num: 2, label: 'Page Scope' },
@@ -267,17 +269,23 @@ export default function CostCalculator({ compact = false }) {
                 key={s.num}
                 type="button"
                 onClick={() => setStep(s.num)}
-                className={`flex flex-col sm:flex-row items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                className={`flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-2 py-2.5 px-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                   isActive
-                    ? 'bg-cyan-500 text-slate-950 font-bold shadow-lg shadow-cyan-500/30'
+                    ? 'bg-brand-blue text-white font-bold shadow-md shadow-blue-500/25 ring-2 ring-blue-500/20'
                     : isCompleted
-                    ? 'bg-white/10 text-cyan-300 hover:bg-white/15'
-                    : 'bg-white/5 text-slate-400 hover:bg-white/10'
+                    ? 'bg-blue-50/80 text-brand-blue border border-blue-200 hover:bg-blue-100/70 font-semibold'
+                    : 'bg-slate-50 text-slate-500 hover:bg-slate-100 border border-slate-200/80'
                 }`}
               >
-                <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${
-                  isActive ? 'bg-slate-950 text-cyan-400 font-bold' : isCompleted ? 'bg-cyan-400 text-slate-950' : 'bg-white/10'
-                }`}>
+                <span
+                  className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] shrink-0 font-bold ${
+                    isActive
+                      ? 'bg-white text-brand-blue'
+                      : isCompleted
+                      ? 'bg-brand-blue text-white'
+                      : 'bg-slate-200 text-slate-600'
+                  }`}
+                >
                   {isCompleted ? <Check className="w-3 h-3 stroke-[3]" /> : s.num}
                 </span>
                 <span className="truncate hidden sm:inline">{s.label}</span>
@@ -288,7 +296,7 @@ export default function CostCalculator({ compact = false }) {
       </div>
 
       {/* ── Wizard Content Area ── */}
-      <div className="bg-slate-900/80 border border-white/10 rounded-2xl p-6 sm:p-8 backdrop-blur-xl shadow-2xl relative">
+      <div className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-sm relative">
         <AnimatePresence mode="wait">
           {/* STEP 1: Project Archetype */}
           {step === 1 && (
@@ -301,8 +309,10 @@ export default function CostCalculator({ compact = false }) {
               className="space-y-6"
             >
               <div>
-                <h3 className="text-lg font-heading font-bold text-white">Step 1: Select Your Project Archetype</h3>
-                <p className="text-xs sm:text-sm text-slate-400 mt-1">
+                <h3 className="text-lg sm:text-xl font-heading font-extrabold text-[#0D1B4B]">
+                  Step 1: Select Your Project Archetype
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 mt-1">
                   Choose the category that best matches your immediate business and technology objectives.
                 </p>
               </div>
@@ -315,27 +325,39 @@ export default function CostCalculator({ compact = false }) {
                     <div
                       key={type.id}
                       onClick={() => setSelectedType(type.id)}
-                      className={`relative p-5 rounded-2xl border transition-all cursor-pointer ${
+                      className={`relative p-5 sm:p-6 rounded-2xl border transition-all cursor-pointer ${
                         isSelected
-                          ? 'bg-cyan-500/10 border-cyan-400 shadow-lg shadow-cyan-500/10'
-                          : 'bg-slate-950/60 border-white/10 hover:border-white/20 hover:bg-slate-950/80'
+                          ? 'bg-linear-to-b from-blue-50/70 to-white border-2 border-brand-blue shadow-lg shadow-blue-500/10 ring-2 ring-blue-500/20'
+                          : 'bg-slate-50/50 border-slate-200/90 hover:border-blue-300 hover:bg-white hover:shadow-md'
                       }`}
                     >
-                      <div className="flex items-start justify-between gap-3 mb-3">
-                        <div className={`p-3 rounded-xl ${isSelected ? 'bg-cyan-500 text-slate-950' : 'bg-white/5 text-cyan-400'}`}>
+                      <div className="flex items-start justify-between gap-3 mb-3.5">
+                        <div
+                          className={`p-3 rounded-xl transition-all ${
+                            isSelected
+                              ? 'bg-brand-blue text-white shadow-md shadow-blue-500/20'
+                              : 'bg-blue-50 text-brand-blue border border-blue-100'
+                          }`}
+                        >
                           <Icon className="w-6 h-6" />
                         </div>
-                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-cyan-400/10 text-cyan-300 border border-cyan-400/20">
+                        <span
+                          className={`text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border ${
+                            isSelected
+                              ? 'bg-blue-100 text-brand-blue border-blue-200'
+                              : 'bg-slate-100 text-slate-600 border-slate-200'
+                          }`}
+                        >
                           {type.badge}
                         </span>
                       </div>
 
-                      <h4 className="text-base font-heading font-bold text-white mb-1.5">{type.name}</h4>
-                      <p className="text-xs text-slate-400 leading-relaxed mb-4">{type.description}</p>
+                      <h4 className="text-base font-heading font-bold text-slate-900 mb-1.5">{type.name}</h4>
+                      <p className="text-xs text-slate-600 leading-relaxed mb-4">{type.description}</p>
 
-                      <div className="flex items-center justify-between pt-3 border-t border-white/10 text-xs">
-                        <span className="text-slate-400">Baseline Investment</span>
-                        <span className="font-heading font-bold text-cyan-300">
+                      <div className="flex items-center justify-between pt-3 border-t border-slate-200/70 text-xs">
+                        <span className="text-slate-500 font-medium">Baseline Investment</span>
+                        <span className="font-heading font-bold text-brand-blue text-sm">
                           ₹{type.basePrice.toLocaleString('en-IN')}
                         </span>
                       </div>
@@ -357,8 +379,10 @@ export default function CostCalculator({ compact = false }) {
               className="space-y-6"
             >
               <div>
-                <h3 className="text-lg font-heading font-bold text-white">Step 2: Choose Page Architecture &amp; Breadth</h3>
-                <p className="text-xs sm:text-sm text-slate-400 mt-1">
+                <h3 className="text-lg sm:text-xl font-heading font-extrabold text-[#0D1B4B]">
+                  Step 2: Choose Page Architecture &amp; Breadth
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 mt-1">
                   How many unique templates and dedicated content pages does your platform require?
                 </p>
               </div>
@@ -370,23 +394,23 @@ export default function CostCalculator({ compact = false }) {
                     <div
                       key={scope.id}
                       onClick={() => setSelectedScope(scope.id)}
-                      className={`p-5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
+                      className={`p-5 sm:p-6 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
                         isSelected
-                          ? 'bg-cyan-500/10 border-cyan-400 shadow-lg shadow-cyan-500/10'
-                          : 'bg-slate-950/60 border-white/10 hover:border-white/20 hover:bg-slate-950/80'
+                          ? 'bg-linear-to-b from-blue-50/70 to-white border-2 border-brand-blue shadow-lg shadow-blue-500/10 ring-2 ring-blue-500/20'
+                          : 'bg-slate-50/50 border-slate-200/90 hover:border-blue-300 hover:bg-white hover:shadow-md'
                       }`}
                     >
                       <div>
                         <div className="flex items-center justify-between mb-2">
-                          <h4 className="text-base font-heading font-bold text-white">{scope.label}</h4>
-                          {isSelected && <CheckCircle2 className="w-5 h-5 text-cyan-400" />}
+                          <h4 className="text-base font-heading font-bold text-slate-900">{scope.label}</h4>
+                          {isSelected && <CheckCircle2 className="w-5 h-5 text-brand-blue" />}
                         </div>
-                        <p className="text-xs text-slate-400 leading-relaxed mb-4">{scope.desc}</p>
+                        <p className="text-xs text-slate-600 leading-relaxed mb-4">{scope.desc}</p>
                       </div>
 
-                      <div className="flex items-center justify-between pt-3 border-t border-white/10 text-xs">
-                        <span className="text-slate-400">Scope Delta</span>
-                        <span className="font-heading font-bold text-cyan-300">
+                      <div className="flex items-center justify-between pt-3 border-t border-slate-200/70 text-xs">
+                        <span className="text-slate-500 font-medium">Scope Delta</span>
+                        <span className="font-heading font-bold text-brand-blue text-sm">
                           {scope.addPrice === 0 ? 'Included in Base' : `+₹${scope.addPrice.toLocaleString('en-IN')}`}
                         </span>
                       </div>
@@ -409,12 +433,14 @@ export default function CostCalculator({ compact = false }) {
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-heading font-bold text-white">Step 3: Select Advanced Engineering Add-ons</h3>
-                  <p className="text-xs sm:text-sm text-slate-400 mt-1">
+                  <h3 className="text-lg sm:text-xl font-heading font-extrabold text-[#0D1B4B]">
+                    Step 3: Select Advanced Engineering Add-ons
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-600 mt-1">
                     Check the enterprise modules you want integrated into your production build.
                   </p>
                 </div>
-                <span className="text-xs text-cyan-400 font-mono hidden sm:inline">
+                <span className="text-xs text-brand-blue font-mono font-bold bg-blue-50 border border-blue-200 px-3 py-1 rounded-full hidden sm:inline">
                   {selectedAddons.length} Selected
                 </span>
               </div>
@@ -427,29 +453,33 @@ export default function CostCalculator({ compact = false }) {
                     <div
                       key={addon.id}
                       onClick={() => toggleAddon(addon.id)}
-                      className={`p-4 rounded-xl border transition-all cursor-pointer flex items-start gap-3.5 ${
+                      className={`p-4 sm:p-5 rounded-2xl border transition-all cursor-pointer flex items-start gap-3.5 ${
                         isChecked
-                          ? 'bg-cyan-500/10 border-cyan-400 shadow-sm'
-                          : 'bg-slate-950/60 border-white/10 hover:border-white/20'
+                          ? 'bg-linear-to-b from-blue-50/60 to-white border-2 border-brand-blue shadow-xs'
+                          : 'bg-slate-50/50 border-slate-200/90 hover:border-blue-300 hover:bg-white'
                       }`}
                     >
-                      <div className={`w-5 h-5 rounded-md flex items-center justify-center mt-0.5 shrink-0 transition-colors ${
-                        isChecked ? 'bg-cyan-500 text-slate-950' : 'border border-white/30 bg-white/5'
-                      }`}>
-                        {isChecked && <Check className="w-3.5 h-3.5 stroke-3" />}
+                      <div
+                        className={`w-5 h-5 rounded-md flex items-center justify-center mt-0.5 shrink-0 transition-colors ${
+                          isChecked
+                            ? 'bg-brand-blue text-white shadow-xs'
+                            : 'border-2 border-slate-300 bg-white'
+                        }`}
+                      >
+                        {isChecked && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                       </div>
 
-                      <div className="flex-1">
+                      <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between gap-2">
-                          <span className="text-sm font-heading font-bold text-white flex items-center gap-2">
-                            <Icon className="w-4 h-4 text-cyan-400 shrink-0" />
-                            <span>{addon.name}</span>
+                          <span className="text-sm font-heading font-bold text-slate-900 flex items-center gap-2 truncate">
+                            <Icon className="w-4 h-4 text-brand-blue shrink-0" />
+                            <span className="truncate">{addon.name}</span>
                           </span>
-                          <span className="text-xs font-mono font-bold text-cyan-300">
+                          <span className="text-xs font-mono font-bold text-brand-blue bg-blue-50 border border-blue-200/80 px-2 py-0.5 rounded-md shrink-0">
                             +₹{addon.price.toLocaleString('en-IN')}
                           </span>
                         </div>
-                        <p className="text-xs text-slate-400 mt-1">{addon.desc}</p>
+                        <p className="text-xs text-slate-600 mt-1 leading-relaxed">{addon.desc}</p>
                       </div>
                     </div>
                   )
@@ -469,8 +499,10 @@ export default function CostCalculator({ compact = false }) {
               className="space-y-6"
             >
               <div>
-                <h3 className="text-lg font-heading font-bold text-white">Step 4: Delivery Velocity &amp; Launch Window</h3>
-                <p className="text-xs sm:text-sm text-slate-400 mt-1">
+                <h3 className="text-lg sm:text-xl font-heading font-extrabold text-[#0D1B4B]">
+                  Step 4: Delivery Velocity &amp; Launch Window
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 mt-1">
                   Select your timeline requirements. Fast-track options deploy dedicated sprint pods.
                 </p>
               </div>
@@ -482,27 +514,27 @@ export default function CostCalculator({ compact = false }) {
                     <div
                       key={vel.id}
                       onClick={() => setSelectedVelocity(vel.id)}
-                      className={`p-5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
+                      className={`p-5 sm:p-6 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
                         isSelected
-                          ? 'bg-cyan-500/10 border-cyan-400 shadow-lg shadow-cyan-500/10'
-                          : 'bg-slate-950/60 border-white/10 hover:border-white/20 hover:bg-slate-950/80'
+                          ? 'bg-linear-to-b from-blue-50/70 to-white border-2 border-brand-blue shadow-lg shadow-blue-500/10 ring-2 ring-blue-500/20'
+                          : 'bg-slate-50/50 border-slate-200/90 hover:border-blue-300 hover:bg-white hover:shadow-md'
                       }`}
                     >
                       <div>
                         <div className="flex items-center justify-between mb-2">
-                          <h4 className="text-base font-heading font-bold text-white">{vel.label}</h4>
-                          {isSelected && <CheckCircle2 className="w-5 h-5 text-cyan-400" />}
+                          <h4 className="text-base font-heading font-bold text-slate-900">{vel.label}</h4>
+                          {isSelected && <CheckCircle2 className="w-5 h-5 text-brand-blue" />}
                         </div>
-                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/5 text-cyan-300 text-xs font-mono font-semibold mb-3">
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-blue-50 border border-blue-200/80 text-brand-blue text-xs font-mono font-semibold mb-3">
                           <Clock className="w-3.5 h-3.5" />
                           <span>{vel.time}</span>
                         </div>
-                        <p className="text-xs text-slate-400 leading-relaxed mb-4">{vel.desc}</p>
+                        <p className="text-xs text-slate-600 leading-relaxed mb-4">{vel.desc}</p>
                       </div>
 
-                      <div className="pt-3 border-t border-white/10 text-xs flex items-center justify-between">
-                        <span className="text-slate-400">Multiplier</span>
-                        <span className="font-heading font-bold text-cyan-300">
+                      <div className="pt-3 border-t border-slate-200/70 text-xs flex items-center justify-between">
+                        <span className="text-slate-500 font-medium">Multiplier</span>
+                        <span className="font-heading font-bold text-brand-blue">
                           {vel.multiplier === 1.0 ? '1.0x (Standard)' : `${vel.multiplier}x Priority`}
                         </span>
                       </div>
@@ -524,65 +556,76 @@ export default function CostCalculator({ compact = false }) {
               className="space-y-6"
             >
               <div>
-                <h3 className="text-lg font-heading font-bold text-white">Step 5: Lock In Your Estimate &amp; Receive Formal Proposal</h3>
-                <p className="text-xs sm:text-sm text-slate-400 mt-1">
+                <h3 className="text-lg sm:text-xl font-heading font-extrabold text-[#0D1B4B]">
+                  Step 5: Lock In Your Estimate &amp; Receive Formal Proposal
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 mt-1">
                   Enter your details to receive an itemized architectural proposal, wireframe schedule, and direct engineer consultation.
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                 {/* Left: Summary Card */}
-                <div className="lg:col-span-5 bg-slate-950/80 border border-white/10 rounded-2xl p-5 space-y-4">
-                  <h4 className="text-xs font-mono uppercase tracking-wider text-slate-400 font-bold">Configured Architecture</h4>
+                <div className="lg:col-span-5 bg-linear-to-b from-slate-50 to-blue-50/30 border border-slate-200/90 rounded-2xl p-5 sm:p-6 space-y-4 shadow-xs">
+                  <div className="flex items-center justify-between border-b border-slate-200/80 pb-3">
+                    <h4 className="text-xs font-mono uppercase tracking-wider text-slate-600 font-bold flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-brand-blue" />
+                      <span>Configured Scope</span>
+                    </h4>
+                    <span className="text-[10px] font-mono font-bold bg-blue-100 text-brand-blue px-2 py-0.5 rounded-full">
+                      Sprint 0 Ready
+                    </span>
+                  </div>
 
-                  <div className="space-y-2 text-xs">
-                    <div className="flex justify-between pb-2 border-b border-white/10">
-                      <span className="text-slate-400">Archetype:</span>
-                      <span className="font-semibold text-white">{currentCalculation.typeObj.name}</span>
+                  <div className="space-y-2.5 text-xs">
+                    <div className="flex justify-between pb-2 border-b border-slate-200/60">
+                      <span className="text-slate-500 font-medium">Archetype:</span>
+                      <span className="font-bold text-slate-900 text-right">{currentCalculation.typeObj.name}</span>
                     </div>
-                    <div className="flex justify-between pb-2 border-b border-white/10">
-                      <span className="text-slate-400">Scope:</span>
-                      <span className="font-semibold text-white">{currentCalculation.scopeObj.label}</span>
+                    <div className="flex justify-between pb-2 border-b border-slate-200/60">
+                      <span className="text-slate-500 font-medium">Scope:</span>
+                      <span className="font-bold text-slate-900 text-right">{currentCalculation.scopeObj.label}</span>
                     </div>
-                    <div className="flex justify-between pb-2 border-b border-white/10">
-                      <span className="text-slate-400">Modules:</span>
-                      <span className="font-semibold text-cyan-300">{selectedAddons.length} Add-ons Selected</span>
+                    <div className="flex justify-between pb-2 border-b border-slate-200/60">
+                      <span className="text-slate-500 font-medium">Modules:</span>
+                      <span className="font-bold text-brand-blue text-right">{selectedAddons.length} Add-ons Selected</span>
                     </div>
-                    <div className="flex justify-between pb-2 border-b border-white/10">
-                      <span className="text-slate-400">Timeline:</span>
-                      <span className="font-semibold text-white">{currentCalculation.velocityObj.time}</span>
+                    <div className="flex justify-between pb-2 border-b border-slate-200/60">
+                      <span className="text-slate-500 font-medium">Timeline:</span>
+                      <span className="font-bold text-slate-900 text-right">{currentCalculation.velocityObj.time}</span>
                     </div>
                   </div>
 
-                  <div className="p-4 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-center">
-                    <p className="text-[11px] font-mono text-cyan-400 uppercase">Total Estimate</p>
-                    <p className="text-3xl font-heading font-extrabold text-white mt-1">
+                  <div className="p-5 rounded-2xl bg-linear-to-br from-brand-blue to-indigo-700 text-white shadow-lg shadow-blue-500/20 text-center relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none" />
+                    <p className="text-[11px] font-mono text-blue-100 uppercase tracking-wider font-semibold">Total Investment Estimate</p>
+                    <p className="text-3xl sm:text-4xl font-heading font-extrabold text-white mt-1 tracking-tight">
                       ₹{currentCalculation.grandTotal.toLocaleString('en-IN')}
                     </p>
-                    <p className="text-[10px] text-slate-400 mt-1">Guaranteed milestone-based fixed price</p>
+                    <p className="text-[11px] text-blue-100/90 mt-1 font-medium">Guaranteed milestone-based fixed price</p>
                   </div>
 
-                  <div className="text-[11px] text-slate-400 space-y-1.5 pt-2">
+                  <div className="text-xs text-slate-600 space-y-2 pt-1">
                     <p className="flex items-center gap-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                      <CheckCircle2 className="w-4 h-4 text-brand-blue shrink-0" />
                       <span>100% Full Git Source Code Ownership</span>
                     </p>
                     <p className="flex items-center gap-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                      <CheckCircle2 className="w-4 h-4 text-brand-blue shrink-0" />
                       <span>Zero-Vulnerability Code Warranty Included</span>
                     </p>
                     <p className="flex items-center gap-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-                      <span>Direct WhatsApp SLA &amp; Dedicated Solution Architect</span>
+                      <CheckCircle2 className="w-4 h-4 text-brand-blue shrink-0" />
+                      <span>Direct WhatsApp SLA &amp; Solution Architect</span>
                     </p>
                   </div>
                 </div>
 
                 {/* Right: Submission Form */}
-                <div className="lg:col-span-7">
+                <div className="lg:col-span-7 bg-white border border-slate-200/90 rounded-2xl p-5 sm:p-6 shadow-xs">
                   <form onSubmit={handleLeadSubmit} className="space-y-4">
                     <div>
-                      <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wide mb-1.5">
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1.5">
                         Your Full Name *
                       </label>
                       <input
@@ -590,28 +633,28 @@ export default function CostCalculator({ compact = false }) {
                         required
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        placeholder="e.g. Rajesh Kumar"
-                        className="w-full px-4 py-2.5 bg-slate-950/60 border border-white/10 rounded-xl text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
+                        placeholder="e.g. Rajesh Sharma"
+                        className="w-full px-4 py-2.5 bg-slate-50/70 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-brand-blue focus:bg-white focus:ring-2 focus:ring-brand-blue/20 transition-all"
                       />
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wide mb-1.5">
+                        <label className="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1.5">
                           Work Email *
                         </label>
                         <input
-                           type="email"
+                          type="email"
                           required
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                           placeholder="name@company.com"
-                          className="w-full px-4 py-2.5 bg-slate-950/60 border border-white/10 rounded-xl text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
+                          className="w-full px-4 py-2.5 bg-slate-50/70 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-brand-blue focus:bg-white focus:ring-2 focus:ring-brand-blue/20 transition-all"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wide mb-1.5">
+                        <label className="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1.5">
                           WhatsApp / Phone *
                         </label>
                         <input
@@ -620,13 +663,13 @@ export default function CostCalculator({ compact = false }) {
                           value={formData.phone}
                           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                           placeholder="+91 98765 43210"
-                          className="w-full px-4 py-2.5 bg-slate-950/60 border border-white/10 rounded-xl text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
+                          className="w-full px-4 py-2.5 bg-slate-50/70 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-brand-blue focus:bg-white focus:ring-2 focus:ring-brand-blue/20 transition-all"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wide mb-1.5">
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1.5">
                         Specific Requirements / Project Notes (Optional)
                       </label>
                       <textarea
@@ -634,7 +677,7 @@ export default function CostCalculator({ compact = false }) {
                         value={formData.message}
                         onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                         placeholder="Any existing design references, competitors, or custom third-party integrations needed..."
-                        className="w-full px-4 py-2 bg-slate-950/60 border border-white/10 rounded-xl text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all resize-none"
+                        className="w-full px-4 py-2.5 bg-slate-50/70 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-brand-blue focus:bg-white focus:ring-2 focus:ring-brand-blue/20 transition-all resize-none"
                       />
                     </div>
 
@@ -646,16 +689,16 @@ export default function CostCalculator({ compact = false }) {
                         required
                         checked={formData.consent}
                         onChange={(e) => setFormData({ ...formData, consent: e.target.checked })}
-                        className="mt-1 w-4 h-4 rounded border-white/20 bg-slate-900 text-cyan-500 focus:ring-cyan-400 focus:ring-offset-0 cursor-pointer"
+                        className="mt-1 w-4 h-4 rounded border-slate-300 text-brand-blue focus:ring-brand-blue focus:ring-offset-0 cursor-pointer"
                       />
-                      <label htmlFor="calculator-consent" className="text-[11px] text-slate-400 leading-snug cursor-pointer">
-                        I agree to receive a formal itemized estimate and architectural proposal from SnapTech Digital per the <a href="/privacy-policy" target="_blank" rel="noreferrer" className="text-cyan-400 underline">Privacy Policy</a> (DPDP Act 2023 compliant).
+                      <label htmlFor="calculator-consent" className="text-[11px] text-slate-600 leading-snug cursor-pointer">
+                        I agree to receive a formal itemized estimate and architectural proposal from SnapTech Digital per the <a href="/privacy-policy" target="_blank" rel="noreferrer" className="text-brand-blue font-semibold underline hover:text-blue-700">Privacy Policy</a> (DPDP Act 2023 compliant).
                       </label>
                     </div>
 
                     {errorMsg && (
-                      <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-xs text-red-300 flex items-center gap-2">
-                        <Info className="w-4 h-4 shrink-0" />
+                      <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 flex items-center gap-2">
+                        <Info className="w-4 h-4 shrink-0 text-red-600" />
                         <span>{errorMsg}</span>
                       </div>
                     )}
@@ -663,11 +706,11 @@ export default function CostCalculator({ compact = false }) {
                     <button
                       type="submit"
                       disabled={loading}
-                      className="w-full py-3.5 px-6 rounded-xl font-heading font-bold text-sm bg-linear-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 transition-all shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
+                      className="w-full py-3.5 px-6 rounded-xl font-heading font-bold text-sm bg-brand-blue hover:bg-blue-600 text-white transition-all shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
                     >
                       {loading ? (
                         <>
-                          <span className="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
+                          <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                           <span>Generating Formal Architecture Quote…</span>
                         </>
                       ) : (
@@ -685,12 +728,12 @@ export default function CostCalculator({ compact = false }) {
         </AnimatePresence>
 
         {/* ── Navigation Bottom Bar ── */}
-        <div className="flex items-center justify-between pt-6 mt-6 border-t border-white/10">
+        <div className="flex items-center justify-between pt-6 mt-6 border-t border-slate-200/80">
           {step > 1 ? (
             <button
               type="button"
               onClick={() => setStep((s) => Math.max(1, s - 1))}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold text-slate-300 bg-white/5 hover:bg-white/10 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Back</span>
@@ -703,7 +746,7 @@ export default function CostCalculator({ compact = false }) {
             <button
               type="button"
               onClick={() => setStep((s) => Math.min(5, s + 1))}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-slate-950 bg-cyan-400 hover:bg-cyan-300 transition-all shadow-md shadow-cyan-500/20 cursor-pointer"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold text-white bg-brand-blue hover:bg-blue-600 transition-all shadow-md shadow-blue-500/20 cursor-pointer"
             >
               <span>Next Step</span>
               <ArrowRight className="w-3.5 h-3.5" />
