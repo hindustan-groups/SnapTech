@@ -156,11 +156,11 @@ export default function AdminLoginPage() {
             {/* Top Brand Bar */}
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-white border border-slate-200/90 p-1.5 shadow-xs backdrop-blur-xl flex items-center justify-center shrink-0">
+                <div className="w-9 h-9 rounded-full bg-white border border-slate-200/90 p-0.5 shadow-xs backdrop-blur-xl flex items-center justify-center shrink-0">
                   <img
                     src="/snaptech-icon.png"
                     alt="SnapTech Digital"
-                    className="w-full h-full object-contain"
+                    className="w-full h-full rounded-full object-contain"
                   />
                 </div>
                 <div>
@@ -255,11 +255,11 @@ export default function AdminLoginPage() {
             {/* Mobile Header (Shown on < lg screens) */}
             <div className="lg:hidden flex items-center justify-between gap-3 pb-4 mb-4 border-b border-slate-200/80">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-white border border-slate-200 p-1 flex items-center justify-center shrink-0 shadow-xs">
+                <div className="w-8 h-8 rounded-full bg-white border border-slate-200 p-0.5 flex items-center justify-center shrink-0 shadow-xs">
                   <img
                     src="/snaptech-icon.png"
                     alt="SnapTech Digital"
-                    className="w-full h-full object-contain"
+                    className="w-full h-full rounded-full object-contain"
                   />
                 </div>
                 <div>

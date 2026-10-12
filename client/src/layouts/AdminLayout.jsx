@@ -340,7 +340,9 @@ export default function AdminLayout() {
         {/* ── Logo ── */}
         <div className="flex items-center justify-between px-5 h-16 border-b border-white/10 shrink-0">
           <div className="flex items-center gap-2.5">
-            <img src="/snaptech-icon.png" alt="SnapTech Digital" className="w-8 h-8 rounded-lg object-contain shadow-sm" />
+            <div className="w-9 h-9 rounded-full bg-white p-0.5 border border-white/20 shadow-sm flex items-center justify-center shrink-0">
+              <img src="/snaptech-icon.png" alt="SnapTech Digital" className="w-full h-full rounded-full object-contain" />
+            </div>
             <div>
               <p className="font-heading font-bold text-white text-sm leading-none">SnapTech</p>
               <p className="text-cyan-400 text-[10px] font-semibold tracking-wider uppercase mt-0.5">

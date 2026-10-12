@@ -81,7 +81,9 @@ export default function ClientLayout() {
         {/* Logo */}
         <div className="flex items-center justify-between px-5 h-16 border-b border-white/10 shrink-0">
           <div className="flex items-center gap-2.5">
-            <img src="/snaptech-icon.png" alt="Logo" className="w-8 h-8 rounded-lg object-contain shadow-md shadow-cyan-950/40" />
+            <div className="w-8 h-8 rounded-full bg-white p-0.5 border border-white/20 shadow-md shadow-cyan-950/40 flex items-center justify-center shrink-0">
+              <img src="/snaptech-icon.png" alt="SnapTech Digital" className="w-full h-full rounded-full object-contain" />
+            </div>
             <div>
               <p className="font-heading font-bold text-white text-sm leading-none">SnapTech</p>
               <p className="text-brand-cyan text-[10px] font-bold tracking-wider uppercase mt-0.5">

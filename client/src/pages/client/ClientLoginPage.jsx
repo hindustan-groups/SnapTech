@@ -3,7 +3,7 @@
  */
 import { useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { ShieldCheck, Eye, EyeOff, Lock, Mail, CheckCircle2, ArrowLeft } from 'lucide-react'
+import { Eye, EyeOff, Lock, Mail, CheckCircle2, ArrowLeft } from 'lucide-react'
 import { useClientLogin, useClientSetupPassword } from '@/hooks/useClientPortal'
 
 export default function ClientLoginPage() {
@@ -98,8 +98,8 @@ export default function ClientLoginPage() {
       <div className="w-full max-w-md mx-auto relative z-10">
         {/* Brand Logo & Header */}
         <div className="text-center mb-6 sm:mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white border border-slate-200/90 mb-3 sm:mb-4 shadow-[0_10px_25px_rgba(15,23,42,0.06),inset_0_1px_2px_rgba(255,255,255,0.9)] backdrop-blur-xl">
-            <ShieldCheck className="w-7 h-7 sm:w-8 sm:h-8 text-blue-600" />
+          <div className="inline-flex items-center justify-center w-16 h-16 sm:w-18 sm:h-18 rounded-full bg-white border border-blue-200/90 mb-3 sm:mb-4 shadow-[0_12px_28px_rgba(27,110,243,0.12),inset_0_1px_2px_rgba(255,255,255,0.9)] p-1 backdrop-blur-xl">
+            <img src="/snaptech-icon.png" alt="SnapTech Digital" className="w-full h-full rounded-full object-contain" />
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold font-heading text-slate-900 tracking-tight">
             {isSetupMode ? 'Set Your Password' : (
