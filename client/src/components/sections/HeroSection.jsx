@@ -10,7 +10,6 @@ import {
   Search,
   ShieldCheck,
   CheckCircle2,
-  ChevronDown,
   Terminal,
 } from 'lucide-react'
 import { Button, Container } from '@/components/ui'
@@ -99,12 +98,6 @@ export default function HeroSection() {
     ? cfg.hero_capabilities.split('\n').map((s) => s.trim()).filter(Boolean)
     : defaultCapabilities
 
-  const stats = [
-    { value: 'July 2026', label: 'Founded Inception' },
-    { value: '100%', label: 'Code & IP Ownership' },
-    { value: 'Enterprise Division', label: parentName },
-    { value: 'Pan-India', label: 'Client Delivery Reach' },
-  ]
 
   return (
     <section
@@ -370,29 +363,6 @@ export default function HeroSection() {
         </Container>
       </div>
 
-      {/* ── Bottom Enterprise Stats Strip ── */}
-      <div className="border-t border-slate-200 bg-slate-50 hero-fade-in" style={{ animationDelay: '0.8s' }}>
-        <Container>
-          <div className="grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-slate-200">
-            {stats.map((s) => (
-              <div key={s.label} className="py-4 px-4 sm:px-6 text-center">
-                <p className="font-heading text-xl sm:text-2xl lg:text-3xl font-black text-brand-blue font-mono">
-                  {s.value}
-                </p>
-                <p className="text-slate-600 font-medium text-[11px] sm:text-xs mt-0.5 tracking-wide">
-                  {s.label}
-                </p>
-              </div>
-            ))}
-          </div>
-        </Container>
-      </div>
-
-      {/* Scroll indicator */}
-      <div className="py-2 flex justify-center items-center text-slate-600 font-semibold text-[10px] uppercase tracking-widest gap-1" aria-hidden="true">
-        <span>Scroll to Explore</span>
-        <ChevronDown className="w-3.5 h-3.5 animate-bounce text-slate-600" />
-      </div>
     </section>
   )
 }

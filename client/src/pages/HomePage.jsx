@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Phone, Mail } from 'lucide-react'
 import HeroSection from '@/components/sections/HeroSection'
-import PartnerTrustMarquee from '@/components/sections/PartnerTrustMarquee'
 import ParentGroupSection from '@/components/sections/ParentGroupSection'
 import ServicesSection from '@/components/sections/ServicesSection'
 import ShowcaseSection from '@/components/sections/ShowcaseSection'
@@ -80,9 +79,6 @@ export default function HomePage() {
         keywords="SnapTech Digital, IT company Bhilwara, web development Rajasthan, mobile app development India, web design agency, digital marketing Bhilwara, software company Rajasthan"
       />
       <HeroSection />
-
-      {/* ── Enterprise Trust Badges & Infinite Partner Marquee ── */}
-      <PartnerTrustMarquee />
 
       {/* ── Official Parent Group Ecosystem Section ── */}
       <ParentGroupSection />
