@@ -19,7 +19,6 @@
 
 import prisma from '../config/db.js'
 import { env } from '../config/env.js'
-import { timingSafeEqual } from 'crypto'
 import { verifyMasterKey } from '../utils/masterKey.js'
 
 // Keys that must be masked in GET responses
@@ -39,6 +38,7 @@ const ENV_MAP = {
   sys_cloudinary_cloud_name: 'CLOUDINARY_CLOUD_NAME',
   sys_cloudinary_api_key: 'CLOUDINARY_API_KEY',
   sys_cloudinary_api_secret: 'CLOUDINARY_API_SECRET',
+  sys_email_strategy: 'EMAIL_STRATEGY',
   sys_smtp_host: 'EMAIL_HOST',
   sys_smtp_port: 'EMAIL_PORT',
   sys_smtp_user: 'EMAIL_USER',
@@ -103,6 +103,7 @@ export const getIntegrationConfig = async (_req, res, next) => {
       ),
       sentry: !!rows.find((r) => r.key === 'sys_sentry_dsn')?.value,
       googleAnalytics: !!rows.find((r) => r.key === 'sys_ga_measurement_id')?.value,
+      emailStrategy: config.sys_email_strategy || process.env.EMAIL_STRATEGY || 'auto',
     }
 
     res.json({ status: 'ok', data: config })
@@ -206,22 +207,20 @@ export const updateIntegrationConfig = async (req, res, next) => {
 
 /**
  * POST /api/admin/integrations/test-smtp
- * Send a test email to the currently configured SMTP address.
+ * Send a test email specifically via SMTP (Hostinger / Gmail / Custom).
  */
-export const testSmtpConnection = async (req, res, next) => {
+export const testSmtpConnection = async (req, res, _next) => {
   try {
-    const { sendEmail } = await import('../utils/mailer.js')
-
     const {
       sys_smtp_host,
       sys_smtp_port,
       sys_smtp_user,
       sys_smtp_pass,
       sys_smtp_from,
-      sys_resend_api_key,
+      target_email,
     } = req.body || {}
 
-    // 1. If non-masked credentials passed in body, auto-save and apply them immediately
+    // Auto-save and apply to runtime if fresh credentials passed
     if (sys_smtp_user && typeof sys_smtp_user === 'string' && sys_smtp_user.trim()) {
       const u = sys_smtp_user.trim()
       process.env.EMAIL_USER = u
@@ -277,6 +276,91 @@ export const testSmtpConnection = async (req, res, next) => {
       })
     }
 
+    // Load from DB if still not in process.env
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      const dbRows = await prisma.siteSetting.findMany({
+        where: {
+          key: {
+            in: ['sys_smtp_user', 'sys_smtp_pass', 'sys_smtp_host', 'sys_smtp_port', 'sys_smtp_from'],
+          },
+        },
+      })
+      for (const r of dbRows) {
+        if (r.value && ENV_MAP[r.key]) {
+          process.env[ENV_MAP[r.key]] = r.value
+        }
+      }
+    }
+
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'SMTP credentials missing. Please enter your SMTP User (e.g. info@snaptech.digital) and password above.',
+      })
+    }
+
+    const host = process.env.EMAIL_HOST || 'smtp.hostinger.com'
+    const isHostinger = host.toLowerCase().includes('hostinger') || host.toLowerCase().includes('titan')
+
+    const target =
+      (target_email && typeof target_email === 'string' && target_email.trim()) ||
+      process.env.EMAIL_TO ||
+      env.EMAIL_TO ||
+      req.admin?.email ||
+      process.env.EMAIL_USER ||
+      'info@snaptech.digital'
+
+    const emailPayload = {
+      to: target,
+      subject: `✅ SMTP Verification — SnapTech Digital (${isHostinger ? 'Hostinger' : 'Custom'} Mailer)`,
+      html: `<div style="font-family:Arial,sans-serif;padding:24px;border:1px solid #e2e8f0;border-radius:12px;max-width:540px;background:#ffffff">
+        <div style="background:linear-gradient(135deg,#0b0f19,#1e3a8a);padding:18px;border-radius:8px;margin-bottom:20px;text-align:center">
+          <h2 style="color:#ffffff;margin:0;font-size:20px;font-weight:700">SnapTech Digital</h2>
+          <p style="color:#93c5fd;margin:4px 0 0;font-size:12px">SMTP Mailer Verification</p>
+        </div>
+        <h3 style="color:#0f172a;margin:0 0 12px;font-size:16px">✅ ${isHostinger ? 'Hostinger Business Email' : 'SMTP Server'} Connected!</h3>
+        <p style="color:#475569;font-size:14px;line-height:1.6">Your SMTP configuration was tested successfully. Outgoing contact requests, client lead notifications, and portal updates are now securely active.</p>
+        <div style="background:#f8fafc;border-left:4px solid #2563eb;padding:12px;margin:16px 0;border-radius:4px">
+          <p style="color:#64748b;font-size:12px;margin:0">Server Host: <strong style="color:#0f172a">${host}:${process.env.EMAIL_PORT || 465}</strong></p>
+          <p style="color:#64748b;font-size:12px;margin:4px 0 0">Authenticated User: <strong style="color:#0f172a">${process.env.EMAIL_USER}</strong></p>
+          <p style="color:#64748b;font-size:12px;margin:4px 0 0">Recipient: <strong style="color:#0f172a">${target}</strong></p>
+        </div>
+        <p style="color:#94a3b8;font-size:11px;margin-top:24px;border-top:1px solid #f1f5f9;padding-top:12px;text-align:center">
+          Sent from SnapTech Digital Admin Integration Vault
+        </p>
+      </div>`,
+      text: `SMTP Test Successful — Connected to ${host} via user ${process.env.EMAIL_USER}.`,
+    }
+
+    const { sendViaSMTP } = await import('../utils/mailer.js')
+    await sendViaSMTP(emailPayload)
+
+    res.json({
+      status: 'ok',
+      message: `Test email sent successfully via ${isHostinger ? 'Hostinger' : 'SMTP'} (${host}) to ${target}! Check your inbox.`,
+    })
+  } catch (err) {
+    const isHostinger = (process.env.EMAIL_HOST || '').toLowerCase().includes('hostinger')
+    let safeMsg = err.message || 'SMTP test failed.'
+    if (err.message?.includes('Invalid login') || err.message?.includes('auth') || err.message?.includes('535')) {
+      safeMsg = isHostinger
+        ? 'Hostinger SMTP Authentication failed. Verify your full email address (e.g. info@snaptech.digital) and password created in Hostinger Webmail.'
+        : 'Authentication failed. Please verify your SMTP credentials (for Gmail, ensure 16-character App Password is used).'
+    } else if (err.message?.includes('ECONNREFUSED') || err.message?.includes('ETIMEDOUT') || err.message?.includes('ENOTFOUND')) {
+      safeMsg = `Could not connect to SMTP host '${process.env.EMAIL_HOST}'. Ensure Host is smtp.hostinger.com and Port is 465 (SSL) or 587 (TLS).`
+    }
+    res.status(500).json({ status: 'error', message: safeMsg })
+  }
+}
+
+/**
+ * POST /api/admin/integrations/test-resend
+ * Send a test email specifically via Resend API Key.
+ */
+export const testResendConnection = async (req, res, next) => {
+  try {
+    const { sys_resend_api_key, sys_smtp_from, target_email } = req.body || {}
+
     if (
       sys_resend_api_key &&
       typeof sys_resend_api_key === 'string' &&
@@ -292,97 +376,76 @@ export const testSmtpConnection = async (req, res, next) => {
       })
     }
 
-    // 2. If not in process.env, load from database site_settings
-    if (!process.env.RESEND_API_KEY && (!process.env.EMAIL_USER || !process.env.EMAIL_PASS)) {
-      const dbRows = await prisma.siteSetting.findMany({
-        where: {
-          key: {
-            in: [
-              'sys_smtp_user',
-              'sys_smtp_pass',
-              'sys_smtp_host',
-              'sys_smtp_port',
-              'sys_smtp_from',
-              'sys_resend_api_key',
-            ],
-          },
-        },
+    if (sys_smtp_from && typeof sys_smtp_from === 'string' && sys_smtp_from.trim()) {
+      const f = sys_smtp_from.trim()
+      process.env.EMAIL_FROM = f
+      await prisma.siteSetting.upsert({
+        where: { key: 'sys_smtp_from' },
+        update: { value: f },
+        create: { key: 'sys_smtp_from', value: f },
       })
-      for (const r of dbRows) {
-        if (r.value && ENV_MAP[r.key]) {
-          process.env[ENV_MAP[r.key]] = r.value
-        }
+    }
+
+    if (!process.env.RESEND_API_KEY) {
+      const dbRow = await prisma.siteSetting.findUnique({
+        where: { key: 'sys_resend_api_key' },
+      })
+      if (dbRow?.value) {
+        process.env.RESEND_API_KEY = dbRow.value
       }
     }
 
-    // Determine which strategy is active
-    const usingResend = !!(process.env.RESEND_API_KEY || env.RESEND_API_KEY)
-    const usingSmtp = !!(
-      (process.env.EMAIL_USER || env.EMAIL_USER) &&
-      (process.env.EMAIL_PASS || env.EMAIL_PASS)
-    )
-
-    if (!usingResend && !usingSmtp) {
+    if (!process.env.RESEND_API_KEY) {
       return res.status(400).json({
         status: 'error',
-        message:
-          'No email credentials found. Please type your SMTP Email & App Password into the boxes above and click "Send Test Email via SMTP".',
+        message: 'Resend API Key is missing. Please enter your API key (starts with "re_") in the Resend section.',
       })
     }
 
-    const targetEmail =
+    const target =
+      (target_email && typeof target_email === 'string' && target_email.trim()) ||
       process.env.EMAIL_TO ||
       env.EMAIL_TO ||
       req.admin?.email ||
       process.env.EMAIL_USER ||
-      env.EMAIL_USER ||
-      (process.env.EMAIL_FROM || env.EMAIL_FROM || '').replace(/.*<(.+)>/, '$1') ||
-      'info@snaptech.digital'
+      'delivered@resend.dev'
 
     const emailPayload = {
-      to: targetEmail,
-      subject: '✅ Test Email — Snaptech Digital Admin',
-      html: `<div style="font-family:Arial,sans-serif;padding:24px;border:1px solid #e2e8f0;border-radius:12px;max-width:520px;background:#ffffff">
-        <div style="background:linear-gradient(135deg,#0b0f19,#1e3a8a);padding:18px;border-radius:8px;margin-bottom:20px;text-align:center">
-          <h2 style="color:#ffffff;margin:0;font-size:20px;font-weight:700">Snaptech Digital</h2>
-          <p style="color:#93c5fd;margin:4px 0 0;font-size:12px">Integration Vault Verification</p>
+      to: target,
+      subject: '⚡ Resend API Verification — SnapTech Digital',
+      html: `<div style="font-family:Arial,sans-serif;padding:24px;border:1px solid #e2e8f0;border-radius:12px;max-width:540px;background:#ffffff">
+        <div style="background:linear-gradient(135deg,#0b0f19,#7c3aed);padding:18px;border-radius:8px;margin-bottom:20px;text-align:center">
+          <h2 style="color:#ffffff;margin:0;font-size:20px;font-weight:700">SnapTech Digital</h2>
+          <p style="color:#ddd6fe;margin:4px 0 0;font-size:12px">Resend API Key Verification</p>
         </div>
-        <h3 style="color:#0f172a;margin:0 0 12px;font-size:16px">✅ Email Service Active & Verified</h3>
-        <p style="color:#475569;font-size:14px;line-height:1.6">Your SMTP / Email configuration is working correctly. All website contact form inquiries and client notifications will be routed through this inbox.</p>
-        <div style="background:#f8fafc;border-left:4px solid #2563eb;padding:12px;margin:16px 0;border-radius:4px">
-          <p style="color:#64748b;font-size:12px;margin:0">Provider: <strong style="color:#0f172a">${usingResend ? 'Resend API' : 'Gmail / Nodemailer SMTP'}</strong></p>
-          <p style="color:#64748b;font-size:12px;margin:4px 0 0">Recipient: <strong style="color:#0f172a">${targetEmail}</strong></p>
+        <h3 style="color:#0f172a;margin:0 0 12px;font-size:16px">⚡ Resend API Channel Active & Verified</h3>
+        <p style="color:#475569;font-size:14px;line-height:1.6">Your Resend API Key is authentic and successfully authorized to send transactional emails for SnapTech Digital.</p>
+        <div style="background:#f8fafc;border-left:4px solid #7c3aed;padding:12px;margin:16px 0;border-radius:4px">
+          <p style="color:#64748b;font-size:12px;margin:0">Provider: <strong style="color:#0f172a">Resend HTTP API</strong></p>
+          <p style="color:#64748b;font-size:12px;margin:4px 0 0">From Header: <strong style="color:#0f172a">${process.env.EMAIL_FROM || 'onboarding@resend.dev'}</strong></p>
+          <p style="color:#64748b;font-size:12px;margin:4px 0 0">Recipient: <strong style="color:#0f172a">${target}</strong></p>
         </div>
         <p style="color:#94a3b8;font-size:11px;margin-top:24px;border-top:1px solid #f1f5f9;padding-top:12px;text-align:center">
-          Sent from Snaptech Digital Admin Integration Vault
+          Sent from SnapTech Digital Admin Integration Vault
         </p>
       </div>`,
-      text: 'Email Test Successful — Your Snaptech Digital email configuration is working.',
+      text: `Resend API Test Successful — Key authorized to send to ${target}.`,
     }
 
-    if (usingResend) {
-      const { sendViaResend } = await import('../utils/mailer.js')
-      if (sendViaResend) {
-        await sendViaResend(emailPayload)
-      } else {
-        await sendEmail(emailPayload)
-      }
-    } else {
-      const { sendViaSMTP } = await import('../utils/mailer.js')
-      await sendViaSMTP(emailPayload)
-    }
+    const { sendViaResend } = await import('../utils/mailer.js')
+    await sendViaResend(emailPayload)
 
     res.json({
       status: 'ok',
-      message: `Test email sent successfully to ${targetEmail} via ${usingResend ? 'Resend' : 'SMTP'}! Check your inbox.`,
+      message: `Test email sent successfully via Resend API to ${target}! Check your inbox.`,
     })
   } catch (err) {
-    // Sanitize error — never forward raw provider errors (may contain credentials)
-    const safeMsg = err.message?.includes('Invalid login')
-      ? 'Authentication failed. Please verify your 16-character Google App Password.'
-      : err.message?.includes('ECONNREFUSED') || err.message?.includes('ETIMEDOUT')
-        ? 'Could not connect to email server. Check HOST and PORT settings.'
-        : `Email test failed: ${err.message || 'Check your configuration and try again.'}`
+    let safeMsg = err.message || 'Resend test failed.'
+    if (err.message?.includes('API key') || err.message?.includes('Unauthorized')) {
+      safeMsg = 'Resend API key is invalid or revoked. Please verify at resend.com/api-keys.'
+    } else if (err.message?.includes('domain') || err.message?.includes('verify')) {
+      safeMsg = 'Domain verification required in Resend, or use "onboarding@resend.dev" until DNS records propagate.'
+    }
     res.status(500).json({ status: 'error', message: safeMsg })
   }
 }

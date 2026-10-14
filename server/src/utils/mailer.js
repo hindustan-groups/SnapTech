@@ -20,6 +20,20 @@ import { env } from '../config/env.js'
 
 // ── Determine sending strategy ─────────────────────────────────
 function getStrategy() {
+  const strategy = (process.env.EMAIL_STRATEGY || env.EMAIL_STRATEGY || '').toLowerCase()
+  if (strategy === 'smtp') return 'smtp'
+  if (strategy === 'resend') return 'resend'
+
+  // If Hostinger SMTP is configured, prefer Hostinger SMTP
+  const host = (process.env.EMAIL_HOST || env.EMAIL_HOST || '').toLowerCase()
+  if (
+    (process.env.EMAIL_USER || env.EMAIL_USER) &&
+    (process.env.EMAIL_PASS || env.EMAIL_PASS) &&
+    (host.includes('hostinger') || host.includes('titan'))
+  ) {
+    return 'smtp'
+  }
+
   if (process.env.RESEND_API_KEY || env.RESEND_API_KEY) return 'resend'
   if (
     (process.env.EMAIL_USER || env.EMAIL_USER) &&
@@ -124,10 +138,26 @@ async function sendEmailDirect({ to, subject, html, text, attachments }) {
   }
 
   if (strategy === 'resend') {
-    return sendViaResend({ to, subject, html, text, attachments })
+    try {
+      return await sendViaResend({ to, subject, html, text, attachments })
+    } catch (resendErr) {
+      console.warn('[mailer] Resend send failed, checking SMTP fallback:', resendErr.message)
+      if ((process.env.EMAIL_USER || env.EMAIL_USER) && (process.env.EMAIL_PASS || env.EMAIL_PASS)) {
+        return sendViaSMTP({ to, subject, html, text, attachments })
+      }
+      throw resendErr
+    }
   }
 
-  return sendViaSMTP({ to, subject, html, text, attachments })
+  try {
+    return await sendViaSMTP({ to, subject, html, text, attachments })
+  } catch (smtpErr) {
+    console.warn('[mailer] SMTP send failed, checking Resend fallback:', smtpErr.message)
+    if (process.env.RESEND_API_KEY || env.RESEND_API_KEY) {
+      return sendViaResend({ to, subject, html, text, attachments })
+    }
+    throw smtpErr
+  }
 }
 
 // ── In-Memory Throttled Email Queue ────────────────────────────

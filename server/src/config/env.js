@@ -8,6 +8,7 @@ export const env = {
   DATABASE_URL: process.env.DATABASE_URL,
   JWT_SECRET: process.env.JWT_SECRET,
   CLIENT_URL: process.env.CLIENT_URL || 'http://localhost:5173',
+  EMAIL_STRATEGY: process.env.EMAIL_STRATEGY || 'auto',
   EMAIL_HOST: process.env.EMAIL_HOST,
   EMAIL_PORT: parseInt(process.env.EMAIL_PORT || '587', 10),
   EMAIL_USER: process.env.EMAIL_USER,

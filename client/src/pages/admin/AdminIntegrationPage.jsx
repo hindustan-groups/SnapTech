@@ -34,6 +34,13 @@ import {
   MessageSquare,
   Server,
   Zap,
+  Send,
+  ChevronDown,
+  ChevronUp,
+  Check,
+  Copy,
+  Inbox,
+  SlidersHorizontal,
 } from 'lucide-react'
 import { api } from '@/utils/api'
 import { SEO } from '@/components/ui'
@@ -314,6 +321,12 @@ export default function AdminIntegrationPage() {
 
   const [smtpTest, setSmtpTest] = useState(null)
   const [smtpTesting, setSmtpTesting] = useState(false)
+  const [resendTest, setResendTest] = useState(null)
+  const [resendTesting, setResendTesting] = useState(false)
+  const [testRecipient, setTestRecipient] = useState('')
+  const [showAliasGuide, setShowAliasGuide] = useState(false)
+  const [copiedAlias, setCopiedAlias] = useState('')
+
   const [cloudTest, setCloudTest] = useState(null)
   const [cloudTesting, setCloudTesting] = useState(false)
   const [dbTest, setDbTest] = useState(null)
@@ -332,6 +345,8 @@ export default function AdminIntegrationPage() {
     register,
     handleSubmit,
     getValues,
+    setValue,
+    watch,
     formState: { isSubmitting },
   } = useForm({
     values: data
@@ -339,9 +354,10 @@ export default function AdminIntegrationPage() {
           sys_cloudinary_cloud_name: data.sys_cloudinary_cloud_name || '',
           sys_cloudinary_api_key: data.sys_cloudinary_api_key || '',
           sys_cloudinary_api_secret: data.sys_cloudinary_api_secret || '',
+          sys_email_strategy: data.sys_email_strategy || 'auto',
           sys_resend_api_key: data.sys_resend_api_key || '',
           sys_smtp_host: data.sys_smtp_host || '',
-          sys_smtp_port: data.sys_smtp_port || '587',
+          sys_smtp_port: data.sys_smtp_port || '465',
           sys_smtp_user: data.sys_smtp_user || '',
           sys_smtp_pass: data.sys_smtp_pass || '',
           sys_smtp_from: data.sys_smtp_from || '',
@@ -357,6 +373,8 @@ export default function AdminIntegrationPage() {
         }
       : {},
   })
+
+  const currentStrategy = watch('sys_email_strategy') || data?.sys_email_strategy || 'auto'
 
   // 2. Mutation for saving integration settings
   const mutation = useMutation({
@@ -374,6 +392,25 @@ export default function AdminIntegrationPage() {
     mutation.mutate(d)
   }
 
+  const fillHostingerDefaults = () => {
+    setValue('sys_smtp_host', 'smtp.hostinger.com', { shouldDirty: true })
+    setValue('sys_smtp_port', '465', { shouldDirty: true })
+    if (!getValues('sys_smtp_user')) {
+      setValue('sys_smtp_user', 'info@snaptech.digital', { shouldDirty: true })
+    }
+    if (!getValues('sys_smtp_from')) {
+      setValue('sys_smtp_from', '"SnapTech Digital" <info@snaptech.digital>', { shouldDirty: true })
+    }
+    addToast('Hostinger SMTP defaults applied (smtp.hostinger.com:465)', 'info')
+  }
+
+  const handleCopy = (text) => {
+    navigator.clipboard?.writeText(text)
+    setCopiedAlias(text)
+    setTimeout(() => setCopiedAlias(''), 2000)
+    addToast(`Copied ${text} to clipboard`, 'info')
+  }
+
   const handleSmtpTest = async () => {
     setSmtpTesting(true)
     setSmtpTest(null)
@@ -385,16 +422,37 @@ export default function AdminIntegrationPage() {
         sys_smtp_user: vals.sys_smtp_user,
         sys_smtp_pass: vals.sys_smtp_pass,
         sys_smtp_from: vals.sys_smtp_from,
-        sys_resend_api_key: vals.sys_resend_api_key,
+        target_email: testRecipient.trim() || undefined,
       })
       setSmtpTest({ ok: true, message: r.message })
-      addToast('Test email sent successfully', 'success')
+      addToast('Hostinger / SMTP test email sent successfully', 'success')
       qc.invalidateQueries({ queryKey: ['admin-integrations'] })
     } catch (err) {
       setSmtpTest({ ok: false, message: err.message })
       addToast(err.message || 'SMTP test failed', 'error')
     } finally {
       setSmtpTesting(false)
+    }
+  }
+
+  const handleResendTest = async () => {
+    setResendTesting(true)
+    setResendTest(null)
+    try {
+      const vals = getValues ? getValues() : {}
+      const r = await api.post('/admin/integrations/test-resend', {
+        sys_resend_api_key: vals.sys_resend_api_key,
+        sys_smtp_from: vals.sys_smtp_from,
+        target_email: testRecipient.trim() || undefined,
+      })
+      setResendTest({ ok: true, message: r.message })
+      addToast('Resend API test email sent successfully', 'success')
+      qc.invalidateQueries({ queryKey: ['admin-integrations'] })
+    } catch (err) {
+      setResendTest({ ok: false, message: err.message })
+      addToast(err.message || 'Resend test failed', 'error')
+    } finally {
+      setResendTesting(false)
     }
   }
 
@@ -588,113 +646,331 @@ export default function AdminIntegrationPage() {
                 />
               </Section>
 
-              {/* ── 2. Resend ── */}
+              {/* ── 2 & 3. Unified Email Delivery Center (Hostinger SMTP + Resend API) ── */}
               <Section
                 icon={Mail}
-                title="Resend — Transactional Email API"
-                accentColor="violet"
-                badge={<StatusBadge active={status.resend} />}
+                title="Email Delivery Gateway — Hostinger SMTP & Resend API"
+                accentColor="emerald"
+                badge={
+                  <div className="flex items-center gap-2">
+                    <span className={`text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider ${status.smtp ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-gray-100 text-gray-500'}`}>
+                      SMTP: {status.smtp ? 'ACTIVE' : 'OFF'}
+                    </span>
+                    <span className={`text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider ${status.resend ? 'bg-violet-50 text-violet-700 border border-violet-200' : 'bg-gray-100 text-gray-500'}`}>
+                      Resend: {status.resend ? 'ACTIVE' : 'OFF'}
+                    </span>
+                  </div>
+                }
               >
-                <div className="bg-violet-50/60 border border-violet-100 rounded-xl p-3.5 flex items-start gap-2.5 text-xs text-violet-800">
-                  <Info className="w-4 h-4 shrink-0 mt-0.5 text-violet-600" />
-                  <span className="leading-relaxed">
-                    Primary recommended email service for domain-verified emails (e.g. notifications@yourdomain.com). Free tier provides 3,000 emails/month. Obtain your API key from{' '}
+                {/* ── Strategy Switcher ── */}
+                <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 sm:p-5 space-y-3">
+                  <div className="flex items-center justify-between gap-3 flex-wrap">
+                    <div className="flex items-center gap-2">
+                      <SlidersHorizontal className="w-4 h-4 text-brand-blue" />
+                      <label className="text-xs font-bold text-gray-900 uppercase tracking-wider">
+                        Active Outgoing Delivery Strategy
+                      </label>
+                    </div>
+                    <span className="text-[11px] font-bold text-brand-blue bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200">
+                      Currently using: {currentStrategy.toUpperCase()}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                    <label className={`cursor-pointer rounded-xl p-3 border transition-all flex flex-col justify-between ${currentStrategy === 'auto' ? 'bg-blue-50/80 border-brand-blue ring-2 ring-brand-blue/20' : 'bg-white border-gray-200 hover:border-gray-300'}`}>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs font-bold text-gray-900 flex items-center gap-1.5">
+                          <Zap className="w-3.5 h-3.5 text-brand-blue" />
+                          Smart Auto
+                        </span>
+                        <input
+                          type="radio"
+                          value="auto"
+                          {...register('sys_email_strategy')}
+                          className="accent-brand-blue"
+                        />
+                      </div>
+                      <p className="text-[11px] text-gray-500 leading-snug">
+                        Hostinger SMTP preferred when filled; automatic fallback to Resend API.
+                      </p>
+                    </label>
+
+                    <label className={`cursor-pointer rounded-xl p-3 border transition-all flex flex-col justify-between ${currentStrategy === 'smtp' ? 'bg-emerald-50/80 border-emerald-600 ring-2 ring-emerald-500/20' : 'bg-white border-gray-200 hover:border-gray-300'}`}>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs font-bold text-gray-900 flex items-center gap-1.5">
+                          <Server className="w-3.5 h-3.5 text-emerald-600" />
+                          Hostinger SMTP
+                        </span>
+                        <input
+                          type="radio"
+                          value="smtp"
+                          {...register('sys_email_strategy')}
+                          className="accent-emerald-600"
+                        />
+                      </div>
+                      <p className="text-[11px] text-gray-500 leading-snug">
+                        Routes exclusively through Hostinger business email (smtp.hostinger.com:465).
+                      </p>
+                    </label>
+
+                    <label className={`cursor-pointer rounded-xl p-3 border transition-all flex flex-col justify-between ${currentStrategy === 'resend' ? 'bg-violet-50/80 border-violet-600 ring-2 ring-violet-500/20' : 'bg-white border-gray-200 hover:border-gray-300'}`}>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs font-bold text-gray-900 flex items-center gap-1.5">
+                          <Mail className="w-3.5 h-3.5 text-violet-600" />
+                          Resend API
+                        </span>
+                        <input
+                          type="radio"
+                          value="resend"
+                          {...register('sys_email_strategy')}
+                          className="accent-violet-600"
+                        />
+                      </div>
+                      <p className="text-[11px] text-gray-500 leading-snug">
+                        Routes via modern HTTP transactional API with DKIM tracking and instant delivery.
+                      </p>
+                    </label>
+                  </div>
+                </div>
+
+                {/* ── Hostinger Architecture & Free Aliases Assistant ── */}
+                <div className="bg-linear-to-r from-blue-50/60 to-indigo-50/60 border border-blue-200/80 rounded-2xl p-4 sm:p-5">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-lg bg-brand-blue text-white flex items-center justify-center shrink-0">
+                        <Inbox className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <h4 className="text-xs sm:text-sm font-bold text-gray-900">
+                          Hostinger Business Mailboxes & Free Email Aliases Architecture
+                        </h4>
+                        <p className="text-[11px] text-gray-600 mt-0.5">
+                          Configure your official <code className="font-mono text-brand-blue font-bold">@snaptech.digital</code> addresses without paying extra mailbox fees.
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setShowAliasGuide((v) => !v)}
+                      className="px-3 py-1.5 rounded-lg bg-white border border-blue-200 text-xs font-bold text-brand-blue hover:bg-blue-50 transition-all cursor-pointer flex items-center gap-1 shrink-0"
+                    >
+                      <span>{showAliasGuide ? 'Hide Guide' : 'View Setup Guide'}</span>
+                      {showAliasGuide ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                    </button>
+                  </div>
+
+                  {showAliasGuide && (
+                    <div className="mt-4 pt-4 border-t border-blue-200/60 space-y-4">
+                      <div className="bg-white rounded-xl p-3.5 border border-blue-100 text-xs space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-gray-800">1. Primary Mailbox (Create in Hostinger Webmail):</span>
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">
+                            1 Active Mailbox Needed
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between bg-gray-50 p-2 rounded-lg font-mono text-xs text-gray-800">
+                          <span>info@snaptech.digital</span>
+                          <button
+                            type="button"
+                            onClick={() => handleCopy('info@snaptech.digital')}
+                            className="text-brand-blue hover:text-blue-800 flex items-center gap-1 cursor-pointer font-sans text-[11px]"
+                          >
+                            {copiedAlias === 'info@snaptech.digital' ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
+                            <span>{copiedAlias === 'info@snaptech.digital' ? 'Copied' : 'Copy'}</span>
+                          </button>
+                        </div>
+                        <p className="text-[11px] text-gray-500">
+                          Use this login in the SMTP User & Password boxes below. All outgoing system notifications authenticate via this mailbox.
+                        </p>
+                      </div>
+
+                      <div className="bg-white rounded-xl p-3.5 border border-blue-100 text-xs space-y-2.5">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-gray-800">2. Free Email Forwarders / Aliases (₹0 Cost):</span>
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-100 text-brand-blue">
+                            Hostinger hPanel ➔ Forwarders
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-gray-600">
+                          In Hostinger hPanel, go to <strong>Emails ➔ Forwarders</strong> and create these forwarders pointing to <code className="font-mono bg-blue-50 px-1 py-0.5 rounded text-brand-blue">info@snaptech.digital</code> (or your personal Gmail):
+                        </p>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 font-mono text-[11px]">
+                          {[
+                            { email: 'contact@snaptech.digital', role: 'General Inquiries & Lead Form' },
+                            { email: 'support@snaptech.digital', role: 'Client Portal & SLA Helpdesk' },
+                            { email: 'billing@snaptech.digital', role: 'Invoices, Quotes & Financials' },
+                            { email: 'careers@snaptech.digital', role: 'Job Applications & Hiring' },
+                          ].map((item) => (
+                            <div key={item.email} className="bg-gray-50 p-2.5 rounded-lg border border-gray-200/80 flex items-center justify-between">
+                              <div>
+                                <p className="font-bold text-gray-900">{item.email}</p>
+                                <p className="font-sans text-[10px] text-gray-500">{item.role}</p>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => handleCopy(item.email)}
+                                className="text-gray-400 hover:text-brand-blue p-1 cursor-pointer"
+                                title="Copy"
+                              >
+                                {copiedAlias === item.email ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* ── Channel A: Hostinger / SMTP Server Card ── */}
+                <div className="border border-emerald-200/80 rounded-2xl p-5 bg-emerald-50/20 space-y-4">
+                  <div className="flex items-center justify-between flex-wrap gap-3">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-7 h-7 rounded-lg bg-emerald-600 text-white flex items-center justify-center shrink-0">
+                        <Server className="w-3.5 h-3.5" />
+                      </div>
+                      <div>
+                        <h4 className="text-xs sm:text-sm font-bold text-gray-900">
+                          Channel A: Hostinger Business Email (SMTP)
+                        </h4>
+                        <p className="text-[11px] text-gray-500">
+                          Encrypted TLS/SSL server configuration for direct Hostinger mailbox authentication.
+                        </p>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={fillHostingerDefaults}
+                      className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all shadow-xs cursor-pointer flex items-center gap-1.5"
+                    >
+                      <Sparkles className="w-3.5 h-3.5 text-emerald-200" />
+                      <span>Apply Hostinger Defaults</span>
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div className="sm:col-span-2">
+                      <PlainInput
+                        label="SMTP Host"
+                        name="sys_smtp_host"
+                        placeholder="smtp.hostinger.com"
+                        register={register}
+                        description="Default for Hostinger is smtp.hostinger.com (or smtp.titan.email)"
+                      />
+                    </div>
+                    <PlainInput
+                      label="Port"
+                      name="sys_smtp_port"
+                      placeholder="465"
+                      register={register}
+                      type="number"
+                      description="Use 465 (SSL recommended) or 587 (TLS)"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <PlainInput
+                      label="SMTP User / Full Email Address"
+                      name="sys_smtp_user"
+                      placeholder="info@snaptech.digital"
+                      register={register}
+                      description="Your complete email address created in Hostinger"
+                    />
+                    <SecretInput
+                      label="SMTP Password / Webmail Password"
+                      name="sys_smtp_pass"
+                      placeholder="Leave blank to keep existing password"
+                      register={register}
+                      description="Password you created for this mailbox in Hostinger Webmail"
+                    />
+                  </div>
+
+                  <PlainInput
+                    label='Sender Name & Email ("From" Header)'
+                    name="sys_smtp_from"
+                    placeholder={`"SnapTech Digital" <info@snaptech.digital>`}
+                    register={register}
+                    description="Name and address recipients see when receiving emails from this website"
+                  />
+
+                  <div className="pt-1">
+                    <TestButton
+                      label="Send Test Email via Hostinger SMTP"
+                      onClick={handleSmtpTest}
+                      loading={smtpTesting}
+                      result={smtpTest}
+                      icon={Server}
+                    />
+                  </div>
+                </div>
+
+                {/* ── Channel B: Resend Transactional Email API Card ── */}
+                <div className="border border-violet-200/80 rounded-2xl p-5 bg-violet-50/20 space-y-4">
+                  <div className="flex items-center justify-between flex-wrap gap-3">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-7 h-7 rounded-lg bg-violet-600 text-white flex items-center justify-center shrink-0">
+                        <Mail className="w-3.5 h-3.5" />
+                      </div>
+                      <div>
+                        <h4 className="text-xs sm:text-sm font-bold text-gray-900">
+                          Channel B: Resend Transactional Email (API Key)
+                        </h4>
+                        <p className="text-[11px] text-gray-500">
+                          Direct HTTP API for cloud transactional email delivery with analytics and delivery tracking.
+                        </p>
+                      </div>
+                    </div>
+
                     <a
                       href="https://resend.com/api-keys"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="underline font-bold inline-flex items-center gap-0.5 hover:text-violet-900"
+                      className="px-3 py-1.5 rounded-xl bg-violet-50 hover:bg-violet-100 text-violet-700 border border-violet-200 text-xs font-bold transition-all cursor-pointer inline-flex items-center gap-1.5"
                     >
-                      resend.com/api-keys <ExternalLink className="w-3 h-3" />
-                    </a>. When configured, Resend takes precedence over SMTP.
-                  </span>
-                </div>
+                      <span>Get Resend API Key</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
 
-                <SecretInput
-                  label="Resend API Key"
-                  name="sys_resend_api_key"
-                  placeholder="re_xxxxxxxxxxxxxxxxxxxxxxxx"
-                  register={register}
-                  description="Starts with re_. Stored encrypted. Leave blank to keep current key."
-                />
+                  <SecretInput
+                    label="Resend API Key"
+                    name="sys_resend_api_key"
+                    placeholder="re_xxxxxxxxxxxxxxxxxxxxxxxx"
+                    register={register}
+                    description="Starts with 're_'. Stored encrypted. Free tier allows 3,000 emails/month."
+                  />
 
-                <TestButton
-                  label="Send Test Email via Resend"
-                  onClick={handleSmtpTest}
-                  loading={smtpTesting}
-                  result={smtpTest}
-                />
-              </Section>
-
-              {/* ── 3. SMTP Mailer ── */}
-              <Section
-                icon={Server}
-                title="SMTP Mailer — Nodemailer Email Server"
-                accentColor="emerald"
-                badge={<StatusBadge active={status.smtp} />}
-              >
-                <div className="bg-emerald-50/60 border border-emerald-100 rounded-xl p-3.5 flex items-start gap-2.5 text-xs text-emerald-800">
-                  <Info className="w-4 h-4 shrink-0 mt-0.5 text-emerald-600" />
-                  <span className="leading-relaxed">
-                    Backup email provider for lead notifications and client auto-responses. For Gmail SMTP, use an{' '}
-                    <a
-                      href="https://myaccount.google.com/apppasswords"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="underline font-bold inline-flex items-center gap-0.5 hover:text-emerald-900"
-                    >
-                      App Password <ExternalLink className="w-3 h-3" />
-                    </a> instead of your primary account password.
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div className="sm:col-span-2">
-                    <PlainInput
-                      label="SMTP Host"
-                      name="sys_smtp_host"
-                      placeholder="smtp.mailserver.com"
-                      register={register}
+                  <div className="pt-1">
+                    <TestButton
+                      label="Send Test Email via Resend API"
+                      onClick={handleResendTest}
+                      loading={resendTesting}
+                      result={resendTest}
+                      icon={Send}
                     />
                   </div>
-                  <PlainInput
-                    label="Port"
-                    name="sys_smtp_port"
-                    placeholder="587"
-                    register={register}
-                    type="number"
-                  />
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <PlainInput
-                    label="SMTP User / Email Address"
-                    name="sys_smtp_user"
-                    placeholder="notifications@yourdomain.com"
-                    register={register}
-                  />
-                  <SecretInput
-                    label="SMTP Password / App Password"
-                    name="sys_smtp_pass"
-                    placeholder="Leave blank to keep existing password"
-                    register={register}
+                {/* ── Live Verification Recipient Box ── */}
+                <div className="bg-gray-50 border border-gray-200/80 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="space-y-0.5">
+                    <label className="text-xs font-bold text-gray-800 block">
+                      Custom Test Email Recipient (Optional)
+                    </label>
+                    <p className="text-[11px] text-gray-500">
+                      Specify where the test emails should be sent (defaults to your admin email or info@snaptech.digital).
+                    </p>
+                  </div>
+                  <input
+                    type="email"
+                    value={testRecipient}
+                    onChange={(e) => setTestRecipient(e.target.value)}
+                    placeholder="e.g. yourname@gmail.com"
+                    className="w-full sm:w-64 px-3 py-2 text-xs border border-gray-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-brand-blue/20 font-mono"
                   />
                 </div>
-
-                <PlainInput
-                  label='Sender Name & Email ("From" Header)'
-                  name="sys_smtp_from"
-                  placeholder={`"Organization Name" <notifications@yourdomain.com>`}
-                  register={register}
-                  description="Appears as sender address in recipient email inboxes."
-                />
-
-                <TestButton
-                  label="Send Test Email via SMTP"
-                  onClick={handleSmtpTest}
-                  loading={smtpTesting}
-                  result={smtpTest}
-                />
               </Section>
 
               {/* ── 4. reCAPTCHA v3 ── */}

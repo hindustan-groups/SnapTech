@@ -116,6 +116,7 @@ import {
   getIntegrationConfig,
   updateIntegrationConfig,
   testSmtpConnection,
+  testResendConnection,
   testCloudinaryConnection,
   testDatabaseConnection,
   verifyIntegrationKey,
@@ -756,6 +757,7 @@ router.delete('/blog/comments/:id', verifyToken, requireRole('SUPER_ADMIN'), adm
 router.get('/integrations', verifyToken, requireRole('SUPER_ADMIN', 'ADMIN'), verifyUnlockToken, getIntegrationConfig)
 router.patch('/integrations', verifyToken, requireRole('SUPER_ADMIN', 'ADMIN'), verifyUnlockToken, updateIntegrationConfig)
 router.post('/integrations/test-smtp', verifyToken, requireRole('SUPER_ADMIN', 'ADMIN'), verifyUnlockToken, testSmtpConnection)
+router.post('/integrations/test-resend', verifyToken, requireRole('SUPER_ADMIN', 'ADMIN'), verifyUnlockToken, testResendConnection)
 router.post(
   '/integrations/test-cloudinary',
   verifyToken,
