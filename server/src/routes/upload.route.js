@@ -33,7 +33,7 @@ router.post(
         return res.status(400).json({ status: 'error', message: 'No image file provided.' })
       }
 
-      const result = await uploadToCloudinary(req.file.buffer, 'hindustan-projects', 'image')
+      const result = await uploadToCloudinary(req.file.buffer, 'hindustan-projects', 'image', req.file.originalname)
 
       return res.status(201).json({
         status: 'ok',

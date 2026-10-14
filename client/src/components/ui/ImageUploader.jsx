@@ -10,7 +10,7 @@ export default function ImageUploader({
   value,
   onChange,
   label = 'Image',
-  accept = '.jpg,.jpeg,.png,.webp',
+  accept = '.jpg,.jpeg,.png,.webp,.svg,.gif,.avif',
 }) {
   const [dragging, setDragging] = useState(false)
   const [uploading, setUploading] = useState(false)
@@ -23,9 +23,20 @@ export default function ImageUploader({
       setError('File too large. Max 5MB allowed.')
       return
     }
-    const allowed = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
-    if (!allowed.includes(file.type)) {
-      setError('Only JPG, PNG, WebP allowed.')
+    const allowedTypes = [
+      'image/jpeg',
+      'image/jpg',
+      'image/png',
+      'image/webp',
+      'image/svg+xml',
+      'image/gif',
+      'image/avif',
+    ]
+    const ext = file.name ? file.name.split('.').pop().toLowerCase() : ''
+    const allowedExts = ['jpg', 'jpeg', 'png', 'webp', 'svg', 'gif', 'avif']
+
+    if (!allowedTypes.includes(file.type) && (!ext || !allowedExts.includes(ext))) {
+      setError('Only JPG, PNG, WebP, SVG, GIF, and AVIF images are allowed.')
       return
     }
 
@@ -34,18 +45,29 @@ export default function ImageUploader({
     try {
       const formData = new FormData()
       formData.append('image', file)
-      // Use VITE_API_URL so this works in production (Vercel → Render)
-      const BASE = import.meta.env.VITE_API_URL || '/api'
-      const res = await fetch(`${BASE}/upload`, {
-        method: 'POST',
-        credentials: 'include',
-        body: formData,
-      })
-      const json = await res.json()
-      if (!res.ok) throw new Error(json.message || 'Upload failed')
-      onChange(json.data.url)
+      const res = await api.post('/upload', formData)
+      if (res?.data?.url) {
+        onChange(res.data.url)
+      } else {
+        throw new Error('Upload succeeded but no image URL was returned.')
+      }
     } catch (err) {
-      setError(err.message || 'Upload failed. Try again.')
+      const msg = err?.message || ''
+      if (
+        err.status === 401 ||
+        msg.toLowerCase().includes('log in') ||
+        msg.toLowerCase().includes('session')
+      ) {
+        setError('Your session has expired. Please log in again.')
+      } else if (err.status === 404) {
+        setError('Upload endpoint returned 404. Your session may have expired — please log in again.')
+      } else if (err.status === 413) {
+        setError('File too large. Max 5MB allowed.')
+      } else if (err.status === 503) {
+        setError('Cloudinary is not configured. Please verify credentials in Integrations.')
+      } else {
+        setError(msg || 'Upload failed. Try again.')
+      }
     } finally {
       setUploading(false)
     }

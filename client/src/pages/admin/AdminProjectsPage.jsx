@@ -15,15 +15,12 @@ import {
   FolderOpen,
   ImageIcon,
   Search,
-  ExternalLink,
   Upload,
   Loader2,
   TrendingUp,
   Clock,
   Code2,
-  Cpu,
   Layers,
-  Sparkles,
   Eye,
 } from 'lucide-react'
 import { useForm, Controller } from 'react-hook-form'
@@ -96,19 +93,27 @@ function GalleryImagesManager({ images = [], onChange }) {
     try {
       const formData = new FormData()
       formData.append('image', file)
-      const BASE = import.meta.env.VITE_API_URL || '/api'
-      const res = await fetch(`${BASE}/upload`, {
-        method: 'POST',
-        credentials: 'include',
-        body: formData,
-      })
-      const json = await res.json()
-      if (!res.ok) throw new Error(json.message || 'Upload failed')
-      if (json.data?.url) {
-        onChange([...images, json.data.url])
+      const res = await api.post('/upload', formData)
+      if (res?.data?.url) {
+        onChange([...images, res.data.url])
+      } else {
+        throw new Error('Upload succeeded but no image URL was returned.')
       }
     } catch (err) {
-      setError(err.message || 'Upload failed. Try again.')
+      const msg = err?.message || ''
+      if (
+        err.status === 401 ||
+        msg.toLowerCase().includes('log in') ||
+        msg.toLowerCase().includes('session')
+      ) {
+        setError('Your session has expired. Please log in again.')
+      } else if (err.status === 404) {
+        setError('Upload endpoint returned 404. Your session may have expired — please log in again.')
+      } else if (err.status === 413) {
+        setError('File too large (Max 5MB).')
+      } else {
+        setError(msg || 'Upload failed. Try again.')
+      }
     } finally {
       setUploading(false)
       if (fileInputRef.current) fileInputRef.current.value = ''
@@ -169,7 +174,7 @@ function GalleryImagesManager({ images = [], onChange }) {
         <input
           ref={fileInputRef}
           type="file"
-          accept=".jpg,.jpeg,.png,.webp"
+          accept=".jpg,.jpeg,.png,.webp,.svg,.gif,.avif"
           className="hidden"
           onChange={handleFileUpload}
         />

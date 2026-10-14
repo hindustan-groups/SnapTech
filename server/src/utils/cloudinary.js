@@ -18,13 +18,24 @@ cloudinary.config({
 // Use memory storage — file goes to buffer, we upload manually
 const memoryStorage = multer.memoryStorage()
 
-// File filter — only images
+// File filter — images (JPG, PNG, WebP, SVG, GIF, AVIF)
 const fileFilter = (_req, file, cb) => {
-  const allowed = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
-  if (allowed.includes(file.mimetype)) {
+  const allowed = [
+    'image/jpeg',
+    'image/jpg',
+    'image/png',
+    'image/webp',
+    'image/svg+xml',
+    'image/gif',
+    'image/avif',
+  ]
+  const ext = file.originalname?.split('.').pop()?.toLowerCase()
+  const allowedExts = ['jpg', 'jpeg', 'png', 'webp', 'svg', 'gif', 'avif']
+
+  if (allowed.includes(file.mimetype) || (ext && allowedExts.includes(ext))) {
     cb(null, true)
   } else {
-    cb(new Error('Only JPG, PNG, and WebP images are allowed.'), false)
+    cb(new Error('Only JPG, PNG, WebP, SVG, GIF, and AVIF images are allowed.'), false)
   }
 }
 
@@ -89,6 +100,15 @@ export const uploadAttachment = multer({
  */
 export const uploadToCloudinary = (buffer, folder = 'hindustan-projects', resourceType = 'image', originalName = '') => {
   return new Promise((resolve, reject) => {
+    // Re-verify that Cloudinary SDK has the active trimmed credentials
+    const cloud_name = (process.env.CLOUDINARY_CLOUD_NAME || env.CLOUDINARY_CLOUD_NAME)?.trim()
+    const api_key = (process.env.CLOUDINARY_API_KEY || env.CLOUDINARY_API_KEY)?.trim()
+    const api_secret = (process.env.CLOUDINARY_API_SECRET || env.CLOUDINARY_API_SECRET)?.trim()
+
+    if (cloud_name && api_key && api_secret) {
+      cloudinary.config({ cloud_name, api_key, api_secret })
+    }
+
     let public_id = undefined
     if (originalName) {
       const ext = originalName.split('.').pop().toLowerCase()
@@ -102,14 +122,18 @@ export const uploadToCloudinary = (buffer, folder = 'hindustan-projects', resour
       }
     }
 
+    const isSvg = originalName?.toLowerCase().endsWith('.svg')
+    const isGif = originalName?.toLowerCase().endsWith('.gif')
+
     const stream = cloudinary.uploader.upload_stream(
       {
         folder,
         resource_type: resourceType,
         public_id,
-        transformation: resourceType === 'image'
-          ? [{ width: 1200, quality: 'auto', fetch_format: 'auto' }]
-          : undefined,
+        transformation:
+          resourceType === 'image' && !isSvg && !isGif
+            ? [{ width: 1200, quality: 'auto', fetch_format: 'auto' }]
+            : undefined,
       },
       (error, result) => {
         if (error) return reject(error)
