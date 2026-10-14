@@ -24,7 +24,7 @@ function Avatar({ name }) {
     .toUpperCase()
 
   return (
-    <div className="relative mb-5 mx-auto w-24 h-24 flex items-center justify-center z-10">
+    <div className="relative mb-3.5 sm:mb-5 mx-auto w-20 h-20 sm:w-24 sm:h-24 flex items-center justify-center z-10">
       {/* Soft backdrop blur glow */}
       <div className="absolute inset-0 rounded-full bg-linear-to-tr from-brand-blue via-blue-400 to-indigo-600 blur-md opacity-20 group-hover:opacity-40 group-hover:scale-110 transition-all duration-500" />
       
@@ -33,7 +33,7 @@ function Avatar({ name }) {
         {/* White spacer ring */}
         <div className="w-full h-full p-0.5 rounded-full bg-white flex items-center justify-center">
           <div className="w-full h-full rounded-full bg-blue-50/60 flex items-center justify-center border border-slate-100 shadow-inner group-hover:scale-105 transition-transform duration-500">
-            <span className="font-heading text-lg font-extrabold bg-linear-to-tr from-[#0D1B4B] to-brand-blue bg-clip-text text-transparent">
+            <span className="font-heading text-base sm:text-lg font-extrabold bg-linear-to-tr from-[#0D1B4B] to-brand-blue bg-clip-text text-transparent">
               {initials}
             </span>
           </div>
@@ -45,13 +45,13 @@ function Avatar({ name }) {
 
 function TeamCard({ member }) {
   return (
-    <div className="relative overflow-hidden p-6 text-center group border border-slate-200 bg-white hover:border-brand-blue/30 hover:shadow-xl transition-all duration-300 rounded-2xl flex flex-col justify-between h-full">
+    <div className="relative overflow-hidden p-5 sm:p-6 text-center group border border-slate-200 bg-white hover:border-brand-blue/30 hover:shadow-xl transition-all duration-300 rounded-2xl flex flex-col justify-center sm:justify-between h-full">
       {/* Subtle brand glow on hover */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 bg-linear-to-b from-brand-blue/5 to-transparent blur-2xl rounded-full pointer-events-none" />
 
       <div>
         {member.photoUrl ? (
-          <div className="relative mb-5 mx-auto w-24 h-24 flex items-center justify-center z-10">
+          <div className="relative mb-3.5 sm:mb-5 mx-auto w-20 h-20 sm:w-24 sm:h-24 flex items-center justify-center z-10">
             {/* Soft backdrop blur glow */}
             <div className="absolute inset-0 rounded-full bg-linear-to-tr from-brand-blue via-transparent to-indigo-600 blur-md opacity-10 group-hover:opacity-30 group-hover:scale-110 transition-all duration-500" />
 
@@ -61,7 +61,7 @@ function TeamCard({ member }) {
                 <img
                   src={member.photoUrl}
                   alt={member.name}
-                  className="w-20 h-20 rounded-full object-cover shadow-inner group-hover:scale-105 transition-transform duration-500"
+                  className="w-18 h-18 sm:w-20 sm:h-20 rounded-full object-cover shadow-inner group-hover:scale-105 transition-transform duration-500"
                   loading="lazy"
                 />
               </div>
@@ -75,12 +75,12 @@ function TeamCard({ member }) {
           <h3 className="font-heading text-base font-bold text-slate-800 group-hover:text-brand-blue transition-colors duration-300">
             {member.name}
           </h3>
-          <p className="text-[11px] font-mono text-brand-blue font-bold uppercase tracking-wider mt-1 mb-3">
+          <p className="text-[11px] font-mono text-brand-blue font-bold uppercase tracking-wider mt-0.5 sm:mt-1 mb-2 sm:mb-3">
             {member.role}
           </p>
 
           {member.bio && (
-            <p className="text-xs text-slate-500 leading-relaxed mb-5 line-clamp-3 group-hover:text-slate-600 transition-colors duration-300 px-1">
+            <p className="text-xs text-slate-600 leading-relaxed mb-3 sm:mb-4 group-hover:text-slate-700 transition-colors duration-300 px-1">
               {member.bio}
             </p>
           )}
@@ -88,13 +88,13 @@ function TeamCard({ member }) {
       </div>
 
       {member.linkedinUrl && member.linkedinUrl !== '#' && !member.linkedinUrl.includes('hindustanprojects') && (
-        <div className="flex justify-center pt-3 border-t border-slate-100 mt-auto">
+        <div className="flex justify-center pt-3 border-t border-slate-100 mt-1 sm:mt-auto">
           <a
             href={member.linkedinUrl}
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`${member.name} on LinkedIn`}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-mono text-slate-600 bg-slate-50 hover:bg-brand-blue hover:text-white border border-slate-200 hover:border-brand-blue transition-all duration-300"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-mono text-slate-600 bg-slate-50 hover:bg-brand-blue hover:text-white border border-slate-200 hover:border-brand-blue transition-all duration-300 shadow-2xs"
           >
             <LinkedInIcon />
             <span>Connect on LinkedIn</span>
@@ -252,13 +252,13 @@ export default function TeamSection() {
                   </div>
 
                   {/* 3D Stack Stage */}
-                  <div className="relative w-full max-w-xs mx-auto h-100 flex items-center justify-center select-none">
+                  <div className="relative w-full max-w-85 mx-auto h-105 flex items-center justify-center select-none">
                     {/* Deepest Stack Card 3 */}
                     {members.length > 2 && (
                       <div
-                        className="absolute inset-x-5 top-0 h-96 rounded-2xl border border-slate-200/60 bg-slate-100/90 shadow-2xs pointer-events-none transition-all duration-300"
+                        className="absolute inset-x-5 top-0 h-100 rounded-2xl border border-slate-200/60 bg-slate-100/90 shadow-2xs pointer-events-none transition-all duration-300"
                         style={{
-                          transform: 'translateY(22px) scale(0.88)',
+                          transform: 'translateY(18px) scale(0.9)',
                           zIndex: 10,
                           opacity: 0.45,
                         }}
@@ -268,9 +268,9 @@ export default function TeamSection() {
                     {/* Middle Stack Card 2 (Shows next member preview) */}
                     {members.length > 1 && (
                       <div
-                        className="absolute inset-x-2.5 top-0 h-96 rounded-2xl border border-slate-200 bg-white shadow-md pointer-events-none transition-all duration-300 overflow-hidden"
+                        className="absolute inset-x-2.5 top-0 h-100 rounded-2xl border border-slate-200 bg-white shadow-md pointer-events-none transition-all duration-300 overflow-hidden"
                         style={{
-                          transform: 'translateY(11px) scale(0.94)',
+                          transform: 'translateY(9px) scale(0.95)',
                           zIndex: 20,
                           opacity: 0.85,
                         }}
@@ -318,7 +318,7 @@ export default function TeamSection() {
                             handlePrev()
                           }
                         }}
-                        className="relative z-30 w-full h-96 cursor-grab active:cursor-grabbing touch-pan-y"
+                        className="relative z-30 w-full h-100 cursor-grab active:cursor-grabbing touch-pan-y"
                       >
                         <TeamCard member={members[activeMobileIdx]} />
                       </motion.div>
