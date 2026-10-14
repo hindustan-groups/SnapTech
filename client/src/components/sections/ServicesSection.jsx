@@ -5,8 +5,9 @@
  * - Clean corporate white cards with brand color accents
  * - Reveal-on-scroll animation
  */
-import { createElement, useEffect, useRef } from 'react'
+import { createElement, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { ArrowRight, Sparkles, Layers } from 'lucide-react'
 import { Container } from '@/components/ui'
 import { ServiceCardSkeleton } from '@/components/ui/Skeleton'
@@ -181,6 +182,187 @@ const FALLBACK_SERVICES = [
   },
 ]
 
+/* ── Mobile Stacking Card with Scroll Transitions ────────────── */
+function MobileStackCard({ service, index, total, scrollYProgress }) {
+  const accent = CARD_ACCENTS[index % CARD_ACCENTS.length]
+  const step = 1 / Math.max(1, total - 1)
+  const enterStart = Math.max(0, (index - 1) * step)
+  const enterEnd = index * step
+  const exitStart = index * step
+  const exitEnd = Math.min(1, (index + 1) * step)
+
+  // Vertical slide-in from bottom
+  const y = useTransform(
+    scrollYProgress,
+    index === 0 ? [0, 1] : [enterStart, enterEnd],
+    index === 0 ? ['0%', '0%'] : ['110%', '0%'],
+    { clamp: true }
+  )
+
+  // Scale down when subsequent card lands on top
+  const scale = useTransform(
+    scrollYProgress,
+    index === total - 1 ? [0, 1] : [exitStart, exitEnd],
+    index === total - 1 ? [1, 1] : [1, 0.94],
+    { clamp: true }
+  )
+
+  // Dim slightly when covered by next card
+  const opacity = useTransform(
+    scrollYProgress,
+    index === total - 1 ? [0, 1] : [exitStart, exitEnd],
+    index === total - 1 ? [1, 1] : [1, 0.45],
+    { clamp: true }
+  )
+
+  return (
+    <motion.div
+      style={{
+        y,
+        scale,
+        opacity,
+        zIndex: index + 10,
+      }}
+      className="absolute inset-0 w-full"
+    >
+      <Link
+        to={`/services/${service.slug}`}
+        className="group relative flex flex-col bg-white border border-slate-200/90 rounded-2xl p-5 no-underline shadow-[0_-4px_24px_rgba(0,0,0,0.08),0_18px_40px_rgba(13,27,75,0.16)] overflow-hidden h-full justify-between"
+        style={{
+          borderTop: `3.5px solid ${accent.border}`,
+        }}
+      >
+        {/* Top row: Icon, Step Number, Tag */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div
+              className={`w-11 h-11 rounded-xl ${accent.bg} border border-slate-200 flex items-center justify-center shadow-2xs`}
+            >
+              {createElement(getServiceIcon(service.icon), {
+                className: `w-5 h-5 ${accent.icon}`,
+                strokeWidth: 1.75,
+              })}
+            </div>
+            <span className="text-xs font-mono font-bold text-slate-400">
+              0{index + 1} <span className="text-slate-300">/</span> 0{total}
+            </span>
+          </div>
+
+          {service.tag && (
+            <span
+              className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border shadow-2xs"
+              style={{ color: accent.border, background: `${accent.border}12`, borderColor: `${accent.border}30` }}
+            >
+              {service.tag}
+            </span>
+          )}
+        </div>
+
+        {/* Title */}
+        <h3 className="font-heading text-lg font-bold text-slate-800 group-hover:text-brand-blue transition-colors duration-200 mb-2">
+          {service.title}
+        </h3>
+
+        {/* Description */}
+        <p className="text-xs text-slate-600 leading-relaxed flex-1 mb-4">
+          {service.shortDescription}
+        </p>
+
+        {/* Bottom CTA & status */}
+        <div className="flex items-center justify-between pt-3 border-t border-slate-100 mt-auto">
+          <span
+            className="inline-flex items-center gap-1.5 text-xs font-bold transition-all duration-200"
+            style={{ color: accent.border }}
+          >
+            <span>Explore Solution</span>
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+          </span>
+
+          <span className="text-[10px] font-mono text-slate-400">
+            {index < total - 1 ? 'Scroll for next card ↓' : 'End of capabilities ✓'}
+          </span>
+        </div>
+      </Link>
+    </motion.div>
+  )
+}
+
+/* ── Mobile Pinned Scroll Track & Stacking Deck ─────────────── */
+function MobileStackDeck({ services, isLoading }) {
+  const trackRef = useRef(null)
+  const { scrollYProgress } = useScroll({
+    target: trackRef,
+    offset: ['start start', 'end end'],
+  })
+
+  const [activeIdx, setActiveIdx] = useState(0)
+
+  useEffect(() => {
+    return scrollYProgress.on('change', (latest) => {
+      const step = 1 / Math.max(1, services.length - 1)
+      const current = Math.min(
+        services.length - 1,
+        Math.max(0, Math.round(latest / step))
+      )
+      setActiveIdx(current)
+    })
+  }, [scrollYProgress, services.length])
+
+  if (isLoading && services.length === 0) {
+    return <div className="sm:hidden p-4 bg-white rounded-2xl border border-slate-200 animate-pulse h-64" />
+  }
+
+  return (
+    <div ref={trackRef} className="relative h-[280vh] sm:hidden">
+      {/* Pinned Sticky Stage */}
+      <div className="sticky top-20 h-[calc(100vh-84px)] max-h-[500px] flex flex-col justify-center items-center select-none px-2">
+        {/* Stage Progress Header */}
+        <div className="w-full max-w-sm flex items-center justify-between mb-3 px-1">
+          <div className="flex items-center gap-2 text-xs font-semibold text-slate-600">
+            <span className="w-2 h-2 rounded-full bg-brand-blue animate-pulse" />
+            <span>Capability Deck ({activeIdx + 1}/{services.length})</span>
+          </div>
+
+          {/* Mini progress bar */}
+          <div className="w-24 h-1.5 bg-slate-200 rounded-full overflow-hidden">
+            <motion.div
+              style={{ scaleX: scrollYProgress, transformOrigin: 'left' }}
+              className="h-full bg-linear-to-r from-brand-blue to-indigo-600 rounded-full"
+            />
+          </div>
+        </div>
+
+        {/* 3D Stack Stage Box */}
+        <div className="relative w-full max-w-sm h-[320px]">
+          {services.map((service, index) => (
+            <MobileStackCard
+              key={service.id}
+              service={service}
+              index={index}
+              total={services.length}
+              scrollYProgress={scrollYProgress}
+            />
+          ))}
+        </div>
+
+        {/* Tactile scroll hint below card */}
+        <div className="mt-3 flex items-center gap-1.5 text-[11px] font-mono text-slate-400">
+          {activeIdx < services.length - 1 ? (
+            <>
+              <span className="animate-bounce">↓</span>
+              <span>Scroll down to stack next card ({activeIdx + 1} of {services.length})</span>
+            </>
+          ) : (
+            <span className="text-brand-blue font-semibold">
+              ↓ Scroll down to explore parent ecosystem
+            </span>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function ServicesSection() {
   const { data, isLoading } = useServices()
   const services = Array.isArray(data?.data) && data.data.length > 0 ? data.data : (isLoading ? [] : FALLBACK_SERVICES)
@@ -191,7 +373,7 @@ export default function ServicesSection() {
   return (
     <section
       id="services"
-      className="py-20 sm:py-24 bg-slate-50 relative overflow-x-clip sm:overflow-hidden isolate border-t border-slate-100"
+      className="py-20 sm:py-24 bg-slate-50 relative sm:overflow-hidden isolate border-t border-slate-100"
       aria-labelledby="services-heading"
     >
       {/* Subtle background decorations */}
@@ -232,45 +414,7 @@ export default function ServicesSection() {
         </div>
 
         {/* ── Mobile Stacking Cards on Scroll (< sm: screens) ── */}
-        <div className="sm:hidden relative">
-          {isLoading && services.length === 0 ? (
-            <div className="p-4 bg-white rounded-2xl border border-slate-200 animate-pulse h-64" />
-          ) : (
-            <div className="relative pb-8">
-              {/* Stack Deck Progress Header */}
-              <div className="flex items-center justify-between mb-4 px-1">
-                <div className="flex items-center gap-2 text-xs font-semibold text-slate-600">
-                  <span className="w-2 h-2 rounded-full bg-brand-blue animate-pulse" />
-                  <span>Stacking Capabilities ({displayServices.length} Services)</span>
-                </div>
-                <span className="text-[11px] font-mono text-slate-400 flex items-center gap-1 font-medium">
-                  Scroll down &darr;
-                </span>
-              </div>
-
-              {/* Stacked Cards Deck */}
-              <div className="flex flex-col space-y-12">
-                {displayServices.map((service, index) => (
-                  <div
-                    key={service.id}
-                    className="sticky transition-all duration-300"
-                    style={{
-                      top: `${76 + index * 10}px`,
-                      zIndex: index + 10,
-                    }}
-                  >
-                    <ServiceCard
-                      service={service}
-                      index={index}
-                      totalCount={displayServices.length}
-                      isMobile
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
+        <MobileStackDeck services={displayServices} isLoading={isLoading} />
 
         {/* Bottom Explorer Action */}
         <div className="mt-12 sm:mt-14 text-center">
