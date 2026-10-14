@@ -11,17 +11,6 @@ import { useProjects } from '@/hooks/useProjects'
 import { fadeUp, staggerContainer, viewportOnce } from '@/utils/motion'
 import { ProjectModal } from '@/components/sections/PortfolioSection'
 
-const PROJECT_DEFAULT_IMAGES = {
-  'logistics-mobile-app':
-    'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&q=80&auto=format&fit=crop',
-  'corporate-brand-identity':
-    'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80&auto=format&fit=crop',
-  'digital-marketing-campaign':
-    'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80&auto=format&fit=crop',
-  'ecommerce-platform':
-    'https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&q=80&auto=format&fit=crop',
-}
-
 const CATEGORY_DEFAULT_IMAGES = {
   App: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&q=80&auto=format&fit=crop',
   Branding: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80&auto=format&fit=crop',
@@ -30,51 +19,6 @@ const CATEGORY_DEFAULT_IMAGES = {
   Software: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&q=80&auto=format&fit=crop',
 }
 
-const PLACEHOLDER_FEATURED = [
-  {
-    id: 'proj-1',
-    title: 'Enterprise Commerce Architecture',
-    slug: 'ecommerce-platform',
-    clientName: 'Retail Merchant Network, Rajasthan',
-    category: 'Web',
-    isFeatured: true,
-    technologies: ['React 19', 'Node.js', 'PostgreSQL', 'Redis', 'AWS'],
-    description:
-      'A full-stack enterprise e-commerce platform with automated multi-warehouse inventory management, sub-second checkout, and unified merchant analytics dashboard.',
-    thumbnailUrl:
-      'https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&q=80&auto=format&fit=crop',
-    result: '3.4× Conversion Growth in 60 Days',
-  },
-  {
-    id: 'proj-4',
-    title: 'Industrial Textile ERP & Supply Chain System',
-    slug: 'textile-erp-system',
-    clientName: 'Textile Manufacturing Hub, Bhilwara',
-    category: 'Software',
-    isFeatured: true,
-    technologies: ['Node.js', 'React', 'PostgreSQL', 'Docker', 'Redis'],
-    description:
-      'Custom ERP solution managing weaving loom cycles, raw material inventory traceability, supplier ledger automation, and GST e-invoicing in one database.',
-    thumbnailUrl:
-      'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80&auto=format&fit=crop',
-    result: '42% Reduction in Factory Downtime',
-  },
-  {
-    id: 'proj-7',
-    title: 'Enterprise Fleet Telematics Mobile App',
-    slug: 'logistics-mobile-app',
-    clientName: 'Regional Transport & Logistics Hub, Bhilwara',
-    category: 'App',
-    isFeatured: true,
-    technologies: ['React Native', 'Firebase', 'Google Maps Fleet API', 'Node.js'],
-    description:
-      'Mission-critical real-time telemetry and dispatch mobile application for 400+ commercial vehicles across North India with 60fps tracking.',
-    thumbnailUrl:
-      'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&q=80&auto=format&fit=crop',
-    result: '10,000+ Active Driver Dispatches Logged',
-  },
-]
-
 export default function FeaturedProjects() {
   const [selectedProject, setSelectedProject] = useState(null)
   const { data, isLoading } = useProjects({ featured: true })
@@ -82,9 +26,7 @@ export default function FeaturedProjects() {
   const [activeMobileIdx, setActiveMobileIdx] = useState(0)
 
   const projects =
-    Array.isArray(data?.data) && data.data.length > 0
-      ? data.data.slice(0, 3)
-      : (isLoading ? [] : PLACEHOLDER_FEATURED)
+    Array.isArray(data?.data) && data.data.length > 0 ? data.data.slice(0, 3) : []
 
   const handleMobileScroll = useCallback(() => {
     if (!mobileScrollRef.current) return
@@ -102,6 +44,11 @@ export default function FeaturedProjects() {
       cards[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
       setActiveMobileIdx(idx)
     }
+  }
+
+  // If no projects in database, do not render any demo/placeholder projects
+  if (!isLoading && projects.length === 0) {
+    return null
   }
 
   return (
@@ -160,7 +107,6 @@ export default function FeaturedProjects() {
                 : projects.map((p) => {
                     const projectImg =
                       p.thumbnailUrl?.trim() ||
-                      PROJECT_DEFAULT_IMAGES[p.slug] ||
                       CATEGORY_DEFAULT_IMAGES[p.category] ||
                       CATEGORY_DEFAULT_IMAGES.Web
 
@@ -270,7 +216,6 @@ export default function FeaturedProjects() {
                     {projects.map((p) => {
                       const projectImg =
                         p.thumbnailUrl?.trim() ||
-                        PROJECT_DEFAULT_IMAGES[p.slug] ||
                         CATEGORY_DEFAULT_IMAGES[p.category] ||
                         CATEGORY_DEFAULT_IMAGES.Web
 
