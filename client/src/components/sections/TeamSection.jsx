@@ -1,5 +1,5 @@
-import { useState, useRef, useCallback } from 'react'
-import { motion } from 'framer-motion'
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Container } from '@/components/ui'
 import { ServiceCardSkeleton } from '@/components/ui/Skeleton'
@@ -105,28 +105,58 @@ function TeamCard({ member }) {
   )
 }
 
+const flipVariants = {
+  enter: (dir) => ({
+    x: dir > 0 ? 120 : -120,
+    rotate: dir > 0 ? 5 : -5,
+    opacity: 0,
+    scale: 0.94,
+  }),
+  center: {
+    x: 0,
+    rotate: 0,
+    opacity: 1,
+    scale: 1,
+    transition: {
+      type: 'spring',
+      stiffness: 350,
+      damping: 28,
+    },
+  },
+  exit: (dir) => ({
+    x: dir > 0 ? -160 : 160,
+    rotate: dir > 0 ? -8 : 8,
+    opacity: 0,
+    scale: 0.9,
+    transition: {
+      duration: 0.22,
+      ease: [0.32, 0.72, 0, 1],
+    },
+  }),
+}
+
 export default function TeamSection() {
   const { data, isLoading } = useTeam()
   const members = Array.isArray(data?.data) ? data.data : []
-  const mobileScrollRef = useRef(null)
   const [activeMobileIdx, setActiveMobileIdx] = useState(0)
+  const [direction, setDirection] = useState(1)
 
-  const handleMobileScroll = useCallback(() => {
-    if (!mobileScrollRef.current) return
-    const { scrollLeft, clientWidth } = mobileScrollRef.current
-    const itemWidth = clientWidth * 0.78 + 16
-    const idx = Math.round(scrollLeft / itemWidth)
-    setActiveMobileIdx(Math.min(Math.max(0, idx), members.length - 1))
-  }, [members.length])
+  const handleNext = () => {
+    if (members.length <= 1) return
+    setDirection(1)
+    setActiveMobileIdx((prev) => (prev + 1) % members.length)
+  }
 
-  const scrollMobile = (idx) => {
-    if (!mobileScrollRef.current) return
-    const container = mobileScrollRef.current
-    const cards = container.children
-    if (cards[idx]) {
-      cards[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
-      setActiveMobileIdx(idx)
-    }
+  const handlePrev = () => {
+    if (members.length <= 1) return
+    setDirection(-1)
+    setActiveMobileIdx((prev) => (prev === 0 ? members.length - 1 : prev - 1))
+  }
+
+  const handleDotClick = (i) => {
+    if (i === activeMobileIdx || members.length <= 1) return
+    setDirection(i > activeMobileIdx ? 1 : -1)
+    setActiveMobileIdx(i)
   }
 
   return (
@@ -187,30 +217,33 @@ export default function TeamSection() {
                   ))}
             </motion.div>
 
-            {/* ── Mobile Horizontal Snap Carousel (< sm: screens) ── */}
+            {/* ── Mobile 3D Card Stack & Flip Deck (< sm: screens) ── */}
             <div className="sm:hidden">
               {isLoading ? (
-                <div className="h-64 bg-white rounded-2xl border border-slate-200 animate-pulse" />
+                <div className="h-96 bg-white rounded-2xl border border-slate-200 animate-pulse" />
               ) : (
                 <>
-                  <div className="flex items-center justify-between mb-3 px-1">
-                    <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+                  {/* Top Mobile Controls Bar */}
+                  <div className="flex items-center justify-between mb-4 px-2">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-slate-600">
                       <span className="w-2 h-2 rounded-full bg-brand-blue animate-pulse" />
                       <span>Leadership ({activeMobileIdx + 1}/{members.length})</span>
                     </div>
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex items-center gap-2">
                       <button
-                        onClick={() => scrollMobile(activeMobileIdx - 1)}
-                        disabled={activeMobileIdx === 0}
-                        className="w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-600 disabled:opacity-30 disabled:cursor-not-allowed shadow-2xs active:scale-95 transition-all cursor-pointer"
+                        type="button"
+                        onClick={handlePrev}
+                        disabled={members.length <= 1}
+                        className="w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-700 hover:bg-brand-blue hover:text-white hover:border-brand-blue disabled:opacity-30 disabled:cursor-not-allowed shadow-xs active:scale-90 transition-all cursor-pointer"
                         aria-label="Previous team member"
                       >
                         <ChevronLeft className="w-4 h-4" />
                       </button>
                       <button
-                        onClick={() => scrollMobile(activeMobileIdx + 1)}
-                        disabled={activeMobileIdx === members.length - 1}
-                        className="w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-600 disabled:opacity-30 disabled:cursor-not-allowed shadow-2xs active:scale-95 transition-all cursor-pointer"
+                        type="button"
+                        onClick={handleNext}
+                        disabled={members.length <= 1}
+                        className="w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-700 hover:bg-brand-blue hover:text-white hover:border-brand-blue disabled:opacity-30 disabled:cursor-not-allowed shadow-xs active:scale-90 transition-all cursor-pointer"
                         aria-label="Next team member"
                       >
                         <ChevronRight className="w-4 h-4" />
@@ -218,33 +251,104 @@ export default function TeamSection() {
                     </div>
                   </div>
 
-                  <div
-                    ref={mobileScrollRef}
-                    onScroll={handleMobileScroll}
-                    className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-4 px-4 no-scrollbar scroll-smooth"
-                  >
-                    {members.map((m) => (
-                      <div key={m.id} className="w-[78vw] max-w-[280px] shrink-0 snap-center">
-                        <TeamCard member={m} />
+                  {/* 3D Stack Stage */}
+                  <div className="relative w-full max-w-xs mx-auto h-100 flex items-center justify-center select-none">
+                    {/* Deepest Stack Card 3 */}
+                    {members.length > 2 && (
+                      <div
+                        className="absolute inset-x-5 top-0 h-96 rounded-2xl border border-slate-200/60 bg-slate-100/90 shadow-2xs pointer-events-none transition-all duration-300"
+                        style={{
+                          transform: 'translateY(22px) scale(0.88)',
+                          zIndex: 10,
+                          opacity: 0.45,
+                        }}
+                      />
+                    )}
+
+                    {/* Middle Stack Card 2 (Shows next member preview) */}
+                    {members.length > 1 && (
+                      <div
+                        className="absolute inset-x-2.5 top-0 h-96 rounded-2xl border border-slate-200 bg-white shadow-md pointer-events-none transition-all duration-300 overflow-hidden"
+                        style={{
+                          transform: 'translateY(11px) scale(0.94)',
+                          zIndex: 20,
+                          opacity: 0.85,
+                        }}
+                      >
+                        <div className="p-5 text-center flex flex-col items-center">
+                          <div className="w-14 h-14 rounded-full bg-slate-100 border border-slate-200 mb-3 overflow-hidden flex items-center justify-center">
+                            {members[(activeMobileIdx + 1) % members.length]?.photoUrl ? (
+                              <img
+                                src={members[(activeMobileIdx + 1) % members.length].photoUrl}
+                                alt=""
+                                className="w-full h-full object-cover opacity-60"
+                              />
+                            ) : (
+                              <span className="text-xs font-bold text-slate-400">
+                                {members[(activeMobileIdx + 1) % members.length]?.name?.slice(0, 2).toUpperCase()}
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-xs font-bold text-slate-700">
+                            {members[(activeMobileIdx + 1) % members.length]?.name}
+                          </p>
+                          <p className="text-[10px] font-mono text-brand-blue font-bold uppercase mt-0.5">
+                            {members[(activeMobileIdx + 1) % members.length]?.role}
+                          </p>
+                        </div>
                       </div>
-                    ))}
+                    )}
+
+                    {/* Active Front Card 1 (Interactive & Flip animated) */}
+                    <AnimatePresence mode="popLayout" custom={direction}>
+                      <motion.div
+                        key={members[activeMobileIdx]?.id || activeMobileIdx}
+                        custom={direction}
+                        variants={flipVariants}
+                        initial="enter"
+                        animate="center"
+                        exit="exit"
+                        drag={members.length > 1 ? 'x' : false}
+                        dragConstraints={{ left: 0, right: 0 }}
+                        dragElastic={0.45}
+                        onDragEnd={(_e, { offset }) => {
+                          if (offset.x < -45) {
+                            handleNext()
+                          } else if (offset.x > 45) {
+                            handlePrev()
+                          }
+                        }}
+                        className="relative z-30 w-full h-96 cursor-grab active:cursor-grabbing touch-pan-y"
+                      >
+                        <TeamCard member={members[activeMobileIdx]} />
+                      </motion.div>
+                    </AnimatePresence>
                   </div>
 
-                  <div className="flex justify-center items-center gap-1.5 mt-2">
-                    {members.map((_, i) => (
-                      <button
-                        key={i}
-                        onClick={() => scrollMobile(i)}
-                        className="p-1 min-w-5 min-h-5 flex items-center justify-center cursor-pointer"
-                        aria-label={`Go to team member ${i + 1}`}
-                      >
-                        <span
-                          className={`h-1.5 rounded-full transition-all duration-300 block ${
-                            activeMobileIdx === i ? 'w-6 bg-brand-blue shadow-xs' : 'w-1.5 bg-slate-300'
-                          }`}
-                        />
-                      </button>
-                    ))}
+                  {/* Flip dots & tactile swipe hint */}
+                  <div className="flex flex-col items-center gap-2 mt-7">
+                    <div className="flex justify-center items-center gap-1.5">
+                      {members.map((_, i) => (
+                        <button
+                          key={i}
+                          type="button"
+                          onClick={() => handleDotClick(i)}
+                          className="p-1 min-w-5 min-h-5 flex items-center justify-center cursor-pointer"
+                          aria-label={`Go to team member ${i + 1}`}
+                        >
+                          <span
+                            className={`h-1.5 rounded-full transition-all duration-300 block ${
+                              activeMobileIdx === i ? 'w-6 bg-brand-blue shadow-xs' : 'w-1.5 bg-slate-300'
+                            }`}
+                          />
+                        </button>
+                      ))}
+                    </div>
+                    {members.length > 1 && (
+                      <span className="text-[11px] font-mono text-slate-600 flex items-center gap-1.5">
+                        <span>&larr;</span> Swipe card to flip <span>&rarr;</span>
+                      </span>
+                    )}
                   </div>
                 </>
               )}
