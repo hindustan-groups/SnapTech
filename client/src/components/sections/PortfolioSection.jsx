@@ -2,8 +2,8 @@ import { useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, ExternalLink, ArrowRight, Code2, Tag, Sparkles, CheckCircle2, Award } from 'lucide-react'
-import { Container, Button } from '@/components/ui'
+import { X, ExternalLink, ArrowRight, Code2, Tag, Sparkles } from 'lucide-react'
+import { Container } from '@/components/ui'
 import { useProjects } from '@/hooks/useProjects'
 import { fadeUp, staggerContainer } from '@/utils/motion'
 
@@ -16,100 +16,6 @@ const CATEGORY_COLORS = {
   Branding: 'from-pink-500 via-purple-500 to-rose-400',
   Software: 'from-violet-600 via-purple-500 to-fuchsia-400',
 }
-
-const PLACEHOLDER_PROJECTS = [
-  {
-    id: '1',
-    title: 'Enterprise Commerce Architecture',
-    clientName: 'Major Retail Chain, Rajasthan',
-    category: 'Web',
-    isFeatured: true,
-    technologies: ['React 18', 'Node.js', 'PostgreSQL', 'Redis', 'AWS'],
-    description:
-      'A multi-tenant, high-throughput digital commerce platform featuring automated inventory management, sub-second checkout, and unified analytics dashboard.',
-    thumbnailUrl:
-      'https://images.unsplash.com/photo-1551434678-e076c223a692?w=700&q=80&auto=format&fit=crop',
-    result: '3.4× conversion growth in 60 days',
-  },
-  {
-    id: '7',
-    title: 'Enterprise Fleet Telematics Mobile App',
-    clientName: 'Regional Transport & Logistics Hub',
-    category: 'App',
-    isFeatured: true,
-    technologies: ['React Native', 'Firebase', 'Google Maps Fleet API', 'WebSockets'],
-    description:
-      'Mission-critical real-time telemetry and dispatch mobile application for 400+ commercial vehicles across North India with 60fps tracking.',
-    thumbnailUrl:
-      'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=700&q=80&auto=format&fit=crop',
-    result: '10,000+ active drivers onboarded',
-  },
-  {
-    id: '2',
-    title: 'Algorithmic Lead Growth Engine',
-    clientName: 'Premium Lifestyle Brand, Jaipur',
-    category: 'Marketing',
-    isFeatured: true,
-    technologies: ['Programmatic Ads', 'Meta Conversions API', 'Technical SEO'],
-    description:
-      'Full-funnel automated marketing system combining high-intent search visibility, hyper-targeted ad scaling, and conversion rate optimization.',
-    thumbnailUrl:
-      'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=700&q=80&auto=format&fit=crop',
-    result: '3.8× verified ROAS in Quarter 1',
-  },
-  {
-    id: '3',
-    title: 'Corporate Brand System & UI/UX',
-    clientName: 'Industrial Manufacturing Conglomerate',
-    category: 'Branding',
-    isFeatured: true,
-    technologies: ['Figma Tokens', 'Vector Asset System', 'Design Guidelines'],
-    description:
-      'Unified enterprise identity system including interactive component libraries, corporate stationery, and digital presence style guides.',
-    thumbnailUrl:
-      'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=700&q=80&auto=format&fit=crop',
-    result: 'Brand valuation perceived 2× higher',
-  },
-  {
-    id: '4',
-    title: 'Industrial ERP & Supply Chain System',
-    clientName: 'Textile Manufacturing Hub, Bhilwara',
-    category: 'Software',
-    isFeatured: false,
-    technologies: ['Node.js', 'React', 'PostgreSQL', 'Docker'],
-    description:
-      'Custom ERP managing weaving cycles, inventory traceability, supplier ledger automation, and compliance auditing in one centralized database.',
-    thumbnailUrl:
-      'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=700&q=80&auto=format&fit=crop',
-    result: '42% reduction in factory downtime',
-  },
-  {
-    id: '5',
-    title: 'High-Converting Hospitality Web Portal',
-    clientName: 'Luxury Hospitality Group, Udaipur',
-    category: 'Web',
-    isFeatured: false,
-    technologies: ['Next.js 14', 'Tailwind CSS', 'Razorpay', 'Structured SEO'],
-    description:
-      'Interactive room reservation engine with dynamic seasonal pricing, sub-second load times, and #1 Google Maps/Search local positioning.',
-    thumbnailUrl:
-      'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=700&q=80&auto=format&fit=crop',
-    result: '#1 ranking across 12 targeted keywords',
-  },
-  {
-    id: '6',
-    title: 'Omnichannel Digital Brand Expansion',
-    clientName: 'Commercial Real Estate Group',
-    category: 'Marketing',
-    isFeatured: false,
-    technologies: ['Content Automation', 'LinkedIn Inbound', 'Lead Scraper'],
-    description:
-      'Inbound digital authority campaign generating high-ticket commercial property inquiries through programmatic content workflows.',
-    thumbnailUrl:
-      'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=700&q=80&auto=format&fit=crop',
-    result: '500 → 14,000 verified investor leads',
-  },
-]
 
 /* ── Project Detail Modal (Crisp Light Theme) ─────────────────── */
 export function ProjectModal({ project, onClose }) {
@@ -220,7 +126,7 @@ export function ProjectModal({ project, onClose }) {
                   <Code2 className="w-4 h-4 text-brand-blue" />
                   Technical Implementation
                 </h3>
-                <p className="text-sm text-slate-600 leading-relaxed font-normal">{project.description}</p>
+                <p className="text-sm text-slate-600 leading-relaxed font-normal whitespace-pre-line">{project.description}</p>
               </div>
 
               {/* Sidebar specs card */}
@@ -441,7 +347,7 @@ export default function PortfolioSection() {
         {/* Section heading */}
         <div className="max-w-3xl mx-auto text-center mb-12">
           <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-200 bg-blue-50 text-brand-blue text-xs font-bold uppercase tracking-wider mb-3">
-            <Sparkles className="w-3.5 h-3.5 text-brand-blue" /> Verified Deployments
+            <Sparkles className="w-3.5 h-3.5 text-brand-blue" /> Architecture &amp; Case Studies
           </span>
           <h2
             id="portfolio-heading"
@@ -498,9 +404,9 @@ export default function PortfolioSection() {
 
         {!isLoading && filtered.length === 0 && (
           <div className="text-center py-16 p-8 rounded-2xl border border-slate-200 bg-white max-w-md mx-auto shadow-xs">
-            <p className="text-lg font-bold text-slate-900 mb-2">No projects found</p>
-            <p className="text-slate-500 text-sm">
-              We are actively packaging new case studies in this vertical.
+            <p className="text-lg font-bold text-slate-900 mb-2">Case Studies Under Curation</p>
+            <p className="text-slate-600 text-sm leading-relaxed">
+              Case studies and client deliverables are currently being curated and published by our engineering team. Contact us to review relevant architectural demos in your sector.
             </p>
           </div>
         )}

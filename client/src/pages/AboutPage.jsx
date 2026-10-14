@@ -8,7 +8,6 @@ import {
   Users,
   Award,
   Rocket,
-  Heart,
   Code2,
   Handshake,
   Shield,
@@ -62,10 +61,10 @@ export default function AboutPage() {
   const cfg = settingsData?.data || {}
 
   const stats = [
-    { value: `${cfg.stat_projects || '50'}+`, label: 'Enterprise Deliverables', sub: 'Production Deployed', icon: Rocket },
-    { value: `${cfg.stat_clients || '40'}+`, label: 'Retained Enterprises', sub: 'Long-Term Partners', icon: Heart },
-    { value: `${cfg.stat_experience || '5'}+`, label: 'Years Engineering', sub: 'Continuous Operation', icon: Award },
-    { value: `${cfg.stat_cities || '3'}+`, label: 'Corporate Hubs', sub: 'Pan-India Reach', icon: MapPin },
+    { value: 'July 2026', label: 'Founded Inception', sub: 'Bhilwara, Rajasthan', icon: Award },
+    { value: '100%', label: 'Code & IP Ownership', sub: 'Full Git Handover', icon: Rocket },
+    { value: 'Hindustan Projects', label: 'Parent Enterprise', sub: 'Established Group Division', icon: Building2 },
+    { value: 'Pan-India', label: 'Client Delivery Reach', sub: 'Agile Remote Workflows', icon: MapPin },
   ]
 
   const parentUrl = cfg.parent_company_url || 'https://www.hindustanprojects.in'
@@ -270,7 +269,7 @@ export default function AboutPage() {
                   We recognized that growing industrial enterprises and innovative startups require a dependable, permanent technology partner — one with real corporate accountability, localized leadership, and world-class engineering discipline.
                 </p>
                 <p>
-                  Today, SnapTech manages mission-critical web applications, high-throughput cloud infrastructure, and conversion-optimized digital platforms for over 40 enterprises, serving millions of end-users nationwide.
+                  Founded in July 2026 as the dedicated technology arm of Hindustan Projects Group, SnapTech Digital delivers mission-critical web applications, cloud infrastructure, and custom software systems with enterprise engineering discipline and 100% code ownership.
                 </p>
               </div>
 
@@ -360,21 +359,21 @@ export default function AboutPage() {
 
             <div className="relative max-w-3xl mx-auto">
               {/* Luminous Vertical Spine */}
-              <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-linear-to-b from-brand-blue via-blue-400 to-transparent hidden sm:block shadow-xs" />
+              <div className="absolute left-10 top-0 bottom-0 w-0.5 bg-linear-to-b from-brand-blue via-blue-400 to-transparent hidden sm:block shadow-xs" />
 
               <div className="space-y-8">
                 {(milestonesLoading ? Array.from({ length: 4 }) : milestones).map((m, i) =>
                   milestonesLoading ? (
                     <div key={i} className="flex gap-6">
-                      <div className="hidden sm:block w-16 h-16 rounded-full bg-slate-200 animate-pulse shrink-0" />
+                      <div className="hidden sm:block w-20 h-16 rounded-2xl bg-slate-200 animate-pulse shrink-0" />
                       <div className="flex-1 h-20 bg-slate-100 rounded-2xl border border-slate-200 animate-pulse" />
                     </div>
                   ) : (
                     <div key={m.id || i} className="flex gap-6 group">
                       {/* Node Marker */}
                       <div className="hidden sm:flex flex-col items-center shrink-0">
-                        <div className="w-16 h-16 rounded-2xl border border-blue-200 bg-white flex flex-col items-center justify-center shadow-md group-hover:border-brand-blue group-hover:bg-blue-50 transition-all duration-300">
-                          <span className="text-xs font-mono font-extrabold text-brand-blue leading-none">
+                        <div className="w-20 h-16 px-2 rounded-2xl border border-blue-200 bg-white flex flex-col items-center justify-center text-center shadow-md group-hover:border-brand-blue group-hover:bg-blue-50 transition-all duration-300">
+                          <span className="text-[11px] font-mono font-extrabold text-brand-blue leading-tight text-center">
                             {m.year}
                           </span>
                         </div>

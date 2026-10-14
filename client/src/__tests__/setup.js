@@ -15,19 +15,24 @@ Object.defineProperty(window, 'location', {
   value: { ...window.location, reload: vi.fn(), pathname: '/' },
 })
 
-// ── Mock IntersectionObserver (used by Framer Motion) ──────────
-globalThis.IntersectionObserver = vi.fn().mockImplementation(() => ({
-  observe: vi.fn(),
-  unobserve: vi.fn(),
-  disconnect: vi.fn(),
-}))
+// ── Mock IntersectionObserver (used by Framer Motion & hooks) ──
+class MockIntersectionObserver {
+  constructor(callback) {
+    this.callback = callback
+  }
+  observe = vi.fn()
+  unobserve = vi.fn()
+  disconnect = vi.fn()
+}
+globalThis.IntersectionObserver = MockIntersectionObserver
 
 // ── Mock ResizeObserver ────────────────────────────────────────
-globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
-  observe: vi.fn(),
-  unobserve: vi.fn(),
-  disconnect: vi.fn(),
-}))
+class MockResizeObserver {
+  observe = vi.fn()
+  unobserve = vi.fn()
+  disconnect = vi.fn()
+}
+globalThis.ResizeObserver = MockResizeObserver
 
 // ── Mock import.meta.env ───────────────────────────────────────
 vi.stubEnv('VITE_API_URL', '/api')

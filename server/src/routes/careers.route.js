@@ -26,8 +26,7 @@ router.post(
       .notEmpty()
       .trim()
       .isLength({ min: 2, max: 100 })
-      .withMessage('Full Name must be between 2 and 100 characters')
-      .escape(),
+      .withMessage('Full Name must be between 2 and 100 characters'),
     body('email')
       .notEmpty()
       .isEmail()
@@ -37,14 +36,12 @@ router.post(
       .notEmpty()
       .trim()
       .matches(/^[+\d\s\-().]{7,20}$/)
-      .withMessage('Please provide a valid phone number.')
-      .escape(),
+      .withMessage('Please provide a valid phone number.'),
     body('coverLetter')
       .optional({ checkFalsy: true })
       .trim()
       .isLength({ max: 5000 })
-      .withMessage('Cover letter must not exceed 5000 characters')
-      .escape(),
+      .withMessage('Cover letter must not exceed 5000 characters'),
     body('recaptchaToken').notEmpty().withMessage('reCAPTCHA token is required'),
     body('_hp').optional().isLength({ max: 0 }).withMessage('Invalid submission'),
   ],

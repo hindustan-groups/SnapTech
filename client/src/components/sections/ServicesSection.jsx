@@ -13,14 +13,14 @@ import { ServiceCardSkeleton } from '@/components/ui/Skeleton'
 import { useServices } from '@/hooks/useServices'
 import { getServiceIcon } from '@/utils/serviceIcons'
 
-/* Gradient colors per card index — soft brand-aligned for light background */
+/* Brand-aligned card accents for light background */
 const CARD_ACCENTS = [
-  { icon: 'text-[#1a3e8c]', bg: 'bg-[#1a3e8c]/10', glow: 'rgba(26,62,140,0.12)', border: '#1a3e8c' },
-  { icon: 'text-[#e31e24]', bg: 'bg-[#e31e24]/10', glow: 'rgba(227,30,36,0.12)', border: '#e31e24' },
-  { icon: 'text-[#1a3e8c]', bg: 'bg-[#1a3e8c]/10', glow: 'rgba(26,62,140,0.12)', border: '#1a3e8c' },
-  { icon: 'text-[#e31e24]', bg: 'bg-[#e31e24]/10', glow: 'rgba(227,30,36,0.12)', border: '#e31e24' },
-  { icon: 'text-[#1a3e8c]', bg: 'bg-[#1a3e8c]/10', glow: 'rgba(26,62,140,0.12)', border: '#1a3e8c' },
-  { icon: 'text-[#e31e24]', bg: 'bg-[#e31e24]/10', glow: 'rgba(227,30,36,0.12)', border: '#e31e24' },
+  { icon: 'text-[#1B6EF3]', bg: 'bg-[#1B6EF3]/10', glow: 'rgba(27,110,243,0.14)', border: '#1B6EF3' },
+  { icon: 'text-[#0D1B4B]', bg: 'bg-[#0D1B4B]/10', glow: 'rgba(13,27,75,0.12)', border: '#0D1B4B' },
+  { icon: 'text-[#0284c7]', bg: 'bg-[#0284c7]/10', glow: 'rgba(2,132,199,0.12)', border: '#0284c7' },
+  { icon: 'text-[#4f46e5]', bg: 'bg-[#4f46e5]/10', glow: 'rgba(79,70,229,0.12)', border: '#4f46e5' },
+  { icon: 'text-[#1B6EF3]', bg: 'bg-[#1B6EF3]/10', glow: 'rgba(27,110,243,0.14)', border: '#1B6EF3' },
+  { icon: 'text-[#0D1B4B]', bg: 'bg-[#0D1B4B]/10', glow: 'rgba(13,27,75,0.12)', border: '#0D1B4B' },
 ]
 
 function ServiceCard({ service, index, isMobile = false }) {
@@ -71,7 +71,7 @@ function ServiceCard({ service, index, isMobile = false }) {
       </div>
 
       {/* Title */}
-      <h3 className="font-heading text-lg font-bold text-slate-800 group-hover:text-[#1a3e8c] transition-colors duration-200 mb-2">
+      <h3 className="font-heading text-lg font-bold text-slate-800 group-hover:text-brand-blue transition-colors duration-200 mb-2">
         {service.title}
       </h3>
 
@@ -203,25 +203,24 @@ export default function ServicesSection() {
       aria-labelledby="services-heading"
     >
       {/* Subtle background decorations */}
-      <div className="absolute top-0 right-0 w-150 h-150 bg-[#1a3e8c]/4 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-125 h-125 bg-[#e31e24]/4 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-0 right-0 w-150 h-150 bg-blue-100/40 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-125 h-125 bg-indigo-100/30 rounded-full blur-[120px] pointer-events-none" />
 
       <Container className="relative z-10">
         {/* Section heading */}
         <div className="reveal text-center mb-10 sm:mb-16 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1a3e8c]/10 border border-[#1a3e8c]/20 text-[#1a3e8c] text-xs font-bold uppercase tracking-widest mb-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50/80 border border-blue-200 text-brand-blue text-xs font-bold uppercase tracking-widest mb-4 shadow-2xs">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Enterprise Technology Capabilities</span>
           </div>
-          <h2 id="services-heading" className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-800 tracking-tight mb-4">
+          <h2 id="services-heading" className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0D1B4B] tracking-tight mb-4">
             Engineered for{' '}
-            <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(135deg, #1a3e8c, #e31e24)' }}>
-              Scalability & Growth
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-brand-blue via-blue-600 to-indigo-700">
+              Scalability &amp; Digital Growth
             </span>
           </h2>
-          <p className="text-slate-500 text-sm sm:text-base leading-relaxed">
-            Snaptech delivers mission-critical software solutions — from responsive corporate portals and cloud DevOps
-            to native mobile applications and intelligent automation systems.
+          <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+            SnapTech Digital delivers mission-critical software solutions—from custom ERPs and client portals to cloud architecture and mobile apps—purpose-built for growing businesses with 100% IP handover.
           </p>
         </div>
 
@@ -308,9 +307,9 @@ export default function ServicesSection() {
         <div className="mt-12 sm:mt-14 text-center">
           <Link
             to="/services"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white hover:bg-[#1a3e8c] border border-slate-200 hover:border-[#1a3e8c] text-slate-700 hover:text-white text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-200 group shadow-sm"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white hover:bg-brand-blue border border-slate-200 hover:border-brand-blue text-slate-700 hover:text-white text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-200 group shadow-sm"
           >
-            <Layers className="w-4 h-4 text-[#1a3e8c] group-hover:text-white group-hover:scale-110 transition-all" />
+            <Layers className="w-4 h-4 text-brand-blue group-hover:text-white group-hover:scale-110 transition-all" />
             <span>View All Engineering Services</span>
             <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-white group-hover:translate-x-1 transition-all" />
           </Link>

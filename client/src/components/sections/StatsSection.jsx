@@ -3,18 +3,18 @@ import { Rocket, Users, ShieldCheck, Globe } from 'lucide-react'
 import { Container } from '@/components/ui'
 import { useCountUp } from '@/hooks/useCountUp'
 import { fadeUp, staggerContainer, viewportOnce } from '@/utils/motion'
-import { useSiteSettings } from '@/hooks/useContent'
 
 const STAT_ICONS = [Rocket, Users, ShieldCheck, Globe]
 
 function StatItem({ value, suffix = '', label, sublabel, Icon, index }) {
   const { count, ref } = useCountUp(value)
+  const isLong = typeof count === 'string' && count.length > 4
 
   return (
     <motion.div
       ref={ref}
       variants={fadeUp}
-      className="relative flex flex-col items-center text-center px-6 py-8 group"
+      className="relative flex flex-col items-center text-center px-4 py-8 group"
     >
       {/* Vertical divider (not on last) */}
       {index < 3 && (
@@ -26,10 +26,14 @@ function StatItem({ value, suffix = '', label, sublabel, Icon, index }) {
         <Icon className="w-5 h-5 text-white/80 group-hover:text-white transition-colors" />
       </div>
 
-      {/* Animated number */}
-      <p className="font-heading text-4xl sm:text-5xl lg:text-6xl font-black leading-none tracking-tight text-transparent bg-clip-text bg-linear-to-b from-white via-white/95 to-white/70 group-hover:from-brand-blue-light group-hover:to-white transition-all duration-500">
+      {/* Animated or text value */}
+      <p
+        className={`font-heading leading-tight tracking-tight text-transparent bg-clip-text bg-linear-to-b from-white via-white/95 to-white/70 group-hover:from-brand-blue-light group-hover:to-white transition-all duration-500 ${
+          isLong ? 'text-2xl sm:text-3xl font-extrabold' : 'text-4xl sm:text-5xl lg:text-6xl font-black'
+        }`}
+      >
         {count}
-        <span className="text-brand-blue-light">{suffix}</span>
+        {suffix && <span className="text-brand-blue-light">{suffix}</span>}
       </p>
 
       {/* Label */}
@@ -45,42 +49,39 @@ function StatItem({ value, suffix = '', label, sublabel, Icon, index }) {
 }
 
 export default function StatsSection() {
-  const { data: settingsData } = useSiteSettings()
-  const s = settingsData?.data
-
   const stats = [
     {
-      value: parseInt(s?.stat_projects) || 50,
-      suffix: '+',
-      label: 'Projects Delivered',
-      sublabel: 'Production Deployed',
+      value: 'July 2026',
+      suffix: '',
+      label: 'Founded Inception',
+      sublabel: 'Bhilwara, Rajasthan',
       Icon: STAT_ICONS[0],
     },
     {
-      value: parseInt(s?.stat_clients) || 40,
-      suffix: '+',
-      label: 'Enterprise Clients',
-      sublabel: 'Long-Term Partners',
+      value: 100,
+      suffix: '%',
+      label: 'Code Ownership',
+      sublabel: 'Full Git & IP Handover',
       Icon: STAT_ICONS[1],
     },
     {
-      value: parseInt(s?.stat_experience) || 5,
-      suffix: '+',
-      label: 'Years Experience',
-      sublabel: 'Since 2019',
+      value: 'Hindustan Projects',
+      suffix: '',
+      label: 'Parent Enterprise',
+      sublabel: 'Established Group Division',
       Icon: STAT_ICONS[2],
     },
     {
-      value: parseInt(s?.stat_cities) || 12,
-      suffix: '+',
-      label: 'Cities Reached',
-      sublabel: 'Pan-India & Global',
+      value: 'Pan-India',
+      suffix: '',
+      label: 'Delivery Reach',
+      sublabel: 'Agile Remote Workflows',
       Icon: STAT_ICONS[3],
     },
   ]
 
   return (
-    <section className="relative overflow-hidden isolate" aria-label="Company statistics">
+    <section className="relative overflow-hidden isolate" aria-label="Company foundation pillars">
       {/* ── Dark gradient band background ── */}
       <div className="absolute inset-0 -z-10 bg-linear-to-br from-brand-navy via-[#0a1535] to-[#091029]" />
 
@@ -114,7 +115,7 @@ export default function StatsSection() {
         >
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-white/60 text-xs font-mono font-semibold uppercase tracking-widest backdrop-blur-sm">
             <span className="w-1.5 h-1.5 rounded-full bg-brand-blue animate-pulse" />
-            Verified Performance Metrics
+            Engineering & Foundation Standards
           </span>
         </motion.div>
 

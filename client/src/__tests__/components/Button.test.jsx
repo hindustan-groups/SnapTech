@@ -21,16 +21,16 @@ describe('Button — rendering', () => {
     expect(screen.getByText('Get a Quote')).toBeInTheDocument()
   })
 
-  it('applies primary variant classes (brand-red)', () => {
+  it('applies primary variant classes (brand-blue)', () => {
     const { container } = render(<Button variant="primary">Primary</Button>)
     const btn = container.querySelector('button')
-    expect(btn.className).toContain('bg-brand-red')
+    expect(btn.className).toContain('bg-brand-blue')
   })
 
-  it('applies secondary variant classes (brand-blue)', () => {
+  it('applies secondary variant classes (dark navy)', () => {
     const { container } = render(<Button variant="secondary">Secondary</Button>)
     const btn = container.querySelector('button')
-    expect(btn.className).toContain('bg-brand-blue')
+    expect(btn.className).toContain('bg-[#0D1B4B]')
   })
 
   it('applies outline variant classes', () => {
@@ -40,10 +40,10 @@ describe('Button — rendering', () => {
     expect(btn.className).toContain('bg-transparent')
   })
 
-  it('applies outline-red variant', () => {
+  it('applies outline-red variant (fallback to brand-blue)', () => {
     const { container } = render(<Button variant="outline-red">Outline Red</Button>)
     const btn = container.querySelector('button')
-    expect(btn.className).toContain('text-brand-red')
+    expect(btn.className).toContain('text-brand-blue')
   })
 })
 

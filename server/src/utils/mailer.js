@@ -198,6 +198,17 @@ export async function sendEmail(options) {
 }
 
 
+// ── HTML Escaping for Email Templates ─────────────────────────
+export function escapeHtml(str) {
+  if (str === null || str === undefined) return ''
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
 // ── Shared Professional Email Footer ───────────────────────────
 
 /**
@@ -310,9 +321,18 @@ export async function fetchEmailFooterSettings(prisma) {
 /**
  * Admin notification email — sent to the company when a lead comes in.
  */
-export function adminNotificationTemplate({ name, email, phone, message, serviceInterested }) {
+export function adminNotificationTemplate({
+  name,
+  email,
+  phone,
+  message,
+  serviceInterested,
+  estimatedBudget,
+  attribution,
+}) {
   const service = serviceInterested || 'Not specified'
   const phoneDisplay = phone || 'Not provided'
+  const budgetDisplay = estimatedBudget || null
 
   return {
     subject: `New IT Project Lead: ${name} [Snaptech]`,
@@ -326,29 +346,46 @@ export function adminNotificationTemplate({ name, email, phone, message, service
         <table style="width: 100%; border-collapse: collapse;">
           <tr>
             <td style="padding: 8px 0; color: #6B7280; font-size: 14px; width: 35%;">Name</td>
-            <td style="padding: 8px 0; color: #1A1A1A; font-size: 14px; font-weight: 600;">${name}</td>
+            <td style="padding: 8px 0; color: #1A1A1A; font-size: 14px; font-weight: 600;">${escapeHtml(name)}</td>
           </tr>
           <tr style="background: #f9fafb;">
             <td style="padding: 8px 4px; color: #6B7280; font-size: 14px;">Email</td>
-            <td style="padding: 8px 4px; font-size: 14px;"><a href="mailto:${email}" style="color: #0066FF;">${email}</a></td>
+            <td style="padding: 8px 4px; font-size: 14px;"><a href="mailto:${escapeHtml(email)}" style="color: #0066FF;">${escapeHtml(email)}</a></td>
           </tr>
           <tr>
             <td style="padding: 8px 0; color: #6B7280; font-size: 14px;">Phone</td>
-            <td style="padding: 8px 0; color: #1A1A1A; font-size: 14px;">${phoneDisplay}</td>
+            <td style="padding: 8px 0; color: #1A1A1A; font-size: 14px;">${escapeHtml(phoneDisplay)}</td>
           </tr>
           <tr style="background: #f9fafb;">
             <td style="padding: 8px 4px; color: #6B7280; font-size: 14px;">Service</td>
-            <td style="padding: 8px 4px; color: #1A1A1A; font-size: 14px;">${service}</td>
+            <td style="padding: 8px 4px; color: #1A1A1A; font-size: 14px;">${escapeHtml(service)}</td>
           </tr>
+          ${
+            budgetDisplay
+              ? `<tr>
+            <td style="padding: 8px 0; color: #6B7280; font-size: 14px;">Estimated Budget</td>
+            <td style="padding: 8px 0; color: #1A1A1A; font-size: 14px; font-weight: 600;">${escapeHtml(budgetDisplay)}</td>
+          </tr>`
+              : ''
+          }
         </table>
 
         <div style="margin-top: 16px; padding: 16px; background: #f0f6ff; border-radius: 6px; border-left: 4px solid #0066FF;">
           <p style="margin: 0 0 8px; color: #001D4A; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: bold;">Project Requirements</p>
-          <p style="margin: 0; color: #1A1A1A; font-size: 15px; line-height: 1.6; white-space: pre-wrap;">${message}</p>
+          <p style="margin: 0; color: #1A1A1A; font-size: 15px; line-height: 1.6; white-space: pre-wrap;">${escapeHtml(message)}</p>
         </div>
 
+        ${
+          attribution
+            ? `<div style="margin-top: 16px; padding: 12px 14px; background: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0;">
+          <p style="margin: 0 0 4px; color: #64748b; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: bold;">Marketing Attribution</p>
+          <pre style="margin: 0; color: #334155; font-size: 12px; font-family: monospace; white-space: pre-wrap;">${escapeHtml(attribution)}</pre>
+        </div>`
+            : ''
+        }
+
         <div style="margin-top: 20px; text-align: center;">
-          <a href="mailto:${email}" style="display: inline-block; background: #0066FF; color: white; padding: 10px 24px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 600;">Reply to ${name}</a>
+          <a href="mailto:${escapeHtml(email)}" style="display: inline-block; background: #0066FF; color: white; padding: 10px 24px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 600;">Reply to ${escapeHtml(name)}</a>
         </div>
 
         <p style="margin-top: 24px; font-size: 12px; color: #9ca3af; text-align: center; border-top: 1px solid #e5e7eb; padding-top: 16px;">
@@ -356,7 +393,7 @@ export function adminNotificationTemplate({ name, email, phone, message, service
         </p>
       </div>
     `,
-    text: `New IT Project Lead\n\nName: ${name}\nEmail: ${email}\nPhone: ${phoneDisplay}\nService: ${service}\n\nRequirements:\n${message}`,
+    text: `New IT Project Lead\n\nName: ${name}\nEmail: ${email}\nPhone: ${phoneDisplay}\nService: ${service}${budgetDisplay ? `\nBudget: ${budgetDisplay}` : ''}\n\nRequirements:\n${message}${attribution ? `\n\nAttribution:\n${attribution}` : ''}`,
   }
 }
 
@@ -381,7 +418,7 @@ export function autoReplyTemplate({ name }) {
           </p>
         </div>
 
-        <p style="font-size: 16px; color: #1A1A1A;">Hi <strong>${name}</strong>,</p>
+        <p style="font-size: 16px; color: #1A1A1A;">Hi <strong>${escapeHtml(name)}</strong>,</p>
 
         <p style="font-size: 15px; color: #374151; line-height: 1.7;">
           Thank you for reaching out to <strong>SnapTech Digital</strong>! We've received your project inquiry and our solutions engineering team will contact you within <strong>24 hours</strong> with a detailed consultation.
@@ -392,8 +429,8 @@ export function autoReplyTemplate({ name }) {
         </p>
 
         <div style="margin: 20px 0; padding: 16px; background: #f0f6ff; border-radius: 6px; border-left: 4px solid #0066FF;">
-          <p style="margin: 0 0 8px; font-size: 14px; color: #1A1A1A;">📞 <strong>Phone:</strong> ${phone}</p>
-          <p style="margin: 0 0 8px; font-size: 14px; color: #1A1A1A;">📧 <strong>Email:</strong> ${email}</p>
+          <p style="margin: 0 0 8px; font-size: 14px; color: #1A1A1A;">📞 <strong>Phone:</strong> ${escapeHtml(phone)}</p>
+          <p style="margin: 0 0 8px; font-size: 14px; color: #1A1A1A;">📧 <strong>Email:</strong> ${escapeHtml(email)}</p>
           <p style="margin: 0 0 8px; font-size: 14px; color: #1A1A1A;">🌐 <strong>Portal:</strong> <a href="https://www.snaptech.digital" style="color: #0066FF;">www.snaptech.digital</a></p>
           <p style="margin: 0; font-size: 14px; color: #1A1A1A;">🏢 <strong>Parent Group:</strong> <a href="https://www.hindustanprojects.in" style="color: #001D4A;">www.hindustanprojects.in</a></p>
         </div>
@@ -433,33 +470,33 @@ export function jobAdminNotificationTemplate({
         <table style="width: 100%; border-collapse: collapse;">
           <tr>
             <td style="padding: 8px 0; color: #6B7280; font-size: 14px; width: 35%;">Applied For</td>
-            <td style="padding: 8px 0; color: #1A1A1A; font-size: 14px; font-weight: 600;">${jobTitle}</td>
+            <td style="padding: 8px 0; color: #1A1A1A; font-size: 14px; font-weight: 600;">${escapeHtml(jobTitle)}</td>
           </tr>
           <tr style="background: #f9fafb;">
             <td style="padding: 8px 4px; color: #6B7280; font-size: 14px;">Applicant Name</td>
-            <td style="padding: 8px 4px; color: #1A1A1A; font-size: 14px; font-weight: 600;">${name}</td>
+            <td style="padding: 8px 4px; color: #1A1A1A; font-size: 14px; font-weight: 600;">${escapeHtml(name)}</td>
           </tr>
           <tr>
             <td style="padding: 8px 0; color: #6B7280; font-size: 14px;">Email</td>
-            <td style="padding: 8px 0; font-size: 14px;"><a href="mailto:${email}" style="color: #1A3E8C;">${email}</a></td>
+            <td style="padding: 8px 0; font-size: 14px;"><a href="mailto:${escapeHtml(email)}" style="color: #1A3E8C;">${escapeHtml(email)}</a></td>
           </tr>
           <tr style="background: #f9fafb;">
             <td style="padding: 8px 4px; color: #6B7280; font-size: 14px;">Phone</td>
-            <td style="padding: 8px 4px; color: #1A1A1A; font-size: 14px;">${phone}</td>
+            <td style="padding: 8px 4px; color: #1A1A1A; font-size: 14px;">${escapeHtml(phone)}</td>
           </tr>
           <tr>
             <td style="padding: 8px 0; color: #6B7280; font-size: 14px;">Resume / CV</td>
-            <td style="padding: 8px 0; font-size: 14px;"><a href="${resumeUrl}" target="_blank" style="color: #E31E24; font-weight: bold; text-decoration: underline;">Download / View Resume</a></td>
+            <td style="padding: 8px 0; font-size: 14px;"><a href="${escapeHtml(resumeUrl)}" target="_blank" style="color: #E31E24; font-weight: bold; text-decoration: underline;">Download / View Resume</a></td>
           </tr>
         </table>
 
         <div style="margin-top: 16px; padding: 16px; background: #f3f4f6; border-radius: 6px; border-left: 4px solid #1A3E8C;">
           <p style="margin: 0 0 8px; color: #6B7280; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em;">Cover Letter / Notes</p>
-          <p style="margin: 0; color: #1A1A1A; font-size: 14px; line-height: 1.6; white-space: pre-wrap;">${coverLetterDisplay}</p>
+          <p style="margin: 0; color: #1A1A1A; font-size: 14px; line-height: 1.6; white-space: pre-wrap;">${escapeHtml(coverLetterDisplay)}</p>
         </div>
 
         <div style="margin-top: 20px; text-align: center;">
-          <a href="mailto:${email}" style="display: inline-block; background: #1A3E8C; color: white; padding: 10px 24px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 600;">Email ${name}</a>
+          <a href="mailto:${escapeHtml(email)}" style="display: inline-block; background: #1A3E8C; color: white; padding: 10px 24px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 600;">Email ${escapeHtml(name)}</a>
         </div>
       </div>
     `,
@@ -481,10 +518,10 @@ export function jobApplicantConfirmationTemplate({ name, jobTitle }) {
           </h1>
         </div>
 
-        <p style="font-size: 16px; color: #1A1A1A;">Dear <strong>${name}</strong>,</p>
+        <p style="font-size: 16px; color: #1A1A1A;">Dear <strong>${escapeHtml(name)}</strong>,</p>
 
         <p style="font-size: 15px; color: #374151; line-height: 1.7;">
-          Thank you for applying for the <strong>${jobTitle}</strong> position at SnapTech Digital. We have successfully received your job application and resume.
+          Thank you for applying for the <strong>${escapeHtml(jobTitle)}</strong> position at SnapTech Digital. We have successfully received your job application and resume.
         </p>
 
         <p style="font-size: 15px; color: #374151; line-height: 1.7;">

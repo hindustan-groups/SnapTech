@@ -24,9 +24,10 @@ export const helmetConfig = helmet({
         "'self'",
         // Vite dev HMR needs 'unsafe-inline' only in dev
         ...(process.env.NODE_ENV === 'development' ? ["'unsafe-inline'"] : []),
-        // Google reCAPTCHA
+        // Google reCAPTCHA & Tag Manager
         'https://www.google.com',
         'https://www.gstatic.com',
+        'https://www.googletagmanager.com',
       ],
       styleSrc: [
         "'self'",
@@ -39,11 +40,17 @@ export const helmetConfig = helmet({
         'data:',
         'blob:',
         'https://res.cloudinary.com', // Cloudinary images
+        'https://images.unsplash.com', // Unsplash case studies & team photos
+        'https://*.google-analytics.com',
+        'https://*.googletagmanager.com',
       ],
       connectSrc: [
         "'self'",
         // API server URL (where fetch requests go)
         process.env.SERVER_URL || process.env.CLIENT_URL || 'http://localhost:5000',
+        'https://*.google-analytics.com',
+        'https://*.analytics.google.com',
+        'https://*.googletagmanager.com',
         // In dev, also allow the Vite dev server
         ...(process.env.NODE_ENV === 'development' ? ['http://localhost:5173', 'ws://localhost:5173'] : []),
       ],

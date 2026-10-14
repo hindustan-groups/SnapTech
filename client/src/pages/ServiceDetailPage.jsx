@@ -359,7 +359,7 @@ export default function ServiceDetailPage() {
                   Engineering Scope: {service.title}
                 </h2>
                 <div className="text-slate-600 leading-relaxed text-base sm:text-lg space-y-4">
-                  <p>{service.fullDescription || service.shortDescription}</p>
+                  <p className="whitespace-pre-line">{service.fullDescription || service.shortDescription}</p>
                 </div>
               </div>
 

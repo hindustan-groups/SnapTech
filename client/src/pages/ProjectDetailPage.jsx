@@ -3,12 +3,11 @@
  * Dynamic, ultra-responsive, matching SnapTech's high-contrast light enterprise theme.
  */
 import { useState, useMemo } from 'react'
-import { Link, useParams, useNavigate } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import {
   ArrowLeft,
   ArrowRight,
   ExternalLink,
-  Tag,
   CheckCircle2,
   Clock,
   Sparkles,
@@ -25,17 +24,9 @@ import {
   Share2,
   Check,
 } from 'lucide-react'
-import { Container, SEO, Button } from '@/components/ui'
+import { Container, SEO } from '@/components/ui'
 import { useProject, useProjects } from '@/hooks/useProjects'
 import { useSiteSettings } from '@/hooks/useContent'
-
-const CATEGORY_COLORS = {
-  Web: 'from-blue-600 via-cyan-500 to-teal-400',
-  App: 'from-amber-500 via-orange-500 to-yellow-400',
-  Marketing: 'from-orange-500 via-rose-500 to-pink-500',
-  Branding: 'from-pink-500 via-purple-500 to-rose-400',
-  Software: 'from-violet-600 via-purple-500 to-fuchsia-400',
-}
 
 const CATEGORY_PILL_STYLES = {
   Web: 'bg-blue-50 text-blue-700 border-blue-200',
@@ -43,6 +34,14 @@ const CATEGORY_PILL_STYLES = {
   Marketing: 'bg-rose-50 text-rose-700 border-rose-200',
   Branding: 'bg-purple-50 text-purple-700 border-purple-200',
   Software: 'bg-violet-50 text-violet-700 border-violet-200',
+}
+
+const CATEGORY_SERVICE_MAP = {
+  Web: '/services/web-development',
+  App: '/services/mobile-app-development',
+  Marketing: '/services/digital-marketing-seo',
+  Branding: '/services/branding-ui-ux-design',
+  Software: '/services/cloud-solutions-devops',
 }
 
 function ProjectDetailSkeleton() {
@@ -67,7 +66,6 @@ function ProjectDetailSkeleton() {
 
 export default function ProjectDetailPage() {
   const { slug } = useParams()
-  const navigate = useNavigate()
   const { data: projectRes, isLoading, isError } = useProject(slug)
   const { data: allProjectsRes } = useProjects()
   const { data: settingsData } = useSiteSettings()
@@ -140,7 +138,6 @@ export default function ProjectDetailPage() {
     )
   }
 
-  const gradColor = CATEGORY_COLORS[project.category] || 'from-brand-blue to-indigo-600'
   const pillStyle = CATEGORY_PILL_STYLES[project.category] || 'bg-blue-50 text-blue-700 border-blue-200'
 
   return (
@@ -334,7 +331,7 @@ export default function ProjectDetailPage() {
                     </h2>
                   </div>
                 </div>
-                <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+                <p className="text-slate-600 text-sm sm:text-base leading-relaxed whitespace-pre-line">
                   {project.challenge ||
                     `Prior to commissioning SnapTech, ${project.clientName} faced architectural bottlenecks that limited scaling and caused inefficiencies in their ${project.category} pipeline. The operational workflows required high-reliability modernization with strict latency SLAs.`}
                 </p>
@@ -356,7 +353,7 @@ export default function ProjectDetailPage() {
                     </h2>
                   </div>
                 </div>
-                <p className="text-slate-600 text-sm sm:text-base leading-relaxed mb-6">
+                <p className="text-slate-600 text-sm sm:text-base leading-relaxed mb-6 whitespace-pre-line">
                   {project.solution ||
                     `SnapTech engineered a dedicated, scalable architecture utilizing ${project.technologies?.slice(0, 3).join(', ') || 'modern cloud technologies'}. The implementation followed strict code modularity, automated test coverage, and continuous integration to guarantee uptime and speed.`}
                 </p>
@@ -424,9 +421,14 @@ export default function ProjectDetailPage() {
                     <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider block mb-1">
                       Discipline
                     </span>
-                    <span className={`inline-block px-2.5 py-0.5 rounded-md text-xs font-mono font-bold border ${pillStyle}`}>
+                    <Link
+                      to={CATEGORY_SERVICE_MAP[project.category] || '/services'}
+                      title={`Explore our ${project.category} services`}
+                      className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-xs font-mono font-bold border hover:border-brand-blue hover:text-brand-blue transition-colors ${pillStyle}`}
+                    >
                       {project.category}
-                    </span>
+                      <ArrowRight className="w-3 h-3" />
+                    </Link>
                   </div>
                   <div>
                     <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider block mb-1">

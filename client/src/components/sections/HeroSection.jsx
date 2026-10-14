@@ -26,20 +26,12 @@ const DEFAULT_TECH_SEARCH_QUERIES = [
   'High-Speed SEO Optimization',
 ]
 
-const DEFAULT_IT_CAPABILITIES = [
-  'Enterprise Cloud & Scalable Web Architecture',
-  'iOS & Android Native & Cross-Platform Apps',
-  'Full-Cycle Software Engineering & DevOps',
-  'Hindustan Projects Backing & 100% Code Handover',
-]
-
 const DEFAULT_HEADLINE_CYCLE = [
-  'IT Solutions?',
-  'Web Applications?',
-  'Mobile Apps?',
-  'Cloud & DevOps?',
-  'AI Automation?',
-  'Enterprise ERP?',
+  'Custom Web Applications',
+  'Enterprise ERP Systems',
+  'Cross-Platform Mobile Apps',
+  'Cloud & DevOps Pipelines',
+  'High-Growth Digital Engines',
 ]
 
 export default function HeroSection() {
@@ -77,14 +69,18 @@ export default function HeroSection() {
   }
 
   // Dynamic values with elegant enterprise defaults
-  const eyebrowText = cfg.hero_eyebrow || 'Technology & Software Innovation Wing'
-  const divisionText = cfg.hero_division || 'Hindustan Projects Group'
-  const titlePrefix = cfg.hero_title_prefix || 'Looking for'
-  const tagline = cfg.tagline || 'Build. Grow. Succeed with SnapTech Digital.'
-  const domainPlaceholder = cfg.hero_domain || 'www.snaptech.digital'
-  const whatsappNumber = (cfg.whatsapp || '918209604849').replace(/[^0-9]/g, '')
+  const companyName = cfg.company_name || 'SnapTech'
+  const parentName = cfg.parent_company_name || 'Hindustan Projects Group'
+  const eyebrowText = cfg.hero_eyebrow || 'Technology & Digital Innovation Division'
+  const divisionText = cfg.hero_division || parentName
+  const titlePrefix = cfg.hero_title_prefix || 'Engineering Resilient'
+  const tagline =
+    cfg.tagline ||
+    'Custom web applications, native mobile platforms, and enterprise ERP systems engineered for growing businesses with zero technical debt and 100% IP ownership.'
+  const domainPlaceholder = cfg.hero_domain || cfg.domain || 'www.snaptech.digital'
+  const whatsappNumber = (cfg.whatsapp || cfg.phone || '').replace(/[^0-9]/g, '')
   const whatsappMsg = encodeURIComponent(
-    cfg.whatsappMessage || 'Hello SnapTech, I am interested in your digital services.'
+    cfg.whatsappMessage || `Hello ${companyName}, I am interested in your digital services.`
   )
   const heroImage = cfg.hero_image_url || snaptechSocialBanner
 
@@ -92,15 +88,22 @@ export default function HeroSection() {
     ? cfg.hero_popular_queries.split(',').map((s) => s.trim())
     : DEFAULT_TECH_SEARCH_QUERIES
 
+  const defaultCapabilities = [
+    'Full-Stack Web Architecture & Scalable Client Portals',
+    'iOS & Android Cross-Platform Mobile Applications',
+    'Custom Industrial ERP, Weaving & Inventory Automation',
+    `${parentName} Backing with 100% Code & IP Handover`,
+  ]
+
   const capabilities = cfg.hero_capabilities
     ? cfg.hero_capabilities.split('\n').map((s) => s.trim()).filter(Boolean)
-    : DEFAULT_IT_CAPABILITIES
+    : defaultCapabilities
 
   const stats = [
-    { value: `${cfg.stat_projects || '50'}+`, label: 'Enterprise Deployments' },
-    { value: `${cfg.stat_clients || '40'}+`, label: 'Active Corporate Clients' },
-    { value: cfg.stat_sla || '99.9%', label: 'Uptime & Cloud SLA' },
-    { value: cfg.stat_reach || 'Pan-India & Global', label: 'Client Delivery Reach' },
+    { value: 'July 2026', label: 'Founded Inception' },
+    { value: '100%', label: 'Code & IP Ownership' },
+    { value: 'Enterprise Division', label: parentName },
+    { value: 'Pan-India', label: 'Client Delivery Reach' },
   ]
 
   return (
@@ -222,28 +225,29 @@ export default function HeroSection() {
                   variant="primary"
                   size="lg"
                   as={Link}
-                  to="/services"
-                  className="bg-brand-blue hover:bg-blue-600 text-white font-bold shadow-md shadow-blue-500/20 px-6"
+                  to="/contact"
+                  className="bg-brand-blue hover:bg-brand-blue-dark text-white font-bold shadow-md shadow-blue-500/20 px-6 py-3.5 text-xs sm:text-sm uppercase tracking-wider"
                   rightIcon={<ArrowRight className="w-4 h-4" />}
                 >
-                  Explore IT Services
+                  Schedule Technical Consultation
                 </Button>
 
                 <Button
                   variant="outline"
                   size="lg"
                   as={Link}
-                  to="/contact"
-                  className="bg-white hover:bg-blue-50/60 text-brand-blue border border-brand-blue/30 hover:border-brand-blue font-bold shadow-xs px-6"
+                  to="/portfolio"
+                  className="bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 hover:border-brand-blue font-bold shadow-xs px-6 py-3.5 text-xs sm:text-sm uppercase tracking-wider"
                 >
-                  Schedule Consultation
+                  Explore Deployed Case Studies
                 </Button>
 
                 <a
                   href={`https://wa.me/${whatsappNumber}?text=${whatsappMsg}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-3 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-800 text-sm font-semibold transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-3.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-800 text-xs sm:text-sm font-semibold transition-colors"
+                  aria-label="Direct WhatsApp Priority Hotline"
                 >
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                   WhatsApp
@@ -344,10 +348,10 @@ export default function HeroSection() {
                     </div>
                     <div>
                       <p className="text-[10px] uppercase tracking-wider text-slate-500 font-mono font-semibold">
-                        Enterprise Guarantee
+                        Guaranteed Ownership
                       </p>
                       <p className="text-xs font-bold text-slate-900">
-                        ISO-Aligned Delivery Standards
+                        100% Code &amp; IP Handover
                       </p>
                     </div>
                   </div>
@@ -360,10 +364,10 @@ export default function HeroSection() {
                     </span>
                   </div>
 
-                  {/* Floating Project count chip — new */}
+                  {/* Floating Inception chip */}
                   <div className="absolute top-1/3 -right-3 sm:-right-5 bg-brand-navy/95 backdrop-blur-md rounded-xl px-3 py-2 shadow-lg border border-brand-blue/30 flex items-center gap-2 animate-float" style={{ animationDelay: '1s' }}>
-                    <span className="text-base font-black text-white font-mono">{cfg.stat_projects || '50'}+</span>
-                    <span className="text-[10px] text-brand-blue-light font-semibold leading-tight">Projects<br/>Delivered</span>
+                    <span className="text-sm font-black text-white font-mono">July 2026</span>
+                    <span className="text-[10px] text-brand-blue-light font-semibold leading-tight">Founded in<br/>Rajasthan</span>
                   </div>
                 </div>
               </div>

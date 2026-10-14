@@ -67,6 +67,7 @@ export function organizationSchema(cfg = {}) {
     name,
     alternateName: SITE.alternateName,
     url: SITE.url,
+    foundingDate: '2026-07',
     logo: {
       '@type': 'ImageObject',
       url: logo,
@@ -134,6 +135,7 @@ export function localBusinessSchema(cfg = {}) {
     name,
     image,
     url: SITE.url,
+    foundingDate: '2026-07',
     telephone: phone,
     email,
     description: cfg.default_seo_description || SITE.description,

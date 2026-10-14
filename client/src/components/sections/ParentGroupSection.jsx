@@ -2,34 +2,37 @@ import { ExternalLink, ShieldCheck, Building2, Cpu, Globe, Award } from 'lucide-
 import { Container } from '@/components/ui'
 import { useSiteSettings } from '@/hooks/useContent'
 
-const ECOSYSTEM_PILLARS = [
-  {
-    icon: Building2,
-    title: 'Enterprise Heritage & Stability',
-    desc: 'Backed by Hindustan Projects Group, combining deep industrial engineering legacy with agile, next-generation digital technology.',
-  },
-  {
-    icon: Cpu,
-    title: 'Technology & Cloud Division',
-    desc: 'SnapTech Digital serves as the dedicated IT software wing, building mission-critical web applications, SaaS platforms, and mobile apps.',
-  },
-  {
-    icon: Globe,
-    title: 'Unified Domain Architecture',
-    desc: 'Operating under official domain www.snaptech.digital with cross-functional enterprise compliance and cloud synergy.',
-  },
-  {
-    icon: Award,
-    title: 'Guaranteed Delivery & SLA',
-    desc: 'Tier-1 engineering standards with 99.9% uptime, strict milestone tracking, and long-term enterprise maintenance agreements.',
-  },
-]
-
 export default function ParentGroupSection() {
   const { data: settingsData } = useSiteSettings()
   const cfg = settingsData?.data || {}
   const parentUrl = cfg.parent_company_url || 'https://www.hindustanprojects.in'
   const parentName = cfg.parent_company_name || 'Hindustan Projects Group'
+  const companyName = cfg.company_name || 'SnapTech Digital'
+  const domain = cfg.hero_domain || 'www.snaptech.digital'
+  const sla = cfg.stat_sla || '99.9%'
+
+  const ecosystemPillars = [
+    {
+      icon: Building2,
+      title: 'Enterprise Heritage & Stability',
+      desc: `Backed by ${parentName}, combining deep industrial engineering legacy with agile, next-generation digital technology.`,
+    },
+    {
+      icon: Cpu,
+      title: 'Technology & Cloud Division',
+      desc: `${companyName} serves as the dedicated IT software wing, building mission-critical web applications, SaaS platforms, and mobile apps.`,
+    },
+    {
+      icon: Globe,
+      title: 'Unified Domain Architecture',
+      desc: `Operating under official domain ${domain} with cross-functional enterprise compliance and cloud synergy.`,
+    },
+    {
+      icon: Award,
+      title: 'Guaranteed Delivery & SLA',
+      desc: `Tier-1 engineering standards with ${sla}% uptime, strict milestone tracking, and long-term enterprise maintenance agreements.`,
+    },
+  ]
 
   return (
     <section id="group-ecosystem" className="py-20 bg-slate-50 text-slate-900 relative overflow-hidden isolate border-b border-slate-200" aria-labelledby="parent-group-heading">
@@ -50,14 +53,14 @@ export default function ParentGroupSection() {
             </span>
           </h2>
           <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
-            SnapTech Digital bridges heavy industrial engineering with high-velocity digital intelligence. 
+            {companyName} bridges heavy industrial engineering with high-velocity digital intelligence. 
             We provide scalable software, cloud, and digital solutions with the unmatched trustworthiness of our parent enterprise.
           </p>
         </div>
 
         {/* 4 Pillars Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          {ECOSYSTEM_PILLARS.map((pillar) => {
+          {ecosystemPillars.map((pillar) => {
             const Icon = pillar.icon
             return (
               <div

@@ -24,10 +24,10 @@ describe('SectionHeading', () => {
     expect(screen.getByText('What We Do')).toBeInTheDocument()
   })
 
-  it('applies text-brand-red class to eyebrow', () => {
+  it('applies text-brand-blue class to eyebrow', () => {
     render(<SectionHeading eyebrow="What We Do" title="Our Services" />)
     const eyebrow = screen.getByText('What We Do')
-    expect(eyebrow.className).toContain('text-brand-red')
+    expect(eyebrow.className).toContain('text-brand-blue')
   })
 
   it('renders subtitle when provided', () => {
@@ -61,10 +61,10 @@ describe('SectionHeading', () => {
     expect(heading.className).toContain('!text-white')
   })
 
-  it('applies brand-blue title color in dark (default) mode', () => {
+  it('applies brand dark navy title color in dark (default) mode', () => {
     render(<SectionHeading title="Dark Title" />)
     const heading = screen.getByRole('heading', { level: 2 })
-    expect(heading.className).toContain('text-brand-blue')
+    expect(heading.className).toContain('text-[#0D1B4B]')
   })
 
   it('merges custom className on the wrapper', () => {

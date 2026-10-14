@@ -87,13 +87,6 @@ const SOCIAL_LINKS = [
   },
 ]
 
-const TRUST_BADGES = [
-  { label: 'Hindustan Projects Group', icon: '🏢' },
-  { label: '100% Code Ownership', icon: '💻' },
-  { label: '99.9% Cloud SLA', icon: '⚡' },
-  { label: 'Pan-India Delivery', icon: '🇮🇳' },
-]
-
 function BackToTop() {
   const handleClick = () => window.scrollTo({ top: 0, behavior: 'smooth' })
   return (
@@ -121,11 +114,22 @@ export default function Footer() {
   const phone = cfg.phone || '+91 8209604849'
   const contactEmail = cfg.email || 'info@snaptech.digital'
   const address = cfg.address || 'Bhilwara, Rajasthan 311001, India'
+  const parentName = cfg.parent_company_name || 'Hindustan Projects Group'
+  const companyName = cfg.company_name || 'SnapTech Digital'
+  const statSla = cfg.stat_sla || '99.9%'
+  const statReach = cfg.stat_reach || 'Pan-India Delivery'
+
+  const trustBadges = [
+    { label: parentName, icon: '🏢' },
+    { label: '100% Code Ownership', icon: '💻' },
+    { label: `${statSla} Cloud SLA`, icon: '⚡' },
+    { label: statReach, icon: '🇮🇳' },
+  ]
 
   const rawWa = cfg.whatsapp || cfg.phone || '+91 8209604849'
   const cleanWa = rawWa.replace(/\D/g, '')
   const whatsappUrl = cleanWa
-    ? `https://wa.me/${cleanWa}?text=${encodeURIComponent(cfg.whatsappMessage || 'Hi SnapTech Team, I am interested in your digital services.')}`
+    ? `https://wa.me/${cleanWa}?text=${encodeURIComponent(cfg.whatsappMessage || `Hi ${companyName} Team, I am interested in your digital services.`)}`
     : '#'
 
 
@@ -208,7 +212,7 @@ export default function Footer() {
         <div className="border-b border-white/5 bg-white/1">
           <Container>
             <div className="py-3 flex items-center justify-center gap-6 sm:gap-10 flex-wrap">
-              {TRUST_BADGES.map((b) => (
+              {trustBadges.map((b) => (
                 <div key={b.label} className="flex items-center gap-2 text-xs text-slate-400">
                   <span className="text-base leading-none">{b.icon}</span>
                   <span className="font-semibold text-slate-300">{b.label}</span>
@@ -409,7 +413,7 @@ export default function Footer() {
           <div className="border-t border-white/10 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
             <div className="flex flex-col sm:flex-row items-center gap-2">
               <p>
-                © {year} <strong className="text-white">SnapTech Digital</strong>. All rights reserved.
+                © {year} <strong className="text-white">{companyName}</strong>. All rights reserved.
               </p>
             </div>
             <div className="flex flex-wrap gap-4 text-slate-400 justify-center">
@@ -419,7 +423,7 @@ export default function Footer() {
             </div>
             <p className="text-slate-400 flex items-center gap-1.5">
               <span className="inline-block w-1.5 h-1.5 rounded-full bg-brand-primary" />
-              Bhilwara, Rajasthan, India
+              {cfg.address ? cfg.address.split(',').slice(0, 2).join(', ') : 'India'}
             </p>
           </div>
         </Container>

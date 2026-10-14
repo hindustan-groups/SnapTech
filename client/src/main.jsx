@@ -17,6 +17,11 @@ import './index.css'
 import App from './App.jsx'
 import { ErrorBoundary } from './components/monitoring/ErrorBoundary.jsx'
 
+import { initAttribution } from './utils/analytics.js'
+
+// Capture UTM marketing parameters from landing URL
+initAttribution()
+
 // Auto-reload cleanly when a new Vercel deployment updates JavaScript chunk hashes
 window.addEventListener('vite:preloadError', (event) => {
   event.preventDefault()
@@ -105,6 +110,7 @@ async function initializeAnalytics() {
       window.gtag('config', gaId, { page_path: window.location.pathname })
     }
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.warn('[main] Failed to initialize GA4:', err.message)
   }
 }

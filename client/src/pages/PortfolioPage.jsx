@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Rocket, Award, Clock, TrendingUp, CheckCircle2, ArrowRight, Sparkles, MessageSquare } from 'lucide-react'
-import { Container, Button, SEO } from '@/components/ui'
+import { Container, SEO } from '@/components/ui'
 import PortfolioSection from '@/components/sections/PortfolioSection'
 import { useSiteSettings } from '@/hooks/useContent'
 
@@ -11,10 +11,10 @@ export default function PortfolioPage() {
   const cfg = settingsData?.data || {}
 
   const stats = [
-    { value: `${cfg.stat_projects || '50'}+`, label: 'Enterprise Deliverables', sub: 'Production Deployed', icon: Rocket },
-    { value: `${cfg.stat_clients || '40'}+`, label: 'Active Retained Clients', sub: 'Long-Term Partners', icon: Award },
-    { value: '100%', label: 'On-Time Milestone SLA', sub: 'Zero Sprint Delay', icon: Clock },
-    { value: '3.4×', label: 'Average Client ROI', sub: 'Verified Telemetry', icon: TrendingUp },
+    { value: 'July 2026', label: 'Founded Inception', sub: 'Bhilwara, Rajasthan', icon: Award },
+    { value: '100%', label: 'Code & IP Ownership', sub: 'Full Git Handover', icon: Clock },
+    { value: 'Hindustan Projects', label: 'Parent Enterprise', sub: 'Corporate Division', icon: Rocket },
+    { value: 'Pan-India', label: 'Client Delivery Reach', sub: 'Agile Remote Workflows', icon: TrendingUp },
   ]
 
   const rawWa = cfg.whatsapp || cfg.phone || ''
@@ -23,8 +23,8 @@ export default function PortfolioPage() {
   return (
     <div className="bg-white min-h-screen text-slate-900 selection:bg-brand-blue/15 selection:text-brand-blue">
       <SEO
-        title={`Portfolio — ${cfg.stat_projects || '50'}+ Projects Delivered | SnapTech Digital`}
-        description="Explore SnapTech Digital portfolio — enterprise projects delivered across web applications, cloud architecture, native mobile apps, and custom software."
+        title="Portfolio & Case Studies — SnapTech Digital | Bhilwara, Rajasthan"
+        description="Explore SnapTech Digital portfolio — enterprise software architectures, web applications, and digital engineering solutions built with 100% code ownership."
         path="/portfolio"
         keywords="SnapTech Digital portfolio, web development portfolio, IT projects Bhilwara, software engineering case studies, full stack development India"
       />
@@ -98,26 +98,26 @@ export default function PortfolioPage() {
                   />
                 </div>
 
-                {/* Floating Badge 1: 5+ Years Experience */}
+                {/* Floating Badge 1: July 2026 */}
                 <div className="absolute z-20 top-12 -right-4 bg-white/95 backdrop-blur-xl rounded-2xl px-4 py-2.5 shadow-xl border border-slate-200/90 transition-transform duration-300 hover:scale-105">
                   <div className="flex items-center gap-2.5">
-                    <span className="font-heading text-xl font-extrabold text-brand-blue">
-                      {cfg.stat_experience || '5'}+
+                    <span className="font-heading text-lg font-extrabold text-brand-blue">
+                      July 2026
                     </span>
                     <div>
-                      <p className="font-heading text-xs font-bold text-slate-900 leading-none">Years Corporate</p>
-                      <p className="text-[10px] text-slate-500 font-medium mt-0.5">Heritage</p>
+                      <p className="font-heading text-xs font-bold text-slate-900 leading-none">Founded Inception</p>
+                      <p className="text-[10px] text-slate-500 font-medium mt-0.5">Bhilwara, Rajasthan</p>
                     </div>
                   </div>
                 </div>
 
-                {/* Floating Badge 2: 50+ Projects Delivered */}
+                {/* Floating Badge 2: 100% Code Ownership */}
                 <div className="absolute z-20 bottom-12 -left-4 bg-white/95 backdrop-blur-xl rounded-2xl px-4 py-2.5 shadow-xl border border-emerald-500/30 transition-transform duration-300 hover:scale-105">
                   <p className="font-heading text-xs font-bold text-slate-900 flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                    {cfg.stat_projects || '50'}+ Deliverables
+                    100% Code Ownership
                   </p>
-                  <p className="text-[10px] text-emerald-600 font-semibold mt-0.5">100% Production SLA</p>
+                  <p className="text-[10px] text-emerald-600 font-semibold mt-0.5">Full Git &amp; IP Handover</p>
                 </div>
               </div>
             </div>

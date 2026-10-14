@@ -49,7 +49,7 @@ function MilestoneForm({ initial, onSave, onCancel, loading }) {
           </label>
           <input
             {...register('year', { required: true })}
-            placeholder="2024"
+            placeholder="July 2026"
             className={inputCls}
             disabled={loading}
           />
@@ -61,7 +61,7 @@ function MilestoneForm({ initial, onSave, onCancel, loading }) {
           <input
             {...register('title', { required: true })}
             className={inputCls}
-            placeholder="Company founded"
+            placeholder="Founding of SnapTech Digital"
             disabled={loading}
           />
         </div>

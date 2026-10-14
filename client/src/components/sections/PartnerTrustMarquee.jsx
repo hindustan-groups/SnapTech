@@ -5,7 +5,7 @@
  */
 import { ShieldCheck, Award, Lock, Server, Sparkles } from 'lucide-react'
 import { Container } from '@/components/ui'
-import { usePartners } from '@/hooks/useContent'
+import { usePartners, useSiteSettings } from '@/hooks/useContent'
 
 const FALLBACK_ENTERPRISE_PARTNERS = [
   { id: '1', name: 'Textile Mills & Manufacturing' },
@@ -18,31 +18,34 @@ const FALLBACK_ENTERPRISE_PARTNERS = [
   { id: '8', name: 'Automotive & Industrial Traders' },
 ]
 
-const TRUST_PILLARS = [
-  {
-    icon: Award,
-    title: 'Hindustan Projects Group',
-    label: 'Enterprise Holding Backing',
-  },
-  {
-    icon: ShieldCheck,
-    title: '100% Code Handover',
-    label: 'Full Git & IP Ownership',
-  },
-  {
-    icon: Lock,
-    title: '256-Bit SSL / TLS',
-    label: 'Enterprise Data Security',
-  },
-  {
-    icon: Server,
-    title: '99.9% Cloud SLA',
-    label: 'High-Availability Hosting',
-  },
-]
-
 export default function PartnerTrustMarquee() {
   const { data: partnersData } = usePartners()
+  const { data: settingsData } = useSiteSettings()
+  const cfg = settingsData?.data || {}
+
+  const trustPillars = [
+    {
+      icon: Award,
+      title: cfg.parent_company_name || 'Hindustan Projects Group',
+      label: 'Enterprise Holding Backing',
+    },
+    {
+      icon: ShieldCheck,
+      title: '100% Code Handover',
+      label: 'Full Git & IP Ownership',
+    },
+    {
+      icon: Lock,
+      title: '256-Bit SSL / TLS',
+      label: 'Enterprise Data Security',
+    },
+    {
+      icon: Server,
+      title: `${cfg.stat_sla || '99.9%'} Cloud SLA`,
+      label: 'High-Availability Hosting',
+    },
+  ]
+
   const partners = partnersData?.data?.length ? partnersData.data : FALLBACK_ENTERPRISE_PARTNERS
 
   // Duplicate list to achieve seamless infinite scroll effect without gaps
@@ -59,7 +62,7 @@ export default function PartnerTrustMarquee() {
       {/* ── Top Strip: Enterprise Trust Badges ── */}
       <Container className="relative mb-8">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-          {TRUST_PILLARS.map((pillar) => {
+          {trustPillars.map((pillar) => {
             const Icon = pillar.icon
             return (
               <div

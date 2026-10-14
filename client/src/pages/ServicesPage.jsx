@@ -203,8 +203,8 @@ export default function ServicesPage() {
   const [activeCategory, setActiveCategory] = useState('All')
 
   const services = useMemo(() => {
-    if (Array.isArray(data?.data)) return data.data
-    return []
+    if (Array.isArray(data?.data) && data.data.length > 0) return data.data
+    return FALLBACK_SERVICES
   }, [data])
 
   const cfg = settingsData?.data || {}
@@ -246,9 +246,9 @@ export default function ServicesPage() {
 
   const telemetryStats = [
     { icon: Zap, label: 'Deployment Velocity', value: '2–4 Weeks Sprint', sub: 'Production Ready' },
-    { icon: Shield, label: 'Enterprise Security', value: '100% Zero Defect', sub: 'ISO SLA Standards' },
-    { icon: Clock, label: 'Active Support', value: '24/7 Engineering Desk', sub: 'Instant Escalation' },
-    { icon: Users, label: 'Client Trust', value: `${cfg.stat_clients || '50'}+ Enterprises`, sub: 'SnapTech Digital' },
+    { icon: Shield, label: 'Code & IP Rights', value: '100% Handover', sub: 'Full Repository Transfer' },
+    { icon: Clock, label: 'Active Support', value: 'Dedicated Sprints', sub: 'Priority Response' },
+    { icon: Users, label: 'Parent Enterprise', value: 'Hindustan Projects', sub: 'Corporate Technology Arm' },
   ]
 
   return (
@@ -363,7 +363,7 @@ export default function ServicesPage() {
 
                 <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
                   <span className="flex items-center gap-1.5">
-                    <Award className="w-3.5 h-3.5 text-[#1a3e8c]" /> Certified Solution Architects
+                    <Award className="w-3.5 h-3.5 text-[#1a3e8c]" /> Experienced Solution Architects
                   </span>
                   <span className="text-[#1a3e8c] font-mono font-bold">100% Dynamic Engine</span>
                 </div>
@@ -649,7 +649,7 @@ export default function ServicesPage() {
                 From Specification to Production In 4 Sprints
               </h2>
               <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-                Our ISO-compliant delivery pipeline guarantees full repository visibility, clean documentation, zero technical debt, and deterministic milestone deadlines.
+                Our structured agile delivery pipeline guarantees full repository visibility, clean documentation, zero technical debt, and deterministic milestone deadlines.
               </p>
             </div>
 

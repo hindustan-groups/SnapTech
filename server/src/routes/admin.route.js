@@ -147,7 +147,7 @@ import {
 
 // Services
 const serviceCreateValidation = [
-  body('title').trim().notEmpty().withMessage('Title is required.').isLength({ max: 100 }).escape(),
+  body('title').trim().notEmpty().withMessage('Title is required.').isLength({ max: 100 }),
   body('slug')
     .trim()
     .notEmpty()
@@ -155,21 +155,21 @@ const serviceCreateValidation = [
     .matches(/^[a-z0-9-]+$/)
     .withMessage('Slug can only contain lowercase letters, numbers, and hyphens.')
     .isLength({ max: 100 }),
-  body('shortDescription').trim().notEmpty().withMessage('Short description is required.').isLength({ max: 300 }).escape(),
+  body('shortDescription').trim().notEmpty().withMessage('Short description is required.').isLength({ max: 300 }),
   body('fullDescription').trim().notEmpty().withMessage('Full description is required.').isLength({ max: 5000 }),
-  body('icon').trim().notEmpty().withMessage('Icon is required.').isLength({ max: 50 }).escape(),
+  body('icon').trim().notEmpty().withMessage('Icon is required.').isLength({ max: 50 }),
   body('order').optional().isInt({ min: 0 }).toInt(),
   body('isActive').optional().isBoolean().toBoolean(),
-  body('tag').optional({ checkFalsy: true }).trim().isLength({ max: 50 }).escape(),
-  body('deliveryTime').optional({ checkFalsy: true }).trim().isLength({ max: 50 }).escape(),
+  body('tag').optional({ checkFalsy: true }).trim().isLength({ max: 50 }),
+  body('deliveryTime').optional({ checkFalsy: true }).trim().isLength({ max: 50 }),
   body('techStack').optional().isArray().custom((arr) => arr.every((item) => typeof item === 'string')),
   body('keyFeatures').optional().isArray().custom((arr) => arr.every((item) => typeof item === 'string')),
-  body('colorFrom').optional({ checkFalsy: true }).trim().isLength({ max: 50 }).escape(),
-  body('colorTo').optional({ checkFalsy: true }).trim().isLength({ max: 50 }).escape(),
+  body('colorFrom').optional({ checkFalsy: true }).trim().isLength({ max: 50 }),
+  body('colorTo').optional({ checkFalsy: true }).trim().isLength({ max: 50 }),
 ]
 
 const serviceUpdateValidation = [
-  body('title').optional().trim().notEmpty().withMessage('Title cannot be empty.').isLength({ max: 100 }).escape(),
+  body('title').optional().trim().notEmpty().withMessage('Title cannot be empty.').isLength({ max: 100 }),
   body('slug')
     .optional()
     .trim()
@@ -178,22 +178,22 @@ const serviceUpdateValidation = [
     .matches(/^[a-z0-9-]+$/)
     .withMessage('Slug can only contain lowercase letters, numbers, and hyphens.')
     .isLength({ max: 100 }),
-  body('shortDescription').optional().trim().notEmpty().withMessage('Short description cannot be empty.').isLength({ max: 300 }).escape(),
+  body('shortDescription').optional().trim().notEmpty().withMessage('Short description cannot be empty.').isLength({ max: 300 }),
   body('fullDescription').optional().trim().notEmpty().withMessage('Full description cannot be empty.').isLength({ max: 5000 }),
-  body('icon').optional().trim().notEmpty().withMessage('Icon cannot be empty.').isLength({ max: 50 }).escape(),
+  body('icon').optional().trim().notEmpty().withMessage('Icon cannot be empty.').isLength({ max: 50 }),
   body('order').optional().isInt({ min: 0 }).toInt(),
   body('isActive').optional().isBoolean().toBoolean(),
-  body('tag').optional({ checkFalsy: true }).trim().isLength({ max: 50 }).escape(),
-  body('deliveryTime').optional({ checkFalsy: true }).trim().isLength({ max: 50 }).escape(),
+  body('tag').optional({ checkFalsy: true }).trim().isLength({ max: 50 }),
+  body('deliveryTime').optional({ checkFalsy: true }).trim().isLength({ max: 50 }),
   body('techStack').optional().isArray().custom((arr) => arr.every((item) => typeof item === 'string')),
   body('keyFeatures').optional().isArray().custom((arr) => arr.every((item) => typeof item === 'string')),
-  body('colorFrom').optional({ checkFalsy: true }).trim().isLength({ max: 50 }).escape(),
-  body('colorTo').optional({ checkFalsy: true }).trim().isLength({ max: 50 }).escape(),
+  body('colorFrom').optional({ checkFalsy: true }).trim().isLength({ max: 50 }),
+  body('colorTo').optional({ checkFalsy: true }).trim().isLength({ max: 50 }),
 ]
 
 // Projects
 const projectCreateValidation = [
-  body('title').trim().notEmpty().withMessage('Title is required.').isLength({ max: 150 }).escape(),
+  body('title').trim().notEmpty().withMessage('Title is required.').isLength({ max: 150 }),
   body('slug')
     .trim()
     .notEmpty()
@@ -201,18 +201,18 @@ const projectCreateValidation = [
     .matches(/^[a-z0-9-]+$/)
     .withMessage('Slug can only contain lowercase letters, numbers, and hyphens.')
     .isLength({ max: 150 }),
-  body('clientName').trim().notEmpty().withMessage('Client name is required.').isLength({ max: 150 }).escape(),
-  body('description').trim().notEmpty().withMessage('Description is required.').isLength({ max: 2000 }).escape(),
+  body('clientName').trim().notEmpty().withMessage('Client name is required.').isLength({ max: 150 }),
+  body('description').trim().notEmpty().withMessage('Description is required.').isLength({ max: 2000 }),
   body('thumbnailUrl').optional({ checkFalsy: true }).trim().isURL().withMessage('Thumbnail URL must be valid.').isLength({ max: 1000 }),
   body('images').optional().isArray().custom((arr) => arr.every((item) => typeof item === 'string')),
   body('technologies').optional().isArray().custom((arr) => arr.every((item) => typeof item === 'string')),
-  body('category').trim().notEmpty().withMessage('Category is required.').isLength({ max: 50 }).escape(),
+  body('category').trim().notEmpty().withMessage('Category is required.').isLength({ max: 50 }),
   body('isFeatured').optional().isBoolean().toBoolean(),
   body('liveUrl').optional({ checkFalsy: true }).trim().isURL().withMessage('Live URL must be valid.').isLength({ max: 1000 }),
 ]
 
 const projectUpdateValidation = [
-  body('title').optional().trim().notEmpty().withMessage('Title cannot be empty.').isLength({ max: 150 }).escape(),
+  body('title').optional().trim().notEmpty().withMessage('Title cannot be empty.').isLength({ max: 150 }),
   body('slug')
     .optional()
     .trim()
@@ -221,41 +221,41 @@ const projectUpdateValidation = [
     .matches(/^[a-z0-9-]+$/)
     .withMessage('Slug can only contain lowercase letters, numbers, and hyphens.')
     .isLength({ max: 150 }),
-  body('clientName').optional().trim().notEmpty().withMessage('Client name cannot be empty.').isLength({ max: 150 }).escape(),
-  body('description').optional().trim().notEmpty().withMessage('Description cannot be empty.').isLength({ max: 2000 }).escape(),
+  body('clientName').optional().trim().notEmpty().withMessage('Client name cannot be empty.').isLength({ max: 150 }),
+  body('description').optional().trim().notEmpty().withMessage('Description cannot be empty.').isLength({ max: 2000 }),
   body('thumbnailUrl').optional({ checkFalsy: true }).trim().isURL().withMessage('Thumbnail URL must be valid.').isLength({ max: 1000 }),
   body('images').optional().isArray().custom((arr) => arr.every((item) => typeof item === 'string')),
   body('technologies').optional().isArray().custom((arr) => arr.every((item) => typeof item === 'string')),
-  body('category').optional().trim().notEmpty().withMessage('Category cannot be empty.').isLength({ max: 50 }).escape(),
+  body('category').optional().trim().notEmpty().withMessage('Category cannot be empty.').isLength({ max: 50 }),
   body('isFeatured').optional().isBoolean().toBoolean(),
   body('liveUrl').optional({ checkFalsy: true }).trim().isURL().withMessage('Live URL must be valid.').isLength({ max: 1000 }),
 ]
 
 // Team Members
 const teamCreateValidation = [
-  body('name').trim().notEmpty().withMessage('Name is required.').isLength({ max: 100 }).escape(),
-  body('role').trim().notEmpty().withMessage('Role is required.').isLength({ max: 100 }).escape(),
+  body('name').trim().notEmpty().withMessage('Name is required.').isLength({ max: 100 }),
+  body('role').trim().notEmpty().withMessage('Role is required.').isLength({ max: 100 }),
   body('photoUrl').optional({ checkFalsy: true }).trim().isURL().withMessage('Photo URL must be valid.').isLength({ max: 1000 }),
-  body('bio').optional({ checkFalsy: true }).trim().isLength({ max: 1000 }).escape(),
+  body('bio').optional({ checkFalsy: true }).trim().isLength({ max: 1000 }),
   body('linkedinUrl').optional({ checkFalsy: true }).trim().isURL().withMessage('LinkedIn URL must be valid.').isLength({ max: 1000 }),
   body('order').optional().isInt({ min: 0 }).toInt(),
 ]
 
 const teamUpdateValidation = [
-  body('name').optional().trim().notEmpty().withMessage('Name cannot be empty.').isLength({ max: 100 }).escape(),
-  body('role').optional().trim().notEmpty().withMessage('Role cannot be empty.').isLength({ max: 100 }).escape(),
+  body('name').optional().trim().notEmpty().withMessage('Name cannot be empty.').isLength({ max: 100 }),
+  body('role').optional().trim().notEmpty().withMessage('Role cannot be empty.').isLength({ max: 100 }),
   body('photoUrl').optional({ checkFalsy: true }).trim().isURL().withMessage('Photo URL must be valid.').isLength({ max: 1000 }),
-  body('bio').optional({ checkFalsy: true }).trim().isLength({ max: 1000 }).escape(),
+  body('bio').optional({ checkFalsy: true }).trim().isLength({ max: 1000 }),
   body('linkedinUrl').optional({ checkFalsy: true }).trim().isURL().withMessage('LinkedIn URL must be valid.').isLength({ max: 1000 }),
   body('order').optional().isInt({ min: 0 }).toInt(),
 ]
 
 // Testimonials
 const testimonialCreateValidation = [
-  body('name').trim().notEmpty().withMessage('Name is required.').isLength({ max: 100 }).escape(),
-  body('role').trim().notEmpty().withMessage('Role is required.').isLength({ max: 100 }).escape(),
-  body('company').trim().notEmpty().withMessage('Company is required.').isLength({ max: 100 }).escape(),
-  body('text').trim().notEmpty().withMessage('Testimonial text is required.').isLength({ max: 1000 }).escape(),
+  body('name').trim().notEmpty().withMessage('Name is required.').isLength({ max: 100 }),
+  body('role').trim().notEmpty().withMessage('Role is required.').isLength({ max: 100 }),
+  body('company').trim().notEmpty().withMessage('Company is required.').isLength({ max: 100 }),
+  body('text').trim().notEmpty().withMessage('Testimonial text is required.').isLength({ max: 1000 }),
   body('rating').optional().isInt({ min: 1, max: 5 }).toInt(),
   body('avatarUrl').optional({ checkFalsy: true }).trim().isURL().withMessage('Avatar URL must be valid.').isLength({ max: 1000 }),
   body('isActive').optional().isBoolean().toBoolean(),
@@ -263,10 +263,10 @@ const testimonialCreateValidation = [
 ]
 
 const testimonialUpdateValidation = [
-  body('name').optional().trim().notEmpty().withMessage('Name cannot be empty.').isLength({ max: 100 }).escape(),
-  body('role').optional().trim().notEmpty().withMessage('Role cannot be empty.').isLength({ max: 100 }).escape(),
-  body('company').optional().trim().notEmpty().withMessage('Company cannot be empty.').isLength({ max: 100 }).escape(),
-  body('text').optional().trim().notEmpty().withMessage('Testimonial text cannot be empty.').isLength({ max: 1000 }).escape(),
+  body('name').optional().trim().notEmpty().withMessage('Name cannot be empty.').isLength({ max: 100 }),
+  body('role').optional().trim().notEmpty().withMessage('Role cannot be empty.').isLength({ max: 100 }),
+  body('company').optional().trim().notEmpty().withMessage('Company cannot be empty.').isLength({ max: 100 }),
+  body('text').optional().trim().notEmpty().withMessage('Testimonial text cannot be empty.').isLength({ max: 1000 }),
   body('rating').optional().isInt({ min: 1, max: 5 }).toInt(),
   body('avatarUrl').optional({ checkFalsy: true }).trim().isURL().withMessage('Avatar URL must be valid.').isLength({ max: 1000 }),
   body('isActive').optional().isBoolean().toBoolean(),
@@ -275,44 +275,44 @@ const testimonialUpdateValidation = [
 
 // FAQs
 const faqCreateValidation = [
-  body('question').trim().notEmpty().withMessage('Question is required.').isLength({ max: 500 }).escape(),
-  body('answer').trim().notEmpty().withMessage('Answer is required.').isLength({ max: 2000 }).escape(),
+  body('question').trim().notEmpty().withMessage('Question is required.').isLength({ max: 500 }),
+  body('answer').trim().notEmpty().withMessage('Answer is required.').isLength({ max: 2000 }),
   body('order').optional().isInt({ min: 0 }).toInt(),
   body('isActive').optional().isBoolean().toBoolean(),
 ]
 
 const faqUpdateValidation = [
-  body('question').optional().trim().notEmpty().withMessage('Question cannot be empty.').isLength({ max: 500 }).escape(),
-  body('answer').optional().trim().notEmpty().withMessage('Answer cannot be empty.').isLength({ max: 2000 }).escape(),
+  body('question').optional().trim().notEmpty().withMessage('Question cannot be empty.').isLength({ max: 500 }),
+  body('answer').optional().trim().notEmpty().withMessage('Answer cannot be empty.').isLength({ max: 2000 }),
   body('order').optional().isInt({ min: 0 }).toInt(),
   body('isActive').optional().isBoolean().toBoolean(),
 ]
 
 // Milestones
 const milestoneCreateValidation = [
-  body('year').trim().notEmpty().withMessage('Year is required.').isLength({ max: 10 }).escape(),
-  body('title').trim().notEmpty().withMessage('Title is required.').isLength({ max: 150 }).escape(),
-  body('desc').trim().notEmpty().withMessage('Description is required.').isLength({ max: 500 }).escape(),
+  body('year').trim().notEmpty().withMessage('Year is required.').isLength({ max: 20 }),
+  body('title').trim().notEmpty().withMessage('Title is required.').isLength({ max: 150 }),
+  body('desc').trim().notEmpty().withMessage('Description is required.').isLength({ max: 500 }),
   body('order').optional().isInt({ min: 0 }).toInt(),
 ]
 
 const milestoneUpdateValidation = [
-  body('year').optional().trim().notEmpty().withMessage('Year cannot be empty.').isLength({ max: 10 }).escape(),
-  body('title').optional().trim().notEmpty().withMessage('Title cannot be empty.').isLength({ max: 150 }).escape(),
-  body('desc').optional().trim().notEmpty().withMessage('Description cannot be empty.').isLength({ max: 500 }).escape(),
+  body('year').optional().trim().notEmpty().withMessage('Year cannot be empty.').isLength({ max: 20 }),
+  body('title').optional().trim().notEmpty().withMessage('Title cannot be empty.').isLength({ max: 150 }),
+  body('desc').optional().trim().notEmpty().withMessage('Description cannot be empty.').isLength({ max: 500 }),
   body('order').optional().isInt({ min: 0 }).toInt(),
 ]
 
 // Partners
 const partnerCreateValidation = [
-  body('name').trim().notEmpty().withMessage('Name is required.').isLength({ max: 100 }).escape(),
+  body('name').trim().notEmpty().withMessage('Name is required.').isLength({ max: 100 }),
   body('logoUrl').optional({ checkFalsy: true }).trim().isURL().withMessage('Logo URL must be valid.').isLength({ max: 1000 }),
   body('order').optional().isInt({ min: 0 }).toInt(),
   body('isActive').optional().isBoolean().toBoolean(),
 ]
 
 const partnerUpdateValidation = [
-  body('name').optional().trim().notEmpty().withMessage('Name cannot be empty.').isLength({ max: 100 }).escape(),
+  body('name').optional().trim().notEmpty().withMessage('Name cannot be empty.').isLength({ max: 100 }),
   body('logoUrl').optional({ checkFalsy: true }).trim().isURL().withMessage('Logo URL must be valid.').isLength({ max: 1000 }),
   body('order').optional().isInt({ min: 0 }).toInt(),
   body('isActive').optional().isBoolean().toBoolean(),
@@ -320,7 +320,7 @@ const partnerUpdateValidation = [
 
 // Blog Posts
 const blogPostCreateValidation = [
-  body('title').trim().notEmpty().withMessage('Title is required.').isLength({ max: 200 }).escape(),
+  body('title').trim().notEmpty().withMessage('Title is required.').isLength({ max: 200 }),
   body('slug')
     .trim()
     .notEmpty()
@@ -328,20 +328,20 @@ const blogPostCreateValidation = [
     .matches(/^[a-z0-9-]+$/)
     .withMessage('Slug can only contain lowercase letters, numbers, and hyphens.')
     .isLength({ max: 200 }),
-  body('excerpt').trim().notEmpty().withMessage('Excerpt is required.').isLength({ max: 500 }).escape(),
+  body('excerpt').trim().notEmpty().withMessage('Excerpt is required.').isLength({ max: 500 }),
   body('content').trim().notEmpty().withMessage('Content is required.').isLength({ max: 50000 }),
   body('featuredImageUrl').optional({ checkFalsy: true }).trim().isURL().withMessage('Featured Image URL must be valid.').isLength({ max: 1000 }),
-  body('category').trim().notEmpty().withMessage('Category is required.').isLength({ max: 100 }).escape(),
+  body('category').trim().notEmpty().withMessage('Category is required.').isLength({ max: 100 }),
   body('tags').optional().isArray().custom((arr) => arr.every((item) => typeof item === 'string')),
-  body('authorName').optional({ checkFalsy: true }).trim().isLength({ max: 100 }).escape(),
+  body('authorName').optional({ checkFalsy: true }).trim().isLength({ max: 100 }),
   body('status').optional().isIn(['DRAFT', 'PUBLISHED', 'ARCHIVED']).withMessage('Status must be DRAFT, PUBLISHED, or ARCHIVED.'),
-  body('metaTitle').optional({ checkFalsy: true }).trim().isLength({ max: 200 }).escape(),
-  body('metaDescription').optional({ checkFalsy: true }).trim().isLength({ max: 500 }).escape(),
+  body('metaTitle').optional({ checkFalsy: true }).trim().isLength({ max: 200 }),
+  body('metaDescription').optional({ checkFalsy: true }).trim().isLength({ max: 500 }),
   body('isFeatured').optional().isBoolean().toBoolean(),
 ]
 
 const blogPostUpdateValidation = [
-  body('title').optional().trim().notEmpty().withMessage('Title cannot be empty.').isLength({ max: 200 }).escape(),
+  body('title').optional().trim().notEmpty().withMessage('Title cannot be empty.').isLength({ max: 200 }),
   body('slug')
     .optional()
     .trim()
@@ -350,15 +350,15 @@ const blogPostUpdateValidation = [
     .matches(/^[a-z0-9-]+$/)
     .withMessage('Slug can only contain lowercase letters, numbers, and hyphens.')
     .isLength({ max: 200 }),
-  body('excerpt').optional().trim().notEmpty().withMessage('Excerpt cannot be empty.').isLength({ max: 500 }).escape(),
+  body('excerpt').optional().trim().notEmpty().withMessage('Excerpt cannot be empty.').isLength({ max: 500 }),
   body('content').optional().trim().notEmpty().withMessage('Content cannot be empty.').isLength({ max: 50000 }),
   body('featuredImageUrl').optional({ checkFalsy: true }).trim().isURL().withMessage('Featured Image URL must be valid.').isLength({ max: 1000 }),
-  body('category').optional().trim().notEmpty().withMessage('Category cannot be empty.').isLength({ max: 100 }).escape(),
+  body('category').optional().trim().notEmpty().withMessage('Category cannot be empty.').isLength({ max: 100 }),
   body('tags').optional().isArray().custom((arr) => arr.every((item) => typeof item === 'string')),
-  body('authorName').optional({ checkFalsy: true }).trim().isLength({ max: 100 }).escape(),
+  body('authorName').optional({ checkFalsy: true }).trim().isLength({ max: 100 }),
   body('status').optional().isIn(['DRAFT', 'PUBLISHED', 'ARCHIVED']).withMessage('Status must be DRAFT, PUBLISHED, or ARCHIVED.'),
-  body('metaTitle').optional({ checkFalsy: true }).trim().isLength({ max: 200 }).escape(),
-  body('metaDescription').optional({ checkFalsy: true }).trim().isLength({ max: 500 }).escape(),
+  body('metaTitle').optional({ checkFalsy: true }).trim().isLength({ max: 200 }),
+  body('metaDescription').optional({ checkFalsy: true }).trim().isLength({ max: 500 }),
   body('isFeatured').optional().isBoolean().toBoolean(),
 ]
 

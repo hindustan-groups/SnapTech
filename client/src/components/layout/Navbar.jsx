@@ -175,6 +175,19 @@ export default function Navbar() {
     }
   }, [menuOpen])
 
+  // Accessibility: Close menus on Escape key
+  useEffect(() => {
+    if (!menuOpen && !megaOpen) return
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setMenuOpen(false)
+        setMegaOpen(false)
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [menuOpen, megaOpen])
+
   // Lock body scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : ''
@@ -442,9 +455,10 @@ export default function Navbar() {
           <button
             type="button"
             onClick={() => setMenuOpen((o) => !o)}
-            className="lg:hidden p-2 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-100 transition-colors focus-visible:outline-none"
+            className="lg:hidden p-2 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-100 transition-colors focus-visible:outline-none cursor-pointer"
             aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
             aria-expanded={menuOpen}
+            aria-controls="mobile-navigation-menu"
           >
             {menuOpen ? <X className="w-6 h-6 text-brand-red" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -453,7 +467,12 @@ export default function Navbar() {
 
       {/* ── Mobile Drawer ── */}
       {menuOpen && (
-        <div className="lg:hidden mobile-drawer-enter border-t border-slate-200 bg-white shadow-2xl max-h-[85vh] overflow-y-auto text-slate-800">
+        <div
+          id="mobile-navigation-menu"
+          role="region"
+          aria-label="Mobile Navigation"
+          className="lg:hidden mobile-drawer-enter border-t border-slate-200 bg-white shadow-2xl max-h-[85vh] overflow-y-auto text-slate-800"
+        >
           {/* Parent group callout */}
           <div className="px-4 pt-4 pb-3">
             <div className="p-3.5 bg-blue-50 rounded-2xl border border-blue-100">

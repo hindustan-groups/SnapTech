@@ -49,7 +49,23 @@ async function verifyRecaptcha(token) {
  */
 export const submitContact = async (req, res, next) => {
   try {
-    const { name, email, phone, message, serviceInterested, recaptchaToken, _hp } = req.body
+    const {
+      name,
+      email,
+      phone,
+      message,
+      serviceInterested,
+      recaptchaToken,
+      _hp,
+      estimatedBudget,
+      utmSource,
+      utmMedium,
+      utmCampaign,
+      utmTerm,
+      utmContent,
+      referrer,
+      landingPage,
+    } = req.body
 
     // ── 1. Honeypot check ──────────────────────────────────────
     // `_hp` is a hidden field. Bots fill it; real users leave it blank.
@@ -94,6 +110,19 @@ export const submitContact = async (req, res, next) => {
       })
     }
 
+    // ── Compile attribution metadata ───────────────────────────
+    const attributionParts = []
+    if (utmSource) attributionParts.push(`Source: ${utmSource}`)
+    if (utmMedium) attributionParts.push(`Medium: ${utmMedium}`)
+    if (utmCampaign) attributionParts.push(`Campaign: ${utmCampaign}`)
+    if (utmTerm) attributionParts.push(`Term: ${utmTerm}`)
+    if (utmContent) attributionParts.push(`Content: ${utmContent}`)
+    if (referrer) attributionParts.push(`Referrer: ${referrer}`)
+    if (landingPage) attributionParts.push(`Landing: ${landingPage}`)
+
+    const attributionNotes =
+      attributionParts.length > 0 ? `[Attribution]\n${attributionParts.join('\n')}` : ''
+
     // ── 3. Save lead to database ───────────────────────────────
     const lead = await prisma.contactLead.create({
       data: {
@@ -102,19 +131,29 @@ export const submitContact = async (req, res, next) => {
         phone: phone?.trim() || null,
         message: message.trim(),
         serviceInterested: serviceInterested?.trim() || null,
+        estimatedBudget: estimatedBudget?.trim() || '',
+        notes: attributionNotes,
         status: 'NEW',
       },
     })
 
     // ── 4 & 5. Send emails (non-blocking — don't fail the request if email fails) ──
-    const adminEmail = adminNotificationTemplate({ name, email, phone, message, serviceInterested })
+    const adminEmail = adminNotificationTemplate({
+      name,
+      email,
+      phone,
+      message,
+      serviceInterested,
+      estimatedBudget,
+      attribution: attributionNotes,
+    })
     const userReply = autoReplyTemplate({ name })
 
     const emailTarget = env.EMAIL_FROM ? env.EMAIL_FROM.replace(/.*<(.+)>/, '$1') : env.EMAIL_USER
 
     // ── 6. Send WhatsApp Notification to Admin (non-blocking) ──
     const { sendWhatsAppNotification } = await import('../utils/whatsapp.js')
-    const whatsappBody = `🆕 *New Lead Received!*\n*Name:* ${name}\n*Email:* ${email}\n*Phone:* ${phone || 'Not provided'}\n*Service:* ${serviceInterested || 'Not specified'}\n*Message:* ${message.slice(0, 100)}${message.length > 100 ? '...' : ''}`
+    const whatsappBody = `🆕 *New Lead Received!*\n*Name:* ${name}\n*Email:* ${email}\n*Phone:* ${phone || 'Not provided'}\n*Service:* ${serviceInterested || 'Not specified'}${estimatedBudget ? `\n*Budget:* ${estimatedBudget}` : ''}\n*Message:* ${message.slice(0, 100)}${message.length > 100 ? '...' : ''}`
     
     sendWhatsAppNotification(whatsappBody).catch((err) =>
       console.error('[WhatsApp] Notification trigger failed:', err.message)

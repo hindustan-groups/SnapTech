@@ -45,8 +45,8 @@ function FaqItem({ question, answer, isOpen, onToggle, index }) {
     <div
       className={`border rounded-2xl overflow-hidden transition-all duration-300 ${
         isOpen
-          ? 'border-[#1a3e8c]/30 bg-white shadow-md'
-          : 'border-slate-200 bg-white hover:border-[#1a3e8c]/20 hover:shadow-sm'
+          ? 'border-brand-blue/40 bg-white shadow-md'
+          : 'border-slate-200 bg-white hover:border-brand-blue/30 hover:shadow-sm'
       }`}
     >
       <button
@@ -58,28 +58,28 @@ function FaqItem({ question, answer, isOpen, onToggle, index }) {
           <span
             className={`w-7 h-7 rounded-xl flex items-center justify-center text-xs font-bold shrink-0 mt-0.5 transition-all duration-300 ${
               isOpen
-                ? 'bg-[#1a3e8c] text-white shadow-sm'
-                : 'bg-slate-100 border border-slate-200 text-slate-500 group-hover:border-[#1a3e8c]/30 group-hover:text-[#1a3e8c] group-hover:bg-[#1a3e8c]/10'
+                ? 'bg-brand-blue text-white shadow-sm'
+                : 'bg-slate-100 border border-slate-200 text-slate-500 group-hover:border-brand-blue/30 group-hover:text-brand-blue group-hover:bg-blue-50'
             }`}
           >
             {index + 1}
           </span>
           <span className={`font-heading text-sm sm:text-base font-semibold transition-colors duration-200 ${
-            isOpen ? 'text-[#1a3e8c]' : 'text-slate-700 group-hover:text-slate-900'
+            isOpen ? 'text-brand-blue' : 'text-slate-700 group-hover:text-slate-900'
           }`}>
             {question}
           </span>
         </span>
         <ChevronDown
           className={`w-5 h-5 shrink-0 ml-4 transition-all duration-300 ${
-            isOpen ? 'rotate-180 text-[#1a3e8c]' : 'text-slate-400 group-hover:text-slate-600'
+            isOpen ? 'rotate-180 text-brand-blue' : 'text-slate-400 group-hover:text-slate-600'
           }`}
         />
       </button>
 
       {/* CSS animated accordion body */}
       <div className={`accordion-content ${isOpen ? 'open' : ''}`}>
-        <div className="px-5 sm:px-6 pb-6 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4 ml-10">
+        <div className="px-5 sm:px-6 pb-6 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4 ml-10 whitespace-pre-line">
           {answer}
         </div>
       </div>
@@ -95,8 +95,8 @@ export default function FaqSection() {
 
   const settings = settingsData?.data || {}
   const allFaqs = useMemo(
-    () => Array.isArray(faqsData?.data) ? faqsData.data : [],
-    [faqsData]
+    () => Array.isArray(faqsData?.data) && faqsData.data.length > 0 ? faqsData.data : (isLoading ? [] : FALLBACK_FAQS),
+    [faqsData, isLoading]
   )
 
   const faqs = useMemo(() => {
@@ -116,8 +116,8 @@ export default function FaqSection() {
   return (
     <section id="faq" className="py-24 bg-white border-t border-slate-100 relative overflow-hidden" aria-labelledby="faq-heading">
       {/* Subtle ambient lighting */}
-      <div className="absolute top-1/4 right-0 w-96 h-96 bg-[#1a3e8c]/5 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-10 left-10 w-80 h-80 bg-[#e31e24]/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/4 right-0 w-96 h-96 bg-blue-100/30 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-10 left-10 w-80 h-80 bg-indigo-100/20 rounded-full blur-[120px] pointer-events-none" />
 
       <Container className="relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
@@ -125,19 +125,19 @@ export default function FaqSection() {
           {/* Left: sticky heading panel */}
           <div className="lg:col-span-5">
             <div className="reveal sticky top-28 space-y-6">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1a3e8c]/10 border border-[#1a3e8c]/20 text-[#1a3e8c] text-xs font-bold uppercase tracking-widest">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50/80 border border-blue-200 text-brand-blue text-xs font-bold uppercase tracking-widest shadow-2xs">
                 <HelpCircle className="w-3.5 h-3.5" />
-                Technical Clarity & FAQ
+                Technical Clarity &amp; FAQ
               </div>
 
-              <h2 id="faq-heading" className="font-heading text-3xl sm:text-4xl font-extrabold text-slate-800 leading-tight">
+              <h2 id="faq-heading" className="font-heading text-3xl sm:text-4xl font-extrabold text-[#0D1B4B] leading-tight">
                 Frequently Asked{' '}
-                <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(135deg, #1B6EF3, #0D1B4B)' }}>
+                <span className="text-transparent bg-clip-text bg-linear-to-r from-brand-blue via-blue-600 to-indigo-700">
                   Questions
                 </span>
               </h2>
 
-              <p className="text-slate-500 text-sm sm:text-base leading-relaxed max-w-sm">
+              <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-sm">
                 Transparent answers about our engineering timelines, pricing structures, intellectual property, and enterprise delivery guarantees.
               </p>
 
@@ -157,11 +157,11 @@ export default function FaqSection() {
                 </a>
                 <Link
                   to="/contact"
-                  className="flex items-center gap-3 p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-slate-700 text-xs sm:text-sm font-semibold hover:bg-[#1a3e8c]/5 hover:border-[#1a3e8c]/30 hover:text-[#1a3e8c] transition-all group"
+                  className="flex items-center gap-3 p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-slate-700 text-xs sm:text-sm font-semibold hover:bg-blue-50/50 hover:border-brand-blue/30 hover:text-brand-blue transition-all group"
                 >
-                  <MessageCircle className="w-4 h-4 text-[#1a3e8c]" />
+                  <MessageCircle className="w-4 h-4 text-brand-blue" />
                   <span>Request Custom Consultation</span>
-                  <ArrowRight className="w-4 h-4 ml-auto text-slate-400 group-hover:text-[#1a3e8c] group-hover:translate-x-0.5 transition-all" />
+                  <ArrowRight className="w-4 h-4 ml-auto text-slate-400 group-hover:text-brand-blue group-hover:translate-x-0.5 transition-all" />
                 </Link>
               </div>
             </div>

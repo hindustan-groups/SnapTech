@@ -193,9 +193,9 @@ export default function TestimonialsSection() {
                 <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
               ))}
             </div>
-            <span className="text-xs font-bold text-slate-800">5.0 Star Rating</span>
+            <span className="text-xs font-bold text-slate-800">Verified Client Feedback</span>
             <span className="text-slate-300">•</span>
-            <span className="text-xs text-slate-500">100% Client Satisfaction</span>
+            <span className="text-xs text-slate-500">Direct Partner Reviews</span>
           </div>
         </div>
 
@@ -281,7 +281,7 @@ export default function TestimonialsSection() {
                     </div>
 
                     {/* Middle: Big Testimonial Text */}
-                    <blockquote className="text-slate-700 text-base sm:text-lg md:text-xl font-normal leading-relaxed italic mb-8">
+                    <blockquote className="text-slate-700 text-base sm:text-lg md:text-xl font-normal leading-relaxed italic mb-8 whitespace-pre-line">
                       &ldquo;{currentTestimonial.text}&rdquo;
                     </blockquote>
 

@@ -6,11 +6,13 @@ import { useState, useEffect, useRef } from 'react'
  * @param {number} duration — animation duration in ms (default 1800)
  */
 export function useCountUp(target, duration = 1800) {
+  const isNumber = typeof target === 'number' && !isNaN(target)
   const [count, setCount] = useState(0)
   const ref = useRef(null)
   const started = useRef(false)
 
   useEffect(() => {
+    if (!isNumber) return
     const el = ref.current
     if (!el) return
 
@@ -37,7 +39,7 @@ export function useCountUp(target, duration = 1800) {
 
     observer.observe(el)
     return () => observer.disconnect()
-  }, [target, duration])
+  }, [target, duration, isNumber])
 
-  return { count, ref }
+  return { count: isNumber ? count : target, ref }
 }

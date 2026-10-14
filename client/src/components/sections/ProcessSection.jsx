@@ -10,9 +10,9 @@ const STEPS = [
     title: 'Discovery & Blueprinting',
     desc: 'We map your business workflows, user journeys, and infrastructure requirements into an executable technical specification.',
     detail: 'Scope & Architecture',
-    color: 'text-[#1a3e8c] bg-[#1a3e8c]/10',
-    glow: 'rgba(26,62,140,0.2)',
-    border: '#1a3e8c',
+    color: 'text-brand-blue bg-blue-50',
+    glow: 'rgba(27,110,243,0.2)',
+    border: '#1B6EF3',
   },
   {
     step: '02',
@@ -20,9 +20,9 @@ const STEPS = [
     title: 'Strategic UI/UX Design',
     desc: 'Our design team crafts responsive, high-converting prototypes in Figma, validating every micro-interaction before a single line of code.',
     detail: 'Interactive Prototype',
-    color: 'text-[#e31e24] bg-[#e31e24]/10',
-    glow: 'rgba(227,30,36,0.2)',
-    border: '#e31e24',
+    color: 'text-brand-navy bg-slate-100',
+    glow: 'rgba(13,27,75,0.2)',
+    border: '#0D1B4B',
   },
   {
     step: '03',
@@ -30,9 +30,9 @@ const STEPS = [
     title: 'Agile Full-Stack Build',
     desc: 'Engineering with modern tech stacks, automated unit testing, and continuous deployment so you track progress on a live staging URL.',
     detail: 'Agile 2-Week Sprints',
-    color: 'text-[#1a3e8c] bg-[#1a3e8c]/10',
-    glow: 'rgba(26,62,140,0.2)',
-    border: '#1a3e8c',
+    color: 'text-blue-600 bg-blue-50',
+    glow: 'rgba(37,99,235,0.2)',
+    border: '#2563eb',
   },
   {
     step: '04',
@@ -53,7 +53,7 @@ function ProcessStep({ step, index }) {
   return (
     <div className="reveal relative flex flex-col items-center text-center group" style={{ transitionDelay: `${index * 100}ms` }}>
       {/* Ghost step number */}
-      <span className="absolute -top-7 left-1/2 -translate-x-1/2 font-heading text-7xl font-black text-slate-100 group-hover:text-[#1a3e8c]/10 transition-colors pointer-events-none select-none leading-none">
+      <span className="absolute -top-7 left-1/2 -translate-x-1/2 font-heading text-7xl font-black text-slate-100 group-hover:text-brand-blue/10 transition-colors pointer-events-none select-none leading-none">
         {step.step}
       </span>
 
@@ -83,7 +83,7 @@ function ProcessStep({ step, index }) {
         >
           {step.detail}
         </div>
-        <h3 className="font-heading text-base font-bold text-slate-800 mb-2 group-hover:text-[#1a3e8c] transition-colors">
+        <h3 className="font-heading text-base font-bold text-slate-800 mb-2 group-hover:text-brand-blue transition-colors">
           {step.title}
         </h3>
         <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">{step.desc}</p>
@@ -92,8 +92,8 @@ function ProcessStep({ step, index }) {
       {/* Connector arrow (not on last step) */}
       {!isLast && (
         <div className="hidden lg:flex absolute top-9 left-[calc(50%+48px)] right-[calc(-50%+48px)] items-center justify-center z-0 pointer-events-none">
-          <div className="flex-1 h-px bg-linear-to-r from-[#1a3e8c]/30 via-[#e31e24]/30 to-slate-200" />
-          <ArrowRight className="w-4 h-4 text-[#1a3e8c] shrink-0 -ml-1" />
+          <div className="flex-1 h-px bg-linear-to-r from-brand-blue/30 via-indigo-500/30 to-slate-200" />
+          <ArrowRight className="w-4 h-4 text-brand-blue shrink-0 -ml-1" />
         </div>
       )}
     </div>
@@ -148,19 +148,21 @@ export default function ProcessSection() {
       aria-labelledby="process-heading"
     >
       {/* Subtle background decorations */}
-      <div className="absolute top-1/2 right-1/4 w-96 h-96 bg-[#1a3e8c]/5 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-[#e31e24]/5 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-1/2 right-1/4 w-96 h-96 bg-blue-100/30 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-indigo-100/20 rounded-full blur-[140px] pointer-events-none" />
 
       <Container className="relative z-10">
         {/* Heading */}
         <div className="reveal text-center mb-10 sm:mb-20 max-w-2xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1a3e8c]/10 border border-[#1a3e8c]/20 text-[#1a3e8c] text-xs font-bold uppercase tracking-widest mb-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50/80 border border-blue-200 text-brand-blue text-xs font-bold uppercase tracking-widest mb-4 shadow-2xs">
             <Workflow className="w-3.5 h-3.5" />
             <span>Execution Methodology</span>
           </div>
-          <h2 id="process-heading" className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-800 tracking-tight mb-4">
+          <h2 id="process-heading" className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0D1B4B] tracking-tight mb-4">
             How We{' '}
-            <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(135deg, #1a3e8c, #e31e24)' }}>Build & Deliver</span>
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-brand-blue via-blue-600 to-indigo-700">
+              Build &amp; Deliver
+            </span>
           </h2>
           <p className="text-slate-500 text-sm sm:text-base leading-relaxed">
             A transparent, sprint-driven engineering roadmap from initial architecture blueprinting to a resilient, high-converting digital product.
@@ -270,15 +272,12 @@ export default function ProcessSection() {
 
         {/* Bottom CTA */}
         <div className="reveal text-center mt-16">
-          <p className="text-slate-500 text-sm mb-4 font-mono">Ready to map your project roadmap?</p>
+          <p className="text-slate-500 text-sm mb-4 font-mono">Ready to map your technical roadmap?</p>
           <Link
             to="/contact"
-            className="inline-flex items-center gap-2 text-white font-bold px-7 py-3.5 rounded-xl shadow-lg transition-all duration-200 hover:-translate-y-0.5 group"
-            style={{ background: 'linear-gradient(135deg, #1a3e8c, #1a3e8c)' }}
-            onMouseEnter={(e) => { e.currentTarget.style.background = 'linear-gradient(135deg, #e31e24, #1a3e8c)' }}
-            onMouseLeave={(e) => { e.currentTarget.style.background = 'linear-gradient(135deg, #1a3e8c, #1a3e8c)' }}
+            className="inline-flex items-center gap-2 text-white font-bold px-7 py-3.5 rounded-xl shadow-lg transition-all duration-200 hover:-translate-y-0.5 bg-brand-blue hover:bg-brand-blue-dark group cursor-pointer"
           >
-            <span>Schedule Free Tech Architecture Call</span>
+            <span>Schedule Technical Architecture Consultation</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>

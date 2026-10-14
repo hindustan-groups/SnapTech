@@ -480,38 +480,10 @@ let mockFaqs = [
 let mockMilestones = [
   {
     id: 'ms-1',
-    year: '2019',
-    title: 'Hindustan Projects Group Foundation',
-    desc: 'Hindustan Projects Group established in Rajasthan with a strategic focus on regional infrastructure, commercial ventures, and industrial development.',
+    year: 'July 2026',
+    title: 'Founding of SnapTech Digital',
+    desc: 'Established in July 2026 as the dedicated technology and digital transformation division of Hindustan Projects in Bhilwara, Rajasthan.',
     order: 1,
-  },
-  {
-    id: 'ms-2',
-    year: '2021',
-    title: 'Enterprise Operations & Digital Modernization',
-    desc: 'Implemented internal workflow automation, digital inventory controls, and operational technology across group ventures.',
-    order: 2,
-  },
-  {
-    id: 'ms-3',
-    year: '2023',
-    title: 'Software Engineering Cell Incubation',
-    desc: 'Formed a specialized software cell engineering custom ERPs, cloud platforms, and data pipelines for regional manufacturing and textile leaders.',
-    order: 3,
-  },
-  {
-    id: 'ms-4',
-    year: '2025',
-    title: 'Official Launch of SnapTech Digital',
-    desc: 'Launched SnapTech Digital (snaptech.digital) as the dedicated IT & software engineering division of Hindustan Projects Group.',
-    order: 4,
-  },
-  {
-    id: 'ms-5',
-    year: '2026',
-    title: 'Pan-India Modern Cloud Architecture',
-    desc: 'Scaling cloud microservices, modern React/Node web platforms, cross-platform mobile apps, and automated workflows nationwide.',
-    order: 5,
   },
 ]
 

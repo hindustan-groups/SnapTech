@@ -22,6 +22,7 @@ import { useFaqs, useSiteSettings } from '@/hooks/useContent'
 import { api } from '@/utils/api'
 import { faqSchema, breadcrumbSchema } from '@/components/ui/SEO'
 import { fadeUp, staggerContainer } from '@/utils/motion'
+import { trackEvent } from '@/utils/analytics'
 import contactArchitectHero from '@/assets/contact_architect_hero.jpg'
 
 // ── Zod validation schema ─────────────────────────────────────
@@ -244,6 +245,11 @@ export default function ContactPage() {
           _hp: data._hp || '', // honeypot
         })
 
+        trackEvent('generate_lead', {
+          form: 'contact_page',
+          service: data.serviceInterested || 'general',
+        })
+
         localStorage.setItem('last_submit_lead', Date.now().toString())
         setLocalLockout(true)
         setSubmitState('success')
@@ -312,10 +318,10 @@ export default function ContactPage() {
               <div className="grid grid-cols-2 gap-4 pt-2 max-w-md">
                 <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs hover:border-brand-blue/40 transition-colors duration-300">
                   <p className="text-2xl font-black text-brand-blue font-mono">
-                    {cfg.stat_projects || '150+'}
+                    100%
                   </p>
                   <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-1">
-                    Deployments Complete
+                    Code &amp; IP Handover
                   </p>
                 </div>
                 <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs hover:border-emerald-500/40 transition-colors duration-300">

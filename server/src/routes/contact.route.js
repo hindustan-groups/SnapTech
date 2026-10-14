@@ -18,8 +18,7 @@ const contactValidation = [
     .notEmpty()
     .withMessage('Name is required.')
     .isLength({ min: 2, max: 100 })
-    .withMessage('Name must be between 2 and 100 characters.')
-    .escape(),
+    .withMessage('Name must be between 2 and 100 characters.'),
 
   body('email')
     .trim()
@@ -40,15 +39,28 @@ const contactValidation = [
     .notEmpty()
     .withMessage('Message is required.')
     .isLength({ min: 10, max: 2000 })
-    .withMessage('Message must be between 10 and 2000 characters.')
-    .escape(),
+    .withMessage('Message must be between 10 and 2000 characters.'),
 
   body('serviceInterested')
     .optional({ checkFalsy: true })
     .trim()
     .isLength({ max: 100 })
-    .withMessage('Service name too long.')
-    .escape(),
+    .withMessage('Service name too long.'),
+
+  body('estimatedBudget')
+    .optional({ checkFalsy: true })
+    .trim()
+    .isLength({ max: 100 })
+    .withMessage('Estimated budget too long.'),
+
+  // Optional attribution & analytics tracking parameters
+  body('utmSource').optional({ checkFalsy: true }).trim().isLength({ max: 150 }),
+  body('utmMedium').optional({ checkFalsy: true }).trim().isLength({ max: 150 }),
+  body('utmCampaign').optional({ checkFalsy: true }).trim().isLength({ max: 150 }),
+  body('utmTerm').optional({ checkFalsy: true }).trim().isLength({ max: 150 }),
+  body('utmContent').optional({ checkFalsy: true }).trim().isLength({ max: 150 }),
+  body('referrer').optional({ checkFalsy: true }).trim().isLength({ max: 500 }),
+  body('landingPage').optional({ checkFalsy: true }).trim().isLength({ max: 500 }),
 
   body('recaptchaToken').notEmpty().withMessage('reCAPTCHA token is required.'),
 

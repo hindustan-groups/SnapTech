@@ -53,9 +53,6 @@ const ENTERPRISE_DIFFERENTIATORS = [
 export default function WhyUsSection() {
   const { data: settingsData } = useSiteSettings()
   const cfg = settingsData?.data || {}
-  const statProjects = cfg.stat_projects || '50'
-  const statClients = cfg.stat_clients || '40'
-  const statExperience = cfg.stat_experience || '5'
 
   const mobileScrollRef = useRef(null)
   const [activeMobileIdx, setActiveMobileIdx] = useState(0)
@@ -261,26 +258,26 @@ export default function WhyUsSection() {
                     </span>
                   </div>
                   <span className="text-[10px] font-mono text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full font-bold">
-                    AUDITED 2026
+                    STANDARDS 2026
                   </span>
                 </div>
 
                 <div className="space-y-3.5">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-500 font-medium">Total Enterprise Deployments</span>
-                    <span className="font-mono font-bold text-slate-900 text-sm">{statProjects}+</span>
+                    <span className="text-slate-500 font-medium">Company Inception</span>
+                    <span className="font-mono font-bold text-slate-900 text-sm">July 2026</span>
                   </div>
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-500 font-medium">Active Corporate Retainers</span>
-                    <span className="font-mono font-bold text-slate-900 text-sm">{statClients}+</span>
+                    <span className="text-slate-500 font-medium">Parent Enterprise</span>
+                    <span className="font-mono font-bold text-slate-900 text-sm">Hindustan Projects</span>
                   </div>
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-500 font-medium">Group Engineering Foundation</span>
-                    <span className="font-mono font-bold text-slate-900 text-sm">{statExperience}+ Years</span>
+                    <span className="text-slate-500 font-medium">Source Code Ownership</span>
+                    <span className="font-mono font-bold text-slate-900 text-sm">100% Handover</span>
                   </div>
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-500 font-medium">Production Cloud Uptime</span>
-                    <span className="font-mono font-bold text-emerald-600 text-sm">99.9%</span>
+                    <span className="text-slate-500 font-medium">Target Cloud SLA</span>
+                    <span className="font-mono font-bold text-emerald-600 text-sm">{cfg.stat_sla || '99.9%'}</span>
                   </div>
                   <div className="flex items-center justify-between text-xs">
                     <span className="text-slate-500 font-medium">Code Quality &amp; Security</span>
@@ -291,7 +288,7 @@ export default function WhyUsSection() {
                 <div className="border-t border-slate-200 pt-4">
                   <div className="flex items-center gap-2.5 text-xs text-slate-600">
                     <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                    <span>Backed by Hindustan Projects Group with full IP &amp; code handover</span>
+                    <span>Backed by {cfg.parent_company_name || 'Hindustan Projects Group'} with full IP &amp; code handover</span>
                   </div>
                 </div>
               </div>

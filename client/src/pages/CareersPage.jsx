@@ -145,23 +145,23 @@ export default function CareersPage() {
           {/* Quick Metrics Bar */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto pt-4">
             <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs">
-              <div className="text-2xl sm:text-3xl font-extrabold text-brand-blue font-mono">
-                {cfg.stat_projects || '150+'}
+              <div className="text-xl sm:text-2xl font-extrabold text-brand-blue font-mono">
+                July 2026
               </div>
               <div className="text-xs text-slate-500 mt-1 uppercase tracking-wider font-semibold">
-                Systems Deployed
+                Founded Inception
               </div>
             </div>
             <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs">
-              <div className="text-2xl sm:text-3xl font-extrabold text-emerald-600 font-mono">
-                {cfg.stat_experience || '12+'}
+              <div className="text-xl sm:text-2xl font-extrabold text-emerald-600 font-mono">
+                100%
               </div>
               <div className="text-xs text-slate-500 mt-1 uppercase tracking-wider font-semibold">
-                Years Legacy
+                Code Ownership
               </div>
             </div>
             <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs">
-              <div className="text-2xl sm:text-3xl font-extrabold text-purple-600 font-mono">
+              <div className="text-xl sm:text-2xl font-extrabold text-purple-600 font-mono">
                 Hybrid
               </div>
               <div className="text-xs text-slate-500 mt-1 uppercase tracking-wider font-semibold">
@@ -169,11 +169,11 @@ export default function CareersPage() {
               </div>
             </div>
             <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs">
-              <div className="text-2xl sm:text-3xl font-extrabold text-amber-600 font-mono">
-                Top 5%
+              <div className="text-xl sm:text-2xl font-extrabold text-amber-600 font-mono">
+                High
               </div>
               <div className="text-xs text-slate-500 mt-1 uppercase tracking-wider font-semibold">
-                Talent Density
+                Engineering Bar
               </div>
             </div>
           </div>

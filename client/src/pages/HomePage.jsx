@@ -17,6 +17,7 @@ import { Container, SEO } from '@/components/ui'
 import { organizationSchema, localBusinessSchema } from '@/components/ui/SEO'
 import { useSiteSettings } from '@/hooks/useContent'
 import { api } from '@/utils/api'
+import { trackEvent } from '@/utils/analytics'
 
 /**
  * HomePage — assembles all homepage sections.
@@ -31,8 +32,8 @@ export default function HomePage() {
   const [submitting, setSubmitting] = useState(false)
   const { data: settingsData } = useSiteSettings()
   const cfg = settingsData?.data || {}
-  const phone = cfg.phone || '+91 8209604849'
-  const contactEmail = cfg.email || 'info@snaptech.digital'
+  const phone = cfg.phone || ''
+  const contactEmail = cfg.email || ''
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -56,6 +57,10 @@ export default function HomePage() {
         message: `Quick quote request from homepage for: ${service}${clientPhone ? ` (Phone/WhatsApp: ${clientPhone})` : ''}`,
         recaptchaToken,
         _hp: '',
+      })
+      trackEvent('generate_lead', {
+        form: 'homepage_quote',
+        service,
       })
       setSubmitted(true)
     } catch {
@@ -96,51 +101,54 @@ export default function HomePage() {
       {/* Contact CTA Banner */}
       <section
         id="contact"
-        className="py-24 relative overflow-hidden bg-slate-50 border-t border-slate-100"
+        className="py-20 sm:py-24 relative overflow-hidden bg-slate-50 border-t border-slate-200/80"
+        aria-labelledby="homepage-contact-heading"
       >
         {/* Background ambient lighting */}
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#1a3e8c]/5 blur-[140px] rounded-full pointer-events-none" />
-        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-[#e31e24]/5 blur-[140px] rounded-full pointer-events-none" />
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-100/40 blur-[140px] rounded-full pointer-events-none" />
+        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-indigo-100/30 blur-[140px] rounded-full pointer-events-none" />
 
         <Container className="relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left: text */}
             <div className="lg:col-span-6 space-y-6">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1a3e8c]/10 border border-[#1a3e8c]/20 text-[#1a3e8c] text-xs font-bold uppercase tracking-widest w-fit">
-                <span className="w-2 h-2 rounded-full bg-[#1a3e8c] animate-pulse" />
-                Start Your Project
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-brand-blue text-xs font-bold uppercase tracking-wider w-fit shadow-2xs">
+                <span className="w-2 h-2 rounded-full bg-brand-blue animate-pulse" />
+                {cfg.contact_badge || (cfg.address ? `Consultation Desk • ${cfg.address.split(',')[0]} Tech Center` : 'Consultation Desk • Solution Architecture')}
               </div>
 
-              <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-800 leading-tight">
-                Ready to Scale Your Business{' '}
-                <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(135deg, #1a3e8c, #e31e24)' }}>Digitally?</span>
+              <h2 id="homepage-contact-heading" className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0D1B4B] leading-tight">
+                Ready to Build Your{' '}
+                <span className="text-transparent bg-clip-text bg-linear-to-r from-brand-blue via-blue-600 to-indigo-700">
+                  Mission-Critical Software?
+                </span>
               </h2>
 
-              <p className="text-slate-500 text-sm sm:text-base leading-relaxed max-w-lg">
-                Direct technical consultation with our engineering leads. We analyze your requirements and blueprint the optimal high-availability solution — zero ambiguity, zero technical debt.
+              <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-lg font-normal">
+                Consult directly with our senior software architects. We analyze your requirements, formulate architectural blueprints, and deliver high-availability platforms with 100% IP ownership under strict mutual NDA.
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 max-w-lg">
-                <div className="flex items-center gap-2.5 p-3 rounded-xl bg-white border border-slate-200 text-xs text-slate-600">
-                  <span className="text-[#1a3e8c] font-black">✓</span> 2-Hour Response SLA Guarantee
+                <div className="flex items-center gap-2.5 p-3 rounded-xl bg-white border border-slate-200 text-xs text-slate-700 font-medium shadow-2xs">
+                  <span className="text-brand-blue font-black">✓</span> Rapid 2-Hour Response SLA
                 </div>
-                <div className="flex items-center gap-2.5 p-3 rounded-xl bg-white border border-slate-200 text-xs text-slate-600">
-                  <span className="text-[#1a3e8c] font-black">✓</span> 100% IP &amp; Code Ownership
+                <div className="flex items-center gap-2.5 p-3 rounded-xl bg-white border border-slate-200 text-xs text-slate-700 font-medium shadow-2xs">
+                  <span className="text-brand-blue font-black">✓</span> 100% Code &amp; IP Ownership
                 </div>
-                <div className="flex items-center gap-2.5 p-3 rounded-xl bg-white border border-slate-200 text-xs text-slate-600">
-                  <span className="text-[#1a3e8c] font-black">✓</span> Milestone Sprint Deliveries
+                <div className="flex items-center gap-2.5 p-3 rounded-xl bg-white border border-slate-200 text-xs text-slate-700 font-medium shadow-2xs">
+                  <span className="text-brand-blue font-black">✓</span> Bi-Weekly Milestone Sprints
                 </div>
-                <div className="flex items-center gap-2.5 p-3 rounded-xl bg-white border border-slate-200 text-xs text-slate-600">
-                  <span className="text-[#1a3e8c] font-black">✓</span> Transparent Pricing Matrix
+                <div className="flex items-center gap-2.5 p-3 rounded-xl bg-white border border-slate-200 text-xs text-slate-700 font-medium shadow-2xs">
+                  <span className="text-brand-blue font-black">✓</span> Strict Mutual NDA Protection
                 </div>
               </div>
             </div>
 
             {/* Right: Contact Card */}
             <div className="lg:col-span-6 max-w-md lg:ml-auto w-full">
-              <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden group hover:border-[#1a3e8c]/30 transition-all">
+              <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden group hover:border-brand-blue/40 transition-all">
                 {/* Top brand gradient line */}
-                <div className="absolute top-0 left-0 right-0 h-0.75" style={{ background: 'linear-gradient(90deg, #1a3e8c, #e31e24)' }} />
+                <div className="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-brand-blue via-blue-600 to-indigo-600" />
 
                 <div className="space-y-4">
                   {submitted ? (
@@ -149,7 +157,7 @@ export default function HomePage() {
                         ✓
                       </div>
                       <h3 className="font-heading text-lg font-bold text-slate-800">
-                        Inquiry Sent!
+                        Inquiry Received!
                       </h3>
                       <p className="text-xs text-slate-500 leading-relaxed">
                         Thank you. Our senior technical advisors will review your project brief and connect with you within 2 hours.
@@ -168,7 +176,7 @@ export default function HomePage() {
                       </p>
                       <button
                         onClick={() => setSubmitError(false)}
-                        className="text-xs text-brand-cyan hover:underline cursor-pointer"
+                        className="text-xs text-brand-blue hover:underline cursor-pointer font-bold"
                       >
                         Retry Submission
                       </button>
@@ -176,13 +184,13 @@ export default function HomePage() {
                   ) : (
                     <form onSubmit={handleSubmit} className="space-y-3.5">
                       <div className="text-center pb-1">
-                        <h3 className="font-heading text-sm font-bold uppercase tracking-wider text-slate-800">
-                          Request Free Consultation
+                        <h3 className="font-heading text-sm font-bold uppercase tracking-wider text-slate-900">
+                          Request Technical Consultation
                         </h3>
-                        <p className="text-[11px] text-slate-500">Zero-cost preliminary architecture assessment</p>
+                        <p className="text-[11px] text-slate-500">Zero-cost preliminary architecture blueprint</p>
                       </div>
                       <div>
-                        <label htmlFor="quote-name" className="block text-[10px] font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                        <label htmlFor="quote-name" className="block text-[10px] font-bold uppercase tracking-wider text-slate-700 mb-1.5">
                           Full Name
                         </label>
                         <input
@@ -194,12 +202,12 @@ export default function HomePage() {
                           value={name}
                           onChange={(e) => setName(e.target.value)}
                           placeholder="e.g. Aditya Sharma"
-                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#1a3e8c]/60 focus:ring-1 focus:ring-[#1a3e8c]/20 transition-all"
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue/20 transition-all"
                         />
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
-                          <label htmlFor="quote-email" className="block text-[10px] font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                          <label htmlFor="quote-email" className="block text-[10px] font-bold uppercase tracking-wider text-slate-700 mb-1.5">
                             Work Email
                           </label>
                           <input
@@ -211,11 +219,11 @@ export default function HomePage() {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="aditya@textiles.com"
-                            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#1a3e8c]/60 focus:ring-1 focus:ring-[#1a3e8c]/20 transition-all"
+                            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue/20 transition-all"
                           />
                         </div>
                         <div>
-                          <label htmlFor="quote-phone" className="block text-[10px] font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                          <label htmlFor="quote-phone" className="block text-[10px] font-bold uppercase tracking-wider text-slate-700 mb-1.5">
                             Phone / WhatsApp
                           </label>
                           <input
@@ -226,12 +234,12 @@ export default function HomePage() {
                             value={clientPhone}
                             onChange={(e) => setClientPhone(e.target.value)}
                             placeholder="+91 98765 43210"
-                            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#1a3e8c]/60 focus:ring-1 focus:ring-[#1a3e8c]/20 transition-all"
+                            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue/20 transition-all"
                           />
                         </div>
                       </div>
                       <div>
-                        <label htmlFor="quote-service" className="block text-[10px] font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                        <label htmlFor="quote-service" className="block text-[10px] font-bold uppercase tracking-wider text-slate-700 mb-1.5">
                           Target Capability
                         </label>
                         <select
@@ -239,7 +247,7 @@ export default function HomePage() {
                           name="service"
                           value={service}
                           onChange={(e) => setService(e.target.value)}
-                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 focus:outline-none focus:border-[#1a3e8c]/60 transition-all cursor-pointer"
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 focus:outline-none focus:border-brand-blue transition-all cursor-pointer"
                         >
                           <option value="Web Development">Full-Stack Web &amp; Portal Development</option>
                           <option value="App Development">Mobile App Development (iOS &amp; Android)</option>
@@ -250,8 +258,7 @@ export default function HomePage() {
                       </div>
                       <button
                         type="submit"
-                        className="w-full mt-2 text-white font-bold py-3 rounded-xl text-xs transition-all shadow-lg active:scale-[0.98] cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2"
-                        style={{ background: submitting ? '#94a3b8' : 'linear-gradient(135deg, #1a3e8c, #e31e24)' }}
+                        className="w-full mt-2 text-white font-bold py-3.5 rounded-xl text-xs sm:text-sm bg-brand-blue hover:bg-brand-blue-dark transition-all shadow-md hover:shadow-lg hover:shadow-brand-blue/20 active:scale-[0.99] cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2"
                         disabled={submitting}
                       >
                         {submitting ? 'Submitting…' : 'Submit Consultation Request'}
@@ -261,28 +268,34 @@ export default function HomePage() {
 
                   <div className="border-t border-slate-100 my-4" />
 
-                  <div className="space-y-2.5">
-                    <a
-                      href={`tel:${phone.replace(/\s+/g, '')}`}
-                      className="text-slate-600 hover:text-[#1a3e8c] text-xs sm:text-sm flex items-center gap-3 p-2 rounded-xl hover:bg-[#1a3e8c]/5 transition-colors group"
-                    >
-                      <div className="w-8 h-8 rounded-xl bg-[#1a3e8c]/10 border border-[#1a3e8c]/20 flex items-center justify-center shrink-0 group-hover:bg-[#1a3e8c] group-hover:border-[#1a3e8c] transition-all duration-200">
-                        <Phone className="w-3.5 h-3.5 text-[#1a3e8c] group-hover:text-white transition-colors" />
-                      </div>
-                      <span className="font-semibold">{phone}</span>
-                      <span className="ml-auto text-[10px] text-slate-500 uppercase tracking-wider font-medium">Direct Line</span>
-                    </a>
-                    <a
-                      href={`mailto:${contactEmail}`}
-                      className="text-slate-600 hover:text-[#e31e24] text-xs sm:text-sm flex items-center gap-3 p-2 rounded-xl hover:bg-[#e31e24]/5 transition-colors group"
-                    >
-                      <div className="w-8 h-8 rounded-xl bg-[#e31e24]/10 border border-[#e31e24]/20 flex items-center justify-center shrink-0 group-hover:bg-[#e31e24] group-hover:border-[#e31e24] transition-all duration-200">
-                        <Mail className="w-3.5 h-3.5 text-[#e31e24] group-hover:text-white transition-colors" />
-                      </div>
-                      <span className="font-semibold">{contactEmail}</span>
-                      <span className="ml-auto text-[10px] text-slate-500 uppercase tracking-wider font-medium">Email</span>
-                    </a>
-                  </div>
+                  {(phone || contactEmail) && (
+                    <div className="space-y-2.5">
+                      {phone && (
+                        <a
+                          href={`tel:${phone.replace(/\s+/g, '')}`}
+                          className="text-slate-600 hover:text-brand-blue text-xs sm:text-sm flex items-center gap-3 p-2 rounded-xl hover:bg-blue-50/50 transition-colors group"
+                        >
+                          <div className="w-8 h-8 rounded-xl bg-blue-50 border border-blue-200/80 flex items-center justify-center shrink-0 group-hover:bg-brand-blue group-hover:border-brand-blue transition-all duration-200">
+                            <Phone className="w-3.5 h-3.5 text-brand-blue group-hover:text-white transition-colors" />
+                          </div>
+                          <span className="font-semibold text-slate-800 group-hover:text-brand-blue transition-colors">{phone}</span>
+                          <span className="ml-auto text-[10px] text-slate-500 uppercase tracking-wider font-medium">Direct Line</span>
+                        </a>
+                      )}
+                      {contactEmail && (
+                        <a
+                          href={`mailto:${contactEmail}`}
+                          className="text-slate-600 hover:text-brand-blue text-xs sm:text-sm flex items-center gap-3 p-2 rounded-xl hover:bg-blue-50/50 transition-colors group"
+                        >
+                          <div className="w-8 h-8 rounded-xl bg-blue-50 border border-blue-200/80 flex items-center justify-center shrink-0 group-hover:bg-brand-blue group-hover:border-brand-blue transition-all duration-200">
+                            <Mail className="w-3.5 h-3.5 text-brand-blue group-hover:text-white transition-colors" />
+                          </div>
+                          <span className="font-semibold text-slate-800 group-hover:text-brand-blue transition-colors">{contactEmail}</span>
+                          <span className="ml-auto text-[10px] text-slate-500 uppercase tracking-wider font-medium">Email Desk</span>
+                        </a>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

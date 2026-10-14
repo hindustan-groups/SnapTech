@@ -81,12 +81,27 @@ async function request(path, options = {}) {
 
 export const api = {
   get: (path, options = {}) => request(path, { method: 'GET', ...options }),
-  post: (path, body, options = {}) =>
-    request(path, {
+  post: (path, body, options = {}) => {
+    let finalBody = body
+    if (path === '/contact' && body && typeof body === 'object' && !(body instanceof FormData)) {
+      try {
+        if (typeof window !== 'undefined' && window.sessionStorage) {
+          const rawAttr = window.sessionStorage.getItem('snaptech_attribution')
+          if (rawAttr) {
+            const attr = JSON.parse(rawAttr)
+            finalBody = { ...attr, ...body }
+          }
+        }
+      } catch {
+        // Fallback safely if storage parsing fails
+      }
+    }
+    return request(path, {
       method: 'POST',
-      body: body instanceof FormData ? body : JSON.stringify(body),
+      body: finalBody instanceof FormData ? finalBody : JSON.stringify(finalBody),
       ...options,
-    }),
+    })
+  },
   put: (path, body, options = {}) =>
     request(path, {
       method: 'PUT',
