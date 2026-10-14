@@ -363,12 +363,6 @@ export default function HeroSection() {
                       Cloud SLA {cfg.stat_sla || '99.9%'}
                     </span>
                   </div>
-
-                  {/* Floating Inception chip */}
-                  <div className="absolute top-1/3 -right-3 sm:-right-5 bg-brand-navy/95 backdrop-blur-md rounded-xl px-3 py-2 shadow-lg border border-brand-blue/30 flex items-center gap-2 animate-float" style={{ animationDelay: '1s' }}>
-                    <span className="text-sm font-black text-white font-mono">July 2026</span>
-                    <span className="text-[10px] text-brand-blue-light font-semibold leading-tight">Founded in<br/>Rajasthan</span>
-                  </div>
                 </div>
               </div>
             </div>
