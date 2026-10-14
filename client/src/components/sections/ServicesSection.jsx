@@ -115,9 +115,61 @@ function useReveal(selector = '.reveal') {
   return containerRef
 }
 
+/* ── Fallback Services (safety net if DB is connecting) ───────── */
+const FALLBACK_SERVICES = [
+  {
+    id: '1',
+    title: 'Custom Web Development',
+    slug: 'web-development',
+    icon: 'Globe',
+    tag: 'Most Popular',
+    shortDescription: 'High-performance, ultra-responsive web applications engineered with React, Next.js, Node.js, and PostgreSQL for maximum conversion speed.',
+  },
+  {
+    id: '2',
+    title: 'Digital Marketing & SEO',
+    slug: 'digital-marketing-seo',
+    icon: 'Megaphone',
+    tag: 'High ROI',
+    shortDescription: 'Revenue-focused digital growth engines spanning search dominance, programmatic ad management, and conversion funnel optimization.',
+  },
+  {
+    id: '3',
+    title: 'IT Consulting & Strategy',
+    slug: 'it-consulting-strategy',
+    icon: 'Lightbulb',
+    tag: 'Expert Advice',
+    shortDescription: 'Strategic IT advisory from veteran architects. We modernise legacy systems, establish microservices architectures, and align tech stacks.',
+  },
+  {
+    id: '4',
+    title: 'E-Commerce Solutions',
+    slug: 'ecommerce-solutions',
+    icon: 'Monitor',
+    tag: 'Sell More',
+    shortDescription: 'Turnkey high-converting digital storefronts, custom Shopify Plus developments, headless commerce platforms, and instant payment gateway integrations.',
+  },
+  {
+    id: '5',
+    title: 'Cloud Solutions & DevOps',
+    slug: 'cloud-solutions-devops',
+    icon: 'Settings',
+    tag: 'Scalable',
+    shortDescription: 'Mission-critical cloud orchestration on AWS, GCP, and Azure. Zero-downtime automated deployment pipelines and auto-scaling clusters.',
+  },
+  {
+    id: '6',
+    title: 'Branding & UI/UX Design',
+    slug: 'branding-ui-ux-design',
+    icon: 'Layers',
+    tag: 'Stand Out',
+    shortDescription: 'Award-winning product interfaces that captivate users. We design scalable design systems, interactive prototypes, and cohesive brand identities.',
+  },
+]
+
 export default function ServicesSection() {
   const { data, isLoading } = useServices()
-  const services = Array.isArray(data?.data) ? data.data : []
+  const services = Array.isArray(data?.data) && data.data.length > 0 ? data.data : (isLoading ? [] : FALLBACK_SERVICES)
   const containerRef = useReveal()
   const mobileScrollRef = useRef(null)
   const [activeMobileIdx, setActiveMobileIdx] = useState(0)

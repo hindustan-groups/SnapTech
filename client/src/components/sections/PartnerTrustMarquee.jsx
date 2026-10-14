@@ -8,36 +8,36 @@ import { Container } from '@/components/ui'
 import { usePartners } from '@/hooks/useContent'
 
 const FALLBACK_ENTERPRISE_PARTNERS = [
-  { id: '1', name: 'Rajasthan State Mines & Minerals' },
-  { id: '2', name: 'Sangam India Textiles' },
-  { id: '3', name: 'Mayur Suitings Group' },
-  { id: '4', name: 'Bhilwara Infotech Solutions' },
-  { id: '5', name: 'Shree Cement Logistics' },
-  { id: '6', name: 'Mewar Polytex Industries' },
-  { id: '7', name: 'Precision Heavy Engineering' },
-  { id: '8', name: 'Apex Digital Logistics' },
+  { id: '1', name: 'Textile Mills & Manufacturing' },
+  { id: '2', name: 'Marble & Granite Exporters' },
+  { id: '3', name: 'Retail & D2C E-Commerce' },
+  { id: '4', name: 'Logistics & Supply Chain Portals' },
+  { id: '5', name: 'Real Estate & Infrastructure Groups' },
+  { id: '6', name: 'Healthcare & Diagnostic Labs' },
+  { id: '7', name: 'Educational & Training Institutes' },
+  { id: '8', name: 'Automotive & Industrial Traders' },
 ]
 
 const TRUST_PILLARS = [
   {
     icon: Award,
-    title: 'ISO 9001:2015',
-    label: 'Certified Engineering Standards',
+    title: 'Hindustan Projects Group',
+    label: 'Enterprise Holding Backing',
   },
   {
     icon: ShieldCheck,
-    title: 'MSME Registered',
-    label: 'Govt. Recognized Tech Enterprise',
+    title: '100% Code Handover',
+    label: 'Full Git & IP Ownership',
   },
   {
     icon: Lock,
     title: '256-Bit SSL / TLS',
-    label: 'Enterprise Zero-Trust Security',
+    label: 'Enterprise Data Security',
   },
   {
     icon: Server,
-    title: '99.9% Uptime SLA',
-    label: 'High-Availability Multi-AZ Cloud',
+    title: '99.9% Cloud SLA',
+    label: 'High-Availability Hosting',
   },
 ]
 
@@ -87,7 +87,7 @@ export default function PartnerTrustMarquee() {
       <div className="text-center mb-5">
         <span className="text-[10px] font-mono uppercase tracking-widest text-slate-500 flex items-center justify-center gap-2">
           <Sparkles className="w-3 h-3 text-brand-blue" />
-          <span>Trusted by Enterprise Clients &amp; Industrial Conglomerates</span>
+          <span>Powering Digital &amp; IT Systems for Leading Regional Sectors</span>
           <Sparkles className="w-3 h-3 text-brand-blue" />
         </span>
       </div>

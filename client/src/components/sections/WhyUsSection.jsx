@@ -275,7 +275,7 @@ export default function WhyUsSection() {
                     <span className="font-mono font-bold text-slate-900 text-sm">{statClients}+</span>
                   </div>
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-500 font-medium">Engineering Legacy</span>
+                    <span className="text-slate-500 font-medium">Group Engineering Foundation</span>
                     <span className="font-mono font-bold text-slate-900 text-sm">{statExperience}+ Years</span>
                   </div>
                   <div className="flex items-center justify-between text-xs">
@@ -283,15 +283,15 @@ export default function WhyUsSection() {
                     <span className="font-mono font-bold text-emerald-600 text-sm">99.9%</span>
                   </div>
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-500 font-medium">Code Quality & Security</span>
-                    <span className="font-mono font-bold text-brand-blue text-sm">A+ SonarQube</span>
+                    <span className="text-slate-500 font-medium">Code Quality &amp; Security</span>
+                    <span className="font-mono font-bold text-brand-blue text-sm">Clean Architecture</span>
                   </div>
                 </div>
 
                 <div className="border-t border-slate-200 pt-4">
                   <div className="flex items-center gap-2.5 text-xs text-slate-600">
                     <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                    <span>ISO-aligned delivery standards with full IP handover</span>
+                    <span>Backed by Hindustan Projects Group with full IP &amp; code handover</span>
                   </div>
                 </div>
               </div>

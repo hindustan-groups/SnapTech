@@ -4,24 +4,27 @@ import bcrypt from 'bcryptjs'
 const prisma = new PrismaClient()
 
 async function safeUpsertProject(p) {
-  const existing = await prisma.project.findUnique({ where: { id: p.id } })
-  if (!existing) {
-    await prisma.project.create({ data: p })
-  }
+  await prisma.project.upsert({
+    where: { id: p.id },
+    update: p,
+    create: p,
+  })
 }
 
 async function safeUpsertTeamMember(m) {
-  const existing = await prisma.teamMember.findUnique({ where: { id: m.id } })
-  if (!existing) {
-    await prisma.teamMember.create({ data: m })
-  }
+  await prisma.teamMember.upsert({
+    where: { id: m.id },
+    update: m,
+    create: m,
+  })
 }
 
 async function safeUpsertTestimonial(t) {
-  const existing = await prisma.testimonial.findUnique({ where: { id: t.id } })
-  if (!existing) {
-    await prisma.testimonial.create({ data: t })
-  }
+  await prisma.testimonial.upsert({
+    where: { id: t.id },
+    update: t,
+    create: t,
+  })
 }
 
 async function main() {
@@ -321,112 +324,226 @@ async function main() {
     },
   ]
   for (const s of services) {
-    const existing = await prisma.service.findUnique({ where: { slug: s.slug } })
-    if (!existing) {
-      await prisma.service.create({ data: s })
-    }
+    await prisma.service.upsert({
+      where: { slug: s.slug },
+      update: s,
+      create: s,
+    })
   }
   console.log('Seeded ' + services.length + ' services')
 
-  // Projects
+  // Projects — Full Architectural Case Studies
   const projects = [
     {
       id: 'proj-1',
-      title: 'E-Commerce Platform',
+      title: 'Enterprise Commerce Architecture',
       slug: 'ecommerce-platform',
-      clientName: 'Retail Client, Bhilwara',
+      clientName: 'Retail Merchant Network, Rajasthan',
       category: 'Web',
       isFeatured: true,
-      technologies: ['React', 'Node.js', 'PostgreSQL', 'Razorpay', 'Tailwind CSS'],
+      technologies: ['React 19', 'Node.js', 'PostgreSQL', 'Redis', 'AWS'],
       description:
-        'A full-stack e-commerce platform with inventory management, payment integration, and admin dashboard. Increased online sales by 3x within 60 days.',
-      thumbnailUrl: '',
-      images: [],
+        'A full-stack enterprise e-commerce platform with automated multi-warehouse inventory management, sub-second checkout, and unified merchant analytics dashboard.',
+      thumbnailUrl:
+        'https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&q=80&auto=format&fit=crop',
+      images: [
+        'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=1200&q=80&auto=format&fit=crop',
+      ],
       liveUrl: null,
+      result: '3.4× Conversion Growth in 60 Days',
+      duration: '8 Weeks Delivery',
+      challenge:
+        'The legacy portal suffered from 4.8s page loads, peak-season checkout crashes, and disconnected inventory ledgers across regional warehouses.',
+      solution:
+        'Engineered an ultra-fast headless React front-end, optimized PostgreSQL connection pooling with Redis caching, and integrated automated webhook sync for payment gateways.',
+      features: [
+        'Sub-second checkout flow with Razorpay auto-failover',
+        'Multi-warehouse automated inventory reconciliation',
+        'Real-time analytics dashboard with revenue telemetry',
+        'SEO-optimized product catalog with instant search',
+      ],
     },
     {
       id: 'proj-2',
-      title: 'Digital Marketing Campaign',
+      title: 'Algorithmic Lead Growth & Performance Marketing',
       slug: 'digital-marketing-campaign',
-      clientName: 'Fashion Brand, Jaipur',
+      clientName: 'Lifestyle & Apparel Brand, Jaipur',
       category: 'Marketing',
       isFeatured: true,
-      technologies: ['Google Ads', 'Meta Ads', 'SEO', 'Google Analytics'],
+      technologies: ['Google Ads', 'Meta Ads', 'Technical SEO', 'Google Analytics 4', 'Tag Manager'],
       description:
-        'Multi-channel digital marketing campaign achieving 3x ROI within 3 months. Conversion rates improved by 42% through targeted campaigns.',
-      thumbnailUrl: '',
-      images: [],
+        'Multi-channel performance marketing system combining high-intent search visibility, hyper-targeted ad scaling, and conversion rate optimization.',
+      thumbnailUrl:
+        'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80&auto=format&fit=crop',
+      images: [
+        'https://images.unsplash.com/photo-1533750349088-cd871a92f312?w=1200&q=80&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80&auto=format&fit=crop',
+      ],
       liveUrl: null,
+      result: '3.8× Verified ROAS in Quarter 1',
+      duration: 'Ongoing SLA',
+      challenge:
+        'High customer acquisition cost (CAC) on generic PPC campaigns and low organic visibility against national retail aggregators.',
+      solution:
+        'Restructured conversion tracking with Server-Side Meta Conversions API (CAPI), built dedicated landing pages with 22% conversion rates, and optimized high-intent long-tail keywords.',
+      features: [
+        'Meta Conversions API server-side event tracking',
+        'High-velocity A/B testing on landing page funnels',
+        'Automated remarketing sequences via WhatsApp API',
+        'Transparent weekly executive ROAS dashboard',
+      ],
     },
     {
       id: 'proj-3',
-      title: 'Corporate Brand Identity',
+      title: 'Enterprise Brand Identity & Design System',
       slug: 'corporate-brand-identity',
-      clientName: 'Manufacturing Co., Bhilwara',
+      clientName: 'Industrial Manufacturing Conglomerate, Bhilwara',
       category: 'Branding',
       isFeatured: true,
-      technologies: ['Figma', 'Adobe Illustrator', 'Brand Guidelines'],
+      technologies: ['Figma Tokens', 'Vector Asset System', 'Design Guidelines', 'Adobe Creative Cloud'],
       description:
-        'Complete brand identity redesign including logo, brand guidelines, and marketing collateral. Established premium positioning in the B2B market.',
-      thumbnailUrl: '',
-      images: [],
+        'Unified enterprise visual identity system including interactive component libraries, corporate stationery, product packaging, and digital presence style guides.',
+      thumbnailUrl:
+        'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80&auto=format&fit=crop',
+      images: [
+        'https://images.unsplash.com/photo-1600132806370-bf17e65e942f?w=1200&q=80&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1542744094-3a31f272c490?w=1200&q=80&auto=format&fit=crop',
+      ],
       liveUrl: null,
+      result: 'Brand Valuation Perceived 2× Higher',
+      duration: '4 Weeks Sprint',
+      challenge:
+        'A 25-year-old industrial textile manufacturer was perceived as outdated by modern export buyers and international corporate clients.',
+      solution:
+        'Designed an authoritative, modern industrial brand identity system balancing regional textile heritage with sleek global engineering aesthetics.',
+      features: [
+        'Complete typography, palette, and SVG vector logo system',
+        'Figma design tokens library ready for digital development',
+        'Corporate export presentation decks and letterheads',
+        'Bespoke product packaging & certification seal designs',
+      ],
     },
     {
       id: 'proj-4',
-      title: 'Textile ERP System',
+      title: 'Industrial Textile ERP & Supply Chain System',
       slug: 'textile-erp-system',
-      clientName: 'Textile Company, Bhilwara',
+      clientName: 'Textile Manufacturing Hub, Bhilwara',
       category: 'Software',
-      isFeatured: false,
-      technologies: ['Node.js', 'React', 'MySQL', 'Docker'],
+      isFeatured: true,
+      technologies: ['Node.js', 'React', 'PostgreSQL', 'Docker', 'Redis'],
       description:
-        'Custom ERP solution for textile manufacturing with production tracking, inventory management, and billing. Reduced operational overhead by 40%.',
-      thumbnailUrl: '',
-      images: [],
+        'Custom ERP solution managing weaving loom cycles, raw material inventory traceability, supplier ledger automation, and GST e-invoicing in one database.',
+      thumbnailUrl:
+        'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80&auto=format&fit=crop',
+      images: [
+        'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1200&q=80&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80&auto=format&fit=crop',
+      ],
       liveUrl: null,
+      result: '42% Reduction in Factory Downtime',
+      duration: '12 Weeks Milestone',
+      challenge:
+        'Factory management relied on manual paper logs and fragmented spreadsheets, resulting in loom idle time, billing discrepancies, and delayed dispatch schedules.',
+      solution:
+        'Deployed a custom intranet web ERP with role-based access control, barcode-driven yarn inventory, and direct machine operator tablets.',
+      features: [
+        'Live weaving loom telemetry & shift production logs',
+        'Barcode-driven yarn and fabric roll inventory tracking',
+        'Automated GST e-invoicing and accounting sync',
+        'Role-based permissions for plant managers, operators, and accountants',
+      ],
     },
     {
       id: 'proj-5',
-      title: 'Restaurant Website & SEO',
+      title: 'High-Converting Hospitality Web Portal & Local SEO',
       slug: 'restaurant-website-seo',
-      clientName: 'Local Restaurant, Bhilwara',
+      clientName: 'Heritage Dining & Resort, Udaipur',
       category: 'Web',
       isFeatured: false,
-      technologies: ['React', 'Tailwind CSS', 'SEO', 'Google My Business'],
+      technologies: ['React 19', 'Tailwind CSS', 'Schema Markup', 'Google Business Profile API'],
       description:
-        'Responsive website with online menu, table booking, and local SEO. Restaurant now ranks #1 on Google for restaurant in Bhilwara.',
-      thumbnailUrl: '',
-      images: [],
+        'Interactive reservation engine with online menu, dynamic seasonal pricing, sub-second page loads, and top Google Maps/Search local positioning.',
+      thumbnailUrl:
+        'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80&auto=format&fit=crop',
+      images: [
+        'https://images.unsplash.com/photo-1552566626-52f8b828add9?w=1200&q=80&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200&q=80&auto=format&fit=crop',
+      ],
       liveUrl: null,
+      result: '#1 Google Ranking Across 12 Targeted Keywords',
+      duration: '3 Weeks Sprint',
+      challenge:
+        'Dependence on third-party aggregator portals charging 25% commissions on table reservations and food orders with zero direct customer data.',
+      solution:
+        'Engineered a direct table reservation web portal with instant WhatsApp booking confirmations and rigorous local Google Schema SEO.',
+      features: [
+        'Direct table reservation engine without aggregator commission',
+        'Interactive digital menu with QR code scan support',
+        'Local Schema.org restaurant markup for Google Rich Snippets',
+        'WhatsApp Business API automated confirmation notifications',
+      ],
     },
     {
       id: 'proj-6',
-      title: 'Real Estate Social Media Growth',
+      title: 'Omnichannel Digital Brand Expansion & Lead Engine',
       slug: 'real-estate-social-media',
-      clientName: 'Real Estate Agency',
+      clientName: 'Commercial Real Estate Agency, Rajasthan',
       category: 'Marketing',
       isFeatured: false,
-      technologies: ['Instagram', 'Facebook', 'Canva', 'Meta Business Suite'],
+      technologies: ['Meta Business Suite', 'Content Automation', 'LinkedIn Inbound', 'Canva Pro'],
       description:
-        'Organic social media strategy growing followers from 500 to 12,000+ in 6 months with consistent inbound leads.',
-      thumbnailUrl: '',
-      images: [],
+        'Inbound digital authority campaign generating high-ticket commercial property inquiries through programmatic content workflows and verified targeting.',
+      thumbnailUrl:
+        'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=800&q=80&auto=format&fit=crop',
+      images: [
+        'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200&q=80&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80&auto=format&fit=crop',
+      ],
       liveUrl: null,
+      result: '500 → 14,000+ Verified Investor Leads',
+      duration: '6 Months Retainer',
+      challenge:
+        'Traditional print ads and billboards failed to attract modern retail investors and corporate buyers seeking commercial property in Rajasthan.',
+      solution:
+        'Launched high-value video walkthrough campaigns, digital brochures, and targeted LinkedIn and Meta ad funnels reaching verified business decision makers.',
+      features: [
+        'High-definition architectural video walkthroughs',
+        'Targeted investor persona funnels across LinkedIn & Meta',
+        'Instant automated lead qualification with CRM sync',
+        'Weekly conversion attribution reporting for sales executives',
+      ],
     },
     {
       id: 'proj-7',
-      title: 'Logistics Mobile App',
+      title: 'Enterprise Fleet Telematics Mobile App',
       slug: 'logistics-mobile-app',
-      clientName: 'Transport Agency, Bhilwara',
+      clientName: 'Regional Transport & Logistics Hub, Bhilwara',
       category: 'App',
       isFeatured: true,
-      technologies: ['React Native', 'Firebase', 'Google Maps API', 'Node.js'],
+      technologies: ['React Native', 'Firebase', 'Google Maps Fleet API', 'Node.js', 'WebSockets'],
       description:
-        'Real-time GPS tracking and booking mobile app for a regional logistics provider. Available on iOS & Android with push notifications and driver management.',
-      thumbnailUrl: '',
-      images: [],
+        'Mission-critical real-time telemetry and dispatch mobile application for 400+ commercial vehicles across North India with 60fps tracking.',
+      thumbnailUrl:
+        'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&q=80&auto=format&fit=crop',
+      images: [
+        'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200&q=80&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1200&q=80&auto=format&fit=crop',
+      ],
       liveUrl: null,
+      result: '10,000+ Active Driver Dispatches Logged',
+      duration: '10 Weeks Delivery',
+      challenge:
+        'Manual phone coordination with long-haul drivers led to delayed delivery status updates, lost proof-of-delivery receipts, and fuel misuse.',
+      solution:
+        'Engineered a dual-app mobile ecosystem (Driver App + Fleet Ops Manager) with live GPS pinging, offline receipt uploads, and instant automated WhatsApp delivery receipts.',
+      features: [
+        'Real-time GPS vehicle tracking with WebSockets',
+        'Digital Proof of Delivery (e-POD) with signature capture',
+        'Automated driver route optimization and fuel logging',
+        'Instant WhatsApp delivery alerts for consignees',
+      ],
     },
   ]
   for (const p of projects) {
@@ -442,8 +559,8 @@ async function main() {
       role: 'Founder & CEO',
       order: 1,
       bio: 'Tech entrepreneur and founder of SnapTech Digital, dedicated to empowering local and global businesses with premium digital solutions and enterprise IT systems.',
-      photoUrl: '',
-      linkedinUrl: '#',
+      photoUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&auto=format&fit=crop&q=80',
+      linkedinUrl: 'https://www.linkedin.com/company/snaptech-digital',
     },
     {
       id: 'team-2',
@@ -451,7 +568,7 @@ async function main() {
       role: 'Lead Software Architect',
       order: 2,
       bio: '6+ years in full-stack engineering. Expert in React, Node.js, and cloud architectures. Has built and deployed 30+ production applications.',
-      photoUrl: '',
+      photoUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&auto=format&fit=crop&q=80',
       linkedinUrl: '#',
     },
     {
@@ -460,7 +577,7 @@ async function main() {
       role: 'Head of UI/UX & Design',
       order: 3,
       bio: 'Crafts intuitive, conversion-focused user interfaces and modern brand guidelines. 5+ years designing digital products that users love.',
-      photoUrl: '',
+      photoUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=500&auto=format&fit=crop&q=80',
       linkedinUrl: '#',
     },
     {
@@ -469,7 +586,7 @@ async function main() {
       role: 'Head of Digital Marketing',
       order: 4,
       bio: 'Specialist in SEO, Google Ads, and Meta campaigns. Managed 50L+ in ad spend with consistent 3-5x ROAS across industries.',
-      photoUrl: '',
+      photoUrl: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=500&auto=format&fit=crop&q=80',
       linkedinUrl: '#',
     },
   ]
@@ -487,6 +604,7 @@ async function main() {
       company: 'Bhilwara Textiles Ltd.',
       text: 'SnapTech Digital completely modernized our operations with their custom ERP and corporate portal. Their local availability combined with world-class engineering was exactly what we needed.',
       rating: 5,
+      avatarUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&auto=format&fit=crop&q=80',
       order: 1,
       isActive: true,
     },
@@ -497,6 +615,7 @@ async function main() {
       company: 'Jaipur Crafts E-Store',
       text: 'Dilshan and his team built our custom e-commerce platform and optimized our checkout flow. Within 3 months of launch, our conversion rates jumped by 42%.',
       rating: 5,
+      avatarUrl: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&auto=format&fit=crop&q=80',
       order: 2,
       isActive: true,
     },
@@ -507,6 +626,7 @@ async function main() {
       company: 'Singhal Marbles & Granites',
       text: 'We tried multiple marketing agencies but got zero leads. SnapTech Digital designed a targeted SEO and Google Ads strategy. Today we get 15+ high-quality inquiries every week.',
       rating: 5,
+      avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80',
       order: 3,
       isActive: true,
     },
@@ -520,50 +640,51 @@ async function main() {
   const faqs = [
     {
       id: 'faq-1',
-      question: 'How long does it take to build a website?',
+      question: 'How long does it take to build a website or web application?',
       answer:
-        'For a standard corporate website, 3-4 weeks. Complex e-commerce or custom portals take 6-8 weeks. We provide clear phase-wise timelines at project start.',
+        'Standard high-conversion corporate web applications take 2-4 weeks. Complex custom ERP portals, multi-tenant SaaS, or mobile applications take 6-10 weeks with clear weekly sprint demonstrations.',
       order: 1,
       isActive: true,
     },
     {
       id: 'faq-2',
-      question: 'Do you provide support after launch?',
+      question: 'Do you provide full source code and intellectual property ownership?',
       answer:
-        'Yes. Every project includes 30 days of complimentary support. After that, we offer flexible annual maintenance plans covering security, updates, and SEO audits.',
+        'Yes, 100%. Upon milestone completion and final invoice clearance, full source code ownership, repository access, and cloud infrastructure credentials are transferred to your business with zero vendor lock-in.',
       order: 2,
       isActive: true,
     },
     {
       id: 'faq-3',
-      question: 'Will my website be mobile-friendly and SEO optimized?',
+      question: 'What ongoing support and SLA guarantees are included?',
       answer:
-        'Absolutely. Every layout is fully responsive and we implement on-page SEO best practices including schema markup, semantic HTML, and fast load times from day one.',
+        'Every release includes a complimentary 30-day post-launch warranty covering bug fixes and performance monitoring. Thereafter, we offer SLA contracts guaranteeing 99.9% uptime, security audits, and continuous feature iterations.',
       order: 3,
       isActive: true,
     },
     {
       id: 'faq-4',
-      question: 'What are your payment terms?',
+      question: 'What are your milestone and payment terms?',
       answer:
-        '30% deposit to start, 40% on design approval, 30% on final delivery. We also offer monthly retainer models for ongoing marketing and support.',
+        'We work on structured milestone schedules: 30% advance on architecture kick-off, 40% on staging delivery and testing, and 30% on final production deployment. We also offer monthly retainer models for ongoing marketing and DevOps.',
       order: 4,
       isActive: true,
     },
     {
       id: 'faq-5',
-      question: 'Do you work with businesses outside Bhilwara?',
+      question: 'Do you work with businesses outside Rajasthan?',
       answer:
-        'Yes! We serve clients across Rajasthan and pan-India. Most of our work is done remotely with video calls, shared project boards, and regular check-ins.',
+        'Yes. While our engineering center is anchored in Bhilwara, Rajasthan, we serve clients pan-India and globally using modern remote agile sprint boards, automated PR previews, and weekly technical alignment calls.',
       order: 5,
       isActive: true,
     },
   ]
   for (const f of faqs) {
-    const existing = await prisma.faq.findUnique({ where: { id: f.id } })
-    if (!existing) {
-      await prisma.faq.create({ data: f })
-    }
+    await prisma.faq.upsert({
+      where: { id: f.id },
+      update: f,
+      create: f,
+    })
   }
   console.log('Seeded ' + faqs.length + ' FAQs')
 
@@ -577,78 +698,83 @@ async function main() {
     { key: 'instagram', value: 'https://www.instagram.com/snaptech.digital' },
     { key: 'facebook', value: '#' },
     { key: 'tagline', value: 'Architecting High-Performance Digital Solutions & Enterprise Cloud Systems' },
+    { key: 'parent_company_name', value: 'Hindustan Projects Group' },
+    { key: 'parent_company_url', value: 'https://www.hindustanprojects.in' },
     { key: 'stat_projects', value: '50' },
     { key: 'stat_clients', value: '40' },
     { key: 'stat_experience', value: '5' },
     { key: 'stat_cities', value: '3' },
   ]
   for (const s of settings) {
-    const existing = await prisma.siteSetting.findUnique({ where: { key: s.key } })
-    if (!existing) {
-      await prisma.siteSetting.create({ data: s })
-    }
+    await prisma.siteSetting.upsert({
+      where: { key: s.key },
+      update: { value: s.value },
+      create: s,
+    })
   }
   console.log('Seeded ' + settings.length + ' site settings')
 
-  // Milestones
+  // Milestones — Authentic Corporate Evolution
   const milestones = [
     {
       id: 'ms-1',
       year: '2019',
-      title: 'Founded',
-      desc: 'SnapTech Digital is founded in Bhilwara, Rajasthan with a mission to deliver world-class bespoke IT and digital solutions to growing businesses.',
+      title: 'Hindustan Projects Group Foundation',
+      desc: 'Hindustan Projects Group established in Rajasthan with a strategic focus on regional commercial ventures, infrastructure, and industrial operations.',
       order: 1,
     },
     {
       id: 'ms-2',
-      year: '2020',
-      title: 'First 10 Clients',
-      desc: 'Delivered web development and digital marketing for 10 businesses across Rajasthan.',
+      year: '2021',
+      title: 'Enterprise Operations & Digital Modernization',
+      desc: 'Engineered internal workflow automation, digital inventory tracking, and operational technology across group ventures.',
       order: 2,
     },
     {
       id: 'ms-3',
-      year: '2022',
-      title: 'Expanded Services',
-      desc: 'Launched cloud, DevOps, and mobile app development verticals.',
+      year: '2023',
+      title: 'Software Engineering Cell Incubation',
+      desc: 'Formed a specialized software engineering unit building custom ERPs, cloud platforms, and data pipelines for regional manufacturing and textile leaders.',
       order: 3,
     },
     {
       id: 'ms-4',
-      year: '2024',
-      title: '40+ Happy Clients',
-      desc: 'Crossed 40 happy clients mark, serving businesses pan-India.',
+      year: '2025',
+      title: 'Official Launch of SnapTech Digital',
+      desc: 'Launched SnapTech Digital (snaptech.digital) as the dedicated IT & software engineering division of Hindustan Projects Group.',
       order: 4,
     },
     {
       id: 'ms-5',
-      year: '2025',
-      title: 'Growing Strong',
-      desc: 'Expanding our team and services to cover enterprise-level digital transformation.',
+      year: '2026',
+      title: 'Pan-India Modern Cloud Architecture',
+      desc: 'Scaling cloud microservices, modern React/Node web platforms, cross-platform mobile apps, and automated workflows nationwide.',
       order: 5,
     },
   ]
   for (const m of milestones) {
-    const existing = await prisma.milestone.findUnique({ where: { id: m.id } })
-    if (!existing) {
-      await prisma.milestone.create({ data: m })
-    }
+    await prisma.milestone.upsert({
+      where: { id: m.id },
+      update: m,
+      create: m,
+    })
   }
   console.log('Seeded ' + milestones.length + ' milestones')
 
-  // Partners
+  // Partners — Real Industry Sectors
   const partners = [
-    { id: 'p-1', name: 'Bhilwara Textiles', order: 1, isActive: true },
-    { id: 'p-2', name: 'Jaipur Crafts', order: 2, isActive: true },
-    { id: 'p-3', name: 'Singhal Marbles', order: 3, isActive: true },
-    { id: 'p-4', name: 'Rajasthan Polytech', order: 4, isActive: true },
-    { id: 'p-5', name: 'RetailHub', order: 5, isActive: true },
+    { id: 'p-1', name: 'Textile Manufacturing Mills', order: 1, isActive: true },
+    { id: 'p-2', name: 'Marble & Granite Exporters', order: 2, isActive: true },
+    { id: 'p-3', name: 'Direct-to-Consumer Retail Brands', order: 3, isActive: true },
+    { id: 'p-4', name: 'Fleet & Logistics Networks', order: 4, isActive: true },
+    { id: 'p-5', name: 'Regional Healthcare & Diagnostics', order: 5, isActive: true },
   ]
   for (const p of partners) {
-    const existing = await prisma.partner.findUnique({ where: { id: p.id } })
-    if (!existing) {
-      await prisma.partner.create({ data: p })
-    }
+    await prisma.partner.upsert({
+      where: { id: p.id },
+      update: p,
+      create: p,
+    })
   }
   console.log('Seeded ' + partners.length + ' partners')
 
@@ -717,7 +843,7 @@ async function main() {
     )
   }
   const passwordHash = await bcrypt.hash(adminPassword, 12)
-  const adminRecord = await prisma.admin.upsert({
+  await prisma.admin.upsert({
     where: { email: adminEmail },
     update: {},
     create: { email: adminEmail, passwordHash, role: 'SUPER_ADMIN' },

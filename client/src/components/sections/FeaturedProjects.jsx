@@ -32,42 +32,46 @@ const CATEGORY_DEFAULT_IMAGES = {
 
 const PLACEHOLDER_FEATURED = [
   {
-    id: '1',
-    title: 'E-Commerce Platform',
+    id: 'proj-1',
+    title: 'Enterprise Commerce Architecture',
     slug: 'ecommerce-platform',
-    clientName: 'Retail Client, Bhilwara',
+    clientName: 'Retail Merchant Network, Rajasthan',
     category: 'Web',
     isFeatured: true,
-    technologies: ['React', 'Node.js', 'PostgreSQL'],
+    technologies: ['React 19', 'Node.js', 'PostgreSQL', 'Redis', 'AWS'],
     description:
-      'A full-stack e-commerce platform with inventory management, payment integration, and admin dashboard.',
+      'A full-stack enterprise e-commerce platform with automated multi-warehouse inventory management, sub-second checkout, and unified merchant analytics dashboard.',
     thumbnailUrl:
-      'https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&q=80&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&q=80&auto=format&fit=crop',
+    result: '3.4× Conversion Growth in 60 Days',
   },
   {
-    id: '2',
-    title: 'Digital Marketing Campaign',
-    slug: 'digital-marketing-campaign',
-    clientName: 'Fashion Brand, Jaipur',
-    category: 'Marketing',
+    id: 'proj-4',
+    title: 'Industrial Textile ERP & Supply Chain System',
+    slug: 'textile-erp-system',
+    clientName: 'Textile Manufacturing Hub, Bhilwara',
+    category: 'Software',
     isFeatured: true,
-    technologies: ['Google Ads', 'Meta Ads', 'SEO'],
-    description: 'Multi-channel digital marketing campaign achieving 3x ROI within 3 months.',
+    technologies: ['Node.js', 'React', 'PostgreSQL', 'Docker', 'Redis'],
+    description:
+      'Custom ERP solution managing weaving loom cycles, raw material inventory traceability, supplier ledger automation, and GST e-invoicing in one database.',
     thumbnailUrl:
-      'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&q=80&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80&auto=format&fit=crop',
+    result: '42% Reduction in Factory Downtime',
   },
   {
-    id: '3',
-    title: 'Corporate Brand Identity',
-    slug: 'corporate-brand-identity',
-    clientName: 'Manufacturing Co., Bhilwara',
-    category: 'Branding',
+    id: 'proj-7',
+    title: 'Enterprise Fleet Telematics Mobile App',
+    slug: 'logistics-mobile-app',
+    clientName: 'Regional Transport & Logistics Hub, Bhilwara',
+    category: 'App',
     isFeatured: true,
-    technologies: ['Figma', 'Illustrator'],
+    technologies: ['React Native', 'Firebase', 'Google Maps Fleet API', 'Node.js'],
     description:
-      'Complete brand identity design including logo, brand guidelines, and marketing collateral.',
+      'Mission-critical real-time telemetry and dispatch mobile application for 400+ commercial vehicles across North India with 60fps tracking.',
     thumbnailUrl:
-      'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&q=80&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&q=80&auto=format&fit=crop',
+    result: '10,000+ Active Driver Dispatches Logged',
   },
 ]
 
@@ -77,7 +81,10 @@ export default function FeaturedProjects() {
   const mobileScrollRef = useRef(null)
   const [activeMobileIdx, setActiveMobileIdx] = useState(0)
 
-  const projects = Array.isArray(data?.data) ? data.data.slice(0, 3) : []
+  const projects =
+    Array.isArray(data?.data) && data.data.length > 0
+      ? data.data.slice(0, 3)
+      : (isLoading ? [] : PLACEHOLDER_FEATURED)
 
   const handleMobileScroll = useCallback(() => {
     if (!mobileScrollRef.current) return

@@ -11,14 +11,18 @@ import { useSiteSettings } from '@/hooks/useContent'
 
 export const SITE = {
   name: 'SnapTech Digital',
-  alternateName: 'SnapTech Digital — Web & App Development Agency',
-  parentName: 'Hindustan Projects',
+  alternateName: 'SnapTech Digital — Technology & Software Division of Hindustan Projects',
+  parentName: 'Hindustan Projects Group',
   parentUrl: 'https://www.hindustanprojects.in',
   url: 'https://www.snaptech.digital',
   description:
-    'SnapTech Digital is a full-service digital agency based in Bhilwara, Rajasthan. We build enterprise websites, web apps, and mobile apps — and deliver digital marketing, SEO, and IT consulting services across India.',
+    'SnapTech Digital is the dedicated software and digital innovation division of Hindustan Projects Group, based in Bhilwara, Rajasthan. We build high-performance custom web applications, mobile apps, enterprise ERPs, and cloud architectures for growing businesses across India.',
   phone: '+91 8209604849',
   email: 'info@snaptech.digital',
+  contactEmail: 'contact@snaptech.digital',
+  supportEmail: 'support@snaptech.digital',
+  careersEmail: 'careers@snaptech.digital',
+  billingEmail: 'billing@snaptech.digital',
   address: {
     street: 'Bhilwara',
     city: 'Bhilwara',
@@ -30,12 +34,12 @@ export const SITE = {
   logo: 'https://www.snaptech.digital/snaptech-logo.png',
   ogImage: 'https://www.snaptech.digital/snaptech-social-banner.jpg',
   twitterHandle: '@snaptechdigital',
-  founded: '2019',
   keywords:
-    'SnapTech Digital, IT company Bhilwara, web development Rajasthan, mobile app development India, digital marketing, SEO services, web design agency, software company Rajasthan',
+    'SnapTech Digital, Hindustan Projects IT division, custom web development Bhilwara, mobile app development Rajasthan, enterprise ERP software India, digital marketing, full-stack software company',
   sameAs: [
     'https://www.instagram.com/snaptechdigital',
     'https://www.facebook.com/snaptechdigital',
+    'https://www.linkedin.com/company/snaptech-digital',
   ],
 }
 
@@ -73,15 +77,32 @@ export function organizationSchema(cfg = {}) {
       url: parentUrl,
     },
     description: cfg.default_seo_description || SITE.description,
-    foundingDate: SITE.founded,
-    contactPoint: {
-      '@type': 'ContactPoint',
-      telephone: phone,
-      email,
-      contactType: 'customer service',
-      availableLanguage: ['English', 'Hindi'],
-      areaServed: 'IN',
-    },
+    contactPoint: [
+      {
+        '@type': 'ContactPoint',
+        telephone: phone,
+        email: email || SITE.email,
+        contactType: 'customer service',
+        availableLanguage: ['English', 'Hindi'],
+        areaServed: 'IN',
+      },
+      {
+        '@type': 'ContactPoint',
+        telephone: phone,
+        email: SITE.contactEmail,
+        contactType: 'sales',
+        availableLanguage: ['English', 'Hindi'],
+        areaServed: 'IN',
+      },
+      {
+        '@type': 'ContactPoint',
+        telephone: phone,
+        email: SITE.supportEmail,
+        contactType: 'technical support',
+        availableLanguage: ['English', 'Hindi'],
+        areaServed: 'IN',
+      },
+    ],
     address: {
       '@type': 'PostalAddress',
       streetAddress: cfg.address || SITE.address.street,

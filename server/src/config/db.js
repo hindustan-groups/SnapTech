@@ -144,14 +144,14 @@ let mockServices = [
 let mockProjects = [
   {
     id: 'p-1',
-    title: 'E-Commerce Platform',
-    slug: 'e-commerce-platform',
-    clientName: 'Retail Client, Bhilwara',
+    title: 'Enterprise Commerce Architecture',
+    slug: 'ecommerce-platform',
+    clientName: 'Retail Merchant Network, Rajasthan',
     category: 'Web',
     isFeatured: true,
-    technologies: ['React', 'Node.js', 'PostgreSQL', 'Redis', 'AWS'],
+    technologies: ['React 19', 'Node.js', 'PostgreSQL', 'Redis', 'AWS'],
     description:
-      'A full-stack enterprise e-commerce platform with automated inventory management, sub-second checkout, and unified merchant analytics dashboard.',
+      'A full-stack enterprise e-commerce platform with automated multi-warehouse inventory management, sub-second checkout, and unified merchant analytics dashboard.',
     thumbnailUrl:
       'https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&q=80&auto=format&fit=crop',
     images: [
@@ -165,7 +165,7 @@ let mockProjects = [
     challenge: 'The legacy portal suffered from 4.8s page loads, peak-season checkout crashes, and disconnected inventory ledgers across regional warehouses.',
     solution: 'Engineered an ultra-fast headless React front-end, optimized PostgreSQL connection pooling with Redis caching, and integrated automated webhook sync for payment gateways.',
     features: [
-      'Sub-second checkout flow with Razorpay & Cashfree auto-failover',
+      'Sub-second checkout flow with Razorpay auto-failover',
       'Multi-warehouse automated inventory reconciliation',
       'Real-time analytics dashboard with revenue telemetry',
       'SEO-optimized product catalog with instant search',
@@ -175,12 +175,12 @@ let mockProjects = [
   },
   {
     id: 'p-2',
-    title: 'Digital Marketing Campaign',
+    title: 'Algorithmic Lead Growth & Performance Marketing',
     slug: 'digital-marketing-campaign',
-    clientName: 'Fashion Brand, Jaipur',
+    clientName: 'Lifestyle & Apparel Brand, Jaipur',
     category: 'Marketing',
     isFeatured: true,
-    technologies: ['Google Ads', 'Meta Ads', 'SEO', 'Data Studio', 'HubSpot'],
+    technologies: ['Google Ads', 'Meta Ads', 'Technical SEO', 'Google Analytics 4', 'Tag Manager'],
     description:
       'Multi-channel performance marketing system combining high-intent search visibility, hyper-targeted ad scaling, and conversion rate optimization.',
     thumbnailUrl:
@@ -191,7 +191,7 @@ let mockProjects = [
     ],
     liveUrl: null,
     result: '3.8× Verified ROAS in Quarter 1',
-    duration: 'Continuous SLA',
+    duration: 'Ongoing SLA',
     challenge: 'High customer acquisition cost (CAC) on generic PPC campaigns and low organic visibility against national retail aggregators.',
     solution: 'Restructured conversion tracking with Server-Side Meta Conversions API (CAPI), built dedicated landing pages with 22% conversion rates, and optimized high-intent long-tail keywords.',
     features: [
@@ -205,12 +205,12 @@ let mockProjects = [
   },
   {
     id: 'p-3',
-    title: 'Corporate Brand Identity',
+    title: 'Enterprise Brand Identity & Design System',
     slug: 'corporate-brand-identity',
-    clientName: 'Manufacturing Co., Bhilwara',
+    clientName: 'Industrial Manufacturing Conglomerate, Bhilwara',
     category: 'Branding',
     isFeatured: true,
-    technologies: ['Figma Tokens', 'Vector Asset System', 'Design Guidelines', 'Adobe CC'],
+    technologies: ['Figma Tokens', 'Vector Asset System', 'Design Guidelines', 'Adobe Creative Cloud'],
     description:
       'Unified enterprise visual identity system including interactive component libraries, corporate stationery, product packaging, and digital presence style guides.',
     thumbnailUrl:
@@ -235,19 +235,19 @@ let mockProjects = [
   },
   {
     id: 'p-4',
-    title: 'ERP System',
-    slug: 'erp-system',
-    clientName: 'Textile Company, Bhilwara',
+    title: 'Industrial Textile ERP & Supply Chain System',
+    slug: 'textile-erp-system',
+    clientName: 'Textile Manufacturing Hub, Bhilwara',
     category: 'Software',
-    isFeatured: false,
+    isFeatured: true,
     technologies: ['Node.js', 'React', 'PostgreSQL', 'Docker', 'Redis'],
     description:
       'Custom ERP solution managing weaving loom cycles, raw material inventory traceability, supplier ledger automation, and GST e-invoicing in one database.',
     thumbnailUrl:
       'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80&auto=format&fit=crop',
     images: [
+      'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1200&q=80&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=1200&q=80&auto=format&fit=crop',
     ],
     liveUrl: null,
     result: '42% Reduction in Factory Downtime',
@@ -257,8 +257,98 @@ let mockProjects = [
     features: [
       'Live weaving loom telemetry & shift production logs',
       'Barcode-driven yarn and fabric roll inventory tracking',
-      'Automated GST e-invoicing and tally accounting integration',
+      'Automated GST e-invoicing and accounting sync',
       'Role-based permissions for plant managers, operators, and accountants',
+    ],
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: 'p-5',
+    title: 'High-Converting Hospitality Web Portal & Local SEO',
+    slug: 'restaurant-website-seo',
+    clientName: 'Heritage Dining & Resort, Udaipur',
+    category: 'Web',
+    isFeatured: false,
+    technologies: ['React 19', 'Tailwind CSS', 'Schema Markup', 'Google Business Profile API'],
+    description:
+      'Interactive reservation engine with online menu, dynamic seasonal pricing, sub-second page loads, and top Google Maps/Search local positioning.',
+    thumbnailUrl:
+      'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1552566626-52f8b828add9?w=1200&q=80&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200&q=80&auto=format&fit=crop',
+    ],
+    liveUrl: null,
+    result: '#1 Google Ranking Across 12 Targeted Keywords',
+    duration: '3 Weeks Sprint',
+    challenge: 'Dependence on third-party aggregator portals charging 25% commissions on table reservations and food orders with zero direct customer data.',
+    solution: 'Engineered a direct table reservation web portal with instant WhatsApp booking confirmations and rigorous local Google Schema SEO.',
+    features: [
+      'Direct table reservation engine without aggregator commission',
+      'Interactive digital menu with QR code scan support',
+      'Local Schema.org restaurant markup for Google Rich Snippets',
+      'WhatsApp Business API automated confirmation notifications',
+    ],
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: 'p-6',
+    title: 'Omnichannel Digital Brand Expansion & Lead Engine',
+    slug: 'real-estate-social-media',
+    clientName: 'Commercial Real Estate Agency, Rajasthan',
+    category: 'Marketing',
+    isFeatured: false,
+    technologies: ['Meta Business Suite', 'Content Automation', 'LinkedIn Inbound', 'Canva Pro'],
+    description:
+      'Inbound digital authority campaign generating high-ticket commercial property inquiries through programmatic content workflows and verified targeting.',
+    thumbnailUrl:
+      'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=800&q=80&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200&q=80&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80&auto=format&fit=crop',
+    ],
+    liveUrl: null,
+    result: '500 → 14,000+ Verified Investor Leads',
+    duration: '6 Months Retainer',
+    challenge: 'Traditional print ads and billboards failed to attract modern retail investors and corporate buyers seeking commercial property in Rajasthan.',
+    solution: 'Launched high-value video walkthrough campaigns, digital brochures, and targeted LinkedIn and Meta ad funnels reaching verified business decision makers.',
+    features: [
+      'High-definition architectural video walkthroughs',
+      'Targeted investor persona funnels across LinkedIn & Meta',
+      'Instant automated lead qualification with CRM sync',
+      'Weekly conversion attribution reporting for sales executives',
+    ],
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: 'p-7',
+    title: 'Enterprise Fleet Telematics Mobile App',
+    slug: 'logistics-mobile-app',
+    clientName: 'Regional Transport & Logistics Hub, Bhilwara',
+    category: 'App',
+    isFeatured: true,
+    technologies: ['React Native', 'Firebase', 'Google Maps Fleet API', 'Node.js', 'WebSockets'],
+    description:
+      'Mission-critical real-time telemetry and dispatch mobile application for 400+ commercial vehicles across North India with 60fps tracking.',
+    thumbnailUrl:
+      'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&q=80&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200&q=80&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1200&q=80&auto=format&fit=crop',
+    ],
+    liveUrl: null,
+    result: '10,000+ Active Driver Dispatches Logged',
+    duration: '10 Weeks Delivery',
+    challenge: 'Manual phone coordination with long-haul drivers led to delayed delivery status updates, lost proof-of-delivery receipts, and fuel misuse.',
+    solution: 'Engineered a dual-app mobile ecosystem (Driver App + Fleet Ops Manager) with live GPS pinging, offline receipt uploads, and instant automated WhatsApp delivery receipts.',
+    features: [
+      'Real-time GPS vehicle tracking with WebSockets',
+      'Digital Proof of Delivery (e-POD) with signature capture',
+      'Automated driver route optimization and fuel logging',
+      'Instant WhatsApp delivery alerts for consignees',
     ],
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -321,7 +411,7 @@ let mockJobApplications = [
     id: 'ja-1',
     jobPostingId: 'jp-1',
     fullName: 'Rahul Sharma',
-    email: 'rahul.sharma@example.com',
+    email: 'rahul.applicant@snaptech.digital',
     phone: '9876543210',
     resumeUrl: 'https://res.cloudinary.com/demo/image/upload/v1580000000/sample_resume.pdf',
     coverLetter:
@@ -374,14 +464,14 @@ let mockFaqs = [
   {
     id: '1',
     question: 'What services do you offer?',
-    answer: 'We offer web development, digital marketing, SEO, IT strategy, and custom software.',
+    answer: 'We offer custom web development, mobile app engineering, enterprise ERPs, cloud DevOps, digital marketing, and UI/UX design.',
     order: 1,
     isActive: true,
   },
   {
     id: '2',
     question: 'Where are you located?',
-    answer: 'Our head office is in Bhilwara, Rajasthan, but we serve clients all across India.',
+    answer: 'Our engineering hub is based in Bhilwara, Rajasthan, but we serve enterprise clients across India with dedicated remote sprint boards.',
     order: 2,
     isActive: true,
   },
@@ -391,25 +481,67 @@ let mockMilestones = [
   {
     id: 'ms-1',
     year: '2019',
-    title: 'Founded',
-    desc: 'SnapTech Digital is founded in Bhilwara, Rajasthan with a mission to deliver world-class bespoke IT and digital solutions to growing businesses.',
+    title: 'Hindustan Projects Group Foundation',
+    desc: 'Hindustan Projects Group established in Rajasthan with a strategic focus on regional infrastructure, commercial ventures, and industrial development.',
     order: 1,
   },
   {
     id: 'ms-2',
-    year: '2020',
-    title: 'First 10 Clients',
-    desc: 'Delivered web development and digital marketing for 10 businesses across Rajasthan.',
+    year: '2021',
+    title: 'Enterprise Operations & Digital Modernization',
+    desc: 'Implemented internal workflow automation, digital inventory controls, and operational technology across group ventures.',
     order: 2,
+  },
+  {
+    id: 'ms-3',
+    year: '2023',
+    title: 'Software Engineering Cell Incubation',
+    desc: 'Formed a specialized software cell engineering custom ERPs, cloud platforms, and data pipelines for regional manufacturing and textile leaders.',
+    order: 3,
+  },
+  {
+    id: 'ms-4',
+    year: '2025',
+    title: 'Official Launch of SnapTech Digital',
+    desc: 'Launched SnapTech Digital (snaptech.digital) as the dedicated IT & software engineering division of Hindustan Projects Group.',
+    order: 4,
+  },
+  {
+    id: 'ms-5',
+    year: '2026',
+    title: 'Pan-India Modern Cloud Architecture',
+    desc: 'Scaling cloud microservices, modern React/Node web platforms, cross-platform mobile apps, and automated workflows nationwide.',
+    order: 5,
   },
 ]
 
 let mockPartners = [
   {
     id: '1',
-    name: 'Partner One',
-    logoUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200',
+    name: 'Textile Manufacturing Mills',
+    logoUrl: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=200',
     order: 1,
+    isActive: true,
+  },
+  {
+    id: '2',
+    name: 'Marble & Granite Exporters',
+    logoUrl: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=200',
+    order: 2,
+    isActive: true,
+  },
+  {
+    id: '3',
+    name: 'Direct-to-Consumer Retail Brands',
+    logoUrl: 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=200',
+    order: 3,
+    isActive: true,
+  },
+  {
+    id: '4',
+    name: 'Fleet & Logistics Networks',
+    logoUrl: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=200',
+    order: 4,
     isActive: true,
   },
 ]
@@ -420,10 +552,12 @@ let mockSettings = [
   { key: 'whatsappMessage', value: 'Hi SnapTech Team! I visited your website and want to discuss a project.' },
   { key: 'email', value: 'info@snaptech.digital' },
   { key: 'address', value: 'Bhilwara, Rajasthan 311001, India' },
-  { key: 'linkedin', value: '#' },
-  { key: 'instagram', value: '#' },
+  { key: 'linkedin', value: 'https://www.linkedin.com/company/snaptech-digital' },
+  { key: 'instagram', value: 'https://www.instagram.com/snaptech.digital' },
   { key: 'facebook', value: '#' },
-  { key: 'tagline', value: 'Building Digital Solutions That Drive Business Growth' },
+  { key: 'tagline', value: 'Architecting High-Performance Digital Solutions & Enterprise Cloud Systems' },
+  { key: 'parent_company_name', value: 'Hindustan Projects Group' },
+  { key: 'parent_company_url', value: 'https://www.hindustanprojects.in' },
   {
     key: 'googleMapUrl',
     value:

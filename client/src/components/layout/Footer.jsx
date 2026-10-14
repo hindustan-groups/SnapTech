@@ -88,10 +88,10 @@ const SOCIAL_LINKS = [
 ]
 
 const TRUST_BADGES = [
-  { label: '50+ Projects', icon: '🚀' },
-  { label: '40+ Clients', icon: '🤝' },
-  { label: '99.9% Uptime', icon: '⚡' },
-  { label: 'Pan-India', icon: '🇮🇳' },
+  { label: 'Hindustan Projects Group', icon: '🏢' },
+  { label: '100% Code Ownership', icon: '💻' },
+  { label: '99.9% Cloud SLA', icon: '⚡' },
+  { label: 'Pan-India Delivery', icon: '🇮🇳' },
 ]
 
 function BackToTop() {
@@ -128,12 +128,6 @@ export default function Footer() {
     ? `https://wa.me/${cleanWa}?text=${encodeURIComponent(cfg.whatsappMessage || 'Hi SnapTech Team, I am interested in your digital services.')}`
     : '#'
 
-  const trustBadges = [
-    `${cfg.stat_projects || '50'}+ Projects`,
-    `${cfg.stat_clients || '40'}+ Clients`,
-    `${cfg.stat_sla || '99.9'}% Uptime`,
-    'Pan-India',
-  ]
 
   const socials = SOCIAL_LINKS.filter((s) => {
     const val = cfg[s.key]

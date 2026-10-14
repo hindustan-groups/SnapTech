@@ -359,7 +359,7 @@ const MARKETING_SERVICES = [
 const HOSTING_FEATURES = [
   { title: 'Domain Registration', desc: '.com, .in, .org domain registration & DNS management.', icon: Globe },
   { title: 'Shared Hosting', desc: 'Ultra-fast NVMe SSD cloud hosting with 99.9% uptime guarantee.', icon: Server },
-  { title: 'Business Email', desc: 'Professional domain-based email accounts (you@yourcompany.com).', icon: Mail },
+  { title: 'Business Email', desc: 'Professional domain-based business email accounts (e.g. info@yourcompany.com).', icon: Mail },
   { title: 'SSL Certificate', desc: '256-bit SSL encryption to secure site visitors & boost Google ranking.', icon: Lock },
   { title: 'Website Migration', desc: 'Zero downtime seamless site and database transfer services.', icon: RefreshCw },
   { title: 'Website Maintenance', desc: 'Regular software updates, security malware scans, and weekly backups.', icon: Settings },

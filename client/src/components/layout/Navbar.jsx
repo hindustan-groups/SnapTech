@@ -372,7 +372,7 @@ export default function Navbar() {
                           <div className="flex items-center gap-2 text-slate-600">
                             <Shield className="w-4 h-4 text-brand-blue shrink-0" />
                             <span className="text-[11px]">
-                              <strong className="text-slate-900">ISO 9001:2015</strong> Quality Certified · 99.9% SLA
+                              <strong className="text-slate-900">Hindustan Projects Division</strong> · 100% Code Handover · 99.9% SLA
                             </span>
                           </div>
                           <Link

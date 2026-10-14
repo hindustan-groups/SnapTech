@@ -30,7 +30,7 @@ const VALUES = [
   {
     icon: Shield,
     title: 'Radical Transparency',
-    desc: 'Direct repository visibility, deterministic milestones, zero hidden costs, and ISO-grade service level agreements.',
+    desc: 'Direct repository visibility, deterministic milestones, zero hidden costs, and enterprise-grade service level agreements.',
   },
   {
     icon: Code2,
@@ -185,7 +185,7 @@ export default function AboutPage() {
 
                 <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 font-mono">
                   <span>Headquarters: Bhilwara, RJ</span>
-                  <span className="text-brand-blue font-bold">ISO SLA Compliant</span>
+                  <span className="text-brand-blue font-bold">99.9% Uptime SLA</span>
                 </div>
               </div>
             </div>
@@ -244,8 +244,8 @@ export default function AboutPage() {
                       <p className="text-xs text-slate-900 font-semibold">Bhilwara, Rajasthan, India</p>
                     </div>
                   </div>
-                  <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-blue-50 text-brand-blue font-bold border border-blue-200">
-                    Est. 2019
+                  <span className="text-[11px] font-mono px-2.5 py-0.5 rounded bg-blue-50 text-brand-blue font-bold border border-blue-200">
+                    Group Tech Wing
                   </span>
                 </div>
               </div>

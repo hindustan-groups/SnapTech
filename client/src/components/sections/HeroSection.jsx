@@ -30,7 +30,7 @@ const DEFAULT_IT_CAPABILITIES = [
   'Enterprise Cloud & Scalable Web Architecture',
   'iOS & Android Native & Cross-Platform Apps',
   'Full-Cycle Software Engineering & DevOps',
-  'ISO 9001 Grade Engineering & 99.9% Uptime SLA',
+  'Hindustan Projects Backing & 100% Code Handover',
 ]
 
 const DEFAULT_HEADLINE_CYCLE = [
@@ -77,8 +77,8 @@ export default function HeroSection() {
   }
 
   // Dynamic values with elegant enterprise defaults
-  const eyebrowText = cfg.hero_eyebrow || 'Bhilwara-Based Digital Agency'
-  const divisionText = cfg.hero_division || 'Engineering & IT Division'
+  const eyebrowText = cfg.hero_eyebrow || 'Technology & Software Innovation Wing'
+  const divisionText = cfg.hero_division || 'Hindustan Projects Group'
   const titlePrefix = cfg.hero_title_prefix || 'Looking for'
   const tagline = cfg.tagline || 'Build. Grow. Succeed with SnapTech Digital.'
   const domainPlaceholder = cfg.hero_domain || 'www.snaptech.digital'
@@ -325,8 +325,8 @@ export default function HeroSection() {
                             <p className="text-emerald-700 font-bold text-sm">PostgreSQL Multi-AZ</p>
                           </div>
                           <div className="p-2 rounded bg-white border border-slate-200">
-                            <p className="text-slate-500 text-[10px]">Compliance</p>
-                            <p className="text-brand-blue font-bold text-sm">ISO 9001:2015</p>
+                            <p className="text-slate-500 text-[10px]">Code &amp; IP</p>
+                            <p className="text-brand-blue font-bold text-sm">100% Handover</p>
                           </div>
                         </div>
                       </div>
