@@ -35,17 +35,17 @@ export default function ParentGroupSection() {
     <section id="group-ecosystem" className="py-20 bg-slate-50 text-slate-900 relative overflow-hidden isolate border-b border-slate-200" aria-labelledby="parent-group-heading">
       {/* Background subtle ambient elements */}
       <div className="absolute top-1/2 left-0 w-96 h-96 bg-blue-100/30 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-red-100/30 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-indigo-100/30 rounded-full blur-3xl pointer-events-none" />
 
       <Container>
         <div className="max-w-4xl mx-auto text-center mb-14">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-50 border border-red-200 text-brand-red text-xs font-bold uppercase tracking-wider mb-4 shadow-xs">
-            <ShieldCheck className="w-4 h-4 text-brand-red" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50/80 border border-blue-200 text-brand-blue text-xs font-bold uppercase tracking-wider mb-4 shadow-2xs">
+            <ShieldCheck className="w-4 h-4 text-brand-blue" />
             <span>Corporate Ecosystem</span>
           </div>
-          <h2 id="parent-group-heading" className="font-heading text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight mb-4">
+          <h2 id="parent-group-heading" className="font-heading text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0D1B4B] tracking-tight leading-tight mb-4">
             The Digital &amp; Technology Powerhouse of{' '}
-            <span className="text-brand-blue">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-brand-blue via-blue-600 to-indigo-700">
               {parentName}
             </span>
           </h2>
@@ -81,12 +81,12 @@ export default function ParentGroupSection() {
         </div>
 
         {/* Parent Website Cross-Link Banner */}
-        <div className="rounded-2xl bg-linear-to-r from-blue-50/80 via-white to-red-50/40 p-6 sm:p-8 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
+        <div className="rounded-2xl bg-linear-to-r from-blue-50/80 via-white to-indigo-50/50 p-6 sm:p-8 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
           <div className="space-y-1 text-center sm:text-left">
-            <span className="text-[11px] font-mono uppercase tracking-widest text-brand-red font-bold block">
+            <span className="text-[11px] font-mono uppercase tracking-widest text-brand-blue font-bold block">
               Official Corporate Gateway
             </span>
-            <h4 className="font-heading text-lg sm:text-xl font-bold text-slate-900">
+            <h4 className="font-heading text-lg sm:text-xl font-bold text-[#0D1B4B]">
               Explore {parentName}
             </h4>
             <p className="text-xs text-slate-600">
@@ -97,7 +97,7 @@ export default function ParentGroupSection() {
             href={parentUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-brand-red hover:bg-brand-red-dark text-white text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-200 shrink-0 shadow-md shadow-red-500/20 hover:scale-[1.02] active:scale-[0.98]"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-brand-blue hover:bg-blue-600 text-white text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-200 shrink-0 shadow-md shadow-blue-500/20 hover:scale-[1.02] active:scale-[0.98]"
           >
             <span>Visit {parentUrl.replace(/^https?:\/\/(www\.)?/, '')}</span>
             <ExternalLink className="w-4 h-4" />

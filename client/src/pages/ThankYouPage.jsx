@@ -53,22 +53,23 @@ export default function ThankYouPage() {
         noIndex
       />
 
-      <div className="bg-[#020714] text-white min-h-screen pt-28 pb-20 selection:bg-cyan-500 selection:text-black relative overflow-hidden flex items-center">
-        {/* Ambient background glowing orbs */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-120 h-120 bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none" />
-        <div className="absolute bottom-10 right-10 w-96 h-96 bg-blue-600/10 rounded-full blur-[140px] pointer-events-none" />
+      <div className="bg-white text-slate-900 min-h-screen pt-28 pb-20 selection:bg-brand-blue/15 selection:text-brand-blue relative overflow-hidden flex items-center">
+        {/* Ambient subtle background grid & gentle glow */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a08_1px,transparent_1px),linear-gradient(to_bottom,#0f172a08_1px,transparent_1px)] bg-size-[48px_48px] pointer-events-none" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-140 h-140 bg-blue-100/50 rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute bottom-10 right-10 w-96 h-96 bg-indigo-100/40 rounded-full blur-[140px] pointer-events-none" />
 
-        <Container>
-          <div className="max-w-2xl mx-auto text-center relative z-10 space-y-8">
+        <Container className="relative z-10">
+          <div className="max-w-2xl mx-auto text-center space-y-8">
             {/* Animated Success Badge */}
             <motion.div
               initial={{ scale: 0, rotate: -20 }}
               animate={{ scale: 1, rotate: 0 }}
               transition={{ type: 'spring', damping: 14, stiffness: 180 }}
-              className="w-20 h-20 mx-auto rounded-3xl bg-linear-to-br from-cyan-400 to-blue-600 p-0.5 shadow-2xl shadow-cyan-500/40"
+              className="w-20 h-20 mx-auto rounded-3xl bg-linear-to-br from-brand-blue to-indigo-600 p-0.5 shadow-xl shadow-blue-500/25"
             >
-              <div className="w-full h-full bg-slate-950 rounded-[22px] flex items-center justify-center">
-                <CheckCircle2 className="w-10 h-10 text-cyan-400" />
+              <div className="w-full h-full bg-white rounded-[22px] flex items-center justify-center">
+                <CheckCircle2 className="w-10 h-10 text-brand-blue" />
               </div>
             </motion.div>
 
@@ -79,16 +80,16 @@ export default function ThankYouPage() {
               transition={{ delay: 0.15 }}
               className="space-y-3"
             >
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-400/20 text-xs font-mono font-semibold text-cyan-400 uppercase tracking-wider">
-                <Sparkles className="w-3.5 h-3.5" />
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-xs font-bold text-brand-blue uppercase tracking-wider shadow-2xs">
+                <Sparkles className="w-3.5 h-3.5 text-brand-blue" />
                 <span>Inquiry Successfully Logged</span>
               </div>
 
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-extrabold text-white tracking-tight">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-extrabold text-[#0D1B4B] tracking-tight">
                 {clientName ? `Thank You, ${clientName}!` : 'Thank You for Reaching Out!'}
               </h1>
 
-              <p className="text-base sm:text-lg text-slate-300 max-w-xl mx-auto leading-relaxed">
+              <p className="text-base sm:text-lg text-slate-600 max-w-xl mx-auto leading-relaxed">
                 Your specifications have been routed to our senior engineering pod. We are scoping your requirements and will reach out with a detailed architectural breakdown.
               </p>
             </motion.div>
@@ -99,23 +100,23 @@ export default function ThankYouPage() {
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.25 }}
-                className="p-5 rounded-2xl border border-cyan-500/30 bg-slate-900/80 backdrop-blur-xl shadow-xl text-left flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                className="p-5 sm:p-6 rounded-2xl border border-slate-200/90 bg-linear-to-b from-blue-50/60 to-white shadow-md text-left flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
               >
                 <div>
-                  <p className="text-[11px] font-mono uppercase text-cyan-400 font-bold tracking-wider">
+                  <p className="text-[11px] font-mono uppercase text-brand-blue font-bold tracking-wider">
                     Configured Architectural Scope
                   </p>
-                  <p className="text-base font-heading font-bold text-white mt-0.5">
+                  <p className="text-base sm:text-lg font-heading font-extrabold text-[#0D1B4B] mt-0.5">
                     {projectType || 'Custom Web Application'}
                   </p>
-                  <p className="text-xs text-slate-400 mt-0.5">
+                  <p className="text-xs text-slate-600 mt-0.5">
                     Itemized milestone breakdown is being compiled for you.
                   </p>
                 </div>
 
-                <div className="sm:text-right shrink-0 bg-white/5 px-4 py-2 rounded-xl border border-white/10">
-                  <p className="text-[10px] font-mono text-slate-400 uppercase">Estimated Budget</p>
-                  <p className="text-xl font-heading font-extrabold text-cyan-300">{estimate}</p>
+                <div className="sm:text-right shrink-0 bg-white px-4 py-2.5 rounded-xl border border-blue-200 shadow-xs">
+                  <p className="text-[10px] font-mono text-slate-500 uppercase font-bold">Estimated Budget</p>
+                  <p className="text-xl sm:text-2xl font-heading font-extrabold text-brand-blue">{estimate}</p>
                 </div>
               </motion.div>
             )}
@@ -127,25 +128,29 @@ export default function ThankYouPage() {
               transition={{ delay: 0.3 }}
               className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left"
             >
-              <div className="p-4 rounded-xl border border-white/10 bg-slate-900/60 flex items-start gap-3">
-                <Clock className="w-5 h-5 text-cyan-400 shrink-0 mt-0.5" />
+              <div className="p-5 rounded-2xl border border-slate-200/90 bg-slate-50/60 hover:bg-white transition-all shadow-2xs flex items-start gap-3.5">
+                <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200/80 flex items-center justify-center text-brand-blue shrink-0">
+                  <Clock className="w-5 h-5 text-brand-blue" />
+                </div>
                 <div>
-                  <h4 className="text-xs font-heading font-bold text-white uppercase tracking-wider">
+                  <h4 className="text-xs font-heading font-bold text-slate-900 uppercase tracking-wider">
                     Guaranteed Response SLA
                   </h4>
-                  <p className="text-xs text-slate-400 mt-1">
+                  <p className="text-xs text-slate-600 mt-1 leading-relaxed">
                     Formal reply within 4 to 24 business hours directly from a Solution Architect.
                   </p>
                 </div>
               </div>
 
-              <div className="p-4 rounded-xl border border-white/10 bg-slate-900/60 flex items-start gap-3">
-                <ShieldCheck className="w-5 h-5 text-cyan-400 shrink-0 mt-0.5" />
+              <div className="p-5 rounded-2xl border border-slate-200/90 bg-slate-50/60 hover:bg-white transition-all shadow-2xs flex items-start gap-3.5">
+                <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200/80 flex items-center justify-center text-brand-blue shrink-0">
+                  <ShieldCheck className="w-5 h-5 text-brand-blue" />
+                </div>
                 <div>
-                  <h4 className="text-xs font-heading font-bold text-white uppercase tracking-wider">
+                  <h4 className="text-xs font-heading font-bold text-slate-900 uppercase tracking-wider">
                     Confidential &amp; Secure
                   </h4>
-                  <p className="text-xs text-slate-400 mt-1">
+                  <p className="text-xs text-slate-600 mt-1 leading-relaxed">
                     Your architecture and project ideas are strictly protected under mutual NDA standards.
                   </p>
                 </div>
@@ -157,11 +162,11 @@ export default function ThankYouPage() {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.35 }}
-              className="p-6 rounded-2xl bg-linear-to-r from-blue-900/40 via-cyan-900/30 to-blue-900/40 border border-cyan-500/30 space-y-4"
+              className="p-6 sm:p-8 rounded-3xl bg-linear-to-r from-blue-50 via-indigo-50/60 to-blue-50 border border-blue-200/90 space-y-4 shadow-xs"
             >
               <div>
-                <h3 className="text-base font-heading font-bold text-white">Need an urgent project kickoff?</h3>
-                <p className="text-xs text-slate-300 mt-1">
+                <h3 className="text-lg font-heading font-bold text-[#0D1B4B]">Need an urgent project kickoff?</h3>
+                <p className="text-xs sm:text-sm text-slate-600 mt-1">
                   Connect immediately with our technical leadership on WhatsApp for real-time discussion.
                 </p>
               </div>
@@ -170,7 +175,7 @@ export default function ThankYouPage() {
                 href={`https://wa.me/${cleanWa}?text=${prefilledWhatsappMsg}`}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-heading font-bold text-xs transition-all shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-heading font-bold text-xs transition-all shadow-md shadow-emerald-600/25 cursor-pointer"
               >
                 <MessageSquare className="w-4 h-4" />
                 <span>Chat on WhatsApp Now ({phoneDisplay})</span>
@@ -182,29 +187,29 @@ export default function ThankYouPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
-              className="flex flex-wrap items-center justify-center gap-3 pt-2 text-xs font-semibold text-slate-400"
+              className="flex flex-wrap items-center justify-center gap-3 pt-2 text-xs font-bold text-slate-600"
             >
               <Link
                 to="/portfolio"
-                className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 hover:text-white transition-colors flex items-center gap-1.5"
+                className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 hover:text-brand-blue transition-colors flex items-center gap-1.5 cursor-pointer"
               >
-                <Briefcase className="w-3.5 h-3.5 text-cyan-400" />
+                <Briefcase className="w-3.5 h-3.5 text-brand-blue" />
                 <span>Explore Recent Work</span>
               </Link>
 
               <Link
                 to="/services"
-                className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 hover:text-white transition-colors flex items-center gap-1.5"
+                className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 hover:text-brand-blue transition-colors flex items-center gap-1.5 cursor-pointer"
               >
-                <Layers className="w-3.5 h-3.5 text-cyan-400" />
+                <Layers className="w-3.5 h-3.5 text-brand-blue" />
                 <span>Engineering Capabilities</span>
               </Link>
 
               <Link
                 to="/"
-                className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 hover:text-white transition-colors flex items-center gap-1.5"
+                className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 hover:text-brand-blue transition-colors flex items-center gap-1.5 cursor-pointer"
               >
-                <Home className="w-3.5 h-3.5 text-cyan-400" />
+                <Home className="w-3.5 h-3.5 text-brand-blue" />
                 <span>Back to Home</span>
               </Link>
             </motion.div>

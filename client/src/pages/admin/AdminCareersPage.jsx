@@ -274,7 +274,7 @@ export default function AdminCareersPage() {
         <div className="flex overflow-x-auto border-b border-gray-200 min-w-0">
           <button
             onClick={() => setActiveTab('postings')}
-            className={`py-3 px-6 text-sm font-semibold border-b-2 -mb-[2px] transition-all cursor-pointer ${
+            className={`py-3 px-6 text-sm font-semibold border-b-2 -mb-0.5 transition-all cursor-pointer ${
               activeTab === 'postings'
                 ? 'border-brand-blue text-brand-blue'
                 : 'border-transparent text-gray-400 hover:text-gray-600'
@@ -286,7 +286,7 @@ export default function AdminCareersPage() {
           </button>
           <button
             onClick={() => setActiveTab('applications')}
-            className={`py-3 px-6 text-sm font-semibold border-b-2 -mb-[2px] transition-all cursor-pointer ${
+            className={`py-3 px-6 text-sm font-semibold border-b-2 -mb-0.5 transition-all cursor-pointer ${
               activeTab === 'applications'
                 ? 'border-brand-blue text-brand-blue'
                 : 'border-transparent text-gray-400 hover:text-gray-600'
@@ -801,7 +801,7 @@ export default function AdminCareersPage() {
                     href={viewingApp.resumeUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center gap-1 bg-brand-red text-white hover:bg-brand-red-dark text-xs font-bold px-3 py-2 rounded-lg transition-colors cursor-pointer"
+                    className="flex items-center gap-1 bg-brand-blue text-white hover:bg-blue-600 text-xs font-bold px-3 py-2 rounded-lg transition-colors cursor-pointer shadow-xs"
                   >
                     <Download className="w-3.5 h-3.5" /> View Resume
                   </a>
@@ -867,7 +867,7 @@ export default function AdminCareersPage() {
                   <h5 className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">
                     Cover Letter / Notes
                   </h5>
-                  <div className="bg-gray-50 border border-gray-100 rounded-xl p-4 text-xs text-gray-600 leading-relaxed max-h-[150px] overflow-y-auto whitespace-pre-wrap">
+                  <div className="bg-gray-50 border border-gray-100 rounded-xl p-4 text-xs text-gray-600 leading-relaxed max-h-37.5 overflow-y-auto whitespace-pre-wrap">
                     {viewingApp.coverLetter || 'No cover letter provided by the candidate.'}
                   </div>
                 </div>

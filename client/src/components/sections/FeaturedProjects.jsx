@@ -115,12 +115,12 @@ export default function FeaturedProjects() {
           variants={fadeUp}
           className="text-center mb-10 sm:mb-16 max-w-3xl mx-auto"
         >
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1a3e8c]/10 border border-[#1a3e8c]/20 text-[#1a3e8c] text-xs font-mono font-bold uppercase tracking-widest mb-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50/80 border border-blue-200 text-brand-blue text-xs font-mono font-bold uppercase tracking-widest mb-4 shadow-2xs">
             <span>Enterprise Case Studies</span>
           </div>
-          <h2 id="featured-heading" className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-800 tracking-tight mb-4">
+          <h2 id="featured-heading" className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0D1B4B] tracking-tight mb-4">
             Flagship Software &{' '}
-            <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(135deg, #1a3e8c, #e31e24)' }}>
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-brand-blue via-blue-600 to-indigo-700">
               Cloud Deployments
             </span>
           </h2>
@@ -160,7 +160,7 @@ export default function FeaturedProjects() {
                     return (
                       <motion.div key={p.id} variants={fadeUp}>
                         <div
-                          className="overflow-hidden group cursor-pointer border border-slate-200 bg-white rounded-2xl hover:border-[#1a3e8c]/40 hover:shadow-xl transition-all duration-300 flex flex-col h-full"
+                          className="overflow-hidden group cursor-pointer border border-slate-200 bg-white rounded-2xl hover:border-brand-blue/40 hover:shadow-xl transition-all duration-300 flex flex-col h-full"
                           onClick={() => setSelectedProject(p)}
                         >
                           {/* Project Visual Thumbnail */}
@@ -178,7 +178,7 @@ export default function FeaturedProjects() {
                           <div className="p-6 flex flex-col flex-1 justify-between bg-white">
                             <div>
                               <div className="flex items-center justify-between gap-2 mb-3">
-                                <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-[#1a3e8c]">
+                                <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-brand-blue">
                                   {p.category}
                                 </span>
                                 <span className="text-[11px] font-mono text-slate-500 font-medium">
@@ -186,7 +186,7 @@ export default function FeaturedProjects() {
                                 </span>
                               </div>
 
-                              <h3 className="font-heading text-lg font-bold text-slate-900 group-hover:text-[#1a3e8c] transition-colors duration-200 mb-2">
+                              <h3 className="font-heading text-lg font-bold text-slate-900 group-hover:text-brand-blue transition-colors duration-200 mb-2">
                                 {p.title}
                               </h3>
                               <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed mb-4">
@@ -196,7 +196,7 @@ export default function FeaturedProjects() {
 
                             {/* Tech stack chips & Action */}
                             <div className="flex items-center justify-between pt-3.5 border-t border-slate-100 mt-2">
-                              <span className="text-xs font-bold text-[#1a3e8c] group-hover:translate-x-1 transition-transform flex items-center gap-1">
+                              <span className="text-xs font-bold text-brand-blue group-hover:translate-x-1 transition-transform flex items-center gap-1">
                                 Case Study <ArrowRight className="w-3.5 h-3.5" />
                               </span>
                               {p.technologies && p.technologies.length > 0 && (
@@ -286,7 +286,7 @@ export default function FeaturedProjects() {
                           <div className="p-5 flex flex-col flex-1 justify-between bg-white">
                             <div>
                               <div className="flex items-center justify-between gap-2 mb-2">
-                                <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-50 border border-blue-200 text-[#1a3e8c]">
+                                <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-50 border border-blue-200 text-brand-blue">
                                   {p.category}
                                 </span>
                                 <span className="text-[10px] font-mono text-slate-500 font-medium truncate max-w-[140px]">
@@ -303,7 +303,7 @@ export default function FeaturedProjects() {
                             </div>
 
                             <div className="flex items-center justify-between pt-3 border-t border-slate-100 mt-1">
-                              <span className="text-[11px] font-bold text-[#1a3e8c] flex items-center gap-1">
+                              <span className="text-[11px] font-bold text-brand-blue flex items-center gap-1">
                                 Case Study <ArrowRight className="w-3 h-3" />
                               </span>
                               {p.technologies && p.technologies.length > 0 && (

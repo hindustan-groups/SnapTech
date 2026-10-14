@@ -120,7 +120,7 @@ export default function HeroSection() {
           aria-hidden="true"
         />
         <div
-          className="absolute top-1/3 right-0 w-112.5 h-112.5 rounded-full bg-red-100/40 blur-[130px] pointer-events-none"
+          className="absolute top-1/3 right-0 w-112.5 h-112.5 rounded-full bg-indigo-100/40 blur-[130px] pointer-events-none"
           aria-hidden="true"
         />
       </div>
@@ -133,8 +133,8 @@ export default function HeroSection() {
             <div className="lg:col-span-7 space-y-6">
               {/* Parent Group Eyebrow Badge */}
               <div className="flex flex-wrap items-center gap-2 hero-fade-up" style={{ animationDelay: '0s' }}>
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-red-200 bg-red-50 text-brand-red text-xs font-bold tracking-wider uppercase shadow-xs">
-                  <span className="w-2 h-2 rounded-full bg-brand-red animate-pulse" />
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-200 bg-blue-50/80 text-brand-blue text-xs font-bold tracking-wider uppercase shadow-2xs">
+                  <span className="w-2 h-2 rounded-full bg-brand-blue animate-pulse" />
                   <span>{eyebrowText}</span>
                 </div>
                 <span className="text-xs text-slate-500 font-semibold hidden sm:inline">
@@ -144,10 +144,10 @@ export default function HeroSection() {
 
               {/* Main Headline */}
               <div className="space-y-2 hero-fade-up" style={{ animationDelay: '0.15s' }}>
-                <h1 className="font-heading font-extrabold text-3xl sm:text-4xl lg:text-5xl xl:text-6xl tracking-tight leading-[1.15] text-slate-900">
+                <h1 className="font-heading font-extrabold text-3xl sm:text-4xl lg:text-5xl xl:text-6xl tracking-tight leading-[1.15] text-[#0D1B4B]">
                   {titlePrefix}{' '}
                   <span
-                    className="text-brand-red font-black inline-block transition-all duration-300"
+                    className="text-transparent bg-clip-text bg-linear-to-r from-brand-blue via-blue-600 to-indigo-700 font-black inline-block transition-all duration-300"
                     style={{
                       opacity: headlineVisible ? 1 : 0,
                       transform: headlineVisible ? 'translateY(0)' : 'translateY(-8px)',
@@ -183,7 +183,7 @@ export default function HeroSection() {
                   />
                   <button
                     type="submit"
-                    className="px-4 py-2 rounded-xl bg-brand-red hover:bg-brand-red-dark text-white text-xs font-bold uppercase tracking-wider transition-colors shrink-0 shadow-md shadow-red-500/20 flex items-center gap-1.5 cursor-pointer active:scale-95"
+                    className="px-4 py-2 rounded-xl bg-brand-blue hover:bg-blue-600 text-white text-xs font-bold uppercase tracking-wider transition-colors shrink-0 shadow-md shadow-blue-500/20 flex items-center gap-1.5 cursor-pointer active:scale-95"
                   >
                     <span>Search</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -198,7 +198,7 @@ export default function HeroSection() {
                       key={query}
                       type="button"
                       onClick={() => setSearchQuery(query)}
-                      className="text-[11px] px-2.5 py-0.5 rounded-md bg-slate-100 hover:bg-red-50 text-slate-700 hover:text-brand-red border border-slate-200 transition-colors cursor-pointer"
+                      className="text-[11px] px-2.5 py-0.5 rounded-md bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-brand-blue border border-slate-200 transition-colors cursor-pointer"
                     >
                       {query}
                     </button>
@@ -210,7 +210,7 @@ export default function HeroSection() {
               <ul className="space-y-2 pt-2 hero-fade-up" style={{ animationDelay: '0.45s' }}>
                 {capabilities.map((cap) => (
                   <li key={cap} className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-700 font-medium">
-                    <CheckCircle2 className="w-4 h-4 text-brand-red shrink-0" />
+                    <CheckCircle2 className="w-4 h-4 text-brand-blue shrink-0" />
                     <span>{cap}</span>
                   </li>
                 ))}
@@ -223,7 +223,7 @@ export default function HeroSection() {
                   size="lg"
                   as={Link}
                   to="/services"
-                  className="bg-brand-red hover:bg-brand-red-dark text-white font-bold shadow-md shadow-red-500/20 px-6"
+                  className="bg-brand-blue hover:bg-blue-600 text-white font-bold shadow-md shadow-blue-500/20 px-6"
                   rightIcon={<ArrowRight className="w-4 h-4" />}
                 >
                   Explore IT Services
@@ -257,8 +257,8 @@ export default function HeroSection() {
                 {/* Clean Frame Card */}
                 <div className="relative p-2.5 rounded-2xl bg-white border border-slate-200 shadow-xl">
                   {/* Opposing Focus Brackets Graphic */}
-                  <div className="absolute -top-2 -left-2 w-6 h-6 border-t-3 border-l-3 border-brand-red pointer-events-none" />
-                  <div className="absolute -bottom-2 -right-2 w-6 h-6 border-b-3 border-r-3 border-brand-blue pointer-events-none" />
+                  <div className="absolute -top-2 -left-2 w-6 h-6 border-t-3 border-l-3 border-brand-blue pointer-events-none" />
+                  <div className="absolute -bottom-2 -right-2 w-6 h-6 border-b-3 border-r-3 border-brand-navy pointer-events-none" />
 
                   {/* Top Interactive Mode Switcher */}
                   <div className="flex items-center justify-between px-3 py-1.5 mb-2 rounded-lg bg-slate-50 border border-slate-200 text-[11px] font-mono">

@@ -86,9 +86,9 @@ export default function PartnerTrustMarquee() {
       {/* ── Eyebrow label ── */}
       <div className="text-center mb-5">
         <span className="text-[10px] font-mono uppercase tracking-widest text-slate-500 flex items-center justify-center gap-2">
-          <Sparkles className="w-3 h-3 text-brand-red" />
+          <Sparkles className="w-3 h-3 text-brand-blue" />
           <span>Trusted by Enterprise Clients &amp; Industrial Conglomerates</span>
-          <Sparkles className="w-3 h-3 text-brand-red" />
+          <Sparkles className="w-3 h-3 text-brand-blue" />
         </span>
       </div>
 

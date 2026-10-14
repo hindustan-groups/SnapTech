@@ -26,14 +26,14 @@ function Avatar({ name }) {
   return (
     <div className="relative mb-5 mx-auto w-24 h-24 flex items-center justify-center z-10">
       {/* Soft backdrop blur glow */}
-      <div className="absolute inset-0 rounded-full bg-linear-to-tr from-brand-blue via-transparent to-brand-red blur-md opacity-20 group-hover:opacity-55 group-hover:scale-115 transition-all duration-500" />
+      <div className="absolute inset-0 rounded-full bg-linear-to-tr from-brand-blue via-blue-400 to-indigo-600 blur-md opacity-20 group-hover:opacity-40 group-hover:scale-110 transition-all duration-500" />
       
       {/* Gradient Ring Wrapper */}
-      <div className="relative w-full h-full p-0.75 rounded-full bg-linear-to-tr from-brand-blue/20 via-slate-200 to-brand-red/20 group-hover:from-brand-blue group-hover:via-brand-blue-light group-hover:to-brand-red transition-all duration-500 shadow-sm flex items-center justify-center">
+      <div className="relative w-full h-full p-0.75 rounded-full bg-linear-to-tr from-brand-blue/20 via-slate-200 to-indigo-500/20 group-hover:from-brand-blue group-hover:via-brand-blue-light group-hover:to-indigo-600 transition-all duration-500 shadow-sm flex items-center justify-center">
         {/* White spacer ring */}
         <div className="w-full h-full p-0.5 rounded-full bg-white flex items-center justify-center">
-          <div className="w-full h-full rounded-full bg-[#1a3e8c]/5 flex items-center justify-center border border-slate-100 shadow-inner group-hover:scale-105 transition-transform duration-500">
-            <span className="font-heading text-lg font-extrabold bg-linear-to-tr from-[#1a3e8c] to-[#3b6fd4] bg-clip-text text-transparent">
+          <div className="w-full h-full rounded-full bg-blue-50/60 flex items-center justify-center border border-slate-100 shadow-inner group-hover:scale-105 transition-transform duration-500">
+            <span className="font-heading text-lg font-extrabold bg-linear-to-tr from-[#0D1B4B] to-brand-blue bg-clip-text text-transparent">
               {initials}
             </span>
           </div>
@@ -45,18 +45,18 @@ function Avatar({ name }) {
 
 function TeamCard({ member }) {
   return (
-    <div className="relative overflow-hidden p-6 text-center group border border-slate-200 bg-white hover:border-[#1a3e8c]/30 hover:shadow-xl transition-all duration-300 rounded-2xl flex flex-col justify-between h-full">
+    <div className="relative overflow-hidden p-6 text-center group border border-slate-200 bg-white hover:border-brand-blue/30 hover:shadow-xl transition-all duration-300 rounded-2xl flex flex-col justify-between h-full">
       {/* Subtle brand glow on hover */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 bg-linear-to-b from-[#1a3e8c]/5 to-transparent blur-2xl rounded-full pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 bg-linear-to-b from-brand-blue/5 to-transparent blur-2xl rounded-full pointer-events-none" />
 
       <div>
         {member.photoUrl ? (
           <div className="relative mb-5 mx-auto w-24 h-24 flex items-center justify-center z-10">
             {/* Soft backdrop blur glow */}
-            <div className="absolute inset-0 rounded-full bg-linear-to-tr from-[#1a3e8c] via-transparent to-[#e31e24] blur-md opacity-10 group-hover:opacity-30 group-hover:scale-110 transition-all duration-500" />
+            <div className="absolute inset-0 rounded-full bg-linear-to-tr from-brand-blue via-transparent to-indigo-600 blur-md opacity-10 group-hover:opacity-30 group-hover:scale-110 transition-all duration-500" />
 
             {/* Gradient Ring Wrapper */}
-            <div className="relative p-0.75 rounded-full bg-linear-to-tr from-[#1a3e8c]/40 via-white to-[#e31e24]/40 group-hover:from-[#1a3e8c] group-hover:via-white group-hover:to-[#e31e24] transition-all duration-500 shadow-sm">
+            <div className="relative p-0.75 rounded-full bg-linear-to-tr from-brand-blue/40 via-white to-indigo-500/40 group-hover:from-brand-blue group-hover:via-white group-hover:to-indigo-600 transition-all duration-500 shadow-sm">
               <div className="p-0.5 rounded-full bg-white">
                 <img
                   src={member.photoUrl}
@@ -72,10 +72,10 @@ function TeamCard({ member }) {
         )}
 
         <div className="relative z-10">
-          <h3 className="font-heading text-base font-bold text-slate-800 group-hover:text-[#1a3e8c] transition-colors duration-300">
+          <h3 className="font-heading text-base font-bold text-slate-800 group-hover:text-brand-blue transition-colors duration-300">
             {member.name}
           </h3>
-          <p className="text-[11px] font-mono text-[#e31e24] font-bold uppercase tracking-wider mt-1 mb-3">
+          <p className="text-[11px] font-mono text-brand-blue font-bold uppercase tracking-wider mt-1 mb-3">
             {member.role}
           </p>
 
@@ -94,7 +94,7 @@ function TeamCard({ member }) {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`${member.name} on LinkedIn`}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-mono text-slate-600 bg-slate-50 hover:bg-[#1a3e8c] hover:text-white border border-slate-200 hover:border-[#1a3e8c] transition-all duration-300"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-mono text-slate-600 bg-slate-50 hover:bg-brand-blue hover:text-white border border-slate-200 hover:border-brand-blue transition-all duration-300"
           >
             <LinkedInIcon />
             <span>Connect on LinkedIn</span>
@@ -136,8 +136,8 @@ export default function TeamSection() {
       aria-labelledby="team-heading"
     >
       {/* Subtle background decorations */}
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-[#1a3e8c]/5 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute top-0 left-0 w-80 h-80 bg-[#e31e24]/5 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-100/30 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-0 left-0 w-80 h-80 bg-indigo-100/30 rounded-full blur-[140px] pointer-events-none" />
 
       <Container className="relative z-10">
         <motion.div
@@ -147,16 +147,16 @@ export default function TeamSection() {
           variants={fadeUp}
           className="text-center mb-10 sm:mb-16 max-w-3xl mx-auto"
         >
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1a3e8c]/10 border border-[#1a3e8c]/20 text-[#1a3e8c] text-xs font-mono font-bold uppercase tracking-widest mb-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50/80 border border-blue-200 text-brand-blue text-xs font-mono font-bold uppercase tracking-widest mb-4 shadow-2xs">
             <span>Engineering Leadership</span>
           </div>
-          <h2 id="team-heading" className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-800 tracking-tight mb-4">
+          <h2 id="team-heading" className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0D1B4B] tracking-tight mb-4">
             The Minds Behind{' '}
-            <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(135deg, #1a3e8c, #e31e24)' }}>
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-brand-blue via-blue-600 to-indigo-700">
               Snaptech Innovation
             </span>
           </h2>
-          <p className="text-slate-500 text-sm sm:text-base leading-relaxed">
+          <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
             Our multi-disciplinary team of software architects, UI/UX designers, and DevOps engineers dedicated to corporate excellence.
           </p>
         </motion.div>

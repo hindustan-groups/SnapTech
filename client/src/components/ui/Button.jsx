@@ -6,29 +6,29 @@ import { useRef } from 'react'
 
 const variants = {
   primary: [
-    'bg-brand-red text-white',
-    'hover:bg-[#C01A1F] active:bg-[#A01520]',
-    'border border-brand-red hover:border-[#C01A1F]',
+    'bg-brand-blue text-white',
+    'hover:bg-blue-600 active:bg-blue-700',
+    'border border-brand-blue hover:border-blue-600 shadow-sm',
   ].join(' '),
 
   secondary: [
-    'bg-brand-blue text-white',
-    'hover:bg-[#122D6B] active:bg-[#0E2255]',
-    'border border-brand-blue hover:border-[#122D6B]',
+    'bg-[#0D1B4B] text-white',
+    'hover:bg-[#1a2d6b] active:bg-[#090f2d]',
+    'border border-[#0D1B4B] hover:border-[#1a2d6b] shadow-sm',
   ].join(' '),
 
   outline: [
     'bg-transparent text-brand-blue',
     'border border-brand-blue',
     'hover:bg-brand-blue hover:text-white',
-    'active:bg-[#122D6B]',
+    'active:bg-blue-700',
   ].join(' '),
 
   'outline-red': [
-    'bg-transparent text-brand-red',
-    'border border-brand-red',
-    'hover:bg-brand-red hover:text-white',
-    'active:bg-[#C01A1F]',
+    'bg-transparent text-brand-blue',
+    'border border-brand-blue',
+    'hover:bg-brand-blue hover:text-white',
+    'active:bg-blue-700',
   ].join(' '),
 
   ghost: [

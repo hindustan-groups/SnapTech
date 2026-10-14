@@ -87,8 +87,8 @@ const QUICK_ACTIONS = [
     label: 'View Leads',
     to: '/admin/leads',
     icon: MessageSquare,
-    color: 'text-brand-red',
-    bg: 'bg-red-50',
+    color: 'text-brand-blue',
+    bg: 'bg-blue-50',
   },
   {
     label: 'Services',
@@ -273,7 +273,7 @@ export default function AdminDashboardPage() {
                 backgroundSize: '28px 28px',
               }}
             />
-            <div className="absolute top-0 right-0 w-48 h-48 bg-brand-red/15 rounded-full blur-3xl" />
+            <div className="absolute top-0 right-0 w-48 h-48 bg-brand-blue/20 rounded-full blur-3xl" />
 
             <div className="relative flex items-end justify-between gap-4 flex-wrap">
               <div>
@@ -441,7 +441,7 @@ export default function AdminDashboardPage() {
             <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
               <div className="flex items-center justify-between mb-4 border-b border-gray-100 pb-3">
                 <div className="flex items-center gap-2">
-                  <MessageSquare className="w-4 h-4 text-brand-red" />
+                  <MessageSquare className="w-4 h-4 text-brand-blue" />
                   <h2 className="font-heading text-sm font-bold text-gray-800">Support Tickets Assigned to You</h2>
                 </div>
                 <Link to="/admin/tickets" className="text-xs text-brand-blue hover:underline font-bold">
@@ -604,7 +604,7 @@ export default function AdminDashboardPage() {
               backgroundSize: '28px 28px',
             }}
           />
-          <div className="absolute top-0 right-0 w-48 h-48 bg-brand-red/15 rounded-full blur-3xl" />
+          <div className="absolute top-0 right-0 w-48 h-48 bg-brand-blue/20 rounded-full blur-3xl" />
 
           <div className="relative flex items-end justify-between gap-4 flex-wrap">
             <div>
@@ -710,8 +710,8 @@ export default function AdminDashboardPage() {
           <StatCard
             icon={MessageSquare}
             label="New Leads"
-            bg="bg-red-100"
-            color="text-brand-red"
+            bg="bg-blue-100"
+            color="text-brand-blue"
             to="/admin/leads"
             value={isLoading ? '…' : data?.newLeads}
             trend={{ up: true, label: 'This week' }}

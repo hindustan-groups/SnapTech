@@ -33,8 +33,8 @@ const FALLBACK_SERVICES = [
     label: 'Mobile Apps',
     desc: 'iOS & Android native or cross-platform.',
     href: '/services/mobile-app-development',
-    color: 'text-brand-red',
-    bg: 'bg-red-50 border border-red-100',
+    color: 'text-indigo-600',
+    bg: 'bg-indigo-50 border border-indigo-100',
   },
   {
     icon: Cloud,
@@ -57,8 +57,8 @@ const FALLBACK_SERVICES = [
     label: 'Digital Marketing',
     desc: 'SEO, PPC, Meta Ads & growth marketing.',
     href: '/services/digital-marketing-seo',
-    color: 'text-brand-red',
-    bg: 'bg-red-50 border border-red-100',
+    color: 'text-purple-600',
+    bg: 'bg-purple-50 border border-purple-100',
   },
   {
     icon: Layers,
@@ -73,16 +73,16 @@ const FALLBACK_SERVICES = [
     label: 'E-Commerce',
     desc: 'Full store setup, payments & CMS.',
     href: '/services/ecommerce-solutions',
-    color: 'text-brand-red',
-    bg: 'bg-red-50 border border-red-100',
+    color: 'text-teal-600',
+    bg: 'bg-teal-50 border border-teal-100',
   },
   {
     icon: Shield,
     label: 'Cybersecurity & Audits',
     desc: 'VAPT, SSL & enterprise hardening.',
     href: '/services/cybersecurity-audit',
-    color: 'text-brand-blue',
-    bg: 'bg-blue-50 border border-blue-100',
+    color: 'text-emerald-600',
+    bg: 'bg-emerald-50 border border-emerald-100',
   },
 ]
 

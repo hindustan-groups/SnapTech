@@ -85,7 +85,7 @@ function RichEditor({ value, onChange, label }) {
           onClick={() => setHtmlMode(!htmlMode)}
           className={`flex items-center gap-1 px-2.5 py-1 rounded text-xs font-bold transition-all border ${
             htmlMode
-              ? 'bg-brand-red text-white border-brand-red shadow-sm'
+              ? 'bg-brand-blue text-white border-brand-blue shadow-sm'
               : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
           }`}
         >

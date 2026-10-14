@@ -85,8 +85,8 @@ export default function WhyUsSection() {
       aria-labelledby="whyus-heading"
     >
       {/* Subtle ambient decorations */}
-      <div className="absolute top-1/4 right-0 w-96 h-96 bg-[#1a3e8c]/5 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#e31e24]/5 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-1/4 right-0 w-96 h-96 bg-blue-100/30 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-indigo-100/30 rounded-full blur-[140px] pointer-events-none" />
 
       <Container className="relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
@@ -99,20 +99,20 @@ export default function WhyUsSection() {
             variants={staggerContainer}
           >
             <motion.div variants={fadeUp}>
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1a3e8c]/10 border border-[#1a3e8c]/20 text-[#1a3e8c] text-xs font-mono font-bold uppercase tracking-widest mb-4">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50/80 border border-blue-200 text-brand-blue text-xs font-mono font-bold uppercase tracking-widest mb-4 shadow-2xs">
                 <Award className="w-3.5 h-3.5" />
                 <span>The SnapTech Digital Advantage</span>
               </div>
               <h2
                 id="whyus-heading"
-                className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-800 tracking-tight leading-tight"
+                className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0D1B4B] tracking-tight leading-tight"
               >
                 Enterprise Engineering,{' '}
-                <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(135deg, #1a3e8c, #e31e24)' }}>
+                <span className="text-transparent bg-clip-text bg-linear-to-r from-brand-blue via-blue-600 to-indigo-700">
                   Zero Compromise
                 </span>
               </h2>
-              <p className="text-slate-500 text-sm sm:text-base leading-relaxed mt-4 max-w-xl">
+              <p className="text-slate-600 text-sm sm:text-base leading-relaxed mt-4 max-w-xl">
                 We bridge high-velocity engineering with corporate-grade stability. 
                 Here is why growing businesses and enterprises across India trust SnapTech Digital.
               </p>
@@ -126,21 +126,21 @@ export default function WhyUsSection() {
                   <motion.div
                     key={item.title}
                     variants={fadeUp}
-                    className="p-5 rounded-2xl bg-slate-50 border border-slate-200 hover:border-[#1a3e8c]/30 hover:shadow-lg transition-all duration-300 group flex flex-col justify-between"
+                    className="p-5 rounded-2xl bg-slate-50 border border-slate-200 hover:border-brand-blue/30 hover:shadow-lg transition-all duration-300 group flex flex-col justify-between"
                   >
                     <div>
                       <div className="flex items-center justify-between mb-3">
-                        <div className="w-10 h-10 rounded-xl bg-[#1a3e8c]/10 border border-[#1a3e8c]/20 text-[#1a3e8c] flex items-center justify-center group-hover:bg-[#1a3e8c] group-hover:text-white transition-all">
+                        <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200 text-brand-blue flex items-center justify-center group-hover:bg-brand-blue group-hover:text-white transition-all shadow-2xs">
                           <Icon className="w-5 h-5" />
                         </div>
-                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#1a3e8c]/10 border border-[#1a3e8c]/20 text-[#1a3e8c] group-hover:bg-[#1a3e8c] group-hover:text-white group-hover:border-[#1a3e8c] transition-colors">
+                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-50 border border-blue-200 text-brand-blue group-hover:bg-brand-blue group-hover:text-white group-hover:border-brand-blue transition-colors">
                           {item.badge}
                         </span>
                       </div>
-                      <h3 className="font-heading text-base font-bold text-slate-800 mb-2 group-hover:text-[#1a3e8c] transition-colors">
+                      <h3 className="font-heading text-base font-bold text-slate-900 mb-2 group-hover:text-brand-blue transition-colors">
                         {item.title}
                       </h3>
-                      <p className="text-xs text-slate-500 leading-relaxed">
+                      <p className="text-xs text-slate-600 leading-relaxed">
                         {item.desc}
                       </p>
                     </div>
@@ -190,17 +190,17 @@ export default function WhyUsSection() {
                     >
                       <div>
                         <div className="flex items-center justify-between mb-3">
-                          <div className="w-10 h-10 rounded-xl bg-[#1a3e8c]/10 border border-[#1a3e8c]/20 text-[#1a3e8c] flex items-center justify-center">
+                          <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200 text-brand-blue flex items-center justify-center">
                             <Icon className="w-5 h-5" />
                           </div>
-                          <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#1a3e8c]/10 border border-[#1a3e8c]/20 text-[#1a3e8c]">
+                          <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-50 border border-blue-200 text-brand-blue">
                             {item.badge}
                           </span>
                         </div>
-                        <h3 className="font-heading text-base font-bold text-slate-800 mb-2">
+                        <h3 className="font-heading text-base font-bold text-slate-900 mb-2">
                           {item.title}
                         </h3>
-                        <p className="text-xs text-slate-500 leading-relaxed">
+                        <p className="text-xs text-slate-600 leading-relaxed">
                           {item.desc}
                         </p>
                       </div>
@@ -230,7 +230,7 @@ export default function WhyUsSection() {
             <motion.div variants={fadeUp} className="pt-2">
               <Link
                 to="/about"
-                className="inline-flex items-center gap-2 text-sm font-bold text-[#1a3e8c] hover:text-[#e31e24] transition-colors group"
+                className="inline-flex items-center gap-2 text-sm font-bold text-brand-blue hover:text-blue-700 transition-colors group"
               >
                 <span>Read Full Company Mission & Heritage</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
@@ -246,45 +246,45 @@ export default function WhyUsSection() {
             viewport={viewportOnce}
             variants={fadeUp}
           >
-            <div className="relative p-3 rounded-2xl border border-[#1a3e8c]/20 shadow-xl">
+            <div className="relative p-3 rounded-2xl border border-slate-200 bg-white shadow-xl">
               {/* Corner focus brackets */}
-              <div className="absolute -top-2 -left-2 w-6 h-6 border-t-2 border-l-2 border-[#1a3e8c] pointer-events-none" />
-              <div className="absolute -bottom-2 -right-2 w-6 h-6 border-b-2 border-r-2 border-[#e31e24] pointer-events-none" />
+              <div className="absolute -top-2 -left-2 w-6 h-6 border-t-2 border-l-2 border-brand-blue pointer-events-none" />
+              <div className="absolute -bottom-2 -right-2 w-6 h-6 border-b-2 border-r-2 border-brand-navy pointer-events-none" />
 
               {/* Inner Card */}
               <div className="p-6 rounded-xl bg-slate-50 border border-slate-200 space-y-6">
                 <div className="flex items-center justify-between border-b border-slate-200 pb-4">
                   <div className="flex items-center gap-2">
-                    <ShieldCheck className="w-5 h-5 text-[#1a3e8c]" />
-                    <span className="font-heading text-sm font-bold text-slate-800 tracking-wide">
+                    <ShieldCheck className="w-5 h-5 text-brand-blue" />
+                    <span className="font-heading text-sm font-bold text-slate-900 tracking-wide">
                       VERIFIED SLA MATRIX
                     </span>
                   </div>
-                  <span className="text-[10px] font-mono text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+                  <span className="text-[10px] font-mono text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full font-bold">
                     AUDITED 2026
                   </span>
                 </div>
 
                 <div className="space-y-3.5">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-500">Total Enterprise Deployments</span>
-                    <span className="font-mono font-bold text-slate-800 text-sm">{statProjects}+</span>
+                    <span className="text-slate-500 font-medium">Total Enterprise Deployments</span>
+                    <span className="font-mono font-bold text-slate-900 text-sm">{statProjects}+</span>
                   </div>
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-500">Active Corporate Retainers</span>
-                    <span className="font-mono font-bold text-slate-800 text-sm">{statClients}+</span>
+                    <span className="text-slate-500 font-medium">Active Corporate Retainers</span>
+                    <span className="font-mono font-bold text-slate-900 text-sm">{statClients}+</span>
                   </div>
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-500">Engineering Legacy</span>
-                    <span className="font-mono font-bold text-slate-800 text-sm">{statExperience}+ Years</span>
+                    <span className="text-slate-500 font-medium">Engineering Legacy</span>
+                    <span className="font-mono font-bold text-slate-900 text-sm">{statExperience}+ Years</span>
                   </div>
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-500">Production Cloud Uptime</span>
+                    <span className="text-slate-500 font-medium">Production Cloud Uptime</span>
                     <span className="font-mono font-bold text-emerald-600 text-sm">99.9%</span>
                   </div>
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-500">Code Quality & Security</span>
-                    <span className="font-mono font-bold text-[#1a3e8c] text-sm">A+ SonarQube</span>
+                    <span className="text-slate-500 font-medium">Code Quality & Security</span>
+                    <span className="font-mono font-bold text-brand-blue text-sm">A+ SonarQube</span>
                   </div>
                 </div>
 
@@ -297,7 +297,7 @@ export default function WhyUsSection() {
               </div>
 
               {/* Floating Badge */}
-              <div className="absolute -bottom-5 -right-4 text-white rounded-xl px-4 py-2 shadow-xl flex items-center gap-2" style={{ background: 'linear-gradient(135deg, #1a3e8c, #e31e24)' }}>
+              <div className="absolute -bottom-5 -right-4 text-white rounded-xl px-4 py-2 shadow-xl flex items-center gap-2 bg-linear-to-r from-[#0D1B4B] to-brand-blue">
                 <Zap className="w-4 h-4 text-white" />
                 <span className="text-xs font-bold font-mono">100% In-House Engineers</span>
               </div>

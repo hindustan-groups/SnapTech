@@ -20,17 +20,19 @@ export default function SectionHeading({
   light = false,
 }) {
   const alignment = align === 'center' ? 'text-center' : 'text-left'
-  const titleColor = light ? '!text-white' : 'text-brand-blue'
-  const subtitleColor = light ? '!text-white/70' : 'text-text-muted'
+  const titleColor = light ? '!text-white' : 'text-[#0D1B4B]'
+  const subtitleColor = light ? '!text-white/70' : 'text-slate-600'
 
   return (
     <div className={`${alignment} ${className}`}>
       {eyebrow && (
-        <span className="inline-block mb-3 text-sm font-semibold tracking-widest uppercase text-brand-red">
-          {eyebrow}
-        </span>
+        <div>
+          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-50/80 border border-blue-200 text-brand-blue mb-3.5 shadow-2xs">
+            {eyebrow}
+          </span>
+        </div>
       )}
-      <h2 className={`font-heading text-3xl sm:text-4xl font-bold ${titleColor} leading-tight`}>
+      <h2 className={`font-heading text-3xl sm:text-4xl font-extrabold ${titleColor} leading-tight tracking-tight`}>
         {title}
       </h2>
       {subtitle && (

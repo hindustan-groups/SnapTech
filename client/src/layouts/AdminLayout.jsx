@@ -398,7 +398,7 @@ export default function AdminLayout() {
                       {({ isActive }) => (
                         <>
                           {isActive && (
-                            <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 bg-brand-red rounded-full" />
+                            <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-brand-blue rounded-r-full shadow-xs shadow-blue-400" />
                           )}
                           <Icon className="w-4 h-4 shrink-0" />
                           <span className="flex-1">{label}</span>
@@ -438,7 +438,7 @@ export default function AdminLayout() {
         {/* ── User + logout ── */}
         <div className="px-3 pb-4 border-t border-white/10 pt-3 shrink-0">
           <div className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-white/5 mb-1">
-            <div className="w-8 h-8 rounded-full bg-linear-to-br from-brand-red to-orange-400 flex items-center justify-center text-white font-bold text-xs shrink-0">
+            <div className="w-8 h-8 rounded-full bg-linear-to-br from-brand-blue to-indigo-600 flex items-center justify-center text-white font-bold text-xs shrink-0 shadow-xs">
               {admin.email[0].toUpperCase()}
             </div>
             <div className="flex-1 min-w-0">

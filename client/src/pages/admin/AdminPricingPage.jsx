@@ -295,7 +295,7 @@ export default function AdminPricingPage() {
           <div
             key={pkg.id}
             className={`bg-white rounded-2xl border p-6 flex flex-col justify-between shadow-sm relative transition-all ${
-              pkg.isPopular ? 'border-brand-red ring-2 ring-brand-red/20' : 'border-gray-200'
+              pkg.isPopular ? 'border-brand-blue ring-2 ring-brand-blue/20' : 'border-gray-200'
             } ${!pkg.isActive ? 'opacity-60 bg-gray-50' : ''}`}
           >
             <div>
@@ -314,7 +314,7 @@ export default function AdminPricingPage() {
                       type="checkbox"
                       checked={Boolean(pkg.isPopular)}
                       onChange={(e) => handleFieldChange(pkg.id, 'isPopular', e.target.checked)}
-                      className="rounded text-brand-red"
+                      className="rounded text-brand-blue focus:ring-brand-blue"
                     />
                     Popular
                   </label>
