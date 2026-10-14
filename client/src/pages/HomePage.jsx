@@ -80,6 +80,9 @@ export default function HomePage() {
       />
       <HeroSection />
 
+      {/* ── Engineering & Foundation Standards ── */}
+      <StatsSection />
+
       {/* ── Official Parent Group Ecosystem Section ── */}
       <ParentGroupSection />
 
@@ -87,7 +90,6 @@ export default function HomePage() {
       <ShowcaseSection />
       <ProcessSection />
       <WhyUsSection />
-      <StatsSection />
       <TechStackSection />
       <FeaturedProjects />
       <TestimonialsSection />
