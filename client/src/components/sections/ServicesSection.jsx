@@ -5,10 +5,9 @@
  * - Clean corporate white cards with brand color accents
  * - Reveal-on-scroll animation
  */
-import { createElement, useEffect, useRef, useState } from 'react'
+import { createElement, useEffect, useRef, useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, useScroll, useTransform } from 'framer-motion'
-import { ArrowRight, Sparkles, Layers } from 'lucide-react'
+import { ArrowRight, Sparkles, Layers, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Container } from '@/components/ui'
 import { ServiceCardSkeleton } from '@/components/ui/Skeleton'
 import { useServices } from '@/hooks/useServices'
@@ -24,23 +23,16 @@ const CARD_ACCENTS = [
   { icon: 'text-[#0D1B4B]', bg: 'bg-[#0D1B4B]/10', glow: 'rgba(13,27,75,0.12)', border: '#0D1B4B' },
 ]
 
-function ServiceCard({ service, index, totalCount = 6, isMobile = false }) {
+function ServiceCard({ service, index, isMobile = false }) {
   const accent = CARD_ACCENTS[index % CARD_ACCENTS.length]
 
   return (
     <Link
       to={`/services/${service.slug}`}
-      className={`group relative flex flex-col bg-white border border-slate-200/90 rounded-2xl p-5 sm:p-6 no-underline
+      className={`reveal group relative flex flex-col bg-white border border-slate-200 rounded-2xl p-6 no-underline
         transition-all duration-300 hover:border-transparent hover:-translate-y-1.5 shadow-sm
-        hover:shadow-xl overflow-hidden ${
-          isMobile
-            ? 'shadow-[0_-3px_18px_rgba(0,0,0,0.06),0_14px_32px_rgba(13,27,75,0.12)]'
-            : 'reveal'
-        }`}
-      style={{
-        transitionDelay: `${index * 60}ms`,
-        borderTop: isMobile ? `3px solid ${accent.border}` : undefined,
-      }}
+        hover:shadow-xl overflow-hidden ${isMobile ? 'h-full justify-between' : ''}`}
+      style={{ transitionDelay: `${index * 60}ms` }}
       onMouseEnter={(e) => {
         e.currentTarget.style.boxShadow = `0 20px 48px ${accent.glow}, 0 4px 12px rgba(0,0,0,0.08)`
         e.currentTarget.style.borderColor = `${accent.border}50`
@@ -57,27 +49,20 @@ function ServiceCard({ service, index, totalCount = 6, isMobile = false }) {
       />
 
       {/* Top row: Icon & Tag */}
-      <div className="flex items-center justify-between mb-4 sm:mb-5">
-        <div className="flex items-center gap-3">
-          <div
-            className={`w-11 h-11 sm:w-12 sm:h-12 rounded-xl ${accent.bg} border border-slate-200 flex items-center justify-center
-              group-hover:scale-110 transition-all duration-300 shadow-2xs`}
-          >
-            {createElement(getServiceIcon(service.icon), {
-              className: `w-5 h-5 sm:w-6 sm:h-6 ${accent.icon} transition-colors`,
-              strokeWidth: 1.75,
-            })}
-          </div>
-          {isMobile && (
-            <span className="text-[11px] font-mono font-bold text-slate-400">
-              0{index + 1} / 0{totalCount}
-            </span>
-          )}
+      <div className="flex items-center justify-between mb-5">
+        <div
+          className={`w-12 h-12 rounded-xl ${accent.bg} border border-slate-200 flex items-center justify-center
+            group-hover:scale-110 transition-all duration-300`}
+        >
+          {createElement(getServiceIcon(service.icon), {
+            className: `w-6 h-6 ${accent.icon} transition-colors`,
+            strokeWidth: 1.75,
+          })}
         </div>
 
         {service.tag && (
           <span
-            className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border shadow-2xs"
+            className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border"
             style={{ color: accent.border, background: `${accent.border}12`, borderColor: `${accent.border}30` }}
           >
             {service.tag}
@@ -86,18 +71,18 @@ function ServiceCard({ service, index, totalCount = 6, isMobile = false }) {
       </div>
 
       {/* Title */}
-      <h3 className="font-heading text-base sm:text-lg font-bold text-slate-800 group-hover:text-brand-blue transition-colors duration-200 mb-2">
+      <h3 className="font-heading text-lg font-bold text-slate-800 group-hover:text-brand-blue transition-colors duration-200 mb-2">
         {service.title}
       </h3>
 
       {/* Description */}
-      <p className="text-xs sm:text-sm text-slate-500 leading-relaxed flex-1 mb-4 sm:mb-5 group-hover:text-slate-600 transition-colors">
+      <p className="text-sm text-slate-500 leading-relaxed flex-1 mb-5 group-hover:text-slate-600 transition-colors">
         {service.shortDescription}
       </p>
 
       {/* Learn More CTA */}
       <span
-        className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold transition-all duration-200 mt-auto"
+        className="inline-flex items-center gap-1.5 text-sm font-semibold transition-all duration-200 mt-auto"
         style={{ color: accent.border }}
       >
         <span>Explore Service</span>
@@ -182,205 +167,44 @@ const FALLBACK_SERVICES = [
   },
 ]
 
-/* ── Mobile Stacking Card with Scroll Transitions ────────────── */
-function MobileStackCard({ service, index, total, scrollYProgress }) {
-  const accent = CARD_ACCENTS[index % CARD_ACCENTS.length]
-  const step = 1 / Math.max(1, total - 1)
-  const enterStart = Math.max(0, (index - 1) * step)
-  const enterEnd = index * step
-  const exitStart = index * step
-  const exitEnd = Math.min(1, (index + 1) * step)
-
-  // Vertical slide-in from bottom
-  const y = useTransform(
-    scrollYProgress,
-    index === 0 ? [0, 1] : [enterStart, enterEnd],
-    index === 0 ? ['0%', '0%'] : ['110%', '0%'],
-    { clamp: true }
-  )
-
-  // Scale down when subsequent card lands on top
-  const scale = useTransform(
-    scrollYProgress,
-    index === total - 1 ? [0, 1] : [exitStart, exitEnd],
-    index === total - 1 ? [1, 1] : [1, 0.94],
-    { clamp: true }
-  )
-
-  // Dim slightly when covered by next card
-  const opacity = useTransform(
-    scrollYProgress,
-    index === total - 1 ? [0, 1] : [exitStart, exitEnd],
-    index === total - 1 ? [1, 1] : [1, 0.45],
-    { clamp: true }
-  )
-
-  return (
-    <motion.div
-      style={{
-        y,
-        scale,
-        opacity,
-        zIndex: index + 10,
-      }}
-      className="absolute inset-0 w-full"
-    >
-      <Link
-        to={`/services/${service.slug}`}
-        className="group relative flex flex-col bg-white border border-slate-200/90 rounded-2xl p-5 no-underline shadow-[0_-4px_24px_rgba(0,0,0,0.08),0_18px_40px_rgba(13,27,75,0.16)] overflow-hidden h-full justify-between"
-        style={{
-          borderTop: `3.5px solid ${accent.border}`,
-        }}
-      >
-        {/* Top row: Icon, Step Number, Tag */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-3">
-            <div
-              className={`w-11 h-11 rounded-xl ${accent.bg} border border-slate-200 flex items-center justify-center shadow-2xs`}
-            >
-              {createElement(getServiceIcon(service.icon), {
-                className: `w-5 h-5 ${accent.icon}`,
-                strokeWidth: 1.75,
-              })}
-            </div>
-            <span className="text-xs font-mono font-bold text-slate-400">
-              0{index + 1} <span className="text-slate-300">/</span> 0{total}
-            </span>
-          </div>
-
-          {service.tag && (
-            <span
-              className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border shadow-2xs"
-              style={{ color: accent.border, background: `${accent.border}12`, borderColor: `${accent.border}30` }}
-            >
-              {service.tag}
-            </span>
-          )}
-        </div>
-
-        {/* Title */}
-        <h3 className="font-heading text-lg font-bold text-slate-800 group-hover:text-brand-blue transition-colors duration-200 mb-2">
-          {service.title}
-        </h3>
-
-        {/* Description */}
-        <p className="text-xs text-slate-600 leading-relaxed flex-1 mb-4">
-          {service.shortDescription}
-        </p>
-
-        {/* Bottom CTA & status */}
-        <div className="flex items-center justify-between pt-3 border-t border-slate-100 mt-auto">
-          <span
-            className="inline-flex items-center gap-1.5 text-xs font-bold transition-all duration-200"
-            style={{ color: accent.border }}
-          >
-            <span>Explore Solution</span>
-            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-          </span>
-
-          <span className="text-[10px] font-mono text-slate-400">
-            {index < total - 1 ? 'Scroll for next card ↓' : 'End of capabilities ✓'}
-          </span>
-        </div>
-      </Link>
-    </motion.div>
-  )
-}
-
-/* ── Mobile Pinned Scroll Track & Stacking Deck ─────────────── */
-function MobileStackDeck({ services, isLoading }) {
-  const trackRef = useRef(null)
-  const { scrollYProgress } = useScroll({
-    target: trackRef,
-    offset: ['start start', 'end end'],
-  })
-
-  const [activeIdx, setActiveIdx] = useState(0)
-
-  useEffect(() => {
-    return scrollYProgress.on('change', (latest) => {
-      const step = 1 / Math.max(1, services.length - 1)
-      const current = Math.min(
-        services.length - 1,
-        Math.max(0, Math.round(latest / step))
-      )
-      setActiveIdx(current)
-    })
-  }, [scrollYProgress, services.length])
-
-  if (isLoading && services.length === 0) {
-    return <div className="sm:hidden p-4 bg-white rounded-2xl border border-slate-200 animate-pulse h-64" />
-  }
-
-  return (
-    <div ref={trackRef} className="relative h-[280vh] sm:hidden">
-      {/* Pinned Sticky Stage */}
-      <div className="sticky top-20 h-[calc(100vh-84px)] max-h-[500px] flex flex-col justify-center items-center select-none px-2">
-        {/* Stage Progress Header */}
-        <div className="w-full max-w-sm flex items-center justify-between mb-3 px-1">
-          <div className="flex items-center gap-2 text-xs font-semibold text-slate-600">
-            <span className="w-2 h-2 rounded-full bg-brand-blue animate-pulse" />
-            <span>Capability Deck ({activeIdx + 1}/{services.length})</span>
-          </div>
-
-          {/* Mini progress bar */}
-          <div className="w-24 h-1.5 bg-slate-200 rounded-full overflow-hidden">
-            <motion.div
-              style={{ scaleX: scrollYProgress, transformOrigin: 'left' }}
-              className="h-full bg-linear-to-r from-brand-blue to-indigo-600 rounded-full"
-            />
-          </div>
-        </div>
-
-        {/* 3D Stack Stage Box */}
-        <div className="relative w-full max-w-sm h-[320px]">
-          {services.map((service, index) => (
-            <MobileStackCard
-              key={service.id}
-              service={service}
-              index={index}
-              total={services.length}
-              scrollYProgress={scrollYProgress}
-            />
-          ))}
-        </div>
-
-        {/* Tactile scroll hint below card */}
-        <div className="mt-3 flex items-center gap-1.5 text-[11px] font-mono text-slate-400">
-          {activeIdx < services.length - 1 ? (
-            <>
-              <span className="animate-bounce">↓</span>
-              <span>Scroll down to stack next card ({activeIdx + 1} of {services.length})</span>
-            </>
-          ) : (
-            <span className="text-brand-blue font-semibold">
-              ↓ Scroll down to explore parent ecosystem
-            </span>
-          )}
-        </div>
-      </div>
-    </div>
-  )
-}
-
 export default function ServicesSection() {
   const { data, isLoading } = useServices()
   const services = Array.isArray(data?.data) && data.data.length > 0 ? data.data : (isLoading ? [] : FALLBACK_SERVICES)
   const containerRef = useReveal()
+  const mobileScrollRef = useRef(null)
+  const [activeMobileIdx, setActiveMobileIdx] = useState(0)
 
   const displayServices = services.slice(0, 6)
+
+  // Track active item during mobile horizontal scroll
+  const handleMobileScroll = useCallback(() => {
+    if (!mobileScrollRef.current) return
+    const { scrollLeft, clientWidth } = mobileScrollRef.current
+    const itemWidth = clientWidth * 0.84 + 16 // approximate card width + gap
+    const idx = Math.round(scrollLeft / itemWidth)
+    setActiveMobileIdx(Math.min(Math.max(0, idx), displayServices.length - 1))
+  }, [displayServices.length])
+
+  // Scroll to specific index on mobile
+  const scrollMobile = (idx) => {
+    if (!mobileScrollRef.current) return
+    const container = mobileScrollRef.current
+    const cards = container.children
+    if (cards[idx]) {
+      cards[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+      setActiveMobileIdx(idx)
+    }
+  }
 
   return (
     <section
       id="services"
-      className="py-20 sm:py-24 bg-slate-50 relative sm:overflow-hidden isolate border-t border-slate-100"
+      className="py-20 sm:py-24 bg-slate-50 relative overflow-hidden isolate border-t border-slate-100"
       aria-labelledby="services-heading"
     >
       {/* Subtle background decorations */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
-        <div className="absolute top-0 right-0 w-150 h-150 bg-blue-100/40 rounded-full blur-[120px]" />
-        <div className="absolute bottom-0 left-0 w-125 h-125 bg-indigo-100/30 rounded-full blur-[120px]" />
-      </div>
+      <div className="absolute top-0 right-0 w-150 h-150 bg-blue-100/40 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-125 h-125 bg-indigo-100/30 rounded-full blur-[120px] pointer-events-none" />
 
       <Container className="relative z-10">
         {/* Section heading */}
@@ -413,8 +237,71 @@ export default function ServicesSection() {
               ))}
         </div>
 
-        {/* ── Mobile Stacking Cards on Scroll (< sm: screens) ── */}
-        <MobileStackDeck services={displayServices} isLoading={isLoading} />
+        {/* ── Mobile Horizontal Snap Carousel (< sm: screens) ── */}
+        <div className="sm:hidden">
+          {isLoading && services.length === 0 ? (
+            <div className="p-4 bg-white rounded-2xl border border-slate-200 animate-pulse h-64" />
+          ) : (
+            <>
+              {/* Mobile Swipe Bar Header */}
+              <div className="flex items-center justify-between mb-3 px-1">
+                <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+                  <span className="w-2 h-2 rounded-full bg-brand-blue animate-pulse" />
+                  <span>Swipe to explore ({activeMobileIdx + 1}/{displayServices.length})</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={() => scrollMobile(activeMobileIdx - 1)}
+                    disabled={activeMobileIdx === 0}
+                    className="w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-600 disabled:opacity-30 disabled:cursor-not-allowed shadow-2xs cursor-pointer active:scale-95 transition-all"
+                    aria-label="Previous service"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => scrollMobile(activeMobileIdx + 1)}
+                    disabled={activeMobileIdx === displayServices.length - 1}
+                    className="w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-600 disabled:opacity-30 disabled:cursor-not-allowed shadow-2xs cursor-pointer active:scale-95 transition-all"
+                    aria-label="Next service"
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Horizontal Scroll Track */}
+              <div
+                ref={mobileScrollRef}
+                onScroll={handleMobileScroll}
+                className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-4 px-4 no-scrollbar scroll-smooth"
+              >
+                {displayServices.map((service, index) => (
+                  <div key={service.id} className="w-[84vw] max-w-[320px] shrink-0 snap-center">
+                    <ServiceCard service={service} index={index} isMobile />
+                  </div>
+                ))}
+              </div>
+
+              {/* Mobile Indicator Dots */}
+              <div className="flex justify-center items-center gap-1.5 mt-2">
+                {displayServices.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => scrollMobile(i)}
+                    className="p-1 min-w-5 min-h-5 flex items-center justify-center cursor-pointer"
+                    aria-label={`Go to service ${i + 1}`}
+                  >
+                    <span
+                      className={`h-1.5 rounded-full transition-all duration-300 block ${
+                        activeMobileIdx === i ? 'w-6 bg-brand-blue shadow-xs' : 'w-1.5 bg-slate-300'
+                      }`}
+                    />
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
 
         {/* Bottom Explorer Action */}
         <div className="mt-12 sm:mt-14 text-center">
