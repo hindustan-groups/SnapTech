@@ -2,7 +2,8 @@
  * ProjectDetailPage.jsx — Enterprise Architectural Case Study & Project Details.
  * Dynamic, ultra-responsive, matching SnapTech's high-contrast light enterprise theme.
  */
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { Link, useParams } from 'react-router-dom'
 import {
   ArrowLeft,
@@ -275,11 +276,15 @@ export default function ProjectDetailPage() {
             <div className="lg:col-span-8 space-y-10">
               {/* Interactive Showcase Viewport */}
               <div className="rounded-3xl border border-slate-200 bg-white p-2.5 sm:p-4 shadow-xl overflow-hidden">
-                <div className="relative rounded-2xl overflow-hidden bg-slate-950 aspect-16/10 group cursor-pointer" onClick={() => setLightboxOpen(true)}>
+                <div
+                  className="relative rounded-2xl overflow-hidden bg-slate-950 aspect-16/10 group cursor-pointer"
+                  onClick={() => setLightboxOpen(true)}
+                  title="Click to expand fullscreen popup"
+                >
                   <img
                     src={galleryImages[activeImageIdx]}
                     alt={`${project.title} viewport ${activeImageIdx + 1}`}
-                    className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500 ease-out"
+                    className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500 ease-out"
                   />
                   <div className="absolute inset-0 bg-linear-to-t from-slate-950/60 via-transparent to-transparent pointer-events-none" />
 
@@ -288,6 +293,36 @@ export default function ProjectDetailPage() {
                     <Maximize2 className="w-3.5 h-3.5" />
                     <span>View Lightbox</span>
                   </div>
+
+                  {/* On-Card Navigation Arrows */}
+                  {galleryImages.length > 1 && (
+                    <>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setActiveImageIdx((prev) => (prev === 0 ? galleryImages.length - 1 : prev - 1))
+                        }}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 z-10 p-2.5 rounded-full bg-slate-900/70 hover:bg-brand-blue text-white backdrop-blur-md border border-white/20 transition-all opacity-0 group-hover:opacity-100 hover:scale-110 active:scale-95 shadow-lg"
+                        aria-label="Previous screenshot"
+                        title="Previous screenshot"
+                      >
+                        <ChevronLeft className="w-5 h-5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setActiveImageIdx((prev) => (prev === galleryImages.length - 1 ? 0 : prev + 1))
+                        }}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 z-10 p-2.5 rounded-full bg-slate-900/70 hover:bg-brand-blue text-white backdrop-blur-md border border-white/20 transition-all opacity-0 group-hover:opacity-100 hover:scale-110 active:scale-95 shadow-lg"
+                        aria-label="Next screenshot"
+                        title="Next screenshot"
+                      >
+                        <ChevronRight className="w-5 h-5" />
+                      </button>
+                    </>
+                  )}
 
                   {/* Bottom Image Indicator */}
                   <div className="absolute bottom-4 left-4 z-10 flex items-center gap-2 px-3 py-1 rounded-lg bg-black/60 backdrop-blur-md text-white text-xs font-mono font-medium">
@@ -301,12 +336,14 @@ export default function ProjectDetailPage() {
                     {galleryImages.map((img, idx) => (
                       <button
                         key={idx}
+                        type="button"
                         onClick={() => setActiveImageIdx(idx)}
                         className={`relative rounded-xl overflow-hidden w-24 h-16 shrink-0 border-2 transition-all cursor-pointer ${
                           activeImageIdx === idx
                             ? 'border-brand-blue ring-2 ring-brand-blue/30 shadow-md scale-102'
                             : 'border-slate-200 opacity-70 hover:opacity-100 hover:border-slate-300'
                         }`}
+                        title={`Select screenshot ${idx + 1}`}
                       >
                         <img src={img} alt="Thumbnail preview" className="w-full h-full object-cover" />
                       </button>
@@ -590,63 +627,222 @@ export default function ProjectDetailPage() {
         </section>
       )}
 
-      {/* ── Lightbox Modal ─────────────────────────────────────── */}
+      {/* ── Image Lightbox Modal ────────────────────────────────── */}
       {lightboxOpen && (
-        <div
-          className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
-          onClick={() => setLightboxOpen(false)}
-        >
-          {/* Close button */}
-          <button
-            onClick={() => setLightboxOpen(false)}
-            className="absolute top-5 right-5 z-20 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all cursor-pointer"
-            aria-label="Close fullscreen"
-          >
-            <X className="w-6 h-6" />
-          </button>
-
-          {/* Lightbox content */}
-          <div
-            className="relative max-w-5xl w-full max-h-[85vh] flex flex-col items-center"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="relative w-full h-[65vh] sm:h-[75vh] flex items-center justify-center">
-              <img
-                src={galleryImages[activeImageIdx]}
-                alt={`${project.title} screenshot`}
-                className="max-w-full max-h-full object-contain rounded-xl shadow-2xl"
-              />
-
-              {galleryImages.length > 1 && (
-                <>
-                  <button
-                    onClick={() =>
-                      setActiveImageIdx((prev) => (prev === 0 ? galleryImages.length - 1 : prev - 1))
-                    }
-                    className="absolute left-2 sm:left-4 p-3 rounded-full bg-black/60 hover:bg-black/90 text-white border border-white/20 transition-all cursor-pointer shadow-lg"
-                    aria-label="Previous image"
-                  >
-                    <ChevronLeft className="w-6 h-6" />
-                  </button>
-                  <button
-                    onClick={() =>
-                      setActiveImageIdx((prev) => (prev === galleryImages.length - 1 ? 0 : prev + 1))
-                    }
-                    className="absolute right-2 sm:right-4 p-3 rounded-full bg-black/60 hover:bg-black/90 text-white border border-white/20 transition-all cursor-pointer shadow-lg"
-                    aria-label="Next image"
-                  >
-                    <ChevronRight className="w-6 h-6" />
-                  </button>
-                </>
-              )}
-            </div>
-
-            <div className="mt-4 text-center text-white/80 text-sm font-mono">
-              Screenshot {activeImageIdx + 1} of {galleryImages.length}
-            </div>
-          </div>
-        </div>
+        <ImageLightboxModal
+          images={galleryImages}
+          activeIdx={activeImageIdx}
+          onClose={() => setLightboxOpen(false)}
+          onChangeIdx={setActiveImageIdx}
+          projectTitle={project.title}
+          category={project.category}
+        />
       )}
     </div>
+  )
+}
+
+/* ── Lightbox Modal Component (Fully Portaled & Responsive) ────────── */
+function ImageLightboxModal({
+  images,
+  activeIdx,
+  onClose,
+  onChangeIdx,
+  projectTitle,
+  category,
+}) {
+  const [touchStart, setTouchStart] = useState(null)
+  const [touchEnd, setTouchEnd] = useState(null)
+  const minSwipeDistance = 45
+
+  // Lock body & html scroll completely while modal is open
+  useEffect(() => {
+    const origBodyOverflow = document.body.style.overflow
+    const origHtmlOverflow = document.documentElement.style.overflow
+    document.body.style.overflow = 'hidden'
+    document.documentElement.style.overflow = 'hidden'
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose()
+      } else if (e.key === 'ArrowLeft') {
+        onChangeIdx((prev) => (prev === 0 ? images.length - 1 : prev - 1))
+      } else if (e.key === 'ArrowRight') {
+        onChangeIdx((prev) => (prev === images.length - 1 ? 0 : prev + 1))
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.body.style.overflow = origBodyOverflow
+      document.documentElement.style.overflow = origHtmlOverflow
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [images.length, onChangeIdx, onClose])
+
+  // Touch handlers for mobile swipe
+  const onTouchStart = (e) => {
+    setTouchEnd(null)
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const onTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return
+    const distance = touchStart - touchEnd
+    if (distance > minSwipeDistance) {
+      // Next image
+      onChangeIdx((prev) => (prev === images.length - 1 ? 0 : prev + 1))
+    } else if (distance < -minSwipeDistance) {
+      // Prev image
+      onChangeIdx((prev) => (prev === 0 ? images.length - 1 : prev - 1))
+    }
+  }
+
+  const currentImg = images[activeIdx] || images[0]
+
+  return createPortal(
+    <div
+      className="fixed inset-0 z-9999 flex flex-col justify-between bg-slate-950/95 backdrop-blur-xl p-3 sm:p-5 md:p-6 overflow-hidden select-none"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Image Preview Lightbox"
+    >
+      {/* Top Header Bar */}
+      <div
+        className="relative z-10 w-full max-w-5xl mx-auto flex items-center justify-between gap-3 bg-slate-900/85 backdrop-blur-md border border-white/10 rounded-2xl px-3.5 py-2.5 sm:px-5 sm:py-3 shadow-2xl shrink-0"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+          {category && (
+            <span className="shrink-0 px-2 sm:px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-brand-blue/30 text-blue-300 border border-blue-400/30">
+              {category}
+            </span>
+          )}
+          <h3 className="text-white text-xs sm:text-sm font-semibold truncate max-w-37.5 sm:max-w-xs md:max-w-md">
+            {projectTitle}
+          </h3>
+        </div>
+
+        {/* Counter Badge */}
+        <div className="shrink-0 px-2.5 sm:px-3 py-1 rounded-full bg-white/10 border border-white/15 text-white/90 text-[10px] sm:text-xs font-mono font-medium shadow-xs">
+          {activeIdx + 1} / {images.length}
+        </div>
+
+        {/* Right Action Buttons */}
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          {currentImg && (
+            <a
+              href={currentImg}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white/80 hover:text-white transition-all cursor-pointer"
+              title="Open full resolution in new tab"
+              aria-label="Open image in new tab"
+            >
+              <ExternalLink className="w-4 h-4" />
+            </a>
+          )}
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-2 sm:p-2.5 rounded-xl bg-white/15 hover:bg-rose-600 hover:text-white text-white border border-white/20 transition-all cursor-pointer active:scale-95 shadow-md"
+            aria-label="Close fullscreen modal"
+            title="Close (Esc)"
+          >
+            <X className="w-4 h-4 sm:w-5 sm:h-5" />
+          </button>
+        </div>
+      </div>
+
+      {/* Central Image Viewport */}
+      <div
+        className="relative flex-1 w-full max-w-5xl mx-auto flex items-center justify-center my-2 sm:my-3 min-h-0 overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+      >
+        {/* Previous Arrow Button */}
+        {images.length > 1 && (
+          <button
+            type="button"
+            onClick={() => onChangeIdx((prev) => (prev === 0 ? images.length - 1 : prev - 1))}
+            className="absolute left-1 sm:left-3 md:left-4 z-20 p-2 sm:p-3 rounded-full bg-slate-900/80 hover:bg-brand-blue text-white border border-white/20 backdrop-blur-md shadow-2xl transition-all duration-200 cursor-pointer hover:scale-110 active:scale-90"
+            aria-label="Previous screenshot"
+            title="Previous (Left arrow)"
+          >
+            <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+          </button>
+        )}
+
+        {/* Image Container with smooth transition */}
+        <div className="w-full h-full flex items-center justify-center p-1 sm:p-3">
+          <img
+            key={activeIdx}
+            src={currentImg}
+            alt={`${projectTitle} screenshot ${activeIdx + 1}`}
+            className="max-w-full max-h-[62vh] sm:max-h-[70vh] md:max-h-[75vh] object-contain rounded-xl sm:rounded-2xl shadow-2xl border border-white/10 select-none"
+            draggable={false}
+          />
+        </div>
+
+        {/* Next Arrow Button */}
+        {images.length > 1 && (
+          <button
+            type="button"
+            onClick={() => onChangeIdx((prev) => (prev === images.length - 1 ? 0 : prev + 1))}
+            className="absolute right-1 sm:right-3 md:right-4 z-20 p-2 sm:p-3 rounded-full bg-slate-900/80 hover:bg-brand-blue text-white border border-white/20 backdrop-blur-md shadow-2xl transition-all duration-200 cursor-pointer hover:scale-110 active:scale-90"
+            aria-label="Next screenshot"
+            title="Next (Right arrow)"
+          >
+            <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+          </button>
+        )}
+      </div>
+
+      {/* Bottom Thumbnail Navigation Strip */}
+      <div
+        className="relative z-10 w-full max-w-5xl mx-auto flex flex-col items-center gap-1.5 shrink-0"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {images.length > 1 && (
+          <div className="flex items-center gap-2 sm:gap-2.5 overflow-x-auto max-w-full px-2 py-1 no-scrollbar">
+            {images.map((img, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => onChangeIdx(idx)}
+                className={`relative rounded-lg sm:rounded-xl overflow-hidden w-14 h-10 sm:w-20 sm:h-14 border-2 transition-all duration-200 cursor-pointer shrink-0 ${
+                  activeIdx === idx
+                    ? 'border-brand-blue ring-2 ring-brand-blue/60 scale-105 opacity-100 shadow-lg'
+                    : 'border-white/20 opacity-50 hover:opacity-90 hover:border-white/50'
+                }`}
+                aria-label={`Jump to screenshot ${idx + 1}`}
+              >
+                <img
+                  src={img}
+                  alt={`Thumbnail ${idx + 1}`}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Accessibility & Device Helper Hint */}
+        <div className="text-center text-white/50 text-[10px] sm:text-[11px] font-mono">
+          <span className="hidden sm:inline">Press Esc to close &bull; Use &larr; &rarr; keys to navigate</span>
+          <span className="sm:hidden">Swipe left/right or tap arrows to navigate</span>
+        </div>
+      </div>
+    </div>,
+    document.body
   )
 }

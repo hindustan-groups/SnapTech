@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -20,6 +20,28 @@ const CATEGORY_COLORS = {
 /* ── Project Detail Modal (Crisp Light Theme) ─────────────────── */
 export function ProjectModal({ project, onClose }) {
   const gradColor = CATEGORY_COLORS[project.category] || 'from-brand-primary to-brand-blue'
+  const [activeBannerImg, setActiveBannerImg] = useState(
+    project.thumbnailUrl || (Array.isArray(project.images) && project.images.length > 0 ? project.images[0] : '')
+  )
+
+  // Lock background scroll when modal is open
+  useEffect(() => {
+    const origBody = document.body.style.overflow
+    const origHtml = document.documentElement.style.overflow
+    document.body.style.overflow = 'hidden'
+    document.documentElement.style.overflow = 'hidden'
+
+    const handleKey = (e) => {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', handleKey)
+
+    return () => {
+      document.body.style.overflow = origBody
+      document.documentElement.style.overflow = origHtml
+      window.removeEventListener('keydown', handleKey)
+    }
+  }, [onClose])
 
   return createPortal(
     <motion.div
@@ -53,10 +75,10 @@ export function ProjectModal({ project, onClose }) {
           </button>
 
           {/* Banner Image */}
-          {project.thumbnailUrl ? (
+          {activeBannerImg ? (
             <div className="relative h-60 sm:h-72 md:h-80 overflow-hidden group/image">
               <img
-                src={project.thumbnailUrl}
+                src={activeBannerImg}
                 alt={project.title}
                 className="w-full h-full object-cover group-hover/image:scale-105 transition-transform duration-700 ease-out"
               />
@@ -179,14 +201,25 @@ export function ProjectModal({ project, onClose }) {
                     <span className="block text-[9px] font-mono font-bold text-slate-400 uppercase tracking-wider mb-2">
                       Screenshots ({project.images.length})
                     </span>
-                    <div className="flex gap-1.5 overflow-x-auto pb-1 no-scrollbar">
-                      {project.images.slice(0, 3).map((img, i) => (
-                        <img
+                    <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
+                      {project.images.map((img, i) => (
+                        <button
                           key={i}
-                          src={img}
-                          alt="Screenshot"
-                          className="w-14 h-10 rounded-lg object-cover border border-slate-200 shrink-0"
-                        />
+                          type="button"
+                          onClick={() => setActiveBannerImg(img)}
+                          className={`w-14 h-10 rounded-lg overflow-hidden border-2 transition-all shrink-0 cursor-pointer ${
+                            activeBannerImg === img
+                              ? 'border-brand-blue ring-2 ring-brand-blue/30 scale-105'
+                              : 'border-slate-200 opacity-70 hover:opacity-100'
+                          }`}
+                          title={`Select screenshot ${i + 1}`}
+                        >
+                          <img
+                            src={img}
+                            alt={`Screenshot ${i + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                        </button>
                       ))}
                     </div>
                   </div>
