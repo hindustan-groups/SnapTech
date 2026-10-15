@@ -123,4 +123,31 @@ describe('Admin Stealth Access Control & Authentication (SEC-03)', () => {
     const res = await request(app).get('/api/admin/leads')
     expect(res.status).toBe(404)
   })
+
+  // ── 5. CORS Preflight & Header Allowance ─────────────────────────
+  it('allows CORS preflight for POST /api/admin/login with x-admin-path header', async () => {
+    const res = await request(app)
+      .options('/api/admin/login')
+      .set('Origin', 'https://www.snaptech.digital')
+      .set('Access-Control-Request-Method', 'POST')
+      .set('Access-Control-Request-Headers', 'content-type,x-admin-path')
+
+    expect(res.status).toBe(204)
+    expect(res.headers['access-control-allow-origin']).toBe('https://www.snaptech.digital')
+    expect(res.headers['access-control-allow-headers']).toMatch(/x-admin-path/i)
+  })
+
+  it('allows CORS preflight for POST /api/admin/:secret/login with x-admin-path and x-admin-secret headers', async () => {
+    const res = await request(app)
+      .options(`/api/admin/${SECRET_PATH}/login`)
+      .set('Origin', 'https://www.snaptech.digital')
+      .set('Access-Control-Request-Method', 'POST')
+      .set('Access-Control-Request-Headers', 'content-type,x-admin-path,x-admin-secret')
+
+    expect(res.status).toBe(204)
+    expect(res.headers['access-control-allow-origin']).toBe('https://www.snaptech.digital')
+    expect(res.headers['access-control-allow-headers']).toMatch(/x-admin-path/i)
+    expect(res.headers['access-control-allow-headers']).toMatch(/x-admin-secret/i)
+  })
 })
+

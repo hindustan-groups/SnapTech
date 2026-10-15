@@ -3,9 +3,10 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, fireEvent } from '@testing-library/react'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
 import AdminLoginPage from '@/pages/admin/AdminLoginPage'
+import { api, ApiError } from '@/utils/api'
 
 // Mock WaterRippleLogo and SEO to keep test fast and isolated
 vi.mock('@/components/ui/WaterRippleLogo', () => ({
@@ -86,4 +87,41 @@ describe('Admin Route Access & Validation', () => {
       expect(localStorage.getItem('admin_secret_path')).toBe('active_token_999')
     })
   })
+
+  it('displays user-friendly network error message when server is unreachable (status 0)', async () => {
+    vi.spyOn(api, 'post').mockRejectedValueOnce(
+      new ApiError('Unable to connect to the server. Please check your network connection or server status.', 0)
+    )
+    renderWithRouter('/admin-custom_secret_key_123')
+    fireEvent.change(screen.getByPlaceholderText(/admin@snaptech\.digital/i), {
+      target: { value: 'admin@snaptech.digital' },
+    })
+    fireEvent.change(screen.getByPlaceholderText(/••••••••••••/i), {
+      target: { value: 'password123' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: /Unlock Command Center/i }))
+
+    await waitFor(() => {
+      expect(screen.getByText(/Unable to reach the server/i)).toBeInTheDocument()
+    })
+  })
+
+  it('displays invalid credentials message on 401 response', async () => {
+    vi.spyOn(api, 'post').mockRejectedValueOnce(
+      new ApiError('Invalid email or password. Please try again.', 401)
+    )
+    renderWithRouter('/admin-custom_secret_key_123')
+    fireEvent.change(screen.getByPlaceholderText(/admin@snaptech\.digital/i), {
+      target: { value: 'admin@snaptech.digital' },
+    })
+    fireEvent.change(screen.getByPlaceholderText(/••••••••••••/i), {
+      target: { value: 'password123' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: /Unlock Command Center/i }))
+
+    await waitFor(() => {
+      expect(screen.getByText(/Invalid email or password/i)).toBeInTheDocument()
+    })
+  })
 })
+

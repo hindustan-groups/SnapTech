@@ -76,8 +76,13 @@ const allowedOrigins = [
 
 export const corsOptions = cors({
   origin: (origin, callback) => {
-    // Allow all origins in development or no origin (curl/mobile apps)
-    if (process.env.NODE_ENV === 'development' || !origin) {
+    // Allow all origins in development, local previews, or no origin (curl/mobile apps)
+    if (
+      process.env.NODE_ENV === 'development' ||
+      !origin ||
+      /^http:\/\/localhost(:[0-9]+)?$/.test(origin) ||
+      /^http:\/\/127\.0\.0\.1(:[0-9]+)?$/.test(origin)
+    ) {
       return callback(null, true)
     }
 
@@ -105,7 +110,14 @@ export const corsOptions = cors({
   },
   credentials: true, // needed for httpOnly JWT cookies
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'x-integration-unlock-token'],
+  allowedHeaders: [
+    'Content-Type',
+    'Authorization',
+    'x-integration-unlock-token',
+    'x-admin-path',
+    'x-admin-secret',
+    'x-requested-with',
+  ],
 })
 
 // Helper to log rate-limit-triggered blocks to console for Render dashboard logging
