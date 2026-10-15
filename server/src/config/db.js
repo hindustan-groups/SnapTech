@@ -1632,17 +1632,29 @@ mockPrisma.pageVisit = {
 // ── Smart Connection Resolver ───────────────────────────────
 let activeClient = realPrisma
 
-try {
-  console.log('Checking database connection...')
-  await realPrisma.$connect()
-  console.log('Database connected successfully.')
-} catch (e) {
-  if (process.env.NODE_ENV === 'production') {
-    console.error('❌ CRITICAL: Database connection failed in production mode:', e.message)
-    process.exit(1)
-  } else {
-    console.warn('⚠️ Database is offline. Starting server in MOCK client mode.')
-    activeClient = mockPrisma
+const isMockForced = process.env.USE_MOCK_DB === 'true'
+
+if (isMockForced && process.env.NODE_ENV !== 'production') {
+  console.log('🛡️ [Dev Isolation] USE_MOCK_DB=true. Live database connection bypassed. Using local mock_db.json safely.')
+  activeClient = mockPrisma
+} else {
+  try {
+    console.log('Checking database connection...')
+    await realPrisma.$connect()
+    console.log('Database connected successfully.')
+
+    if (process.env.NODE_ENV !== 'production' && dbUrl?.includes('neon.tech')) {
+      console.warn('⚠️ [SAFETY WARNING] Local server is connected to the LIVE Neon Database!')
+      console.warn('⚠️ To isolate local development from live data, set USE_MOCK_DB=true in server/.env')
+    }
+  } catch (e) {
+    if (process.env.NODE_ENV === 'production') {
+      console.error('❌ CRITICAL: Database connection failed in production mode:', e.message)
+      process.exit(1)
+    } else {
+      console.warn('⚠️ Database is offline. Starting server in MOCK client mode.')
+      activeClient = mockPrisma
+    }
   }
 }
 
