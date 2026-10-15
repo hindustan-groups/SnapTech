@@ -74,27 +74,27 @@ function FeaturedProjectCard({ project, onClick, isMobile = false }) {
       </div>
 
       {/* Card Content Body */}
-      <div className={`${isMobile ? 'p-5' : 'p-6'} flex flex-col flex-1 justify-between bg-white`}>
+      <div className={`${isMobile ? 'p-4' : 'p-6'} flex flex-col flex-1 justify-between bg-white`}>
         <div>
-          <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3">
+          <div className="flex items-center justify-between gap-2 mb-1.5 sm:mb-3">
             <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-brand-blue">
               {project.category}
             </span>
-            <span className="text-[11px] font-mono text-slate-500 font-medium truncate max-w-[140px] sm:max-w-none">
+            <span className="text-[11px] font-mono text-slate-500 font-medium truncate max-w-35 sm:max-w-none">
               {project.clientName}
             </span>
           </div>
 
-          <h3 className="font-heading text-base sm:text-lg font-bold text-slate-900 group-hover:text-brand-blue transition-colors duration-200 mb-1.5 sm:mb-2 line-clamp-1 sm:line-clamp-none">
+          <h3 className="font-heading text-base sm:text-lg font-bold text-slate-900 group-hover:text-brand-blue transition-colors duration-200 mb-1 sm:mb-2 line-clamp-1 sm:line-clamp-none">
             {project.title}
           </h3>
-          <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed mb-3 sm:mb-4">
+          <p className="text-xs text-slate-600 line-clamp-3 leading-relaxed mb-2 sm:mb-4">
             {project.description}
           </p>
         </div>
 
         {/* Tech stack chips & Action */}
-        <div className="flex items-center justify-between pt-3.5 border-t border-slate-100 mt-auto">
+        <div className="flex items-center justify-between pt-3 border-t border-slate-100 mt-1 sm:mt-auto">
           <button
             type="button"
             onClick={(e) => {
@@ -259,13 +259,13 @@ export default function FeaturedProjects() {
                   </div>
 
                   {/* 3D Stack Stage */}
-                  <div className="relative w-full max-w-85 mx-auto h-105 flex items-center justify-center select-none">
+                  <div className="relative w-full max-w-85 mx-auto h-[385px] flex items-center justify-center select-none">
                     {/* Deepest Stack Card 3 */}
                     {projects.length > 2 && (
                       <div
-                        className="absolute inset-x-5 top-0 h-100 rounded-2xl border border-slate-200/60 bg-slate-100/90 shadow-2xs pointer-events-none transition-all duration-300"
+                        className="absolute inset-x-5 top-0 h-[365px] rounded-2xl border border-slate-200/60 bg-slate-100/90 shadow-2xs pointer-events-none transition-all duration-300"
                         style={{
-                          transform: 'translateY(18px) scale(0.9)',
+                          transform: 'translateY(14px) scale(0.9)',
                           zIndex: 10,
                           opacity: 0.45,
                         }}
@@ -282,9 +282,9 @@ export default function FeaturedProjects() {
 
                       return (
                         <div
-                          className="absolute inset-x-2.5 top-0 h-100 rounded-2xl border border-slate-200 bg-white shadow-md pointer-events-none transition-all duration-300 overflow-hidden"
+                          className="absolute inset-x-2.5 top-0 h-[365px] rounded-2xl border border-slate-200 bg-white shadow-md pointer-events-none transition-all duration-300 overflow-hidden"
                           style={{
-                            transform: 'translateY(9px) scale(0.95)',
+                            transform: 'translateY(7px) scale(0.95)',
                             zIndex: 20,
                             opacity: 0.85,
                           }}
@@ -293,24 +293,24 @@ export default function FeaturedProjects() {
                             <div className="relative h-44 bg-slate-900 overflow-hidden">
                               <img src={nextImg} alt="" className="w-full h-full object-cover opacity-60" />
                             </div>
-                            <div className="p-5 flex flex-col justify-between flex-1">
+                            <div className="p-4 flex flex-col justify-between flex-1">
                               <div>
-                                <div className="flex items-center justify-between gap-2 mb-2">
+                                <div className="flex items-center justify-between gap-2 mb-1.5">
                                   <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-50 border border-blue-200 text-brand-blue">
                                     {nextProj?.category}
                                   </span>
-                                  <span className="text-[10px] font-mono text-slate-500 font-medium truncate max-w-[140px]">
+                                  <span className="text-[10px] font-mono text-slate-500 font-medium truncate max-w-35">
                                     {nextProj?.clientName}
                                   </span>
                                 </div>
-                                <p className="font-heading text-base font-bold text-slate-900 line-clamp-1 mb-1.5">
+                                <p className="font-heading text-base font-bold text-slate-900 line-clamp-1 mb-1">
                                   {nextProj?.title}
                                 </p>
-                                <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
+                                <p className="text-xs text-slate-600 line-clamp-3 leading-relaxed">
                                   {nextProj?.description}
                                 </p>
                               </div>
-                              <div className="flex items-center justify-between pt-3 border-t border-slate-100 mt-auto">
+                              <div className="flex items-center justify-between pt-3 border-t border-slate-100 mt-1">
                                 <span className="text-xs font-bold text-brand-blue flex items-center gap-1">
                                   Case Study <ArrowRight className="w-3.5 h-3.5" />
                                 </span>
@@ -340,7 +340,7 @@ export default function FeaturedProjects() {
                             handlePrev()
                           }
                         }}
-                        className="relative z-30 w-full h-100 cursor-grab active:cursor-grabbing touch-pan-y"
+                        className="relative z-30 w-full h-[365px] cursor-grab active:cursor-grabbing touch-pan-y"
                       >
                         <FeaturedProjectCard
                           project={projects[activeMobileIdx]}
