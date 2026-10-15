@@ -76,25 +76,26 @@ export default function HeroSection() {
   return (
     <section
       id="home"
-      className="relative flex flex-col overflow-hidden isolate min-h-fit lg:min-h-screen bg-white text-slate-900"
+      className="relative flex flex-col overflow-hidden isolate min-h-fit lg:min-h-screen text-slate-900"
+      style={{ background: 'linear-gradient(135deg, #EEF4FF 0%, #F0F6FF 30%, #E8F2FF 60%, #EBF4FF 100%)' }}
       aria-label="SnapTech Digital — Web & App Development Agency Hero"
     >
-      {/* ── Background: Clean Light Surface with Subtle Accents ── */}
-      <div className="absolute inset-0 -z-10 bg-linear-to-b from-white via-slate-50/60 to-white">
-        {/* Subtle grid pattern */}
+      {/* ── Background: Light Blue Gradient with Subtle Dot Grid ── */}
+      <div className="absolute inset-0 -z-10" aria-hidden="true">
+        {/* Subtle dot grid pattern */}
         <div
-          className="absolute inset-0 opacity-[0.35] bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] bg-size-[24px_24px]"
-          aria-hidden="true"
+          className="absolute inset-0 opacity-[0.28]"
+          style={{ backgroundImage: 'radial-gradient(#93c5fd 1px, transparent 1px)', backgroundSize: '24px 24px' }}
         />
-
-        {/* Soft Ambient Brand Glows */}
+        {/* Large ambient right-side blue glow */}
         <div
-          className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-150 h-100 rounded-full bg-blue-100/40 blur-[130px] pointer-events-none"
-          aria-hidden="true"
+          className="absolute top-0 right-0 bottom-0 w-[60%]"
+          style={{ background: 'radial-gradient(ellipse 80% 90% at 85% 50%, rgba(191,219,254,0.55) 0%, rgba(219,234,254,0.35) 40%, transparent 75%)' }}
         />
+        {/* Left accent glow */}
         <div
-          className="absolute top-1/3 right-0 w-120 h-120 rounded-full bg-indigo-100/35 blur-[140px] pointer-events-none"
-          aria-hidden="true"
+          className="absolute top-1/3 left-0 w-[30%] h-[40%]"
+          style={{ background: 'radial-gradient(ellipse at 0% 50%, rgba(147,197,253,0.20) 0%, transparent 70%)' }}
         />
       </div>
 
@@ -106,7 +107,7 @@ export default function HeroSection() {
             <div className="relative z-10 lg:col-span-6 xl:col-span-6 space-y-2.5 sm:space-y-3 lg:space-y-3 xl:space-y-3.5">
               {/* Parent Group Eyebrow Badge */}
               <div className="flex flex-wrap items-center gap-2 hero-fade-up">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-blue-200 bg-blue-50/80 text-brand-blue text-[11px] font-bold tracking-wider uppercase shadow-2xs">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-blue-200 bg-white/70 text-brand-blue text-[11px] font-bold tracking-wider uppercase shadow-2xs backdrop-blur-sm">
                   <span className="w-1.5 h-1.5 rounded-full bg-brand-blue animate-pulse" />
                   <span>{eyebrowText}</span>
                 </div>
@@ -130,11 +131,11 @@ export default function HeroSection() {
                 </p>
               </div>
 
-              {/* ── Interactive Domain Search Box (matching campaign art) ── */}
+              {/* ── Interactive Domain Search Box ── */}
               <div className="hero-fade-up max-w-xl">
                 <form
                   onSubmit={handleSearchSubmit}
-                  className="relative flex items-center bg-white hover:bg-slate-50/50 focus-within:bg-white rounded-full border border-slate-300/80 focus-within:border-brand-blue focus-within:ring-2 focus-within:ring-brand-blue/20 p-1 sm:p-1.5 shadow-sm transition-all"
+                  className="relative flex items-center bg-white/90 hover:bg-white focus-within:bg-white rounded-full border border-slate-200/80 focus-within:border-brand-blue focus-within:ring-2 focus-within:ring-brand-blue/20 p-1 sm:p-1.5 shadow-sm transition-all backdrop-blur-sm"
                 >
                   <div className="pl-3 pr-2 text-brand-blue shrink-0">
                     <Search className="w-4.5 h-4.5 text-[#1877F2]" />
@@ -167,7 +168,7 @@ export default function HeroSection() {
                       key={query}
                       type="button"
                       onClick={() => setSearchQuery(query)}
-                      className="text-[10px] sm:text-[11px] px-2.5 py-0.5 rounded-full bg-blue-50/70 hover:bg-blue-100 text-[#1877F2] border border-blue-200/60 font-medium transition-colors cursor-pointer"
+                      className="text-[10px] sm:text-[11px] px-2.5 py-0.5 rounded-full bg-white/70 hover:bg-blue-100 text-[#1877F2] border border-blue-200/60 font-medium transition-colors cursor-pointer backdrop-blur-sm"
                     >
                       {query}
                     </button>
@@ -207,7 +208,7 @@ export default function HeroSection() {
                   size="sm"
                   as={Link}
                   to="/portfolio"
-                  className="bg-white hover:bg-blue-50/50 text-[#1877F2] border border-[#1877F2] font-bold shadow-2xs px-3 sm:px-3.5 xl:px-4 py-2 sm:py-2.5 text-[11px] sm:text-xs uppercase tracking-wider rounded-xl transition-all whitespace-nowrap shrink-0"
+                  className="bg-white/80 hover:bg-blue-50 text-[#1877F2] border border-[#1877F2] font-bold shadow-2xs px-3 sm:px-3.5 xl:px-4 py-2 sm:py-2.5 text-[11px] sm:text-xs uppercase tracking-wider rounded-xl transition-all whitespace-nowrap shrink-0"
                 >
                   EXPLORE DEPLOYED CASE STUDIES
                 </Button>
@@ -216,7 +217,7 @@ export default function HeroSection() {
                   href={`https://wa.me/${whatsappNumber}?text=${whatsappMsg}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-xl bg-white hover:bg-emerald-50/70 border border-emerald-400 text-emerald-600 text-xs font-semibold transition-colors shadow-2xs whitespace-nowrap shrink-0"
+                  className="inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-xl bg-white/80 hover:bg-emerald-50/70 border border-emerald-400 text-emerald-600 text-xs font-semibold transition-colors shadow-2xs whitespace-nowrap shrink-0"
                   aria-label="Direct WhatsApp Priority Hotline"
                 >
                   <svg className="w-4 h-4 text-[#25D366] shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -228,31 +229,24 @@ export default function HeroSection() {
             </div>
 
             {/* ── Right Column: Prominent High-Impact 3D Tech Visual ── */}
-            <div className="lg:col-span-6 xl:col-span-6 flex items-center justify-start lg:-ml-6 xl:-ml-10 2xl:-ml-12 hero-fade-up relative">
-              <div className="relative w-full flex items-center justify-start">
-                {/* Ambient Soft Blue Halo Backdrop matching reference screenshot */}
-                <div
-                  className="absolute right-[-10%] top-1/2 -translate-y-1/2 w-[130%] aspect-square rounded-full bg-linear-to-bl from-blue-300/40 via-blue-200/45 to-transparent blur-3xl -z-10 pointer-events-none"
-                  aria-hidden="true"
-                />
-
-                {/* Primary 3D Technology Asset (large, uncropped, balanced, seamless) */}
-                <img
-                  src={heroImage}
-                  alt="SnapTech Digital — Enterprise Web & Mobile Solutions"
-                  width="554"
-                  height="468"
-                  loading="eager"
-                  fetchPriority="high"
-                  decoding="async"
-                  className="w-full h-auto object-contain max-h-[380px] sm:max-h-[420px] lg:max-h-[440px] xl:max-h-[480px] 2xl:max-h-[520px] select-none transition-transform duration-700 hover:scale-[1.01]"
-                />
-              </div>
+            <div className="lg:col-span-6 xl:col-span-6 flex items-center justify-center lg:justify-end hero-fade-up relative">
+              {/* Primary 3D Technology Asset — seamless, no blob background */}
+              <img
+                src={heroImage}
+                alt="SnapTech Digital — Enterprise Web & Mobile Solutions"
+                width="600"
+                height="500"
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
+                className="w-full h-auto object-contain max-h-[370px] sm:max-h-[420px] lg:max-h-[460px] xl:max-h-[510px] 2xl:max-h-[560px] select-none transition-transform duration-700 hover:scale-[1.015]"
+                style={{ filter: 'drop-shadow(0 20px 40px rgba(59,130,246,0.18))' }}
+              />
             </div>
           </div>
 
-          {/* ── Bottom Tech Partner Strip (matching reference art) ── */}
-          <div className="mt-2 sm:mt-2.5 pt-2 border-t border-slate-200/70 flex flex-wrap items-center justify-between gap-3 text-slate-500">
+          {/* ── Bottom Tech Partner Strip ── */}
+          <div className="mt-2 sm:mt-2.5 pt-2 border-t border-blue-200/50 flex flex-wrap items-center justify-between gap-3 text-slate-500">
             <div className="flex flex-wrap items-center gap-5 sm:gap-7 text-xs font-semibold text-slate-600">
               <span className="flex items-center gap-1.5 hover:text-brand-blue transition-colors">
                 <ReactIcon className="w-4.5 h-4.5" />
@@ -284,7 +278,7 @@ export default function HeroSection() {
                 <span>Google Cloud</span>
               </span>
             </div>
-            <div className="text-[11px] font-semibold text-slate-400 sm:border-l sm:border-slate-300 sm:pl-3.5">
+            <div className="text-[11px] font-semibold text-slate-400 sm:border-l sm:border-blue-200 sm:pl-3.5">
               Trusted Technology Partner
             </div>
           </div>
