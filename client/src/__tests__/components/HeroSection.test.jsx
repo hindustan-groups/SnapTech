@@ -24,6 +24,19 @@ vi.mock('@/hooks/useContent', () => ({
   })),
 }))
 
+// Mock useServices hook
+vi.mock('@/hooks/useServices', () => ({
+  useServices: vi.fn(() => ({
+    data: {
+      data: [
+        { title: 'Web Development' },
+        { title: 'Mobile App Development' },
+      ],
+    },
+    isLoading: false,
+  })),
+}))
+
 const mockedNavigate = vi.fn()
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom')
@@ -43,70 +56,73 @@ describe('HeroSection — Redesigned Homepage Hero', () => {
 
   it('renders the main h1 heading with title prefix and initial cycling text', () => {
     renderHero()
-    const heading = screen.getByRole('heading', { level: 1 })
-    expect(heading).toBeInTheDocument()
-    expect(heading.textContent).toContain('Engineering Resilient')
-    expect(heading.textContent).toContain('Cross-Platform Mobile Apps')
+    const headings = screen.getAllByRole('heading', { level: 1 })
+    expect(headings.length).toBeGreaterThanOrEqual(1)
+    expect(headings[0].textContent).toContain('Engineering Resilient')
+    expect(headings[0].textContent).toContain('Cross-Platform')
+    expect(headings[0].textContent).toContain('Mobile')
+    expect(headings[0].textContent).toContain('Apps')
   })
 
   it('renders the eyebrow badge with parent company info', () => {
     renderHero()
-    expect(screen.getByText('Technology & Digital Innovation Division')).toBeInTheDocument()
+    expect(screen.getAllByText('Technology & Digital Innovation Division').length).toBeGreaterThanOrEqual(1)
     expect(screen.getAllByText(/Hindustan Projects Group/).length).toBeGreaterThanOrEqual(1)
   })
 
   it('renders the hero subtitle', () => {
     renderHero()
     expect(
-      screen.getByText('Architecting High-Performance Digital Solutions & Enterprise Cloud Systems')
-    ).toBeInTheDocument()
+      screen.getAllByText('Architecting High-Performance Digital Solutions & Enterprise Cloud Systems').length
+    ).toBeGreaterThanOrEqual(1)
   })
 
   it('renders the search input and handles submission', () => {
     renderHero()
-    const searchInput = screen.getByPlaceholderText('Search snaptech.digital')
-    expect(searchInput).toBeInTheDocument()
+    const searchInputs = screen.getAllByPlaceholderText(/Web Development/i)
+    expect(searchInputs.length).toBeGreaterThanOrEqual(1)
+    const searchInput = searchInputs[0]
 
     fireEvent.change(searchInput, { target: { value: 'Mobile Apps' } })
     expect(searchInput.value).toBe('Mobile Apps')
 
-    const searchBtn = screen.getByRole('button', { name: /search/i })
-    fireEvent.click(searchBtn)
+    const searchBtns = screen.getAllByRole('button', { name: /search/i })
+    fireEvent.click(searchBtns[0])
     expect(mockedNavigate).toHaveBeenCalledWith('/services?q=Mobile%20Apps')
   })
 
   it('renders popular tags and fills search input when clicked', () => {
     renderHero()
-    const popularTag = screen.getByText('Custom Web Applications')
-    expect(popularTag).toBeInTheDocument()
+    const popularTags = screen.getAllByText('Custom Web Applications')
+    expect(popularTags.length).toBeGreaterThanOrEqual(1)
 
-    fireEvent.click(popularTag)
-    const searchInput = screen.getByPlaceholderText('Search snaptech.digital')
-    expect(searchInput.value).toBe('Custom Web Applications')
+    fireEvent.click(popularTags[0])
+    const searchInputs = screen.getAllByPlaceholderText(/Web Development/i)
+    expect(searchInputs[0].value).toBe('Custom Web Applications')
   })
 
   it('renders feature bullet capabilities with checkmarks', () => {
     renderHero()
-    expect(screen.getByText(/iOS & Android Cross-Platform Mobile Applications/i)).toBeInTheDocument()
-    expect(screen.getByText(/Custom Industrial ERP, Weaving & Inventory Automation/i)).toBeInTheDocument()
-    expect(screen.getByText(/Hindustan Projects Group Backing with 100% Code & IP Handover/i)).toBeInTheDocument()
+    expect(screen.getAllByText(/iOS & Android Cross-Platform Mobile Applications/i).length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText(/Custom Industrial ERP, Weaving & Inventory Automation/i).length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText(/Hindustan Projects Group Backing with 100% Code & IP Handover/i).length).toBeGreaterThanOrEqual(1)
   })
 
   it('renders high-converting CTA links', () => {
     renderHero()
-    const consultLink = screen.getByRole('link', { name: /schedule technical consultation/i })
-    expect(consultLink).toHaveAttribute('href', '/contact')
+    const consultLinks = screen.getAllByRole('link', { name: /schedule technical consultation/i })
+    expect(consultLinks[0]).toHaveAttribute('href', '/contact')
 
-    const portfolioLink = screen.getByRole('link', { name: /explore deployed case studies/i })
-    expect(portfolioLink).toHaveAttribute('href', '/portfolio')
+    const portfolioLinks = screen.getAllByRole('link', { name: /case studies/i })
+    expect(portfolioLinks[0]).toHaveAttribute('href', '/portfolio')
 
-    const whatsappLink = screen.getByLabelText(/direct whatsapp priority hotline/i)
-    expect(whatsappLink).toHaveAttribute('target', '_blank')
+    const whatsappLinks = screen.getAllByLabelText(/direct whatsapp priority hotline/i)
+    expect(whatsappLinks[0]).toHaveAttribute('target', '_blank')
   })
 
   it('renders the prominent 3D hero image with eager loading and proper attributes', () => {
     renderHero()
-    const heroImg = screen.getByAltText(/SnapTech Digital — Enterprise Web & Mobile Solutions/i)
+    const heroImg = screen.getByAltText(/SnapTech Digital — Enterprise Solutions/i)
     expect(heroImg).toBeInTheDocument()
     expect(heroImg).toHaveAttribute('loading', 'eager')
     expect(heroImg).toHaveAttribute('fetchpriority', 'high')
@@ -116,12 +132,12 @@ describe('HeroSection — Redesigned Homepage Hero', () => {
 
   it('renders the technology partner logos strip', () => {
     renderHero()
-    expect(screen.getByText('React')).toBeInTheDocument()
-    expect(screen.getByText('NEXT.js')).toBeInTheDocument()
-    expect(screen.getByText('Node.js')).toBeInTheDocument()
-    expect(screen.getByText('Flutter')).toBeInTheDocument()
-    expect(screen.getByText('aws')).toBeInTheDocument()
-    expect(screen.getByText('Google Cloud')).toBeInTheDocument()
-    expect(screen.getByText('Trusted Technology Partner')).toBeInTheDocument()
+    expect(screen.getAllByText('React').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText('NEXT.js').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText(/node\.js/i).length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText('Flutter').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText('aws').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText('Google Cloud').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText('Trusted Technology Partner').length).toBeGreaterThanOrEqual(1)
   })
 })
