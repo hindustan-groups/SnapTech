@@ -88,12 +88,12 @@ export default function HomePage() {
 
       <ServicesSection />
       <ShowcaseSection />
-      <ProcessSection />
-      <WhyUsSection />
       <TechStackSection />
       <FeaturedProjects />
       <TestimonialsSection />
       <TeamSection />
+      <ProcessSection />
+      <WhyUsSection />
       <FaqSection />
 
       {/* Contact CTA Banner */}
