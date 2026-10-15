@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Container } from '@/components/ui'
 import { Search, Compass, Cpu, Rocket, ArrowRight, Workflow, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
@@ -100,27 +101,55 @@ function ProcessStep({ step, index }) {
   )
 }
 
+const flipVariants = {
+  enter: (dir) => ({
+    x: dir > 0 ? 120 : -120,
+    rotate: dir > 0 ? 5 : -5,
+    opacity: 0,
+    scale: 0.94,
+  }),
+  center: {
+    x: 0,
+    rotate: 0,
+    opacity: 1,
+    scale: 1,
+    transition: {
+      type: 'spring',
+      stiffness: 350,
+      damping: 28,
+    },
+  },
+  exit: (dir) => ({
+    x: dir > 0 ? -160 : 160,
+    rotate: dir > 0 ? -8 : 8,
+    opacity: 0,
+    scale: 0.9,
+    transition: {
+      duration: 0.22,
+      ease: [0.32, 0.72, 0, 1],
+    },
+  }),
+}
+
 export default function ProcessSection() {
   const containerRef = useRef(null)
-  const mobileScrollRef = useRef(null)
   const [activeMobileIdx, setActiveMobileIdx] = useState(0)
+  const [direction, setDirection] = useState(1)
 
-  const handleMobileScroll = useCallback(() => {
-    if (!mobileScrollRef.current) return
-    const { scrollLeft, clientWidth } = mobileScrollRef.current
-    const itemWidth = clientWidth * 0.82 + 16
-    const idx = Math.round(scrollLeft / itemWidth)
-    setActiveMobileIdx(Math.min(Math.max(0, idx), STEPS.length - 1))
-  }, [])
+  const handleNext = () => {
+    setDirection(1)
+    setActiveMobileIdx((prev) => (prev + 1) % STEPS.length)
+  }
 
-  const scrollMobile = (idx) => {
-    if (!mobileScrollRef.current) return
-    const container = mobileScrollRef.current
-    const cards = container.children
-    if (cards[idx]) {
-      cards[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
-      setActiveMobileIdx(idx)
-    }
+  const handlePrev = () => {
+    setDirection(-1)
+    setActiveMobileIdx((prev) => (prev === 0 ? STEPS.length - 1 : prev - 1))
+  }
+
+  const handleDotClick = (i) => {
+    if (i === activeMobileIdx) return
+    setDirection(i > activeMobileIdx ? 1 : -1)
+    setActiveMobileIdx(i)
   }
 
   useEffect(() => {
@@ -176,26 +205,27 @@ export default function ProcessSection() {
           ))}
         </div>
 
-        {/* ── Mobile Horizontal Snap Carousel (< md: screens) ── */}
+        {/* ── Mobile 3D Card Stack & Flip Deck (< md: screens) ── */}
         <div className="md:hidden">
-          <div className="flex items-center justify-between mb-4 px-1">
-            <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+          {/* Top Mobile Controls Bar */}
+          <div className="flex items-center justify-between mb-4 px-2">
+            <div className="flex items-center gap-2 text-xs font-semibold text-slate-600">
               <span className="w-2 h-2 rounded-full bg-brand-blue animate-pulse" />
-              <span>Roadmap (Step {activeMobileIdx + 1} of {STEPS.length})</span>
+              <span>Roadmap (Step {activeMobileIdx + 1}/{STEPS.length})</span>
             </div>
             <div className="flex items-center gap-1.5">
               <button
-                onClick={() => scrollMobile(activeMobileIdx - 1)}
-                disabled={activeMobileIdx === 0}
-                className="w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-600 disabled:opacity-30 disabled:cursor-not-allowed shadow-2xs active:scale-95 transition-all cursor-pointer"
+                type="button"
+                onClick={handlePrev}
+                className="w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-700 hover:bg-brand-blue hover:text-white hover:border-brand-blue shadow-xs active:scale-90 transition-all cursor-pointer"
                 aria-label="Previous step"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
               <button
-                onClick={() => scrollMobile(activeMobileIdx + 1)}
-                disabled={activeMobileIdx === STEPS.length - 1}
-                className="w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-600 disabled:opacity-30 disabled:cursor-not-allowed shadow-2xs active:scale-95 transition-all cursor-pointer"
+                type="button"
+                onClick={handleNext}
+                className="w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-700 hover:bg-brand-blue hover:text-white hover:border-brand-blue shadow-xs active:scale-90 transition-all cursor-pointer"
                 aria-label="Next step"
               >
                 <ChevronRight className="w-4 h-4" />
@@ -203,69 +233,183 @@ export default function ProcessSection() {
             </div>
           </div>
 
-          <div
-            ref={mobileScrollRef}
-            onScroll={handleMobileScroll}
-            className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-4 px-4 no-scrollbar scroll-smooth"
-          >
-            {STEPS.map((step, index) => {
-              const Icon = step.icon
+          {/* 3D Stack Stage */}
+          <div className="relative w-full max-w-85 mx-auto h-[350px] flex items-center justify-center select-none">
+            {/* Deepest Stack Card 3 */}
+            {STEPS.length > 2 && (
+              <div
+                className="absolute inset-x-5 top-0 h-[330px] rounded-2xl border border-slate-200/60 bg-slate-100/90 shadow-2xs pointer-events-none transition-all duration-300"
+                style={{
+                  transform: 'translateY(16px) scale(0.9)',
+                  zIndex: 10,
+                  opacity: 0.45,
+                }}
+              />
+            )}
+
+            {/* Middle Stack Card 2 (Shows next step preview) */}
+            {STEPS.length > 1 && (() => {
+              const nextStep = STEPS[(activeMobileIdx + 1) % STEPS.length]
+              const NextIcon = nextStep.icon
               return (
                 <div
-                  key={step.step}
-                  className="w-[82vw] max-w-[300px] shrink-0 snap-center p-6 bg-white rounded-2xl border border-slate-200 shadow-sm relative flex flex-col justify-between"
+                  className="absolute inset-x-2.5 top-0 h-[330px] rounded-2xl border border-slate-200 bg-white shadow-md pointer-events-none transition-all duration-300 overflow-hidden"
+                  style={{
+                    transform: 'translateY(8px) scale(0.95)',
+                    zIndex: 20,
+                    opacity: 0.85,
+                  }}
                 >
-                  <div>
-                    <div className="flex items-center justify-between mb-4">
-                      <div
-                        className={`w-14 h-14 rounded-xl ${step.color} border border-slate-200 flex items-center justify-center shadow-xs`}
-                      >
-                        <Icon className="w-6 h-6" strokeWidth={1.75} />
+                  <div className="p-6 flex flex-col justify-between h-full bg-white opacity-85">
+                    <div>
+                      <div className="flex items-center justify-between mb-3">
+                        <div
+                          className={`w-14 h-14 rounded-2xl ${nextStep.color} border border-slate-200/80 flex items-center justify-center shadow-xs opacity-75`}
+                        >
+                          <NextIcon className="w-7 h-7" strokeWidth={1.75} />
+                        </div>
+                        <span className="font-heading text-5xl font-black text-slate-200 leading-none">
+                          {nextStep.step}
+                        </span>
                       </div>
-                      <span className="font-heading text-4xl font-black text-slate-200 leading-none">
-                        {step.step}
-                      </span>
+                      <div
+                        className="text-[10px] font-mono font-bold uppercase tracking-widest mb-2.5 px-2.5 py-1 rounded-full inline-block border opacity-80"
+                        style={{
+                          color: nextStep.border,
+                          background: `${nextStep.border}15`,
+                          borderColor: `${nextStep.border}30`,
+                        }}
+                      >
+                        {nextStep.detail}
+                      </div>
+                      <h4 className="font-heading text-base font-bold text-slate-800 line-clamp-1 mb-1.5">
+                        {nextStep.title}
+                      </h4>
+                      <p className="text-xs text-slate-500 line-clamp-3 leading-relaxed">
+                        {nextStep.desc}
+                      </p>
                     </div>
 
-                    <div
-                      className="text-[10px] font-mono font-bold uppercase tracking-widest mb-2 px-2 py-0.5 rounded-full inline-block border"
-                      style={{ color: step.border, background: `${step.border}15`, borderColor: `${step.border}30` }}
-                    >
-                      {step.detail}
+                    <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-mono text-slate-400">
+                      <span>Phase {nextStep.step}</span>
+                      <span className="font-bold text-brand-blue">Next Phase &rarr;</span>
                     </div>
-
-                    <h3 className="font-heading text-base font-bold text-slate-900 mb-2">
-                      {step.title}
-                    </h3>
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      {step.desc}
-                    </p>
-                  </div>
-
-                  <div className="pt-4 border-t border-slate-100 mt-4 flex items-center justify-between text-xs text-slate-400 font-mono">
-                    <span>Phase 0{index + 1}</span>
-                    <span className="font-bold" style={{ color: step.border }}>{index === 3 ? 'Production' : 'Sprint Milestone'}</span>
                   </div>
                 </div>
               )
-            })}
+            })()}
+
+            {/* Active Front Card 1 (Interactive & Flip animated) */}
+            <AnimatePresence mode="popLayout" custom={direction}>
+              <motion.div
+                key={activeMobileIdx}
+                custom={direction}
+                variants={flipVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.45}
+                onDragEnd={(_e, { offset, velocity }) => {
+                  if (offset.x < -45 || velocity?.x < -300) {
+                    handleNext()
+                  } else if (offset.x > 45 || velocity?.x > 300) {
+                    handlePrev()
+                  }
+                }}
+                className="relative z-30 w-full h-[330px] cursor-grab active:cursor-grabbing touch-pan-y"
+              >
+                {(() => {
+                  const currentStep = STEPS[activeMobileIdx]
+                  const CurrentIcon = currentStep.icon
+                  return (
+                    <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-md relative overflow-hidden flex flex-col justify-between h-full">
+                      {/* Subtle brand glow */}
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-linear-to-b from-blue-500/5 to-transparent blur-2xl rounded-full pointer-events-none" />
+
+                      <div>
+                        {/* Top row: Icon bubble + Ghost Number */}
+                        <div className="flex items-center justify-between mb-4">
+                          <div
+                            className={`relative w-14 h-14 rounded-2xl ${currentStep.color} border border-slate-200/80 flex items-center justify-center shadow-xs`}
+                          >
+                            <CurrentIcon className="w-7 h-7" strokeWidth={1.75} />
+                            <span
+                              className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full text-white text-[10px] font-extrabold flex items-center justify-center shadow-sm"
+                              style={{ background: currentStep.border }}
+                            >
+                              {activeMobileIdx + 1}
+                            </span>
+                          </div>
+                          <span className="font-heading text-5xl font-black text-slate-100 select-none leading-none">
+                            {currentStep.step}
+                          </span>
+                        </div>
+
+                        {/* Detail Badge */}
+                        <div
+                          className="text-[10px] font-mono font-bold uppercase tracking-widest mb-2.5 px-2.5 py-1 rounded-full inline-block border shadow-2xs"
+                          style={{
+                            color: currentStep.border,
+                            background: `${currentStep.border}15`,
+                            borderColor: `${currentStep.border}30`,
+                          }}
+                        >
+                          {currentStep.detail}
+                        </div>
+
+                        {/* Title & Description */}
+                        <h3 className="font-heading text-lg font-bold text-[#0D1B4B] mb-2 leading-snug">
+                          {currentStep.title}
+                        </h3>
+                        <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                          {currentStep.desc}
+                        </p>
+                      </div>
+
+                      {/* Card Bottom Meta */}
+                      <div className="pt-3.5 border-t border-slate-100 mt-4 flex items-center justify-between text-xs font-mono">
+                        <span className="text-slate-400 font-medium">Phase 0{activeMobileIdx + 1}</span>
+                        <span
+                          className="font-bold px-2.5 py-1 rounded-md"
+                          style={{
+                            color: currentStep.border,
+                            background: `${currentStep.border}12`,
+                          }}
+                        >
+                          {activeMobileIdx === STEPS.length - 1 ? 'Production SLA' : 'Sprint Milestone'}
+                        </span>
+                      </div>
+                    </div>
+                  )
+                })()}
+              </motion.div>
+            </AnimatePresence>
           </div>
 
-          <div className="flex justify-center items-center gap-1.5 mt-2">
-            {STEPS.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => scrollMobile(i)}
-                className="p-1 min-w-5 min-h-5 flex items-center justify-center cursor-pointer"
-                aria-label={`Go to step ${i + 1}`}
-              >
-                <span
-                  className={`h-1.5 rounded-full transition-all duration-300 block ${
-                    activeMobileIdx === i ? 'w-6 bg-brand-blue shadow-xs' : 'w-1.5 bg-slate-300'
-                  }`}
-                />
-              </button>
-            ))}
+          {/* Flip dots & tactile swipe hint */}
+          <div className="flex flex-col items-center gap-2 mt-6">
+            <div className="flex justify-center items-center gap-1.5">
+              {STEPS.map((_, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => handleDotClick(i)}
+                  className="p-1 min-w-5 min-h-5 flex items-center justify-center cursor-pointer"
+                  aria-label={`Go to step ${i + 1}`}
+                >
+                  <span
+                    className={`h-1.5 rounded-full transition-all duration-300 block ${
+                      activeMobileIdx === i ? 'w-6 bg-brand-blue shadow-xs' : 'w-1.5 bg-slate-300'
+                    }`}
+                  />
+                </button>
+              ))}
+            </div>
+            <span className="text-[11px] font-mono text-slate-500 flex items-center gap-1.5">
+              <span>&larr;</span> Swipe card to flip <span>&rarr;</span>
+            </span>
           </div>
         </div>
 
