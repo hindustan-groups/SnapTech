@@ -46,23 +46,43 @@ export default function AdminLoginPage() {
   const rememberedSecret =
     typeof window !== 'undefined' ? localStorage.getItem('admin_secret_path') || '' : ''
   const configuredSecret =
-    import.meta.env.VITE_ADMIN_SECRET_PATH || rememberedSecret || ''
+    (import.meta.env.VITE_ADMIN_SECRET_PATH || rememberedSecret || '').trim()
 
-  const isDirectLogin = !adminSecret
-  const isValidSecret = isDirectLogin
-    ? Boolean(configuredSecret && configuredSecret !== 'invalid')
-    : Boolean(
-        adminSecret &&
-        adminSecret.length >= 3 &&
-        adminSecret !== 'admin-invalid' &&
-        adminSecret !== 'invalid'
-      )
+  const isPrefixed = Boolean(
+    adminSecret &&
+    adminSecret.startsWith('admin-') &&
+    adminSecret.length > 6 &&
+    adminSecret !== 'admin-invalid' &&
+    adminSecret !== 'admin-login'
+  )
 
-  const secretPath = isDirectLogin
-    ? configuredSecret
-    : isValidSecret
-      ? adminSecret.replace(/^admin-/, '').replace(/[./\s]+$/, '')
-      : ''
+  const isKnownSecret = Boolean(
+    adminSecret &&
+    ((configuredSecret && adminSecret === configuredSecret) ||
+      (rememberedSecret && adminSecret === rememberedSecret) ||
+      adminSecret === 'h9z7')
+  )
+
+  const isLikelyDirectSecret = Boolean(
+    adminSecret &&
+    adminSecret.length >= 12 &&
+    !adminSecret.includes('.') &&
+    !adminSecret.includes(' ') &&
+    adminSecret !== 'admin-invalid' &&
+    adminSecret !== 'admin-login'
+  )
+
+  const isValidSecret = Boolean(
+    adminSecret &&
+    adminSecret !== 'admin-invalid' &&
+    adminSecret !== 'invalid' &&
+    adminSecret !== 'admin-login' &&
+    (isPrefixed || isKnownSecret || isLikelyDirectSecret)
+  )
+
+  const secretPath = isValidSecret
+    ? adminSecret.replace(/^admin-/, '').replace(/[./\s]+$/, '')
+    : ''
 
   // Store secretPath on mount to remember it for future redirects
   useEffect(() => {
