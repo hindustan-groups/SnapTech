@@ -4,7 +4,8 @@
  * and from VITE_API_URL env var in production.
  */
 
-const BASE_URL = import.meta.env.VITE_API_URL || '/api'
+const rawBase = import.meta.env.VITE_API_URL || '/api'
+const BASE_URL = rawBase.replace(/\/+$/, '')
 
 export class ApiError extends Error {
   constructor(message, status) {
@@ -33,7 +34,8 @@ async function request(path, options = {}) {
   }
 
   const { params, ...fetchOptions } = options
-  let url = `${BASE_URL}${path}`
+  const cleanPath = path.startsWith('/') ? path : `/${path}`
+  let url = `${BASE_URL}${cleanPath}`
 
   if (params && typeof params === 'object') {
     const searchParams = new URLSearchParams()
@@ -48,11 +50,25 @@ async function request(path, options = {}) {
     }
   }
 
-  const res = await fetch(url, {
-    headers,
-    credentials: 'include', // sends httpOnly cookies for admin auth
-    ...fetchOptions,
-  })
+  let res
+  try {
+    res = await fetch(url, {
+      headers,
+      credentials: 'include', // sends httpOnly cookies for admin auth
+      ...fetchOptions,
+    })
+  } catch (err) {
+    if (err instanceof ApiError) throw err
+    const isNetworkError =
+      err.name === 'TypeError' ||
+      err.message === 'Failed to fetch' ||
+      err.message?.includes('NetworkError') ||
+      err.message?.includes('Failed to fetch')
+    const message = isNetworkError
+      ? 'Unable to connect to the server. Please check your network connection or server status.'
+      : err.message || 'Network request failed'
+    throw new ApiError(message, 0)
+  }
 
   let data = {}
   try {
