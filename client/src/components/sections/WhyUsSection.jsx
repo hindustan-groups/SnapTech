@@ -3,8 +3,8 @@
  * Seamless Cyber-Navy Glassmorphic design.
  * 100% Dynamic data from useSiteSettings with high-impact enterprise SLA pillars.
  */
-import { useState, useRef, useCallback } from 'react'
-import { motion } from 'framer-motion'
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   ShieldCheck,
   Clock,
@@ -50,29 +50,57 @@ const ENTERPRISE_DIFFERENTIATORS = [
   },
 ]
 
+const flipVariants = {
+  enter: (dir) => ({
+    x: dir > 0 ? 120 : -120,
+    rotate: dir > 0 ? 5 : -5,
+    opacity: 0,
+    scale: 0.94,
+  }),
+  center: {
+    x: 0,
+    rotate: 0,
+    opacity: 1,
+    scale: 1,
+    transition: {
+      type: 'spring',
+      stiffness: 350,
+      damping: 28,
+    },
+  },
+  exit: (dir) => ({
+    x: dir > 0 ? -160 : 160,
+    rotate: dir > 0 ? -8 : 8,
+    opacity: 0,
+    scale: 0.9,
+    transition: {
+      duration: 0.22,
+      ease: [0.32, 0.72, 0, 1],
+    },
+  }),
+}
+
 export default function WhyUsSection() {
   const { data: settingsData } = useSiteSettings()
   const cfg = settingsData?.data || {}
 
-  const mobileScrollRef = useRef(null)
   const [activeMobileIdx, setActiveMobileIdx] = useState(0)
+  const [direction, setDirection] = useState(1)
 
-  const handleMobileScroll = useCallback(() => {
-    if (!mobileScrollRef.current) return
-    const { scrollLeft, clientWidth } = mobileScrollRef.current
-    const itemWidth = clientWidth * 0.78 + 12
-    const idx = Math.round(scrollLeft / itemWidth)
-    setActiveMobileIdx(Math.min(Math.max(0, idx), ENTERPRISE_DIFFERENTIATORS.length - 1))
-  }, [])
+  const handleNext = () => {
+    setDirection(1)
+    setActiveMobileIdx((prev) => (prev + 1) % ENTERPRISE_DIFFERENTIATORS.length)
+  }
 
-  const scrollMobile = (idx) => {
-    if (!mobileScrollRef.current) return
-    const container = mobileScrollRef.current
-    const cards = container.children
-    if (cards[idx]) {
-      cards[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
-      setActiveMobileIdx(idx)
-    }
+  const handlePrev = () => {
+    setDirection(-1)
+    setActiveMobileIdx((prev) => (prev === 0 ? ENTERPRISE_DIFFERENTIATORS.length - 1 : prev - 1))
+  }
+
+  const handleDotClick = (i) => {
+    if (i === activeMobileIdx) return
+    setDirection(i > activeMobileIdx ? 1 : -1)
+    setActiveMobileIdx(i)
   }
 
   return (
@@ -146,26 +174,27 @@ export default function WhyUsSection() {
               })}
             </div>
 
-            {/* ── Mobile Horizontal Snap Carousel (< sm: screens) ── */}
+            {/* ── Mobile 3D Card Stack & Flip Deck (< sm: screens) ── */}
             <div className="sm:hidden pt-2">
-              <div className="flex items-center justify-between mb-3 px-1">
-                <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+              {/* Top Mobile Controls Bar */}
+              <div className="flex items-center justify-between mb-4 px-2">
+                <div className="flex items-center gap-2 text-xs font-semibold text-slate-600">
                   <span className="w-2 h-2 rounded-full bg-brand-blue animate-pulse" />
                   <span>The Advantage ({activeMobileIdx + 1}/{ENTERPRISE_DIFFERENTIATORS.length})</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <button
-                    onClick={() => scrollMobile(activeMobileIdx - 1)}
-                    disabled={activeMobileIdx === 0}
-                    className="w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-600 disabled:opacity-30 disabled:cursor-not-allowed shadow-2xs active:scale-95 transition-all cursor-pointer"
+                    type="button"
+                    onClick={handlePrev}
+                    className="w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-700 hover:bg-brand-blue hover:text-white hover:border-brand-blue shadow-xs active:scale-90 transition-all cursor-pointer"
                     aria-label="Previous advantage"
                   >
                     <ChevronLeft className="w-4 h-4" />
                   </button>
                   <button
-                    onClick={() => scrollMobile(activeMobileIdx + 1)}
-                    disabled={activeMobileIdx === ENTERPRISE_DIFFERENTIATORS.length - 1}
-                    className="w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-600 disabled:opacity-30 disabled:cursor-not-allowed shadow-2xs active:scale-95 transition-all cursor-pointer"
+                    type="button"
+                    onClick={handleNext}
+                    className="w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-700 hover:bg-brand-blue hover:text-white hover:border-brand-blue shadow-xs active:scale-90 transition-all cursor-pointer"
                     aria-label="Next advantage"
                   >
                     <ChevronRight className="w-4 h-4" />
@@ -173,54 +202,140 @@ export default function WhyUsSection() {
                 </div>
               </div>
 
-              <div
-                ref={mobileScrollRef}
-                onScroll={handleMobileScroll}
-                className="flex overflow-x-auto snap-x snap-mandatory gap-3 pb-3 -mx-4 px-4 no-scrollbar scroll-smooth"
-              >
-                {ENTERPRISE_DIFFERENTIATORS.map((item) => {
-                  const Icon = item.icon
+              {/* 3D Stack Stage */}
+              <div className="relative w-full max-w-85 mx-auto h-[290px] flex items-center justify-center select-none">
+                {/* Deepest Stack Card 3 */}
+                {ENTERPRISE_DIFFERENTIATORS.length > 2 && (
+                  <div
+                    className="absolute inset-x-5 top-0 h-[270px] rounded-2xl border border-slate-200/60 bg-slate-100/90 shadow-2xs pointer-events-none transition-all duration-300"
+                    style={{
+                      transform: 'translateY(14px) scale(0.9)',
+                      zIndex: 10,
+                      opacity: 0.45,
+                    }}
+                  />
+                )}
+
+                {/* Middle Stack Card 2 (Shows next differentiator preview) */}
+                {ENTERPRISE_DIFFERENTIATORS.length > 1 && (() => {
+                  const nextItem = ENTERPRISE_DIFFERENTIATORS[(activeMobileIdx + 1) % ENTERPRISE_DIFFERENTIATORS.length]
+                  const NextIcon = nextItem.icon
                   return (
                     <div
-                      key={item.title}
-                      className="w-[78vw] max-w-[280px] shrink-0 snap-center p-5 rounded-2xl bg-slate-50 border border-slate-200 shadow-sm flex flex-col justify-between"
+                      className="absolute inset-x-2.5 top-0 h-[270px] rounded-2xl border border-slate-200 bg-white shadow-md pointer-events-none transition-all duration-300 overflow-hidden"
+                      style={{
+                        transform: 'translateY(7px) scale(0.95)',
+                        zIndex: 20,
+                        opacity: 0.85,
+                      }}
                     >
-                      <div>
-                        <div className="flex items-center justify-between mb-3">
-                          <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200 text-brand-blue flex items-center justify-center">
-                            <Icon className="w-5 h-5" />
+                      <div className="p-5 flex flex-col justify-between h-full bg-white opacity-85">
+                        <div>
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200 text-brand-blue flex items-center justify-center opacity-75">
+                              <NextIcon className="w-5 h-5" />
+                            </div>
+                            <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-50 border border-blue-200 text-brand-blue opacity-80">
+                              {nextItem.badge}
+                            </span>
                           </div>
-                          <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-50 border border-blue-200 text-brand-blue">
-                            {item.badge}
-                          </span>
+                          <h4 className="font-heading text-base font-bold text-slate-800 line-clamp-1 mb-1.5">
+                            {nextItem.title}
+                          </h4>
+                          <p className="text-xs text-slate-500 line-clamp-3 leading-relaxed">
+                            {nextItem.desc}
+                          </p>
                         </div>
-                        <h3 className="font-heading text-base font-bold text-slate-900 mb-2">
-                          {item.title}
-                        </h3>
-                        <p className="text-xs text-slate-600 leading-relaxed">
-                          {item.desc}
-                        </p>
+
+                        <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-mono text-slate-400">
+                          <span>Advantage 0{((activeMobileIdx + 1) % ENTERPRISE_DIFFERENTIATORS.length) + 1}</span>
+                          <span className="font-bold text-brand-blue">Next Advantage &rarr;</span>
+                        </div>
                       </div>
                     </div>
                   )
-                })}
+                })()}
+
+                {/* Active Front Card 1 (Interactive & Flip animated) */}
+                <AnimatePresence mode="popLayout" custom={direction}>
+                  <motion.div
+                    key={activeMobileIdx}
+                    custom={direction}
+                    variants={flipVariants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    drag="x"
+                    dragConstraints={{ left: 0, right: 0 }}
+                    dragElastic={0.45}
+                    onDragEnd={(_e, { offset, velocity }) => {
+                      if (offset.x < -45 || velocity?.x < -300) {
+                        handleNext()
+                      } else if (offset.x > 45 || velocity?.x > 300) {
+                        handlePrev()
+                      }
+                    }}
+                    className="relative z-30 w-full h-[270px] cursor-grab active:cursor-grabbing touch-pan-y"
+                  >
+                    {(() => {
+                      const currentItem = ENTERPRISE_DIFFERENTIATORS[activeMobileIdx]
+                      const CurrentIcon = currentItem.icon
+                      return (
+                        <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-md relative overflow-hidden flex flex-col justify-between h-full">
+                          {/* Subtle brand glow */}
+                          <div className="absolute top-0 right-0 w-32 h-32 bg-linear-to-b from-blue-500/5 to-transparent blur-2xl rounded-full pointer-events-none" />
+
+                          <div>
+                            <div className="flex items-center justify-between mb-4">
+                              <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-200 text-brand-blue flex items-center justify-center shadow-2xs">
+                                <CurrentIcon className="w-6 h-6" />
+                              </div>
+                              <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-brand-blue shadow-2xs">
+                                {currentItem.badge}
+                              </span>
+                            </div>
+
+                            <h3 className="font-heading text-lg font-bold text-[#0D1B4B] mb-2 leading-snug">
+                              {currentItem.title}
+                            </h3>
+                            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                              {currentItem.desc}
+                            </p>
+                          </div>
+
+                          <div className="pt-3 border-t border-slate-100 mt-4 flex items-center justify-between text-xs font-mono text-slate-400">
+                            <span>Advantage 0{activeMobileIdx + 1}</span>
+                            <span className="font-bold text-brand-blue">Enterprise Grade</span>
+                          </div>
+                        </div>
+                      )
+                    })()}
+                  </motion.div>
+                </AnimatePresence>
               </div>
 
-              <div className="flex justify-center items-center gap-1.5 mt-2">
-                {ENTERPRISE_DIFFERENTIATORS.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => scrollMobile(i)}
-                    className="p-1 min-w-5 min-h-5 flex items-center justify-center cursor-pointer"
-                    aria-label={`Go to advantage ${i + 1}`}
-                  >
-                    <span
-                      className={`h-1.5 rounded-full transition-all duration-300 block ${
-                        activeMobileIdx === i ? 'w-6 bg-brand-blue shadow-xs' : 'w-1.5 bg-slate-300'
-                      }`}
-                    />
-                  </button>
-                ))}
+              {/* Flip dots & tactile swipe hint */}
+              <div className="flex flex-col items-center gap-2 mt-6">
+                <div className="flex justify-center items-center gap-1.5">
+                  {ENTERPRISE_DIFFERENTIATORS.map((_, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => handleDotClick(i)}
+                      className="p-1 min-w-5 min-h-5 flex items-center justify-center cursor-pointer"
+                      aria-label={`Go to advantage ${i + 1}`}
+                    >
+                      <span
+                        className={`h-1.5 rounded-full transition-all duration-300 block ${
+                          activeMobileIdx === i ? 'w-6 bg-brand-blue shadow-xs' : 'w-1.5 bg-slate-300'
+                        }`}
+                      />
+                    </button>
+                  ))}
+                </div>
+                <span className="text-[11px] font-mono text-slate-500 flex items-center gap-1.5">
+                  <span>&larr;</span> Swipe card to flip <span>&rarr;</span>
+                </span>
               </div>
             </div>
 
