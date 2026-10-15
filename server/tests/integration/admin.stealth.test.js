@@ -53,9 +53,27 @@ describe('Admin Stealth Access Control & Authentication (SEC-03)', () => {
     expect([200, 401, 403]).toContain(res.status)
   })
 
+  it('allows access to authentication logic on POST /api/admin/admin-:secret/login with prefixed secret', async () => {
+    const prefixed = SECRET_PATH.startsWith('admin-') ? SECRET_PATH : `admin-${SECRET_PATH}`
+    const res = await request(app)
+      .post(`/api/admin/${prefixed}/login`)
+      .send({ email: VALID_EMAIL, password: VALID_PASSWORD })
+
+    expect(res.status).not.toBe(404)
+    expect([200, 401, 403]).toContain(res.status)
+  })
+
   it('returns 404 on POST /api/admin/:secret/login with wrong secret', async () => {
     const res = await request(app)
       .post('/api/admin/unauthorized-secret-slug/login')
+      .send({ email: VALID_EMAIL, password: VALID_PASSWORD })
+
+    expect(res.status).toBe(404)
+  })
+
+  it('returns 404 on POST /api/admin/admin-login without valid secret', async () => {
+    const res = await request(app)
+      .post('/api/admin/admin-login')
       .send({ email: VALID_EMAIL, password: VALID_PASSWORD })
 
     expect(res.status).toBe(404)
