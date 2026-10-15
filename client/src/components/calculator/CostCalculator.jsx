@@ -193,6 +193,32 @@ export default function CostCalculator({ compact = false }) {
     setErrorMsg('')
 
     try {
+      let recaptchaToken = ''
+      const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY
+      if (siteKey && typeof window !== 'undefined' && typeof window.grecaptcha !== 'undefined') {
+        try {
+          recaptchaToken = await new Promise((resolve, reject) => {
+            window.grecaptcha.ready(() => {
+              window.grecaptcha
+                .execute(siteKey, { action: 'cost_calculator' })
+                .then(resolve)
+                .catch(reject)
+            })
+          })
+        } catch {
+          recaptchaToken = ''
+        }
+      } else if (!import.meta.env.PROD) {
+        // Strictly gated to non-production local development environments
+        recaptchaToken = 'dev-token'
+      }
+
+      if (!recaptchaToken) {
+        setErrorMsg('Security verification is unavailable. Please reach us directly on WhatsApp or Email.')
+        setLoading(false)
+        return
+      }
+
       const estimateSummary = `[Cost Calculator Quote]\nProject Type: ${currentCalculation.typeObj.name}\nScope: ${currentCalculation.scopeObj.label}\nAddons: ${selectedAddons.join(', ')}\nDelivery: ${currentCalculation.velocityObj.label} (${currentCalculation.velocityObj.time})\nEstimated Range: ₹${currentCalculation.grandTotal.toLocaleString('en-IN')}\n\nClient Note: ${formData.message || 'None'}`
 
       await api.post('/contact', {
@@ -202,7 +228,7 @@ export default function CostCalculator({ compact = false }) {
         serviceInterested: `Website Cost Calculator (Est: ₹${currentCalculation.grandTotal.toLocaleString('en-IN')})`,
         message: estimateSummary,
         consent: true,
-        recaptchaToken: 'dev-token',
+        recaptchaToken,
         _hp: '',
       })
 

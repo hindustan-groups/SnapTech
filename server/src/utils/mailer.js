@@ -578,12 +578,16 @@ export function leadFollowUpReminderTemplate({ leads, adminUrl }) {
           </tbody>
         </table>
 
-        <div style="margin-top: 30px; text-align: center;">
+        ${
+          adminUrl
+            ? `<div style="margin-top: 30px; text-align: center;">
           <a href="${adminUrl}" style="display: inline-block; background: #1A3E8C; color: white; padding: 12px 28px; border-radius: 6px; text-decoration: none; font-size: 15px; font-weight: 600; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">Open Admin Panel leads</a>
-        </div>
+        </div>`
+            : ''
+        }
       </div>
     `,
-    text: `Follow-up reminder for ${leads.length} overdue leads. Direct Admin Link: ${adminUrl}`,
+    text: `Follow-up reminder for ${leads.length} overdue leads.${adminUrl ? ` Direct Admin Link: ${adminUrl}` : ''}`,
   }
 }
 
@@ -623,12 +627,16 @@ export function staleLeadFollowUpTemplate({ leads, adminUrl }) {
           </tbody>
         </table>
 
-        <div style="margin-top: 30px; text-align: center;">
+        ${
+          adminUrl
+            ? `<div style="margin-top: 30px; text-align: center;">
           <a href="${adminUrl}" style="display: inline-block; background: #E31E24; color: white; padding: 12px 28px; border-radius: 6px; text-decoration: none; font-size: 15px; font-weight: 600;">Open Admin Leads Dashboard</a>
-        </div>
+        </div>`
+            : ''
+        }
       </div>
     `,
-    text: `Stale leads follow-up reminder for ${leads.length} leads. Admin link: ${adminUrl}`,
+    text: `Stale leads follow-up reminder for ${leads.length} leads.${adminUrl ? ` Admin link: ${adminUrl}` : ''}`,
   }
 }
 

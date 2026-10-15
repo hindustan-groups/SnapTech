@@ -387,6 +387,7 @@ const router = Router()
 
 const envSecret = process.env.ADMIN_SECRET_PATH || 'admin-portal'
 const strippedSecret = envSecret.startsWith('admin-') ? envSecret.slice(6) : envSecret
+const prefixedSecret = envSecret.startsWith('admin-') ? envSecret : `admin-${envSecret}`
 
 const loginPaths = Array.from(
   new Set([
@@ -394,6 +395,8 @@ const loginPaths = Array.from(
     `/${envSecret}/login`,
     `/${strippedSecret}`,
     `/${strippedSecret}/login`,
+    `/${prefixedSecret}`,
+    `/${prefixedSecret}/login`,
     `/login`,
     '/',
     '',

@@ -12,37 +12,7 @@
 import prisma from '../config/db.js'
 import { env } from '../config/env.js'
 import { sendEmail, adminNotificationTemplate, autoReplyTemplate } from '../utils/mailer.js'
-
-/**
- * Verify Google reCAPTCHA v3 token.
- * Returns true if score >= threshold (0.5).
- * Returns true unconditionally in dev when secret key is not configured.
- */
-async function verifyRecaptcha(token) {
-  if (!env.RECAPTCHA_SECRET_KEY) {
-    // Dev mode: skip reCAPTCHA verification
-    console.warn('[reCAPTCHA] RECAPTCHA_SECRET_KEY not set — skipping verification in dev.')
-    return true
-  }
-
-  const params = new URLSearchParams({
-    secret: env.RECAPTCHA_SECRET_KEY,
-    response: token,
-  })
-
-  const response = await fetch(
-    `https://www.google.com/recaptcha/api/siteverify?${params.toString()}`,
-    { method: 'POST' }
-  )
-
-  if (!response.ok) {
-    throw new Error('reCAPTCHA verification request failed')
-  }
-
-  const data = await response.json()
-  // reCAPTCHA v3 returns a score 0.0–1.0; >= 0.5 = likely human
-  return data.success && data.score >= 0.5
-}
+import { verifyRecaptcha } from '../utils/recaptcha.js'
 
 /**
  * POST /api/contact
@@ -85,7 +55,9 @@ export const submitContact = async (req, res, next) => {
       })
     }
 
-    const isHuman = await verifyRecaptcha(recaptchaToken)
+    const isHuman = await verifyRecaptcha(recaptchaToken, req.ip, {
+      expectedAction: ['contact_form', 'cost_calculator', 'pricing_quote', 'homepage_quote'],
+    })
     if (!isHuman) {
       return res.status(400).json({
         status: 'error',

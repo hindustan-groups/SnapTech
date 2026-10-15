@@ -22,18 +22,14 @@ export const getLegalPage = async (req, res, next) => {
       return res.status(404).json({ status: 'error', message: `Legal page ${pageType} not found.` })
     }
 
-    // Resolve admin email for updatedBy
-    let adminEmail = 'System Seed'
-    if (page.updatedBy) {
-      const updater = await prisma.admin.findUnique({ where: { id: page.updatedBy } })
-      if (updater) {
-        adminEmail = updater.email
-      }
-    }
-
+    // SEC-01: Remove internal administrator email and audit metadata from public response DTO.
+    // Preserve legitimate legal content, page type, title, id, and lastUpdated timestamp.
     const responseData = {
-      ...page,
-      adminEmail,
+      id: page.id,
+      pageType: page.pageType,
+      title: page.title,
+      content: page.content,
+      lastUpdated: page.lastUpdated,
     }
 
     setCache(cacheKey, responseData, 600) // 10 min cache

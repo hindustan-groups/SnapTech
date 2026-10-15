@@ -226,17 +226,30 @@ export default function ContactPage() {
       setApiError('')
 
       try {
-        let recaptchaToken = 'dev-token'
+        let recaptchaToken = ''
         const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY
-        if (siteKey && typeof window.grecaptcha !== 'undefined') {
-          recaptchaToken = await new Promise((resolve, reject) => {
-            window.grecaptcha.ready(() => {
-              window.grecaptcha
-                .execute(siteKey, { action: 'contact_form' })
-                .then(resolve)
-                .catch(reject)
+        if (siteKey && typeof window !== 'undefined' && typeof window.grecaptcha !== 'undefined') {
+          try {
+            recaptchaToken = await new Promise((resolve, reject) => {
+              window.grecaptcha.ready(() => {
+                window.grecaptcha
+                  .execute(siteKey, { action: 'contact_form' })
+                  .then(resolve)
+                  .catch(reject)
+              })
             })
-          })
+          } catch {
+            recaptchaToken = ''
+          }
+        } else if (!import.meta.env.PROD) {
+          // Strictly gated to non-production local development environments
+          recaptchaToken = 'dev-token'
+        }
+
+        if (!recaptchaToken) {
+          setSubmitState('error')
+          setApiError('Security verification failed or is unavailable. Please refresh the page and try again.')
+          return
         }
 
         await api.post('/contact', {

@@ -84,12 +84,23 @@ export const hideAdminRoutes = (req, res, next) => {
     `/api/admin/${strippedSecret}`,
     `/api/admin/${prefixedSecret}/login`,
     `/api/admin/${prefixedSecret}`,
-    `/api/admin/login`,
-    `/api/admin`,
     `/api/admin/logout`,
     `/api/admin/refresh-token`,
     `/api/admin/2fa/login`,
   ]
+
+  // Allow /api/admin/login and /api/admin ONLY when a valid stealth header is supplied
+  const adminPathHeader = (req.headers['x-admin-path'] || req.headers['x-admin-secret'] || '')
+    .toString()
+    .trim()
+    .toLowerCase()
+  const validSecrets = [envSecret, strippedSecret, prefixedSecret]
+    .filter(Boolean)
+    .map((s) => s.toLowerCase())
+
+  if (adminPathHeader && validSecrets.includes(adminPathHeader)) {
+    allowedPaths.push('/api/admin/login', '/api/admin')
+  }
 
   if (allowedPaths.includes(cleanUrl)) {
     return next()
@@ -112,7 +123,7 @@ export const hideAdminRoutes = (req, res, next) => {
   try {
     jwt.verify(token, process.env.JWT_SECRET)
     next()
-  } catch (err) {
+  } catch {
     // Return 404 so expired/invalid tokens don't confirm route existence
     return res.status(404).json({
       status: 'error',

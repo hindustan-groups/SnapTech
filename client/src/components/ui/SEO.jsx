@@ -335,7 +335,7 @@ export default function SEO({
 
   const allSchemas = [...defaultSchemas, ...schemas.filter(Boolean)]
 
-  // Synchronize static fallback tags in index.html to reflect dynamic route canonical
+  // Synchronize static fallback tags in index.html to reflect dynamic route canonical & robots state
   useEffect(() => {
     if (typeof document === 'undefined') return
     const canonicalTags = document.querySelectorAll('link[rel="canonical"]')
@@ -346,7 +346,13 @@ export default function SEO({
     ogUrls.forEach((tag) => {
       tag.content = canonical
     })
-  }, [canonical])
+    const robotsTags = document.querySelectorAll('meta[name="robots"]')
+    robotsTags.forEach((tag) => {
+      tag.content = noIndex
+        ? 'noindex,nofollow'
+        : 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1'
+    })
+  }, [canonical, noIndex])
 
   return (
     <Helmet>
