@@ -4,12 +4,13 @@
  * High-impact balanced two-column layout with prominent 3D technology illustration,
  * ambient soft blue gradients, domain search bar, and verified enterprise CTAs.
  */
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { ArrowRight, Search } from 'lucide-react'
 import { Button, Container } from '@/components/ui'
 import { useSiteSettings } from '@/hooks/useContent'
 import { useServices } from '@/hooks/useServices'
+import { useTypewriter } from '@/hooks/useTypewriter'
 import heroDesktopBg from '@/assets/hero-desktop-bg.jpg'
 import heroTechVisual from '@/assets/hero-tech-visual-final.webp'
 import {
@@ -28,6 +29,34 @@ const DEFAULT_TECH_SEARCH_QUERIES = [
   'AI & Workflow Automation',
   'High-Speed SEO Optimization',
 ]
+
+const BUILT_IN_SERVICES = [
+  'Web Development',
+  'Mobile App Development',
+  'Custom Industrial ERP',
+  'Enterprise Cloud & AWS',
+  'AI & Workflow Automation',
+  'E-Commerce Solutions',
+  'Cybersecurity & Audits',
+]
+
+function SearchInput({ id, value, onChange, servicesList, className }) {
+  const placeholder = useTypewriter(servicesList, { isPaused: Boolean(value) })
+
+  return (
+    <input
+      id={id}
+      name="q"
+      type="text"
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+      aria-label="Search IT services or technologies"
+      autoComplete="off"
+      className={className}
+    />
+  )
+}
 
 export default function HeroSection() {
   const [searchQuery, setSearchQuery] = useState('')
@@ -61,63 +90,23 @@ export default function HeroSection() {
   )
   const heroImage = cfg.hero_image_url || heroTechVisual
 
-  // Auto-rotating dynamic services typewriter for search bar
+  // Auto-rotating dynamic services for search bar with robust built-in fallback
   const servicesListForSearch = useMemo(() => {
     if (cfg.hero_search_terms) {
-      return cfg.hero_search_terms.split(',').map((s) => s.trim()).filter(Boolean)
+      const configured = cfg.hero_search_terms
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean)
+      if (configured.length > 0) return configured
     }
     if (servicesData?.data?.length) {
-      return servicesData.data.map((s) => s.title)
+      const titles = servicesData.data
+        .map((s) => (typeof s.title === 'string' ? s.title.trim() : ''))
+        .filter(Boolean)
+      if (titles.length > 0) return titles
     }
-    return [
-      'Web Development',
-      'Mobile App Development',
-      'Custom Industrial ERP',
-      'Enterprise Cloud & AWS',
-      'AI & Workflow Automation',
-      'E-Commerce Solutions',
-      'Cybersecurity & Audits',
-    ]
+    return BUILT_IN_SERVICES
   }, [cfg.hero_search_terms, servicesData])
-
-  const [currentServiceIndex, setCurrentServiceIndex] = useState(0)
-  const [displayedPlaceholder, setDisplayedPlaceholder] = useState('Web Development...')
-  const [isDeleting, setIsDeleting] = useState(false)
-
-  useEffect(() => {
-    if (searchQuery) return // Pause animation when user is actively searching
-
-    const currentService = servicesListForSearch[currentServiceIndex % servicesListForSearch.length]
-    const fullText = `${currentService}...`
-    let timer
-
-    if (!isDeleting) {
-      if (displayedPlaceholder.length < fullText.length) {
-        timer = setTimeout(() => {
-          setDisplayedPlaceholder(fullText.slice(0, displayedPlaceholder.length + 1))
-        }, 70)
-      } else {
-        // Pause at complete service title for 2.2 seconds
-        timer = setTimeout(() => {
-          setIsDeleting(true)
-        }, 2200)
-      }
-    } else {
-      if (displayedPlaceholder.length > 0) {
-        timer = setTimeout(() => {
-          setDisplayedPlaceholder(displayedPlaceholder.slice(0, -1))
-        }, 30)
-      } else {
-        // Move smoothly to next service after short pause
-        timer = setTimeout(() => {
-          setIsDeleting(false)
-          setCurrentServiceIndex((prev) => (prev + 1) % servicesListForSearch.length)
-        }, 200)
-      }
-    }
-
-    return () => clearTimeout(timer)
-  }, [displayedPlaceholder, isDeleting, currentServiceIndex, servicesListForSearch, searchQuery])
 
   const popularQueries = cfg.hero_popular_queries
     ? cfg.hero_popular_queries.split(',').map((s) => s.trim())
@@ -206,15 +195,11 @@ export default function HeroSection() {
             <div className="pl-3 pr-2 text-[#1877F2] shrink-0">
               <Search className="w-4 h-4 text-[#1877F2]" strokeWidth={2.5} />
             </div>
-            <input
+            <SearchInput
               id="hero-tech-search-mobile"
-              name="q"
-              type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={displayedPlaceholder}
-              aria-label="Search IT services or technologies"
-              autoComplete="off"
+              servicesList={servicesListForSearch}
               className="w-full bg-transparent text-slate-900 font-semibold placeholder:text-slate-800 placeholder:font-bold text-xs sm:text-sm focus:outline-none min-w-0"
             />
             <button
@@ -405,15 +390,11 @@ export default function HeroSection() {
                     <div className="pl-3.5 pr-2 text-[#1877F2] shrink-0">
                       <Search className="w-4.5 h-4.5 text-[#1877F2]" strokeWidth={2.5} />
                     </div>
-                    <input
+                    <SearchInput
                       id="hero-tech-search"
-                      name="q"
-                      type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder={displayedPlaceholder}
-                      aria-label="Search IT services or technologies"
-                      autoComplete="off"
+                      servicesList={servicesListForSearch}
                       className="w-full bg-transparent text-slate-900 font-semibold placeholder:text-slate-800 placeholder:font-bold text-xs sm:text-sm focus:outline-none"
                     />
                     <button
