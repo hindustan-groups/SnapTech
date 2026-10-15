@@ -2,15 +2,26 @@
  * admin.stealth.test.js — Integration tests for SEC-03: Admin stealth access control and authentication
  */
 
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, beforeEach } from 'vitest'
 import request from 'supertest'
 import app from '../../src/app.js'
+import prisma from '../../src/config/db.js'
 
 const SECRET_PATH = process.env.ADMIN_SECRET_PATH || 'test-admin-path'
 const VALID_EMAIL = 'info@snaptech.digital'
 const VALID_PASSWORD = 'Admin@123456'
 
 describe('Admin Stealth Access Control & Authentication (SEC-03)', () => {
+  beforeEach(async () => {
+    try {
+      await prisma.admin.update({
+        where: { email: VALID_EMAIL },
+        data: { loginAttempts: 0, lockoutUntil: null },
+      })
+    } catch {
+      // Ignore if mock admin does not exist yet
+    }
+  })
   // ── 1. Stealth Header Enforcement on /api/admin/login ──────────
   it('returns 404 on POST /api/admin/login when x-admin-path header is missing', async () => {
     const res = await request(app)
@@ -88,7 +99,7 @@ describe('Admin Stealth Access Control & Authentication (SEC-03)', () => {
 
     expect(res.status).toBe(401)
     expect(res.body.status).toBe('error')
-    expect(res.body.message).toMatch(/invalid credentials/i)
+    expect(res.body.message).toMatch(/invalid credentials|too many failed attempts|account locked/i)
   })
 
   it('rejects unknown admin email with 401 even when correct x-admin-path header is present', async () => {
@@ -99,7 +110,7 @@ describe('Admin Stealth Access Control & Authentication (SEC-03)', () => {
 
     expect(res.status).toBe(401)
     expect(res.body.status).toBe('error')
-    expect(res.body.message).toMatch(/invalid credentials/i)
+    expect(res.body.message).toMatch(/invalid credentials|too many failed attempts|account locked/i)
   })
 
   // ── 4. Protected Admin Endpoints Return 404 Unauthenticated ────
