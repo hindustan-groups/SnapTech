@@ -43,16 +43,23 @@ export default function AdminLoginPage() {
   const [otpError, setOtpError] = useState('')
   const [otpLoading, setOtpLoading] = useState(false)
 
+  const rememberedSecret =
+    typeof window !== 'undefined' ? localStorage.getItem('admin_secret_path') || '' : ''
+  const configuredSecret =
+    import.meta.env.VITE_ADMIN_SECRET_PATH || rememberedSecret || ''
+
   const isDirectLogin = !adminSecret
-  const isValidSecret =
-    isDirectLogin ||
-    (adminSecret &&
-      adminSecret.length >= 3 &&
-      adminSecret !== 'admin-invalid' &&
-      adminSecret !== 'invalid')
+  const isValidSecret = isDirectLogin
+    ? Boolean(configuredSecret && configuredSecret !== 'invalid')
+    : Boolean(
+        adminSecret &&
+        adminSecret.length >= 3 &&
+        adminSecret !== 'admin-invalid' &&
+        adminSecret !== 'invalid'
+      )
 
   const secretPath = isDirectLogin
-    ? 'login'
+    ? configuredSecret
     : isValidSecret
       ? adminSecret.replace(/^admin-/, '').replace(/[./\s]+$/, '')
       : ''

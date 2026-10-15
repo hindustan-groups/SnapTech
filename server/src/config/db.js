@@ -38,6 +38,7 @@ let mockAdmin = {
   refreshToken: null,
   twoFactorSecret: null,
   twoFactorEnabled: false,
+  isActive: true,
 }
 
 let mockServices = [
@@ -1291,6 +1292,43 @@ let mockChatbotInquiries = []
 let mockErrorLogs = []
 let mockPageVisits = []
 
+let mockBlogPosts = [
+  {
+    id: 'hp-blog-1',
+    title: "Why We Built SnapTech Digital: Shifting Rajasthan's Businesses to Enterprise IT",
+    slug: 'why-we-built-snaptech-digital-enterprise-it',
+    excerpt: "In today's digital-first economy, we built SnapTech Digital to bridge the gap between legacy paper workflows and high-performance custom software for businesses in Rajasthan and beyond.",
+    content: '<h2>Bridging the Digital Gap in Local Markets</h2><p>SnapTech Digital was founded to bring enterprise software to Rajasthan.</p>',
+    featuredImageUrl: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80',
+    category: 'Company News',
+    tags: ['SnapTech Digital', 'mission', 'custom software'],
+    authorName: 'SnapTech Digital Team',
+    status: 'PUBLISHED',
+    isFeatured: true,
+    publishedAt: new Date('2026-07-08'),
+    viewCount: 152,
+    createdAt: new Date('2026-07-08'),
+    updatedAt: new Date('2026-07-08'),
+  },
+  {
+    id: 'hp-blog-2',
+    title: 'What We Build: A Deep Dive into Our Core IT Services & Digital Solutions',
+    slug: 'what-we-build-core-it-services-digital-solutions',
+    excerpt: 'Discover what we build. From responsive corporate portals to custom ERP inventory systems and mobile dashboards, we design custom systems that scale.',
+    content: '<h2>A Full-Suite Software Engineering Partner</h2><p>Our capabilities span custom web applications, specialized business ERP systems, and high-converting marketing platforms.</p>',
+    featuredImageUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80',
+    category: 'Web Development',
+    tags: ['custom web apps', 'ERP', 'mobile apps'],
+    authorName: 'SnapTech Digital Team',
+    status: 'PUBLISHED',
+    isFeatured: false,
+    publishedAt: new Date('2026-07-08'),
+    viewCount: 98,
+    createdAt: new Date('2026-07-08'),
+    updatedAt: new Date('2026-07-08'),
+  },
+]
+
 // Helper to save all mock data arrays to disk
 function saveMockDb() {
   try {
@@ -1316,6 +1354,7 @@ function saveMockDb() {
       mockChatbotInquiries,
       mockErrorLogs,
       mockPageVisits,
+      mockBlogPosts,
     }
     fs.writeFileSync(MOCK_DB_PATH, JSON.stringify(data, null, 2), 'utf8')
   } catch (err) {
@@ -1415,6 +1454,14 @@ function loadMockDb() {
         mockPageVisits = data.mockPageVisits.map((v) => ({
           ...v,
           createdAt: new Date(v.createdAt),
+        }))
+      }
+      if (data.mockBlogPosts) {
+        mockBlogPosts = data.mockBlogPosts.map((b) => ({
+          ...b,
+          publishedAt: b.publishedAt ? new Date(b.publishedAt) : null,
+          createdAt: new Date(b.createdAt),
+          updatedAt: new Date(b.updatedAt),
         }))
       }
 
@@ -1670,43 +1717,6 @@ mockPrisma.pageVisit = {
     return { count: before - mockPageVisits.length }
   },
 }
-
-let mockBlogPosts = [
-  {
-    id: 'hp-blog-1',
-    title: "Why We Built SnapTech Digital: Shifting Rajasthan's Businesses to Enterprise IT",
-    slug: 'why-we-built-snaptech-digital-enterprise-it',
-    excerpt: "In today's digital-first economy, we built SnapTech Digital to bridge the gap between legacy paper workflows and high-performance custom software for businesses in Rajasthan and beyond.",
-    content: '<h2>Bridging the Digital Gap in Local Markets</h2><p>SnapTech Digital was founded to bring enterprise software to Rajasthan.</p>',
-    featuredImageUrl: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80',
-    category: 'Company News',
-    tags: ['SnapTech Digital', 'mission', 'custom software'],
-    authorName: 'SnapTech Digital Team',
-    status: 'PUBLISHED',
-    isFeatured: true,
-    publishedAt: new Date('2026-07-08'),
-    viewCount: 152,
-    createdAt: new Date('2026-07-08'),
-    updatedAt: new Date('2026-07-08'),
-  },
-  {
-    id: 'hp-blog-2',
-    title: 'What We Build: A Deep Dive into Our Core IT Services & Digital Solutions',
-    slug: 'what-we-build-core-it-services-digital-solutions',
-    excerpt: 'Discover what we build. From responsive corporate portals to custom ERP inventory systems and mobile dashboards, we design custom systems that scale.',
-    content: '<h2>A Full-Suite Software Engineering Partner</h2><p>Our capabilities span custom web applications, specialized business ERP systems, and high-converting marketing platforms.</p>',
-    featuredImageUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80',
-    category: 'Web Development',
-    tags: ['custom web apps', 'ERP', 'mobile apps'],
-    authorName: 'SnapTech Digital Team',
-    status: 'PUBLISHED',
-    isFeatured: false,
-    publishedAt: new Date('2026-07-08'),
-    viewCount: 98,
-    createdAt: new Date('2026-07-08'),
-    updatedAt: new Date('2026-07-08'),
-  },
-]
 
 mockPrisma.blogPost = {
   findMany: async (args) => {

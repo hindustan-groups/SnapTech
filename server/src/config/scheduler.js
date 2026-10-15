@@ -280,10 +280,14 @@ export function databaseSnapshotStatusTemplate({
  */
 export async function runDatabaseSnapshotStatusCheck() {
   console.log('[Scheduler] Running Automated Database Snapshot Status Check...')
-  const admins = await prisma.admin.findMany({ select: { email: true } })
-  const recipients = admins.map((a) => a.email).join(', ') || env.EMAIL_USER
+  let recipients = env.EMAIL_USER
 
   try {
+    const admins = await prisma.admin.findMany({ select: { email: true } })
+    if (admins && admins.length > 0) {
+      recipients = admins.map((a) => a.email).join(', ') || env.EMAIL_USER
+    }
+
     const servicesCount = await prisma.service.count()
     const projectsCount = await prisma.project.count()
     const jobPostingsCount = await prisma.jobPosting.count()

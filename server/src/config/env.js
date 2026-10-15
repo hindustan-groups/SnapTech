@@ -34,15 +34,15 @@ export const env = {
 }
 
 // Validate required env vars at startup
-const required = ['DATABASE_URL', 'JWT_SECRET']
+const required = ['JWT_SECRET']
 
 if (process.env.NODE_ENV === 'production') {
   required.push(
+    'DATABASE_URL',
     'ADMIN_SECRET_PATH',
     'CLOUDINARY_CLOUD_NAME',
     'CLOUDINARY_API_KEY',
-    'CLOUDINARY_API_SECRET',
-    'INTEGRATION_MASTER_KEY'
+    'CLOUDINARY_API_SECRET'
   )
 }
 
@@ -63,10 +63,10 @@ if (process.env.NODE_ENV === 'production') {
   }
 }
 
-// In production, enforce minimum strength requirements for INTEGRATION_MASTER_KEY (>= 16 chars)
+// In production, if INTEGRATION_MASTER_KEY is provided via env, enforce minimum length >= 16
 if (process.env.NODE_ENV === 'production') {
-  const masterKey = (env.INTEGRATION_MASTER_KEY || process.env.INTEGRATION_MASTER_KEY || '').trim()
-  if (masterKey.length < 16) {
+  const masterKey = (env.INTEGRATION_MASTER_KEY || process.env.INTEGRATION_MASTER_KEY || '').trim().replace(/^["'`]+|["'`]+$/g, '')
+  if (masterKey && masterKey.length < 16) {
     console.error('[CRITICAL] INTEGRATION_MASTER_KEY must be at least 16 characters long.')
     process.exit(1)
   }

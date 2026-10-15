@@ -15,6 +15,7 @@ import prisma from '../../src/config/db.js'
 
 describe('reCAPTCHA Action & Hostname Hardening Integration (SEC-06)', () => {
   const originalEnv = { ...process.env }
+  const originalContactLead = prisma.contactLead
 
   beforeEach(() => {
     vi.restoreAllMocks()
@@ -30,6 +31,7 @@ describe('reCAPTCHA Action & Hostname Hardening Integration (SEC-06)', () => {
   })
 
   afterEach(() => {
+    prisma.contactLead = originalContactLead
     process.env = { ...originalEnv }
     vi.restoreAllMocks()
   })

@@ -30,8 +30,11 @@ export async function resolveMasterKey() {
       const dbRow = await prisma.siteSetting.findUnique({
         where: { key: 'sys_integration_master_key' },
       })
-      if (dbRow?.value) {
-        rawKey = dbRow.value
+      if (dbRow?.value && typeof dbRow.value === 'string') {
+        const cleanedDbKey = dbRow.value.trim().replace(/^["'`]+|["'`]+$/g, '')
+        if (cleanedDbKey.length >= MIN_MASTER_KEY_LENGTH) {
+          rawKey = cleanedDbKey
+        }
       }
     }
 

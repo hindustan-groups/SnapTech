@@ -22,7 +22,11 @@ describe('masterKey utility (SEC-02)', () => {
   })
 
   afterEach(() => {
-    process.env.INTEGRATION_MASTER_KEY = originalEnvKey
+    if (originalEnvKey === undefined) {
+      delete process.env.INTEGRATION_MASTER_KEY
+    } else {
+      process.env.INTEGRATION_MASTER_KEY = originalEnvKey
+    }
     vi.restoreAllMocks()
   })
 

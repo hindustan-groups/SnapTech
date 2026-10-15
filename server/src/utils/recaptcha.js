@@ -174,21 +174,24 @@ export async function verifyRecaptcha(token, remoteIpOrOptions, options = {}) {
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), VERIFY_TIMEOUT_MS)
 
-    const response = await fetch(RECAPTCHA_VERIFY_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: params.toString(),
-      signal: controller.signal,
-    })
+    let data
+    try {
+      const response = await fetch(RECAPTCHA_VERIFY_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: params.toString(),
+        signal: controller.signal,
+      })
 
-    clearTimeout(timeoutId)
+      if (!response.ok) {
+        console.error(`[reCAPTCHA] Provider returned non-200 status (${response.status}). Failing closed.`)
+        return false
+      }
 
-    if (!response.ok) {
-      console.error(`[reCAPTCHA] Provider returned non-200 status (${response.status}). Failing closed.`)
-      return false
+      data = await response.json()
+    } finally {
+      clearTimeout(timeoutId)
     }
-
-    const data = await response.json()
 
     if (!data || !data.success) {
       return false
@@ -211,7 +214,11 @@ export async function verifyRecaptcha(token, remoteIpOrOptions, options = {}) {
     }
 
     // 7. Hostname validation: reject unauthorized hostnames
-    if (data.hostname) {
+    if (data.hostname || expectedHostname) {
+      if (!data.hostname) {
+        console.warn('[reCAPTCHA] Missing hostname when expectedHostname was requested. Failing closed.')
+        return false
+      }
       const allowedHostnames = getAllowedHostnames()
       if (expectedHostname) {
         const customHosts = Array.isArray(expectedHostname) ? expectedHostname : [expectedHostname]

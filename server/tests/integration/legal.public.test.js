@@ -36,6 +36,7 @@ describe('Public Legal API — SEC-01 Remediation', () => {
       // SEC-01: Internal metadata must be completely stripped from public DTO
       expect(data.adminEmail).toBeUndefined()
       expect(data.updatedBy).toBeUndefined()
+      expect(Object.keys(data).sort()).toEqual(['content', 'id', 'lastUpdated', 'pageType', 'title'])
 
       // The entire response payload must not contain administrative email addresses
       const rawBody = JSON.stringify(res.body)
@@ -54,9 +55,10 @@ describe('Public Legal API — SEC-01 Remediation', () => {
       expect(res.body.data.pageType).toBe('TERMS_OF_SERVICE')
       expect(res.body.data.content).toBeDefined()
 
-      // Ensure no admin email is disclosed
+      // Ensure no admin email is disclosed and exact key contract is met
       expect(res.body.data.adminEmail).toBeUndefined()
       expect(res.body.data.updatedBy).toBeUndefined()
+      expect(Object.keys(res.body.data).sort()).toEqual(['content', 'id', 'lastUpdated', 'pageType', 'title'])
       expect(JSON.stringify(res.body)).not.toMatch(/adminEmail/i)
     })
   })
@@ -72,6 +74,7 @@ describe('Public Legal API — SEC-01 Remediation', () => {
 
       expect(res.body.data.adminEmail).toBeUndefined()
       expect(res.body.data.updatedBy).toBeUndefined()
+      expect(Object.keys(res.body.data).sort()).toEqual(['content', 'id', 'lastUpdated', 'pageType', 'title'])
       expect(JSON.stringify(res.body)).not.toMatch(/adminEmail/i)
     })
   })

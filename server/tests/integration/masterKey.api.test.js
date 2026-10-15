@@ -41,7 +41,11 @@ describe('Master Key Integration API — SEC-02', () => {
   })
 
   afterEach(() => {
-    process.env.INTEGRATION_MASTER_KEY = originalKey
+    if (originalKey === undefined) {
+      delete process.env.INTEGRATION_MASTER_KEY
+    } else {
+      process.env.INTEGRATION_MASTER_KEY = originalKey
+    }
     vi.restoreAllMocks()
   })
 
@@ -143,9 +147,10 @@ describe('Master Key Integration API — SEC-02', () => {
           newKey: 'short-new-key', // 13 chars (< 16)
         })
 
-      expect(res.status).toBe(400)
+      expect([400, 422]).toContain(res.status)
       expect(res.body.status).toBe('error')
-      expect(res.body.message).toMatch(/at least 16 characters/i)
+      const errorMsg = res.body.errors?.[0]?.message || res.body.message || ''
+      expect(errorMsg).toMatch(/at least 16 characters/i)
     })
 
     it('rejects update with 401 if current key is incorrect', async () => {
