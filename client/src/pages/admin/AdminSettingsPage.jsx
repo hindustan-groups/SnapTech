@@ -55,7 +55,7 @@ const emailSchema = z.object({
 const masterKeySchema = z
   .object({
     currentKey: z.string().min(1, 'Current master key is required'),
-    newKey: z.string().min(8, 'New key must be at least 8 characters'),
+    newKey: z.string().min(16, 'New key must be at least 16 characters'),
     confirmKey: z.string().min(1, 'Please confirm new master key'),
   })
   .refine((d) => d.newKey === d.confirmKey, {
@@ -516,7 +516,7 @@ function MasterKeyForm() {
           placeholder="Enter active master key"
         />
         <PasswordInput
-          label="New Master Key (min 8 characters)"
+          label="New Master Key (min 16 characters)"
           name="newKey"
           register={register}
           error={errors.newKey}

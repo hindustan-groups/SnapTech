@@ -144,9 +144,9 @@ export default function JobDetailPage() {
         return
       }
 
-      let recaptchaToken = 'dev-token'
+      let recaptchaToken = ''
       const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY
-      if (siteKey && typeof window.grecaptcha !== 'undefined') {
+      if (siteKey && typeof window !== 'undefined' && typeof window.grecaptcha !== 'undefined') {
         try {
           recaptchaToken = await new Promise((resolve, reject) => {
             window.grecaptcha.ready(() => {
@@ -157,8 +157,16 @@ export default function JobDetailPage() {
             })
           })
         } catch {
-          // Silent fallback for reCAPTCHA failure
+          recaptchaToken = ''
         }
+      } else if (!import.meta.env.PROD) {
+        // Strictly gated to non-production local development environments
+        recaptchaToken = 'dev-token'
+      }
+
+      if (!recaptchaToken) {
+        setApiError('Security verification failed or is unavailable. Please refresh and try again.')
+        return
       }
 
       const payload = new FormData()

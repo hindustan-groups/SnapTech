@@ -9,6 +9,7 @@ import {
 } from '../utils/mailer.js'
 import { env } from '../config/env.js'
 import { getCache, setCache } from '../utils/cache.js'
+import { verifyRecaptcha } from '../utils/recaptcha.js'
 
 export const getActiveJobs = async (_req, res, next) => {
   try {
@@ -78,32 +79,6 @@ export const getJobBySlug = async (req, res, next) => {
   }
 }
 
-/**
- * Verify Google reCAPTCHA v3 token.
- */
-async function verifyRecaptcha(token) {
-  if (!env.RECAPTCHA_SECRET_KEY) {
-    console.warn('[reCAPTCHA] RECAPTCHA_SECRET_KEY not set — skipping verification.')
-    return true
-  }
-
-  const params = new URLSearchParams({
-    secret: env.RECAPTCHA_SECRET_KEY,
-    response: token,
-  })
-
-  const response = await fetch(
-    `https://www.google.com/recaptcha/api/siteverify?${params.toString()}`,
-    { method: 'POST' }
-  )
-
-  if (!response.ok) {
-    throw new Error('reCAPTCHA verification request failed')
-  }
-
-  const data = await response.json()
-  return data.success && data.score >= 0.5
-}
 
 export const submitApplication = async (req, res, next) => {
   try {
@@ -126,7 +101,9 @@ export const submitApplication = async (req, res, next) => {
       })
     }
 
-    const isHuman = await verifyRecaptcha(recaptchaToken)
+    const isHuman = await verifyRecaptcha(recaptchaToken, req.ip, {
+      expectedAction: 'careers_apply',
+    })
     if (!isHuman) {
       return res.status(400).json({
         status: 'error',

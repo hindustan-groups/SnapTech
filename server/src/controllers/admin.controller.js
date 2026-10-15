@@ -5,7 +5,7 @@ import QRCode from 'qrcode'
 import prisma from '../config/db.js'
 import { env } from '../config/env.js'
 import { setAdminCookie, setAdminRefreshTokenCookie, clearAdminCookies } from '../utils/authCookie.js'
-import { verifyMasterKey, resolveMasterKey } from '../utils/masterKey.js'
+import { verifyMasterKey, resolveMasterKey, MIN_MASTER_KEY_LENGTH } from '../utils/masterKey.js'
 import { sendEmail, professionalEmailFooter, fetchEmailFooterSettings } from '../utils/mailer.js'
 
 // Helper to generate access and refresh tokens
@@ -642,10 +642,10 @@ export const changeMasterKey = async (req, res, next) => {
   try {
     const { currentKey, newKey } = req.body
 
-    if (!newKey || typeof newKey !== 'string' || newKey.trim().length < 8) {
+    if (!newKey || typeof newKey !== 'string' || newKey.trim().length < MIN_MASTER_KEY_LENGTH) {
       return res
         .status(400)
-        .json({ status: 'error', message: 'New key must be at least 8 characters.' })
+        .json({ status: 'error', message: `New key must be at least ${MIN_MASTER_KEY_LENGTH} characters.` })
     }
 
     const { match, masterKey } = await verifyMasterKey(currentKey)

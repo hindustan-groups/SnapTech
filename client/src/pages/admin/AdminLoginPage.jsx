@@ -43,15 +43,26 @@ export default function AdminLoginPage() {
   const [otpError, setOtpError] = useState('')
   const [otpLoading, setOtpLoading] = useState(false)
 
-  const isValidSecret =
-    adminSecret &&
-    adminSecret.length >= 3 &&
-    adminSecret !== 'admin-invalid' &&
-    adminSecret !== 'invalid'
+  const rememberedSecret =
+    typeof window !== 'undefined' ? localStorage.getItem('admin_secret_path') || '' : ''
+  const configuredSecret =
+    import.meta.env.VITE_ADMIN_SECRET_PATH || rememberedSecret || ''
 
-  const secretPath = isValidSecret
-    ? adminSecret.replace(/^admin-/, '').replace(/[./\s]+$/, '')
-    : ''
+  const isDirectLogin = !adminSecret
+  const isValidSecret = isDirectLogin
+    ? Boolean(configuredSecret && configuredSecret !== 'invalid')
+    : Boolean(
+        adminSecret &&
+        adminSecret.length >= 3 &&
+        adminSecret !== 'admin-invalid' &&
+        adminSecret !== 'invalid'
+      )
+
+  const secretPath = isDirectLogin
+    ? configuredSecret
+    : isValidSecret
+      ? adminSecret.replace(/^admin-/, '').replace(/[./\s]+$/, '')
+      : ''
 
   // Store secretPath on mount to remember it for future redirects
   useEffect(() => {
@@ -80,14 +91,15 @@ export default function AdminLoginPage() {
     setLoading(true)
     setError('')
     try {
-      const activePath = secretPath || adminSecret || 'h9z7'
+      const activePath = secretPath || adminSecret || 'login'
+      const headers = { 'x-admin-path': activePath }
       let res
       try {
-        res = await api.post(`/admin/${activePath}/login`, data)
+        res = await api.post(`/admin/${activePath}/login`, data, { headers })
       } catch (firstErr) {
         if (firstErr.status === 404) {
-          // Fallback to direct /admin/login endpoint
-          res = await api.post('/admin/login', data)
+          // If server routes login via /admin/login with stealth header
+          res = await api.post('/admin/login', data, { headers })
         } else {
           throw firstErr
         }
@@ -115,7 +127,12 @@ export default function AdminLoginPage() {
     setOtpLoading(true)
     setOtpError('')
     try {
-      await api.post('/admin/2fa/login', { tempToken, code: otpCode })
+      const activePath = secretPath || adminSecret || 'login'
+      await api.post(
+        '/admin/2fa/login',
+        { tempToken, code: otpCode },
+        { headers: { 'x-admin-path': activePath } }
+      )
       navigate('/admin/dashboard')
     } catch (err) {
       setOtpError(err.message || 'Invalid authentication code. Please try again.')

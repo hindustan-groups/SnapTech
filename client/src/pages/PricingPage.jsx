@@ -599,13 +599,39 @@ export default function PricingPage() {
 
     setFormSubmitting(true)
     try {
+      let recaptchaToken = ''
+      const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY
+      if (siteKey && typeof window !== 'undefined' && typeof window.grecaptcha !== 'undefined') {
+        try {
+          recaptchaToken = await new Promise((resolve, reject) => {
+            window.grecaptcha.ready(() => {
+              window.grecaptcha
+                .execute(siteKey, { action: 'pricing_quote' })
+                .then(resolve)
+                .catch(reject)
+            })
+          })
+        } catch {
+          recaptchaToken = ''
+        }
+      } else if (!import.meta.env.PROD) {
+        // Strictly gated to non-production local development environments
+        recaptchaToken = 'dev-token'
+      }
+
+      if (!recaptchaToken) {
+        toast.showError('Security verification is unavailable. Please try again or reach out via WhatsApp.')
+        setFormSubmitting(false)
+        return
+      }
+
       await contactMutation.mutateAsync({
         name: quoteForm.name,
         email: quoteForm.email,
         phone: quoteForm.phone,
         serviceInterested: selectedPlan,
         message: quoteForm.message || `Interested in ${selectedPlan} package pricing.`,
-        recaptchaToken: 'pricing-quote-token',
+        recaptchaToken,
       })
       toast.showSuccess('Thank you! Your quote request has been sent successfully. We will get back to you shortly.')
       setIsQuoteModalOpen(false)

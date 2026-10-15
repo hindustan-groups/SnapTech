@@ -282,9 +282,9 @@ export default function ProcessSection() {
                       >
                         {nextStep.detail}
                       </div>
-                      <h4 className="font-heading text-base font-bold text-slate-800 line-clamp-1 mb-1.5">
+                      <h3 className="font-heading text-base font-bold text-slate-800 line-clamp-1 mb-1.5">
                         {nextStep.title}
-                      </h4>
+                      </h3>
                       <p className="text-xs text-slate-500 line-clamp-3 leading-relaxed">
                         {nextStep.desc}
                       </p>

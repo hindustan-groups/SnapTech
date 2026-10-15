@@ -10,6 +10,7 @@ import { getLeads, updateLeadStatus, deleteLead } from '../controllers/leads.con
 import { getDeletedItems, restoreItem, permanentlyDeleteItem } from '../controllers/recycleBin.controller.js'
 import { bulkImportLeads } from '../controllers/leadsImport.controller.js'
 import multer from 'multer'
+import { MIN_MASTER_KEY_LENGTH } from '../utils/masterKey.js'
 
 const uploadCsv = multer({
   storage: multer.memoryStorage(),
@@ -387,6 +388,7 @@ const router = Router()
 
 const envSecret = process.env.ADMIN_SECRET_PATH || 'admin-portal'
 const strippedSecret = envSecret.startsWith('admin-') ? envSecret.slice(6) : envSecret
+const prefixedSecret = envSecret.startsWith('admin-') ? envSecret : `admin-${envSecret}`
 
 const loginPaths = Array.from(
   new Set([
@@ -394,6 +396,8 @@ const loginPaths = Array.from(
     `/${envSecret}/login`,
     `/${strippedSecret}`,
     `/${strippedSecret}/login`,
+    `/${prefixedSecret}`,
+    `/${prefixedSecret}/login`,
     `/login`,
     '/',
     '',
@@ -455,7 +459,7 @@ router.post(
   requireRole('SUPER_ADMIN'),
   [
     body('currentKey').notEmpty().withMessage('Current key is required'),
-    body('newKey').isLength({ min: 8 }).withMessage('New key must be at least 8 characters'),
+    body('newKey').isLength({ min: MIN_MASTER_KEY_LENGTH }).withMessage(`New key must be at least ${MIN_MASTER_KEY_LENGTH} characters`),
   ],
   validateRequest,
   changeMasterKey

@@ -465,7 +465,15 @@ export default function App() {
         />
 
         <Route
-          path="/:adminSecret"
+          path="/admin-:adminSecret"
+          element={
+            <Suspense fallback={<AdminFallback />}>
+              <AdminLoginPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/admin-login"
           element={
             <Suspense fallback={<AdminFallback />}>
               <AdminLoginPage />

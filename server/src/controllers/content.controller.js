@@ -80,15 +80,15 @@ export const getSettings = async (_req, res, next) => {
 export const updateSettings = async (req, res, next) => {
   try {
     const updates = req.body // { key: value, ... }
-    await Promise.all(
-      Object.entries(updates).map(([key, value]) =>
-        prisma.siteSetting.upsert({
-          where: { key },
-          update: { value: String(value) },
-          create: { key, value: String(value) },
-        })
-      )
+    const operations = Object.entries(updates).map(([key, value]) =>
+      prisma.siteSetting.upsert({
+        where: { key },
+        update: { value: String(value) },
+        create: { key, value: String(value) },
+      })
     )
+
+    await prisma.$transaction(operations)
     
     await logActivity(req, 'UPDATE', 'SiteSetting', `Updated site settings: ${Object.keys(updates).join(', ')}`)
     

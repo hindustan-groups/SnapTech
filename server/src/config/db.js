@@ -38,6 +38,7 @@ let mockAdmin = {
   refreshToken: null,
   twoFactorSecret: null,
   twoFactorEnabled: false,
+  isActive: true,
 }
 
 let mockServices = [
@@ -657,6 +658,15 @@ let mockActivityLogs = [
 const mockPrisma = {
   $connect: () => Promise.resolve(),
   $disconnect: () => Promise.resolve(),
+  $transaction: async (arg) => {
+    if (Array.isArray(arg)) {
+      return Promise.all(arg)
+    }
+    if (typeof arg === 'function') {
+      return arg(mockPrisma)
+    }
+    return arg
+  },
 
   service: {
     findMany: async (args) => mockServices,
@@ -1224,6 +1234,7 @@ const mockPrisma = {
   },
 
   admin: {
+    findMany: async (args) => [mockAdmin],
     findUnique: async (args) => {
       if (args.where.email === mockAdmin.email || args.where.id === mockAdmin.id) {
         return mockAdmin
@@ -1281,6 +1292,43 @@ let mockChatbotInquiries = []
 let mockErrorLogs = []
 let mockPageVisits = []
 
+let mockBlogPosts = [
+  {
+    id: 'hp-blog-1',
+    title: "Why We Built SnapTech Digital: Shifting Rajasthan's Businesses to Enterprise IT",
+    slug: 'why-we-built-snaptech-digital-enterprise-it',
+    excerpt: "In today's digital-first economy, we built SnapTech Digital to bridge the gap between legacy paper workflows and high-performance custom software for businesses in Rajasthan and beyond.",
+    content: '<h2>Bridging the Digital Gap in Local Markets</h2><p>SnapTech Digital was founded to bring enterprise software to Rajasthan.</p>',
+    featuredImageUrl: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80',
+    category: 'Company News',
+    tags: ['SnapTech Digital', 'mission', 'custom software'],
+    authorName: 'SnapTech Digital Team',
+    status: 'PUBLISHED',
+    isFeatured: true,
+    publishedAt: new Date('2026-07-08'),
+    viewCount: 152,
+    createdAt: new Date('2026-07-08'),
+    updatedAt: new Date('2026-07-08'),
+  },
+  {
+    id: 'hp-blog-2',
+    title: 'What We Build: A Deep Dive into Our Core IT Services & Digital Solutions',
+    slug: 'what-we-build-core-it-services-digital-solutions',
+    excerpt: 'Discover what we build. From responsive corporate portals to custom ERP inventory systems and mobile dashboards, we design custom systems that scale.',
+    content: '<h2>A Full-Suite Software Engineering Partner</h2><p>Our capabilities span custom web applications, specialized business ERP systems, and high-converting marketing platforms.</p>',
+    featuredImageUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80',
+    category: 'Web Development',
+    tags: ['custom web apps', 'ERP', 'mobile apps'],
+    authorName: 'SnapTech Digital Team',
+    status: 'PUBLISHED',
+    isFeatured: false,
+    publishedAt: new Date('2026-07-08'),
+    viewCount: 98,
+    createdAt: new Date('2026-07-08'),
+    updatedAt: new Date('2026-07-08'),
+  },
+]
+
 // Helper to save all mock data arrays to disk
 function saveMockDb() {
   try {
@@ -1306,6 +1354,7 @@ function saveMockDb() {
       mockChatbotInquiries,
       mockErrorLogs,
       mockPageVisits,
+      mockBlogPosts,
     }
     fs.writeFileSync(MOCK_DB_PATH, JSON.stringify(data, null, 2), 'utf8')
   } catch (err) {
@@ -1405,6 +1454,14 @@ function loadMockDb() {
         mockPageVisits = data.mockPageVisits.map((v) => ({
           ...v,
           createdAt: new Date(v.createdAt),
+        }))
+      }
+      if (data.mockBlogPosts) {
+        mockBlogPosts = data.mockBlogPosts.map((b) => ({
+          ...b,
+          publishedAt: b.publishedAt ? new Date(b.publishedAt) : null,
+          createdAt: new Date(b.createdAt),
+          updatedAt: new Date(b.updatedAt),
         }))
       }
 
@@ -1606,7 +1663,24 @@ mockPrisma.errorLog = {
       return deleted
     }
     throw new Error('ErrorLog not found')
-  }
+  },
+  deleteMany: async (args) => {
+    if (!args || !args.where) {
+      const count = mockErrorLogs.length
+      mockErrorLogs = []
+      saveMockDb()
+      return { count }
+    }
+    const before = mockErrorLogs.length
+    if (args.where.createdAt?.lt) {
+      const cutoff = new Date(args.where.createdAt.lt)
+      mockErrorLogs = mockErrorLogs.filter((e) => new Date(e.createdAt) >= cutoff)
+    } else if (args.where.id) {
+      mockErrorLogs = mockErrorLogs.filter((e) => e.id !== args.where.id)
+    }
+    saveMockDb()
+    return { count: before - mockErrorLogs.length }
+  },
 }
 
 mockPrisma.pageVisit = {
@@ -1616,7 +1690,7 @@ mockPrisma.pageVisit = {
     list = [...list].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     return applyPagination(list, args)
   },
-  count: async (args) => mockPageVisits.length,
+  count: async () => mockPageVisits.length,
   create: async (args) => {
     const item = {
       id: `visit-${Date.now()}`,
@@ -1626,7 +1700,65 @@ mockPrisma.pageVisit = {
     mockPageVisits.push(item)
     saveMockDb()
     return item
-  }
+  },
+  deleteMany: async (args) => {
+    if (!args || !args.where) {
+      const count = mockPageVisits.length
+      mockPageVisits = []
+      saveMockDb()
+      return { count }
+    }
+    const before = mockPageVisits.length
+    if (args.where.createdAt?.lt) {
+      const cutoff = new Date(args.where.createdAt.lt)
+      mockPageVisits = mockPageVisits.filter((v) => new Date(v.createdAt) >= cutoff)
+    }
+    saveMockDb()
+    return { count: before - mockPageVisits.length }
+  },
+}
+
+mockPrisma.blogPost = {
+  findMany: async (args) => {
+    let list = mockBlogPosts
+    if (args?.where?.status) list = list.filter((b) => b.status === args.where.status)
+    if (args?.where?.category) list = list.filter((b) => b.category === args.where.category)
+    return applyPagination(list, args)
+  },
+  findUnique: async (args) =>
+    mockBlogPosts.find((b) => b.id === args.where?.id || b.slug === args.where?.slug) || null,
+  count: async () => mockBlogPosts.length,
+  create: async (args) => {
+    const item = {
+      id: `blog-${Date.now()}`,
+      status: 'PUBLISHED',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      ...args.data,
+    }
+    mockBlogPosts.push(item)
+    saveMockDb()
+    return item
+  },
+  update: async (args) => {
+    const idx = mockBlogPosts.findIndex((b) => b.id === args.where.id || b.slug === args.where.slug)
+    if (idx !== -1) {
+      mockBlogPosts[idx] = { ...mockBlogPosts[idx], ...args.data, updatedAt: new Date() }
+      saveMockDb()
+      return mockBlogPosts[idx]
+    }
+    throw new Error('BlogPost not found')
+  },
+  delete: async (args) => {
+    const idx = mockBlogPosts.findIndex((b) => b.id === args.where.id || b.slug === args.where.slug)
+    if (idx !== -1) {
+      const deleted = mockBlogPosts[idx]
+      mockBlogPosts = mockBlogPosts.filter((b) => b.id !== args.where.id && b.slug !== args.where.slug)
+      saveMockDb()
+      return deleted
+    }
+    throw new Error('BlogPost not found')
+  },
 }
 
 // ── Smart Connection Resolver ───────────────────────────────

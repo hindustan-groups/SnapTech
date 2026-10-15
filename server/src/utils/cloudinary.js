@@ -6,14 +6,16 @@ import cloudinaryPkg from 'cloudinary'
 import multer from 'multer'
 import { env } from '../config/env.js'
 
-const cloudinary = cloudinaryPkg.v2
+const cloudinary = cloudinaryPkg?.v2 || cloudinaryPkg
 
 // Configure Cloudinary SDK
-cloudinary.config({
-  cloud_name: env.CLOUDINARY_CLOUD_NAME,
-  api_key: env.CLOUDINARY_API_KEY,
-  api_secret: env.CLOUDINARY_API_SECRET,
-})
+if (cloudinary && typeof cloudinary.config === 'function') {
+  cloudinary.config({
+    cloud_name: env.CLOUDINARY_CLOUD_NAME,
+    api_key: env.CLOUDINARY_API_KEY,
+    api_secret: env.CLOUDINARY_API_SECRET,
+  })
+}
 
 // Use memory storage — file goes to buffer, we upload manually
 const memoryStorage = multer.memoryStorage()

@@ -305,9 +305,9 @@ export default function TestimonialsSection() {
                       )}
 
                       <div className="min-w-0">
-                        <h4 className="font-heading text-base sm:text-lg font-bold text-slate-900 truncate">
+                        <h3 className="font-heading text-base sm:text-lg font-bold text-slate-900 truncate">
                           {currentTestimonial.name}
-                        </h4>
+                        </h3>
                         <p className="text-xs sm:text-sm text-slate-500 truncate">
                           {currentTestimonial.role}
                           {currentTestimonial.company && (

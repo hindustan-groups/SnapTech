@@ -26,25 +26,49 @@ export const env = {
   ADMIN_WHATSAPP_TO: process.env.ADMIN_WHATSAPP_TO,
   SENTRY_DSN: process.env.SENTRY_DSN,
   GA_MEASUREMENT_ID: process.env.GA_MEASUREMENT_ID,
-  ADMIN_SECRET_PATH: process.env.ADMIN_SECRET_PATH || 'admin-login',
+  ADMIN_SECRET_PATH: process.env.ADMIN_SECRET_PATH
+    ? process.env.ADMIN_SECRET_PATH.trim()
+    : process.env.NODE_ENV === 'production'
+      ? ''
+      : 'admin-login',
 }
 
 // Validate required env vars at startup
-const required = ['DATABASE_URL', 'JWT_SECRET']
+const required = ['JWT_SECRET']
 
 if (process.env.NODE_ENV === 'production') {
   required.push(
+    'DATABASE_URL',
     'ADMIN_SECRET_PATH',
     'CLOUDINARY_CLOUD_NAME',
     'CLOUDINARY_API_KEY',
-    'CLOUDINARY_API_SECRET',
-    'INTEGRATION_MASTER_KEY'
+    'CLOUDINARY_API_SECRET'
   )
 }
 
 for (const key of required) {
-  if (!env[key] && !process.env[key]) {
+  const val = (env[key] !== undefined && env[key] !== null ? String(env[key]) : (process.env[key] || '')).trim()
+  if (!val) {
     console.error(`[CRITICAL] Missing required environment variable: ${key}`)
     process.exit(1)
   }
 }
+
+// In production, enforce non-default ADMIN_SECRET_PATH
+if (process.env.NODE_ENV === 'production') {
+  const adminSecret = (env.ADMIN_SECRET_PATH || process.env.ADMIN_SECRET_PATH || '').trim()
+  if (!adminSecret || adminSecret === 'admin-login' || adminSecret === 'admin') {
+    console.error('[CRITICAL] ADMIN_SECRET_PATH must be set to a secure, non-default secret path in production.')
+    process.exit(1)
+  }
+}
+
+// In production, if INTEGRATION_MASTER_KEY is provided via env, enforce minimum length >= 16
+if (process.env.NODE_ENV === 'production') {
+  const masterKey = (env.INTEGRATION_MASTER_KEY || process.env.INTEGRATION_MASTER_KEY || '').trim().replace(/^["'`]+|["'`]+$/g, '')
+  if (masterKey && masterKey.length < 16) {
+    console.error('[CRITICAL] INTEGRATION_MASTER_KEY must be at least 16 characters long.')
+    process.exit(1)
+  }
+}
+

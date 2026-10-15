@@ -40,13 +40,29 @@ export default function HomePage() {
     setSubmitting(true)
     setSubmitError(false)
     try {
-      // Get reCAPTCHA v3 token if available, otherwise skip (honeypot _hp field handles spam)
-      let recaptchaToken = null
-      if (window.grecaptcha) {
-        const siteKey = document.querySelector('meta[name="recaptcha-site-key"]')?.content
-        if (siteKey) {
-          recaptchaToken = await window.grecaptcha.execute(siteKey, { action: 'homepage_quote' })
+      let recaptchaToken = ''
+      const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY || document.querySelector('meta[name="recaptcha-site-key"]')?.content
+      if (siteKey && typeof window !== 'undefined' && typeof window.grecaptcha !== 'undefined') {
+        try {
+          recaptchaToken = await new Promise((resolve, reject) => {
+            window.grecaptcha.ready(() => {
+              window.grecaptcha
+                .execute(siteKey, { action: 'homepage_quote' })
+                .then(resolve)
+                .catch(reject)
+            })
+          })
+        } catch {
+          recaptchaToken = ''
         }
+      } else if (!import.meta.env.PROD) {
+        recaptchaToken = 'dev-token'
+      }
+
+      if (!recaptchaToken) {
+        setSubmitError(true)
+        setSubmitting(false)
+        return
       }
       await api.post('/contact', {
         name,

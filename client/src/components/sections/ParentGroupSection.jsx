@@ -266,9 +266,9 @@ export default function ParentGroupSection() {
             <span className="text-[11px] font-mono uppercase tracking-widest text-brand-blue font-bold block">
               Official Corporate Gateway
             </span>
-            <h4 className="font-heading text-lg sm:text-xl font-bold text-[#0D1B4B]">
+            <h3 className="font-heading text-lg sm:text-xl font-bold text-[#0D1B4B]">
               Explore {parentName}
-            </h4>
+            </h3>
             <p className="text-xs text-slate-600">
               Discover engineering milestones, pre-engineered buildings, infrastructure ventures, and group portfolio.
             </p>

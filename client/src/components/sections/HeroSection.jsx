@@ -140,7 +140,7 @@ export default function HeroSection() {
 
               {/* Main Headline */}
               <div className="space-y-2 hero-fade-up" style={{ animationDelay: '0.15s' }}>
-                <h1 className="font-heading font-extrabold text-3xl sm:text-4xl lg:text-5xl xl:text-6xl tracking-tight leading-[1.15] text-[#0D1B4B]">
+                <h1 className="font-heading font-extrabold text-3xl sm:text-4xl lg:text-5xl xl:text-6xl tracking-tight leading-[1.15] text-[#0D1B4B] min-h-[2.3em]">
                   {titlePrefix}{' '}
                   <span
                     className="text-transparent bg-clip-text bg-linear-to-r from-brand-blue via-blue-600 to-indigo-700 font-black inline-block transition-all duration-300"
@@ -291,15 +291,19 @@ export default function HeroSection() {
 
                   {/* Main Visual Poster Image OR Interactive Telemetry Studio */}
                   {activeTelemetryTab === 'blueprint' ? (
-                    <div className="rounded-xl overflow-hidden bg-slate-100 shadow-inner relative group border border-slate-200">
+                    <div className="rounded-xl overflow-hidden bg-slate-100 shadow-inner relative group border border-slate-200 aspect-video min-h-55">
                       <img
                         src={heroImage}
                         alt="SnapTech Digital — Web & App Development"
-                        className="w-full h-auto object-cover block transition-transform duration-500 group-hover:scale-[1.02]"
+                        width="800"
+                        height="450"
+                        loading="eager"
+                        fetchPriority="high"
+                        className="w-full h-full object-cover block transition-transform duration-500 group-hover:scale-[1.02]"
                       />
                     </div>
                   ) : (
-                    <div className="rounded-xl p-4 bg-slate-50 border border-slate-200 font-mono text-xs space-y-3 min-h-55 flex flex-col justify-between">
+                    <div className="rounded-xl p-4 bg-slate-50 border border-slate-200 font-mono text-xs space-y-3 aspect-video min-h-55 flex flex-col justify-between">
                       <div className="space-y-2">
                         <div className="flex items-center justify-between text-slate-600 border-b border-slate-200 pb-2">
                           <span className="flex items-center gap-1.5 text-brand-blue font-bold">
