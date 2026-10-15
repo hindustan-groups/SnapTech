@@ -2,9 +2,9 @@
  * FeaturedProjects — Homepage section showing top 3 featured projects.
  * Links to full portfolio page.
  */
-import { useState, useRef, useCallback } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Container } from '@/components/ui'
 import { useProjects } from '@/hooks/useProjects'
@@ -19,31 +19,141 @@ const CATEGORY_DEFAULT_IMAGES = {
   Software: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&q=80&auto=format&fit=crop',
 }
 
+const flipVariants = {
+  enter: (dir) => ({
+    x: dir > 0 ? 120 : -120,
+    rotate: dir > 0 ? 5 : -5,
+    opacity: 0,
+    scale: 0.94,
+  }),
+  center: {
+    x: 0,
+    rotate: 0,
+    opacity: 1,
+    scale: 1,
+    transition: {
+      type: 'spring',
+      stiffness: 350,
+      damping: 28,
+    },
+  },
+  exit: (dir) => ({
+    x: dir > 0 ? -160 : 160,
+    rotate: dir > 0 ? -8 : 8,
+    opacity: 0,
+    scale: 0.9,
+    transition: {
+      duration: 0.22,
+      ease: [0.32, 0.72, 0, 1],
+    },
+  }),
+}
+
+function FeaturedProjectCard({ project, onClick, isMobile = false }) {
+  const projectImg =
+    project.thumbnailUrl?.trim() ||
+    CATEGORY_DEFAULT_IMAGES[project.category] ||
+    CATEGORY_DEFAULT_IMAGES.Web
+
+  return (
+    <div
+      className={`overflow-hidden group cursor-pointer border border-slate-200 bg-white rounded-2xl hover:border-brand-blue/40 transition-all duration-300 flex flex-col h-full select-none ${
+        isMobile ? 'shadow-xl' : 'hover:shadow-xl'
+      }`}
+      onClick={() => onClick(project)}
+    >
+      {/* Project Visual Thumbnail */}
+      <div className={`overflow-hidden relative bg-slate-900 shrink-0 ${isMobile ? 'h-44' : 'h-52'}`}>
+        <div className="absolute inset-0 bg-linear-to-t from-slate-950/60 via-transparent to-transparent z-10 pointer-events-none" />
+        <img
+          src={projectImg}
+          alt={project.title}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          loading="lazy"
+        />
+      </div>
+
+      {/* Card Content Body */}
+      <div className={`${isMobile ? 'p-5' : 'p-6'} flex flex-col flex-1 justify-between bg-white`}>
+        <div>
+          <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-brand-blue">
+              {project.category}
+            </span>
+            <span className="text-[11px] font-mono text-slate-500 font-medium truncate max-w-[140px] sm:max-w-none">
+              {project.clientName}
+            </span>
+          </div>
+
+          <h3 className="font-heading text-base sm:text-lg font-bold text-slate-900 group-hover:text-brand-blue transition-colors duration-200 mb-1.5 sm:mb-2 line-clamp-1 sm:line-clamp-none">
+            {project.title}
+          </h3>
+          <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed mb-3 sm:mb-4">
+            {project.description}
+          </p>
+        </div>
+
+        {/* Tech stack chips & Action */}
+        <div className="flex items-center justify-between pt-3.5 border-t border-slate-100 mt-auto">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation()
+              onClick(project)
+            }}
+            className="text-xs font-bold text-brand-blue group-hover:translate-x-1 transition-transform flex items-center gap-1 cursor-pointer"
+          >
+            <span>Case Study</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+          {project.technologies && project.technologies.length > 0 && (
+            <div className="flex flex-wrap gap-1">
+              {project.technologies.slice(0, 2).map((t) => (
+                <span
+                  key={t}
+                  className="text-[10px] px-2 py-0.5 rounded-md bg-slate-50 text-slate-600 font-mono border border-slate-200"
+                >
+                  {t}
+                </span>
+              ))}
+              {project.technologies.length > 2 && (
+                <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-slate-50 text-slate-400 font-mono border border-slate-200">
+                  +{project.technologies.length - 2}
+                </span>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function FeaturedProjects() {
   const [selectedProject, setSelectedProject] = useState(null)
   const { data, isLoading } = useProjects({ featured: true })
-  const mobileScrollRef = useRef(null)
   const [activeMobileIdx, setActiveMobileIdx] = useState(0)
+  const [direction, setDirection] = useState(1)
 
   const projects =
     Array.isArray(data?.data) && data.data.length > 0 ? data.data.slice(0, 3) : []
 
-  const handleMobileScroll = useCallback(() => {
-    if (!mobileScrollRef.current) return
-    const { scrollLeft, clientWidth } = mobileScrollRef.current
-    const itemWidth = clientWidth * 0.86 + 16
-    const idx = Math.round(scrollLeft / itemWidth)
-    setActiveMobileIdx(Math.min(Math.max(0, idx), projects.length - 1))
-  }, [projects.length])
+  const handleNext = () => {
+    if (projects.length <= 1) return
+    setDirection(1)
+    setActiveMobileIdx((prev) => (prev + 1) % projects.length)
+  }
 
-  const scrollMobile = (idx) => {
-    if (!mobileScrollRef.current) return
-    const container = mobileScrollRef.current
-    const cards = container.children
-    if (cards[idx]) {
-      cards[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
-      setActiveMobileIdx(idx)
-    }
+  const handlePrev = () => {
+    if (projects.length <= 1) return
+    setDirection(-1)
+    setActiveMobileIdx((prev) => (prev === 0 ? projects.length - 1 : prev - 1))
+  }
+
+  const handleDotClick = (i) => {
+    if (i === activeMobileIdx || projects.length <= 1) return
+    setDirection(i > activeMobileIdx ? 1 : -1)
+    setActiveMobileIdx(i)
   }
 
   // If no projects in database, do not render any demo/placeholder projects
@@ -104,103 +214,43 @@ export default function FeaturedProjects() {
                 ? Array.from({ length: 3 }).map((_, i) => (
                     <div key={i} className="h-80 bg-slate-100 border border-slate-200 rounded-2xl animate-pulse" />
                   ))
-                : projects.map((p) => {
-                    const projectImg =
-                      p.thumbnailUrl?.trim() ||
-                      CATEGORY_DEFAULT_IMAGES[p.category] ||
-                      CATEGORY_DEFAULT_IMAGES.Web
-
-                    return (
-                      <motion.div key={p.id} variants={fadeUp}>
-                        <div
-                          className="overflow-hidden group cursor-pointer border border-slate-200 bg-white rounded-2xl hover:border-brand-blue/40 hover:shadow-xl transition-all duration-300 flex flex-col h-full"
-                          onClick={() => setSelectedProject(p)}
-                        >
-                          {/* Project Visual Thumbnail */}
-                          <div className="overflow-hidden relative h-52 bg-slate-900">
-                            <div className="absolute inset-0 bg-linear-to-t from-slate-950/60 via-transparent to-transparent z-10 pointer-events-none" />
-                            <img
-                              src={projectImg}
-                              alt={p.title}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                              loading="lazy"
-                            />
-                          </div>
-
-                          {/* Card Content Body */}
-                          <div className="p-6 flex flex-col flex-1 justify-between bg-white">
-                            <div>
-                              <div className="flex items-center justify-between gap-2 mb-3">
-                                <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-brand-blue">
-                                  {p.category}
-                                </span>
-                                <span className="text-[11px] font-mono text-slate-500 font-medium">
-                                  {p.clientName}
-                                </span>
-                              </div>
-
-                              <h3 className="font-heading text-lg font-bold text-slate-900 group-hover:text-brand-blue transition-colors duration-200 mb-2">
-                                {p.title}
-                              </h3>
-                              <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed mb-4">
-                                {p.description}
-                              </p>
-                            </div>
-
-                            {/* Tech stack chips & Action */}
-                            <div className="flex items-center justify-between pt-3.5 border-t border-slate-100 mt-2">
-                              <span className="text-xs font-bold text-brand-blue group-hover:translate-x-1 transition-transform flex items-center gap-1">
-                                Case Study <ArrowRight className="w-3.5 h-3.5" />
-                              </span>
-                              {p.technologies && p.technologies.length > 0 && (
-                                <div className="flex flex-wrap gap-1">
-                                  {p.technologies.slice(0, 2).map((t) => (
-                                    <span
-                                      key={t}
-                                      className="text-[10px] px-2 py-0.5 rounded-md bg-slate-50 text-slate-600 font-mono border border-slate-200"
-                                    >
-                                      {t}
-                                    </span>
-                                  ))}
-                                  {p.technologies.length > 2 && (
-                                    <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-slate-50 text-slate-400 font-mono border border-slate-200">
-                                      +{p.technologies.length - 2}
-                                    </span>
-                                  )}
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </motion.div>
-                    )
-                  })}
+                : projects.map((p) => (
+                    <motion.div key={p.id} variants={fadeUp}>
+                      <FeaturedProjectCard
+                        project={p}
+                        onClick={setSelectedProject}
+                      />
+                    </motion.div>
+                  ))}
             </motion.div>
 
-            {/* ── Mobile Horizontal Snap Carousel (< sm: screens) ── */}
+            {/* ── Mobile 3D Card Stack & Flip Deck (< sm: screens) ── */}
             <div className="sm:hidden">
               {isLoading ? (
-                <div className="h-72 bg-slate-100 border border-slate-200 rounded-2xl animate-pulse" />
+                <div className="h-100 bg-white rounded-2xl border border-slate-200 animate-pulse" />
               ) : (
                 <>
-                  <div className="flex items-center justify-between mb-3 px-1">
-                    <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+                  {/* Top Mobile Controls Bar */}
+                  <div className="flex items-center justify-between mb-4 px-2">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-slate-600">
                       <span className="w-2 h-2 rounded-full bg-brand-blue animate-pulse" />
-                      <span>Swipe to explore ({activeMobileIdx + 1}/{projects.length})</span>
+                      <span>Case Studies ({activeMobileIdx + 1}/{projects.length})</span>
                     </div>
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex items-center gap-2">
                       <button
-                        onClick={() => scrollMobile(activeMobileIdx - 1)}
-                        disabled={activeMobileIdx === 0}
-                        className="w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-600 disabled:opacity-30 disabled:cursor-not-allowed shadow-2xs active:scale-95 transition-all cursor-pointer"
+                        type="button"
+                        onClick={handlePrev}
+                        disabled={projects.length <= 1}
+                        className="w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-700 hover:bg-brand-blue hover:text-white hover:border-brand-blue disabled:opacity-30 disabled:cursor-not-allowed shadow-xs active:scale-90 transition-all cursor-pointer"
                         aria-label="Previous project"
                       >
                         <ChevronLeft className="w-4 h-4" />
                       </button>
                       <button
-                        onClick={() => scrollMobile(activeMobileIdx + 1)}
-                        disabled={activeMobileIdx === projects.length - 1}
-                        className="w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-600 disabled:opacity-30 disabled:cursor-not-allowed shadow-2xs active:scale-95 transition-all cursor-pointer"
+                        type="button"
+                        onClick={handleNext}
+                        disabled={projects.length <= 1}
+                        className="w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-700 hover:bg-brand-blue hover:text-white hover:border-brand-blue disabled:opacity-30 disabled:cursor-not-allowed shadow-xs active:scale-90 transition-all cursor-pointer"
                         aria-label="Next project"
                       >
                         <ChevronRight className="w-4 h-4" />
@@ -208,90 +258,123 @@ export default function FeaturedProjects() {
                     </div>
                   </div>
 
-                  <div
-                    ref={mobileScrollRef}
-                    onScroll={handleMobileScroll}
-                    className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-4 px-4 no-scrollbar scroll-smooth"
-                  >
-                    {projects.map((p) => {
-                      const projectImg =
-                        p.thumbnailUrl?.trim() ||
-                        CATEGORY_DEFAULT_IMAGES[p.category] ||
+                  {/* 3D Stack Stage */}
+                  <div className="relative w-full max-w-85 mx-auto h-105 flex items-center justify-center select-none">
+                    {/* Deepest Stack Card 3 */}
+                    {projects.length > 2 && (
+                      <div
+                        className="absolute inset-x-5 top-0 h-100 rounded-2xl border border-slate-200/60 bg-slate-100/90 shadow-2xs pointer-events-none transition-all duration-300"
+                        style={{
+                          transform: 'translateY(18px) scale(0.9)',
+                          zIndex: 10,
+                          opacity: 0.45,
+                        }}
+                      />
+                    )}
+
+                    {/* Middle Stack Card 2 (Shows next project preview) */}
+                    {projects.length > 1 && (() => {
+                      const nextProj = projects[(activeMobileIdx + 1) % projects.length]
+                      const nextImg =
+                        nextProj?.thumbnailUrl?.trim() ||
+                        CATEGORY_DEFAULT_IMAGES[nextProj?.category] ||
                         CATEGORY_DEFAULT_IMAGES.Web
 
                       return (
                         <div
-                          key={p.id}
-                          className="w-[86vw] max-w-[340px] shrink-0 snap-center overflow-hidden cursor-pointer border border-slate-200 bg-white rounded-2xl shadow-sm flex flex-col"
-                          onClick={() => setSelectedProject(p)}
+                          className="absolute inset-x-2.5 top-0 h-100 rounded-2xl border border-slate-200 bg-white shadow-md pointer-events-none transition-all duration-300 overflow-hidden"
+                          style={{
+                            transform: 'translateY(9px) scale(0.95)',
+                            zIndex: 20,
+                            opacity: 0.85,
+                          }}
                         >
-                          <div className="overflow-hidden relative h-48 bg-slate-900">
-                            <div className="absolute inset-0 bg-linear-to-t from-slate-950/60 via-transparent to-transparent z-10 pointer-events-none" />
-                            <img
-                              src={projectImg}
-                              alt={p.title}
-                              className="w-full h-full object-cover"
-                              loading="lazy"
-                            />
-                          </div>
-
-                          <div className="p-5 flex flex-col flex-1 justify-between bg-white">
-                            <div>
-                              <div className="flex items-center justify-between gap-2 mb-2">
-                                <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-50 border border-blue-200 text-brand-blue">
-                                  {p.category}
-                                </span>
-                                <span className="text-[10px] font-mono text-slate-500 font-medium truncate max-w-[140px]">
-                                  {p.clientName}
+                          <div className="flex flex-col h-full bg-white opacity-85">
+                            <div className="relative h-44 bg-slate-900 overflow-hidden">
+                              <img src={nextImg} alt="" className="w-full h-full object-cover opacity-60" />
+                            </div>
+                            <div className="p-5 flex flex-col justify-between flex-1">
+                              <div>
+                                <div className="flex items-center justify-between gap-2 mb-2">
+                                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-50 border border-blue-200 text-brand-blue">
+                                    {nextProj?.category}
+                                  </span>
+                                  <span className="text-[10px] font-mono text-slate-500 font-medium truncate max-w-[140px]">
+                                    {nextProj?.clientName}
+                                  </span>
+                                </div>
+                                <p className="font-heading text-base font-bold text-slate-900 line-clamp-1 mb-1.5">
+                                  {nextProj?.title}
+                                </p>
+                                <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
+                                  {nextProj?.description}
+                                </p>
+                              </div>
+                              <div className="flex items-center justify-between pt-3 border-t border-slate-100 mt-auto">
+                                <span className="text-xs font-bold text-brand-blue flex items-center gap-1">
+                                  Case Study <ArrowRight className="w-3.5 h-3.5" />
                                 </span>
                               </div>
-
-                              <h3 className="font-heading text-base font-bold text-slate-900 mb-1.5 line-clamp-1">
-                                {p.title}
-                              </h3>
-                              <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed mb-3">
-                                {p.description}
-                              </p>
-                            </div>
-
-                            <div className="flex items-center justify-between pt-3 border-t border-slate-100 mt-1">
-                              <span className="text-[11px] font-bold text-brand-blue flex items-center gap-1">
-                                Case Study <ArrowRight className="w-3 h-3" />
-                              </span>
-                              {p.technologies && p.technologies.length > 0 && (
-                                <div className="flex flex-wrap gap-1">
-                                  {p.technologies.slice(0, 2).map((t) => (
-                                    <span
-                                      key={t}
-                                      className="text-[9px] px-2 py-0.5 rounded-md bg-slate-50 text-slate-600 font-mono border border-slate-200"
-                                    >
-                                      {t}
-                                    </span>
-                                  ))}
-                                </div>
-                              )}
                             </div>
                           </div>
                         </div>
                       )
-                    })}
+                    })()}
+
+                    {/* Active Front Card 1 (Interactive & Flip animated) */}
+                    <AnimatePresence mode="popLayout" custom={direction}>
+                      <motion.div
+                        key={projects[activeMobileIdx]?.id || activeMobileIdx}
+                        custom={direction}
+                        variants={flipVariants}
+                        initial="enter"
+                        animate="center"
+                        exit="exit"
+                        drag={projects.length > 1 ? 'x' : false}
+                        dragConstraints={{ left: 0, right: 0 }}
+                        dragElastic={0.45}
+                        onDragEnd={(_e, { offset }) => {
+                          if (offset.x < -45) {
+                            handleNext()
+                          } else if (offset.x > 45) {
+                            handlePrev()
+                          }
+                        }}
+                        className="relative z-30 w-full h-100 cursor-grab active:cursor-grabbing touch-pan-y"
+                      >
+                        <FeaturedProjectCard
+                          project={projects[activeMobileIdx]}
+                          onClick={setSelectedProject}
+                          isMobile
+                        />
+                      </motion.div>
+                    </AnimatePresence>
                   </div>
 
-                  <div className="flex justify-center items-center gap-1.5 mt-2">
-                    {projects.map((_, i) => (
-                      <button
-                        key={i}
-                        onClick={() => scrollMobile(i)}
-                        className="p-1 min-w-5 min-h-5 flex items-center justify-center cursor-pointer"
-                        aria-label={`Go to project ${i + 1}`}
-                      >
-                        <span
-                          className={`h-1.5 rounded-full transition-all duration-300 block ${
-                            activeMobileIdx === i ? 'w-6 bg-brand-blue shadow-xs' : 'w-1.5 bg-slate-300'
-                          }`}
-                        />
-                      </button>
-                    ))}
+                  {/* Flip dots & tactile swipe hint */}
+                  <div className="flex flex-col items-center gap-2 mt-7">
+                    <div className="flex justify-center items-center gap-1.5">
+                      {projects.map((_, i) => (
+                        <button
+                          key={i}
+                          type="button"
+                          onClick={() => handleDotClick(i)}
+                          className="p-1 min-w-5 min-h-5 flex items-center justify-center cursor-pointer"
+                          aria-label={`Go to project ${i + 1}`}
+                        >
+                          <span
+                            className={`h-1.5 rounded-full transition-all duration-300 block ${
+                              activeMobileIdx === i ? 'w-6 bg-brand-blue shadow-xs' : 'w-1.5 bg-slate-300'
+                            }`}
+                          />
+                        </button>
+                      ))}
+                    </div>
+                    {projects.length > 1 && (
+                      <span className="text-[11px] font-mono text-slate-600 flex items-center gap-1.5">
+                        <span>&larr;</span> Swipe card to flip <span>&rarr;</span>
+                      </span>
+                    )}
                   </div>
                 </>
               )}
