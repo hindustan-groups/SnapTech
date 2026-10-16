@@ -16,9 +16,7 @@ import {
   Code2,
   Cpu,
   GitBranch,
-  ShieldAlert,
   Clock,
-  Layers,
   FileCheck,
   Coins,
   ChevronDown,
@@ -50,14 +48,14 @@ const COMPARISON_ROWS = [
   },
   {
     dimension: 'Core Web Vitals & Speed',
-    snaptech: 'Guaranteed 95+ PageSpeed scores, sub-second global edge CDN load',
+    snaptech: 'Optimized Core Web Vitals, global edge CDN caching, and lightweight assets',
     freelancers: 'Untested, heavy uncompressed images, typically 40–60 scores',
     agencies: 'Overloaded with heavy tracking tags and slow plugin stacks',
     highlight: true,
   },
   {
     dimension: 'Enterprise Security & Hardening',
-    snaptech: 'OWASP Top 10 hardened, sanitized inputs, zero-vulnerability warranty',
+    snaptech: 'OWASP Top 10 hardening, input sanitization, and pre-launch security audits',
     freelancers: 'Basic or non-existent security reviews, SQL injection risks',
     agencies: 'Basic security, expensive extra charges for compliance checklists',
     highlight: false,
@@ -84,15 +82,15 @@ const COMPARISON_ROWS = [
     highlight: false,
   },
   {
-    dimension: 'Post-Launch SLA & Monitoring',
-    snaptech: 'Included 30-day warranty with 24/7 automated telemetry & 99.8% uptime SLA',
+    dimension: 'Post-Launch Support & Monitoring',
+    snaptech: 'Included 30-day post-launch support with health monitoring and defect resolution',
     freelancers: 'Ghosting once final invoice payment is cleared',
     agencies: 'Expensive mandatory annual maintenance contracts ($500+/mo)',
     highlight: false,
   },
   {
-    dimension: 'Privacy & DPDP Act 2023',
-    snaptech: 'Built-in DPDP 2023 & GDPR consent architecture, zero legal liability',
+    dimension: 'Privacy & Data Governance',
+    snaptech: 'Built-in privacy architecture aligned with DPDP Act 2023 and GDPR guidelines',
     freelancers: 'Ignored, creates regulatory vulnerability for your business',
     agencies: 'Basic checkbox without actual data lifecycle policies',
     highlight: false,
@@ -113,13 +111,13 @@ const KEY_PILLARS = [
   },
   {
     icon: Zap,
-    title: 'Sub-Second Speed & Modern Cloud',
-    badge: '95+ PageSpeed',
-    desc: 'No sluggish themes or unmaintained WordPress plugins. We engineer platforms with React, Vite, Node.js, and edge CDN caching for blistering sub-second page loads that maximize conversions.',
+    title: 'High-Performance Edge Architecture',
+    badge: 'High Performance',
+    desc: 'No bloated themes or unmaintained plugins. We engineer platforms with modern React, Vite, Node.js, and edge CDN caching for fast, responsive page loads that maximize conversions.',
     bullets: [
-      '95+ Core Web Vitals guaranteed',
-      'Edge CDN caching & image compression',
-      'Sub-500ms initial server response time',
+      'Targeted Core Web Vitals optimization',
+      'Edge CDN caching & modern image compression',
+      'Fast initial server response and asset delivery',
     ],
   },
   {
@@ -141,16 +139,16 @@ const KEY_PILLARS = [
     bullets: [
       'Dedicated lead architect on your Slack/WhatsApp',
       'Weekly live staging demo calls',
-      'Rapid 4 to 24h technical SLA response',
+      'Prompt direct technical response and updates',
     ],
   },
 ]
 
-const GUARANTEES = [
+const COMMITMENTS = [
   {
     icon: ShieldCheck,
-    title: 'Zero-Bug Sprint Warranty',
-    desc: 'Every milestone deliverable includes comprehensive automated unit and integration tests, followed by an included 30-day post-launch warranty.',
+    title: '30-Day Post-Launch Support',
+    desc: 'Every milestone deliverable undergoes thorough testing before handover, followed by an included 30-day post-launch bug fixing and support window.',
   },
   {
     icon: FileCheck,
@@ -184,8 +182,12 @@ export default function WhyChooseUsPage() {
     <>
       <SEO
         title="Why Choose SnapTech Digital | Agency vs Freelancer Comparison"
-        description="Discover why leading brands choose SnapTech Digital over traditional agencies and freelancers. 100% code ownership, sub-second speed, and transparent fixed milestone pricing."
+        description="Discover why leading brands choose SnapTech Digital over traditional agencies and freelancers. 100% code ownership, high performance, and transparent fixed milestone pricing."
         path="/why-snaptech"
+        breadcrumbs={[
+          { name: 'Home', path: '/' },
+          { name: 'Why SnapTech', path: '/why-snaptech' },
+        ]}
         keywords="why snaptech digital, best web agency india, web development agency comparison, software engineering partner, hire web developers rajasthan"
       />
 
@@ -228,7 +230,7 @@ export default function WhyChooseUsPage() {
                 transition={{ duration: 0.5, delay: 0.2 }}
                 className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto"
               >
-                Tired of sluggish 16-week agency retainers or unreliable freelancers? Here is how our production-grade engineering model delivers 100% code ownership, sub-second speed, and predictable milestone ROI.
+                Tired of sluggish 16-week agency retainers or unreliable freelancers? Here is how our production-grade engineering model delivers 100% code ownership, optimized performance, and predictable milestone ROI.
               </motion.p>
 
               {/* Action Buttons */}
@@ -277,13 +279,13 @@ export default function WhyChooseUsPage() {
                   <CheckCircle2 className="w-4 h-4 text-emerald-600" /> 100% Code Ownership
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Sub-Second 95+ PageSpeed
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Optimized Performance
                 </span>
                 <span className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Fixed Milestone Quotes
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" /> 99.8% Uptime SLA
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" /> 30-Day Launch Support
                 </span>
               </motion.div>
             </div>
@@ -304,9 +306,9 @@ export default function WhyChooseUsPage() {
                   bg: 'bg-blue-50 border-blue-200',
                 },
                 {
-                  metric: '95+',
-                  label: 'Core Web Vitals',
-                  sub: 'Guaranteed sub-second global edge load times',
+                  metric: '< 1s',
+                  label: 'Target Load Time',
+                  sub: 'Optimized bundle size and global edge CDN caching',
                   icon: Zap,
                   color: 'text-amber-500',
                   bg: 'bg-amber-50 border-amber-200',
@@ -320,9 +322,9 @@ export default function WhyChooseUsPage() {
                   bg: 'bg-emerald-50 border-emerald-200',
                 },
                 {
-                  metric: '99.8%',
-                  label: 'Production SLA',
-                  sub: '24/7 automated telemetry & architect support',
+                  metric: '30 Days',
+                  label: 'Post-Launch Support',
+                  sub: 'Included defect resolution & deployment monitoring',
                   icon: ShieldCheck,
                   color: 'text-indigo-600',
                   bg: 'bg-indigo-50 border-indigo-200',
@@ -578,7 +580,7 @@ export default function WhyChooseUsPage() {
           </Container>
         </section>
 
-        {/* ── 5. Enterprise Client Guarantees ── */}
+        {/* ── 5. Enterprise Client Commitments ── */}
         <section className="py-14 sm:py-20 bg-slate-50">
           <Container>
             <div className="text-center max-w-2xl mx-auto mb-12 space-y-2">
@@ -586,15 +588,15 @@ export default function WhyChooseUsPage() {
                 // RISK-FREE COLLABORATION
               </span>
               <h2 className="text-2xl sm:text-3xl font-heading font-extrabold text-slate-900">
-                Guaranteed by Contract
+                Contract-Backed Commitments
               </h2>
               <p className="text-xs sm:text-sm text-slate-600">
-                Every project is protected by industry-grade contractual SLAs and zero-ambiguity scope definitions.
+                Every project is governed by clearly documented milestone scopes, IP transfer agreements, and dedicated post-launch support.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {GUARANTEES.map((item, idx) => {
+              {COMMITMENTS.map((item, idx) => {
                 const IconComp = item.icon
                 return (
                   <div

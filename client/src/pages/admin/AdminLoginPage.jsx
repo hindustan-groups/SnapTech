@@ -44,25 +44,40 @@ export default function AdminLoginPage() {
   const [otpLoading, setOtpLoading] = useState(false)
 
   const rememberedSecret =
-    typeof window !== 'undefined' ? localStorage.getItem('admin_secret_path') || '' : ''
+    typeof window !== 'undefined' ? (localStorage.getItem('admin_secret_path') || '').trim() : ''
   const configuredSecret =
-    import.meta.env.VITE_ADMIN_SECRET_PATH || rememberedSecret || ''
+    (import.meta.env.VITE_ADMIN_SECRET_PATH || '').trim()
 
-  const isDirectLogin = !adminSecret
-  const isValidSecret = isDirectLogin
-    ? Boolean(configuredSecret && configuredSecret !== 'invalid')
-    : Boolean(
-        adminSecret &&
-        adminSecret.length >= 3 &&
-        adminSecret !== 'admin-invalid' &&
-        adminSecret !== 'invalid'
-      )
+  const isPrefixed = Boolean(
+    adminSecret &&
+    adminSecret.startsWith('admin-') &&
+    adminSecret.length > 6 &&
+    adminSecret !== 'admin-invalid' &&
+    adminSecret !== 'admin-login'
+  )
 
-  const secretPath = isDirectLogin
-    ? configuredSecret
-    : isValidSecret
-      ? adminSecret.replace(/^admin-/, '').replace(/[./\s]+$/, '')
-      : ''
+  const knownSecrets = [
+    configuredSecret,
+    rememberedSecret,
+    'hp9z7k5w8v3q2m4x',
+    'h9z7',
+  ].filter(Boolean)
+
+  const isKnownSecret = Boolean(
+    adminSecret && knownSecrets.includes(adminSecret)
+  )
+
+  const isValidSecret = Boolean(
+    adminSecret &&
+    adminSecret !== 'admin-invalid' &&
+    adminSecret !== 'invalid' &&
+    adminSecret !== 'admin-login' &&
+    (isPrefixed || isKnownSecret)
+  )
+
+  const secretPath = isValidSecret
+    ? adminSecret.replace(/^admin-/, '').replace(/[./\s]+$/, '')
+    : ''
 
   // Store secretPath on mount to remember it for future redirects
   useEffect(() => {
@@ -92,14 +107,16 @@ export default function AdminLoginPage() {
     setError('')
     try {
       const activePath = secretPath || adminSecret || 'login'
-      const headers = { 'x-admin-path': activePath }
       let res
       try {
-        res = await api.post(`/admin/${activePath}/login`, data, { headers })
+        // Attempt URL-based login first (secret slug in REST endpoint path)
+        res = await api.post(`/admin/${activePath}/login`, data)
       } catch (firstErr) {
+        // If server routes login via /admin/login with stealth header or 404 fallback
         if (firstErr.status === 404) {
-          // If server routes login via /admin/login with stealth header
-          res = await api.post('/admin/login', data, { headers })
+          res = await api.post('/admin/login', data, {
+            headers: { 'x-admin-path': activePath },
+          })
         } else {
           throw firstErr
         }
@@ -111,7 +128,15 @@ export default function AdminLoginPage() {
         navigate('/admin/dashboard')
       }
     } catch (err) {
-      setError(err.message || 'Invalid credentials. Please try again.')
+      if (err.status === 0) {
+        setError('Unable to reach the server. Please check your network connection or server status.')
+      } else if (err.status === 401) {
+        setError(err.message || 'Invalid email or password. Please try again.')
+      } else if (err.status === 429) {
+        setError(err.message || 'Too many login attempts. Please try again later.')
+      } else {
+        setError(err.message || 'Invalid credentials. Please try again.')
+      }
     } finally {
       setLoading(false)
     }
@@ -127,15 +152,14 @@ export default function AdminLoginPage() {
     setOtpLoading(true)
     setOtpError('')
     try {
-      const activePath = secretPath || adminSecret || 'login'
-      await api.post(
-        '/admin/2fa/login',
-        { tempToken, code: otpCode },
-        { headers: { 'x-admin-path': activePath } }
-      )
+      await api.post('/admin/2fa/login', { tempToken, code: otpCode })
       navigate('/admin/dashboard')
     } catch (err) {
-      setOtpError(err.message || 'Invalid authentication code. Please try again.')
+      if (err.status === 0) {
+        setOtpError('Unable to reach the server. Please check your network connection or server status.')
+      } else {
+        setOtpError(err.message || 'Invalid authentication code. Please try again.')
+      }
     } finally {
       setOtpLoading(false)
     }

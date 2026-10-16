@@ -16,7 +16,7 @@ import {
   Building2,
 } from 'lucide-react'
 import { Container, SEO } from '@/components/ui'
-import { useTeam } from '@/hooks/useTeam'
+import TeamSection from '@/components/sections/TeamSection'
 import { useMilestones, useSiteSettings } from '@/hooks/useContent'
 
 /* ── Static data (company values) ─────────────────────────────── */
@@ -43,20 +43,10 @@ const VALUES = [
   },
 ]
 
-function LinkedInIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5" aria-hidden="true">
-      <path d="M4.98 3.5C4.98 4.88 3.88 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8.5h4V24h-4V8.5zM8.5 8.5h3.84v2.12h.05c.53-1 1.84-2.12 3.79-2.12 4.05 0 4.8 2.67 4.8 6.13V24h-4v-8.5c0-2.03-.04-4.63-2.82-4.63-2.83 0-3.26 2.2-3.26 4.48V24h-4V8.5z" />
-    </svg>
-  )
-}
-
 export default function AboutPage() {
-  const { data: teamData, isLoading: teamLoading } = useTeam()
   const { data: milestonesData, isLoading: milestonesLoading } = useMilestones()
   const { data: settingsData } = useSiteSettings()
 
-  const team = teamData?.data?.length ? teamData.data : []
   const milestones = Array.isArray(milestonesData?.data) ? milestonesData.data : []
   const cfg = settingsData?.data || {}
 
@@ -75,12 +65,16 @@ export default function AboutPage() {
         title="About SnapTech Digital — Our Story, Team & Mission | Bhilwara, Rajasthan"
         description="SnapTech Digital is a digital agency based in Bhilwara, Rajasthan. Learn about our story, our team, our values, and how we help businesses grow through technology."
         path="/about"
+        breadcrumbs={[
+          { name: 'Home', path: '/' },
+          { name: 'About Us', path: '/about' },
+        ]}
         keywords="SnapTech Digital, about us, digital agency Bhilwara, IT company Rajasthan, web development team, software company India"
         schemas={[
           {
             '@context': 'https://schema.org',
             '@type': 'AboutPage',
-            name: 'About Snaptech',
+            name: 'About SnapTech Digital',
             url: 'https://www.snaptech.digital/about',
             description:
               'SnapTech Digital is the dedicated technology and digital transformation company of Hindustan Projects Group, delivering enterprise digital systems.',
@@ -403,101 +397,21 @@ export default function AboutPage() {
       )}
 
       {/* ── 6. Leadership & Engineering Squad ───────────────────────── */}
-      <section className="py-16 sm:py-20 lg:py-24 bg-slate-50/60 border-t border-b border-slate-200/80 relative">
-        <Container>
-          <div className="max-w-3xl mx-auto text-center mb-14">
-            <span className="text-xs font-mono font-bold tracking-wider uppercase text-brand-blue mb-3 block">
-              // EXECUTIVE DIRECTORS & ARCHITECTS
+      <TeamSection
+        id="about-team"
+        badge="// EXECUTIVE DIRECTORS & ARCHITECTS"
+        title={
+          <>
+            Meet The{' '}
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-brand-blue via-blue-600 to-indigo-700">
+              Technical Board
             </span>
-            <h2 className="font-heading text-3xl sm:text-4xl font-extrabold text-slate-900 mb-4">
-              Meet The Technical Board
-            </h2>
-            <p className="text-slate-600 text-sm sm:text-base font-normal">
-              A seasoned collective of technologists, systems architects, and product leads committed to flawless execution.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {teamLoading ? (
-              Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="h-72 bg-slate-200/70 rounded-2xl border border-slate-200 animate-pulse" />
-              ))
-            ) : team.length === 0 ? (
-              <div className="col-span-full text-center py-10 bg-white rounded-2xl border border-slate-200/80 p-8 shadow-xs">
-                <Users className="w-8 h-8 text-brand-blue mx-auto mb-2 opacity-50" />
-                <p className="text-slate-600 text-sm font-semibold">Leadership and technical team profiles will be updated shortly.</p>
-              </div>
-            ) : (
-              team.map((member) => {
-                  const initials = member.name
-                    .split(' ')
-                    .map((n) => n[0])
-                    .slice(0, 2)
-                    .join('')
-                    .toUpperCase()
-
-                  return (
-                    <div
-                      key={member.id}
-                      className="group relative overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-6 text-center
-                        shadow-xs hover:border-brand-blue/50 hover:shadow-xl
-                        hover:-translate-y-1.5 transition-all duration-300 flex flex-col items-center"
-                    >
-                      {/* Avatar */}
-                      <div className="relative mb-5 mx-auto w-24 h-24 flex items-center justify-center">
-                        <div className="relative p-1 rounded-full bg-linear-to-tr from-brand-blue to-cyan-400">
-                          {member.photoUrl ? (
-                            <img
-                              src={member.photoUrl}
-                              alt={member.name}
-                              className="w-20 h-20 rounded-full object-cover shadow-inner"
-                              loading="lazy"
-                            />
-                          ) : (
-                            <div className="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200">
-                              <span className="font-heading text-lg font-extrabold text-brand-blue">
-                                {initials}
-                              </span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Info */}
-                      <h3 className="font-heading text-lg font-bold text-slate-900 group-hover:text-brand-blue transition-colors duration-300">
-                        {member.name}
-                      </h3>
-                      <p className="text-xs font-mono font-semibold text-brand-blue uppercase tracking-wider mt-1 mb-3">
-                        {member.role}
-                      </p>
-                      {member.bio && (
-                        <p className="text-xs text-slate-600 leading-relaxed mb-5 line-clamp-3 font-normal">
-                          {member.bio}
-                        </p>
-                      )}
-
-                      {/* LinkedIn / Profile */}
-                      {member.linkedinUrl && (
-                        <div className="mt-auto">
-                          <a
-                            href={member.linkedinUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label={`${member.name} on LinkedIn`}
-                            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono text-slate-700 bg-slate-50 hover:bg-blue-50 hover:text-brand-blue border border-slate-200 hover:border-blue-300 transition-all duration-300"
-                          >
-                            <LinkedInIcon />
-                            <span>Verified Profile</span>
-                          </a>
-                        </div>
-                      )}
-                    </div>
-                  )
-                })
-            )}
-          </div>
-        </Container>
-      </section>
+          </>
+        }
+        subtitle="A seasoned collective of technologists, systems architects, and product leads committed to flawless execution."
+        mobileLabel="Technical Board"
+        className="py-16 sm:py-20 lg:py-24 bg-slate-50/60 border-t border-b border-slate-200/80 relative overflow-hidden isolate"
+      />
 
       {/* ── 7. Group Consultation CTA ───────────────────────────────── */}
       <section className="relative py-20 sm:py-24 overflow-hidden bg-slate-50">

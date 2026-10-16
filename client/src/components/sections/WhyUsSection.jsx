@@ -12,7 +12,6 @@ import {
   ArrowRight,
   Code2,
   Lock,
-  Zap,
   CheckCircle2,
   Award,
   ChevronLeft,
@@ -406,12 +405,6 @@ export default function WhyUsSection() {
                     <span>Backed by {cfg.parent_company_name || 'Hindustan Projects Group'} with full IP &amp; code handover</span>
                   </div>
                 </div>
-              </div>
-
-              {/* Floating Badge */}
-              <div className="absolute -bottom-5 -right-4 text-white rounded-xl px-4 py-2 shadow-xl flex items-center gap-2 bg-linear-to-r from-[#0D1B4B] to-brand-blue">
-                <Zap className="w-4 h-4 text-white" />
-                <span className="text-xs font-bold font-mono">100% In-House Engineers</span>
               </div>
             </div>
           </motion.div>

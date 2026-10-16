@@ -7,6 +7,7 @@ const CACHE_FRESH = 'no-cache, must-revalidate'
 /**
  * GET /api/services
  * Returns all active services ordered by the `order` field.
+ * Employs 10-minute cache with instant stale-while-revalidate.
  */
 export const getAllServices = async (_req, res, next) => {
   try {

@@ -48,6 +48,7 @@ import { breadcrumbSchema, faqSchema } from '@/components/ui/SEO'
 import { useSiteSettings, usePricingPackages } from '@/hooks/useContent'
 import { useContact } from '@/hooks/useContact'
 import { useToast } from '@/components/ui/ToastProvider'
+import LandingPageOfferBanner from '@/components/sections/LandingPageOfferBanner'
 
 // ── 0. Feature Comparison Matrix ───────────────────────────────────
 const COMPARISON_MATRIX = [
@@ -901,6 +902,16 @@ export default function PricingPage() {
             </p>
           </div>
 
+          {/* ── Featured ₹2,999 Landing Page Launch Offer ── */}
+          <div className="mb-12 sm:mb-14">
+            <LandingPageOfferBanner
+              as="div"
+              showContainer={false}
+              className="mb-0"
+              onClaimOffer={() => openQuoteModal('Landing Page Website (₹2,999 Offer)')}
+            />
+          </div>
+
           {/* Pricing Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 items-stretch">
             {websitePackages.map((pkg, idx) => {
@@ -1617,7 +1628,7 @@ export default function PricingPage() {
       <section id="why-choose-us" className="py-16 lg:py-24 bg-white border-t border-slate-200/80 scroll-mt-24">
         <Container>
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <span className="text-xs font-bold uppercase tracking-widest text-brand-blue">The Snaptech Edge</span>
+            <span className="text-xs font-bold uppercase tracking-widest text-brand-blue">The SnapTech Edge</span>
             <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 mt-1">
               Why Choose SnapTech Digital
             </h2>

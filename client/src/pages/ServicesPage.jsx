@@ -96,33 +96,33 @@ const FALLBACK_SERVICES = [
     category: 'Engineering',
     tag: 'Most Popular',
     deliveryTime: '2–4 Weeks',
-    techStack: ['React.js', 'Next.js', 'Node.js', 'WordPress', 'MongoDB', 'Tailwind CSS'],
-    keyFeatures: ['Fully responsive on all devices', 'SEO-optimised from day one', 'Fast loading under 3s', 'Clean maintainable codebase'],
-    shortDescription: 'High-performance, ultra-responsive web applications engineered with React, Next.js, Node.js, and PostgreSQL for maximum conversion speed.',
+    techStack: ['React', 'Next.js', 'Node.js', 'PostgreSQL', 'Tailwind CSS', 'Docker'],
+    keyFeatures: ['Mobile-first responsive design', 'Fast loading Core Web Vitals tuned', 'Custom lead capture forms with spam filters', '100% full source code ownership'],
+    shortDescription: 'Custom, high-speed websites, web applications, and customer portals engineered for fast loading speeds, search visibility, and conversion-focused performance.',
   },
   {
     id: '2',
+    title: 'Mobile App Development',
+    slug: 'mobile-app-development',
+    icon: 'Smartphone',
+    category: 'Engineering',
+    tag: 'iOS & Android',
+    deliveryTime: '6–10 Weeks',
+    techStack: ['React Native', 'Flutter', 'Firebase', 'REST APIs', 'App Store Connect', 'Google Play'],
+    keyFeatures: ['Cross-platform iOS & Android codebase', 'Offline caching & local data sync', 'Push notifications for re-engagement', 'App Store and Play Store publishing support'],
+    shortDescription: 'Cross-platform iOS and Android mobile applications built with React Native and Flutter for seamless mobile performance, offline caching, and app store deployment.',
+  },
+  {
+    id: '3',
     title: 'Digital Marketing & SEO',
     slug: 'digital-marketing-seo',
     icon: 'Megaphone',
     category: 'Growth & SEO',
-    tag: 'High ROI',
-    deliveryTime: 'Ongoing Monthly',
-    techStack: ['Google Ads', 'Meta Ads', 'SEMrush', 'Google Analytics', 'Search Console'],
-    keyFeatures: ['Full SEO audit and on-page fixes', 'Google & Meta paid ad campaigns', 'Monthly ROI analytics reports'],
-    shortDescription: 'Revenue-focused digital growth engines spanning search dominance, programmatic ad management, and conversion funnel optimization.',
-  },
-  {
-    id: '3',
-    title: 'IT Consulting & Strategy',
-    slug: 'it-consulting-strategy',
-    icon: 'Lightbulb',
-    category: 'Advisory',
-    tag: 'Expert Advice',
-    deliveryTime: '1–2 Weeks',
-    techStack: ['AWS', 'Azure', 'Microservices', 'System Architecture', 'Compliance'],
-    keyFeatures: ['Current system assessment', 'Technology roadmap design', 'Cloud architecture review'],
-    shortDescription: 'Strategic IT advisory from veteran architects. We modernise legacy systems, establish microservices architectures, and align tech stacks.',
+    tag: 'Lead Acquisition',
+    deliveryTime: 'Monthly Campaigns',
+    techStack: ['Google Ads', 'Meta Ads', 'SEMrush', 'Google Analytics 4', 'Search Console', 'Tag Manager'],
+    keyFeatures: ['Comprehensive technical SEO audits', 'Google & Meta targeted ad campaigns', 'GA4 server-side conversion tracking', 'Transparent monthly ROI reporting'],
+    shortDescription: 'Targeted search engine optimization (SEO), Google Ads, and Meta advertising campaigns structured to generate qualified commercial leads and measurable ROI.',
   },
   {
     id: '4',
@@ -130,11 +130,11 @@ const FALLBACK_SERVICES = [
     slug: 'ecommerce-solutions',
     icon: 'Monitor',
     category: 'Engineering',
-    tag: 'Sell More',
+    tag: 'Online Storefronts',
     deliveryTime: '3–6 Weeks',
-    techStack: ['Shopify', 'WooCommerce', 'Razorpay', 'Stripe', 'React', 'Inventory APIs'],
-    keyFeatures: ['Custom storefront design', 'Secure payment integration', 'Mobile-first checkout flow'],
-    shortDescription: 'Turnkey high-converting digital storefronts, custom Shopify Plus developments, headless commerce platforms, and instant payment gateway integrations.',
+    techStack: ['Shopify', 'WooCommerce', 'Razorpay', 'Stripe', 'React', 'Node.js'],
+    keyFeatures: ['Mobile-first storefront design', 'Secure UPI & card payment gateways', 'Real-time catalog & inventory sync', 'Automated order confirmation alerts'],
+    shortDescription: 'Turnkey digital storefronts, custom Shopify setups, and scalable online catalogs engineered for smooth checkout flows and automated order processing.',
   },
   {
     id: '5',
@@ -142,11 +142,11 @@ const FALLBACK_SERVICES = [
     slug: 'cloud-solutions-devops',
     icon: 'Settings',
     category: 'Cloud & DevOps',
-    tag: 'Scalable',
+    tag: 'Cloud Infrastructure',
     deliveryTime: '1–3 Weeks',
-    techStack: ['AWS', 'Google Cloud', 'Docker', 'Kubernetes', 'GitHub Actions', 'Nginx'],
-    keyFeatures: ['Cloud server setup & migration', 'Automated CI/CD pipelines', '99.9% uptime guarantee'],
-    shortDescription: 'Mission-critical cloud orchestration on AWS, GCP, and Azure. Zero-downtime automated deployment pipelines and auto-scaling clusters.',
+    techStack: ['AWS', 'Google Cloud', 'Docker', 'GitHub Actions', 'Nginx', 'PostgreSQL', 'Redis'],
+    keyFeatures: ['Cloud server setup & migration', 'Automated zero-downtime CI/CD pipelines', 'Automated daily encrypted database backups', 'Proactive server health & security monitoring'],
+    shortDescription: 'Secure cloud hosting setup, containerized deployments, automated backups, and proactive monitoring on AWS, Google Cloud, and DigitalOcean.',
   },
   {
     id: '6',
@@ -154,23 +154,23 @@ const FALLBACK_SERVICES = [
     slug: 'branding-ui-ux-design',
     icon: 'Layers',
     category: 'Design & UI/UX',
-    tag: 'Stand Out',
+    tag: 'Brand Identity',
     deliveryTime: '2–3 Weeks',
-    techStack: ['Figma', 'Adobe Illustrator', 'Prototyping', 'Design Tokens', 'Style Guides'],
-    keyFeatures: ['Professional logo design', 'Full brand identity system', 'UI design with Figma prototypes'],
-    shortDescription: 'Award-winning product interfaces that captivate users. We design scalable design systems, interactive prototypes, and cohesive brand identities.',
+    techStack: ['Figma', 'Adobe Illustrator', 'Adobe Photoshop', 'Design Tokens', 'Prototyping'],
+    keyFeatures: ['Distinctive vector corporate logo suites', 'Complete brand style guidelines', 'Interactive clickable Figma UI/UX prototypes', 'Reusable front-end design tokens'],
+    shortDescription: 'Intuitive user interface designs, interactive prototypes, and unified corporate visual identities that establish credibility and enhance customer engagement.',
   },
   {
     id: '7',
-    title: 'Mobile App Development',
-    slug: 'mobile-app-development',
-    icon: 'Smartphone',
-    category: 'Engineering',
-    tag: 'iOS & Android',
-    deliveryTime: '6–12 Weeks',
-    techStack: ['React Native', 'Flutter', 'Firebase', 'REST APIs', 'App Store', 'Play Store'],
-    keyFeatures: ['Cross-platform iOS & Android', 'Native-like performance', 'App Store submission handled'],
-    shortDescription: 'Flawless cross-platform iOS and Android applications. Native 60fps animations, robust offline caching, push notifications, and verified App Store deployment.',
+    title: 'IT Consulting & Strategy',
+    slug: 'it-consulting-strategy',
+    icon: 'Lightbulb',
+    category: 'Advisory',
+    tag: 'Technical Advisory',
+    deliveryTime: '1–2 Weeks',
+    techStack: ['Cloud Architecture', 'System Audits', 'Jira', 'Security Review', 'Database Design'],
+    keyFeatures: ['Software stack & hosting audit', 'Independent vendor proposal evaluation', 'Prioritized digital transformation roadmap', 'Security & backup readiness checklist'],
+    shortDescription: 'Independent technical consulting to help business owners evaluate software options, audit existing IT systems, and plan realistic digital roadmaps.',
   },
 ]
 
@@ -287,7 +287,7 @@ export default function ServicesPage() {
             <div className="lg:col-span-7">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1a3e8c]/10 border border-[#1a3e8c]/20 text-[#1a3e8c] text-xs font-mono font-bold uppercase tracking-widest mb-6">
                 <span className="w-2 h-2 rounded-full bg-[#1a3e8c] animate-pulse" />
-                Snaptech Enterprise Capabilities
+                SnapTech Enterprise Capabilities
               </div>
               <h1 className="font-heading text-4xl sm:text-5xl lg:text-[3.5rem] font-extrabold text-slate-900 leading-[1.12] mb-6 tracking-tight">
                 Next-Gen IT Services{' '}
@@ -567,7 +567,7 @@ export default function ServicesPage() {
                             to={`/services/${service.slug}`}
                             className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1a3e8c] group-hover:text-[#0D1B4B] transition-colors"
                           >
-                            <span>Explore Architecture</span>
+                            <span>Explore Service</span>
                             <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                           </Link>
 

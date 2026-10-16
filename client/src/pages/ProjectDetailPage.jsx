@@ -67,7 +67,7 @@ function ProjectDetailSkeleton() {
 
 export default function ProjectDetailPage() {
   const { slug } = useParams()
-  const { data: projectRes, isLoading, isError } = useProject(slug)
+  const { data: projectRes, isLoading, isError, error, refetch } = useProject(slug)
   const { data: allProjectsRes } = useProjects()
   const { data: settingsData } = useSiteSettings()
 
@@ -115,27 +115,66 @@ export default function ProjectDetailPage() {
     return <ProjectDetailSkeleton />
   }
 
-  if (isError || !project) {
+  // Transient network or server error (e.g., status 500 or 0)
+  if (isError && error?.status !== 404 && !project) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6 text-center">
-        <div className="max-w-md bg-white p-8 rounded-3xl border border-slate-200 shadow-xl">
-          <div className="w-14 h-14 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto mb-4 border border-rose-200">
-            <Layers className="w-6 h-6" />
-          </div>
-          <h2 className="font-heading text-2xl font-bold text-slate-900 mb-2">Case Study Not Found</h2>
-          <p className="text-slate-600 text-sm mb-6">
-            The project you are looking for may have been archived, renamed, or is currently undergoing technical updates.
-          </p>
-          <div className="flex gap-3 justify-center">
-            <Link
-              to="/portfolio"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-blue text-white text-sm font-semibold hover:bg-brand-blue-dark transition-all"
-            >
-              <ArrowLeft className="w-4 h-4" /> Back to Portfolio
-            </Link>
+      <>
+        <SEO title="Case Study Temporarily Unavailable | SnapTech Digital" />
+        <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6 text-center">
+          <div className="max-w-md bg-white p-8 rounded-3xl border border-slate-200 shadow-xl">
+            <div className="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto mb-4 border border-amber-200">
+              <Layers className="w-6 h-6" />
+            </div>
+            <h1 className="font-heading text-2xl font-bold text-slate-900 mb-2">Unable to Load Case Study</h1>
+            <p className="text-slate-600 text-sm mb-6">
+              A temporary connection or server error occurred while retrieving this project. Please retry or browse other projects.
+            </p>
+            <div className="flex gap-3 justify-center">
+              <button
+                type="button"
+                onClick={() => refetch?.()}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-blue text-white text-sm font-semibold hover:bg-brand-blue-dark transition-all cursor-pointer"
+              >
+                Retry Connection
+              </button>
+              <Link
+                to="/portfolio"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-sm font-semibold hover:bg-slate-50 transition-all"
+              >
+                Back to Portfolio
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
+      </>
+    )
+  }
+
+  // Genuine entity-not-found state (404 status or empty project data)
+  if (!project) {
+    return (
+      <>
+        <SEO title="Case Study Not Found | SnapTech Digital" noIndex />
+        <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6 text-center">
+          <div className="max-w-md bg-white p-8 rounded-3xl border border-slate-200 shadow-xl">
+            <div className="w-14 h-14 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto mb-4 border border-rose-200">
+              <Layers className="w-6 h-6" />
+            </div>
+            <h1 className="font-heading text-2xl font-bold text-slate-900 mb-2">Case Study Not Found</h1>
+            <p className="text-slate-600 text-sm mb-6">
+              The project you are looking for may have been archived, renamed, or does not exist in our registry.
+            </p>
+            <div className="flex gap-3 justify-center">
+              <Link
+                to="/portfolio"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-blue text-white text-sm font-semibold hover:bg-brand-blue-dark transition-all"
+              >
+                <ArrowLeft className="w-4 h-4" /> Back to Portfolio
+              </Link>
+            </div>
+          </div>
+        </div>
+      </>
     )
   }
 
