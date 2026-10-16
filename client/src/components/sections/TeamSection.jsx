@@ -80,7 +80,7 @@ function TeamCard({ member }) {
           </p>
 
           {member.bio && (
-            <p className="text-xs text-slate-600 leading-relaxed mb-3 sm:mb-4 group-hover:text-slate-700 transition-colors duration-300 px-1">
+            <p className="text-xs text-slate-600 leading-relaxed mb-3 sm:mb-4 group-hover:text-slate-700 transition-colors duration-300 px-1 line-clamp-3 sm:line-clamp-4">
               {member.bio}
             </p>
           )}
@@ -135,7 +135,14 @@ const flipVariants = {
   }),
 }
 
-export default function TeamSection() {
+export default function TeamSection({
+  id = 'team',
+  badge = 'Engineering Leadership',
+  title,
+  subtitle = 'Our multi-disciplinary team of software architects, UI/UX designers, and DevOps engineers dedicated to corporate excellence.',
+  mobileLabel = 'Leadership',
+  className = 'py-20 sm:py-24 bg-slate-50 border-t border-slate-100 relative overflow-hidden isolate',
+} = {}) {
   const { data, isLoading } = useTeam()
   const members = Array.isArray(data?.data) ? data.data : []
   const [activeMobileIdx, setActiveMobileIdx] = useState(0)
@@ -161,9 +168,9 @@ export default function TeamSection() {
 
   return (
     <section
-      id="team"
-      className="py-20 sm:py-24 bg-slate-50 border-t border-slate-100 relative overflow-hidden isolate"
-      aria-labelledby="team-heading"
+      id={id}
+      className={className}
+      aria-labelledby={`${id}-heading`}
     >
       {/* Subtle background decorations */}
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-100/30 rounded-full blur-[140px] pointer-events-none" />
@@ -177,18 +184,26 @@ export default function TeamSection() {
           variants={fadeUp}
           className="text-center mb-10 sm:mb-16 max-w-3xl mx-auto"
         >
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50/80 border border-blue-200 text-brand-blue text-xs font-mono font-bold uppercase tracking-widest mb-4 shadow-2xs">
-            <span>Engineering Leadership</span>
-          </div>
-          <h2 id="team-heading" className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0D1B4B] tracking-tight mb-4">
-            The Minds Behind{' '}
-            <span className="text-transparent bg-clip-text bg-linear-to-r from-brand-blue via-blue-600 to-indigo-700">
-              Snaptech Innovation
-            </span>
+          {badge && (
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50/80 border border-blue-200 text-brand-blue text-xs font-mono font-bold uppercase tracking-widest mb-4 shadow-2xs">
+              <span>{badge}</span>
+            </div>
+          )}
+          <h2 id={`${id}-heading`} className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0D1B4B] tracking-tight mb-4">
+            {title || (
+              <>
+                The Minds Behind{' '}
+                <span className="text-transparent bg-clip-text bg-linear-to-r from-brand-blue via-blue-600 to-indigo-700">
+                  Snaptech Innovation
+                </span>
+              </>
+            )}
           </h2>
-          <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-            Our multi-disciplinary team of software architects, UI/UX designers, and DevOps engineers dedicated to corporate excellence.
-          </p>
+          {subtitle && (
+            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+              {subtitle}
+            </p>
+          )}
         </motion.div>
 
         {members.length === 0 && !isLoading ? (
@@ -227,7 +242,7 @@ export default function TeamSection() {
                   <div className="flex items-center justify-between mb-4 px-2">
                     <div className="flex items-center gap-2 text-xs font-semibold text-slate-600">
                       <span className="w-2 h-2 rounded-full bg-brand-blue animate-pulse" />
-                      <span>Leadership ({activeMobileIdx + 1}/{members.length})</span>
+                      <span>{mobileLabel} ({activeMobileIdx + 1}/{members.length})</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <button
