@@ -13,6 +13,7 @@ import { Container } from '@/components/ui'
 import { useSiteSettings } from '@/hooks/useContent'
 import { useServices } from '@/hooks/useServices'
 import { api } from '@/utils/api'
+import { getRecaptchaToken } from '@/utils/recaptcha'
 import { ArrowUp, CheckCircle2, MapPin, Phone, Mail, ExternalLink } from 'lucide-react'
 import snaptechLogoWhite from '@/assets/snaptech-logo-white.png'
 import WaterRippleLogo from '@/components/ui/WaterRippleLogo'
@@ -23,7 +24,7 @@ const QUICK_LINKS = [
   { label: 'Pricing & Packages', href: '/pricing' },
   { label: 'Cost Calculator', href: '/cost-calculator' },
   { label: 'Why SnapTech', href: '/why-snaptech' },
-  { label: 'About Snaptech', href: '/about' },
+  { label: 'About SnapTech', href: '/about' },
   { label: 'Portfolio / Case Studies', href: '/portfolio' },
   { label: 'Tech Blog & Insights', href: '/blog' },
   { label: 'Careers', href: '/careers' },
@@ -109,6 +110,7 @@ export default function Footer() {
 
   const [email, setEmail] = useState('')
   const [subState, setSubState] = useState('idle') // idle | loading | success | error
+  const [subError, setSubError] = useState('')
 
   const cfg = settingsData?.data || {}
   const phone = cfg.phone || '+91 8209604849'
@@ -157,18 +159,29 @@ export default function Footer() {
     e.preventDefault()
     if (!email || subState === 'loading') return
     setSubState('loading')
+    setSubError('')
     try {
+      const recaptchaToken = await getRecaptchaToken('newsletter_footer')
+      if (!recaptchaToken) {
+        setSubState('error')
+        setSubError('Security verification failed. Please try again.')
+        return
+      }
       await api.post('/contact', {
         name: 'Newsletter Subscriber',
         email,
         message: 'Newsletter subscription from Footer',
         serviceInterested: 'Newsletter',
+        recaptchaToken,
         _hp: '',
       })
       setSubState('success')
       setEmail('')
-    } catch {
+    } catch (err) {
       setSubState('error')
+      setSubError(
+        err.response?.data?.message || err.message || 'Subscription failed. Please try again.'
+      )
     }
   }
 
@@ -312,7 +325,7 @@ export default function Footer() {
                   </form>
                 )}
                 {subState === 'error' && (
-                  <p className="text-red-400 text-[11px] mt-1">Failed. Please try again.</p>
+                  <p className="text-red-400 text-[11px] mt-1">{subError || 'Failed. Please try again.'}</p>
                 )}
               </div>
             </div>

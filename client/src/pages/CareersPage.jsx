@@ -104,7 +104,7 @@ export default function CareersPage() {
 
   const whatsappNumber = (cfg.whatsapp || cfg.phone || '918209604849').replace(/[^0-9]/g, '')
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-    'Hello Snaptech Hiring Team, I am reaching out regarding engineering and tech career opportunities.'
+    'Hello SnapTech Digital Hiring Team, I am reaching out regarding engineering and tech career opportunities.'
   )}`
 
   return (
@@ -113,6 +113,10 @@ export default function CareersPage() {
         title="Careers at SnapTech Digital — Join Our Team | Bhilwara, Rajasthan"
         description="Explore open positions at SnapTech Digital. We hire web developers, UI/UX designers, and digital marketers. Work from our Bhilwara, Rajasthan office or remotely."
         path="/careers"
+        breadcrumbs={[
+          { name: 'Home', path: '/' },
+          { name: 'Careers', path: '/careers' },
+        ]}
         keywords="SnapTech Digital careers, IT jobs Bhilwara, software developer jobs Rajasthan, web developer careers, tech jobs India, digital marketing jobs"
       />
 

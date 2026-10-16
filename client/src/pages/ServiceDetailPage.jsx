@@ -26,6 +26,8 @@ import { useProjects } from '@/hooks/useProjects'
 import { getServiceIcon } from '@/utils/serviceIcons'
 import { useSiteSettings } from '@/hooks/useContent'
 import { api } from '@/utils/api'
+import { getRecaptchaToken } from '@/utils/recaptcha'
+import { trackEvent } from '@/utils/analytics'
 import { ProjectModal } from '@/components/sections/PortfolioSection'
 
 /* ── Fallback Imagery for Projects ────────────────────────────── */
@@ -60,12 +62,190 @@ function getServiceTheme(slug) {
   )
 }
 
-/* ── Fallback structured steps for custom services ───────────── */
+/* ── Service-Specific Verified Fallbacks ──────────────────────── */
+const SERVICE_FALLBACKS = {
+  'web-development': {
+    title: 'Custom Web Development',
+    icon: 'Globe',
+    tag: 'Web Architecture',
+    deliveryTime: '2–4 Weeks',
+    shortDescription:
+      'Custom, high-speed websites, web applications, and customer portals engineered for fast loading speeds, search visibility, and conversion-focused performance.',
+    fullDescription:
+      'SnapTech Digital engineers custom web applications and business websites tailored to your specific commercial requirements. We build clean, modular architectures using modern frameworks like React and Next.js backed by Node.js and PostgreSQL. From corporate marketing sites to internal business portals and secure client dashboards, every project includes mobile responsiveness, on-page SEO foundations, and complete source code ownership upon delivery.',
+    techStack: ['React', 'Next.js', 'Node.js', 'PostgreSQL', 'Tailwind CSS', 'Docker'],
+    keyFeatures: [
+      'Fully responsive layout optimized across mobile, tablet, and desktop',
+      'Fast performance tuning aligned with Google Core Web Vitals',
+      'Custom contact, quote, and lead capture forms with spam filtering',
+      'On-page SEO setup including meta tags, schema markup, and sitemaps',
+      'Secure administrative portal or headless CMS for easy content updates',
+      '100% full source code ownership with 30-day post-launch support',
+    ],
+    process: [
+      { step: '01', title: 'Requirements & Scoping', desc: 'Understanding your business objectives, target audience, and functional specifications.' },
+      { step: '02', title: 'Wireframes & Architecture', desc: 'Designing responsive layout mockups and structuring the database and API schema.' },
+      { step: '03', title: 'Development & Testing', desc: 'Writing clean, modular code with cross-browser compatibility and device testing.' },
+      { step: '04', title: 'Launch & Handover', desc: 'Production deployment, domain and SSL setup, analytics integration, and full code handover.' },
+    ],
+  },
+  'mobile-app-development': {
+    title: 'Mobile App Development',
+    icon: 'Smartphone',
+    tag: 'iOS & Android',
+    deliveryTime: '6–10 Weeks',
+    shortDescription:
+      'Cross-platform iOS and Android mobile applications built with React Native and Flutter for seamless mobile performance, offline caching, and app store deployment.',
+    fullDescription:
+      'We design and build secure, intuitive mobile applications that run smoothly on both Apple iOS and Google Android from a unified codebase. Utilizing modern frameworks like React Native and Flutter, we eliminate the cost and overhead of maintaining separate codebases while delivering native-feel touch responsiveness. Our mobile engineering covers authentication, REST/GraphQL API integrations, push notifications, offline data synchronization, and end-to-end publishing on the Apple App Store and Google Play Store.',
+    techStack: ['React Native', 'Flutter', 'Firebase', 'REST APIs', 'App Store Connect', 'Google Play Console'],
+    keyFeatures: [
+      'Single cross-platform codebase for iOS and Android deployment',
+      'Intuitive, responsive touch interfaces and fluid screen transitions',
+      'Offline data caching and background synchronization',
+      'Targeted push notifications for user alerts and re-engagement',
+      'Secure user authentication and third-party API integrations',
+      'Assisted App Store and Google Play Store submission and review compliance',
+    ],
+    process: [
+      { step: '01', title: 'App Scoping & User Flow', desc: 'Defining user journeys, screen hierarchy, and mobile functional requirements.' },
+      { step: '02', title: 'UI/UX Mobile Design', desc: 'Crafting pixel-perfect mobile screen mockups following iOS and Android guidelines.' },
+      { step: '03', title: 'Cross-Platform Build', desc: 'Engineering app frontend, integrating APIs, local storage, and push notifications.' },
+      { step: '04', title: 'Store Submission & Launch', desc: 'Publishing app bundles, configuring store listings, and monitoring release health.' },
+    ],
+  },
+  'ecommerce-solutions': {
+    title: 'E-Commerce Solutions',
+    icon: 'Monitor',
+    tag: 'Online Storefronts',
+    deliveryTime: '3–6 Weeks',
+    shortDescription:
+      'Turnkey digital storefronts, custom Shopify setups, and scalable online catalogs engineered for smooth checkout flows and automated order processing.',
+    fullDescription:
+      'SnapTech Digital builds conversion-focused e-commerce stores designed to turn casual visitors into paying customers. Whether you need a customized Shopify storefront or a tailored React web shop, we implement fast product search, category navigation, secure Indian and international payment gateways (Razorpay, Stripe), automated tax calculation, and order tracking. We focus on minimizing mobile cart abandonment and simplifying store management for your operations team.',
+    techStack: ['Shopify', 'WooCommerce', 'React', 'Razorpay', 'Stripe', 'Node.js'],
+    keyFeatures: [
+      'Mobile-first digital storefront design optimized for quick product discovery',
+      'Secure payment gateway integration with UPI, Credit/Debit cards, and NetBanking',
+      'Real-time inventory and catalog management with category filtering',
+      'Automated order confirmation and dispatch alerts via WhatsApp, SMS, or Email',
+      'Optimized product schema markup for search engine and shopping visibility',
+      'Store admin dashboard training and post-launch checkout flow verification',
+    ],
+    process: [
+      { step: '01', title: 'Catalog & Store Planning', desc: 'Structuring product categories, variants, shipping zones, and tax rules.' },
+      { step: '02', title: 'Storefront UI & Branding', desc: 'Designing custom homepage, collection, product, and mobile checkout pages.' },
+      { step: '03', title: 'Payment & API Integration', desc: 'Configuring payment gateways, shipping calculators, and inventory sync.' },
+      { step: '04', title: 'Testing & Launch', desc: 'Conducting live test transactions, load checks, and handing over store controls.' },
+    ],
+  },
+  'digital-marketing-seo': {
+    title: 'Digital Marketing & SEO',
+    icon: 'Megaphone',
+    tag: 'Lead Acquisition',
+    deliveryTime: 'Monthly Campaigns',
+    shortDescription:
+      'Targeted search engine optimization (SEO), Google Ads, and Meta advertising campaigns structured to generate qualified commercial leads and measurable ROI.',
+    fullDescription:
+      'We help businesses build sustainable online visibility and acquire high-intent customers through data-backed marketing strategies. Our approach unites on-page technical SEO, Google Business Profile local ranking, and high-conversion paid search campaigns across Google Ads and Meta platforms. We emphasize transparent reporting, conversion tracking with Google Analytics 4, and ongoing landing page optimization so you always know where your marketing budget is going.',
+    techStack: ['Google Ads', 'Meta Ads Manager', 'Google Analytics 4', 'SEMrush', 'Search Console', 'Tag Manager'],
+    keyFeatures: [
+      'Technical SEO audit with on-page metadata, site speed, and indexing fixes',
+      'Local SEO and Google Business Profile optimization for regional search rankings',
+      'Targeted Google Search (PPC) and Meta ad campaign setup and management',
+      'Server-side conversion tracking and Google Analytics 4 event configuration',
+      'Landing page conversion rate optimization (CRO) to maximize lead capture',
+      'Transparent monthly performance reports detailing inquiries, clicks, and costs',
+    ],
+    process: [
+      { step: '01', title: 'Audit & Competitor Analysis', desc: 'Auditing existing search presence, keyword gaps, and competitor advertising.' },
+      { step: '02', title: 'Strategy & Tracking Setup', desc: 'Setting up GA4 conversion events, defining target audiences, and keyword tiers.' },
+      { step: '03', title: 'Campaign Execution', desc: 'Deploying optimized search ads, publishing SEO updates, and refining ad copy.' },
+      { step: '04', title: 'Ongoing Optimization', desc: 'Reviewing weekly lead quality, pruning negative keywords, and reporting monthly ROI.' },
+    ],
+  },
+  'cloud-solutions-devops': {
+    title: 'Cloud Solutions & DevOps',
+    icon: 'Settings',
+    tag: 'Cloud Infrastructure',
+    deliveryTime: '1–3 Weeks',
+    shortDescription:
+      'Secure cloud hosting setup, containerized deployments, automated backups, and proactive monitoring on AWS, Google Cloud, and DigitalOcean.',
+    fullDescription:
+      'SnapTech Digital helps businesses transition to modern, dependable cloud infrastructure designed to scale with your traffic. We set up and manage virtual private servers, containerized workloads with Docker, and automated CI/CD deployment pipelines on leading cloud providers. Our engineers implement automated daily database backups, SSL/TLS certificate management, firewall rules, and real-time monitoring to keep your business services operational and secure.',
+    techStack: ['AWS', 'Google Cloud', 'Docker', 'GitHub Actions', 'Nginx', 'PostgreSQL', 'Redis'],
+    keyFeatures: [
+      'Cloud infrastructure setup and migration on AWS, Google Cloud, or DigitalOcean',
+      'Automated CI/CD build and deployment pipelines for rapid updates',
+      'Automated daily encrypted database backups with disaster recovery procedures',
+      'Server security hardening, firewall configuration, and SSL/TLS installation',
+      'Continuous server health monitoring, resource alerts, and log aggregation',
+      'Hosting cost review to eliminate idle instances and right-size cloud resources',
+    ],
+    process: [
+      { step: '01', title: 'Infrastructure Assessment', desc: 'Reviewing current server capacity, database performance, and security settings.' },
+      { step: '02', title: 'Cloud Architecture Design', desc: 'Selecting appropriate instance tiers, storage volumes, and network security rules.' },
+      { step: '03', title: 'Migration & Pipeline Setup', desc: 'Configuring servers, containerizing code, and setting up automated CI/CD.' },
+      { step: '04', title: 'Monitoring & Documentation', desc: 'Enabling automated alerts, testing backup restores, and delivering runbooks.' },
+    ],
+  },
+  'branding-ui-ux-design': {
+    title: 'Branding & UI/UX Design',
+    icon: 'Layers',
+    tag: 'Brand Identity',
+    deliveryTime: '2–3 Weeks',
+    shortDescription:
+      'Intuitive user interface designs, interactive prototypes, and unified corporate visual identities that establish credibility and enhance customer engagement.',
+    fullDescription:
+      'A strong visual presence and intuitive digital product design build immediate trust with your audience. SnapTech Digital crafts cohesive brand identities—from distinctive vector logos and typography systems to complete digital design guidelines. For web and mobile applications, our UI/UX designers create comprehensive user journeys, wireframes, and interactive Figma prototypes that validate concepts and streamline front-end engineering before a single line of code is written.',
+    techStack: ['Figma', 'Adobe Illustrator', 'Adobe Photoshop', 'Design Tokens', 'Prototyping'],
+    keyFeatures: [
+      'Distinctive vector logo design in full color, reverse, and monochrome formats',
+      'Complete corporate visual identity guidelines (colors, typography, spacing)',
+      'Interactive, clickable Figma UI/UX prototypes and wireframe user journeys',
+      'Reusable UI component libraries and design tokens for web and mobile development',
+      'Corporate digital stationery, presentation deck templates, and social media kits',
+      'Complete commercial asset handover in Figma, SVG, EPS, PNG, and PDF formats',
+    ],
+    process: [
+      { step: '01', title: 'Brand Discovery & Brief', desc: 'Exploring your market positioning, brand personality, and aesthetic preferences.' },
+      { step: '02', title: 'Concept Exploration', desc: 'Developing creative directions for logos, typography, and primary UI layouts.' },
+      { step: '03', title: 'Refinement & Prototyping', desc: 'Iterating on feedback to produce interactive Figma flows and asset variations.' },
+      { step: '04', title: 'Design System Handover', desc: 'Organizing all export-ready vector files, style sheets, and developer specifications.' },
+    ],
+  },
+  'it-consulting-strategy': {
+    title: 'IT Consulting & Strategy',
+    icon: 'Lightbulb',
+    tag: 'Technical Advisory',
+    deliveryTime: '1–2 Weeks',
+    shortDescription:
+      'Independent technical consulting to help business owners evaluate software options, audit existing IT systems, and plan realistic digital roadmaps.',
+    fullDescription:
+      'Navigating software choices and agency proposals can be overwhelming. SnapTech Digital provides practical, vendor-neutral IT consulting to help business leaders make confident technology investments. We evaluate existing systems, identify performance bottlenecks and security vulnerabilities, assess vendor estimates, and design practical implementation roadmaps aligned with your operating budget and growth targets.',
+    techStack: ['Cloud Architecture', 'System Audits', 'Jira', 'Security Review', 'Database Design'],
+    keyFeatures: [
+      'Comprehensive review of current software systems, databases, and hosting',
+      'Objective evaluation and cost comparison of third-party software proposals',
+      'Step-by-step digital roadmap prioritized by business impact and budget',
+      'System architecture recommendations for operational scale and data integrity',
+      'Data backup, security posture, and compliance checklist evaluation',
+      'Executive summary presentation and clear action plan for decision-makers',
+    ],
+    process: [
+      { step: '01', title: 'Discovery & System Audit', desc: 'Interviewing stakeholders and reviewing existing software, tools, and pain points.' },
+      { step: '02', title: 'Gap & Risk Analysis', desc: 'Identifying performance bottlenecks, security risks, and cost inefficiencies.' },
+      { step: '03', title: 'Roadmap & Architecture', desc: 'Formulating realistic technical recommendations and evaluating vendor options.' },
+      { step: '04', title: 'Executive Briefing', desc: 'Presenting findings, priority action items, and phased budget recommendations.' },
+    ],
+  },
+}
+
 const DEFAULT_ENGINEERING_PROCESS = [
-  { step: '01', title: 'Technical Discovery & Scoping', desc: 'Comprehensive architecture audit, requirements analysis, and milestone specification.' },
-  { step: '02', title: 'System Blueprint & Prototyping', desc: 'Figma interactive wireframes and scalable cloud infrastructure blueprint design.' },
-  { step: '03', title: 'Agile Engineering & QA', desc: 'Iterative development sprints with clean code, automated tests, and continuous CI/CD.' },
-  { step: '04', title: 'Deployment & SLA Handover', desc: 'Zero-downtime production deployment, APM monitoring setup, and post-launch warranty.' },
+  { step: '01', title: 'Discovery & Consultation', desc: 'Understanding your requirements, timelines, and technical scope.' },
+  { step: '02', title: 'Architecture & Design', desc: 'Planning the system architecture, deliverables, and milestone roadmaps.' },
+  { step: '03', title: 'Implementation & Testing', desc: 'Engineering modular solutions with thorough code and functional verification.' },
+  { step: '04', title: 'Deployment & Support', desc: 'Production release, handover documentation, and post-launch technical support.' },
 ]
 
 function DetailSkeleton() {
@@ -89,7 +269,7 @@ function DetailSkeleton() {
 
 export default function ServiceDetailPage() {
   const { slug } = useParams()
-  const { data, isLoading } = useService(slug)
+  const { data, isLoading, isError, error, refetch } = useService(slug)
   const { data: allServicesData } = useServices()
   const { data: projectsData } = useProjects()
   const { data: settingsData } = useSiteSettings()
@@ -105,8 +285,11 @@ export default function ServiceDetailPage() {
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [submitError, setSubmitError] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
 
-  const service = data?.data
+  const fallback = SERVICE_FALLBACKS[slug]
+  const rawService = data?.data
+  const service = rawService || fallback
   const cfg = settingsData?.data || {}
 
   const phone = cfg.phone || '+91 8209604849'
@@ -115,33 +298,38 @@ export default function ServiceDetailPage() {
 
   const theme = getServiceTheme(slug)
 
-  // Pure dynamic data extraction
+  // Service-specific data extraction with fallback resilience
   const keyFeatures = useMemo(() => {
-    if (service?.keyFeatures && service.keyFeatures.length > 0) return service.keyFeatures
-    return [
-      'Tailored Enterprise Specification',
+    if (rawService?.keyFeatures && Array.isArray(rawService.keyFeatures) && rawService.keyFeatures.length > 0) {
+      return rawService.keyFeatures
+    }
+    return fallback?.keyFeatures || [
+      'Tailored Project Specification & Architecture',
       '100% IP & Full Source Code Ownership',
-      'Zero-Vulnerability Code Warranty',
-      'High-Performance & Conversion Optimized',
-      'Integrated Telemetry & Analytics',
-      '30-Day Complimentary Post-Launch SLA',
+      'Production-Ready QA & Performance Testing',
+      'Integrated Contact Forms & Telemetry',
+      '30-Day Complimentary Post-Launch Support',
     ]
-  }, [service])
+  }, [rawService, fallback])
 
   const techStack = useMemo(() => {
-    if (service?.techStack && service.techStack.length > 0) return service.techStack
-    return ['React', 'Next.js', 'Node.js', 'PostgreSQL', 'Docker', 'AWS', 'Tailwind CSS']
-  }, [service])
+    if (rawService?.techStack && Array.isArray(rawService.techStack) && rawService.techStack.length > 0) {
+      return rawService.techStack
+    }
+    return fallback?.techStack || ['React', 'Next.js', 'Node.js', 'PostgreSQL', 'Tailwind CSS']
+  }, [rawService, fallback])
 
   const process = useMemo(() => {
-    if (service?.process && Array.isArray(service.process) && service.process.length > 0) {
-      return service.process
+    if (rawService?.process && Array.isArray(rawService.process) && rawService.process.length > 0) {
+      return rawService.process
     }
-    return DEFAULT_ENGINEERING_PROCESS
-  }, [service])
+    return fallback?.process || DEFAULT_ENGINEERING_PROCESS
+  }, [rawService, fallback])
 
-  const tag = service?.tag || 'Enterprise Grade'
-  const deliveryTime = service?.deliveryTime || '2–4 Weeks Sprint'
+  const tag = rawService?.tag || fallback?.tag || 'Enterprise Grade'
+  const deliveryTime = rawService?.deliveryTime || fallback?.deliveryTime || '2–4 Weeks Sprint'
+  const shortDescription = rawService?.shortDescription || fallback?.shortDescription || ''
+  const fullDescription = rawService?.fullDescription || fallback?.fullDescription || shortDescription
 
   // Dynamic related projects matching service domain
   const relatedProjects = useMemo(() => {
@@ -174,18 +362,35 @@ export default function ServiceDetailPage() {
     if (!clientName || !clientEmail || !clientPhone) return
     setSubmitting(true)
     setSubmitError(false)
+    setErrorMessage('')
     try {
+      const recaptchaToken = await getRecaptchaToken('service_inquiry')
+      if (!recaptchaToken) {
+        setSubmitError(true)
+        setErrorMessage('Security verification could not be completed. Please refresh or try again.')
+        setSubmitting(false)
+        return
+      }
+
       await api.post('/contact', {
         name: clientName,
         email: clientEmail,
         phone: clientPhone,
         serviceInterested: service?.title || 'IT Solutions',
         message: `Direct Service Desk Inquiry for ${service?.title || slug}. Note: ${clientMessage || 'Please share detailed architecture & pricing breakdown.'}`,
+        recaptchaToken,
         _hp: '',
       })
+      trackEvent('generate_lead', {
+        form: 'service_detail_consultation',
+        service: service?.title || slug,
+      })
       setSubmitted(true)
-    } catch {
+    } catch (err) {
       setSubmitError(true)
+      setErrorMessage(
+        err.response?.data?.message || err.message || 'Submission failed. Please call us directly.'
+      )
     } finally {
       setSubmitting(false)
     }
@@ -194,20 +399,59 @@ export default function ServiceDetailPage() {
   if (isLoading) return <DetailSkeleton />
 
   if (!service) {
-    return (
-      <div className="bg-slate-50 min-h-screen py-36 text-center text-slate-900">
-        <Container>
-          <div className="max-w-md mx-auto p-8 rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <p className="text-slate-600 text-lg mb-6">Service capability not found in database.</p>
-            <Link
-              to="/services"
-              className="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-[#0D1B4B] hover:bg-[#1B6EF3] text-white font-bold text-sm transition-all"
-            >
-              ← Return to Services Directory
-            </Link>
+    if (isError && error?.status !== 404) {
+      return (
+        <>
+          <SEO title="Service Temporarily Unavailable | SnapTech Digital" />
+          <div className="bg-slate-50 min-h-screen py-36 text-center text-slate-900">
+            <Container>
+              <div className="max-w-md mx-auto p-8 rounded-2xl border border-slate-200 bg-white shadow-sm">
+                <h1 className="font-heading text-2xl font-bold text-slate-900 mb-2">Service Temporarily Unavailable</h1>
+                <p className="text-slate-600 text-sm mb-6">
+                  Unable to load service details due to a connection or server error. Please retry or browse our directory.
+                </p>
+                <div className="flex gap-3 justify-center">
+                  <button
+                    type="button"
+                    onClick={() => refetch?.()}
+                    className="inline-flex items-center justify-center px-6 py-2.5 rounded-xl bg-[#0D1B4B] hover:bg-[#1B6EF3] text-white font-bold text-sm transition-all cursor-pointer"
+                  >
+                    Retry Connection
+                  </button>
+                  <Link
+                    to="/services"
+                    className="inline-flex items-center justify-center px-6 py-2.5 rounded-xl border border-slate-300 text-slate-700 font-semibold text-sm hover:bg-slate-50 transition-all"
+                  >
+                    Services Directory
+                  </Link>
+                </div>
+              </div>
+            </Container>
           </div>
-        </Container>
-      </div>
+        </>
+      )
+    }
+
+    return (
+      <>
+        <SEO title="Service Capability Not Found | SnapTech Digital" noIndex />
+        <div className="bg-slate-50 min-h-screen py-36 text-center text-slate-900">
+          <Container>
+            <div className="max-w-md mx-auto p-8 rounded-2xl border border-slate-200 bg-white shadow-sm">
+              <h1 className="font-heading text-2xl font-bold text-slate-900 mb-2">Service Capability Not Found</h1>
+              <p className="text-slate-600 text-sm mb-6">
+                Service capability not found in database or catalog. The requested capability does not exist or has been moved.
+              </p>
+              <Link
+                to="/services"
+                className="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-[#0D1B4B] hover:bg-[#1B6EF3] text-white font-bold text-sm transition-all"
+              >
+                ← Return to Services Directory
+              </Link>
+            </div>
+          </Container>
+        </div>
+      </>
     )
   }
 
@@ -216,13 +460,13 @@ export default function ServiceDetailPage() {
     <div className="bg-slate-50/50 min-h-screen text-slate-900 selection:bg-blue-500/20 selection:text-[#1a3e8c]">
       <SEO
         title={`${service.title} — SnapTech Digital | Bhilwara, Rajasthan`}
-        description={service.shortDescription}
+        description={shortDescription}
         path={`/services/${service.slug}`}
         keywords={`${service.title}, SnapTech Digital, ${service.title} agency, IT company Bhilwara, Rajasthan`}
         schemas={[
           serviceSchema({
             title: service.title,
-            description: service.shortDescription,
+            description: shortDescription,
             url: `${SITE.url}/services/${service.slug}`,
             serviceType: service.title,
           }),
@@ -243,15 +487,15 @@ export default function ServiceDetailPage() {
 
         <Container className="relative">
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-xs sm:text-sm text-slate-500 mb-8 font-mono" aria-label="Breadcrumb">
+          <nav className="flex items-center gap-2 text-xs sm:text-sm text-slate-600 mb-8 font-mono" aria-label="Breadcrumb">
             <Link to="/" className="hover:text-[#1a3e8c] transition-colors">
               Home
             </Link>
-            <span className="text-slate-300">/</span>
+            <span className="text-slate-400" aria-hidden="true">/</span>
             <Link to="/services" className="hover:text-[#1a3e8c] transition-colors">
               Services
             </Link>
-            <span className="text-slate-300">/</span>
+            <span className="text-slate-400" aria-hidden="true">/</span>
             <span className="text-[#1a3e8c] font-semibold">{service.title}</span>
           </nav>
 
@@ -280,7 +524,7 @@ export default function ServiceDetailPage() {
               </div>
 
               <p className="text-slate-600 text-base sm:text-lg leading-relaxed max-w-2xl mb-8">
-                {service.shortDescription}
+                {shortDescription}
               </p>
 
               {/* Quick Telemetry & SLA Pills */}
@@ -294,13 +538,13 @@ export default function ServiceDetailPage() {
                 <div className="flex items-center gap-2.5 px-4 py-2 rounded-xl bg-emerald-50/70 border border-emerald-200/80">
                   <Shield className="w-4 h-4 text-emerald-600" />
                   <span className="text-xs sm:text-sm text-slate-700">
-                    <strong className="text-emerald-800">100% Zero-Defect</strong> Code Warranty
+                    <strong className="text-emerald-800">100% IP &amp; Code</strong> Handover
                   </span>
                 </div>
                 <div className="flex items-center gap-2.5 px-4 py-2 rounded-xl bg-amber-50/70 border border-amber-200/80">
                   <Star className="w-4 h-4 text-amber-500" />
                   <span className="text-xs sm:text-sm text-slate-700">
-                    <strong className="text-amber-900">Enterprise SLA</strong> Backed
+                    <strong className="text-amber-900">Priority Technical</strong> Support
                   </span>
                 </div>
               </div>
@@ -315,9 +559,9 @@ export default function ServiceDetailPage() {
                   </span>
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" />
                 </div>
-                <h3 className="font-heading text-lg font-bold text-slate-900 mb-2">
+                <h2 className="font-heading text-lg font-bold text-slate-900 mb-2">
                   Launch {service.title}
-                </h3>
+                </h2>
                 <p className="text-slate-600 text-xs sm:text-sm mb-6 leading-relaxed">
                   Book a free technical scoping call with our senior architects. Immediate NDA protection available.
                 </p>
@@ -359,7 +603,7 @@ export default function ServiceDetailPage() {
                   Engineering Scope: {service.title}
                 </h2>
                 <div className="text-slate-600 leading-relaxed text-base sm:text-lg space-y-4">
-                  <p className="whitespace-pre-line">{service.fullDescription || service.shortDescription}</p>
+                  <p className="whitespace-pre-line">{fullDescription}</p>
                 </div>
               </div>
 
@@ -520,7 +764,7 @@ export default function ServiceDetailPage() {
                   </p>
 
                   {submitted ? (
-                    <div className="p-5 rounded-xl bg-emerald-50 border border-emerald-200 text-center space-y-2">
+                    <div className="p-5 rounded-xl bg-emerald-50 border border-emerald-200 text-center space-y-2" role="status">
                       <CheckCircle2 className="w-8 h-8 text-emerald-600 mx-auto" />
                       <p className="font-bold text-slate-900 text-sm">Consultation Scheduled!</p>
                       <p className="text-xs text-slate-600">
@@ -530,64 +774,90 @@ export default function ServiceDetailPage() {
                   ) : (
                     <form onSubmit={handleInquirySubmit} className="space-y-3.5">
                       <div>
-                        <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
+                        <label
+                          htmlFor="service-inquiry-name"
+                          className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1"
+                        >
                           Full Name *
                         </label>
                         <input
+                          id="service-inquiry-name"
+                          name="name"
                           type="text"
                           required
+                          autoComplete="name"
                           value={clientName}
                           onChange={(e) => setClientName(e.target.value)}
                           placeholder="Your Name"
-                          className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:border-[#1a3e8c] focus:ring-2 focus:ring-[#1a3e8c]/10 transition-all"
+                          className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-500 focus:bg-white focus:outline-none focus:border-[#1a3e8c] focus:ring-2 focus:ring-[#1a3e8c]/10 transition-all"
                         />
                       </div>
                       <div>
-                        <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
+                        <label
+                          htmlFor="service-inquiry-email"
+                          className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1"
+                        >
                           Work Email *
                         </label>
                         <input
+                          id="service-inquiry-email"
+                          name="email"
                           type="email"
                           required
+                          autoComplete="email"
                           value={clientEmail}
                           onChange={(e) => setClientEmail(e.target.value)}
                           placeholder="rahul@company.com"
-                          className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:border-[#1a3e8c] focus:ring-2 focus:ring-[#1a3e8c]/10 transition-all"
+                          className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-500 focus:bg-white focus:outline-none focus:border-[#1a3e8c] focus:ring-2 focus:ring-[#1a3e8c]/10 transition-all"
                         />
                       </div>
                       <div>
-                        <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
+                        <label
+                          htmlFor="service-inquiry-phone"
+                          className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1"
+                        >
                           Phone / WhatsApp *
                         </label>
                         <input
+                          id="service-inquiry-phone"
+                          name="phone"
                           type="tel"
                           required
+                          autoComplete="tel"
                           value={clientPhone}
                           onChange={(e) => setClientPhone(e.target.value)}
                           placeholder="+91 98765 43210"
-                          className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:border-[#1a3e8c] focus:ring-2 focus:ring-[#1a3e8c]/10 transition-all"
+                          className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-500 focus:bg-white focus:outline-none focus:border-[#1a3e8c] focus:ring-2 focus:ring-[#1a3e8c]/10 transition-all"
                         />
                       </div>
                       <div>
-                        <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
+                        <label
+                          htmlFor="service-inquiry-message"
+                          className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1"
+                        >
                           Scope Notes (Optional)
                         </label>
                         <textarea
+                          id="service-inquiry-message"
+                          name="message"
                           rows={2}
                           value={clientMessage}
                           onChange={(e) => setClientMessage(e.target.value)}
                           placeholder="Requirements or deadlines..."
-                          className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:border-[#1a3e8c] focus:ring-2 focus:ring-[#1a3e8c]/10 transition-all resize-none"
+                          className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-500 focus:bg-white focus:outline-none focus:border-[#1a3e8c] focus:ring-2 focus:ring-[#1a3e8c]/10 transition-all resize-none"
                         />
                       </div>
 
                       {submitError && (
-                        <p className="text-[11px] text-red-600 font-semibold">Submission failed. Please call us directly.</p>
+                        <p className="text-[11px] text-red-700 font-semibold" role="alert">
+                          {errorMessage || 'Submission failed. Please call us directly.'}
+                        </p>
                       )}
 
                       <button
                         type="submit"
                         disabled={submitting}
+                        aria-busy={submitting}
                         className="w-full py-3 rounded-xl bg-[#0D1B4B] hover:bg-[#1B6EF3] text-white font-bold text-xs shadow-md shadow-blue-900/10 transition-all cursor-pointer disabled:opacity-60"
                       >
                         {submitting ? 'Connecting…' : 'Submit Consultation Request'}
@@ -602,6 +872,13 @@ export default function ServiceDetailPage() {
                       )}`}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={() =>
+                        trackEvent('whatsapp_click', {
+                          source: 'service_detail',
+                          location: 'service_detail_priority_desk',
+                          service: service?.title || slug,
+                        })
+                      }
                       className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl border border-emerald-300 bg-emerald-50 text-emerald-800 text-xs font-semibold hover:bg-emerald-100 transition-all"
                     >
                       <MessageSquare className="w-4 h-4 text-[#25D366]" />
@@ -624,7 +901,7 @@ export default function ServiceDetailPage() {
                     <Phone className="w-4 h-4 text-[#1a3e8c]" />
                   </div>
                   <div>
-                    <p className="text-[11px] text-slate-500 font-mono">Immediate Telephone</p>
+                    <p className="text-[11px] text-slate-600 font-mono">Immediate Telephone</p>
                     <p className="text-sm font-bold text-slate-900 group-hover:text-[#1a3e8c] transition-colors">
                       {phone}
                     </p>
@@ -639,14 +916,14 @@ export default function ServiceDetailPage() {
                     <Mail className="w-4 h-4 text-[#1a3e8c]" />
                   </div>
                   <div>
-                    <p className="text-[11px] text-slate-500 font-mono">Official Inquiries</p>
+                    <p className="text-[11px] text-slate-600 font-mono">Official Inquiries</p>
                     <p className="text-sm font-bold text-slate-900 group-hover:text-[#1a3e8c] transition-colors truncate">
                       {contactEmail}
                     </p>
                   </div>
                 </a>
 
-                <div className="flex items-center gap-2 pt-2 text-xs text-slate-500 border-t border-slate-100 font-mono">
+                <div className="flex items-center gap-2 pt-2 text-xs text-slate-600 border-t border-slate-100 font-mono">
                   <Zap className="w-3.5 h-3.5 text-[#1a3e8c]" />
                   24-Hour Guaranteed Proposal SLA
                 </div>

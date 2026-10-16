@@ -12,6 +12,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import request from 'supertest'
 import app from '../../src/app.js'
 import prisma from '../../src/config/db.js'
+import { contactLimiter } from '../../src/middleware/security.js'
 
 describe('reCAPTCHA Action & Hostname Hardening Integration (SEC-06)', () => {
   const originalEnv = { ...process.env }
@@ -22,6 +23,13 @@ describe('reCAPTCHA Action & Hostname Hardening Integration (SEC-06)', () => {
     process.env = { ...originalEnv }
     process.env.RECAPTCHA_SECRET_KEY = 'test_secret_key'
     delete process.env.ALLOW_DEV_CAPTCHA_BYPASS
+
+    // Reset contactLimiter store for test IP so test cases don't hit the 5-request window limit
+    if (typeof contactLimiter?.resetKey === 'function') {
+      contactLimiter.resetKey('::ffff:127.0.0.1')
+      contactLimiter.resetKey('127.0.0.1')
+      contactLimiter.resetKey('::1')
+    }
 
     // Ensure mock DB handles lead creation safely for tests
     prisma.contactLead = {
@@ -142,6 +150,59 @@ describe('reCAPTCHA Action & Hostname Hardening Integration (SEC-06)', () => {
           message: 'Cost calculation estimate submission.',
           serviceInterested: 'Cost Calculator',
           recaptchaToken: 'valid-calculator-token',
+        })
+
+      expect(res.status).toBe(201)
+      expect(res.body.status).toBe('ok')
+    })
+
+    it('accepts contact submission with valid service_inquiry action', async () => {
+      vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        json: async () => ({
+          success: true,
+          score: 0.9,
+          action: 'service_inquiry',
+          hostname: 'www.snaptech.digital',
+        }),
+      })
+
+      const res = await request(app)
+        .post('/api/contact')
+        .send({
+          name: 'Service Inquiry Lead',
+          email: `service-${Date.now()}@example.com`,
+          phone: '9876543210',
+          message: 'Direct service consultation inquiry.',
+          serviceInterested: 'Web Development',
+          recaptchaToken: 'valid-service-token',
+        })
+
+      expect(res.status).toBe(201)
+      expect(res.body.status).toBe('ok')
+    })
+
+    it('accepts contact submission with valid newsletter_footer action', async () => {
+      vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        json: async () => ({
+          success: true,
+          score: 0.9,
+          action: 'newsletter_footer',
+          hostname: 'snaptech.digital',
+        }),
+      })
+
+      const res = await request(app)
+        .post('/api/contact')
+        .send({
+          name: 'Newsletter Subscriber',
+          email: `newsletter-${Date.now()}@example.com`,
+          message: 'Newsletter subscription from Footer',
+          serviceInterested: 'Newsletter',
+          recaptchaToken: 'valid-newsletter-token',
         })
 
       expect(res.status).toBe(201)

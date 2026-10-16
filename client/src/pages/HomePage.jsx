@@ -3,6 +3,7 @@ import { Phone, Mail } from 'lucide-react'
 import HeroSection from '@/components/sections/HeroSection'
 import ParentGroupSection from '@/components/sections/ParentGroupSection'
 import ServicesSection from '@/components/sections/ServicesSection'
+import LandingPageOfferBanner from '@/components/sections/LandingPageOfferBanner'
 import ShowcaseSection from '@/components/sections/ShowcaseSection'
 import ProcessSection from '@/components/sections/ProcessSection'
 import WhyUsSection from '@/components/sections/WhyUsSection'
@@ -12,9 +13,10 @@ import FeaturedProjects from '@/components/sections/FeaturedProjects'
 import TestimonialsSection from '@/components/sections/TestimonialsSection'
 import TeamSection from '@/components/sections/TeamSection'
 import FaqSection from '@/components/sections/FaqSection'
+import { FALLBACK_FAQS } from '@/data/faqs'
 import { Container, SEO } from '@/components/ui'
-import { organizationSchema, localBusinessSchema } from '@/components/ui/SEO'
-import { useSiteSettings } from '@/hooks/useContent'
+import { faqSchema } from '@/components/ui/SEO'
+import { useSiteSettings, useFaqs } from '@/hooks/useContent'
 import { api } from '@/utils/api'
 import { trackEvent } from '@/utils/analytics'
 
@@ -30,9 +32,22 @@ export default function HomePage() {
   const [submitError, setSubmitError] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const { data: settingsData } = useSiteSettings()
+  const { data: faqsData } = useFaqs()
   const cfg = settingsData?.data || {}
   const phone = cfg.phone || ''
   const contactEmail = cfg.email || ''
+
+  const faqs = Array.isArray(faqsData?.data) && faqsData.data.length > 0
+    ? faqsData.data
+    : FALLBACK_FAQS
+
+  const handleClaimOffer = () => {
+    setService('Landing Page Website (₹2,999 Offer)')
+    const contactEl = document.getElementById('contact')
+    if (contactEl) {
+      contactEl.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -91,7 +106,7 @@ export default function HomePage() {
         title="SnapTech Digital — Web & App Development Agency | Bhilwara, Rajasthan"
         description="SnapTech Digital builds enterprise websites, web apps, and mobile apps. Full-service digital agency based in Bhilwara, Rajasthan. Get a free project consultation."
         path="/"
-        schemas={[organizationSchema(), localBusinessSchema()]}
+        schemas={[faqSchema(faqs)]}
         keywords="SnapTech Digital, IT company Bhilwara, web development Rajasthan, mobile app development India, web design agency, digital marketing Bhilwara, software company Rajasthan"
       />
       <HeroSection />
@@ -103,6 +118,7 @@ export default function HomePage() {
       <ParentGroupSection />
 
       <ServicesSection />
+      <LandingPageOfferBanner onClaimOffer={handleClaimOffer} />
       <ShowcaseSection />
       <TechStackSection />
       <FeaturedProjects />
@@ -263,6 +279,7 @@ export default function HomePage() {
                           onChange={(e) => setService(e.target.value)}
                           className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 focus:outline-none focus:border-brand-blue transition-all cursor-pointer"
                         >
+                          <option value="Landing Page Website (₹2,999 Offer)">Landing Page Website (₹2,999 Launch Offer)</option>
                           <option value="Web Development">Full-Stack Web &amp; Portal Development</option>
                           <option value="App Development">Mobile App Development (iOS &amp; Android)</option>
                           <option value="Enterprise ERP">Custom Enterprise ERP &amp; SaaS Systems</option>

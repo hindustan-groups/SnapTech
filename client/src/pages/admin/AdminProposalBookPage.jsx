@@ -513,7 +513,7 @@ export default function AdminProposalBookPage() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col rounded-xl overflow-hidden shadow-2xl border border-slate-800 print:bg-white print:text-black print:border-none print:shadow-none print:rounded-none">
-      <SEO title="Enterprise Proposal Book Studio — SnapTech Digital" />
+      <SEO title="Enterprise Proposal Book Studio — SnapTech Digital" noIndex={true} />
 
       {/* Print Specifications Standard CSS */}
       <style>{`

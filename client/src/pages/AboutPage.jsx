@@ -65,12 +65,16 @@ export default function AboutPage() {
         title="About SnapTech Digital — Our Story, Team & Mission | Bhilwara, Rajasthan"
         description="SnapTech Digital is a digital agency based in Bhilwara, Rajasthan. Learn about our story, our team, our values, and how we help businesses grow through technology."
         path="/about"
+        breadcrumbs={[
+          { name: 'Home', path: '/' },
+          { name: 'About Us', path: '/about' },
+        ]}
         keywords="SnapTech Digital, about us, digital agency Bhilwara, IT company Rajasthan, web development team, software company India"
         schemas={[
           {
             '@context': 'https://schema.org',
             '@type': 'AboutPage',
-            name: 'About Snaptech',
+            name: 'About SnapTech Digital',
             url: 'https://www.snaptech.digital/about',
             description:
               'SnapTech Digital is the dedicated technology and digital transformation company of Hindustan Projects Group, delivering enterprise digital systems.',

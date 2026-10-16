@@ -17,6 +17,7 @@ import {
 import { useServices } from '@/hooks/useServices'
 import { useSiteSettings } from '@/hooks/useContent'
 import { getServiceIcon } from '@/utils/serviceIcons'
+import { trackEvent } from '@/utils/analytics'
 
 /* ── Fallback Service mega-menu data ── */
 const FALLBACK_SERVICES = [
@@ -222,7 +223,7 @@ export default function Navbar() {
                 href={parentUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-bold text-brand-blue hover:text-brand-red inline-flex items-center gap-1 transition-colors group/parent"
+                className="font-bold text-[#1458d0] hover:text-brand-red inline-flex items-center gap-1 transition-colors group/parent"
               >
                 <span>{cfg.parent_company_name || 'Hindustan Projects Group'}</span>
                 <svg className="w-3 h-3 opacity-75 group-hover/parent:translate-x-0.5 group-hover/parent:-translate-y-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -289,11 +290,11 @@ export default function Navbar() {
                 window.scrollTo({ top: 0, behavior: 'smooth' })
               }
             }}
-            aria-label="Snaptech — IT & Technology Solutions"
+            aria-label="SnapTech Digital — IT & Technology Solutions"
           >
             <img
               src="/snaptech-logo.png"
-              alt="Snaptech"
+              alt="SnapTech Digital"
               className="h-10 w-auto object-contain transition-transform duration-200 group-hover/logo:scale-[1.03]"
             />
           </Link>
@@ -431,6 +432,12 @@ export default function Navbar() {
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() =>
+                trackEvent('whatsapp_click', {
+                  source: 'navbar',
+                  location: 'navbar_desktop_icon',
+                })
+              }
               className="p-1.5 sm:p-2.5 rounded-lg sm:rounded-full transition-all border border-emerald-400/90 bg-white text-[#25D366] hover:bg-emerald-50 shadow-2xs flex items-center justify-center shrink-0"
               title="Quick WhatsApp Priority Desk"
               aria-label="WhatsApp Priority Desk"
@@ -554,6 +561,13 @@ export default function Navbar() {
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => {
+                trackEvent('whatsapp_click', {
+                  source: 'navbar',
+                  location: 'navbar_mobile_drawer',
+                })
+                setMenuOpen(false)
+              }}
               className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl border border-emerald-500/40 text-emerald-700 bg-emerald-50 text-xs font-bold uppercase tracking-wider transition-colors hover:bg-emerald-100"
             >
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />

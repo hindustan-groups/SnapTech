@@ -26,6 +26,10 @@ export default function PortfolioPage() {
         title="Portfolio & Case Studies — SnapTech Digital | Bhilwara, Rajasthan"
         description="Explore SnapTech Digital portfolio — enterprise software architectures, web applications, and digital engineering solutions built with 100% code ownership."
         path="/portfolio"
+        breadcrumbs={[
+          { name: 'Home', path: '/' },
+          { name: 'Portfolio', path: '/portfolio' },
+        ]}
         keywords="SnapTech Digital portfolio, web development portfolio, IT projects Bhilwara, software engineering case studies, full stack development India"
       />
 

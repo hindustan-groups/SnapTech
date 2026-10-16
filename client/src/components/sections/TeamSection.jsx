@@ -93,7 +93,7 @@ function TeamCard({ member }) {
             href={member.linkedinUrl}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={`${member.name} on LinkedIn`}
+            aria-label={`Connect on LinkedIn — ${member.name}`}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-mono text-slate-600 bg-slate-50 hover:bg-brand-blue hover:text-white border border-slate-200 hover:border-brand-blue transition-all duration-300 shadow-2xs"
           >
             <LinkedInIcon />

@@ -70,6 +70,18 @@
       ]
     }
   ],
+  "redirects": [
+    {
+      "source": "/why-us",
+      "destination": "/why-snaptech",
+      "permanent": true
+    },
+    {
+      "source": "/projects/:slug",
+      "destination": "/portfolio/:slug",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/api/:path*",
