@@ -13,8 +13,6 @@ import {
   CheckCircle,
   AlertCircle,
   ChevronDown,
-  ShieldCheck,
-  Zap,
 } from 'lucide-react'
 import { Container, SEO } from '@/components/ui'
 import { useServices } from '@/hooks/useServices'
@@ -23,7 +21,6 @@ import { api } from '@/utils/api'
 import { faqSchema, breadcrumbSchema } from '@/components/ui/SEO'
 import { fadeUp, staggerContainer } from '@/utils/motion'
 import { trackEvent } from '@/utils/analytics'
-import contactArchitectHero from '@/assets/contact_architect_hero.jpg'
 
 // ── Zod validation schema ─────────────────────────────────────
 const contactSchema = z.object({
@@ -301,163 +298,63 @@ export default function ContactPage() {
         ]}
       />
 
-      {/* ── Page Hero Header ── */}
-      <section className="pt-28 sm:pt-36 lg:pt-40 pb-16 sm:pb-20 lg:pb-24 bg-linear-to-b from-slate-50 via-white to-slate-50/50 border-b border-slate-200/80 relative overflow-hidden">
+      {/* ── Page Hero Header (Clean Header Only) ── */}
+      <section className="pt-28 sm:pt-36 lg:pt-40 pb-16 sm:pb-20 overflow-hidden bg-linear-to-b from-blue-50/60 via-white to-slate-50/50 border-b border-slate-200/80 relative">
         {/* Ambient Grid & Glows */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a08_1px,transparent_1px),linear-gradient(to_bottom,#0f172a08_1px,transparent_1px)] bg-size-[30px_30px] pointer-events-none" />
-        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-100/60 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-10 w-96 h-96 bg-sky-100/50 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-10 left-1/4 w-96 h-96 bg-blue-100/60 rounded-full blur-3xl -translate-y-1/2 pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-indigo-50/70 rounded-full blur-3xl translate-y-1/2 pointer-events-none" />
 
-        <Container className="relative">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-            {/* Left text column */}
-            <div className="lg:col-span-7 space-y-6">
-              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold text-brand-blue bg-blue-50 border border-blue-200/80 shadow-xs mb-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-brand-blue animate-pulse" />
-                SNAPTECH DIGITAL IT & MEDIA DIVISION
-              </span>
-              <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#0D1B4B] leading-tight tracking-tight">
-                Let&apos;s Architect Your{' '}
-                <span className="text-transparent bg-clip-text bg-linear-to-r from-brand-blue via-blue-600 to-indigo-700">
-                  Digital Engine
-                </span>
-              </h1>
-              <p className="text-slate-600 text-base sm:text-lg max-w-2xl leading-relaxed font-normal">
-                Looking for enterprise web platforms, custom ERPs, mobile engineering, or cloud
-                infrastructure? Connect directly with our lead software architects.
-              </p>
+        <Container className="relative text-center max-w-4xl">
+          <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold text-brand-blue bg-blue-50 border border-blue-200/80 shadow-xs mb-5">
+            <span className="w-1.5 h-1.5 rounded-full bg-brand-blue animate-pulse" />
+            SNAPTECH DIGITAL IT &amp; MEDIA DIVISION
+          </span>
 
-              {/* Advanced Trust Blocks */}
-              <div className="grid grid-cols-2 gap-4 pt-2 max-w-md">
-                <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs hover:border-brand-blue/40 transition-colors duration-300">
-                  <p className="text-2xl font-black text-brand-blue font-mono">
-                    100%
-                  </p>
-                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-1">
-                    Code &amp; IP Handover
-                  </p>
-                </div>
-                <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs hover:border-emerald-500/40 transition-colors duration-300">
-                  <p className="text-2xl font-black text-emerald-600 font-mono">&lt; 2h</p>
-                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-1">
-                    First Response SLA
-                  </p>
-                </div>
+          <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#0D1B4B] leading-tight tracking-tight mb-5">
+            Let&apos;s Architect Your{' '}
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-brand-blue via-blue-600 to-indigo-700">
+              Digital Engine
+            </span>
+          </h1>
+
+          <p className="text-slate-600 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed font-normal mb-10">
+            Looking for enterprise web platforms, custom ERPs, mobile engineering, or cloud
+            infrastructure? Connect directly with our lead software architects.
+          </p>
+
+          {/* Quick Metrics Bar */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto">
+            <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-xs hover:border-brand-blue/40 transition-colors duration-300">
+              <div className="text-xl sm:text-2xl font-extrabold text-brand-blue font-mono">
+                100%
+              </div>
+              <div className="text-[11px] text-slate-500 mt-1 uppercase tracking-wider font-semibold">
+                Code &amp; IP Handover
               </div>
             </div>
-
-            {/* Right graphic column — High-Tech Solution Architect Consultation Desk */}
-            <div className="lg:col-span-5 flex flex-col justify-center">
-              <div className="relative mx-auto w-full max-w-md lg:max-w-none">
-                {/* Outer Glass Card */}
-                <div className="relative rounded-3xl bg-white/90 border border-slate-200/90 shadow-2xl p-3 sm:p-4 backdrop-blur-xl overflow-hidden group">
-                  {/* Subtle Top Status Header */}
-                  <div className="flex items-center justify-between px-3 py-2 mb-3 rounded-xl bg-slate-50 border border-slate-200/80 text-[11px] font-mono">
-                    <div className="flex items-center gap-2">
-                      <span className="relative flex h-2.5 w-2.5">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
-                      </span>
-                      <span className="text-slate-800 font-bold uppercase tracking-wider text-[10px] sm:text-[11px]">
-                        CONSULTATION DESK // ACTIVE
-                      </span>
-                    </div>
-                    <span className="text-[10px] font-bold text-brand-blue bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200/60">
-                      &lt; 2H SLA GUARANTEE
-                    </span>
-                  </div>
-
-                  {/* Main Portrait Frame with Tech Overlay */}
-                  <div className="relative rounded-2xl overflow-hidden bg-slate-950 aspect-4/3 sm:aspect-square shadow-inner border border-slate-200">
-                    <img
-                      src={contactArchitectHero}
-                      alt="SnapTech Solution Architect & Technical Consultation Desk"
-                      className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
-                      loading="eager"
-                      fetchPriority="high"
-                      decoding="async"
-                    />
-
-                    {/* Gradient shading at bottom for text contrast */}
-                    <div className="absolute inset-0 bg-linear-to-t from-slate-950/85 via-slate-950/20 to-transparent pointer-events-none" />
-
-                    {/* Corner Tech Accents */}
-                    <div className="absolute top-2.5 left-2.5 w-4 h-4 border-t-2 border-l-2 border-cyan-400/80 pointer-events-none z-20" />
-                    <div className="absolute top-2.5 right-2.5 w-4 h-4 border-t-2 border-r-2 border-cyan-400/80 pointer-events-none z-20" />
-                    <div className="absolute bottom-2.5 left-2.5 w-4 h-4 border-b-2 border-l-2 border-cyan-400/80 pointer-events-none z-20" />
-                    <div className="absolute bottom-2.5 right-2.5 w-4 h-4 border-b-2 border-r-2 border-cyan-400/80 pointer-events-none z-20" />
-
-                    {/* Top Left Floating Tag: Direct Architect On Duty */}
-                    <div className="absolute top-4 left-4 z-10 flex items-center gap-2.5 bg-slate-950/85 border border-cyan-500/30 backdrop-blur-md px-3 py-1.5 rounded-xl shadow-xl">
-                      <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                      <div className="text-left">
-                        <p className="text-[9px] font-mono text-cyan-300 font-bold uppercase tracking-wider leading-none">
-                          DIRECT DESK
-                        </p>
-                        <p className="text-[11px] font-bold text-white leading-none mt-0.5">
-                          Lead Solutions Architect
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Top Right Floating Tag: Mutual NDA */}
-                    <div className="absolute top-4 right-4 z-10 flex items-center gap-1.5 bg-slate-950/85 border border-white/15 backdrop-blur-md px-2.5 py-1.5 rounded-xl shadow-xl">
-                      <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
-                      <span className="text-[10px] font-mono font-semibold text-slate-200">
-                        NDA Protected
-                      </span>
-                    </div>
-
-                    {/* Bottom Content Inside Image */}
-                    <div className="absolute bottom-4 left-4 right-4 z-10 space-y-2">
-                      <div className="flex flex-wrap items-center gap-1.5 text-[10px] font-mono font-semibold">
-                        <span className="bg-slate-950/85 text-cyan-300 px-2 py-0.5 rounded-md border border-cyan-500/25 backdrop-blur-sm">
-                          Full-Stack Cloud
-                        </span>
-                        <span className="bg-slate-950/85 text-blue-300 px-2 py-0.5 rounded-md border border-blue-500/25 backdrop-blur-sm">
-                          Mobile &amp; Web
-                        </span>
-                        <span className="bg-slate-950/85 text-emerald-300 px-2 py-0.5 rounded-md border border-emerald-500/25 backdrop-blur-sm">
-                          Custom ERP
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Quick-Connect Action Bar below image */}
-                  <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
-                    <div className="text-left">
-                      <p className="text-[10px] text-slate-500 font-mono font-bold uppercase">
-                        HEADQUARTERS DESK
-                      </p>
-                      <p className="text-xs font-bold text-slate-800">
-                        Bhilwara &bull; IST (UTC +5:30)
-                      </p>
-                    </div>
-
-                    <a
-                      href={`https://wa.me/${whatsappNum}?text=${encodeURIComponent('Hi SnapTech Digital, I would like to speak directly with a Solution Architect about my project.')}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold shadow-md shadow-emerald-500/20 transition-all cursor-pointer"
-                    >
-                      <MessageCircle className="w-3.5 h-3.5" />
-                      <span>WhatsApp Direct</span>
-                    </a>
-                  </div>
-                </div>
-
-                {/* Sub Trust Guarantees */}
-                <div className="mt-3 grid grid-cols-2 gap-2 text-center text-[11px] font-medium text-slate-500">
-                  <div className="flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg bg-slate-50 border border-slate-200">
-                    <ShieldCheck className="w-3.5 h-3.5 text-brand-blue" />
-                    <span>Strict Mutual NDA</span>
-                  </div>
-                  <div className="flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg bg-slate-50 border border-slate-200">
-                    <Zap className="w-3.5 h-3.5 text-amber-500" />
-                    <span>100% Code Ownership</span>
-                  </div>
-                </div>
+            <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-xs hover:border-emerald-500/40 transition-colors duration-300">
+              <div className="text-xl sm:text-2xl font-extrabold text-emerald-600 font-mono">
+                &lt; 2h
+              </div>
+              <div className="text-[11px] text-slate-500 mt-1 uppercase tracking-wider font-semibold">
+                First Response SLA
+              </div>
+            </div>
+            <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-xs hover:border-indigo-500/40 transition-colors duration-300">
+              <div className="text-xl sm:text-2xl font-extrabold text-indigo-600 font-mono">
+                Direct
+              </div>
+              <div className="text-[11px] text-slate-500 mt-1 uppercase tracking-wider font-semibold">
+                Architect On Duty
+              </div>
+            </div>
+            <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-xs hover:border-slate-400 transition-colors duration-300">
+              <div className="text-xl sm:text-2xl font-extrabold text-slate-800 font-mono">
+                Strict
+              </div>
+              <div className="text-[11px] text-slate-500 mt-1 uppercase tracking-wider font-semibold">
+                Mutual NDA
               </div>
             </div>
           </div>
