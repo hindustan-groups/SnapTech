@@ -333,7 +333,23 @@ export default function SEO({
     defaultSchemas.push(breadcrumbSchema(breadcrumbs))
   }
 
-  const allSchemas = [...defaultSchemas, ...schemas.filter(Boolean)]
+  // Combine and deduplicate singleton schemas (Organization, LocalBusiness, WebSite, FAQPage, BreadcrumbList)
+  const allSchemas = []
+  const seenTypes = new Set()
+  const singletonTypes = new Set(['Organization', 'LocalBusiness', 'WebSite', 'FAQPage', 'BreadcrumbList'])
+
+  for (const s of [...defaultSchemas, ...schemas.filter(Boolean)]) {
+    if (!s || typeof s !== 'object') continue
+    const type = s['@type']
+    if (type && singletonTypes.has(type)) {
+      if (!seenTypes.has(type)) {
+        seenTypes.add(type)
+        allSchemas.push(s)
+      }
+    } else {
+      allSchemas.push(s)
+    }
+  }
 
   // Synchronize static fallback tags in index.html to reflect dynamic route canonical & robots state
   useEffect(() => {

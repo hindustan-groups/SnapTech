@@ -56,7 +56,14 @@ export const submitContact = async (req, res, next) => {
     }
 
     const isHuman = await verifyRecaptcha(recaptchaToken, req.ip, {
-      expectedAction: ['contact_form', 'cost_calculator', 'pricing_quote', 'homepage_quote'],
+      expectedAction: [
+        'contact_form',
+        'cost_calculator',
+        'pricing_quote',
+        'homepage_quote',
+        'service_inquiry',
+        'newsletter_footer',
+      ],
     })
     if (!isHuman) {
       return res.status(400).json({

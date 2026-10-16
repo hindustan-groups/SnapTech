@@ -20,6 +20,7 @@ import {
   FlutterIcon,
   AwsIcon,
 } from '@/components/ui/TechIcons'
+import { trackEvent } from '@/utils/analytics'
 
 const DEFAULT_TECH_SEARCH_QUERIES = [
   'Custom Web Applications',
@@ -162,11 +163,11 @@ export default function HeroSection() {
 
         {/* ── 1. Eyebrow Badge & Division on separate line ── */}
         <div className="space-y-1.5 hero-fade-up">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-blue-200 bg-[#EEF5FF] text-[#1877F2] text-[11px] font-bold tracking-wider uppercase shadow-xs">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-blue-200 bg-[#EEF5FF] text-[#0d62d9] text-[11px] font-bold tracking-wider uppercase shadow-xs">
             <span className="w-1.5 h-1.5 rounded-full bg-[#1877F2]" />
             <span>{eyebrowText}</span>
           </div>
-          <div className="text-[11.5px] text-slate-500 font-semibold pl-0.5">
+          <div className="text-[11.5px] text-slate-600 font-semibold pl-0.5">
             | {divisionText}
           </div>
         </div>
@@ -204,7 +205,7 @@ export default function HeroSection() {
             />
             <button
               type="submit"
-              className="px-4 py-2 rounded-full bg-[#1877F2] hover:bg-blue-600 text-white text-[11px] font-bold uppercase tracking-wider transition-colors shrink-0 shadow-sm shadow-blue-500/30 flex items-center gap-1.5 cursor-pointer active:scale-95"
+              className="px-4 py-2 rounded-full bg-[#1363d6] hover:bg-[#0d55be] text-white text-[11px] font-bold uppercase tracking-wider transition-colors shrink-0 shadow-sm shadow-blue-500/30 flex items-center gap-1.5 cursor-pointer active:scale-95"
             >
               <span>SEARCH</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -219,7 +220,7 @@ export default function HeroSection() {
                 key={query}
                 type="button"
                 onClick={() => setSearchQuery(query)}
-                className="text-[10px] sm:text-[11px] px-2.5 py-0.5 rounded-full bg-[#EEF5FF] hover:bg-blue-100 text-[#1877F2] border border-blue-200/70 font-semibold transition-colors cursor-pointer shrink-0 whitespace-nowrap active:scale-95"
+                className="text-[10px] sm:text-[11px] px-2.5 py-0.5 rounded-full bg-[#EEF5FF] hover:bg-blue-100 text-[#0d62d9] border border-blue-200/70 font-semibold transition-colors cursor-pointer shrink-0 whitespace-nowrap active:scale-95"
               >
                 {query}
               </button>
@@ -271,7 +272,13 @@ export default function HeroSection() {
             href={`https://wa.me/${whatsappNumber}?text=${whatsappMsg}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full inline-flex items-center justify-center gap-2 py-3 rounded-xl bg-white hover:bg-emerald-50 border border-[#25D366] text-[#25D366] text-xs sm:text-[13px] font-semibold transition-colors shadow-xs active:scale-[0.99]"
+            onClick={() =>
+              trackEvent('whatsapp_click', {
+                source: 'hero',
+                location: 'hero_mobile',
+              })
+            }
+            className="w-full inline-flex items-center justify-center gap-2 py-3 rounded-xl bg-white hover:bg-emerald-50 border border-[#25D366] text-emerald-800 text-xs sm:text-[13px] font-semibold transition-colors shadow-xs active:scale-[0.99]"
             aria-label="Direct WhatsApp Priority Hotline"
           >
             <svg className="w-4.5 h-4.5 text-[#25D366] shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -286,11 +293,16 @@ export default function HeroSection() {
           <img
             src={heroImage}
             alt="SnapTech Digital — Enterprise Solutions"
+            width="554"
+            height="468"
             loading="eager"
             fetchPriority="high"
             decoding="async"
             className="w-full max-w-sm sm:max-w-md h-auto object-contain select-none"
-            style={{ filter: 'drop-shadow(0 14px 28px rgba(59,130,246,0.12))' }}
+            style={{
+              aspectRatio: '554 / 468',
+              filter: 'drop-shadow(0 14px 28px rgba(59,130,246,0.12))',
+            }}
           />
         </div>
 
@@ -328,7 +340,7 @@ export default function HeroSection() {
           {/* Centered Trusted Technology Partner with Divider Lines */}
           <div className="relative flex items-center justify-center pt-1">
             <div className="w-16 sm:w-20 h-px bg-slate-200" />
-            <span className="px-2.5 text-[11px] font-medium text-slate-400 whitespace-nowrap">
+            <span className="px-2.5 text-[11px] font-semibold text-slate-600 whitespace-nowrap">
               Trusted Technology Partner
             </span>
             <div className="w-16 sm:w-20 h-px bg-slate-200" />
@@ -463,6 +475,12 @@ export default function HeroSection() {
                     href={`https://wa.me/${whatsappNumber}?text=${whatsappMsg}`}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() =>
+                      trackEvent('whatsapp_click', {
+                        source: 'hero',
+                        location: 'hero_desktop',
+                      })
+                    }
                     className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white/95 hover:bg-emerald-50 border border-emerald-400 text-emerald-600 text-xs font-semibold transition-colors shadow-xs whitespace-nowrap shrink-0"
                     aria-label="Direct WhatsApp Priority Hotline"
                   >
@@ -483,7 +501,7 @@ export default function HeroSection() {
         {/* ── Bottom Tech Partner Strip ── */}
         <div className="relative z-10 w-full">
           <Container width="wide">
-            <div className="py-2.5 sm:py-3 border-t border-blue-200/50 flex flex-wrap items-center justify-between gap-3 text-slate-500">
+            <div className="py-2.5 sm:py-3 border-t border-blue-200/50 flex flex-wrap items-center justify-between gap-3 text-slate-600">
               <div className="flex flex-wrap items-center gap-4 sm:gap-7 text-xs font-semibold text-slate-600">
                 <span className="flex items-center gap-1.5 hover:text-brand-blue transition-colors">
                   <ReactIcon className="w-4 h-4" />
@@ -512,7 +530,7 @@ export default function HeroSection() {
                   <span>Google Cloud</span>
                 </span>
               </div>
-              <div className="text-[11px] font-semibold text-slate-400 sm:border-l sm:border-blue-200 sm:pl-3.5">
+              <div className="text-[11px] font-semibold text-slate-600 sm:border-l sm:border-blue-200 sm:pl-3.5">
                 Trusted Technology Partner
               </div>
             </div>

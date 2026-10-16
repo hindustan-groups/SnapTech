@@ -9,6 +9,45 @@ import prisma from '../config/db.js'
 const router = Router()
 const BASE = process.env.CLIENT_URL || 'https://www.snaptech.digital'
 
+/**
+ * Safely normalizes date values (Date objects, ISO strings, timestamps) to YYYY-MM-DD.
+ * Returns null if the value is missing, invalid, or cannot be parsed deterministically.
+ */
+export function normalizeSitemapDate(val) {
+  if (!val) return null
+  if (val instanceof Date) {
+    return isNaN(val.getTime()) ? null : val.toISOString().split('T')[0]
+  }
+  if (typeof val === 'string') {
+    const trimmed = val.trim()
+    const isoPrefixMatch = /^\d{4}-\d{2}-\d{2}/.exec(trimmed)
+    if (isoPrefixMatch) {
+      const d = new Date(trimmed)
+      return isNaN(d.getTime()) ? null : isoPrefixMatch[0]
+    }
+    const d = new Date(trimmed)
+    return isNaN(d.getTime()) ? null : d.toISOString().split('T')[0]
+  }
+  if (typeof val === 'number') {
+    const d = new Date(val)
+    return isNaN(d.getTime()) ? null : d.toISOString().split('T')[0]
+  }
+  return null
+}
+
+/**
+ * Escapes XML special characters in string values to ensure valid XML.
+ */
+export function escapeXml(str) {
+  if (!str) return ''
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;')
+}
+
 router.get('/', async (_req, res, next) => {
   try {
     const [services, blogPosts, jobs, projects] = await Promise.all([
@@ -53,40 +92,38 @@ router.get('/', async (_req, res, next) => {
       path: `/services/${s.slug}`,
       priority: '0.8',
       freq: 'monthly',
-      lastmod: s.updatedAt ? s.updatedAt.toISOString().split('T')[0] : null,
+      lastmod: normalizeSitemapDate(s.updatedAt),
     }))
 
     const projectPages = projects.map((p) => ({
       path: `/portfolio/${p.slug}`,
       priority: '0.7',
       freq: 'monthly',
-      lastmod: p.updatedAt ? p.updatedAt.toISOString().split('T')[0] : null,
+      lastmod: normalizeSitemapDate(p.updatedAt),
     }))
 
     const blogPages = blogPosts.map((p) => ({
       path: `/blog/${p.slug}`,
       priority: '0.8',
       freq: 'weekly',
-      lastmod: (p.updatedAt || p.publishedAt) ? (p.updatedAt || p.publishedAt).toISOString().split('T')[0] : null,
+      lastmod: normalizeSitemapDate(p.updatedAt || p.publishedAt),
     }))
 
     const jobPages = jobs.map((j) => ({
       path: `/careers/${j.slug}`,
       priority: '0.6',
       freq: 'weekly',
-      lastmod: j.updatedAt ? j.updatedAt.toISOString().split('T')[0] : null,
+      lastmod: normalizeSitemapDate(j.updatedAt),
     }))
 
     const allPages = [...staticPages, ...servicePages, ...projectPages, ...blogPages, ...jobPages]
-    const today = new Date().toISOString().split('T')[0]
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${allPages
   .map(
     (p) => `  <url>
-    <loc>${BASE}${p.path}</loc>
-    <lastmod>${p.lastmod || today}</lastmod>
+    <loc>${escapeXml(`${BASE}${p.path}`)}</loc>${p.lastmod ? `\n    <lastmod>${escapeXml(p.lastmod)}</lastmod>` : ''}
     <changefreq>${p.freq}</changefreq>
     <priority>${p.priority}</priority>
   </url>`

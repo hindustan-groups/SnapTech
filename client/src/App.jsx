@@ -1,9 +1,39 @@
 import { lazy, Suspense } from 'react'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation, useParams } from 'react-router-dom'
 import RootLayout from '@/layouts/RootLayout'
 import GlobalClickRipple from '@/components/ui/GlobalClickRipple'
 import { ToastProvider } from '@/components/ui/ToastProvider'
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary'
+
+// ── Canonical Alias Redirects (Client-Side History Replace) ────
+function WhyUsRedirect() {
+  const location = useLocation()
+  return (
+    <Navigate
+      to={{
+        pathname: '/why-snaptech',
+        search: location.search,
+        hash: location.hash,
+      }}
+      replace
+    />
+  )
+}
+
+function ProjectsSlugRedirect() {
+  const { slug } = useParams()
+  const location = useLocation()
+  return (
+    <Navigate
+      to={{
+        pathname: `/portfolio/${slug}`,
+        search: location.search,
+        hash: location.hash,
+      }}
+      replace
+    />
+  )
+}
 
 // ── Page loading fallback ──────────────────────────────────────
 function PageFallback() {
@@ -524,14 +554,7 @@ export default function App() {
               </Suspense>
             }
           />
-          <Route
-            path="/why-us"
-            element={
-              <Suspense fallback={<PageFallback />}>
-                <WhyChooseUsPage />
-              </Suspense>
-            }
-          />
+          <Route path="/why-us" element={<WhyUsRedirect />} />
           <Route
             path="/about"
             element={
@@ -556,14 +579,7 @@ export default function App() {
               </Suspense>
             }
           />
-          <Route
-            path="/projects/:slug"
-            element={
-              <Suspense fallback={<PageFallback />}>
-                <ProjectDetailPage />
-              </Suspense>
-            }
-          />
+          <Route path="/projects/:slug" element={<ProjectsSlugRedirect />} />
           <Route
             path="/blog"
             element={

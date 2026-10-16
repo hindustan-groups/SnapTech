@@ -49,11 +49,18 @@ describe('Admin Route Access & Validation', () => {
     expect(screen.getByRole('button', { name: /Unlock Command Center/i })).toBeInTheDocument()
   })
 
-  it('renders login page on direct secret URL pattern (>= 12 characters)', () => {
+  it('renders login page on legitimate canonical secret URL (/hp9z7k5w8v3q2m4x)', () => {
     renderWithRouter('/hp9z7k5w8v3q2m4x')
     expect(screen.getAllByText(/Command Center/i).length).toBeGreaterThan(0)
     expect(screen.getByPlaceholderText(/••••••••••••/i)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /Unlock Command Center/i })).toBeInTheDocument()
+  })
+
+  it('renders NotFoundPage on random long nonexistent URL (/non-existent-page-test-123)', () => {
+    renderWithRouter('/non-existent-page-test-123')
+    expect(screen.queryByRole('button', { name: /Unlock Command Center/i })).not.toBeInTheDocument()
+    expect(screen.getByText(/404/i)).toBeInTheDocument()
+    expect(screen.getByText(/Page Not Found/i)).toBeInTheDocument()
   })
 
   it('renders login page on remembered secret from localStorage', () => {

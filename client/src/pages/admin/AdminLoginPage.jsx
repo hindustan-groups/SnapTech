@@ -44,9 +44,9 @@ export default function AdminLoginPage() {
   const [otpLoading, setOtpLoading] = useState(false)
 
   const rememberedSecret =
-    typeof window !== 'undefined' ? localStorage.getItem('admin_secret_path') || '' : ''
+    typeof window !== 'undefined' ? (localStorage.getItem('admin_secret_path') || '').trim() : ''
   const configuredSecret =
-    (import.meta.env.VITE_ADMIN_SECRET_PATH || rememberedSecret || '').trim()
+    (import.meta.env.VITE_ADMIN_SECRET_PATH || '').trim()
 
   const isPrefixed = Boolean(
     adminSecret &&
@@ -56,20 +56,15 @@ export default function AdminLoginPage() {
     adminSecret !== 'admin-login'
   )
 
-  const isKnownSecret = Boolean(
-    adminSecret &&
-    ((configuredSecret && adminSecret === configuredSecret) ||
-      (rememberedSecret && adminSecret === rememberedSecret) ||
-      adminSecret === 'h9z7')
-  )
+  const knownSecrets = [
+    configuredSecret,
+    rememberedSecret,
+    'hp9z7k5w8v3q2m4x',
+    'h9z7',
+  ].filter(Boolean)
 
-  const isLikelyDirectSecret = Boolean(
-    adminSecret &&
-    adminSecret.length >= 12 &&
-    !adminSecret.includes('.') &&
-    !adminSecret.includes(' ') &&
-    adminSecret !== 'admin-invalid' &&
-    adminSecret !== 'admin-login'
+  const isKnownSecret = Boolean(
+    adminSecret && knownSecrets.includes(adminSecret)
   )
 
   const isValidSecret = Boolean(
@@ -77,7 +72,7 @@ export default function AdminLoginPage() {
     adminSecret !== 'admin-invalid' &&
     adminSecret !== 'invalid' &&
     adminSecret !== 'admin-login' &&
-    (isPrefixed || isKnownSecret || isLikelyDirectSecret)
+    (isPrefixed || isKnownSecret)
   )
 
   const secretPath = isValidSecret

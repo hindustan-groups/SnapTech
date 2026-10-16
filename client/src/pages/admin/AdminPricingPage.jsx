@@ -191,7 +191,7 @@ export default function AdminPricingPage() {
 
   return (
     <div className="space-y-6">
-      <SEO title="Pricing & Package Management — Admin" />
+      <SEO title="Pricing & Package Management — Admin" noIndex={true} />
 
       {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-slate-900 text-white p-6 rounded-2xl shadow-xl">
