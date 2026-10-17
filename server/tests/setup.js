@@ -25,29 +25,20 @@ process.env.RESEND_API_KEY = ''
 process.env.RECAPTCHA_SECRET_KEY = ''
 
 // ── Mock mailer (never send real emails during tests) ─────────
-vi.mock('../src/utils/mailer.js', () => ({
-  sendEmail: vi.fn().mockResolvedValue({ messageId: 'test-mock-message-id' }),
-  adminNotificationTemplate: vi.fn().mockReturnValue({
-    subject: 'Test: New Lead',
-    html: '<p>Test</p>',
-    text: 'Test',
-  }),
-  autoReplyTemplate: vi.fn().mockReturnValue({
-    subject: 'Test: Thank you',
-    html: '<p>Test</p>',
-    text: 'Test',
-  }),
-  jobAdminNotificationTemplate: vi.fn().mockReturnValue({
-    subject: 'Test: Job Application',
-    html: '<p>Test</p>',
-    text: 'Test',
-  }),
-  jobApplicantConfirmationTemplate: vi.fn().mockReturnValue({
-    subject: 'Test: Confirmation',
-    html: '<p>Test</p>',
-    text: 'Test',
-  }),
-}))
+vi.mock('../src/utils/mailer.js', async (importOriginal) => {
+  const actual = await importOriginal()
+  return {
+    ...actual,
+    sendEmail: vi.fn().mockImplementation(async (options) => {
+      // Check automation rules and idempotency via actual implementation
+      if (options?.event || options?.idempotencyKey) {
+        return actual.sendEmail(options)
+      }
+      return { messageId: 'test-mock-message-id', ...options }
+    }),
+    verifyConnection: vi.fn().mockResolvedValue({ success: true, verified: true }),
+  }
+})
 
 // ── Mock WhatsApp (never send real messages in tests) ─────────
 vi.mock('../src/utils/whatsapp.js', () => ({

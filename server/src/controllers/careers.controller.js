@@ -205,28 +205,65 @@ export const submitApplication = async (req, res, next) => {
     )
 
     // ── Send Email Notifications (non-blocking) ───────────────────
-    // 1. Email to Admin
-    const adminEmail = env.ADMIN_EMAIL || 'info@snaptech.digital'
-    const adminMail = jobAdminNotificationTemplate({
-      jobTitle: job.title,
-      name: fullName,
-      email,
-      phone,
-      resumeUrl,
-      coverLetter,
-    })
-    sendEmail({ to: adminEmail, ...adminMail }).catch((err) => {
-      console.error('[mailer] Job application admin email failed:', err.message)
-    })
+    let rule = null
+    try {
+      rule = await prisma.emailAutomationRule.findFirst({
+        where: { event: 'careers.applied' },
+      })
+    } catch {
+      // ignore
+    }
 
-    // 2. Confirmation to Applicant
-    const applicantMail = jobApplicantConfirmationTemplate({
-      name: fullName,
-      jobTitle: job.title,
-    })
-    sendEmail({ to: email, ...applicantMail }).catch((err) => {
-      console.error('[mailer] Job application applicant confirmation failed:', err.message)
-    })
+    const isEnabled = rule ? rule.isEnabled : true
+    const sendCustomerCopy = rule ? rule.sendCustomerCopy : true
+    const sendInternalAlert = rule ? rule.sendInternalAlert : true
+    const internalRouting = rule?.internalRouting || env.ADMIN_EMAIL || 'careers@snaptech.digital'
+
+    if (isEnabled) {
+      // 1. Email to Recruiting Team
+      if (sendInternalAlert && internalRouting) {
+        const adminMail = jobAdminNotificationTemplate({
+          jobTitle: job.title,
+          name: fullName,
+          email,
+          phone,
+          resumeUrl,
+          coverLetter,
+        })
+        sendEmail({
+          to: internalRouting,
+          ...adminMail,
+          event: 'careers.applied',
+          templateId: 'admin_careers_alert',
+          idempotencyKey: `careers-${application.id}-admin`,
+          replyTo: email,
+          isInternalAlert: true,
+          metadata: { applicationId: application.id, role: job.title },
+        }).catch((err) => {
+          console.error('[mailer] Job application admin email failed:', err.message)
+        })
+      }
+
+      // 2. Confirmation to Applicant
+      if (sendCustomerCopy && email) {
+        const applicantMail = jobApplicantConfirmationTemplate({
+          name: fullName,
+          jobTitle: job.title,
+        })
+        sendEmail({
+          to: email,
+          ...applicantMail,
+          event: 'careers.applied',
+          templateId: 'careers_application_confirmation',
+          idempotencyKey: `careers-${application.id}-applicant`,
+          replyTo: 'careers@snaptech.digital',
+          isCustomerCopy: true,
+          metadata: { applicationId: application.id, role: job.title },
+        }).catch((err) => {
+          console.error('[mailer] Job application applicant confirmation failed:', err.message)
+        })
+      }
+    }
 
     res.status(201).json({ status: 'ok', data: application })
   } catch (err) {

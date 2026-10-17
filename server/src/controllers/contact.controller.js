@@ -116,39 +116,80 @@ export const submitContact = async (req, res, next) => {
       },
     })
 
-    // ── 4 & 5. Send emails (non-blocking — don't fail the request if email fails) ──
-    const adminEmail = adminNotificationTemplate({
-      name,
-      email,
-      phone,
-      message,
-      serviceInterested,
-      estimatedBudget,
-      attribution: attributionNotes,
-    })
-    const userReply = autoReplyTemplate({ name })
-
-    const emailTarget = env.EMAIL_FROM ? env.EMAIL_FROM.replace(/.*<(.+)>/, '$1') : env.EMAIL_USER
-
-    // ── 6. Send WhatsApp Notification to Admin (non-blocking) ──
-    const { sendWhatsAppNotification } = await import('../utils/whatsapp.js')
-    const whatsappBody = `🆕 *New Lead Received!*\n*Name:* ${name}\n*Email:* ${email}\n*Phone:* ${phone || 'Not provided'}\n*Service:* ${serviceInterested || 'Not specified'}${estimatedBudget ? `\n*Budget:* ${estimatedBudget}` : ''}\n*Message:* ${message.slice(0, 100)}${message.length > 100 ? '...' : ''}`
-    
-    sendWhatsAppNotification(whatsappBody).catch((err) =>
-      console.error('[WhatsApp] Notification trigger failed:', err.message)
+    // ── 4 & 5. Automated Transactional Emails via Central Email Service ──
+    const isQuote = !!(
+      estimatedBudget ||
+      message.toLowerCase().includes('quote') ||
+      message.toLowerCase().includes('proposal')
     )
+    const eventName = isQuote ? 'quote.created' : 'lead.created'
 
-    // Fire-and-forget with error logging
-    Promise.all([
-      emailTarget
-        ? sendEmail({ to: emailTarget, ...adminEmail }).catch((err) =>
-            console.error('[mailer] Admin notification failed:', err.message)
-          )
-        : Promise.resolve(),
-      sendEmail({ to: email, ...userReply }).catch((err) =>
-        console.error('[mailer] Auto-reply failed:', err.message)
-      ),
-    ])
+    let rule = null
+    try {
+      rule = await prisma.emailAutomationRule.findFirst({
+        where: { event: eventName },
+      })
+    } catch {
+      // ignore
+    }
+
+    const isEnabled = rule ? rule.isEnabled : true
+    const sendCustomerCopy = rule ? rule.sendCustomerCopy : true
+    const sendInternalAlert = rule ? rule.sendInternalAlert : true
+    const internalRouting =
+      rule?.internalRouting ||
+      (isQuote
+        ? 'sales@snaptech.digital'
+        : env.EMAIL_FROM
+          ? env.EMAIL_FROM.replace(/.*<(.+)>/, '$1')
+          : env.EMAIL_USER || 'info@snaptech.digital')
+
+    if (isEnabled) {
+      const adminEmail = adminNotificationTemplate({
+        name,
+        email,
+        phone,
+        message,
+        serviceInterested,
+        estimatedBudget,
+        attribution: attributionNotes,
+      })
+      const userReply = autoReplyTemplate({ name })
+
+      const emailPromises = []
+
+      if (sendInternalAlert && internalRouting) {
+        emailPromises.push(
+          sendEmail({
+            to: internalRouting,
+            ...adminEmail,
+            event: eventName,
+            templateId: 'admin_lead_alert',
+            idempotencyKey: `lead-${lead.id}-admin`,
+            replyTo: email,
+            isInternalAlert: true,
+            metadata: { leadId: lead.id, isQuote },
+          }).catch((err) => console.error('[mailer] Admin notification failed:', err.message))
+        )
+      }
+
+      if (sendCustomerCopy && email) {
+        emailPromises.push(
+          sendEmail({
+            to: email,
+            ...userReply,
+            event: eventName,
+            templateId: isQuote ? 'quote_confirmation' : 'inquiry_confirmation',
+            idempotencyKey: `lead-${lead.id}-client`,
+            replyTo: isQuote ? 'sales@snaptech.digital' : 'hello@snaptech.digital',
+            isCustomerCopy: true,
+            metadata: { leadId: lead.id, serviceInterested },
+          }).catch((err) => console.error('[mailer] Auto-reply failed:', err.message))
+        )
+      }
+
+      Promise.all(emailPromises)
+    }
 
     return res.status(201).json({
       status: 'ok',

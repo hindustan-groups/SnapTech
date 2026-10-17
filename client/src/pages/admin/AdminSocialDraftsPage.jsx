@@ -68,13 +68,13 @@ export default function AdminSocialDraftsPage() {
   // Fetch social drafts
   const { data: draftsRes, isLoading, refetch } = useQuery({
     queryKey: ['social-drafts'],
-    queryFn: () => api.get('/admin/social/drafts').then((r) => r.data.data),
+    queryFn: () => api.get('/admin/social/drafts').then((r) => r.data || []),
   })
 
   // Fetch portfolio projects for selection
   const { data: projectsRes } = useQuery({
     queryKey: ['admin-portfolio-projects'],
-    queryFn: () => api.get('/projects').then((r) => r.data.data),
+    queryFn: () => api.get('/projects').then((r) => r.data || []),
   })
 
   const drafts = draftsRes || []
@@ -88,11 +88,11 @@ export default function AdminSocialDraftsPage() {
       const previousDrafts = queryClient.getQueryData(['social-drafts'])
 
       queryClient.setQueryData(['social-drafts'], (old) => {
-        if (!Array.isArray(old)) return old
+        if (!Array.isArray(old)) return []
         return old.map((d) => (d.id === id ? { ...d, status } : d))
       })
 
-      return { previousDrafts }
+      return { previousDrafts: previousDrafts || [] }
     },
     onSuccess: (_, variables) => {
       toast.success(variables.status === 'POSTED' ? 'Post marked as published live!' : 'Post status updated!')
@@ -114,7 +114,7 @@ export default function AdminSocialDraftsPage() {
       toast.info('Social post deleted.')
       // 0ms Optimistic UI deletion
       queryClient.setQueryData(['social-drafts'], (old) => {
-        if (!Array.isArray(old)) return old
+        if (!Array.isArray(old)) return []
         return old.filter((d) => d.id !== deletedId)
       })
       queryClient.invalidateQueries({ queryKey: ['social-drafts'] })

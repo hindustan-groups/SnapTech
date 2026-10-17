@@ -121,6 +121,12 @@ export const createClientProject = async (req, res, next) => {
       sendMail({
         to: project.client.email,
         subject: `🚀 New Project Initialized: ${project.projectTitle}`,
+        event: 'project.kickoff',
+        templateId: 'project_kickoff_update',
+        idempotencyKey: `proj-kickoff-${project.id}`,
+        replyTo: 'projects@snaptech.digital',
+        isCustomerCopy: true,
+        metadata: { projectId: project.id, clientName: project.clientName },
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; border: 1px solid #e2e8f0; border-radius: 16px;">
             <h2 style="color: #1e3a8a; margin-top: 0;">Project Setup: ${project.projectTitle}</h2>

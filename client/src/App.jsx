@@ -138,6 +138,7 @@ const AdminSocialDraftsPage = lazyWithRetry(() => import('@/pages/admin/AdminSoc
 const AdminChatbotInquiriesPage = lazyWithRetry(() => import('@/pages/admin/AdminChatbotInquiriesPage'))
 const AdminProposalBookPage = lazyWithRetry(() => import('@/pages/admin/AdminProposalBookPage'))
 const AdminPricingPage = lazyWithRetry(() => import('@/pages/admin/AdminPricingPage'))
+const AdminEmailCenterPage = lazyWithRetry(() => import('@/pages/admin/AdminEmailCenterPage'))
 
 // ── Client Portal pages — lazy loaded ──────────────────────────
 const ClientLayout = lazyWithRetry(() => import('@/layouts/ClientLayout'))
@@ -411,6 +412,18 @@ export default function App() {
                 <AdminMonitoringPage />
               </Suspense>
             }
+          />
+          <Route
+            path="email-center"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <AdminEmailCenterPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="email"
+            element={<Navigate to="/admin/email-center" replace />}
           />
           <Route
             index

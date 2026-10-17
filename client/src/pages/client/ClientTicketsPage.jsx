@@ -60,7 +60,7 @@ export default function ClientTicketsPage() {
     const response = await api.post('/client/tickets/upload', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
-    return response.data.data
+    return response.data?.data || response.data || response
   }
 
   const onCreateSubmit = async (data) => {

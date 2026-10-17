@@ -40,6 +40,7 @@ import {
   Bot,
   Share2,
   DollarSign,
+  Mail,
 } from 'lucide-react'
 import { api } from '@/utils/api'
 import { useQuery } from '@tanstack/react-query'
@@ -50,6 +51,7 @@ const NAV_GROUPS = [
     items: [
       { to: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
       { to: '/admin/leads', icon: MessageSquare, label: 'Leads', badge: 'new', roles: ['ADMIN', 'SUPER_ADMIN'] },
+      { to: '/admin/email-center', icon: Mail, label: 'Email Center', badge: 'SMTP', roles: ['ADMIN', 'SUPER_ADMIN'] },
       { to: '/admin/pricing', icon: DollarSign, label: 'Pricing Manager', roles: ['ADMIN', 'SUPER_ADMIN'] },
       { to: '/admin/proposal-book', icon: FileText, label: 'Proposal Book', badge: 'A4', roles: ['ADMIN', 'SUPER_ADMIN', 'STAFF'] },
       { to: '/admin/chatbot-inquiries', icon: Bot, label: 'Chatbot Inquiries', roles: ['ADMIN', 'SUPER_ADMIN'] },
@@ -226,7 +228,7 @@ export default function AdminLayout() {
 
   const { data: inquiries = [] } = useQuery({
     queryKey: ['chatbot-inquiries'],
-    queryFn: () => api.get('/chatbot/admin/inquiries').then((r) => r.data.data),
+    queryFn: () => api.get('/chatbot/admin/inquiries').then((r) => r.data || []),
     enabled: !!admin,
     refetchInterval: 30000, // poll every 30s
   })

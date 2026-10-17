@@ -115,7 +115,7 @@ export default function AdminFaqPage() {
   // ── Chatbot Inquiries ──────────────────────────────────────────
   const { data: inquiries = [], isLoading: inqLoading } = useQuery({
     queryKey: ['chatbot-inquiries'],
-    queryFn: () => api.get('/chatbot/admin/inquiries').then((r) => r.data.data),
+    queryFn: () => api.get('/chatbot/admin/inquiries').then((r) => r.data || []),
   })
   const deleteInq = useMutation({
     mutationFn: (id) => api.delete(`/chatbot/admin/inquiries/${id}`),

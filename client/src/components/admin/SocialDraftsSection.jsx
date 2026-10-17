@@ -9,7 +9,7 @@ export function SocialDraftsSection() {
 
   const { data: drafts, isLoading } = useQuery({
     queryKey: ['social-drafts'],
-    queryFn: () => api.get('/admin/social/drafts').then((r) => r.data.data),
+    queryFn: () => api.get('/admin/social/drafts').then((r) => r.data || []),
   })
 
   const statusMutation = useMutation({

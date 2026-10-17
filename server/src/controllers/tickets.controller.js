@@ -63,12 +63,18 @@ export const createTicket = async (req, res, next) => {
         message: description,
       })
 
-      const adminEmail = env.EMAIL_USER || 'info@snaptech.digital'
+      const adminEmail = env.EMAIL_USER || 'support@snaptech.digital'
       sendEmail({
         to: adminEmail,
         subject: emailOptions.subject,
         html: emailOptions.html,
         text: emailOptions.text,
+        event: 'ticket.created',
+        templateId: 'support_ticket_confirmation',
+        idempotencyKey: `ticket-${result.ticket.id}-alert`,
+        replyTo: 'support@snaptech.digital',
+        isInternalAlert: true,
+        metadata: { ticketId: result.ticket.id, category: result.ticket.category },
       }).catch((err) => console.error('Admin ticket email dispatch failed:', err.message))
     }).catch((err) => console.error('Failed to resolve client details for ticket email:', err.message))
 
@@ -363,6 +369,11 @@ export const replyToTicketFromAdmin = async (req, res, next) => {
         subject: emailOptions.subject,
         html: emailOptions.html,
         text: emailOptions.text,
+        event: 'ticket.reply',
+        templateId: 'support_ticket_reply',
+        replyTo: 'support@snaptech.digital',
+        isCustomerCopy: true,
+        metadata: { ticketId: ticket.id, sender: admin?.role || 'Staff' },
       }).catch((err) => console.error('Client ticket response email dispatch failed:', err.message))
     }
 

@@ -20,10 +20,13 @@ export function ToastProvider({ children }) {
   }, [])
 
   const toast = {
+    addToast,
+    toast: addToast,
     success: (msg) => addToast(msg, 'success'),
     error: (msg) => addToast(msg, 'error'),
     info: (msg) => addToast(msg, 'info'),
     warning: (msg) => addToast(msg, 'warning'),
+    removeToast,
   }
 
   return (
@@ -77,6 +80,10 @@ export function useToast() {
   if (!context) {
     return {
       // eslint-disable-next-line no-console
+      addToast: (msg, type = 'info') => console.log(`[Toast ${type}]:`, msg),
+      // eslint-disable-next-line no-console
+      toast: (msg, type = 'info') => console.log(`[Toast ${type}]:`, msg),
+      // eslint-disable-next-line no-console
       success: (msg) => console.log('Success:', msg),
       // eslint-disable-next-line no-console
       error: (msg) => console.error('Error:', msg),
@@ -84,6 +91,7 @@ export function useToast() {
       info: (msg) => console.log('Info:', msg),
       // eslint-disable-next-line no-console
       warning: (msg) => console.warn('Warning:', msg),
+      removeToast: () => {},
     }
   }
   return context

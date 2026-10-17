@@ -1369,6 +1369,11 @@ const mockPrisma = {
     },
   },
 
+  client: {
+    findMany: async () => [],
+    count: async () => 0,
+  },
+
   legalPage: {
     findMany: async (args) => mockLegalPages,
     findUnique: async (args) =>
@@ -1410,6 +1415,127 @@ let mockSocialPostDrafts = []
 let mockChatbotInquiries = []
 let mockErrorLogs = []
 let mockPageVisits = []
+let mockEmailLogs = []
+let mockEmailAutomationRules = [
+  {
+    id: 'rule-lead-created',
+    event: 'lead.created',
+    title: 'New Lead / Inquiry Notification',
+    description: 'Sends confirmation auto-reply to client and alert to internal team.',
+    templateId: 'lead_inquiry_confirmation',
+    internalRouting: 'info@snaptech.digital',
+    sendCustomerCopy: true,
+    sendInternalAlert: true,
+    isEnabled: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: 'rule-quote-created',
+    event: 'quote.created',
+    title: 'Quote Request Confirmation',
+    description: 'Detailed quotation received confirmation with SLA timeline.',
+    templateId: 'quote_request_confirmation',
+    internalRouting: 'sales@snaptech.digital',
+    sendCustomerCopy: true,
+    sendInternalAlert: true,
+    isEnabled: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: 'rule-proposal-sent',
+    event: 'proposal.sent',
+    title: 'Project Proposal Delivery',
+    description: 'Delivers project proposal and scope breakdown to client.',
+    templateId: 'proposal_email',
+    internalRouting: 'sales@snaptech.digital',
+    sendCustomerCopy: true,
+    sendInternalAlert: false,
+    isEnabled: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: 'rule-project-kickoff',
+    event: 'project.kickoff',
+    title: 'Project Kickoff / Milestone Update',
+    description: 'Notifies client on project kickoff or major milestone advancement.',
+    templateId: 'project_kickoff_update',
+    internalRouting: 'projects@snaptech.digital',
+    sendCustomerCopy: true,
+    sendInternalAlert: true,
+    isEnabled: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: 'rule-ticket-created',
+    event: 'ticket.created',
+    title: 'Support Ticket Receipt Confirmation',
+    description: 'Sends ticket ID and confirmation to client upon helpdesk submission.',
+    templateId: 'support_ticket_confirmation',
+    internalRouting: 'support@snaptech.digital',
+    sendCustomerCopy: true,
+    sendInternalAlert: true,
+    isEnabled: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: 'rule-ticket-reply',
+    event: 'ticket.reply',
+    title: 'Support Ticket Update / Staff Reply',
+    description: 'Notifies client when staff posts a response to their support ticket.',
+    templateId: 'support_ticket_reply',
+    internalRouting: 'support@snaptech.digital',
+    sendCustomerCopy: true,
+    sendInternalAlert: false,
+    isEnabled: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: 'rule-invoice-created',
+    event: 'invoice.created',
+    title: 'Milestone Invoice Issued',
+    description: 'Dispatches billing milestone invoice link and payment instructions.',
+    templateId: 'invoice_email',
+    internalRouting: 'billing@snaptech.digital',
+    sendCustomerCopy: true,
+    sendInternalAlert: false,
+    isEnabled: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: 'rule-payment-verified',
+    event: 'payment.verified',
+    title: 'Verified Payment Receipt',
+    description: 'Official payment receipt and confirmation of milestone settlement.',
+    templateId: 'verified_payment_confirmation',
+    internalRouting: 'billing@snaptech.digital',
+    sendCustomerCopy: true,
+    sendInternalAlert: true,
+    isEnabled: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: 'rule-careers-applied',
+    event: 'careers.applied',
+    title: 'Careers Application Received',
+    description: 'Confirms application receipt to candidate and alerts HR/recruiting.',
+    templateId: 'careers_application_confirmation',
+    internalRouting: 'careers@snaptech.digital',
+    sendCustomerCopy: true,
+    sendInternalAlert: true,
+    isEnabled: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+]
+
 
 let mockBlogPosts = [
   {
@@ -1474,6 +1600,8 @@ function saveMockDb() {
       mockErrorLogs,
       mockPageVisits,
       mockBlogPosts,
+      mockEmailLogs,
+      mockEmailAutomationRules,
     }
     fs.writeFileSync(MOCK_DB_PATH, JSON.stringify(data, null, 2), 'utf8')
   } catch (err) {
@@ -1581,6 +1709,20 @@ function loadMockDb() {
           publishedAt: b.publishedAt ? new Date(b.publishedAt) : null,
           createdAt: new Date(b.createdAt),
           updatedAt: new Date(b.updatedAt),
+        }))
+      }
+      if (data.mockEmailLogs) {
+        mockEmailLogs = data.mockEmailLogs.map((l) => ({
+          ...l,
+          createdAt: new Date(l.createdAt),
+          updatedAt: new Date(l.updatedAt),
+        }))
+      }
+      if (data.mockEmailAutomationRules && Array.isArray(data.mockEmailAutomationRules) && data.mockEmailAutomationRules.length > 0) {
+        mockEmailAutomationRules = data.mockEmailAutomationRules.map((r) => ({
+          ...r,
+          createdAt: new Date(r.createdAt),
+          updatedAt: new Date(r.updatedAt),
         }))
       }
 
@@ -1878,6 +2020,170 @@ mockPrisma.blogPost = {
     }
     throw new Error('BlogPost not found')
   },
+}
+
+mockPrisma.emailLog = {
+  findMany: async (args) => {
+    let list = [...mockEmailLogs]
+    if (args?.where) {
+      if (args.where.recipient) {
+        if (typeof args.where.recipient === 'string') {
+          list = list.filter((l) => l.recipient.toLowerCase() === args.where.recipient.toLowerCase())
+        } else if (args.where.recipient.contains) {
+          const q = args.where.recipient.contains.toLowerCase()
+          list = list.filter((l) => l.recipient.toLowerCase().includes(q))
+        }
+      }
+      if (args.where.status) {
+        list = list.filter((l) => l.status === args.where.status)
+      }
+      if (args.where.event) {
+        list = list.filter((l) => l.event === args.where.event)
+      }
+      if (args.where.createdAt) {
+        if (args.where.createdAt.gte) {
+          const gte = new Date(args.where.createdAt.gte)
+          list = list.filter((l) => new Date(l.createdAt) >= gte)
+        }
+        if (args.where.createdAt.lte) {
+          const lte = new Date(args.where.createdAt.lte)
+          list = list.filter((l) => new Date(l.createdAt) <= lte)
+        }
+      }
+    }
+    // Sort newest first
+    list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    return applyPagination(list, args)
+  },
+  findUnique: async (args) =>
+    mockEmailLogs.find(
+      (l) =>
+        (args.where?.id && l.id === args.where.id) ||
+        (args.where?.idempotencyKey && l.idempotencyKey === args.where.idempotencyKey)
+    ) || null,
+  findFirst: async (args) => {
+    let list = [...mockEmailLogs]
+    if (args?.where) {
+      if (args.where.idempotencyKey) {
+        list = list.filter((l) => l.idempotencyKey === args.where.idempotencyKey)
+      }
+      if (args.where.recipient) {
+        list = list.filter((l) => l.recipient.toLowerCase() === args.where.recipient.toLowerCase())
+      }
+      if (args.where.event) {
+        list = list.filter((l) => l.event === args.where.event)
+      }
+      if (args.where.createdAt?.gte) {
+        const gte = new Date(args.where.createdAt.gte)
+        list = list.filter((l) => new Date(l.createdAt) >= gte)
+      }
+    }
+    return list[0] || null
+  },
+  count: async (args) => {
+    let list = [...mockEmailLogs]
+    if (args?.where) {
+      if (args.where.status) list = list.filter((l) => l.status === args.where.status)
+      if (args.where.event) list = list.filter((l) => l.event === args.where.event)
+      if (args.where.createdAt?.gte) {
+        const gte = new Date(args.where.createdAt.gte)
+        list = list.filter((l) => new Date(l.createdAt) >= gte)
+      }
+    }
+    return list.length
+  },
+  create: async (args) => {
+    const item = {
+      id: `email-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      status: 'SENT',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      ...args.data,
+    }
+    mockEmailLogs.unshift(item)
+    saveMockDb()
+    return item
+  },
+  update: async (args) => {
+    const idx = mockEmailLogs.findIndex((l) => l.id === args.where.id)
+    if (idx !== -1) {
+      mockEmailLogs[idx] = { ...mockEmailLogs[idx], ...args.data, updatedAt: new Date() }
+      saveMockDb()
+      return mockEmailLogs[idx]
+    }
+    throw new Error('EmailLog not found')
+  },
+  deleteMany: async () => {
+    const count = mockEmailLogs.length
+    mockEmailLogs = []
+    saveMockDb()
+    return { count }
+  },
+}
+
+mockPrisma.emailAutomationRule = {
+  findMany: async (args) => {
+    let list = [...mockEmailAutomationRules]
+    if (args?.where?.isEnabled !== undefined) {
+      list = list.filter((r) => r.isEnabled === args.where.isEnabled)
+    }
+    return list
+  },
+  findUnique: async (args) =>
+    mockEmailAutomationRules.find(
+      (r) =>
+        (args.where?.id && r.id === args.where.id) ||
+        (args.where?.event && r.event === args.where.event)
+    ) || null,
+  findFirst: async (args) =>
+    mockEmailAutomationRules.find(
+      (r) =>
+        (args.where?.id && r.id === args.where.id) ||
+        (args.where?.event && r.event === args.where.event)
+    ) || null,
+  update: async (args) => {
+    const idx = mockEmailAutomationRules.findIndex(
+      (r) =>
+        (args.where.id && r.id === args.where.id) ||
+        (args.where.event && r.event === args.where.event)
+    )
+    if (idx !== -1) {
+      mockEmailAutomationRules[idx] = {
+        ...mockEmailAutomationRules[idx],
+        ...args.data,
+        updatedAt: new Date(),
+      }
+      saveMockDb()
+      return mockEmailAutomationRules[idx]
+    }
+    throw new Error('EmailAutomationRule not found')
+  },
+  upsert: async (args) => {
+    const idx = mockEmailAutomationRules.findIndex(
+      (r) =>
+        (args.where.id && r.id === args.where.id) ||
+        (args.where.event && r.event === args.where.event)
+    )
+    if (idx !== -1) {
+      mockEmailAutomationRules[idx] = {
+        ...mockEmailAutomationRules[idx],
+        ...args.update,
+        updatedAt: new Date(),
+      }
+      saveMockDb()
+      return mockEmailAutomationRules[idx]
+    }
+    const item = {
+      id: `rule-${Date.now()}`,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      ...args.create,
+    }
+    mockEmailAutomationRules.push(item)
+    saveMockDb()
+    return item
+  },
+  count: async () => mockEmailAutomationRules.length,
 }
 
 // ── Smart Connection Resolver ───────────────────────────────

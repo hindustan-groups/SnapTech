@@ -701,3 +701,48 @@ model PricingPackage {
   @@map("pricing_packages")
 }
 
+// ─────────────────────────────────────────────────────────────────
+// EmailLog — Persistent transactional & outbound email audit log
+// ─────────────────────────────────────────────────────────────────
+model EmailLog {
+  id             String    @id @default(cuid())
+  recipient      String
+  subject        String
+  sender         String
+  replyTo        String?
+  event          String?   // e.g. "lead.created", "quote.created", "manual.compose"
+  templateId     String?
+  status         String    @default("SENT") // "SENT" | "FAILED" | "QUEUED"
+  errorMessage   String?
+  metadata       Json?     // Delivery details, recipient name, etc. (no secrets)
+  idempotencyKey String?   @unique
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([recipient])
+  @@index([status])
+  @@index([event])
+  @@index([createdAt])
+  @@map("email_logs")
+}
+
+// ─────────────────────────────────────────────────────────────────
+// EmailAutomationRule — Configurable event-to-template automation
+// ─────────────────────────────────────────────────────────────────
+model EmailAutomationRule {
+  id                String   @id @default(cuid())
+  event             String   @unique // e.g. "lead.created", "quote.created", "ticket.created"
+  title             String
+  description       String?
+  templateId        String
+  internalRouting   String?  // e.g. "info@snaptech.digital", "sales@snaptech.digital"
+  sendCustomerCopy  Boolean  @default(true)
+  sendInternalAlert Boolean  @default(true)
+  isEnabled         Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@map("email_automation_rules")
+}
+
+
