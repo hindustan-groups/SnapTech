@@ -29,7 +29,7 @@ export default function AdminChatbotInquiriesPage() {
   // Fetch inquiries
   const { data: inquiriesRes, isLoading } = useQuery({
     queryKey: ['chatbot-inquiries'],
-    queryFn: () => api.get('/chatbot/admin/inquiries').then((r) => r.data.data),
+    queryFn: () => api.get('/chatbot/admin/inquiries').then((r) => r.data || []),
   })
 
   const inquiries = inquiriesRes || []

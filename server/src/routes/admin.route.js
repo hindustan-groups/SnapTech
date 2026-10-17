@@ -143,6 +143,20 @@ import {
   adminBulkUpdatePricing,
   adminDeletePricing,
 } from '../controllers/pricing.controller.js'
+import {
+  getEmailDashboardStats,
+  listEmailLogs,
+  getEmailLogById,
+  sendManualEmail,
+  listEmailTemplates,
+  previewEmailTemplate,
+  listAutomationRules,
+  updateAutomationRule,
+  getEmailSettings,
+  updateEmailSettings,
+  testEmailConnection,
+  getEligibleRecipients,
+} from '../controllers/emailCenter.controller.js'
 
 // ── CMS Validation Schemas ─────────────────────────────────────
 
@@ -788,5 +802,19 @@ router.get('/integrations/check-unlock', verifyToken, requireRole('SUPER_ADMIN',
 router.get('/recycle-bin', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), getDeletedItems)
 router.post('/recycle-bin/restore', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), restoreItem)
 router.delete('/recycle-bin/permanent/:id', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), permanentlyDeleteItem)
+
+// ── Complete Email Center ─────────────────────────────────────
+router.get('/email/stats', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), getEmailDashboardStats)
+router.get('/email/logs', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), listEmailLogs)
+router.get('/email/logs/:id', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), getEmailLogById)
+router.post('/email/send', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), sendManualEmail)
+router.get('/email/templates', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), listEmailTemplates)
+router.post('/email/templates/preview', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), previewEmailTemplate)
+router.get('/email/rules', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), listAutomationRules)
+router.patch('/email/rules/:id', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), updateAutomationRule)
+router.get('/email/settings', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), getEmailSettings)
+router.patch('/email/settings', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), updateEmailSettings)
+router.post('/email/test', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), testEmailConnection)
+router.get('/email/recipients', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), getEligibleRecipients)
 
 export default router

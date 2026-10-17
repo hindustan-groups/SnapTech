@@ -93,6 +93,12 @@ export const simulatePayment = async (req, res, next) => {
         subject: emailOptions.subject,
         html: emailOptions.html,
         text: emailOptions.text,
+        event: 'payment.verified',
+        templateId: 'verified_payment_confirmation',
+        idempotencyKey: `pay-verified-${id}`,
+        replyTo: 'billing@snaptech.digital',
+        isCustomerCopy: true,
+        metadata: { milestoneId: id, amount: milestone.amount, projectName },
       }).catch((err) => console.error('Payment email dispatch failed:', err.message))
     }
 
@@ -221,6 +227,12 @@ export const updateBillingMilestone = async (req, res, next) => {
             subject: emailOptions.subject,
             html: emailOptions.html,
             text: emailOptions.text,
+            event: 'payment.verified',
+            templateId: 'verified_payment_confirmation',
+            idempotencyKey: `pay-admin-verified-${id}`,
+            replyTo: 'billing@snaptech.digital',
+            isCustomerCopy: true,
+            metadata: { milestoneId: id, amount: fullMilestone.amount, adminTriggered: true },
           }).catch((err) => console.error('Admin mark payment email dispatch failed:', err.message))
         }
       }).catch((err) => console.error('Failed to retrieve client details for email dispatch:', err.message))

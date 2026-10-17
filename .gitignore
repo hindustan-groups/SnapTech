@@ -15,8 +15,10 @@ build/
 # Prisma
 server/src/generated/
 
-# Mock DB (development only — never in production)
+# Mock DB and local backups (development only — never in production)
 server/mock_db.json
+/server/mock_db.backup.json
+/server/mock_db.removed_test_services.json
 
 # Logs
 logs/
@@ -47,3 +49,10 @@ FULL-AUDIT-REPORT.md
 
 # Audit reports and generated review artifacts
 audit-reports/
+
+# Local QA screenshots (root-level verification artifacts)
+/desktop_*.png
+/mobile_*.png
+backups/
+backups/
+scratch/
