@@ -12,7 +12,6 @@
  */
 
 import nodemailer from 'nodemailer'
-import dns from 'node:dns'
 import prisma from '../../config/db.js'
 import { env } from '../../config/env.js'
 import { encryptCredential, decryptCredential } from '../../utils/crypto.js'
@@ -167,12 +166,26 @@ export async function getInternalAccountWithCredentials(idOrEmail) {
   const envPass = (process.env.EMAIL_PASS || env.EMAIL_PASS || '').trim()
   const isPrimary = account.email.toLowerCase().trim() === envUser || account.isDefaultSender
 
-  const fallbackPass = (isPrimary && envPass) ? envPass : null
+  let fallbackPass = (isPrimary && envPass) ? envPass : null
+
+  if (!fallbackPass) {
+    try {
+      const dbSetting = await prisma.siteSetting.findUnique({ where: { key: 'sys_smtp_pass' } })
+      if (dbSetting?.value) {
+        fallbackPass = dbSetting.value.trim()
+      }
+    } catch {
+      // Continue without crashing
+    }
+  }
+
+  const effectiveSmtpPass = decryptedSmtpPass || fallbackPass || decryptedImapPass
+  const effectiveImapPass = decryptedImapPass || fallbackPass || decryptedSmtpPass
 
   return {
     ...account,
-    smtpPassword: decryptedSmtpPass || fallbackPass,
-    imapPassword: decryptedImapPass || fallbackPass,
+    smtpPassword: effectiveSmtpPass,
+    imapPassword: effectiveImapPass,
   }
 }
 
@@ -195,7 +208,7 @@ export async function getDefaultSenderAccount() {
 }
 
 /**
- * Creates a new email account.
+ * Creates a new email account (or updates existing if email matches).
  */
 export async function createAccount(data) {
   const email = String(data.email || '').trim().toLowerCase()
@@ -205,7 +218,7 @@ export async function createAccount(data) {
 
   const existing = await prisma.emailAccount.findUnique({ where: { email } })
   if (existing) {
-    throw new Error(`An account with email '${email}' already exists.`)
+    return updateAccount(existing.id, data)
   }
 
   // If this account is set as default sender, unset existing defaults
@@ -222,10 +235,9 @@ export async function createAccount(data) {
   const defaultSmtpHost = isHostinger ? DEFAULT_HOSTINGER_HOST : (isGmail ? 'smtp.gmail.com' : 'smtp.hostinger.com')
   const defaultImapHost = isHostinger ? DEFAULT_HOSTINGER_IMAP_HOST : (isGmail ? 'imap.gmail.com' : 'imap.hostinger.com')
 
-  const encryptedSmtpPass = data.smtpPassword ? encryptCredential(data.smtpPassword.trim()) : null
-  const encryptedImapPass = data.imapPassword
-    ? encryptCredential(data.imapPassword.trim())
-    : encryptedSmtpPass // default to same password if not provided separately
+  const rawPass = (data.smtpPassword || data.imapPassword || '').trim()
+  const encryptedSmtpPass = rawPass ? encryptCredential(rawPass) : null
+  const encryptedImapPass = encryptedSmtpPass
 
   const account = await prisma.emailAccount.create({
     data: {
@@ -251,6 +263,16 @@ export async function createAccount(data) {
       syncEnabled: data.syncEnabled !== undefined ? Boolean(data.syncEnabled) : true,
     },
   })
+
+  // If saved with a password and set as default/primary, sync to runtime env & siteSetting
+  if (rawPass && (data.isDefaultSender || email.includes('snaptech.digital'))) {
+    process.env.EMAIL_PASS = rawPass
+    prisma.siteSetting.upsert({
+      where: { key: 'sys_smtp_pass' },
+      update: { value: rawPass },
+      create: { key: 'sys_smtp_pass', value: rawPass },
+    }).catch(() => {})
+  }
 
   return sanitizeAccount(account)
 }
@@ -279,7 +301,24 @@ export async function updateAccount(id, data) {
   if (data.smtpSecure !== undefined) updatePayload.smtpSecure = Boolean(data.smtpSecure)
   if (data.smtpUser !== undefined) updatePayload.smtpUser = data.smtpUser.trim()
   if (data.smtpPassword && typeof data.smtpPassword === 'string' && data.smtpPassword.trim() && !/^•+/.test(data.smtpPassword)) {
-    updatePayload.smtpPasswordEncrypted = encryptCredential(data.smtpPassword.trim())
+    const rawPass = data.smtpPassword.trim()
+    const enc = encryptCredential(rawPass)
+    updatePayload.smtpPasswordEncrypted = enc
+
+    // Auto-sync IMAP password for Hostinger if IMAP pass is empty or dots
+    if (!data.imapPassword || !data.imapPassword.trim() || /^•+/.test(data.imapPassword)) {
+      updatePayload.imapPasswordEncrypted = enc
+    }
+
+    // Also sync to runtime env & siteSetting for primary/default mailbox
+    if (existing.isDefaultSender || existing.email.toLowerCase().includes('snaptech.digital')) {
+      process.env.EMAIL_PASS = rawPass
+      prisma.siteSetting.upsert({
+        where: { key: 'sys_smtp_pass' },
+        update: { value: rawPass },
+        create: { key: 'sys_smtp_pass', value: rawPass },
+      }).catch(() => {})
+    }
   }
 
   // IMAP Settings
@@ -290,7 +329,11 @@ export async function updateAccount(id, data) {
   if (data.imapMailbox !== undefined) updatePayload.imapMailbox = data.imapMailbox.trim()
   if (data.syncEnabled !== undefined) updatePayload.syncEnabled = Boolean(data.syncEnabled)
   if (data.imapPassword && typeof data.imapPassword === 'string' && data.imapPassword.trim() && !/^•+/.test(data.imapPassword)) {
-    updatePayload.imapPasswordEncrypted = encryptCredential(data.imapPassword.trim())
+    const enc = encryptCredential(data.imapPassword.trim())
+    updatePayload.imapPasswordEncrypted = enc
+    if (!updatePayload.smtpPasswordEncrypted && !existing.smtpPasswordEncrypted) {
+      updatePayload.smtpPasswordEncrypted = enc
+    }
   }
 
   // Handle default sender toggle
@@ -345,13 +388,10 @@ export async function testAccountSmtp(id, targetRecipient = null) {
     port,
     secure: port === 465,
     auth: { user, pass },
-    connectionTimeout: 10000,
-    greetingTimeout: 10000,
-    socketTimeout: 10000,
+    connectionTimeout: 15000,
+    greetingTimeout: 15000,
+    socketTimeout: 15000,
     family: 4,
-    dnsLookup: (hostname, options, callback) => {
-      dns.lookup(hostname, { ...options, family: 4, all: false }, callback)
-    },
     tls: {
       rejectUnauthorized: false,
       servername: host,
@@ -414,8 +454,8 @@ export async function testAccountImap(id) {
     secure: account.imapSecure !== false,
     auth: { user, pass },
     logger: false,
-    connectionTimeout: process.env.NODE_ENV === 'test' ? 1500 : 8000,
-    greetingTimeout: process.env.NODE_ENV === 'test' ? 1500 : 5000,
+    connectionTimeout: process.env.NODE_ENV === 'test' ? 1500 : 15000,
+    greetingTimeout: process.env.NODE_ENV === 'test' ? 1500 : 10000,
     tls: {
       rejectUnauthorized: false,
       servername: host,

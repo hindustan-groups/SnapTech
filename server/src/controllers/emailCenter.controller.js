@@ -783,6 +783,39 @@ export const updateEmailSettings = async (req, res, next) => {
           create: { key: 'sys_smtp_pass', value: val },
         })
       )
+
+      // Sync password to EmailAccount so IMAP sync & account mailers have it immediately
+      const { encryptCredential } = await import('../utils/crypto.js')
+      const encrypted = encryptCredential(val)
+      const primaryEmail = (smtpUser || process.env.EMAIL_USER || VERIFIED_SENDER_MAILBOX).trim().toLowerCase()
+      ops.push(
+        prisma.emailAccount.updateMany({
+          where: {
+            OR: [{ email: primaryEmail }, { isDefaultSender: true }],
+          },
+          data: {
+            smtpPasswordEncrypted: encrypted,
+            imapPasswordEncrypted: encrypted,
+          },
+        }).catch(() => {})
+      )
+    }
+
+    const primaryTarget = (smtpUser || process.env.EMAIL_USER || VERIFIED_SENDER_MAILBOX).trim().toLowerCase()
+    const syncFields = {}
+    if (smtpHost) syncFields.smtpHost = smtpHost.trim()
+    if (smtpPort) syncFields.smtpPort = parseInt(smtpPort, 10)
+    if (senderName) syncFields.displayName = senderName.trim()
+    if (defaultReplyTo) syncFields.replyTo = defaultReplyTo.trim()
+    if (Object.keys(syncFields).length > 0) {
+      ops.push(
+        prisma.emailAccount.updateMany({
+          where: {
+            OR: [{ email: primaryTarget }, { isDefaultSender: true }],
+          },
+          data: syncFields,
+        }).catch(() => {})
+      )
     }
 
     await Promise.all(ops)

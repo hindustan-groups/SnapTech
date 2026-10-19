@@ -228,8 +228,17 @@ export const globalLimiter = rateLimit({
   handler: makeLimitHandler('Global'),
 })
 
-// ── Request Timeout (Terminate gracefully if request takes > 10s) ──
+// ── Request Timeout (Terminate gracefully if request takes too long) ──
 export const requestTimeout = (req, res, next) => {
+  const url = req?.originalUrl || req?.url || req?.path || ''
+  const isExtendedOperation =
+    typeof url === 'string' &&
+    (url.includes('/admin/email') ||
+      url.includes('/admin/integrations') ||
+      url.includes('/contact'))
+
+  const timeoutMs = isExtendedOperation ? 45000 : 10000
+
   const timer = setTimeout(() => {
     if (!res.headersSent) {
       res.status(503).json({
@@ -237,7 +246,7 @@ export const requestTimeout = (req, res, next) => {
         message: 'Request timed out. The server took too long to respond.',
       })
     }
-  }, 10000) // 10 seconds
+  }, timeoutMs)
 
   res.on('finish', () => clearTimeout(timer))
   res.on('close', () => clearTimeout(timer))
