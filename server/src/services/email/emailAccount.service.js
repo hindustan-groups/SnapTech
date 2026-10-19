@@ -22,15 +22,28 @@ export const DEFAULT_HOSTINGER_IMAP_HOST = 'imap.hostinger.com'
 export const DEFAULT_HOSTINGER_PORT = 465
 export const DEFAULT_HOSTINGER_IMAP_PORT = 993
 
+export function sanitizeErrorMessage(msg, secrets = []) {
+  if (!msg || typeof msg !== 'string') return ''
+  let clean = msg
+  for (const s of secrets) {
+    if (s && typeof s === 'string' && s.length > 2) {
+      clean = clean.split(s).join('[REDACTED]')
+    }
+  }
+  // Scrub URI passwords like postgresql://user:pass@host
+  clean = clean.replace(/(:\/\/[^:]+:)([^@]+)(@)/g, '$1***$3')
+  // Scrub common secret assignment patterns
+  clean = clean.replace(/(?:password|pass|secret|token|bearer|key)\s*[:=]\s*['"]?[^\s,'"]+/gi, '$1=[REDACTED]')
+  return clean.slice(0, 500)
+}
+
 /**
  * Ensures at least the primary system account exists in the database.
- * Preserves existing Hostinger environment settings.
+ * Preserves existing Hostinger environment settings and self-heals credentials
+ * if environment variables are provided.
  */
 export async function ensureDefaultAccounts() {
   try {
-    const count = await prisma.emailAccount.count()
-    if (count > 0) return
-
     const primaryEmail = (process.env.EMAIL_USER || env.EMAIL_USER || 'info@snaptech.digital').trim().toLowerCase()
     const primaryPass = (process.env.EMAIL_PASS || env.EMAIL_PASS || '').trim()
     const host = (process.env.EMAIL_HOST || env.EMAIL_HOST || DEFAULT_HOSTINGER_HOST).trim()
@@ -41,6 +54,31 @@ export async function ensureDefaultAccounts() {
     const imapPort = 993
 
     const encryptedPass = primaryPass ? encryptCredential(primaryPass) : null
+
+    const existing = await prisma.emailAccount.findFirst({
+      where: {
+        OR: [{ email: primaryEmail }, { isDefaultSender: true }],
+      },
+    })
+
+    if (existing) {
+      // Self-heal: If database record has no password but environment has EMAIL_PASS, populate it
+      if (primaryPass && (!existing.smtpPasswordEncrypted || !existing.imapPasswordEncrypted)) {
+        await prisma.emailAccount.update({
+          where: { id: existing.id },
+          data: {
+            smtpPasswordEncrypted: existing.smtpPasswordEncrypted || encryptedPass,
+            imapPasswordEncrypted: existing.imapPasswordEncrypted || encryptedPass,
+            syncEnabled: existing.syncEnabled ?? true,
+          },
+        })
+        console.log(`[emailAccount] Self-healed credentials for primary account: ${existing.email}`)
+      }
+      const existingAccounts = await prisma.emailAccount.findMany({
+        orderBy: [{ isDefaultSender: 'desc' }, { createdAt: 'asc' }],
+      })
+      return existingAccounts.map(sanitizeAccount)
+    }
 
     await prisma.emailAccount.create({
       data: {
@@ -67,8 +105,13 @@ export async function ensureDefaultAccounts() {
       },
     })
     console.log(`[emailAccount] Initialized primary default account: ${primaryEmail}`)
+    const createdAccounts = await prisma.emailAccount.findMany({
+      orderBy: [{ isDefaultSender: 'desc' }, { createdAt: 'asc' }],
+    })
+    return createdAccounts.map(sanitizeAccount)
   } catch (err) {
     console.warn('[emailAccount] Could not auto-seed default account:', err.message)
+    return []
   }
 }
 
@@ -107,6 +150,8 @@ export async function getAccountById(id) {
 
 /**
  * Retrieves the raw account with decrypted credentials for internal mail worker use.
+ * Automatically falls back to env EMAIL_PASS if record has no stored password
+ * and matches the primary environment mailbox.
  */
 export async function getInternalAccountWithCredentials(idOrEmail) {
   const isEmail = String(idOrEmail).includes('@')
@@ -115,10 +160,19 @@ export async function getInternalAccountWithCredentials(idOrEmail) {
   })
   if (!account) return null
 
+  const decryptedSmtpPass = account.smtpPasswordEncrypted ? decryptCredential(account.smtpPasswordEncrypted) : null
+  const decryptedImapPass = account.imapPasswordEncrypted ? decryptCredential(account.imapPasswordEncrypted) : null
+
+  const envUser = (process.env.EMAIL_USER || env.EMAIL_USER || 'info@snaptech.digital').toLowerCase().trim()
+  const envPass = (process.env.EMAIL_PASS || env.EMAIL_PASS || '').trim()
+  const isPrimary = account.email.toLowerCase().trim() === envUser || account.isDefaultSender
+
+  const fallbackPass = (isPrimary && envPass) ? envPass : null
+
   return {
     ...account,
-    smtpPassword: account.smtpPasswordEncrypted ? decryptCredential(account.smtpPasswordEncrypted) : null,
-    imapPassword: account.imapPasswordEncrypted ? decryptCredential(account.imapPasswordEncrypted) : null,
+    smtpPassword: decryptedSmtpPass || fallbackPass,
+    imapPassword: decryptedImapPass || fallbackPass,
   }
 }
 
@@ -137,11 +191,7 @@ export async function getDefaultSenderAccount() {
   }
   if (!account) return null
 
-  return {
-    ...account,
-    smtpPassword: account.smtpPasswordEncrypted ? decryptCredential(account.smtpPasswordEncrypted) : null,
-    imapPassword: account.imapPasswordEncrypted ? decryptCredential(account.imapPasswordEncrypted) : null,
-  }
+  return getInternalAccountWithCredentials(account.id)
 }
 
 /**
@@ -308,30 +358,35 @@ export async function testAccountSmtp(id, targetRecipient = null) {
     },
   })
 
-  // Verify connection handshake
-  await transporter.verify()
+  try {
+    // Verify connection handshake
+    await transporter.verify()
 
-  // Send a lightweight test email
-  const info = await transporter.sendMail({
-    from: `"${account.displayName || 'SnapTech Digital'}" <${account.email}>`,
-    to: recipient,
-    subject: `✅ SMTP Verification: ${account.email}`,
-    text: `SMTP handshake and delivery test successful for ${account.email} on ${host}:${port}.`,
-    html: `
-      <div style="font-family: Arial, sans-serif; padding: 20px; background: #f8fafc; border-radius: 8px;">
-        <h3 style="color: #0f172a; margin-top: 0;">SMTP Connection Verified</h3>
-        <p style="color: #334155;">The SMTP handshake for <strong>${account.email}</strong> was successful.</p>
-        <p style="font-size: 12px; color: #64748b;">Host: ${host}:${port} | Provider: ${account.provider}</p>
-      </div>
-    `,
-  })
+    // Send a lightweight test email
+    const info = await transporter.sendMail({
+      from: `"${account.displayName || 'SnapTech Digital'}" <${account.email}>`,
+      to: recipient,
+      subject: `✅ SMTP Verification: ${account.email}`,
+      text: `SMTP handshake and delivery test successful for ${account.email} on ${host}:${port}.`,
+      html: `
+        <div style="font-family: Arial, sans-serif; padding: 20px; background: #f8fafc; border-radius: 8px;">
+          <h3 style="color: #0f172a; margin-top: 0;">SMTP Connection Verified</h3>
+          <p style="color: #334155;">The SMTP handshake for <strong>${account.email}</strong> was successful.</p>
+          <p style="font-size: 12px; color: #64748b;">Host: ${host}:${port} | Provider: ${account.provider}</p>
+        </div>
+      `,
+    })
 
-  return {
-    success: true,
-    messageId: info.messageId,
-    host,
-    port,
-    recipient,
+    return {
+      success: true,
+      messageId: info.messageId,
+      host,
+      port,
+      recipient,
+    }
+  } catch (err) {
+    const cleanMsg = sanitizeErrorMessage(err.message, [pass])
+    throw new Error(`SMTP Handshake/Send failed: ${cleanMsg}`, { cause: err })
   }
 }
 
@@ -388,6 +443,7 @@ export async function testAccountImap(id) {
       port,
     }
   } catch (err) {
-    throw new Error(`IMAP Connection failed: ${err.message}`, { cause: err })
+    const cleanMsg = sanitizeErrorMessage(err.message, [pass])
+    throw new Error(`IMAP Connection failed: ${cleanMsg}`, { cause: err })
   }
 }
