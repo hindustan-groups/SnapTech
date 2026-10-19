@@ -14,6 +14,8 @@ import {
   Check,
   X,
   Zap,
+  Eye,
+  EyeOff,
 } from 'lucide-react'
 import { api } from '@/utils/api'
 import { useToast } from '@/components/ui/ToastProvider'
@@ -318,6 +320,7 @@ export default function AccountsTab({ accounts = [], isLoading, onAccountChanged
         <AccountFormModal
           mode={modalState.mode}
           account={modalState.account}
+          accounts={accounts}
           onClose={() => setModalState(null)}
           onSuccess={() => {
             setModalState(null)
@@ -332,9 +335,11 @@ export default function AccountsTab({ accounts = [], isLoading, onAccountChanged
 /**
  * Account Configuration Modal (Add or Edit)
  */
-function AccountFormModal({ mode, account, onClose, onSuccess }) {
+function AccountFormModal({ mode, account, accounts = [], onClose, onSuccess }) {
   const isEdit = mode === 'edit'
   const toast = useToast()
+  const [showPassword, setShowPassword] = useState(false)
+  const [syncImapPassword, setSyncImapPassword] = useState(true)
 
   const [formData, setFormData] = useState({
     email: account?.email || '',
@@ -408,11 +413,26 @@ function AccountFormModal({ mode, account, onClose, onSuccess }) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (!formData.email.trim()) {
+    const cleanEmail = formData.email.trim().toLowerCase()
+    if (!cleanEmail) {
       toast.warning('Email address is required.')
       return
     }
-    saveMutation.mutate(formData)
+    const payload = { ...formData, email: cleanEmail }
+    if (syncImapPassword && payload.smtpPassword && !payload.imapPassword) {
+      payload.imapPassword = payload.smtpPassword
+    }
+    const existingAccount = accounts.find((a) => a.email?.toLowerCase() === cleanEmail)
+    if (!isEdit && existingAccount) {
+      api.patch(`/admin/email/accounts/${existingAccount.id}`, payload)
+        .then((res) => {
+          toast.success(res.message || 'Account configuration updated successfully.')
+          onSuccess?.()
+        })
+        .catch((err) => toast.error(`Update failed: ${err.message}`))
+      return
+    }
+    saveMutation.mutate(payload)
   }
 
   return (
@@ -569,17 +589,55 @@ function AccountFormModal({ mode, account, onClose, onSuccess }) {
                 />
               </div>
               <div>
-                <label className="block text-gray-700 font-medium mb-1">
-                  SMTP Password {isEdit && <span className="text-gray-400 font-normal">(Leave blank to keep existing)</span>}
-                </label>
-                <input
-                  type="password"
-                  value={formData.smtpPassword}
-                  onChange={(e) => setFormData({ ...formData, smtpPassword: e.target.value })}
-                  placeholder={isEdit ? '••••••••••••' : 'Enter SMTP password'}
-                  className="w-full px-3 py-1.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:border-blue-500"
-                />
+                <div className="flex items-center justify-between mb-1">
+                  <label className="text-gray-700 font-medium text-xs">
+                    SMTP Password {isEdit && <span className="text-gray-400 font-normal">(Leave blank to keep)</span>}
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="text-gray-400 hover:text-gray-600 inline-flex items-center gap-1 text-[11px] cursor-pointer"
+                  >
+                    {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                    <span>{showPassword ? 'Hide' : 'Show'}</span>
+                  </button>
+                </div>
+                <div className="relative">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    value={formData.smtpPassword}
+                    onChange={(e) => {
+                      const val = e.target.value
+                      setFormData((prev) => ({
+                        ...prev,
+                        smtpPassword: val,
+                        ...(syncImapPassword ? { imapPassword: val } : {}),
+                      }))
+                    }}
+                    placeholder={isEdit ? '••••••••••••' : 'Enter SMTP password'}
+                    className="w-full px-3 py-1.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 font-mono text-xs"
+                  />
+                </div>
               </div>
+            </div>
+
+            {/* Password Sync Helper */}
+            <div className="pt-1">
+              <label className="inline-flex items-center gap-2 text-xs font-semibold text-blue-700 bg-blue-50/80 px-3 py-2 rounded-xl border border-blue-200 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={syncImapPassword}
+                  onChange={(e) => {
+                    const checked = e.target.checked
+                    setSyncImapPassword(checked)
+                    if (checked && formData.smtpPassword) {
+                      setFormData((prev) => ({ ...prev, imapPassword: prev.smtpPassword }))
+                    }
+                  }}
+                  className="rounded text-blue-600 focus:ring-blue-500"
+                />
+                <span>Use identical password for IMAP receiving (Hostinger standard)</span>
+              </label>
             </div>
           </div>
 
@@ -621,15 +679,27 @@ function AccountFormModal({ mode, account, onClose, onSuccess }) {
                 />
               </div>
               <div>
-                <label className="block text-gray-700 font-medium mb-1">
-                  IMAP Password {isEdit && <span className="text-gray-400 font-normal">(Leave blank to keep existing)</span>}
-                </label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="text-gray-700 font-medium text-xs">
+                    IMAP Password {isEdit && <span className="text-gray-400 font-normal">(Leave blank to keep)</span>}
+                  </label>
+                  {syncImapPassword && (
+                    <span className="text-[10px] text-blue-600 font-semibold bg-blue-50 px-1.5 py-0.5 rounded">
+                      Linked to SMTP
+                    </span>
+                  )}
+                </div>
                 <input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   value={formData.imapPassword}
                   onChange={(e) => setFormData({ ...formData, imapPassword: e.target.value })}
-                  placeholder={isEdit ? '••••••••••••' : 'Enter IMAP password'}
-                  className="w-full px-3 py-1.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:border-blue-500"
+                  disabled={syncImapPassword}
+                  placeholder={
+                    syncImapPassword
+                      ? (formData.smtpPassword ? 'Mirrors SMTP Password' : (isEdit ? '••••••••••••' : 'Mirrors SMTP Password'))
+                      : (isEdit ? '••••••••••••' : 'Enter IMAP password')
+                  }
+                  className="w-full px-3 py-1.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 font-mono text-xs disabled:bg-gray-100 disabled:text-gray-500"
                 />
               </div>
             </div>

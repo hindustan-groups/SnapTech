@@ -192,7 +192,38 @@ export async function sendViaSMTP(options = {}) {
   const host = (accountConfig?.smtpHost || process.env.EMAIL_HOST || env.EMAIL_HOST || HOSTINGER_SMTP_HOST).trim()
   const port = parseInt(accountConfig?.smtpPort || process.env.EMAIL_PORT || env.EMAIL_PORT || String(HOSTINGER_SMTP_PORT), 10)
   const user = (accountConfig?.smtpUser || process.env.EMAIL_USER || env.EMAIL_USER || VERIFIED_SENDER_MAILBOX).trim()
-  const pass = (accountConfig?.smtpPassword || process.env.EMAIL_PASS || env.EMAIL_PASS || '').trim().replace(/\s+/g, '')
+  let pass = (accountConfig?.smtpPassword || process.env.EMAIL_PASS || env.EMAIL_PASS || '').trim().replace(/\s+/g, '')
+
+  // Self-heal: If password is empty in process.env, check SiteSetting or EmailAccount in database
+  if (!pass) {
+    try {
+      const dbSetting = await prisma.siteSetting.findUnique({ where: { key: 'sys_smtp_pass' } })
+      if (dbSetting?.value) {
+        pass = dbSetting.value.trim().replace(/\s+/g, '')
+        process.env.EMAIL_PASS = pass
+      }
+    } catch {
+      // Continue to next fallback
+    }
+  }
+
+  if (!pass) {
+    try {
+      const defaultAcc = await prisma.emailAccount.findFirst({
+        where: { isDefaultSender: true },
+      })
+      if (defaultAcc?.smtpPasswordEncrypted) {
+        const { decryptCredential } = await import('./crypto.js')
+        const decrypted = decryptCredential(defaultAcc.smtpPasswordEncrypted)
+        if (decrypted) {
+          pass = decrypted.trim().replace(/\s+/g, '')
+          process.env.EMAIL_PASS = pass
+        }
+      }
+    } catch {
+      // Continue without crashing
+    }
+  }
 
   const isGmail =
     host.includes('gmail') || user.toLowerCase().includes('gmail.com') || host === 'smtp.gmail.com'
@@ -206,13 +237,10 @@ export async function sendViaSMTP(options = {}) {
     port: finalPort,
     secure: isSecure,
     auth: { user, pass },
-    connectionTimeout: 10000,
-    greetingTimeout: 10000,
-    socketTimeout: 10000,
+    connectionTimeout: 15000,
+    greetingTimeout: 15000,
+    socketTimeout: 15000,
     family: 4,
-    dnsLookup: (hostname, lookupOptions, callback) => {
-      dns.lookup(hostname, { ...lookupOptions, family: 4, all: false }, callback)
-    },
     tls: {
       rejectUnauthorized: false,
       servername: finalHost,

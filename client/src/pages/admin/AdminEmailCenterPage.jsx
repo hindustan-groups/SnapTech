@@ -11,7 +11,7 @@
  *  - Technical audit report on Hostinger IMAP vs SMTP inbound feasibility
  */
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   Mail,
@@ -24,6 +24,8 @@ import {
   Clock,
   RefreshCw,
   Eye,
+  EyeOff,
+  Save,
   Sliders,
   FileText,
   Layers,
@@ -223,7 +225,15 @@ export default function AdminEmailCenterPage() {
       )}
 
       {activeTab === 'settings' && (
-        <SettingsTab settings={settingsData?.data} />
+        <SettingsTab
+          settings={settingsData?.data}
+          accounts={accountsData?.data || []}
+          onSettingsUpdated={() => {
+            refetchSettings()
+            refetchAccounts()
+            refetchStats()
+          }}
+        />
       )}
 
       {activeTab === 'audit' && <InboxAuditTab />}
@@ -1221,10 +1231,47 @@ function AutomationRulesTab({ rules, accounts = [] }) {
 // ─────────────────────────────────────────────────────────────
 // TAB 5: EMAIL SETTINGS & CONNECTION TEST
 // ─────────────────────────────────────────────────────────────
-function SettingsTab({ settings }) {
+function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
   const toast = useToast()
   const [testEmail, setTestEmail] = useState('info@snaptech.digital')
   const [testResult, setTestResult] = useState(null)
+  const [testingImap, setTestingImap] = useState(false)
+  const [imapResult, setImapResult] = useState(null)
+  const [showPassword, setShowPassword] = useState(false)
+
+  const [formData, setFormData] = useState({
+    smtpUser: settings?.verifiedSender || 'info@snaptech.digital',
+    smtpPass: '',
+    smtpHost: settings?.smtpHost || 'smtp.hostinger.com',
+    smtpPort: settings?.smtpPort || 465,
+    senderName: settings?.senderName || 'SnapTech Digital',
+    defaultReplyTo: settings?.defaultReplyTo || 'info@snaptech.digital',
+  })
+
+  useEffect(() => {
+    if (settings) {
+      setFormData((prev) => ({
+        ...prev,
+        smtpUser: settings.verifiedSender || prev.smtpUser,
+        smtpHost: settings.smtpHost || prev.smtpHost,
+        smtpPort: settings.smtpPort || prev.smtpPort,
+        senderName: settings.senderName || prev.senderName,
+        defaultReplyTo: settings.defaultReplyTo || prev.defaultReplyTo,
+      }))
+    }
+  }, [settings])
+
+  const saveMutation = useMutation({
+    mutationFn: (data) => api.patch('/admin/email/settings', data),
+    onSuccess: (res) => {
+      toast.success(res.message || 'Hostinger credentials saved and synchronized successfully!')
+      setFormData((prev) => ({ ...prev, smtpPass: '' }))
+      onSettingsUpdated?.()
+    },
+    onError: (err) => {
+      toast.error(`Save failed: ${err.message}`)
+    },
+  })
 
   const testMutation = useMutation({
     mutationFn: (targetEmail) =>
@@ -1238,6 +1285,35 @@ function SettingsTab({ settings }) {
       toast.error(`SMTP Connection Failed: ${err.message}`)
     },
   })
+
+  const handleTestImap = async () => {
+    const defaultAcc = accounts.find((a) => a.isDefaultSender) || accounts[0]
+    if (!defaultAcc) {
+      toast.warning('No email account configured to test IMAP receiving.')
+      return
+    }
+    setTestingImap(true)
+    setImapResult(null)
+    try {
+      const res = await api.post(`/admin/email/accounts/${defaultAcc.id}/test-imap`)
+      const d = res.data
+      setImapResult({
+        status: 'ok',
+        message: `Connected to ${d.host}:${d.port}. Mailbox '${d.mailbox}' has ${d.totalMessages} messages (${d.unseenMessages} unread).`,
+      })
+      toast.success('Inbound IMAP Connection verified successfully!')
+    } catch (err) {
+      setImapResult({ status: 'error', message: err.message })
+      toast.error(`IMAP Test Failed: ${err.message}`)
+    } finally {
+      setTestingImap(false)
+    }
+  }
+
+  const handleSaveCredentials = (e) => {
+    e.preventDefault()
+    saveMutation.mutate(formData)
+  }
 
   const aliases = [
     { name: 'hello@snaptech.digital', tag: 'General Contact', desc: 'Main website contact form submissions and general public queries.' },
@@ -1255,10 +1331,10 @@ function SettingsTab({ settings }) {
       <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-xs space-y-5">
         <div>
           <h2 className="text-lg font-bold text-gray-900 font-heading">
-            Hostinger SMTP Configuration
+            Hostinger SMTP &amp; IMAP Gateway
           </h2>
           <p className="text-xs text-gray-500">
-            Authenticated infrastructure settings. Passwords and keys remain strictly protected on the backend.
+            Authenticated infrastructure credentials. All changes automatically sync to outbound SMTP sending and inbound IMAP syncing.
           </p>
         </div>
 
@@ -1291,58 +1367,220 @@ function SettingsTab({ settings }) {
             <span className="text-[11px] font-semibold text-gray-500">Credential Status</span>
             <div className="flex items-center gap-1.5 text-sm font-bold text-gray-900">
               <Lock className="w-3.5 h-3.5 text-emerald-600" />
-              <span>••••••••••••</span>
+              <span>{settings?.isPasswordConfigured ? '•••••••••••• (Configured)' : 'Not Set'}</span>
             </div>
-            <span className="text-[10px] text-gray-400">Never echoed to browser</span>
+            <span className="text-[10px] text-gray-400">Encrypted in Neon DB</span>
           </div>
         </div>
 
-        {/* Live Handshake Diagnostic Tool */}
-        <div className="p-5 bg-blue-50/50 border border-blue-200 rounded-xl space-y-3">
-          <div className="flex items-center gap-2 text-blue-900 font-bold text-sm">
-            <ShieldCheck className="w-4 h-4 text-blue-600" />
-            Hostinger SMTP Live Diagnostic &amp; Handshake Verification
+        {/* Update Hostinger Credentials Form */}
+        <form onSubmit={handleSaveCredentials} className="p-5 bg-slate-50 border border-slate-200 rounded-xl space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-slate-900 font-bold text-sm">
+              <Server className="w-4 h-4 text-blue-600" />
+              Update Hostinger Credentials &amp; Gateway Settings
+            </div>
+            <span className="text-[11px] text-slate-500">
+              Syncs to both SMTP (sending) and IMAP (receiving)
+            </span>
           </div>
-          <p className="text-xs text-blue-800 leading-relaxed">
-            Dispatches a real cryptographic verification message through Hostinger SMTP to verify server credentials, socket timeouts, and SPF/DKIM headers.
-          </p>
 
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 max-w-lg">
-            <input
-              type="email"
-              value={testEmail}
-              onChange={(e) => setTestEmail(e.target.value)}
-              placeholder="Recipient email address"
-              className="w-full px-3.5 py-2 text-xs bg-white border border-blue-200 rounded-xl focus:outline-none"
-            />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            <div>
+              <label className="block text-gray-700 font-medium text-xs mb-1">
+                Mailbox Address (Username) *
+              </label>
+              <input
+                type="email"
+                value={formData.smtpUser}
+                onChange={(e) => setFormData({ ...formData, smtpUser: e.target.value })}
+                required
+                className="w-full px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-blue-500"
+              />
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <label className="text-gray-700 font-medium text-xs">
+                  Hostinger Mailbox Password *
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="text-gray-400 hover:text-gray-600 inline-flex items-center gap-1 text-[11px] cursor-pointer"
+                >
+                  {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                  <span>{showPassword ? 'Hide' : 'Show'}</span>
+                </button>
+              </div>
+              <input
+                type={showPassword ? 'text' : 'password'}
+                value={formData.smtpPass}
+                onChange={(e) => setFormData({ ...formData, smtpPass: e.target.value })}
+                placeholder={settings?.isPasswordConfigured ? 'Leave blank to keep current' : 'Enter Hostinger password'}
+                className="w-full px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs font-mono focus:outline-none focus:border-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-gray-700 font-medium text-xs mb-1">
+                Sender Display Name
+              </label>
+              <input
+                type="text"
+                value={formData.senderName}
+                onChange={(e) => setFormData({ ...formData, senderName: e.target.value })}
+                placeholder="SnapTech Digital"
+                className="w-full px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-gray-700 font-medium text-xs mb-1">
+                SMTP Host
+              </label>
+              <input
+                type="text"
+                value={formData.smtpHost}
+                onChange={(e) => setFormData({ ...formData, smtpHost: e.target.value })}
+                placeholder="smtp.hostinger.com"
+                className="w-full px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-gray-700 font-medium text-xs mb-1">
+                SMTP Port &amp; Encryption
+              </label>
+              <select
+                value={formData.smtpPort}
+                onChange={(e) => setFormData({ ...formData, smtpPort: parseInt(e.target.value, 10) })}
+                className="w-full px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-blue-500 cursor-pointer"
+              >
+                <option value={465}>Port 465 (SSL / TLS — Recommended)</option>
+                <option value={587}>Port 587 (STARTTLS)</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-gray-700 font-medium text-xs mb-1">
+                Default Reply-To
+              </label>
+              <input
+                type="email"
+                value={formData.defaultReplyTo}
+                onChange={(e) => setFormData({ ...formData, defaultReplyTo: e.target.value })}
+                placeholder="info@snaptech.digital"
+                className="w-full px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-blue-500"
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between pt-2">
+            <span className="text-[11px] text-gray-500">
+              Changes apply instantly to live runtime and sync to your Neon PostgreSQL database.
+            </span>
             <button
-              type="button"
-              onClick={() => {
-                if (!testEmail || !testEmail.includes('@')) {
-                  toast.warning('Please enter a valid target email for verification.')
-                  return
-                }
-                testMutation.mutate(testEmail)
-              }}
-              disabled={testMutation.isPending}
-              className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer shadow-xs"
+              type="submit"
+              disabled={saveMutation.isPending}
+              className="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold cursor-pointer transition-all shadow-xs disabled:opacity-50"
             >
-              {testMutation.isPending ? 'Verifying Handshake...' : 'Run SMTP Test'}
+              <Save className="w-3.5 h-3.5" />
+              {saveMutation.isPending ? 'Saving Settings...' : 'Save & Sync Credentials'}
             </button>
           </div>
+        </form>
 
-          {testResult && (
-            <div
-              className={`p-3.5 rounded-xl border text-xs mt-3 ${
-                testResult.status === 'ok'
-                  ? 'bg-emerald-50 border-emerald-200 text-emerald-900'
-                  : 'bg-rose-50 border-rose-200 text-rose-900'
-              }`}
-            >
-              <strong>{testResult.status === 'ok' ? '✓ Handshake Passed: ' : '✗ Diagnostic Notice: '}</strong>
-              {testResult.message}
+        {/* Live Handshake Diagnostic Tool (SMTP Sending & IMAP Receiving) */}
+        <div className="p-5 bg-blue-50/50 border border-blue-200 rounded-xl space-y-4">
+          <div className="flex items-center gap-2 text-blue-900 font-bold text-sm">
+            <ShieldCheck className="w-4 h-4 text-blue-600" />
+            Hostinger SMTP &amp; IMAP Live Diagnostic Handshake
+          </div>
+          <p className="text-xs text-blue-800 leading-relaxed">
+            Verify both outbound email delivery (SMTP port 465/587) and inbound mailbox synchronization (IMAP port 993) directly against Hostinger mail servers.
+          </p>
+
+          <div className="space-y-3">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 max-w-xl">
+              <input
+                type="email"
+                value={testEmail}
+                onChange={(e) => setTestEmail(e.target.value)}
+                placeholder="Target recipient email for test delivery"
+                className="w-full px-3.5 py-2 text-xs bg-white border border-blue-200 rounded-xl focus:outline-none"
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  if (!testEmail || !testEmail.includes('@')) {
+                    toast.warning('Please enter a valid target email for verification.')
+                    return
+                  }
+                  testMutation.mutate(testEmail)
+                }}
+                disabled={testMutation.isPending}
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer shadow-xs disabled:opacity-50 flex items-center justify-center gap-1.5"
+              >
+                {testMutation.isPending ? (
+                  <>
+                    <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                    <span>Verifying SMTP...</span>
+                  </>
+                ) : (
+                  <>
+                    <Zap className="w-3.5 h-3.5" />
+                    <span>Run SMTP Test (Send)</span>
+                  </>
+                )}
+              </button>
+
+              <button
+                type="button"
+                onClick={handleTestImap}
+                disabled={testingImap}
+                className="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer shadow-xs disabled:opacity-50 flex items-center justify-center gap-1.5"
+              >
+                {testingImap ? (
+                  <>
+                    <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                    <span>Verifying IMAP...</span>
+                  </>
+                ) : (
+                  <>
+                    <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
+                    <span>Run IMAP Test (Receive)</span>
+                  </>
+                )}
+              </button>
             </div>
-          )}
+
+            {testResult && (
+              <div
+                className={`p-3.5 rounded-xl border text-xs ${
+                  testResult.status === 'ok'
+                    ? 'bg-emerald-50 border-emerald-200 text-emerald-900'
+                    : 'bg-rose-50 border-rose-200 text-rose-900'
+                }`}
+              >
+                <strong>{testResult.status === 'ok' ? '✓ SMTP Handshake Passed: ' : '✗ SMTP Diagnostic Notice: '}</strong>
+                {testResult.message}
+              </div>
+            )}
+
+            {imapResult && (
+              <div
+                className={`p-3.5 rounded-xl border text-xs ${
+                  imapResult.status === 'ok'
+                    ? 'bg-emerald-50 border-emerald-200 text-emerald-900'
+                    : 'bg-rose-50 border-rose-200 text-rose-900'
+                }`}
+              >
+                <strong>{imapResult.status === 'ok' ? '✓ IMAP Sync Passed: ' : '✗ IMAP Diagnostic Notice: '}</strong>
+                {imapResult.message}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

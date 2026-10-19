@@ -163,6 +163,31 @@ export const updateIntegrationConfig = async (req, res, next) => {
 
     await Promise.all(opsToRun)
 
+    // Sync SMTP credentials to EmailAccount if updated in Integrations
+    if (
+      updates.sys_smtp_pass &&
+      typeof updates.sys_smtp_pass === 'string' &&
+      updates.sys_smtp_pass.trim() &&
+      !/^•+/.test(updates.sys_smtp_pass.trim())
+    ) {
+      try {
+        const { encryptCredential } = await import('../utils/crypto.js')
+        const enc = encryptCredential(updates.sys_smtp_pass.trim())
+        const targetEmail = (updates.sys_smtp_user || process.env.EMAIL_USER || 'info@snaptech.digital').trim().toLowerCase()
+        await prisma.emailAccount.updateMany({
+          where: {
+            OR: [{ email: targetEmail }, { isDefaultSender: true }],
+          },
+          data: {
+            smtpPasswordEncrypted: enc,
+            imapPasswordEncrypted: enc,
+          },
+        })
+      } catch (e) {
+        console.warn('[integrations] Could not sync SMTP pass to EmailAccount:', e.message)
+      }
+    }
+
     // Reconfigure Cloudinary SDK if cloud keys were updated
     const cloudinaryKeys = [
       'sys_cloudinary_cloud_name',
@@ -244,6 +269,22 @@ export const testSmtpConnection = async (req, res, _next) => {
         update: { value: p },
         create: { key: 'sys_smtp_pass', value: p },
       })
+      try {
+        const { encryptCredential } = await import('../utils/crypto.js')
+        const enc = encryptCredential(p)
+        const targetEmail = (sys_smtp_user || process.env.EMAIL_USER || 'info@snaptech.digital').trim().toLowerCase()
+        await prisma.emailAccount.updateMany({
+          where: {
+            OR: [{ email: targetEmail }, { isDefaultSender: true }],
+          },
+          data: {
+            smtpPasswordEncrypted: enc,
+            imapPasswordEncrypted: enc,
+          },
+        })
+      } catch (e) {
+        console.warn('[integrations] Could not sync test password to EmailAccount:', e.message)
+      }
     }
 
     if (sys_smtp_host && typeof sys_smtp_host === 'string' && sys_smtp_host.trim()) {
