@@ -259,7 +259,7 @@ export async function resolveRoutingForEvent(event, context = {}) {
     // ignore
   }
 
-  let department = 'general'
+  let department
   switch (event) {
     case 'quote.created':
     case 'pricing.quote':
