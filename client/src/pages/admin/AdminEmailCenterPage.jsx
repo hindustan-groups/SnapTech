@@ -1464,17 +1464,15 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
 
             <div>
               <label className="block text-gray-700 font-medium text-xs mb-1">
-                Active Sending Strategy
+                Default Reply-To
               </label>
-              <select
-                value={formData.emailStrategy}
-                onChange={(e) => setFormData({ ...formData, emailStrategy: e.target.value })}
-                className="w-full px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-blue-500 cursor-pointer"
-              >
-                <option value="resend">Resend API (HTTPS Port 443 — Recommended for Render Free tier)</option>
-                <option value="smtp">Hostinger SMTP (Direct Port 465 — Requires Render Paid or VPS)</option>
-                <option value="auto">Auto-detect (Hostinger SMTP with Resend API fallback)</option>
-              </select>
+              <input
+                type="email"
+                value={formData.defaultReplyTo}
+                onChange={(e) => setFormData({ ...formData, defaultReplyTo: e.target.value })}
+                placeholder="info@snaptech.digital"
+                className="w-full px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-blue-500"
+              />
             </div>
           </div>
 
@@ -1519,32 +1517,7 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
                     toast.warning('Please enter a valid target email for verification.')
                     return
                   }
-                  testMutation.mutate({ targetEmail: testEmail, strategy: 'resend' })
-                }}
-                disabled={testMutation.isPending}
-                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer shadow-xs disabled:opacity-50 flex items-center justify-center gap-1.5"
-              >
-                {testMutation.isPending ? (
-                  <>
-                    <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                    <span>Testing...</span>
-                  </>
-                ) : (
-                  <>
-                    <Send className="w-3.5 h-3.5" />
-                    <span>Test Resend API (Port 443)</span>
-                  </>
-                )}
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  if (!testEmail || !testEmail.includes('@')) {
-                    toast.warning('Please enter a valid target email for verification.')
-                    return
-                  }
-                  testMutation.mutate({ targetEmail: testEmail, strategy: 'smtp' })
+                  testMutation.mutate(testEmail)
                 }}
                 disabled={testMutation.isPending}
                 className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer shadow-xs disabled:opacity-50 flex items-center justify-center gap-1.5"
@@ -1557,7 +1530,7 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
                 ) : (
                   <>
                     <Zap className="w-3.5 h-3.5" />
-                    <span>Test SMTP (Port 465)</span>
+                    <span>Run SMTP Test (Send)</span>
                   </>
                 )}
               </button>

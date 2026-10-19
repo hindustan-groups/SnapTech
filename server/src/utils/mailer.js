@@ -54,33 +54,16 @@ export const ROUTING_ALIASES = {
 // ── Strategy Detection ─────────────────────────────────────────
 export function getStrategy() {
   const strategy = (process.env.EMAIL_STRATEGY || env.EMAIL_STRATEGY || '').toLowerCase()
-  if (strategy === 'smtp') return 'smtp'
   if (strategy === 'resend') return 'resend'
+  if (strategy === 'console') return 'console'
 
-  // On Render Free tier, outbound SMTP ports 25, 465, 587 are blocked at the network level.
-  // When running on Render with RESEND_API_KEY available, use Resend (HTTPS Port 443).
-  if (process.env.RENDER && (process.env.RESEND_API_KEY || env.RESEND_API_KEY)) {
-    return 'resend'
+  // In test or development without credentials, use console mock logger
+  if (process.env.NODE_ENV === 'test' || (!process.env.EMAIL_PASS && !env.EMAIL_PASS)) {
+    return 'console'
   }
 
-  // If Hostinger SMTP is configured, prefer Hostinger SMTP
-  const host = (process.env.EMAIL_HOST || env.EMAIL_HOST || '').toLowerCase()
-  if (
-    (process.env.EMAIL_USER || env.EMAIL_USER) &&
-    (process.env.EMAIL_PASS || env.EMAIL_PASS) &&
-    (host.includes('hostinger') || host.includes('titan') || host === 'smtp.hostinger.com')
-  ) {
-    return 'smtp'
-  }
-
-  if (process.env.RESEND_API_KEY || env.RESEND_API_KEY) return 'resend'
-  if (
-    (process.env.EMAIL_USER || env.EMAIL_USER) &&
-    (process.env.EMAIL_PASS || env.EMAIL_PASS)
-  ) {
-    return 'smtp'
-  }
-  return 'console'
+  // Hostinger SMTP is the primary and direct delivery channel for SnapTech Digital
+  return 'smtp'
 }
 
 // ── HTML Escaping for Email Templates ──────────────────────────
@@ -232,12 +215,12 @@ export async function sendViaSMTP(options = {}) {
     }
   }
 
-  const isGmail =
-    host.includes('gmail') ||
-    (host === HOSTINGER_SMTP_HOST && user.toLowerCase().includes('gmail.com') && !accountConfig?.smtpHost && !process.env.EMAIL_HOST) ||
-    host === 'smtp.gmail.com'
+  let finalHost = host
+  // Default to Hostinger SMTP if host is empty or legacy gmail
+  if (!accountConfig?.smtpHost && (!host || host === 'smtp.gmail.com')) {
+    finalHost = HOSTINGER_SMTP_HOST
+  }
 
-  const finalHost = isGmail ? 'smtp.gmail.com' : host
   const finalPort = port === 587 ? 587 : 465
   const isSecure = accountConfig?.smtpSecure !== undefined ? accountConfig.smtpSecure : (finalPort === 465)
 
@@ -248,10 +231,11 @@ export async function sendViaSMTP(options = {}) {
     host: resolvedHostIp,
     port: finalPort,
     secure: isSecure,
+    requireTLS: finalPort === 587,
     auth: { user, pass },
-    connectionTimeout: 15000,
-    greetingTimeout: 15000,
-    socketTimeout: 15000,
+    connectionTimeout: 12000,
+    greetingTimeout: 12000,
+    socketTimeout: 12000,
     family: 4,
     tls: {
       rejectUnauthorized: false,
@@ -277,11 +261,29 @@ export async function sendViaSMTP(options = {}) {
   if (inReplyTo) mailPayload.inReplyTo = inReplyTo
   if (references) mailPayload.references = references
 
-  const info = await transporter.sendMail(mailPayload)
-  return info
+  try {
+    const info = await transporter.sendMail(mailPayload)
+    return info
+  } catch (err) {
+    const isConnTimeout = /timeout|connect|econnrefused|enetunreach|esocket/i.test(err.message)
+    // Automatic port fallback for Hostinger: If port 465 timed out, retry with port 587 (STARTTLS) or vice-versa
+    if (isConnTimeout && (finalHost.includes('hostinger') || finalHost.includes('titan'))) {
+      const altPort = finalPort === 465 ? 587 : 465
+      console.warn(`[mailer] Hostinger SMTP port ${finalPort} connection failed (${err.message}). Retrying on alternate port ${altPort}...`)
+      const altTransportConfig = {
+        ...transportConfig,
+        port: altPort,
+        secure: altPort === 465,
+        requireTLS: altPort === 587,
+      }
+      const altTransporter = nodemailer.createTransport(altTransportConfig)
+      return await altTransporter.sendMail(mailPayload)
+    }
+    throw err
+  }
 }
 
-// ── Direct Sender with Automatic Fallback & Retries ────────────
+// ── Direct Sender with Automatic Retries ───────────────────────
 async function sendEmailDirect(options) {
   const strategy = options.accountConfig ? 'smtp' : getStrategy()
 
@@ -320,28 +322,8 @@ async function sendEmailDirect(options) {
     }
   }
 
-  if (strategy === 'resend') {
-    try {
-      return await executeWithRetry(() => sendViaResend(options))
-    } catch (resendErr) {
-      console.warn('[mailer] Resend send failed, checking SMTP fallback:', resendErr.message)
-      if ((process.env.EMAIL_USER || env.EMAIL_USER) && (process.env.EMAIL_PASS || env.EMAIL_PASS)) {
-        return executeWithRetry(() => sendViaSMTP(options))
-      }
-      throw resendErr
-    }
-  }
-
-  // Default: SMTP
-  try {
-    return await executeWithRetry(() => sendViaSMTP(options))
-  } catch (smtpErr) {
-    console.warn('[mailer] SMTP send failed, checking Resend fallback:', smtpErr.message)
-    if (process.env.RESEND_API_KEY || env.RESEND_API_KEY) {
-      return executeWithRetry(() => sendViaResend(options))
-    }
-    throw smtpErr
-  }
+  // Pure Hostinger SMTP delivery (No Resend mixing)
+  return await executeWithRetry(() => sendViaSMTP(options))
 }
 
 // ── In-Memory Throttled Email Queue ────────────────────────────

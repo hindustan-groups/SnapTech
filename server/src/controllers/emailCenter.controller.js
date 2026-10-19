@@ -637,9 +637,15 @@ export const updateAutomationRule = async (req, res, next) => {
  */
 export const getEmailSettings = async (_req, res, next) => {
   try {
-    const user = process.env.EMAIL_USER || env.EMAIL_USER || VERIFIED_SENDER_MAILBOX
-    const host = process.env.EMAIL_HOST || env.EMAIL_HOST || HOSTINGER_SMTP_HOST
-    const port = parseInt(process.env.EMAIL_PORT || env.EMAIL_PORT || String(HOSTINGER_SMTP_PORT), 10)
+    const dbUser = await prisma.siteSetting.findUnique({ where: { key: 'sys_smtp_user' } }).catch(() => null)
+    const dbHost = await prisma.siteSetting.findUnique({ where: { key: 'sys_smtp_host' } }).catch(() => null)
+    const dbPort = await prisma.siteSetting.findUnique({ where: { key: 'sys_smtp_port' } }).catch(() => null)
+    const dbSenderName = await prisma.siteSetting.findUnique({ where: { key: 'sys_email_sender_name' } }).catch(() => null)
+    const dbReplyTo = await prisma.siteSetting.findUnique({ where: { key: 'sys_email_reply_to' } }).catch(() => null)
+
+    const user = dbUser?.value || process.env.EMAIL_USER || env.EMAIL_USER || VERIFIED_SENDER_MAILBOX
+    const host = dbHost?.value || process.env.EMAIL_HOST || env.EMAIL_HOST || HOSTINGER_SMTP_HOST
+    const port = parseInt(dbPort?.value || process.env.EMAIL_PORT || env.EMAIL_PORT || String(HOSTINGER_SMTP_PORT), 10)
     let hasPass = !!(process.env.EMAIL_PASS || env.EMAIL_PASS)
     if (!hasPass) {
       const dbPass = await prisma.siteSetting.findUnique({ where: { key: 'sys_smtp_pass' } })
@@ -649,8 +655,8 @@ export const getEmailSettings = async (_req, res, next) => {
       const defAcc = await prisma.emailAccount.findFirst({ where: { isDefaultSender: true } })
       if (defAcc?.smtpPasswordEncrypted) hasPass = true
     }
-    const senderName = process.env.EMAIL_SENDER_NAME || 'SnapTech Digital'
-    const defaultReplyTo = process.env.EMAIL_REPLY_TO || user
+    const senderName = dbSenderName?.value || process.env.EMAIL_SENDER_NAME || 'SnapTech Digital'
+    const defaultReplyTo = dbReplyTo?.value || process.env.EMAIL_REPLY_TO || user
 
     // Mask user
     let maskedUser = user
@@ -669,7 +675,7 @@ export const getEmailSettings = async (_req, res, next) => {
         smtpHost: host,
         smtpPort: port,
         isPasswordConfigured: hasPass,
-        activeStrategy: (process.env.EMAIL_STRATEGY || 'smtp').toLowerCase(),
+        activeStrategy: 'smtp',
         aliases: ROUTING_ALIASES,
         hostingerSpec: {
           recommendedHost: HOSTINGER_SMTP_HOST,
@@ -866,7 +872,8 @@ export const updateEmailSettings = async (req, res, next) => {
  * Test Hostinger SMTP handshake & send a verification test email
  */
 export const testEmailConnection = async (req, res) => {
-  const port = parseInt(process.env.EMAIL_PORT || env.EMAIL_PORT || String(HOSTINGER_SMTP_PORT), 10)
+  const dbPort = await prisma.siteSetting.findUnique({ where: { key: 'sys_smtp_port' } }).catch(() => null)
+  const port = parseInt(dbPort?.value || process.env.EMAIL_PORT || env.EMAIL_PORT || String(HOSTINGER_SMTP_PORT), 10)
   try {
     const { targetEmail } = req.body || {}
 
@@ -880,8 +887,11 @@ export const testEmailConnection = async (req, res) => {
       return res.status(400).json({ status: 'error', message: 'A valid test recipient email address is required.' })
     }
 
-    const host = process.env.EMAIL_HOST || env.EMAIL_HOST || HOSTINGER_SMTP_HOST
-    const user = process.env.EMAIL_USER || env.EMAIL_USER || VERIFIED_SENDER_MAILBOX
+    const dbHost = await prisma.siteSetting.findUnique({ where: { key: 'sys_smtp_host' } }).catch(() => null)
+    const dbUser = await prisma.siteSetting.findUnique({ where: { key: 'sys_smtp_user' } }).catch(() => null)
+
+    const host = dbHost?.value || process.env.EMAIL_HOST || env.EMAIL_HOST || HOSTINGER_SMTP_HOST
+    const user = dbUser?.value || process.env.EMAIL_USER || env.EMAIL_USER || VERIFIED_SENDER_MAILBOX
 
     const footerSettings = await fetchEmailFooterSettings(prisma)
 
@@ -902,7 +912,7 @@ export const testEmailConnection = async (req, res) => {
             <p style="margin: 0; font-size: 12px; color: #64748b;">Transport Security: <strong style="color: #16a34a;">SSL / TLS Handshake Verified</strong></p>
           </div>
           <p style="font-size: 13px; color: #475569; line-height: 1.6;">
-            All client inquiries, automated transactional alerts, support tickets, and invoice updates are flowing through this centralized channel.
+            All client inquiries, automated transactional alerts, support tickets, and invoice updates are flowing through this centralized Hostinger channel.
           </p>
         `,
         ctaText: 'Visit Admin Email Center',
@@ -913,35 +923,6 @@ export const testEmailConnection = async (req, res) => {
       event: 'admin.smtp_test',
       templateId: 'smtp_verification',
       metadata: { initiatedBy: req.admin?.email || 'admin' },
-    }
-
-    const targetStrategy = (req.body?.strategy || '').toLowerCase()
-
-    if (targetStrategy === 'resend' || (!user && !process.env.EMAIL_PASS && (process.env.RESEND_API_KEY || env.RESEND_API_KEY))) {
-      const { sendViaResend } = await import('../utils/mailer.js')
-      const result = await sendViaResend(testPayload)
-      await prisma.emailLog.create({
-        data: {
-          recipient,
-          subject: testPayload.subject,
-          sender: 'SnapTech Digital <info@snaptech.digital>',
-          status: 'SENT',
-          event: 'admin.resend_test',
-          templateId: 'resend_verification',
-          metadata: { strategy: 'resend', messageId: result?.messageId },
-        },
-      })
-      return res.json({
-        status: 'ok',
-        message: `Test email sent successfully via Resend API (HTTPS Port 443) to ${recipient}!`,
-        data: {
-          connection: 'SUCCESS',
-          strategy: 'resend',
-          messageId: result?.messageId,
-          testEmailSent: true,
-          recipient,
-        },
-      })
     }
 
     if (process.env.NODE_ENV === 'test' || (!user && !process.env.EMAIL_PASS)) {
@@ -993,14 +974,9 @@ export const testEmailConnection = async (req, res) => {
       // ignore
     }
 
-    let errorDetail = cleanMsg
-    if (/connection timeout|etimedout/i.test(cleanMsg)) {
-      errorDetail = `${cleanMsg} — Outbound port ${port || 465} is blocked by hosting provider. Note: Render Free Tier blocks outbound SMTP ports 25, 465, and 587. Please switch delivery strategy to 'Resend API' (HTTPS Port 443) which works instantly on Render Free tier, or upgrade Render to a paid plan ($7/mo) to unblock direct SMTP.`
-    }
-
     res.status(500).json({
       status: 'error',
-      message: `SMTP Connection / Handshake failed: ${errorDetail}`,
+      message: `SMTP Connection / Handshake failed: ${cleanMsg}. Please verify your Hostinger Webmail user and password.`,
     })
   }
 }
