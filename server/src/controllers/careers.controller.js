@@ -10,6 +10,7 @@ import {
 import { env } from '../config/env.js'
 import { getCache, setCache } from '../utils/cache.js'
 import { verifyRecaptcha } from '../utils/recaptcha.js'
+import { resolveRoutingForEvent } from '../services/email/emailRouting.service.js'
 
 export const getActiveJobs = async (_req, res, next) => {
   try {
@@ -205,23 +206,17 @@ export const submitApplication = async (req, res, next) => {
     )
 
     // ── Send Email Notifications (non-blocking) ───────────────────
-    let rule = null
-    try {
-      rule = await prisma.emailAutomationRule.findFirst({
-        where: { event: 'careers.applied' },
-      })
-    } catch {
-      // ignore
-    }
-
-    const isEnabled = rule ? rule.isEnabled : true
-    const sendCustomerCopy = rule ? rule.sendCustomerCopy : true
-    const sendInternalAlert = rule ? rule.sendInternalAlert : true
-    const internalRouting = rule?.internalRouting || env.ADMIN_EMAIL || 'careers@snaptech.digital'
+    const {
+      internalRecipient,
+      replyTo: applicantReplyTo,
+      isEnabled,
+      sendCustomerCopy,
+      sendInternalAlert,
+    } = await resolveRoutingForEvent('careers.applied')
 
     if (isEnabled) {
       // 1. Email to Recruiting Team
-      if (sendInternalAlert && internalRouting) {
+      if (sendInternalAlert && internalRecipient) {
         const adminMail = jobAdminNotificationTemplate({
           jobTitle: job.title,
           name: fullName,
@@ -231,7 +226,7 @@ export const submitApplication = async (req, res, next) => {
           coverLetter,
         })
         sendEmail({
-          to: internalRouting,
+          to: internalRecipient,
           ...adminMail,
           event: 'careers.applied',
           templateId: 'admin_careers_alert',
@@ -256,7 +251,7 @@ export const submitApplication = async (req, res, next) => {
           event: 'careers.applied',
           templateId: 'careers_application_confirmation',
           idempotencyKey: `careers-${application.id}-applicant`,
-          replyTo: 'careers@snaptech.digital',
+          replyTo: applicantReplyTo,
           isCustomerCopy: true,
           metadata: { applicationId: application.id, role: job.title },
         }).catch((err) => {

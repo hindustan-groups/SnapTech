@@ -37,14 +37,15 @@ export const HOSTINGER_SMTP_PORT = 465
 
 // ── Configurable Routing Aliases ───────────────────────────────
 export const ROUTING_ALIASES = {
-  general: 'hello@snaptech.digital',
-  contact: 'hello@snaptech.digital',
-  hello: 'hello@snaptech.digital',
+  general: 'info@snaptech.digital',
+  contact: 'info@snaptech.digital',
+  hello: 'info@snaptech.digital',
   sales: 'sales@snaptech.digital',
   quotes: 'sales@snaptech.digital',
   support: 'support@snaptech.digital',
   billing: 'billing@snaptech.digital',
   careers: 'careers@snaptech.digital',
+  privacy: 'privacy@snaptech.digital',
   projects: 'projects@snaptech.digital',
   marketing: 'marketing@snaptech.digital',
 }

@@ -50,6 +50,11 @@ import {
   syncAccountMailbox,
   syncAllActiveAccounts,
 } from '../services/email/emailSync.service.js'
+import {
+  getRoutingDiagnostics,
+  updateRoutingConfig,
+} from '../services/email/emailRouting.service.js'
+import { logActivity } from '../utils/activity.js'
 
 /**
  * GET /api/admin/email/stats
@@ -1317,8 +1322,6 @@ export const replyToEmailMessage = async (req, res, next) => {
       footerSettings,
     })
 
-    const senderEmail = accountConfig?.email || req.admin?.email || 'info@snaptech.digital'
-
     const sendResult = await sendEmail({
       to: recipient.toLowerCase(),
       subject: emailPayload.subject,
@@ -1430,3 +1433,50 @@ export const deleteEmailMessage = async (req, res, next) => {
     next(err)
   }
 }
+
+/**
+ * GET /api/admin/email/routing
+ * Retrieve central email routing configuration and mailbox diagnostics
+ */
+export const getEmailRoutingHandler = async (_req, res, next) => {
+  try {
+    const data = await getRoutingDiagnostics()
+    res.json({ status: 'ok', data })
+  } catch (err) {
+    next(err)
+  }
+}
+
+/**
+ * PATCH /api/admin/email/routing
+ * Update central email routing configuration
+ */
+export const updateEmailRoutingHandler = async (req, res, next) => {
+  try {
+    const payload =
+      req.body?.routing && typeof req.body.routing === 'object' ? req.body.routing : req.body
+
+    const updatedRouting = await updateRoutingConfig(payload)
+    await logActivity(
+      req,
+      'UPDATE',
+      'EmailRouting',
+      `Updated central email routing: ${Object.keys(payload).join(', ')}`
+    )
+    const diagnostics = await getRoutingDiagnostics()
+    res.json({
+      status: 'ok',
+      message: 'Central email routing configuration updated successfully.',
+      data: {
+        ...diagnostics,
+        routing: updatedRouting,
+      },
+    })
+  } catch (err) {
+    if (!err.statusCode && !err.status && err.message?.includes('Invalid email')) {
+      err.statusCode = 400
+    }
+    next(err)
+  }
+}
+

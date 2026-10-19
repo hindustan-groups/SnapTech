@@ -116,8 +116,32 @@ const FIELD_GROUPS = [
       },
       {
         key: 'email',
-        label: 'Public Support Email',
-        placeholder: 'contact@yourdomain.com',
+        label: 'Main Business Contact Email (info@snaptech.digital)',
+        placeholder: 'info@snaptech.digital',
+        Icon: Mail,
+      },
+      {
+        key: 'sales_email',
+        label: 'Sales & Quotation Inquiries Email',
+        placeholder: 'sales@snaptech.digital',
+        Icon: Mail,
+      },
+      {
+        key: 'support_email',
+        label: 'Customer Support & Helpdesk Email',
+        placeholder: 'support@snaptech.digital',
+        Icon: Mail,
+      },
+      {
+        key: 'careers_email',
+        label: 'Careers & Recruitment Email',
+        placeholder: 'careers@snaptech.digital',
+        Icon: Mail,
+      },
+      {
+        key: 'privacy_email',
+        label: 'Privacy & Legal Inquiries Email',
+        placeholder: 'privacy@snaptech.digital',
         Icon: Mail,
       },
       {
