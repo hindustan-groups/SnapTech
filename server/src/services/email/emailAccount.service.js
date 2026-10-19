@@ -180,8 +180,8 @@ export async function getInternalAccountWithCredentials(idOrEmail) {
     }
   }
 
-  const effectiveSmtpPass = decryptedSmtpPass || fallbackPass || decryptedImapPass
-  const effectiveImapPass = decryptedImapPass || fallbackPass || decryptedSmtpPass
+  const effectiveSmtpPass = (decryptedSmtpPass || fallbackPass || decryptedImapPass || '').trim().replace(/\s+/g, '')
+  const effectiveImapPass = (decryptedImapPass || fallbackPass || decryptedSmtpPass || '').trim().replace(/\s+/g, '')
 
   return {
     ...account,
@@ -374,9 +374,9 @@ export async function testAccountSmtp(id, targetRecipient = null) {
   if (!account) throw new Error('Account not found.')
 
   const host = account.smtpHost || DEFAULT_HOSTINGER_HOST
-  const port = account.smtpPort || 465
+  const configuredPort = account.smtpPort || 465
   const user = account.smtpUser || account.email
-  const pass = account.smtpPassword
+  const pass = (account.smtpPassword || '').trim().replace(/\s+/g, '')
 
   if (!pass) {
     throw new Error('SMTP password is not configured for this account. Please enter the password and save.')
@@ -384,15 +384,17 @@ export async function testAccountSmtp(id, targetRecipient = null) {
 
   const recipient = (targetRecipient && targetRecipient.trim()) || user
   const resolvedHost = await resolveIpv4Host(host)
+  const isHostinger = host.toLowerCase().includes('hostinger') || host.toLowerCase().includes('titan')
 
-  const transporter = nodemailer.createTransport({
+  const createConfig = (p) => ({
     host: resolvedHost,
-    port,
-    secure: port === 465,
+    port: p,
+    secure: p === 465,
+    requireTLS: p === 587,
     auth: { user, pass },
-    connectionTimeout: 15000,
-    greetingTimeout: 15000,
-    socketTimeout: 15000,
+    connectionTimeout: 8000,
+    greetingTimeout: 8000,
+    socketTimeout: 8000,
     family: 4,
     tls: {
       rejectUnauthorized: false,
@@ -400,34 +402,50 @@ export async function testAccountSmtp(id, targetRecipient = null) {
     },
   })
 
-  try {
-    // Verify connection handshake
+  const sendTestMsg = async (transporter, effectivePort) => {
     await transporter.verify()
-
-    // Send a lightweight test email
     const info = await transporter.sendMail({
       from: `"${account.displayName || 'SnapTech Digital'}" <${account.email}>`,
       to: recipient,
       subject: `✅ SMTP Verification: ${account.email}`,
-      text: `SMTP handshake and delivery test successful for ${account.email} on ${host}:${port}.`,
+      text: `SMTP handshake and delivery test successful for ${account.email} on ${host}:${effectivePort}.`,
       html: `
         <div style="font-family: Arial, sans-serif; padding: 20px; background: #f8fafc; border-radius: 8px;">
           <h3 style="color: #0f172a; margin-top: 0;">SMTP Connection Verified</h3>
           <p style="color: #334155;">The SMTP handshake for <strong>${account.email}</strong> was successful.</p>
-          <p style="font-size: 12px; color: #64748b;">Host: ${host}:${port} | Provider: ${account.provider}</p>
+          <p style="font-size: 12px; color: #64748b;">Host: ${host}:${effectivePort} | Provider: ${account.provider}</p>
         </div>
       `,
     })
-
     return {
       success: true,
       messageId: info.messageId,
       host,
-      port,
+      port: effectivePort,
       recipient,
     }
+  }
+
+  try {
+    const transporter = nodemailer.createTransport(createConfig(configuredPort))
+    return await sendTestMsg(transporter, configuredPort)
   } catch (err) {
+    const isConnTimeout = /timeout|connect|econnrefused|enetunreach|esocket/i.test(err.message)
+    if (isConnTimeout && isHostinger) {
+      const altPort = configuredPort === 465 ? 587 : 465
+      console.warn(`[emailAccount] Hostinger SMTP port ${configuredPort} failed (${err.message}). Retrying on alternate port ${altPort}...`)
+      try {
+        const altTransporter = nodemailer.createTransport(createConfig(altPort))
+        return await sendTestMsg(altTransporter, altPort)
+      } catch {
+        // Fall through to primary error message
+      }
+    }
+
     const cleanMsg = sanitizeErrorMessage(err.message, [pass])
+    if (/invalid login|535|authentication failed|auth/i.test(cleanMsg)) {
+      throw new Error(`Hostinger SMTP Authentication failed: Invalid credentials for ${user}. Please verify your full email address and Hostinger Webmail password.`, { cause: err })
+    }
     throw new Error(`SMTP Handshake/Send failed: ${cleanMsg}`, { cause: err })
   }
 }
@@ -442,7 +460,7 @@ export async function testAccountImap(id) {
   const host = account.imapHost || DEFAULT_HOSTINGER_IMAP_HOST
   const port = account.imapPort || 993
   const user = account.imapUser || account.email
-  const pass = account.imapPassword
+  const pass = (account.imapPassword || '').trim().replace(/\s+/g, '')
 
   if (!pass) {
     throw new Error('IMAP password is not configured for this account. Please enter the password and save.')
@@ -457,8 +475,8 @@ export async function testAccountImap(id) {
     secure: account.imapSecure !== false,
     auth: { user, pass },
     logger: false,
-    connectionTimeout: process.env.NODE_ENV === 'test' ? 1500 : 15000,
-    greetingTimeout: process.env.NODE_ENV === 'test' ? 1500 : 10000,
+    connectionTimeout: process.env.NODE_ENV === 'test' ? 1500 : 8000,
+    greetingTimeout: process.env.NODE_ENV === 'test' ? 1500 : 6000,
     tls: {
       rejectUnauthorized: false,
       servername: host,
@@ -487,6 +505,9 @@ export async function testAccountImap(id) {
     }
   } catch (err) {
     const cleanMsg = sanitizeErrorMessage(err.message, [pass])
+    if (/command failed|authentication failed|login failed|no \[/i.test(cleanMsg)) {
+      throw new Error(`Hostinger IMAP Authentication failed: Invalid credentials for ${user}. Please verify your full email address and Hostinger Webmail password.`, { cause: err })
+    }
     throw new Error(`IMAP Connection failed: ${cleanMsg}`, { cause: err })
   }
 }

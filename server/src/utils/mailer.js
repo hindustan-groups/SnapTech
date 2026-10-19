@@ -54,11 +54,10 @@ export const ROUTING_ALIASES = {
 // ── Strategy Detection ─────────────────────────────────────────
 export function getStrategy() {
   const strategy = (process.env.EMAIL_STRATEGY || env.EMAIL_STRATEGY || '').toLowerCase()
-  if (strategy === 'resend') return 'resend'
   if (strategy === 'console') return 'console'
 
-  // In test or development without credentials, use console mock logger
-  if (process.env.NODE_ENV === 'test' || (!process.env.EMAIL_PASS && !env.EMAIL_PASS)) {
+  // In test environment, use console mock logger
+  if (process.env.NODE_ENV === 'test') {
     return 'console'
   }
 
@@ -215,6 +214,14 @@ export async function sendViaSMTP(options = {}) {
     }
   }
 
+  if (!pass && process.env.NODE_ENV !== 'production') {
+    console.warn('[mailer] No Hostinger SMTP password found in env, SiteSetting, or EmailAccount. Simulating send in development mode.')
+    return { messageId: `dev-no-pass-${Date.now()}` }
+  }
+  if (!pass) {
+    throw new Error('Hostinger SMTP password is not configured. Please configure your Hostinger Webmail password in the admin panel or environment.')
+  }
+
   let finalHost = host
   // Default to Hostinger SMTP if host is empty or legacy gmail
   if (!accountConfig?.smtpHost && (!host || host === 'smtp.gmail.com')) {
@@ -270,14 +277,24 @@ export async function sendViaSMTP(options = {}) {
     if (isConnTimeout && (finalHost.includes('hostinger') || finalHost.includes('titan'))) {
       const altPort = finalPort === 465 ? 587 : 465
       console.warn(`[mailer] Hostinger SMTP port ${finalPort} connection failed (${err.message}). Retrying on alternate port ${altPort}...`)
-      const altTransportConfig = {
-        ...transportConfig,
-        port: altPort,
-        secure: altPort === 465,
-        requireTLS: altPort === 587,
+      try {
+        const altTransportConfig = {
+          ...transportConfig,
+          port: altPort,
+          secure: altPort === 465,
+          requireTLS: altPort === 587,
+        }
+        const altTransporter = nodemailer.createTransport(altTransportConfig)
+        return await altTransporter.sendMail(mailPayload)
+      } catch (retryErr) {
+        if (/invalid login|535|authentication failed|auth/i.test(retryErr.message)) {
+          throw new Error(`Hostinger SMTP Authentication failed: Invalid credentials for ${user}. Please verify your full email address and Hostinger Webmail password.`, { cause: retryErr })
+        }
+        throw retryErr
       }
-      const altTransporter = nodemailer.createTransport(altTransportConfig)
-      return await altTransporter.sendMail(mailPayload)
+    }
+    if (/invalid login|535|authentication failed|auth/i.test(err.message)) {
+      throw new Error(`Hostinger SMTP Authentication failed: Invalid credentials for ${user}. Please verify your full email address and Hostinger Webmail password.`, { cause: err })
     }
     throw err
   }

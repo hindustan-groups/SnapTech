@@ -974,9 +974,14 @@ export const testEmailConnection = async (req, res) => {
       // ignore
     }
 
+    let userFacingMsg = cleanMsg
+    if (/invalid login|535|authentication failed|auth/i.test(cleanMsg)) {
+      userFacingMsg = 'Hostinger SMTP Authentication failed (Error 535). Please verify your password created in Hostinger Webmail/hPanel for info@snaptech.digital (do NOT use a Gmail 16-character App Password).'
+    }
+
     res.status(500).json({
       status: 'error',
-      message: `SMTP Connection / Handshake failed: ${cleanMsg}. Please verify your Hostinger Webmail user and password.`,
+      message: `SMTP Connection / Handshake failed: ${userFacingMsg}`,
     })
   }
 }

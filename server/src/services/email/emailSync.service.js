@@ -98,7 +98,7 @@ export async function syncAccountMailbox(accountId, options = {}) {
     secure: account.imapSecure !== false,
     auth: {
       user: account.imapUser || account.email,
-      pass: account.imapPassword,
+      pass: (account.imapPassword || '').trim().replace(/\s+/g, ''),
     },
     logger: false,
     connectionTimeout: process.env.NODE_ENV === 'test' ? 1500 : 8000,
