@@ -29,7 +29,7 @@ export async function getRecaptchaToken(action = 'contact_form') {
             .catch(reject)
         })
       })
-      if (token && typeof token === 'string') {
+      if (token && typeof token === 'string' && token.trim()) {
         return token
       }
     } catch {

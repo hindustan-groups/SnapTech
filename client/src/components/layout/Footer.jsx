@@ -180,7 +180,12 @@ export default function Footer() {
     } catch (err) {
       setSubState('error')
       setSubError(
-        err.response?.data?.message || err.message || 'Subscription failed. Please try again.'
+        err.response?.data?.message ||
+        (Array.isArray(err.response?.data?.errors)
+          ? err.response.data.errors.map((e) => e.msg || e.message).join(', ')
+          : null) ||
+        err.message ||
+        'Subscription failed. Please try again.'
       )
     }
   }

@@ -389,7 +389,12 @@ export default function ServiceDetailPage() {
     } catch (err) {
       setSubmitError(true)
       setErrorMessage(
-        err.response?.data?.message || err.message || 'Submission failed. Please call us directly.'
+        err.response?.data?.message ||
+        (Array.isArray(err.response?.data?.errors)
+          ? err.response.data.errors.map((e) => e.msg || e.message).join(', ')
+          : null) ||
+        err.message ||
+        'Submission failed. Please call us directly.'
       )
     } finally {
       setSubmitting(false)

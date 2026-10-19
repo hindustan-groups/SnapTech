@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -59,7 +59,6 @@ export default function JobDetailPage() {
   const [file, setFile] = useState(null)
   const [fileError, setFileError] = useState('')
   const [apiError, setApiError] = useState('')
-  const [localLockout, setLocalLockout] = useState(false)
   const [copied, setCopied] = useState(false)
 
   const {
@@ -81,20 +80,6 @@ export default function JobDetailPage() {
 
   // Resolve job from DB
   const job = data?.data || null
-
-  useEffect(() => {
-    if (job?.slug) {
-      const lastSubmit = localStorage.getItem(`last_submit_careers_${job.slug}`)
-      if (lastSubmit) {
-        const timeDiff = Date.now() - parseInt(lastSubmit, 10)
-        const oneDay = 24 * 60 * 60 * 1000
-        if (timeDiff < oneDay) {
-          // eslint-disable-next-line react-hooks/set-state-in-effect
-          setLocalLockout(true)
-        }
-      }
-    }
-  }, [job?.slug])
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0]
@@ -131,13 +116,6 @@ export default function JobDetailPage() {
       setApiError('')
 
       if (!job?.slug) return
-
-      // Double-check lockout
-      const lastSubmit = localStorage.getItem(`last_submit_careers_${job.slug}`)
-      if (lastSubmit && Date.now() - parseInt(lastSubmit, 10) < 24 * 60 * 60 * 1000) {
-        setApiError('You have already applied for this role within the last 24 hours.')
-        return
-      }
 
       if (!file) {
         setFileError('Please upload your resume.')
@@ -176,12 +154,17 @@ export default function JobDetailPage() {
 
       try {
         await applyMutation.mutateAsync(payload)
-        localStorage.setItem(`last_submit_careers_${job.slug}`, Date.now().toString())
-        setLocalLockout(true)
         reset()
         setFile(null)
       } catch (err) {
-        setApiError(err.message || 'Failed to submit application. Please try again.')
+        setApiError(
+          err.response?.data?.message ||
+          (Array.isArray(err.response?.data?.errors)
+            ? err.response.data.errors.map((e) => e.msg || e.message).join(', ')
+            : null) ||
+          err.message ||
+          'Failed to submit application. Please try again.'
+        )
       }
     },
     [job, file, applyMutation, reset]
@@ -454,21 +437,6 @@ export default function JobDetailPage() {
                     >
                       Apply for Another Role
                     </Button>
-                  </div>
-                ) : localLockout ? (
-                  <div className="text-center py-8 space-y-4">
-                    <div className="w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center mx-auto text-amber-600">
-                      <AlertCircle className="w-8 h-8 animate-pulse" />
-                    </div>
-                    <div className="space-y-2">
-                      <h3 className="font-heading text-lg font-bold text-slate-900">
-                        Submission Locked (24h)
-                      </h3>
-                      <p className="text-slate-600 text-xs leading-relaxed px-2">
-                        You have already submitted an application for this role within the last 24
-                        hours. Please wait for our recruiters to review your profile.
-                      </p>
-                    </div>
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

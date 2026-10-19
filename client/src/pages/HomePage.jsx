@@ -29,7 +29,7 @@ export default function HomePage() {
   const [clientPhone, setClientPhone] = useState('')
   const [service, setService] = useState('Web Development')
   const [submitted, setSubmitted] = useState(false)
-  const [submitError, setSubmitError] = useState(false)
+  const [submitError, setSubmitError] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const { data: settingsData } = useSiteSettings()
   const { data: faqsData } = useFaqs()
@@ -53,7 +53,7 @@ export default function HomePage() {
     e.preventDefault()
     if (!name || !email) return
     setSubmitting(true)
-    setSubmitError(false)
+    setSubmitError('')
     try {
       let recaptchaToken = ''
       const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY || document.querySelector('meta[name="recaptcha-site-key"]')?.content
@@ -87,8 +87,15 @@ export default function HomePage() {
         service,
       })
       setSubmitted(true)
-    } catch {
-      setSubmitError(true)
+    } catch (err) {
+      const msg =
+        err.response?.data?.message ||
+        (Array.isArray(err.response?.data?.errors)
+          ? err.response.data.errors.map((e) => e.msg || e.message).join(', ')
+          : null) ||
+        err.message ||
+        'Unable to deliver message right now. Please reach us directly via Phone or WhatsApp.'
+      setSubmitError(msg)
     } finally {
       setSubmitting(false)
     }
@@ -195,11 +202,13 @@ export default function HomePage() {
                       <h3 className="font-heading text-base font-bold text-red-600">
                         Submission Failed
                       </h3>
-                      <p className="text-xs text-slate-500 leading-relaxed">
-                        Unable to deliver message right now. Please reach us directly via Phone or WhatsApp.
+                      <p className="text-xs text-slate-600 leading-relaxed px-3">
+                        {typeof submitError === 'string' && submitError
+                          ? submitError
+                          : 'Unable to deliver message right now. Please reach us directly via Phone or WhatsApp.'}
                       </p>
                       <button
-                        onClick={() => setSubmitError(false)}
+                        onClick={() => setSubmitError('')}
                         className="text-xs text-brand-blue hover:underline cursor-pointer font-bold"
                       >
                         Retry Submission

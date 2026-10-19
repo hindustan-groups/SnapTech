@@ -232,7 +232,14 @@ export default function CostCalculator({ compact = false }) {
       // Navigate to dedicated Thank You page with query params
       navigate(`/thank-you?source=calculator&estimate=${encodeURIComponent('₹' + currentCalculation.grandTotal.toLocaleString('en-IN'))}&type=${encodeURIComponent(currentCalculation.typeObj.name)}&name=${encodeURIComponent(formData.name)}`)
     } catch (err) {
-      setErrorMsg(err.message || 'Unable to submit estimate. Please reach us directly on WhatsApp or Email.')
+      setErrorMsg(
+        err.response?.data?.message ||
+        (Array.isArray(err.response?.data?.errors)
+          ? err.response.data.errors.map((e) => e.msg || e.message).join(', ')
+          : null) ||
+        err.message ||
+        'Unable to submit estimate. Please reach us directly on WhatsApp or Email.'
+      )
     } finally {
       setLoading(false)
     }

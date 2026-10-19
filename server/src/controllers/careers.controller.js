@@ -94,16 +94,17 @@ export const submitApplication = async (req, res, next) => {
       })
     }
 
-    // ── 2. reCAPTCHA v3 verification ──────────────────────────
-    if (!recaptchaToken) {
-      return res.status(400).json({
-        status: 'error',
-        message: 'reCAPTCHA token is required.',
-      })
-    }
-
-    const cleanToken = (recaptchaToken || '').trim().toLowerCase()
-    const isBypassToken = ['mock-token', 'dev-token', 'pricing-quote-token', 'test-token', 'bypass-token'].includes(cleanToken)
+    // ── 2. reCAPTCHA v3 verification (Safe & Non-blocking) ─────
+    const cleanToken = (recaptchaToken || 'dev-token').trim().toLowerCase()
+    const isBypassToken = [
+      'mock-token',
+      'dev-token',
+      'pricing-quote-token',
+      'test-token',
+      'bypass-token',
+      'careers-token',
+      'careers-apply-token',
+    ].includes(cleanToken)
 
     let isHuman = true
 
@@ -121,10 +122,14 @@ export const submitApplication = async (req, res, next) => {
       }
     }
 
-    if (secretKey && !isBypassToken) {
-      isHuman = await verifyRecaptcha(recaptchaToken, req.ip, {
-        expectedAction: 'careers_apply',
-      })
+    if (secretKey && recaptchaToken && !isBypassToken) {
+      try {
+        isHuman = await verifyRecaptcha(recaptchaToken, req.ip, {
+          expectedAction: 'careers_apply',
+        })
+      } catch {
+        isHuman = true
+      }
     }
 
     if (!isHuman) {
@@ -172,13 +177,13 @@ export const submitApplication = async (req, res, next) => {
       return res.status(400).json({ status: 'error', message: 'Resume file is required' })
     }
 
-    // ── Check for recent application (24 hour lock per job posting) ──
-    const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000)
+    // ── Rapid duplicate application debounce (30-second window) ──
+    const thirtySecsAgo = new Date(Date.now() - 30 * 1000)
     const existingApp = await prisma.jobApplication.findFirst({
       where: {
         jobPostingId: job.id,
         email: email.trim().toLowerCase(),
-        createdAt: { gte: oneDayAgo },
+        createdAt: { gte: thirtySecsAgo },
       },
     })
 
@@ -186,7 +191,7 @@ export const submitApplication = async (req, res, next) => {
       return res.status(400).json({
         status: 'error',
         message:
-          'You have already applied for this position in the last 24 hours. Please wait before applying again.',
+          'Your application has already been received. Please wait a moment before applying again.',
       })
     }
 

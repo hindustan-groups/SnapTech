@@ -630,8 +630,15 @@ export default function PricingPage() {
       toast.showSuccess('Thank you! Your quote request has been sent successfully. We will get back to you shortly.')
       setIsQuoteModalOpen(false)
       setQuoteForm({ name: '', email: '', phone: '', message: '' })
-    } catch {
-      toast.showError('Failed to submit quote request. Please try again or reach out via WhatsApp.')
+    } catch (err) {
+      toast.showError(
+        err.response?.data?.message ||
+        (Array.isArray(err.response?.data?.errors)
+          ? err.response.data.errors.map((e) => e.msg || e.message).join(', ')
+          : null) ||
+        err.message ||
+        'Failed to submit quote request. Please try again or reach out via WhatsApp.'
+      )
     } finally {
       setFormSubmitting(false)
     }

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -163,7 +163,6 @@ export default function ContactPage() {
   const [submitState, setSubmitState] = useState('idle')
   const [apiError, setApiError] = useState('')
   const [activeFaq, setActiveFaq] = useState(null)
-  const [localLockout, setLocalLockout] = useState(false)
 
   const { data: servicesData } = useServices()
   const services = servicesData?.data ?? []
@@ -197,28 +196,8 @@ export default function ContactPage() {
     },
   })
 
-  useEffect(() => {
-    const lastSubmit = localStorage.getItem('last_submit_lead')
-    if (lastSubmit) {
-      const timeDiff = Date.now() - parseInt(lastSubmit, 10)
-      const oneDay = 24 * 60 * 60 * 1000
-      if (timeDiff < oneDay) {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setLocalLockout(true)
-      }
-    }
-  }, [])
-
   const onSubmit = useCallback(
     async (data) => {
-      // Check local lockout before calling API
-      const lastSubmit = localStorage.getItem('last_submit_lead')
-      if (lastSubmit && Date.now() - parseInt(lastSubmit, 10) < 24 * 60 * 60 * 1000) {
-        setSubmitState('error')
-        setApiError('You have already submitted an inquiry recently. Please wait 24 hours.')
-        return
-      }
-
       setSubmitState('loading')
       setApiError('')
 
@@ -253,8 +232,6 @@ export default function ContactPage() {
           service: data.serviceInterested || 'general',
         })
 
-        localStorage.setItem('last_submit_lead', Date.now().toString())
-        setLocalLockout(true)
         setSubmitState('success')
         reset()
         // Seamless transition to dedicated Thank You experience
@@ -263,7 +240,14 @@ export default function ContactPage() {
         }, 1200)
       } catch (err) {
         setSubmitState('error')
-        setApiError(err.message || 'Something went wrong. Please try again.')
+        setApiError(
+          err.response?.data?.message ||
+          (Array.isArray(err.response?.data?.errors)
+            ? err.response.data.errors.map((e) => e.msg || e.message).join(', ')
+            : null) ||
+          err.message ||
+          'Something went wrong. Please try again.'
+        )
       }
     },
     [reset, navigate]
@@ -485,21 +469,6 @@ export default function ContactPage() {
                     >
                       Send Another Message
                     </button>
-                  </div>
-                ) : localLockout ? (
-                  <div className="flex flex-col items-center justify-center py-10 text-center gap-5">
-                    <span className="w-16 h-16 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center shadow-inner text-amber-600">
-                      <AlertCircle className="w-8 h-8 animate-pulse" />
-                    </span>
-                    <div>
-                      <h3 className="font-heading text-2xl font-bold text-slate-900 mb-2">
-                        Submission Locked (24h)
-                      </h3>
-                      <p className="text-slate-600 text-xs sm:text-sm max-w-sm leading-relaxed">
-                        You have already submitted an inquiry in the last 24 hours. To prevent duplicate
-                        tickets, our team is currently processing your active request.
-                      </p>
-                    </div>
                   </div>
                 ) : (
                   <>

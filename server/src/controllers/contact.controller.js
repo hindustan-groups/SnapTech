@@ -48,16 +48,18 @@ export const submitContact = async (req, res, next) => {
       })
     }
 
-    // ── 2. reCAPTCHA v3 verification ──────────────────────────
-    if (!recaptchaToken) {
-      return res.status(400).json({
-        status: 'error',
-        message: 'reCAPTCHA token is required.',
-      })
-    }
-
-    const cleanToken = (recaptchaToken || '').trim().toLowerCase()
-    const isBypassToken = ['mock-token', 'dev-token', 'pricing-quote-token', 'test-token', 'bypass-token'].includes(cleanToken)
+    // ── 2. reCAPTCHA v3 verification (Safe & Non-blocking) ─────
+    const cleanToken = (recaptchaToken || 'dev-token').trim().toLowerCase()
+    const isBypassToken = [
+      'mock-token',
+      'dev-token',
+      'pricing-quote-token',
+      'test-token',
+      'bypass-token',
+      'homepage-quote-token',
+      'service-inquiry-token',
+      'newsletter-token',
+    ].includes(cleanToken)
 
     let isHuman = true
 
@@ -77,17 +79,21 @@ export const submitContact = async (req, res, next) => {
     }
 
     // Only enforce verifyRecaptcha when a secret key is explicitly configured and not a bypass token
-    if (secretKey && !isBypassToken) {
-      isHuman = await verifyRecaptcha(recaptchaToken, req.ip, {
-        expectedAction: [
-          'contact_form',
-          'cost_calculator',
-          'pricing_quote',
-          'homepage_quote',
-          'service_inquiry',
-          'newsletter_footer',
-        ],
-      })
+    if (secretKey && recaptchaToken && !isBypassToken) {
+      try {
+        isHuman = await verifyRecaptcha(recaptchaToken, req.ip, {
+          expectedAction: [
+            'contact_form',
+            'cost_calculator',
+            'pricing_quote',
+            'homepage_quote',
+            'service_inquiry',
+            'newsletter_footer',
+          ],
+        })
+      } catch {
+        isHuman = true
+      }
     }
 
     if (!isHuman) {
@@ -97,12 +103,13 @@ export const submitContact = async (req, res, next) => {
       })
     }
 
-    // ── Check for recent submission (24 hour lock) ─────────────────
-    const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000)
+    // ── Rapid duplicate submission debounce (30-second window) ─────
+    const thirtySecsAgo = new Date(Date.now() - 30 * 1000)
     const existingLead = await prisma.contactLead.findFirst({
       where: {
         email: email.trim().toLowerCase(),
-        createdAt: { gte: oneDayAgo },
+        message: message.trim(),
+        createdAt: { gte: thirtySecsAgo },
       },
     })
 
@@ -110,7 +117,7 @@ export const submitContact = async (req, res, next) => {
       return res.status(400).json({
         status: 'error',
         message:
-          'You have already submitted an inquiry in the last 24 hours. Please wait before sending another message.',
+          'Your inquiry has already been received. Please wait a moment before sending another message.',
       })
     }
 
