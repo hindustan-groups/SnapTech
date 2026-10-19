@@ -138,13 +138,16 @@ export async function sendViaResend({ to, subject, html, text, attachments, repl
   const resend = new Resend(apiKey)
 
   let rawFrom = (process.env.EMAIL_FROM || env.EMAIL_FROM || '').trim()
-  if (!rawFrom) {
-    rawFrom = 'SnapTech Digital <onboarding@resend.dev>'
+  if (!rawFrom || rawFrom.includes('onboarding@resend.dev')) {
+    rawFrom = 'SnapTech Digital <info@snaptech.digital>'
   }
   const from = rawFrom.includes('<') ? rawFrom : `SnapTech Digital <${rawFrom}>`
 
   try {
-    const payload = { from, to, subject, html, text, attachments }
+    const payload = { from, to, subject, html, text }
+    if (attachments && Array.isArray(attachments) && attachments.length > 0) {
+      payload.attachments = attachments
+    }
     if (replyTo) payload.reply_to = replyTo
 
     const { data, error } = await resend.emails.send(payload)
@@ -155,15 +158,10 @@ export async function sendViaResend({ to, subject, html, text, attachments, repl
         error.message?.includes('onboarding@resend.dev')
       ) {
         const fallbackFrom = 'SnapTech Digital <onboarding@resend.dev>'
-        const retryResult = await resend.emails.send({
-          from: fallbackFrom,
-          to,
-          subject,
-          html,
-          text,
-          attachments,
-          reply_to: replyTo,
-        })
+        const retryPayload = { from: fallbackFrom, to, subject, html, text }
+        if (payload.attachments) retryPayload.attachments = payload.attachments
+        if (replyTo) retryPayload.reply_to = replyTo
+        const retryResult = await resend.emails.send(retryPayload)
         if (retryResult.error) throw new Error(retryResult.error.message || 'Resend send failed')
         return { messageId: retryResult.data?.id }
       }
@@ -240,9 +238,9 @@ export async function sendViaSMTP(options = {}) {
     secure: isSecure,
     requireTLS: finalPort === 587,
     auth: { user, pass },
-    connectionTimeout: 12000,
-    greetingTimeout: 12000,
-    socketTimeout: 12000,
+    connectionTimeout: 5000,
+    greetingTimeout: 5000,
+    socketTimeout: 5000,
     family: 4,
     tls: {
       rejectUnauthorized: false,
@@ -283,6 +281,9 @@ export async function sendViaSMTP(options = {}) {
           port: altPort,
           secure: altPort === 465,
           requireTLS: altPort === 587,
+          connectionTimeout: 5000,
+          greetingTimeout: 5000,
+          socketTimeout: 5000,
         }
         const altTransporter = nodemailer.createTransport(altTransportConfig)
         return await altTransporter.sendMail(mailPayload)
@@ -300,7 +301,7 @@ export async function sendViaSMTP(options = {}) {
   }
 }
 
-// ── Direct Sender with Automatic Retries ───────────────────────
+// ── Direct Sender with Automatic Retries & HTTPS Gateway Fallback ──────
 async function sendEmailDirect(options) {
   const strategy = options.accountConfig ? 'smtp' : getStrategy()
 
@@ -329,9 +330,9 @@ async function sendEmailDirect(options) {
           /ECONNRESET|ETIMEDOUT|ESOCKETTIMEDOUT|EAI_AGAIN|ENOTFOUND|Connection timeout/i.test(
             err.message
           )
-        if (isTransient && attempts <= 2) {
-          console.warn(`[mailer] Transient error (${err.message}). Retrying in ${attempts * 1000}ms...`)
-          await new Promise((r) => setTimeout(r, attempts * 1000))
+        if (isTransient && attempts <= 1) {
+          console.warn(`[mailer] Transient error (${err.message}). Retrying in 1000ms...`)
+          await new Promise((r) => setTimeout(r, 1000))
           continue
         }
         throw err
@@ -339,8 +340,27 @@ async function sendEmailDirect(options) {
     }
   }
 
-  // Pure Hostinger SMTP delivery (No Resend mixing)
-  return await executeWithRetry(() => sendViaSMTP(options))
+  // 1. Primary: Direct Hostinger SMTP delivery
+  try {
+    return await executeWithRetry(() => sendViaSMTP(options))
+  } catch (smtpErr) {
+    const isConnBlocked =
+      /timeout|connect|econnrefused|enetunreach|esocket|econnreset|etimedout/i.test(
+        smtpErr.message
+      )
+    const resendKey = (process.env.RESEND_API_KEY || env.RESEND_API_KEY || '').trim()
+
+    // When outbound SMTP is firewalled (e.g. Render Free Tier blocks ports 25, 465, 587)
+    // or connection times out, immediately route via verified HTTPS Mail Gateway (port 443)
+    if (isConnBlocked && resendKey) {
+      console.warn(
+        `[mailer] Direct SMTP port connection failed (${smtpErr.message}). Routing seamlessly via verified HTTPS Mail Gateway for info@snaptech.digital...`
+      )
+      return await sendViaResend(options)
+    }
+
+    throw smtpErr
+  }
 }
 
 // ── In-Memory Throttled Email Queue ────────────────────────────

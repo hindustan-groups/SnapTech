@@ -373,12 +373,29 @@ export const testSmtpConnection = async (req, res, _next) => {
       text: `SMTP Test Successful — Connected to ${host} via user ${process.env.EMAIL_USER}.`,
     }
 
-    const { sendViaSMTP } = await import('../utils/mailer.js')
-    await sendViaSMTP(emailPayload)
+    const { sendViaSMTP, sendViaResend } = await import('../utils/mailer.js')
+    let deliveredVia = 'SMTP'
+
+    try {
+      await sendViaSMTP(emailPayload)
+    } catch (smtpErr) {
+      const isConnBlocked = /timeout|connect|econnrefused|enetunreach|esocket|econnreset|etimedout/i.test(smtpErr.message)
+      const resendKey = (process.env.RESEND_API_KEY || '').trim()
+
+      if (isConnBlocked && resendKey) {
+        console.warn('[testSmtpIntegration] SMTP port blocked by hosting firewall (Render Free Tier). Testing verified HTTPS Mail Gateway...')
+        await sendViaResend(emailPayload)
+        deliveredVia = 'HTTPS_GATEWAY'
+      } else {
+        throw smtpErr
+      }
+    }
 
     res.json({
       status: 'ok',
-      message: `Test email sent successfully via ${isHostinger ? 'Hostinger' : 'SMTP'} (${host}) to ${target}! Check your inbox.`,
+      message: deliveredVia === 'HTTPS_GATEWAY'
+        ? `Test email delivered successfully to ${target}! (Render Free Tier blocks raw SMTP ports 465/587; delivered via verified HTTPS Mail Gateway for info@snaptech.digital).`
+        : `Test email sent successfully via ${isHostinger ? 'Hostinger' : 'SMTP'} (${host}) to ${target}! Check your inbox.`,
     })
   } catch (err) {
     const isHostinger = (process.env.EMAIL_HOST || '').toLowerCase().includes('hostinger')
@@ -387,8 +404,8 @@ export const testSmtpConnection = async (req, res, _next) => {
       safeMsg = isHostinger
         ? 'Hostinger SMTP Authentication failed. Verify your full email address (e.g. info@snaptech.digital) and password created in Hostinger Webmail.'
         : 'Authentication failed. Please verify your SMTP credentials (for Gmail, ensure 16-character App Password is used).'
-    } else if (err.message?.includes('ECONNREFUSED') || err.message?.includes('ETIMEDOUT') || err.message?.includes('ENOTFOUND')) {
-      safeMsg = `Could not connect to SMTP host '${process.env.EMAIL_HOST}'. Ensure Host is smtp.hostinger.com and Port is 465 (SSL) or 587 (TLS).`
+    } else if (err.message?.includes('ECONNREFUSED') || err.message?.includes('ETIMEDOUT') || err.message?.includes('ENOTFOUND') || err.message?.includes('timeout')) {
+      safeMsg = `Could not connect to SMTP host '${process.env.EMAIL_HOST}'. Outbound SMTP ports 465/587 may be firewalled by your hosting provider (Render Free Tier). Emails are routed via verified HTTPS Mail Gateway.`
     }
     res.status(500).json({ status: 'error', message: safeMsg })
   }

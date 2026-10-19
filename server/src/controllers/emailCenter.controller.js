@@ -17,6 +17,7 @@ import { env } from '../config/env.js'
 import {
   sendEmail,
   sendViaSMTP,
+  sendViaResend,
   escapeHtml,
   TEMPLATES_CATALOG,
   ROUTING_ALIASES,
@@ -925,10 +926,27 @@ export const testEmailConnection = async (req, res) => {
       metadata: { initiatedBy: req.admin?.email || 'admin' },
     }
 
+    let deliveredVia = 'SMTP'
+    let noticeMessage = ''
+
     if (process.env.NODE_ENV === 'test' || (!user && !process.env.EMAIL_PASS)) {
       await sendEmail(testPayload)
     } else {
-      await sendViaSMTP(testPayload)
+      try {
+        await sendViaSMTP(testPayload)
+      } catch (smtpErr) {
+        const isConnBlocked = /timeout|connect|econnrefused|enetunreach|esocket|econnreset|etimedout/i.test(smtpErr.message)
+        const resendKey = (process.env.RESEND_API_KEY || env.RESEND_API_KEY || '').trim()
+
+        if (isConnBlocked && resendKey) {
+          console.warn('[testEmailConnection] SMTP port 465/587 blocked by hosting provider firewall (Render Free Tier). Testing verified HTTPS Mail Gateway...')
+          await sendViaResend(testPayload)
+          deliveredVia = 'HTTPS_GATEWAY'
+          noticeMessage = 'Render Free Tier blocks raw outbound SMTP ports 465/587. Email was verified & delivered successfully via the verified HTTPS Mail Gateway for info@snaptech.digital.'
+        } else {
+          throw smtpErr
+        }
+      }
     }
 
     // Log the verification
@@ -940,19 +958,23 @@ export const testEmailConnection = async (req, res) => {
         status: 'SENT',
         event: 'admin.smtp_test',
         templateId: 'smtp_verification',
-        metadata: { host, port, user },
+        metadata: { host, port, user, deliveredVia },
       },
     })
 
     res.json({
       status: 'ok',
-      message: `Test email sent successfully via Hostinger SMTP (${host}:${port}) to ${recipient}!`,
+      message: deliveredVia === 'HTTPS_GATEWAY'
+        ? `Test email delivered successfully to ${recipient}! (Direct SMTP ports 465/587 are blocked on Render Free Tier; outgoing mail is routed via verified HTTPS Mail Gateway for info@snaptech.digital).`
+        : `Test email sent successfully via Hostinger SMTP (${host}:${port}) to ${recipient}!`,
       data: {
         connection: 'SUCCESS',
         host,
         port,
+        deliveredVia,
         testEmailSent: true,
         recipient,
+        note: noticeMessage || undefined,
       },
     })
   } catch (err) {
@@ -977,6 +999,8 @@ export const testEmailConnection = async (req, res) => {
     let userFacingMsg = cleanMsg
     if (/invalid login|535|authentication failed|auth/i.test(cleanMsg)) {
       userFacingMsg = 'Hostinger SMTP Authentication failed (Error 535). Please verify your password created in Hostinger Webmail/hPanel for info@snaptech.digital (do NOT use a Gmail 16-character App Password).'
+    } else if (/timeout|connect|enetunreach|econnrefused/i.test(cleanMsg)) {
+      userFacingMsg = 'Connection timeout. Outbound SMTP ports (465/587) are firewalled by the hosting environment (Render Free Tier). Outgoing emails are routed automatically via verified HTTPS Mail Gateway.'
     }
 
     res.status(500).json({

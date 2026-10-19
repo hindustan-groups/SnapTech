@@ -1495,10 +1495,13 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
         <div className="p-5 bg-blue-50/50 border border-blue-200 rounded-xl space-y-4">
           <div className="flex items-center gap-2 text-blue-900 font-bold text-sm">
             <ShieldCheck className="w-4 h-4 text-blue-600" />
-            Hostinger SMTP &amp; IMAP Live Diagnostic Handshake
+            Hostinger Mail Delivery &amp; Inbound IMAP Live Diagnostic
           </div>
           <p className="text-xs text-blue-800 leading-relaxed">
-            Verify both outbound email delivery (SMTP port 465/587) and inbound mailbox synchronization (IMAP port 993) directly against Hostinger mail servers.
+            Verify outbound email delivery and inbound mailbox synchronization (IMAP port 993) for <strong>info@snaptech.digital</strong>.
+            <span className="block mt-1 text-[11px] text-blue-700 font-medium">
+              ⚡ Outbound Delivery Note: Cloud platforms like Render Free Tier block raw TCP ports 465/587. In those environments, outgoing emails are automatically and seamlessly delivered via verified HTTPS Mail Gateway (Port 443) using sender <strong>info@snaptech.digital</strong>.
+            </span>
           </p>
 
           <div className="space-y-3">
