@@ -11,7 +11,7 @@
  *  - Technical audit report on Hostinger IMAP vs SMTP inbound feasibility
  */
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   Mail,
@@ -226,6 +226,7 @@ export default function AdminEmailCenterPage() {
 
       {activeTab === 'settings' && (
         <SettingsTab
+          key={settingsData?.data ? `${settingsData.data.verifiedSender || 'loaded'}` : 'loading'}
           settings={settingsData?.data}
           accounts={accountsData?.data || []}
           onSettingsUpdated={() => {
@@ -1248,18 +1249,6 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
     defaultReplyTo: settings?.defaultReplyTo || 'info@snaptech.digital',
   })
 
-  useEffect(() => {
-    if (settings) {
-      setFormData((prev) => ({
-        ...prev,
-        smtpUser: settings.verifiedSender || prev.smtpUser,
-        smtpHost: settings.smtpHost || prev.smtpHost,
-        smtpPort: settings.smtpPort || prev.smtpPort,
-        senderName: settings.senderName || prev.senderName,
-        defaultReplyTo: settings.defaultReplyTo || prev.defaultReplyTo,
-      }))
-    }
-  }, [settings])
 
   const saveMutation = useMutation({
     mutationFn: (data) => api.patch('/admin/email/settings', data),
