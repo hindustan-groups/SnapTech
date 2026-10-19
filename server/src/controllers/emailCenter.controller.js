@@ -45,6 +45,8 @@ import {
   testAccountSmtp,
   testAccountImap,
   getInternalAccountWithCredentials,
+  getDefaultSenderAccount,
+  sanitizeErrorMessage,
 } from '../services/email/emailAccount.service.js'
 import {
   syncAccountMailbox,
@@ -262,7 +264,7 @@ export const sendManualEmail = async (req, res, next) => {
       footerSettings,
     })
 
-    const senderEmail = accountConfig?.email || req.admin?.email || 'admin@snaptech.digital'
+    const senderEmail = accountConfig?.email || req.admin?.email || process.env.EMAIL_USER || VERIFIED_SENDER_MAILBOX
 
     const sendResult = await sendEmail({
       to: targetRecipient.toLowerCase(),
@@ -879,8 +881,9 @@ export const testEmailConnection = async (req, res) => {
       },
     })
   } catch (err) {
-    console.error('[mailer test error]:', err.message)
-    // Safely record failure in emailLog
+    const cleanMsg = sanitizeErrorMessage(err.message, [process.env.EMAIL_PASS])
+    console.error('[mailer test error]:', cleanMsg)
+    // Safely record failure in emailLog without secret leakage
     try {
       await prisma.emailLog.create({
         data: {
@@ -889,7 +892,7 @@ export const testEmailConnection = async (req, res) => {
           sender: process.env.EMAIL_USER || VERIFIED_SENDER_MAILBOX,
           status: 'FAILED',
           event: 'admin.smtp_test',
-          errorMessage: err.message,
+          errorMessage: cleanMsg,
         },
       })
     } catch {
@@ -898,7 +901,35 @@ export const testEmailConnection = async (req, res) => {
 
     res.status(500).json({
       status: 'error',
-      message: `SMTP Connection / Handshake failed: ${err.message}. Please verify your Hostinger Webmail user and password.`,
+      message: `SMTP Connection / Handshake failed: ${cleanMsg}. Please verify your Hostinger Webmail user and password.`,
+    })
+  }
+}
+
+/**
+ * POST /api/admin/email/test-imap
+ * Test the primary mailbox IMAP connection & credentials directly
+ */
+export const testPrimaryImapHandler = async (_req, res) => {
+  try {
+    const defaultAccount = await getDefaultSenderAccount()
+    if (!defaultAccount) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'No active email account configured for IMAP test. Please configure an account in Email Accounts.',
+      })
+    }
+    const result = await testAccountImap(defaultAccount.id)
+    res.json({
+      status: 'ok',
+      message: `IMAP connection handshake & mailbox authentication verified successfully for ${defaultAccount.email}.`,
+      data: result,
+    })
+  } catch (err) {
+    const cleanMsg = sanitizeErrorMessage(err.message, [process.env.EMAIL_PASS])
+    res.status(400).json({
+      status: 'error',
+      message: cleanMsg,
     })
   }
 }

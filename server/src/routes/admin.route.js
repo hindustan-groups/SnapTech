@@ -155,6 +155,7 @@ import {
   getEmailSettings,
   updateEmailSettings,
   testEmailConnection,
+  testPrimaryImapHandler,
   getEligibleRecipients,
   listEmailAccounts,
   getEmailAccountById,
@@ -832,6 +833,7 @@ router.patch('/email/rules/:id', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'
 router.get('/email/settings', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), getEmailSettings)
 router.patch('/email/settings', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), updateEmailSettings)
 router.post('/email/test', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), testEmailConnection)
+router.post('/email/test-imap', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), testPrimaryImapHandler)
 router.get('/email/recipients', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), getEligibleRecipients)
 
 // Central Email & Contact Routing

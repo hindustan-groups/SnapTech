@@ -3,6 +3,7 @@
  */
 import prisma from '../config/db.js'
 import { sendEmail, clientPaymentSuccessTemplate } from '../utils/mailer.js'
+import { resolveRoutingForEvent } from '../services/email/emailRouting.service.js'
 
 // ── CLIENT PORTAL ACTIONS ────────────────────────────────────────
 
@@ -80,6 +81,7 @@ export const simulatePayment = async (req, res, next) => {
     const projectName = milestone.clientProject?.projectTitle || 'Project'
 
     if (clientEmail) {
+      const routing = await resolveRoutingForEvent('payment.verified')
       const emailOptions = clientPaymentSuccessTemplate({
         clientName,
         projectName,
@@ -96,7 +98,7 @@ export const simulatePayment = async (req, res, next) => {
         event: 'payment.verified',
         templateId: 'verified_payment_confirmation',
         idempotencyKey: `pay-verified-${id}`,
-        replyTo: 'billing@snaptech.digital',
+        replyTo: routing.replyTo || 'billing@snaptech.digital',
         isCustomerCopy: true,
         metadata: { milestoneId: id, amount: milestone.amount, projectName },
       }).catch((err) => console.error('Payment email dispatch failed:', err.message))
@@ -214,26 +216,28 @@ export const updateBillingMilestone = async (req, res, next) => {
       }).then((fullMilestone) => {
         const clientEmail = fullMilestone?.clientProject?.client?.email
         if (clientEmail) {
-          const emailOptions = clientPaymentSuccessTemplate({
-            clientName: fullMilestone.clientProject.client.name || 'Client',
-            projectName: fullMilestone.clientProject.projectTitle || 'Project',
-            milestoneTitle: fullMilestone.title,
-            amount: fullMilestone.amount,
-            invoiceUrl: `${process.env.CLIENT_URL || 'https://www.snaptech.digital'}/client/invoices/${id}`,
-          })
+          resolveRoutingForEvent('payment.verified').then((routing) => {
+            const emailOptions = clientPaymentSuccessTemplate({
+              clientName: fullMilestone.clientProject.client.name || 'Client',
+              projectName: fullMilestone.clientProject.projectTitle || 'Project',
+              milestoneTitle: fullMilestone.title,
+              amount: fullMilestone.amount,
+              invoiceUrl: `${process.env.CLIENT_URL || 'https://www.snaptech.digital'}/client/invoices/${id}`,
+            })
 
-          sendEmail({
-            to: clientEmail,
-            subject: emailOptions.subject,
-            html: emailOptions.html,
-            text: emailOptions.text,
-            event: 'payment.verified',
-            templateId: 'verified_payment_confirmation',
-            idempotencyKey: `pay-admin-verified-${id}`,
-            replyTo: 'billing@snaptech.digital',
-            isCustomerCopy: true,
-            metadata: { milestoneId: id, amount: fullMilestone.amount, adminTriggered: true },
-          }).catch((err) => console.error('Admin mark payment email dispatch failed:', err.message))
+            sendEmail({
+              to: clientEmail,
+              subject: emailOptions.subject,
+              html: emailOptions.html,
+              text: emailOptions.text,
+              event: 'payment.verified',
+              templateId: 'verified_payment_confirmation',
+              idempotencyKey: `pay-admin-verified-${id}`,
+              replyTo: routing.replyTo || 'billing@snaptech.digital',
+              isCustomerCopy: true,
+              metadata: { milestoneId: id, amount: fullMilestone.amount, adminTriggered: true },
+            }).catch((err) => console.error('Admin mark payment email dispatch failed:', err.message))
+          }).catch((err) => console.error('Failed to resolve routing for payment email:', err.message))
         }
       }).catch((err) => console.error('Failed to retrieve client details for email dispatch:', err.message))
     }

@@ -343,6 +343,7 @@ export async function getRoutingDiagnostics() {
 
   const roles = [
     { key: 'general', label: 'General Enquiries & Contact', address: routing.general },
+    { key: 'admin', label: 'Admin (admin@snaptech.digital)', address: 'admin@snaptech.digital' },
     { key: 'sales', label: 'Sales, Quotes & Proposals', address: routing.sales },
     { key: 'support', label: 'Client Support & Helpdesk', address: routing.support },
     { key: 'careers', label: 'Careers & Recruitment', address: routing.careers },
@@ -386,7 +387,7 @@ export async function getRoutingDiagnostics() {
       status: 'FORWARDED',
       isPrimaryDomain,
       accountId: null,
-      note: `Departmental alias routing through Reply-To headers. In Hostinger hPanel, create a forwarder: ${r.address} ➔ ${routing.general}.`,
+      note: `Departmental alias/forwarder routing via Reply-To. In Hostinger hPanel, configure forwarder: ${r.address} ➔ ${routing.general}.`,
       advice: `Route via zero-cost Hostinger forwarder (${r.address} -> ${routing.general}).`,
     }
   })
@@ -400,9 +401,14 @@ export async function getRoutingDiagnostics() {
     spfRecord: 'v=spf1 include:_spf.mail.hostinger.com include:_spf.reach.hostinger.com ~all',
     dmarcConfigured: true,
     dmarcRecord: 'v=DMARC1; p=none',
+    dkimConfigured: false,
+    dkimRecord: null,
+    dkimGuidance: 'DKIM TXT record not found in DNS for snaptech.digital. Enable DKIM in Hostinger hPanel (Emails -> snaptech.digital -> DKIM) and publish the selector TXT record in Hostinger DNS zone to prevent Gmail/Yahoo spam filtering.',
   }
 
-  const warnings = []
+  const warnings = [
+    'DKIM record is pending in DNS for snaptech.digital. Outgoing emails may experience DMARC alignment issues or spam filtering until Hostinger DKIM TXT record is published in DNS.',
+  ]
   rawDiagnostics.forEach((d) => {
     if (!d.isPrimaryDomain) {
       warnings.push(`Address '${d.address}' for ${d.label} is outside '@snaptech.digital'. Delivery may fail SPF alignment if forwarded without SRS.`)

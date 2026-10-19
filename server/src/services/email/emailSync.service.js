@@ -13,7 +13,7 @@
 
 import { simpleParser } from 'mailparser'
 import prisma from '../../config/db.js'
-import { getInternalAccountWithCredentials } from './emailAccount.service.js'
+import { getInternalAccountWithCredentials, sanitizeErrorMessage } from './emailAccount.service.js'
 
 // In-memory sync locks to prevent concurrent runs on the same mailbox
 const activeSyncLocks = new Set()
@@ -136,9 +136,15 @@ export async function syncAccountMailbox(accountId, options = {}) {
       // In ImapFlow, client.search returns array of UIDs matching criteria
       const uids = await client.search(searchCriteria, { uid: true })
 
-      if (Array.isArray(uids) && uids.length > 0) {
+      // When searching uid: 'N:*', IMAP returns the highest UID if N > highest UID.
+      // Filter out UIDs that are <= maxUid unless this is an explicit full resync.
+      const freshUids = (Array.isArray(uids) ? uids : []).filter(
+        (u) => options.fullResync || maxUid === 0 || u > maxUid
+      )
+
+      if (freshUids.length > 0) {
         // Limit to newest N messages
-        const targetUids = uids.slice(-limit)
+        const targetUids = freshUids.slice(-limit)
 
         for await (const msg of client.fetch(targetUids, { source: true, uid: true, flags: true })) {
           if (!msg.source) continue
@@ -261,20 +267,21 @@ export async function syncAccountMailbox(accountId, options = {}) {
       lastUid: maxUid,
     }
   } catch (err) {
-    console.error(`[emailSync] Error syncing account ${account.email}:`, err.message)
+    const cleanError = sanitizeErrorMessage(err.message, [account.imapPassword])
+    console.error(`[emailSync] Error syncing account ${account.email}:`, cleanError)
 
     await prisma.emailAccount.update({
       where: { id: account.id },
       data: {
         lastSyncAt: new Date(),
         lastSyncStatus: 'FAILED',
-        lastSyncError: err.message?.slice(0, 500) || 'Unknown IMAP sync failure',
+        lastSyncError: cleanError,
       },
     }).catch(() => {})
 
     return {
       status: 'FAILED',
-      error: err.message,
+      error: cleanError,
       syncedCount,
     }
   } finally {
