@@ -866,6 +866,7 @@ export const updateEmailSettings = async (req, res, next) => {
  * Test Hostinger SMTP handshake & send a verification test email
  */
 export const testEmailConnection = async (req, res) => {
+  const port = parseInt(process.env.EMAIL_PORT || env.EMAIL_PORT || String(HOSTINGER_SMTP_PORT), 10)
   try {
     const { targetEmail } = req.body || {}
 
@@ -881,7 +882,6 @@ export const testEmailConnection = async (req, res) => {
 
     const host = process.env.EMAIL_HOST || env.EMAIL_HOST || HOSTINGER_SMTP_HOST
     const user = process.env.EMAIL_USER || env.EMAIL_USER || VERIFIED_SENDER_MAILBOX
-    const port = parseInt(process.env.EMAIL_PORT || env.EMAIL_PORT || String(HOSTINGER_SMTP_PORT), 10)
 
     const footerSettings = await fetchEmailFooterSettings(prisma)
 
@@ -913,6 +913,35 @@ export const testEmailConnection = async (req, res) => {
       event: 'admin.smtp_test',
       templateId: 'smtp_verification',
       metadata: { initiatedBy: req.admin?.email || 'admin' },
+    }
+
+    const targetStrategy = (req.body?.strategy || '').toLowerCase()
+
+    if (targetStrategy === 'resend' || (!user && !process.env.EMAIL_PASS && (process.env.RESEND_API_KEY || env.RESEND_API_KEY))) {
+      const { sendViaResend } = await import('../utils/mailer.js')
+      const result = await sendViaResend(testPayload)
+      await prisma.emailLog.create({
+        data: {
+          recipient,
+          subject: testPayload.subject,
+          sender: 'SnapTech Digital <info@snaptech.digital>',
+          status: 'SENT',
+          event: 'admin.resend_test',
+          templateId: 'resend_verification',
+          metadata: { strategy: 'resend', messageId: result?.messageId },
+        },
+      })
+      return res.json({
+        status: 'ok',
+        message: `Test email sent successfully via Resend API (HTTPS Port 443) to ${recipient}!`,
+        data: {
+          connection: 'SUCCESS',
+          strategy: 'resend',
+          messageId: result?.messageId,
+          testEmailSent: true,
+          recipient,
+        },
+      })
     }
 
     if (process.env.NODE_ENV === 'test' || (!user && !process.env.EMAIL_PASS)) {
@@ -964,9 +993,14 @@ export const testEmailConnection = async (req, res) => {
       // ignore
     }
 
+    let errorDetail = cleanMsg
+    if (/connection timeout|etimedout/i.test(cleanMsg)) {
+      errorDetail = `${cleanMsg} — Outbound port ${port || 465} is blocked by hosting provider. Note: Render Free Tier blocks outbound SMTP ports 25, 465, and 587. Please switch delivery strategy to 'Resend API' (HTTPS Port 443) which works instantly on Render Free tier, or upgrade Render to a paid plan ($7/mo) to unblock direct SMTP.`
+    }
+
     res.status(500).json({
       status: 'error',
-      message: `SMTP Connection / Handshake failed: ${cleanMsg}. Please verify your Hostinger Webmail user and password.`,
+      message: `SMTP Connection / Handshake failed: ${errorDetail}`,
     })
   }
 }

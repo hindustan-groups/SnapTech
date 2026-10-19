@@ -57,6 +57,12 @@ export function getStrategy() {
   if (strategy === 'smtp') return 'smtp'
   if (strategy === 'resend') return 'resend'
 
+  // On Render Free tier, outbound SMTP ports 25, 465, 587 are blocked at the network level.
+  // When running on Render with RESEND_API_KEY available, use Resend (HTTPS Port 443).
+  if (process.env.RENDER && (process.env.RESEND_API_KEY || env.RESEND_API_KEY)) {
+    return 'resend'
+  }
+
   // If Hostinger SMTP is configured, prefer Hostinger SMTP
   const host = (process.env.EMAIL_HOST || env.EMAIL_HOST || '').toLowerCase()
   if (
