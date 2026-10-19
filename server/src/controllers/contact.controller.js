@@ -10,9 +10,9 @@
  */
 
 import prisma from '../config/db.js'
-import { env } from '../config/env.js'
 import { sendEmail, adminNotificationTemplate, autoReplyTemplate } from '../utils/mailer.js'
 import { verifyRecaptcha } from '../utils/recaptcha.js'
+import { resolveRoutingForEvent } from '../services/email/emailRouting.service.js'
 
 /**
  * POST /api/contact
@@ -124,25 +124,13 @@ export const submitContact = async (req, res, next) => {
     )
     const eventName = isQuote ? 'quote.created' : 'lead.created'
 
-    let rule = null
-    try {
-      rule = await prisma.emailAutomationRule.findFirst({
-        where: { event: eventName },
-      })
-    } catch {
-      // ignore
-    }
-
-    const isEnabled = rule ? rule.isEnabled : true
-    const sendCustomerCopy = rule ? rule.sendCustomerCopy : true
-    const sendInternalAlert = rule ? rule.sendInternalAlert : true
-    const internalRouting =
-      rule?.internalRouting ||
-      (isQuote
-        ? 'sales@snaptech.digital'
-        : env.EMAIL_FROM
-          ? env.EMAIL_FROM.replace(/.*<(.+)>/, '$1')
-          : env.EMAIL_USER || 'info@snaptech.digital')
+    const {
+      internalRecipient,
+      replyTo: customerReplyTo,
+      isEnabled,
+      sendCustomerCopy,
+      sendInternalAlert,
+    } = await resolveRoutingForEvent(eventName, { isQuote })
 
     if (isEnabled) {
       const adminEmail = adminNotificationTemplate({
@@ -158,10 +146,10 @@ export const submitContact = async (req, res, next) => {
 
       const emailPromises = []
 
-      if (sendInternalAlert && internalRouting) {
+      if (sendInternalAlert && internalRecipient) {
         emailPromises.push(
           sendEmail({
-            to: internalRouting,
+            to: internalRecipient,
             ...adminEmail,
             event: eventName,
             templateId: 'admin_lead_alert',
@@ -182,7 +170,7 @@ export const submitContact = async (req, res, next) => {
             event: eventName,
             templateId: isQuote ? 'quote_confirmation' : 'inquiry_confirmation',
             idempotencyKey: `lead-${lead.id}-client`,
-            replyTo: isQuote ? 'sales@snaptech.digital' : 'hello@snaptech.digital',
+            replyTo: customerReplyTo,
             isCustomerCopy: true,
             leadId: lead.id,
             metadata: { leadId: lead.id, serviceInterested },

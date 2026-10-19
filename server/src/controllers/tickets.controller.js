@@ -5,6 +5,7 @@ import prisma from '../config/db.js'
 import { sendEmail, supportTicketCreatedTemplate, supportTicketReplyTemplate, ticketAssignmentTemplate } from '../utils/mailer.js'
 import { env } from '../config/env.js'
 import { uploadToCloudinary } from '../utils/cloudinary.js'
+import { resolveRoutingForEvent } from '../services/email/emailRouting.service.js'
 
 // ── CLIENT PORTAL ACTIONS ────────────────────────────────────────
 
@@ -54,7 +55,7 @@ export const createTicket = async (req, res, next) => {
     prisma.client.findUnique({
       where: { id: clientId },
       select: { name: true }
-    }).then((client) => {
+    }).then(async (client) => {
       const emailOptions = supportTicketCreatedTemplate({
         clientName: client?.name || 'Client',
         ticketId: result.ticket.id,
@@ -63,16 +64,16 @@ export const createTicket = async (req, res, next) => {
         message: description,
       })
 
-      const adminEmail = env.EMAIL_USER || 'support@snaptech.digital'
+      const routing = await resolveRoutingForEvent('ticket.created')
       sendEmail({
-        to: adminEmail,
+        to: routing.internalRecipient || 'support@snaptech.digital',
         subject: emailOptions.subject,
         html: emailOptions.html,
         text: emailOptions.text,
         event: 'ticket.created',
         templateId: 'support_ticket_confirmation',
         idempotencyKey: `ticket-${result.ticket.id}-alert`,
-        replyTo: 'support@snaptech.digital',
+        replyTo: routing.replyTo || 'support@snaptech.digital',
         isInternalAlert: true,
         metadata: { ticketId: result.ticket.id, category: result.ticket.category },
       }).catch((err) => console.error('Admin ticket email dispatch failed:', err.message))
@@ -364,6 +365,7 @@ export const replyToTicketFromAdmin = async (req, res, next) => {
         portalUrl: `${process.env.CLIENT_URL || 'https://www.snaptech.digital'}/client/support`,
       })
 
+      const routing = await resolveRoutingForEvent('ticket.reply')
       sendEmail({
         to: clientEmail,
         subject: emailOptions.subject,
@@ -371,7 +373,7 @@ export const replyToTicketFromAdmin = async (req, res, next) => {
         text: emailOptions.text,
         event: 'ticket.reply',
         templateId: 'support_ticket_reply',
-        replyTo: 'support@snaptech.digital',
+        replyTo: routing.replyTo || 'support@snaptech.digital',
         isCustomerCopy: true,
         metadata: { ticketId: ticket.id, sender: admin?.role || 'Staff' },
       }).catch((err) => console.error('Client ticket response email dispatch failed:', err.message))

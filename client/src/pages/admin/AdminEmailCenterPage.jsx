@@ -36,21 +36,25 @@ import {
   X,
   AlertTriangle,
   RotateCw,
+  GitFork,
 } from 'lucide-react'
 import { api } from '@/utils/api'
 import { SEO } from '@/components/ui'
 import { useToast } from '@/components/ui/ToastProvider'
 import InboxTab from '@/components/admin/email/InboxTab'
 import AccountsTab from '@/components/admin/email/AccountsTab'
+import RoutingTab from '@/components/admin/email/RoutingTab'
 
 const TABS = [
   { id: 'dashboard', label: 'Dashboard', icon: Zap },
   { id: 'inbox', label: 'Inbox & Messages', icon: Inbox },
   { id: 'accounts', label: 'Email Accounts', icon: Server },
+  { id: 'routing', label: 'Email & Contact Routing', icon: GitFork },
   { id: 'compose', label: 'Compose Email', icon: Send },
   { id: 'templates', label: 'Email Templates', icon: Layers },
   { id: 'rules', label: 'Automation Rules', icon: Sliders },
   { id: 'settings', label: 'Hostinger Gateway', icon: Settings },
+  { id: 'audit', label: 'Inbound Audit Report', icon: Info },
   { id: 'logs', label: 'Delivery Logs', icon: FileText },
 ]
 
@@ -190,6 +194,10 @@ export default function AdminEmailCenterPage() {
         />
       )}
 
+      {activeTab === 'routing' && (
+        <RoutingTab onSwitchToAccounts={() => setActiveTab('accounts')} />
+      )}
+
       {activeTab === 'compose' && (
         <ComposeTab
           templates={templatesData?.data || []}
@@ -217,6 +225,8 @@ export default function AdminEmailCenterPage() {
       {activeTab === 'settings' && (
         <SettingsTab settings={settingsData?.data} />
       )}
+
+      {activeTab === 'audit' && <InboxAuditTab />}
 
       {activeTab === 'logs' && <DeliveryLogsTab />}
     </div>

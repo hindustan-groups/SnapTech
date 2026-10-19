@@ -72,6 +72,15 @@ export const getSettings = async (_req, res, next) => {
         settings[r.key] = r.value
       }
     }
+
+    // Populate normalized public email routing endpoints
+    settings.email = settings.email_routing_general || settings.email || 'info@snaptech.digital'
+    settings.sales_email = settings.email_routing_sales || 'sales@snaptech.digital'
+    settings.support_email = settings.email_routing_support || 'support@snaptech.digital'
+    settings.careers_email = settings.email_routing_careers || 'careers@snaptech.digital'
+    settings.privacy_email = settings.email_routing_privacy || 'privacy@snaptech.digital'
+    settings.billing_email = settings.email_routing_billing || 'billing@snaptech.digital'
+
     res.json({ status: 'ok', data: settings })
   } catch (err) {
     next(err)

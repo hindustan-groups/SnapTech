@@ -211,7 +211,7 @@ describe('Email Center Service — Unit Tests', () => {
 
     it('defines verified alias routing mapping', () => {
       expect(ROUTING_ALIASES).toBeDefined()
-      expect(ROUTING_ALIASES.contact).toBe('hello@snaptech.digital')
+      expect(ROUTING_ALIASES.contact).toBe('info@snaptech.digital')
       expect(ROUTING_ALIASES.quotes).toBe('sales@snaptech.digital')
       expect(ROUTING_ALIASES.support).toBe('support@snaptech.digital')
       expect(ROUTING_ALIASES.billing).toBe('billing@snaptech.digital')

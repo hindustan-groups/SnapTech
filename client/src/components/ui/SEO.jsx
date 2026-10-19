@@ -19,9 +19,11 @@ export const SITE = {
     'SnapTech Digital is the dedicated software and digital innovation division of Hindustan Projects Group, based in Bhilwara, Rajasthan. We build high-performance custom web applications, mobile apps, enterprise ERPs, and cloud architectures for growing businesses across India.',
   phone: '+91 8209604849',
   email: 'info@snaptech.digital',
-  contactEmail: 'contact@snaptech.digital',
+  contactEmail: 'info@snaptech.digital',
+  salesEmail: 'sales@snaptech.digital',
   supportEmail: 'support@snaptech.digital',
   careersEmail: 'careers@snaptech.digital',
+  privacyEmail: 'privacy@snaptech.digital',
   billingEmail: 'billing@snaptech.digital',
   address: {
     street: 'Bhilwara',
@@ -51,6 +53,8 @@ export function organizationSchema(cfg = {}) {
   const parentUrl = cfg.parent_company_url || SITE.parentUrl
   const phone = cfg.phone || SITE.phone
   const email = cfg.email || SITE.email
+  const salesEmail = cfg.sales_email || SITE.salesEmail
+  const supportEmail = cfg.support_email || SITE.supportEmail
   const logo = cfg.logo_url || SITE.logo
 
   const sameAs = [
@@ -82,7 +86,7 @@ export function organizationSchema(cfg = {}) {
       {
         '@type': 'ContactPoint',
         telephone: phone,
-        email: email || SITE.email,
+        email: email,
         contactType: 'customer service',
         availableLanguage: ['English', 'Hindi'],
         areaServed: 'IN',
@@ -90,7 +94,7 @@ export function organizationSchema(cfg = {}) {
       {
         '@type': 'ContactPoint',
         telephone: phone,
-        email: SITE.contactEmail,
+        email: salesEmail,
         contactType: 'sales',
         availableLanguage: ['English', 'Hindi'],
         areaServed: 'IN',
@@ -98,7 +102,7 @@ export function organizationSchema(cfg = {}) {
       {
         '@type': 'ContactPoint',
         telephone: phone,
-        email: SITE.supportEmail,
+        email: supportEmail,
         contactType: 'technical support',
         availableLanguage: ['English', 'Hindi'],
         areaServed: 'IN',

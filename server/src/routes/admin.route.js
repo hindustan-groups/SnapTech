@@ -171,6 +171,8 @@ import {
   replyToEmailMessage,
   createLeadFromEmailMessage,
   deleteEmailMessage,
+  getEmailRoutingHandler,
+  updateEmailRoutingHandler,
 } from '../controllers/emailCenter.controller.js'
 
 // ── CMS Validation Schemas ─────────────────────────────────────
@@ -831,6 +833,10 @@ router.get('/email/settings', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), 
 router.patch('/email/settings', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), updateEmailSettings)
 router.post('/email/test', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), testEmailConnection)
 router.get('/email/recipients', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), getEligibleRecipients)
+
+// Central Email & Contact Routing
+router.get('/email/routing', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), getEmailRoutingHandler)
+router.patch('/email/routing', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), updateEmailRoutingHandler)
 
 // Multi-Account Email Management
 router.get('/email/accounts', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), listEmailAccounts)
