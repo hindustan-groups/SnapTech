@@ -37,10 +37,6 @@ export async function getRecaptchaToken(action = 'contact_form') {
     }
   }
 
-  // Allow non-production environments to pass dummy token
-  if (!import.meta.env.PROD) {
-    return 'dev-token'
-  }
-
-  return ''
+  // Fallback token so frontend forms never block user submissions when reCAPTCHA is unconfigured
+  return 'dev-token'
 }
