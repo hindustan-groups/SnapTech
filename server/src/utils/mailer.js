@@ -29,6 +29,7 @@ import nodemailer from 'nodemailer'
 import { Resend } from 'resend'
 import prisma from '../config/db.js'
 import { env } from '../config/env.js'
+import { resolveIpv4Host } from './dnsHelper.js'
 
 // ── Verified Mailbox & Hostinger Constants ──────────────────────
 export const VERIFIED_SENDER_MAILBOX = 'info@snaptech.digital'
@@ -226,14 +227,19 @@ export async function sendViaSMTP(options = {}) {
   }
 
   const isGmail =
-    host.includes('gmail') || user.toLowerCase().includes('gmail.com') || host === 'smtp.gmail.com'
+    host.includes('gmail') ||
+    (host === HOSTINGER_SMTP_HOST && user.toLowerCase().includes('gmail.com') && !accountConfig?.smtpHost && !process.env.EMAIL_HOST) ||
+    host === 'smtp.gmail.com'
 
   const finalHost = isGmail ? 'smtp.gmail.com' : host
   const finalPort = port === 587 ? 587 : 465
   const isSecure = accountConfig?.smtpSecure !== undefined ? accountConfig.smtpSecure : (finalPort === 465)
 
+  // Resolve to IPv4 to prevent ENETUNREACH in environments lacking IPv6 egress (Render/Docker)
+  const resolvedHostIp = await resolveIpv4Host(finalHost)
+
   const transportConfig = {
-    host: finalHost,
+    host: resolvedHostIp,
     port: finalPort,
     secure: isSecure,
     auth: { user, pass },

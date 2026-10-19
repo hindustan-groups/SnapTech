@@ -1390,9 +1390,17 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
 
             <div>
               <div className="flex items-center justify-between mb-1">
-                <label className="text-gray-700 font-medium text-xs">
-                  Hostinger Mailbox Password *
-                </label>
+                <div className="flex items-center gap-2">
+                  <label className="text-gray-700 font-medium text-xs">
+                    Hostinger Mailbox Password *
+                  </label>
+                  {settings?.isPasswordConfigured && (
+                    <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+                      <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                      Saved &amp; Active
+                    </span>
+                  )}
+                </div>
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
@@ -1406,7 +1414,7 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
                 type={showPassword ? 'text' : 'password'}
                 value={formData.smtpPass}
                 onChange={(e) => setFormData({ ...formData, smtpPass: e.target.value })}
-                placeholder={settings?.isPasswordConfigured ? 'Leave blank to keep current' : 'Enter Hostinger password'}
+                placeholder={settings?.isPasswordConfigured ? '•••••••• (Saved in DB & Runtime — enter to replace)' : 'Enter Hostinger mailbox password'}
                 className="w-full px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs font-mono focus:outline-none focus:border-blue-500"
               />
             </div>

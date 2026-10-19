@@ -14,6 +14,7 @@
 import { simpleParser } from 'mailparser'
 import prisma from '../../config/db.js'
 import { getInternalAccountWithCredentials, sanitizeErrorMessage } from './emailAccount.service.js'
+import { resolveIpv4Host } from '../../utils/dnsHelper.js'
 
 // In-memory sync locks to prevent concurrent runs on the same mailbox
 const activeSyncLocks = new Set()
@@ -88,9 +89,11 @@ export async function syncAccountMailbox(accountId, options = {}) {
   }
 
   const { ImapFlow } = await import('imapflow')
+  const imapHost = account.imapHost || 'imap.hostinger.com'
+  const resolvedHost = await resolveIpv4Host(imapHost)
 
   const client = new ImapFlow({
-    host: account.imapHost || 'imap.hostinger.com',
+    host: resolvedHost,
     port: account.imapPort || 993,
     secure: account.imapSecure !== false,
     auth: {
@@ -102,7 +105,7 @@ export async function syncAccountMailbox(accountId, options = {}) {
     greetingTimeout: process.env.NODE_ENV === 'test' ? 1500 : 5000,
     tls: {
       rejectUnauthorized: false,
-      servername: account.imapHost || 'imap.hostinger.com',
+      servername: imapHost,
     },
   })
 

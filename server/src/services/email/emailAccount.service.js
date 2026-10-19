@@ -15,6 +15,7 @@ import nodemailer from 'nodemailer'
 import prisma from '../../config/db.js'
 import { env } from '../../config/env.js'
 import { encryptCredential, decryptCredential } from '../../utils/crypto.js'
+import { resolveIpv4Host } from '../../utils/dnsHelper.js'
 
 export const DEFAULT_HOSTINGER_HOST = 'smtp.hostinger.com'
 export const DEFAULT_HOSTINGER_IMAP_HOST = 'imap.hostinger.com'
@@ -382,9 +383,10 @@ export async function testAccountSmtp(id, targetRecipient = null) {
   }
 
   const recipient = (targetRecipient && targetRecipient.trim()) || user
+  const resolvedHost = await resolveIpv4Host(host)
 
   const transporter = nodemailer.createTransport({
-    host,
+    host: resolvedHost,
     port,
     secure: port === 465,
     auth: { user, pass },
@@ -446,10 +448,11 @@ export async function testAccountImap(id) {
     throw new Error('IMAP password is not configured for this account. Please enter the password and save.')
   }
 
+  const resolvedHost = await resolveIpv4Host(host)
   const { ImapFlow } = await import('imapflow')
 
   const client = new ImapFlow({
-    host,
+    host: resolvedHost,
     port,
     secure: account.imapSecure !== false,
     auth: { user, pass },

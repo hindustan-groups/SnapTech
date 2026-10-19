@@ -640,7 +640,15 @@ export const getEmailSettings = async (_req, res, next) => {
     const user = process.env.EMAIL_USER || env.EMAIL_USER || VERIFIED_SENDER_MAILBOX
     const host = process.env.EMAIL_HOST || env.EMAIL_HOST || HOSTINGER_SMTP_HOST
     const port = parseInt(process.env.EMAIL_PORT || env.EMAIL_PORT || String(HOSTINGER_SMTP_PORT), 10)
-    const hasPass = !!(process.env.EMAIL_PASS || env.EMAIL_PASS)
+    let hasPass = !!(process.env.EMAIL_PASS || env.EMAIL_PASS)
+    if (!hasPass) {
+      const dbPass = await prisma.siteSetting.findUnique({ where: { key: 'sys_smtp_pass' } })
+      if (dbPass?.value) hasPass = true
+    }
+    if (!hasPass) {
+      const defAcc = await prisma.emailAccount.findFirst({ where: { isDefaultSender: true } })
+      if (defAcc?.smtpPasswordEncrypted) hasPass = true
+    }
     const senderName = process.env.EMAIL_SENDER_NAME || 'SnapTech Digital'
     const defaultReplyTo = process.env.EMAIL_REPLY_TO || user
 
@@ -788,17 +796,41 @@ export const updateEmailSettings = async (req, res, next) => {
       const { encryptCredential } = await import('../utils/crypto.js')
       const encrypted = encryptCredential(val)
       const primaryEmail = (smtpUser || process.env.EMAIL_USER || VERIFIED_SENDER_MAILBOX).trim().toLowerCase()
-      ops.push(
-        prisma.emailAccount.updateMany({
-          where: {
-            OR: [{ email: primaryEmail }, { isDefaultSender: true }],
-          },
-          data: {
-            smtpPasswordEncrypted: encrypted,
-            imapPasswordEncrypted: encrypted,
-          },
-        }).catch(() => {})
-      )
+      const existingAcc = await prisma.emailAccount.findFirst({
+        where: {
+          OR: [{ email: primaryEmail }, { isDefaultSender: true }],
+        },
+      })
+      if (existingAcc) {
+        ops.push(
+          prisma.emailAccount.update({
+            where: { id: existingAcc.id },
+            data: {
+              smtpPasswordEncrypted: encrypted,
+              imapPasswordEncrypted: encrypted,
+            },
+          })
+        )
+      } else {
+        ops.push(
+          prisma.emailAccount.create({
+            data: {
+              email: primaryEmail,
+              displayName: senderName || 'SnapTech Digital',
+              provider: 'HOSTINGER',
+              isDefaultSender: true,
+              smtpHost: smtpHost || 'smtp.hostinger.com',
+              smtpPort: parseInt(smtpPort, 10) || 465,
+              smtpUser: primaryEmail,
+              smtpPasswordEncrypted: encrypted,
+              imapHost: 'imap.hostinger.com',
+              imapPort: 993,
+              imapUser: primaryEmail,
+              imapPasswordEncrypted: encrypted,
+            },
+          })
+        )
+      }
     }
 
     const primaryTarget = (smtpUser || process.env.EMAIL_USER || VERIFIED_SENDER_MAILBOX).trim().toLowerCase()
