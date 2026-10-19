@@ -41,6 +41,8 @@ describe('Admin Email Center API — RBAC & Stealth Verification', () => {
     ['GET', '/api/admin/email/settings'],
     ['POST', '/api/admin/email/send'],
     ['POST', '/api/admin/email/test'],
+    ['GET', '/api/admin/email/accounts'],
+    ['GET', '/api/admin/email/messages'],
   ]
 
   routes.forEach(([method, route]) => {
@@ -233,6 +235,72 @@ describe('Admin Email Center API — ADMIN role operations', () => {
   it('GET /api/admin/email/recipients returns searchable list of recipients', async () => {
     const res = await request(app)
       .get('/api/admin/email/recipients?search=test')
+      .set('Cookie', authCookie('ADMIN'))
+
+    expect(res.status).toBe(200)
+    expect(res.body.status).toBe('ok')
+    expect(Array.isArray(res.body.data)).toBe(true)
+  })
+
+  it('GET /api/admin/email/accounts returns configured mail accounts with masked secrets', async () => {
+    const res = await request(app)
+      .get('/api/admin/email/accounts')
+      .set('Cookie', authCookie('ADMIN'))
+
+    expect(res.status).toBe(200)
+    expect(res.body.status).toBe('ok')
+    expect(Array.isArray(res.body.data)).toBe(true)
+    if (res.body.data.length > 0) {
+      const acct = res.body.data[0]
+      expect(acct).toHaveProperty('email')
+      expect(acct).not.toHaveProperty('smtpPasswordEncrypted')
+      expect(acct).not.toHaveProperty('imapPasswordEncrypted')
+    }
+  })
+
+  it('POST /api/admin/email/accounts creates a new account and enforces validation', async () => {
+    // 1. Validation failure
+    const badRes = await request(app)
+      .post('/api/admin/email/accounts')
+      .set('Cookie', authCookie('ADMIN'))
+      .send({ email: 'not-an-email' })
+    expect(badRes.status).toBe(500)
+
+    // 2. Successful creation
+    const uniqueEmail = `test-inbox-${Date.now()}@snaptech.digital`
+    const goodRes = await request(app)
+      .post('/api/admin/email/accounts')
+      .set('Cookie', authCookie('ADMIN'))
+      .send({
+        email: uniqueEmail,
+        displayName: 'Integration Test Inbox',
+        provider: 'HOSTINGER',
+        smtpPassword: 'SecurePassword123!',
+        imapPassword: 'SecurePassword123!',
+      })
+
+    expect(goodRes.status).toBe(201)
+    expect(goodRes.body.status).toBe('ok')
+    expect(goodRes.body.data.email).toBe(uniqueEmail)
+    expect(goodRes.body.data).not.toHaveProperty('smtpPasswordEncrypted')
+  })
+
+  it('GET /api/admin/email/messages lists messages with folder filtering and pagination', async () => {
+    const res = await request(app)
+      .get('/api/admin/email/messages?folder=INBOX&page=1&limit=10')
+      .set('Cookie', authCookie('ADMIN'))
+
+    expect(res.status).toBe(200)
+    expect(res.body.status).toBe('ok')
+    expect(res.body.data).toHaveProperty('messages')
+    expect(res.body.data).toHaveProperty('pagination')
+    expect(res.body.data).toHaveProperty('unreadCount')
+    expect(Array.isArray(res.body.data.messages)).toBe(true)
+  })
+
+  it('POST /api/admin/email/sync-all triggers batch mailbox synchronization', async () => {
+    const res = await request(app)
+      .post('/api/admin/email/sync-all')
       .set('Cookie', authCookie('ADMIN'))
 
     expect(res.status).toBe(200)

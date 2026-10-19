@@ -1416,6 +1416,67 @@ let mockChatbotInquiries = []
 let mockErrorLogs = []
 let mockPageVisits = []
 let mockEmailLogs = []
+let mockEmailAccounts = [
+  {
+    id: 'acct-primary-info',
+    email: 'info@snaptech.digital',
+    displayName: 'SnapTech Digital Info',
+    provider: 'HOSTINGER',
+    isActive: true,
+    isDefaultSender: true,
+    replyTo: 'info@snaptech.digital',
+    department: 'general',
+    enquiryTypes: ['contact_form', 'service_inquiry', 'general'],
+    smtpHost: 'smtp.hostinger.com',
+    smtpPort: 465,
+    smtpSecure: true,
+    smtpUser: 'info@snaptech.digital',
+    smtpPasswordEncrypted: null,
+    imapHost: 'imap.hostinger.com',
+    imapPort: 993,
+    imapSecure: true,
+    imapUser: 'info@snaptech.digital',
+    imapPasswordEncrypted: null,
+    imapMailbox: 'INBOX',
+    syncEnabled: true,
+    lastSyncAt: null,
+    lastSyncStatus: 'NEVER_SYNCED',
+    lastSyncError: null,
+    syncCursor: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: 'acct-sales',
+    email: 'sales@snaptech.digital',
+    displayName: 'SnapTech Sales & Commercial',
+    provider: 'HOSTINGER',
+    isActive: true,
+    isDefaultSender: false,
+    replyTo: 'sales@snaptech.digital',
+    department: 'sales',
+    enquiryTypes: ['pricing_quote', 'cost_calculator', 'quote'],
+    smtpHost: 'smtp.hostinger.com',
+    smtpPort: 465,
+    smtpSecure: true,
+    smtpUser: 'sales@snaptech.digital',
+    smtpPasswordEncrypted: null,
+    imapHost: 'imap.hostinger.com',
+    imapPort: 993,
+    imapSecure: true,
+    imapUser: 'sales@snaptech.digital',
+    imapPasswordEncrypted: null,
+    imapMailbox: 'INBOX',
+    syncEnabled: true,
+    lastSyncAt: null,
+    lastSyncStatus: 'NEVER_SYNCED',
+    lastSyncError: null,
+    syncCursor: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+]
+let mockEmailMessages = []
 let mockEmailAutomationRules = [
   {
     id: 'rule-lead-created',
@@ -1601,6 +1662,8 @@ function saveMockDb() {
       mockPageVisits,
       mockBlogPosts,
       mockEmailLogs,
+      mockEmailAccounts,
+      mockEmailMessages,
       mockEmailAutomationRules,
     }
     fs.writeFileSync(MOCK_DB_PATH, JSON.stringify(data, null, 2), 'utf8')
@@ -1716,6 +1779,21 @@ function loadMockDb() {
           ...l,
           createdAt: new Date(l.createdAt),
           updatedAt: new Date(l.updatedAt),
+        }))
+      }
+      if (data.mockEmailAccounts && Array.isArray(data.mockEmailAccounts) && data.mockEmailAccounts.length > 0) {
+        mockEmailAccounts = data.mockEmailAccounts.map((a) => ({
+          ...a,
+          createdAt: new Date(a.createdAt),
+          updatedAt: new Date(a.updatedAt),
+        }))
+      }
+      if (data.mockEmailMessages && Array.isArray(data.mockEmailMessages)) {
+        mockEmailMessages = data.mockEmailMessages.map((m) => ({
+          ...m,
+          receivedAt: new Date(m.receivedAt),
+          createdAt: new Date(m.createdAt),
+          updatedAt: new Date(m.updatedAt),
         }))
       }
       if (data.mockEmailAutomationRules && Array.isArray(data.mockEmailAutomationRules) && data.mockEmailAutomationRules.length > 0) {
@@ -2184,6 +2262,333 @@ mockPrisma.emailAutomationRule = {
     return item
   },
   count: async () => mockEmailAutomationRules.length,
+}
+
+mockPrisma.emailAccount = {
+  findMany: async (args) => {
+    let list = [...mockEmailAccounts]
+    if (args?.where) {
+      if (args.where.isActive !== undefined) {
+        list = list.filter((a) => a.isActive === args.where.isActive)
+      }
+      if (args.where.provider) {
+        list = list.filter((a) => a.provider === args.where.provider)
+      }
+      if (args.where.isDefaultSender !== undefined) {
+        list = list.filter((a) => a.isDefaultSender === args.where.isDefaultSender)
+      }
+    }
+    return applyPagination(list, args)
+  },
+  findUnique: async (args) =>
+    mockEmailAccounts.find(
+      (a) =>
+        (args.where?.id && a.id === args.where.id) ||
+        (args.where?.email && a.email.toLowerCase() === args.where.email.toLowerCase())
+    ) || null,
+  findFirst: async (args) => {
+    let list = [...mockEmailAccounts]
+    if (args?.where) {
+      if (args.where.id) {
+        list = list.filter((a) => a.id === args.where.id)
+      }
+      if (args.where.email) {
+        list = list.filter((a) => a.email.toLowerCase() === args.where.email.toLowerCase())
+      }
+      if (args.where.isDefaultSender !== undefined) {
+        list = list.filter((a) => a.isDefaultSender === args.where.isDefaultSender)
+      }
+      if (args.where.isActive !== undefined) {
+        list = list.filter((a) => a.isActive === args.where.isActive)
+      }
+      if (args.where.department) {
+        list = list.filter((a) => a.department === args.where.department)
+      }
+    }
+    return list[0] || null
+  },
+  count: async (args) => {
+    let list = [...mockEmailAccounts]
+    if (args?.where) {
+      if (args.where.isActive !== undefined) {
+        list = list.filter((a) => a.isActive === args.where.isActive)
+      }
+    }
+    return list.length
+  },
+  create: async (args) => {
+    const item = {
+      id: `acct-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+      isActive: true,
+      isDefaultSender: false,
+      enquiryTypes: [],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      ...args.data,
+    }
+    // If set as default sender, unset others
+    if (item.isDefaultSender) {
+      mockEmailAccounts.forEach((a) => {
+        a.isDefaultSender = false
+      })
+    }
+    mockEmailAccounts.push(item)
+    saveMockDb()
+    return item
+  },
+  update: async (args) => {
+    const idx = mockEmailAccounts.findIndex(
+      (a) =>
+        (args.where?.id && a.id === args.where.id) ||
+        (args.where?.email && a.email.toLowerCase() === args.where.email.toLowerCase())
+    )
+    if (idx !== -1) {
+      if (args.data.isDefaultSender) {
+        mockEmailAccounts.forEach((a) => {
+          a.isDefaultSender = false
+        })
+      }
+      mockEmailAccounts[idx] = {
+        ...mockEmailAccounts[idx],
+        ...args.data,
+        updatedAt: new Date(),
+      }
+      saveMockDb()
+      return mockEmailAccounts[idx]
+    }
+    throw new Error('EmailAccount not found')
+  },
+  delete: async (args) => {
+    const idx = mockEmailAccounts.findIndex(
+      (a) =>
+        (args.where?.id && a.id === args.where.id) ||
+        (args.where?.email && a.email.toLowerCase() === args.where.email.toLowerCase())
+    )
+    if (idx !== -1) {
+      const deleted = mockEmailAccounts[idx]
+      mockEmailAccounts = mockEmailAccounts.filter((a) => a.id !== deleted.id)
+      saveMockDb()
+      return deleted
+    }
+    throw new Error('EmailAccount not found')
+  },
+  upsert: async (args) => {
+    const idx = mockEmailAccounts.findIndex(
+      (a) =>
+        (args.where?.id && a.id === args.where.id) ||
+        (args.where?.email && a.email.toLowerCase() === args.where.email.toLowerCase())
+    )
+    if (idx !== -1) {
+      mockEmailAccounts[idx] = {
+        ...mockEmailAccounts[idx],
+        ...args.update,
+        updatedAt: new Date(),
+      }
+      saveMockDb()
+      return mockEmailAccounts[idx]
+    }
+    const item = {
+      id: `acct-${Date.now()}`,
+      isActive: true,
+      isDefaultSender: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      ...args.create,
+    }
+    mockEmailAccounts.push(item)
+    saveMockDb()
+    return item
+  },
+  updateMany: async (args) => {
+    let count = 0
+    mockEmailAccounts.forEach((a) => {
+      let matches = true
+      if (args?.where?.isDefaultSender !== undefined && a.isDefaultSender !== args.where.isDefaultSender) {
+        matches = false
+      }
+      if (args?.where?.id && typeof args.where.id === 'object' && args.where.id.not && a.id === args.where.id.not) {
+        matches = false
+      }
+      if (matches) {
+        Object.assign(a, args.data, { updatedAt: new Date() })
+        count++
+      }
+    })
+    saveMockDb()
+    return { count }
+  },
+  deleteMany: async () => {
+    const count = mockEmailAccounts.length
+    mockEmailAccounts = []
+    saveMockDb()
+    return { count }
+  },
+}
+
+mockPrisma.emailMessage = {
+  findMany: async (args) => {
+    let list = [...mockEmailMessages]
+    if (args?.where) {
+      if (args.where.accountId) {
+        list = list.filter((m) => m.accountId === args.where.accountId)
+      }
+      if (args.where.folder) {
+        list = list.filter((m) => m.folder === args.where.folder)
+      }
+      if (args.where.direction) {
+        list = list.filter((m) => m.direction === args.where.direction)
+      }
+      if (args.where.isRead !== undefined) {
+        list = list.filter((m) => m.isRead === args.where.isRead)
+      }
+      if (args.where.isArchived !== undefined) {
+        list = list.filter((m) => m.isArchived === args.where.isArchived)
+      }
+      if (args.where.leadId) {
+        list = list.filter((m) => m.leadId === args.where.leadId)
+      }
+      if (args.where.threadId) {
+        list = list.filter((m) => m.threadId === args.where.threadId)
+      }
+      if (args.where.fromEmail) {
+        if (typeof args.where.fromEmail === 'string') {
+          list = list.filter((m) => m.fromEmail.toLowerCase() === args.where.fromEmail.toLowerCase())
+        } else if (args.where.fromEmail.contains) {
+          const q = args.where.fromEmail.contains.toLowerCase()
+          list = list.filter((m) => m.fromEmail.toLowerCase().includes(q))
+        }
+      }
+      if (args.where.subject && args.where.subject.contains) {
+        const q = args.where.subject.contains.toLowerCase()
+        list = list.filter((m) => m.subject.toLowerCase().includes(q))
+      }
+    }
+    // Sort newest first
+    list.sort((a, b) => new Date(b.receivedAt || b.createdAt) - new Date(a.receivedAt || a.createdAt))
+    return applyPagination(list, args)
+  },
+  findUnique: async (args) =>
+    mockEmailMessages.find(
+      (m) =>
+        (args.where?.id && m.id === args.where.id) ||
+        (args.where?.messageId && m.messageId === args.where.messageId)
+    ) || null,
+  findFirst: async (args) => {
+    let list = [...mockEmailMessages]
+    if (args?.where) {
+      if (args.where.accountId && args.where.providerUid) {
+        list = list.filter(
+          (m) => m.accountId === args.where.accountId && String(m.providerUid) === String(args.where.providerUid)
+        )
+      }
+      if (args.where.messageId) {
+        list = list.filter((m) => m.messageId === args.where.messageId)
+      }
+      if (args.where.threadId) {
+        list = list.filter((m) => m.threadId === args.where.threadId)
+      }
+      if (args.where.leadId) {
+        list = list.filter((m) => m.leadId === args.where.leadId)
+      }
+    }
+    return list[0] || null
+  },
+  count: async (args) => {
+    let list = [...mockEmailMessages]
+    if (args?.where) {
+      if (args.where.accountId) list = list.filter((m) => m.accountId === args.where.accountId)
+      if (args.where.folder) list = list.filter((m) => m.folder === args.where.folder)
+      if (args.where.direction) list = list.filter((m) => m.direction === args.where.direction)
+      if (args.where.isRead !== undefined) list = list.filter((m) => m.isRead === args.where.isRead)
+      if (args.where.isArchived !== undefined) list = list.filter((m) => m.isArchived === args.where.isArchived)
+    }
+    return list.length
+  },
+  create: async (args) => {
+    const item = {
+      id: `msg-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      direction: 'INBOUND',
+      folder: 'INBOX',
+      isRead: false,
+      isArchived: false,
+      isStarred: false,
+      hasAttachments: false,
+      deliveryStatus: 'DELIVERED',
+      receivedAt: new Date(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      ...args.data,
+    }
+    mockEmailMessages.unshift(item)
+    saveMockDb()
+    return item
+  },
+  createMany: async (args) => {
+    const items = (args.data || []).map((d) => ({
+      id: `msg-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      direction: 'INBOUND',
+      folder: 'INBOX',
+      isRead: false,
+      isArchived: false,
+      isStarred: false,
+      hasAttachments: false,
+      deliveryStatus: 'DELIVERED',
+      receivedAt: new Date(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      ...d,
+    }))
+    mockEmailMessages.unshift(...items)
+    saveMockDb()
+    return { count: items.length }
+  },
+  update: async (args) => {
+    const idx = mockEmailMessages.findIndex((m) => m.id === args.where.id)
+    if (idx !== -1) {
+      mockEmailMessages[idx] = {
+        ...mockEmailMessages[idx],
+        ...args.data,
+        updatedAt: new Date(),
+      }
+      saveMockDb()
+      return mockEmailMessages[idx]
+    }
+    throw new Error('EmailMessage not found')
+  },
+  delete: async (args) => {
+    const idx = mockEmailMessages.findIndex((m) => m.id === args.where.id)
+    if (idx !== -1) {
+      const deleted = mockEmailMessages[idx]
+      mockEmailMessages = mockEmailMessages.filter((m) => m.id !== deleted.id)
+      saveMockDb()
+      return deleted
+    }
+    throw new Error('EmailMessage not found')
+  },
+  deleteMany: async () => {
+    const count = mockEmailMessages.length
+    mockEmailMessages = []
+    saveMockDb()
+    return { count }
+  },
+  updateMany: async (args) => {
+    let count = 0
+    mockEmailMessages.forEach((m) => {
+      let matches = true
+      if (args?.where?.fromEmail && m.fromEmail?.toLowerCase() !== args.where.fromEmail.toLowerCase()) {
+        matches = false
+      }
+      if (args?.where?.leadId === null && m.leadId !== null) {
+        matches = false
+      }
+      if (matches) {
+        Object.assign(m, args.data, { updatedAt: new Date() })
+        count++
+      }
+    })
+    saveMockDb()
+    return { count }
+  },
 }
 
 // ── Smart Connection Resolver ───────────────────────────────

@@ -166,6 +166,25 @@ export function initScheduler() {
       console.error('[Scheduler] Error during weekly log pruning:', err)
     }
   })
+
+  // 6. INCOMING EMAIL IMAP SYNCHRONIZATION & SEEDING (EMAIL-01)
+  // Polls active mailboxes every 5 minutes and ingests new messages.
+  // Skipped in test environment to avoid real network socket connections.
+  if (process.env.NODE_ENV !== 'test') {
+    import('../services/email/emailAccount.service.js')
+      .then(({ ensureDefaultAccounts }) => ensureDefaultAccounts())
+      .catch((err) => console.warn('[Scheduler] Could not ensure default email accounts:', err.message))
+
+    cron.schedule('*/5 * * * *', async () => {
+      try {
+        console.log('[Scheduler] Running 5-minute IMAP mailbox synchronization...')
+        const { syncAllActiveAccounts } = await import('../services/email/emailSync.service.js')
+        await syncAllActiveAccounts()
+      } catch (err) {
+        console.error('[Scheduler] Error during IMAP mailbox sync:', err.message)
+      }
+    })
+  }
 }
 
 /**

@@ -186,6 +186,7 @@ model ContactLead {
   createdAt         DateTime     @default(now())
   updatedAt         DateTime     @updatedAt
   attachments       Attachment[]
+  emailMessages     EmailMessage[]
   deletedAt         DateTime?
 
   @@index([status])
@@ -727,22 +728,126 @@ model EmailLog {
 }
 
 // ─────────────────────────────────────────────────────────────────
+// EmailAccount — Multi-account configuration (Hostinger, Gmail, IMAP/SMTP)
+// ─────────────────────────────────────────────────────────────────
+model EmailAccount {
+  id                    String                @id @default(cuid())
+  email                 String                @unique // e.g. info@snaptech.digital, sales@snaptech.digital
+  displayName           String                // e.g. "SnapTech Digital Info"
+  provider              String                @default("HOSTINGER") // "HOSTINGER" | "GMAIL" | "CUSTOM"
+  isActive              Boolean               @default(true)
+  isDefaultSender       Boolean               @default(false)
+  replyTo               String?
+  department            String?               // "general", "sales", "support", "careers", "billing"
+  enquiryTypes          String[]              @default([]) // mapped lead/enquiry categories
+  
+  // Outbound SMTP connection
+  smtpHost              String?
+  smtpPort              Int?                  @default(465)
+  smtpSecure            Boolean?              @default(true)
+  smtpUser              String?
+  smtpPasswordEncrypted String?
+  
+  // Inbound IMAP connection
+  imapHost              String?
+  imapPort              Int?                  @default(993)
+  imapSecure            Boolean?              @default(true)
+  imapUser              String?
+  imapPasswordEncrypted String?
+  imapMailbox           String?               @default("INBOX")
+  syncEnabled           Boolean               @default(true)
+  lastSyncAt            DateTime?
+  lastSyncStatus        String?               @default("NEVER_SYNCED") // "SUCCESS" | "FAILED" | "SYNCING" | "NEVER_SYNCED"
+  lastSyncError         String?
+  syncCursor            String?               // checkpoint (e.g. UID)
+
+  createdAt             DateTime              @default(now())
+  updatedAt             DateTime              @updatedAt
+
+  messages              EmailMessage[]
+  automationRules       EmailAutomationRule[]
+
+  @@index([email])
+  @@index([isActive])
+  @@index([isDefaultSender])
+  @@map("email_accounts")
+}
+
+// ─────────────────────────────────────────────────────────────────
+// EmailMessage — Inbound & outbound messages linked to leads/accounts
+// ─────────────────────────────────────────────────────────────────
+model EmailMessage {
+  id                  String        @id @default(cuid())
+  accountId           String
+  account             EmailAccount  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  direction           String        @default("INBOUND") // "INBOUND" | "OUTBOUND"
+  folder              String        @default("INBOX")   // "INBOX" | "SENT" | "ARCHIVE" | "TRASH"
+  messageId           String?       // RFC 2822 Message-ID
+  inReplyTo           String?       // In-Reply-To header
+  references          String[]      @default([])
+  threadId            String?       // Conversation grouping identifier
+  from                String
+  fromEmail           String        // Clean normalized email
+  fromName            String?
+  to                  String[]
+  cc                  String[]      @default([])
+  bcc                 String[]      @default([])
+  replyTo             String?
+  subject             String
+  bodyText            String?
+  bodyHtml            String?
+  snippet             String?       // Preview text
+  hasAttachments      Boolean       @default(false)
+  attachmentsMetadata Json?         // [{ filename, contentType, size, id }]
+  isRead              Boolean       @default(false)
+  isArchived          Boolean       @default(false)
+  isStarred           Boolean       @default(false)
+  providerUid         String?       // IMAP UID
+  deliveryStatus      String        @default("DELIVERED") // "RECEIVED" | "SENT" | "FAILED" | "QUEUED"
+  sentAt              DateTime?
+  receivedAt          DateTime      @default(now())
+
+  // CRM Lead Linkage
+  leadId              String?
+  lead                ContactLead?  @relation(fields: [leadId], references: [id], onDelete: SetNull)
+
+  metadata            Json?
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  @@index([accountId])
+  @@index([folder])
+  @@index([direction])
+  @@index([fromEmail])
+  @@index([threadId])
+  @@index([leadId])
+  @@index([receivedAt])
+  @@index([isRead])
+  @@index([accountId, providerUid])
+  @@map("email_messages")
+}
+
+// ─────────────────────────────────────────────────────────────────
 // EmailAutomationRule — Configurable event-to-template automation
 // ─────────────────────────────────────────────────────────────────
 model EmailAutomationRule {
-  id                String   @id @default(cuid())
-  event             String   @unique // e.g. "lead.created", "quote.created", "ticket.created"
+  id                String        @id @default(cuid())
+  event             String        @unique // e.g. "lead.created", "quote.created", "ticket.created"
   title             String
   description       String?
   templateId        String
   internalRouting   String?  // e.g. "info@snaptech.digital", "sales@snaptech.digital"
-  sendCustomerCopy  Boolean  @default(true)
-  sendInternalAlert Boolean  @default(true)
-  isEnabled         Boolean  @default(true)
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  senderAccountId   String?
+  senderAccount     EmailAccount? @relation(fields: [senderAccountId], references: [id], onDelete: SetNull)
+  replyTo           String?
+  sendCustomerCopy  Boolean       @default(true)
+  sendInternalAlert Boolean       @default(true)
+  isEnabled         Boolean       @default(true)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
 
   @@map("email_automation_rules")
 }
+
 
 

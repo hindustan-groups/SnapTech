@@ -40,15 +40,18 @@ import {
 import { api } from '@/utils/api'
 import { SEO } from '@/components/ui'
 import { useToast } from '@/components/ui/ToastProvider'
+import InboxTab from '@/components/admin/email/InboxTab'
+import AccountsTab from '@/components/admin/email/AccountsTab'
 
 const TABS = [
   { id: 'dashboard', label: 'Dashboard', icon: Zap },
+  { id: 'inbox', label: 'Inbox & Messages', icon: Inbox },
+  { id: 'accounts', label: 'Email Accounts', icon: Server },
   { id: 'compose', label: 'Compose Email', icon: Send },
   { id: 'templates', label: 'Email Templates', icon: Layers },
   { id: 'rules', label: 'Automation Rules', icon: Sliders },
-  { id: 'settings', label: 'Email Settings', icon: Settings },
+  { id: 'settings', label: 'Hostinger Gateway', icon: Settings },
   { id: 'logs', label: 'Delivery Logs', icon: FileText },
-  { id: 'inbox-audit', label: 'Mailbox Architecture', icon: Inbox },
 ]
 
 export default function AdminEmailCenterPage() {
@@ -75,6 +78,11 @@ export default function AdminEmailCenterPage() {
   const { data: rulesData, refetch: refetchRules } = useQuery({
     queryKey: ['admin-email-rules'],
     queryFn: () => api.get('/admin/email/rules'),
+  })
+
+  const { data: accountsData, isLoading: accountsLoading, refetch: refetchAccounts } = useQuery({
+    queryKey: ['admin-email-accounts'],
+    queryFn: () => api.get('/admin/email/accounts'),
   })
 
   return (
@@ -111,8 +119,10 @@ export default function AdminEmailCenterPage() {
                 refetchStats()
                 refetchSettings()
                 refetchRules()
+                refetchAccounts()
+                queryClient.invalidateQueries(['admin-email-messages'])
                 queryClient.invalidateQueries(['admin-email-logs'])
-                toast.info('Refreshed email gateway status.')
+                toast.info('Refreshed email gateway & mailbox status.')
               }}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg transition-colors cursor-pointer"
             >
@@ -162,12 +172,33 @@ export default function AdminEmailCenterPage() {
         />
       )}
 
+      {activeTab === 'inbox' && (
+        <InboxTab
+          accounts={accountsData?.data || []}
+          onComposeReply={() => setActiveTab('compose')}
+        />
+      )}
+
+      {activeTab === 'accounts' && (
+        <AccountsTab
+          accounts={accountsData?.data || []}
+          isLoading={accountsLoading}
+          onAccountChanged={() => {
+            refetchAccounts()
+            refetchStats()
+          }}
+        />
+      )}
+
       {activeTab === 'compose' && (
         <ComposeTab
           templates={templatesData?.data || []}
+          accounts={accountsData?.data || []}
           onEmailSent={() => {
             refetchStats()
+            refetchAccounts()
             queryClient.invalidateQueries(['admin-email-logs'])
+            queryClient.invalidateQueries(['admin-email-messages'])
           }}
         />
       )}
@@ -177,7 +208,10 @@ export default function AdminEmailCenterPage() {
       )}
 
       {activeTab === 'rules' && (
-        <AutomationRulesTab rules={rulesData?.data || []} />
+        <AutomationRulesTab
+          rules={rulesData?.data || []}
+          accounts={accountsData?.data || []}
+        />
       )}
 
       {activeTab === 'settings' && (
@@ -185,8 +219,6 @@ export default function AdminEmailCenterPage() {
       )}
 
       {activeTab === 'logs' && <DeliveryLogsTab />}
-
-      {activeTab === 'inbox-audit' && <InboxAuditTab />}
     </div>
   )
 }
@@ -202,87 +234,120 @@ function DashboardTab({ stats, loading, onSwitchTab }) {
     sentToday: 0,
     deliveryRate: 100,
     activeRulesCount: 9,
+    inboxUnreadCount: 0,
+    inboxTotalCount: 0,
+    totalAccounts: 1,
+    activeAccounts: 1,
   }
 
   const recent = stats?.recentActivity || []
 
   return (
     <div className="space-y-6">
-      {/* 4 KPI Metrics */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+      {/* 6 KPI Metrics Grid */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3.5">
+        <div className="bg-white border border-gray-100 rounded-2xl p-4 shadow-xs">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
               Total Sent
             </span>
-            <div className="p-2 bg-emerald-50 text-emerald-600 rounded-xl">
-              <Send className="w-4 h-4" />
+            <div className="p-1.5 bg-emerald-50 text-emerald-600 rounded-lg">
+              <Send className="w-3.5 h-3.5" />
             </div>
           </div>
-          <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-gray-900 font-heading">
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-xl font-bold text-gray-900 font-heading">
               {loading ? '...' : counts.totalSent}
             </span>
-            <span className="text-xs font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">
-              +{counts.sentToday} today
-            </span>
           </div>
-          <p className="mt-1 text-xs text-gray-400">Audited transmissions</p>
+          <p className="mt-1 text-[10px] text-emerald-700 font-medium">+{counts.sentToday} today</p>
         </div>
 
-        <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-              Delivery Success
+        <div className="bg-white border border-gray-100 rounded-2xl p-4 shadow-xs">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
+              Success Rate
             </span>
-            <div className="p-2 bg-blue-50 text-blue-600 rounded-xl">
-              <CheckCircle2 className="w-4 h-4" />
+            <div className="p-1.5 bg-blue-50 text-blue-600 rounded-lg">
+              <CheckCircle2 className="w-3.5 h-3.5" />
             </div>
           </div>
-          <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-gray-900 font-heading">
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-xl font-bold text-gray-900 font-heading">
               {loading ? '...' : `${counts.deliveryRate}%`}
             </span>
           </div>
-          <p className="mt-1 text-xs text-gray-400">Reliable throughput</p>
+          <p className="mt-1 text-[10px] text-gray-400">Reliable output</p>
         </div>
 
-        <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-              Failed / Rejected
+        <div className="bg-white border border-gray-100 rounded-2xl p-4 shadow-xs cursor-pointer hover:border-blue-300 transition-colors" onClick={() => onSwitchTab('inbox')}>
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[10px] font-bold text-blue-700 uppercase tracking-wider">
+              Inbox Unread
             </span>
-            <div className="p-2 bg-rose-50 text-rose-600 rounded-xl">
-              <AlertCircle className="w-4 h-4" />
+            <div className="p-1.5 bg-blue-50 text-blue-600 rounded-lg">
+              <Inbox className="w-3.5 h-3.5" />
             </div>
           </div>
-          <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-gray-900 font-heading">
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-xl font-bold text-blue-700 font-heading">
+              {loading ? '...' : counts.inboxUnreadCount || 0}
+            </span>
+            <span className="text-[10px] text-gray-400">/ {counts.inboxTotalCount || 0}</span>
+          </div>
+          <p className="mt-1 text-[10px] text-blue-600 font-medium">View Incoming &rarr;</p>
+        </div>
+
+        <div className="bg-white border border-gray-100 rounded-2xl p-4 shadow-xs cursor-pointer hover:border-slate-300 transition-colors" onClick={() => onSwitchTab('accounts')}>
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
+              Mail Accounts
+            </span>
+            <div className="p-1.5 bg-purple-50 text-purple-600 rounded-lg">
+              <Server className="w-3.5 h-3.5" />
+            </div>
+          </div>
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-xl font-bold text-gray-900 font-heading">
+              {loading ? '...' : counts.totalAccounts || 1}
+            </span>
+            <span className="text-[10px] text-purple-700 font-medium">({counts.activeAccounts || 1} active)</span>
+          </div>
+          <p className="mt-1 text-[10px] text-purple-600 font-medium">Manage Accounts &rarr;</p>
+        </div>
+
+        <div className="bg-white border border-gray-100 rounded-2xl p-4 shadow-xs">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
+              Failed
+            </span>
+            <div className="p-1.5 bg-rose-50 text-rose-600 rounded-lg">
+              <AlertCircle className="w-3.5 h-3.5" />
+            </div>
+          </div>
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-xl font-bold text-gray-900 font-heading">
               {loading ? '...' : counts.totalFailed}
             </span>
-            <span className="text-xs text-gray-500">transient errors</span>
           </div>
-          <p className="mt-1 text-xs text-gray-400">Auto-retried with backoff</p>
+          <p className="mt-1 text-[10px] text-gray-400">Zero data loss</p>
         </div>
 
-        <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-              Active Triggers
-            </span>
-            <div className="p-2 bg-purple-50 text-purple-600 rounded-xl">
-              <Zap className="w-4 h-4" />
-            </div>
-          </div>
-          <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-gray-900 font-heading">
-              {loading ? '...' : counts.activeRulesCount}
-            </span>
-            <span className="text-xs text-purple-700 bg-purple-50 px-2 py-0.5 rounded-full">
+        <div className="bg-white border border-gray-100 rounded-2xl p-4 shadow-xs">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
               Automations
             </span>
+            <div className="p-1.5 bg-amber-50 text-amber-600 rounded-lg">
+              <Zap className="w-3.5 h-3.5" />
+            </div>
           </div>
-          <p className="mt-1 text-xs text-gray-400">Event-driven triggers active</p>
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-xl font-bold text-gray-900 font-heading">
+              {loading ? '...' : counts.activeRulesCount}
+            </span>
+          </div>
+          <p className="mt-1 text-[10px] text-gray-400">Rules active</p>
         </div>
       </div>
 
@@ -400,12 +465,14 @@ function DashboardTab({ stats, loading, onSwitchTab }) {
 // ─────────────────────────────────────────────────────────────
 // TAB 2: COMPOSE EMAIL
 // ─────────────────────────────────────────────────────────────
-function ComposeTab({ templates, onEmailSent }) {
+function ComposeTab({ templates, accounts = [], onEmailSent }) {
   const toast = useToast()
+  const defaultAccount = accounts.find((a) => a.isDefaultSender) || accounts[0]
+  const [senderAccountId, setSenderAccountId] = useState(defaultAccount?.id || '')
   const [recipient, setRecipient] = useState('')
   const [recipientName, setRecipientName] = useState('')
   const [subject, setSubject] = useState('')
-  const [replyTo, setReplyTo] = useState('info@snaptech.digital')
+  const [replyTo, setReplyTo] = useState(defaultAccount?.replyTo || 'info@snaptech.digital')
   const [templateId, setTemplateId] = useState('custom_compose')
   const [message, setMessage] = useState('')
   const [ctaText, setCtaText] = useState('')
@@ -482,6 +549,7 @@ function ComposeTab({ templates, onEmailSent }) {
       replyTo,
       ctaText,
       ctaUrl,
+      accountId: senderAccountId || null,
     })
   }
 
@@ -492,8 +560,34 @@ function ComposeTab({ templates, onEmailSent }) {
         <div>
           <h2 className="text-lg font-bold text-gray-900 font-heading">Compose Direct Message</h2>
           <p className="text-xs text-gray-500">
-            Dispatches from authenticated mailbox <strong>info@snaptech.digital</strong> with customizable Reply-To routing.
+            Dispatch authenticated messages from your configured company mailboxes with tracking.
           </p>
+        </div>
+
+        {/* Sender Mailbox Selector */}
+        <div className="space-y-1.5">
+          <label className="text-xs font-semibold text-gray-700">From Sender Account *</label>
+          <select
+            value={senderAccountId}
+            onChange={(e) => {
+              setSenderAccountId(e.target.value)
+              const found = accounts.find((a) => a.id === e.target.value)
+              if (found?.replyTo) {
+                setReplyTo(found.replyTo)
+              }
+            }}
+            className="w-full px-3.5 py-2.5 text-xs bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-500 focus:outline-none transition-all cursor-pointer font-medium"
+          >
+            {accounts.length > 0 ? (
+              accounts.map((acct) => (
+                <option key={acct.id} value={acct.id}>
+                  {acct.displayName || acct.email} &lt;{acct.email}&gt; {acct.isDefaultSender ? '★ (Default Sender)' : ''}
+                </option>
+              ))
+            ) : (
+              <option value="">info@snaptech.digital (Primary Default)</option>
+            )}
+          </select>
         </div>
 
         {/* Recipient Picker */}
@@ -1000,13 +1094,13 @@ function TemplatesTab({ templates }) {
 // ─────────────────────────────────────────────────────────────
 // TAB 4: AUTOMATION RULES
 // ─────────────────────────────────────────────────────────────
-function AutomationRulesTab({ rules }) {
+function AutomationRulesTab({ rules, accounts = [] }) {
   const queryClient = useQueryClient()
   const toast = useToast()
 
-  const toggleMutation = useMutation({
-    mutationFn: ({ id, isEnabled }) =>
-      api.patch(`/admin/email/rules/${id}`, { isEnabled }),
+  const updateRuleMutation = useMutation({
+    mutationFn: ({ id, data }) =>
+      api.patch(`/admin/email/rules/${id}`, data),
     onSuccess: (res) => {
       toast.success(res.message || 'Automation rule updated.')
       queryClient.invalidateQueries(['admin-email-rules'])
@@ -1034,7 +1128,7 @@ function AutomationRulesTab({ rules }) {
             key={rule.id}
             className="p-5 border border-gray-200 rounded-xl hover:border-gray-300 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4"
           >
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 flex-1">
               <div className="flex items-center gap-2">
                 <span className="px-2 py-0.5 text-[11px] font-mono font-bold bg-slate-100 text-slate-800 rounded">
                   {rule.event}
@@ -1042,11 +1136,36 @@ function AutomationRulesTab({ rules }) {
                 <span className="text-sm font-bold text-gray-900">{rule.title}</span>
               </div>
               <p className="text-xs text-gray-500">{rule.description}</p>
-              <div className="flex flex-wrap items-center gap-2 pt-1 text-[11px]">
-                <span className="text-gray-400">Internal Routing:</span>
-                <span className="px-2 py-0.5 bg-blue-50 text-blue-700 font-semibold rounded">
-                  {rule.internalRouting || 'info@snaptech.digital'}
-                </span>
+              
+              <div className="flex flex-wrap items-center gap-3 pt-2 text-[11px]">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-gray-400 font-medium">Sender Account:</span>
+                  <select
+                    value={rule.senderAccountId || ''}
+                    onChange={(e) =>
+                      updateRuleMutation.mutate({
+                        id: rule.id,
+                        data: { senderAccountId: e.target.value || null },
+                      })
+                    }
+                    className="px-2 py-0.5 bg-gray-50 border border-gray-200 rounded text-gray-800 text-[11px] font-medium cursor-pointer"
+                  >
+                    <option value="">Default Primary Account</option>
+                    {accounts.map((acct) => (
+                      <option key={acct.id} value={acct.id}>
+                        {acct.displayName || acct.email} ({acct.email})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="flex items-center gap-1.5">
+                  <span className="text-gray-400 font-medium">Internal Routing:</span>
+                  <span className="px-2 py-0.5 bg-blue-50 text-blue-700 font-semibold rounded">
+                    {rule.internalRouting || 'info@snaptech.digital'}
+                  </span>
+                </div>
+
                 <span className="text-gray-300">&bull;</span>
                 <span className="text-gray-500">
                   Customer Copy: <strong>{rule.sendCustomerCopy ? 'Yes' : 'No'}</strong>
@@ -1065,12 +1184,12 @@ function AutomationRulesTab({ rules }) {
               <button
                 type="button"
                 onClick={() =>
-                  toggleMutation.mutate({
+                  updateRuleMutation.mutate({
                     id: rule.id,
-                    isEnabled: !rule.isEnabled,
+                    data: { isEnabled: !rule.isEnabled },
                   })
                 }
-                disabled={toggleMutation.isPending}
+                disabled={updateRuleMutation.isPending}
                 className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
                   rule.isEnabled ? 'bg-blue-600' : 'bg-gray-200'
                 }`}

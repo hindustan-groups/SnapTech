@@ -156,6 +156,21 @@ import {
   updateEmailSettings,
   testEmailConnection,
   getEligibleRecipients,
+  listEmailAccounts,
+  getEmailAccountById,
+  createEmailAccount,
+  updateEmailAccount,
+  deleteEmailAccount,
+  testAccountSmtpHandler,
+  testAccountImapHandler,
+  syncAccountMailboxHandler,
+  syncAllAccountsHandler,
+  listEmailMessages,
+  getEmailMessageById,
+  updateEmailMessage,
+  replyToEmailMessage,
+  createLeadFromEmailMessage,
+  deleteEmailMessage,
 } from '../controllers/emailCenter.controller.js'
 
 // ── CMS Validation Schemas ─────────────────────────────────────
@@ -816,5 +831,24 @@ router.get('/email/settings', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), 
 router.patch('/email/settings', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), updateEmailSettings)
 router.post('/email/test', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), testEmailConnection)
 router.get('/email/recipients', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), getEligibleRecipients)
+
+// Multi-Account Email Management
+router.get('/email/accounts', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), listEmailAccounts)
+router.post('/email/accounts', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), createEmailAccount)
+router.get('/email/accounts/:id', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), getEmailAccountById)
+router.patch('/email/accounts/:id', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), updateEmailAccount)
+router.delete('/email/accounts/:id', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), deleteEmailAccount)
+router.post('/email/accounts/:id/test-smtp', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), testAccountSmtpHandler)
+router.post('/email/accounts/:id/test-imap', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), testAccountImapHandler)
+router.post('/email/accounts/:id/sync', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), syncAccountMailboxHandler)
+router.post('/email/sync-all', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), syncAllAccountsHandler)
+
+// Inbound & Outbound Messages / Inbox / CRM Linking
+router.get('/email/messages', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), listEmailMessages)
+router.get('/email/messages/:id', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), getEmailMessageById)
+router.patch('/email/messages/:id', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), updateEmailMessage)
+router.post('/email/messages/:id/reply', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), replyToEmailMessage)
+router.post('/email/messages/:id/create-lead', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), createLeadFromEmailMessage)
+router.delete('/email/messages/:id', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), deleteEmailMessage)
 
 export default router

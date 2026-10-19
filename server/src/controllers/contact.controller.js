@@ -168,6 +168,7 @@ export const submitContact = async (req, res, next) => {
             idempotencyKey: `lead-${lead.id}-admin`,
             replyTo: email,
             isInternalAlert: true,
+            leadId: lead.id,
             metadata: { leadId: lead.id, isQuote },
           }).catch((err) => console.error('[mailer] Admin notification failed:', err.message))
         )
@@ -183,6 +184,7 @@ export const submitContact = async (req, res, next) => {
             idempotencyKey: `lead-${lead.id}-client`,
             replyTo: isQuote ? 'sales@snaptech.digital' : 'hello@snaptech.digital',
             isCustomerCopy: true,
+            leadId: lead.id,
             metadata: { leadId: lead.id, serviceInterested },
           }).catch((err) => console.error('[mailer] Auto-reply failed:', err.message))
         )
