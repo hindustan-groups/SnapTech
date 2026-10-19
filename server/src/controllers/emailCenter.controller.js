@@ -36,6 +36,20 @@ import {
   customEmailTemplate,
   fetchEmailFooterSettings,
 } from '../utils/mailer.js'
+import {
+  listAccounts,
+  getAccountById,
+  createAccount,
+  updateAccount,
+  deleteAccount,
+  testAccountSmtp,
+  testAccountImap,
+  getInternalAccountWithCredentials,
+} from '../services/email/emailAccount.service.js'
+import {
+  syncAccountMailbox,
+  syncAllActiveAccounts,
+} from '../services/email/emailSync.service.js'
 
 /**
  * GET /api/admin/email/stats
@@ -79,6 +93,13 @@ export const getEmailDashboardStats = async (_req, res, next) => {
       where: { isEnabled: true },
     })
 
+    const [inboxUnreadCount, inboxTotalCount, totalAccounts, activeAccounts] = await Promise.all([
+      prisma.emailMessage ? prisma.emailMessage.count({ where: { folder: 'INBOX', isRead: false } }).catch(() => 0) : 0,
+      prisma.emailMessage ? prisma.emailMessage.count({ where: { folder: 'INBOX' } }).catch(() => 0) : 0,
+      prisma.emailAccount ? prisma.emailAccount.count().catch(() => 0) : 0,
+      prisma.emailAccount ? prisma.emailAccount.count({ where: { isActive: true } }).catch(() => 0) : 0,
+    ])
+
     res.json({
       status: 'ok',
       data: {
@@ -89,6 +110,10 @@ export const getEmailDashboardStats = async (_req, res, next) => {
           sentToday,
           deliveryRate,
           activeRulesCount,
+          inboxUnreadCount,
+          inboxTotalCount,
+          totalAccounts,
+          activeAccounts,
         },
         recentActivity,
         system: {
@@ -201,6 +226,8 @@ export const sendManualEmail = async (req, res, next) => {
     const targetReplyTo = req.body.replyTo?.trim() || null
     const ctaText = req.body.ctaText?.trim() || null
     const ctaUrl = req.body.ctaUrl?.trim() || null
+    const targetAccountId = req.body.accountId || req.body.senderAccountId || null
+    const targetLeadId = req.body.leadId || null
 
     if (!targetRecipient || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(targetRecipient)) {
       return res.status(400).json({ status: 'error', message: 'A valid recipient email address is required.' })
@@ -210,6 +237,11 @@ export const sendManualEmail = async (req, res, next) => {
     }
     if (!targetMessage) {
       return res.status(400).json({ status: 'error', message: 'Email body message is required.' })
+    }
+
+    let accountConfig = null
+    if (targetAccountId) {
+      accountConfig = await getInternalAccountWithCredentials(targetAccountId)
     }
 
     const footerSettings = await fetchEmailFooterSettings(prisma)
@@ -225,14 +257,17 @@ export const sendManualEmail = async (req, res, next) => {
       footerSettings,
     })
 
-    const senderEmail = req.admin?.email || 'admin@snaptech.digital'
+    const senderEmail = accountConfig?.email || req.admin?.email || 'admin@snaptech.digital'
 
     const sendResult = await sendEmail({
       to: targetRecipient.toLowerCase(),
       subject: emailPayload.subject,
       html: emailPayload.html,
       text: emailPayload.text,
-      replyTo: targetReplyTo,
+      replyTo: targetReplyTo || accountConfig?.replyTo,
+      senderAccountId: accountConfig?.id || null,
+      accountConfig,
+      leadId: targetLeadId,
       event: 'manual.compose',
       templateId: targetTemplateId,
       metadata: {
@@ -545,8 +580,15 @@ export const listAutomationRules = async (_req, res, next) => {
 export const updateAutomationRule = async (req, res, next) => {
   try {
     const { id } = req.params
-    const { isEnabled, internalRouting, sendCustomerCopy, sendInternalAlert, templateId } =
-      req.body
+    const {
+      isEnabled,
+      internalRouting,
+      sendCustomerCopy,
+      sendInternalAlert,
+      templateId,
+      senderAccountId,
+      replyTo,
+    } = req.body
 
     const updateData = {}
     const enabledVal = isEnabled !== undefined ? isEnabled : req.body.enabled
@@ -555,6 +597,8 @@ export const updateAutomationRule = async (req, res, next) => {
     if (sendCustomerCopy !== undefined) updateData.sendCustomerCopy = Boolean(sendCustomerCopy)
     if (sendInternalAlert !== undefined) updateData.sendInternalAlert = Boolean(sendInternalAlert)
     if (templateId !== undefined) updateData.templateId = templateId?.trim()
+    if (senderAccountId !== undefined) updateData.senderAccountId = senderAccountId || null
+    if (replyTo !== undefined) updateData.replyTo = replyTo?.trim() || null
 
     let updated = null
     try {
@@ -868,7 +912,7 @@ export const getEligibleRecipients = async (_req, res, next) => {
       }),
       prisma.client.findMany({
         take: 30,
-        select: { id: true, name: true, email: true, companyName: true },
+        select: { id: true, name: true, email: true },
       }),
       prisma.admin.findMany({
         take: 20,
@@ -889,7 +933,7 @@ export const getEligibleRecipients = async (_req, res, next) => {
       name: c.name,
       email: c.email,
       type: 'CLIENT',
-      label: `${c.name} (${c.email}) — Client [${c.companyName || 'Active Client'}]`,
+      label: `${c.name} (${c.email}) — Client`,
     }))
 
     const formattedAdmins = admins.map((a) => ({
@@ -904,6 +948,484 @@ export const getEligibleRecipients = async (_req, res, next) => {
       status: 'ok',
       data: [...formattedLeads, ...formattedClients, ...formattedAdmins],
     })
+  } catch (err) {
+    next(err)
+  }
+}
+
+// ── Multi-Account Management Handlers ─────────────────────────
+
+/**
+ * GET /api/admin/email/accounts
+ * List all configured email accounts (secrets masked)
+ */
+export const listEmailAccounts = async (_req, res, next) => {
+  try {
+    const accounts = await listAccounts()
+    res.json({ status: 'ok', data: accounts })
+  } catch (err) {
+    next(err)
+  }
+}
+
+/**
+ * GET /api/admin/email/accounts/:id
+ * Retrieve details for a single account (secrets masked)
+ */
+export const getEmailAccountById = async (req, res, next) => {
+  try {
+    const account = await getAccountById(req.params.id)
+    if (!account) {
+      return res.status(404).json({ status: 'error', message: 'Email account not found.' })
+    }
+    res.json({ status: 'ok', data: account })
+  } catch (err) {
+    next(err)
+  }
+}
+
+/**
+ * POST /api/admin/email/accounts
+ * Register a new email account
+ */
+export const createEmailAccount = async (req, res, next) => {
+  try {
+    const account = await createAccount(req.body)
+    res.status(201).json({
+      status: 'ok',
+      message: `Email account '${account.email}' configured successfully.`,
+      data: account,
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
+/**
+ * PATCH /api/admin/email/accounts/:id
+ * Update email account settings & credentials
+ */
+export const updateEmailAccount = async (req, res, next) => {
+  try {
+    const account = await updateAccount(req.params.id, req.body)
+    res.json({
+      status: 'ok',
+      message: `Email account '${account.email}' updated successfully.`,
+      data: account,
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
+/**
+ * DELETE /api/admin/email/accounts/:id
+ * Remove an email account
+ */
+export const deleteEmailAccount = async (req, res, next) => {
+  try {
+    await deleteAccount(req.params.id)
+    res.json({ status: 'ok', message: 'Email account deleted successfully.' })
+  } catch (err) {
+    next(err)
+  }
+}
+
+/**
+ * POST /api/admin/email/accounts/:id/test-smtp
+ * Verify outbound SMTP handshake & authentication
+ */
+export const testAccountSmtpHandler = async (req, res) => {
+  try {
+    const result = await testAccountSmtp(req.params.id, req.body.recipient)
+    res.json({
+      status: 'ok',
+      message: 'SMTP connection handshake & authentication verified successfully.',
+      data: result,
+    })
+  } catch (err) {
+    res.status(400).json({ status: 'error', message: err.message })
+  }
+}
+
+/**
+ * POST /api/admin/email/accounts/:id/test-imap
+ * Verify inbound IMAP handshake & mailbox access
+ */
+export const testAccountImapHandler = async (req, res) => {
+  try {
+    const result = await testAccountImap(req.params.id)
+    res.json({
+      status: 'ok',
+      message: 'IMAP connection handshake & mailbox authentication verified successfully.',
+      data: result,
+    })
+  } catch (err) {
+    res.status(400).json({ status: 'error', message: err.message })
+  }
+}
+
+/**
+ * POST /api/admin/email/accounts/:id/sync
+ * Manually trigger IMAP sync for a single mailbox
+ */
+export const syncAccountMailboxHandler = async (req, res) => {
+  try {
+    const result = await syncAccountMailbox(req.params.id, req.body)
+    res.json({
+      status: 'ok',
+      message: 'Mailbox synchronization completed.',
+      data: result,
+    })
+  } catch (err) {
+    res.status(500).json({ status: 'error', message: err.message })
+  }
+}
+
+/**
+ * POST /api/admin/email/sync-all
+ * Batch synchronize all active mailboxes
+ */
+export const syncAllAccountsHandler = async (_req, res, next) => {
+  try {
+    const results = await syncAllActiveAccounts()
+    res.json({
+      status: 'ok',
+      message: 'Batch synchronization across all active accounts completed.',
+      data: results,
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
+// ── Inbound / Outbound Message Management Handlers ────────────
+
+/**
+ * GET /api/admin/email/messages
+ * List messages with folder filtering, pagination, search, and unread counts
+ */
+export const listEmailMessages = async (req, res, next) => {
+  try {
+    const page = Math.max(1, parseInt(req.query.page || '1', 10))
+    const limit = Math.min(100, Math.max(1, parseInt(req.query.limit || '20', 10)))
+    const skip = (page - 1) * limit
+
+    const { folder, accountId, isRead, leadId, search } = req.query
+
+    const where = {}
+    if (folder && folder !== 'ALL') {
+      where.folder = folder.toUpperCase()
+    } else if (!folder) {
+      where.folder = 'INBOX'
+    }
+
+    if (accountId && accountId !== 'ALL') {
+      where.accountId = accountId
+    }
+
+    if (isRead !== undefined && isRead !== 'ALL' && isRead !== '') {
+      where.isRead = isRead === 'true' || isRead === true
+    }
+
+    if (leadId) {
+      where.leadId = leadId
+    }
+
+    if (search && typeof search === 'string' && search.trim()) {
+      const q = search.trim()
+      where.OR = [
+        { subject: { contains: q, mode: 'insensitive' } },
+        { fromEmail: { contains: q, mode: 'insensitive' } },
+        { from: { contains: q, mode: 'insensitive' } },
+        { snippet: { contains: q, mode: 'insensitive' } },
+      ]
+    }
+
+    const [messages, total, unreadCount] = await Promise.all([
+      prisma.emailMessage.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { receivedAt: 'desc' },
+        include: {
+          account: {
+            select: { id: true, email: true, displayName: true },
+          },
+          lead: {
+            select: { id: true, name: true, email: true, status: true, serviceInterested: true },
+          },
+        },
+      }),
+      prisma.emailMessage.count({ where }),
+      prisma.emailMessage.count({
+        where: {
+          folder: 'INBOX',
+          isRead: false,
+          ...(accountId && accountId !== 'ALL' ? { accountId } : {}),
+        },
+      }),
+    ])
+
+    res.json({
+      status: 'ok',
+      data: {
+        messages,
+        pagination: {
+          total,
+          page,
+          limit,
+          totalPages: Math.ceil(total / limit) || 1,
+        },
+        unreadCount,
+      },
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
+/**
+ * GET /api/admin/email/messages/:id
+ * Retrieve single message detail including conversation thread
+ */
+export const getEmailMessageById = async (req, res, next) => {
+  try {
+    const { id } = req.params
+    const message = await prisma.emailMessage.findUnique({
+      where: { id },
+      include: {
+        account: {
+          select: { id: true, email: true, displayName: true },
+        },
+        lead: {
+          select: { id: true, name: true, email: true, status: true, serviceInterested: true, phone: true },
+        },
+      },
+    })
+
+    if (!message) {
+      return res.status(404).json({ status: 'error', message: 'Email message not found.' })
+    }
+
+    if (req.query.markRead === 'true' && !message.isRead) {
+      await prisma.emailMessage.update({
+        where: { id },
+        data: { isRead: true },
+      })
+      message.isRead = true
+    }
+
+    let thread = []
+    if (message.threadId) {
+      thread = await prisma.emailMessage.findMany({
+        where: { threadId: message.threadId },
+        orderBy: { receivedAt: 'asc' },
+        select: {
+          id: true,
+          direction: true,
+          from: true,
+          fromEmail: true,
+          to: true,
+          subject: true,
+          snippet: true,
+          receivedAt: true,
+          sentAt: true,
+          isRead: true,
+        },
+      })
+    }
+
+    res.json({ status: 'ok', data: { ...message, thread } })
+  } catch (err) {
+    next(err)
+  }
+}
+
+/**
+ * PATCH /api/admin/email/messages/:id
+ * Update message read state, folder, or link to CRM Lead
+ */
+export const updateEmailMessage = async (req, res, next) => {
+  try {
+    const { id } = req.params
+    const { isRead, isArchived, folder, leadId } = req.body
+
+    const updateData = {}
+    if (isRead !== undefined) updateData.isRead = Boolean(isRead)
+    if (isArchived !== undefined) {
+      updateData.isArchived = Boolean(isArchived)
+      if (isArchived) updateData.folder = 'ARCHIVE'
+    }
+    if (folder !== undefined) updateData.folder = String(folder).toUpperCase()
+    if (leadId !== undefined) updateData.leadId = leadId || null
+
+    const updated = await prisma.emailMessage.update({
+      where: { id },
+      data: updateData,
+    })
+
+    res.json({ status: 'ok', message: 'Email message updated.', data: updated })
+  } catch (err) {
+    next(err)
+  }
+}
+
+/**
+ * POST /api/admin/email/messages/:id/reply
+ * Reply to an incoming email message with full threading headers
+ */
+export const replyToEmailMessage = async (req, res, next) => {
+  try {
+    const { id } = req.params
+    const { message: replyBody, senderAccountId, subject: customSubject } = req.body
+
+    if (!replyBody || !replyBody.trim()) {
+      return res.status(400).json({ status: 'error', message: 'Reply message body is required.' })
+    }
+
+    const original = await prisma.emailMessage.findUnique({
+      where: { id },
+      include: { account: true },
+    })
+
+    if (!original) {
+      return res.status(404).json({ status: 'error', message: 'Original email message not found.' })
+    }
+
+    const recipient = original.replyTo || original.fromEmail || (Array.isArray(original.to) ? original.to[0] : null)
+    if (!recipient) {
+      return res.status(400).json({ status: 'error', message: 'Cannot determine recipient email address from original message.' })
+    }
+
+    const accountId = senderAccountId || original.accountId
+    let accountConfig = null
+    if (accountId) {
+      accountConfig = await getInternalAccountWithCredentials(accountId)
+    }
+
+    const subject =
+      customSubject ||
+      (original.subject?.toLowerCase().startsWith('re:') ? original.subject : `Re: ${original.subject || ''}`)
+
+    const footerSettings = await fetchEmailFooterSettings(prisma)
+    const emailPayload = customEmailTemplate({
+      recipientName: original.fromName || recipient.split('@')[0],
+      subject,
+      bodyHtml: replyBody.replace(/\n/g, '<br />'),
+      bodyText: replyBody,
+      footerSettings,
+    })
+
+    const senderEmail = accountConfig?.email || req.admin?.email || 'info@snaptech.digital'
+
+    const sendResult = await sendEmail({
+      to: recipient.toLowerCase(),
+      subject: emailPayload.subject,
+      html: emailPayload.html,
+      text: emailPayload.text,
+      senderAccountId: accountConfig?.id || null,
+      accountConfig,
+      leadId: original.leadId || null,
+      inReplyTo: original.messageId || null,
+      references: original.references
+        ? (Array.isArray(original.references) ? [...original.references, original.messageId] : [original.references, original.messageId])
+        : (original.messageId ? [original.messageId] : []),
+      threadId: original.threadId || original.messageId,
+      event: 'manual.compose',
+      templateId: 'reply_compose',
+      metadata: {
+        replyToMessageId: original.id,
+        composedByAdmin: req.admin?.email || 'admin',
+      },
+    })
+
+    res.json({
+      status: 'ok',
+      message: `Reply sent successfully to ${recipient}.`,
+      data: {
+        messageId: sendResult?.messageId,
+        recipient,
+        subject,
+      },
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
+/**
+ * POST /api/admin/email/messages/:id/create-lead
+ * Create a CRM ContactLead from an incoming email message and associate it
+ */
+export const createLeadFromEmailMessage = async (req, res, next) => {
+  try {
+    const { id } = req.params
+    const message = await prisma.emailMessage.findUnique({ where: { id } })
+    if (!message) {
+      return res.status(404).json({ status: 'error', message: 'Email message not found.' })
+    }
+
+    const email = (message.fromEmail || '').trim().toLowerCase()
+    if (!email) {
+      return res.status(400).json({ status: 'error', message: 'Message has no valid sender email address.' })
+    }
+
+    let lead = await prisma.contactLead.findFirst({
+      where: { email },
+    })
+
+    if (!lead) {
+      lead = await prisma.contactLead.create({
+        data: {
+          name: message.fromName || email.split('@')[0],
+          email,
+          serviceInterested: req.body.serviceInterested || 'General Inquiry',
+          message: message.snippet || message.subject || 'Lead created from inbound email message.',
+          status: 'NEW',
+          source: 'EMAIL_INBOX',
+        },
+      })
+    }
+
+    await prisma.emailMessage.updateMany({
+      where: { fromEmail: email, leadId: null },
+      data: { leadId: lead.id },
+    })
+
+    res.json({
+      status: 'ok',
+      message: `Lead '${lead.name}' created/associated successfully.`,
+      data: lead,
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
+/**
+ * DELETE /api/admin/email/messages/:id
+ * Move email message to TRASH or permanently delete if already in TRASH
+ */
+export const deleteEmailMessage = async (req, res, next) => {
+  try {
+    const { id } = req.params
+    const message = await prisma.emailMessage.findUnique({ where: { id } })
+    if (!message) {
+      return res.status(404).json({ status: 'error', message: 'Email message not found.' })
+    }
+
+    if (message.folder === 'TRASH' || req.query.permanent === 'true') {
+      await prisma.emailMessage.delete({ where: { id } })
+      return res.json({ status: 'ok', message: 'Email message permanently deleted.' })
+    }
+
+    const updated = await prisma.emailMessage.update({
+      where: { id },
+      data: { folder: 'TRASH' },
+    })
+
+    res.json({ status: 'ok', message: 'Email message moved to Trash.', data: updated })
   } catch (err) {
     next(err)
   }

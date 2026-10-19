@@ -186,18 +186,19 @@ export async function sendViaResend({ to, subject, html, text, attachments, repl
 }
 
 // ── Hostinger / Nodemailer SMTP Transport ──────────────────────
-export async function sendViaSMTP({ to, subject, html, text, attachments, replyTo }) {
-  const host = (process.env.EMAIL_HOST || env.EMAIL_HOST || HOSTINGER_SMTP_HOST).trim()
-  const port = parseInt(process.env.EMAIL_PORT || env.EMAIL_PORT || String(HOSTINGER_SMTP_PORT), 10)
-  const user = (process.env.EMAIL_USER || env.EMAIL_USER || VERIFIED_SENDER_MAILBOX).trim()
-  const pass = (process.env.EMAIL_PASS || env.EMAIL_PASS || '').trim().replace(/\s+/g, '')
+export async function sendViaSMTP(options = {}) {
+  const { to, subject, html, text, attachments, replyTo, accountConfig, inReplyTo, references } = options
+  const host = (accountConfig?.smtpHost || process.env.EMAIL_HOST || env.EMAIL_HOST || HOSTINGER_SMTP_HOST).trim()
+  const port = parseInt(accountConfig?.smtpPort || process.env.EMAIL_PORT || env.EMAIL_PORT || String(HOSTINGER_SMTP_PORT), 10)
+  const user = (accountConfig?.smtpUser || process.env.EMAIL_USER || env.EMAIL_USER || VERIFIED_SENDER_MAILBOX).trim()
+  const pass = (accountConfig?.smtpPassword || process.env.EMAIL_PASS || env.EMAIL_PASS || '').trim().replace(/\s+/g, '')
 
   const isGmail =
     host.includes('gmail') || user.toLowerCase().includes('gmail.com') || host === 'smtp.gmail.com'
 
   const finalHost = isGmail ? 'smtp.gmail.com' : host
   const finalPort = port === 587 ? 587 : 465
-  const isSecure = finalPort === 465
+  const isSecure = accountConfig?.smtpSecure !== undefined ? accountConfig.smtpSecure : (finalPort === 465)
 
   const transportConfig = {
     host: finalHost,
@@ -208,8 +209,8 @@ export async function sendViaSMTP({ to, subject, html, text, attachments, replyT
     greetingTimeout: 10000,
     socketTimeout: 10000,
     family: 4,
-    dnsLookup: (hostname, options, callback) => {
-      dns.lookup(hostname, { ...options, family: 4, all: false }, callback)
+    dnsLookup: (hostname, lookupOptions, callback) => {
+      dns.lookup(hostname, { ...lookupOptions, family: 4, all: false }, callback)
     },
     tls: {
       rejectUnauthorized: false,
@@ -218,23 +219,30 @@ export async function sendViaSMTP({ to, subject, html, text, attachments, replyT
   }
 
   const transporter = nodemailer.createTransport(transportConfig)
-  const { from, replyTo: resolvedReplyTo } = resolveSenderAndReplyTo({ replyTo })
+  const { from: defaultFrom, replyTo: resolvedReplyTo } = resolveSenderAndReplyTo({ replyTo })
+  const finalFrom = accountConfig?.displayName
+    ? `"${accountConfig.displayName}" <${accountConfig.email || user}>`
+    : (options.from || defaultFrom)
 
-  const info = await transporter.sendMail({
-    from,
+  const mailPayload = {
+    from: finalFrom,
     to,
     subject,
     html,
     text,
     attachments,
-    replyTo: resolvedReplyTo,
-  })
+    replyTo: replyTo || resolvedReplyTo,
+  }
+  if (inReplyTo) mailPayload.inReplyTo = inReplyTo
+  if (references) mailPayload.references = references
+
+  const info = await transporter.sendMail(mailPayload)
   return info
 }
 
 // ── Direct Sender with Automatic Fallback & Retries ────────────
 async function sendEmailDirect(options) {
-  const strategy = getStrategy()
+  const strategy = options.accountConfig ? 'smtp' : getStrategy()
 
   if (strategy === 'console') {
     console.log('\n📧 [DEV — EMAIL NOT SENT — LOG ONLY]')
@@ -246,7 +254,7 @@ async function sendEmailDirect(options) {
       console.log(`  Attachments: ${options.attachments.map((a) => a.filename).join(', ')}`)
     }
     console.log('─────────────────────────────────────\n')
-    return { messageId: 'dev-console-log' }
+    return { messageId: `dev-console-log-${Date.now()}` }
   }
 
   // Transient retry wrapper
@@ -321,6 +329,48 @@ async function processEmailQueue() {
           metadata: options.metadata,
           idempotencyKey: options.idempotencyKey,
         })
+
+        // Also persist outbound message into EmailMessage table if available
+        try {
+          const leadId = options.leadId || options.metadata?.leadId || null
+          let accountId = options.accountId || options.accountConfig?.id || null
+          if (!accountId && prisma.emailAccount) {
+            const defAcct = await prisma.emailAccount.findFirst({
+              where: { isDefaultSender: true, isActive: true },
+              select: { id: true, email: true },
+            }).catch(() => null)
+            accountId = defAcct?.id || null
+          }
+          if (accountId && prisma.emailMessage) {
+            const fromAddr = options.from || VERIFIED_SENDER_MAILBOX
+            const cleanFrom = (fromAddr.match(/<([^>]+)>/)?.[1] || fromAddr).trim().toLowerCase()
+            await prisma.emailMessage.create({
+              data: {
+                accountId,
+                direction: 'OUTBOUND',
+                folder: 'SENT',
+                messageId: result?.messageId || `msg-${Date.now()}`,
+                inReplyTo: options.inReplyTo || null,
+                references: options.references ? (Array.isArray(options.references) ? options.references : [options.references]) : [],
+                threadId: options.threadId || options.inReplyTo || `thread-${Date.now()}`,
+                from: fromAddr,
+                fromEmail: cleanFrom,
+                to: Array.isArray(options.to) ? options.to : [options.to],
+                replyTo: options.replyTo || null,
+                subject: options.subject || '(No Subject)',
+                bodyText: options.text || null,
+                bodyHtml: options.html || null,
+                snippet: (options.text || options.subject || '').slice(0, 160),
+                deliveryStatus: 'SENT',
+                sentAt: new Date(),
+                leadId,
+                metadata: options.metadata || null,
+              },
+            }).catch((mErr) => console.warn('[mailer] Could not persist outbound EmailMessage:', mErr.message))
+          }
+        } catch {
+          // ignore
+        }
       }
       resolve(result)
     } catch (err) {
