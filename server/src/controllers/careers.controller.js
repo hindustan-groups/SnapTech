@@ -1,6 +1,8 @@
 /**
  * careers.controller.js — Public Careers routes (list jobs + apply)
  */
+import fs from 'fs'
+import path from 'path'
 import prisma from '../config/db.js'
 import {
   sendEmail,
@@ -195,21 +197,35 @@ export const submitApplication = async (req, res, next) => {
       })
     }
 
-    // Upload resume buffer to Cloudinary directly
-    const { uploadToCloudinary } = await import('../utils/cloudinary.js')
-    let resumeUrl = 'https://res.cloudinary.com/demo/image/upload/v1580000000/sample_resume.pdf'
-    if (req.file?.buffer) {
-      try {
-        const result = await uploadToCloudinary(
-          req.file.buffer,
-          'hindustan-projects-resumes',
-          'raw',
-          req.file.originalname
-        )
+    // 1. Ensure local disk persistence in server/uploads/resumes (never lost)
+    const uploadsDir = path.resolve(process.cwd(), 'uploads', 'resumes')
+    await fs.promises.mkdir(uploadsDir, { recursive: true })
+
+    const ext = path.extname(req.file.originalname) || '.pdf'
+    const cleanBase = path
+      .basename(req.file.originalname, ext)
+      .replace(/[^a-zA-Z0-9_-]/g, '_')
+      .slice(0, 40)
+    const savedFilename = `${cleanBase}_${Date.now()}${ext}`
+    const localFilePath = path.join(uploadsDir, savedFilename)
+    await fs.promises.writeFile(localFilePath, req.file.buffer)
+
+    let resumeUrl = `/uploads/resumes/${savedFilename}`
+
+    // 2. Also attempt Cloudinary upload if configured
+    try {
+      const { uploadToCloudinary } = await import('../utils/cloudinary.js')
+      const result = await uploadToCloudinary(
+        req.file.buffer,
+        'hindustan-projects-resumes',
+        'raw',
+        req.file.originalname
+      )
+      if (result?.secure_url) {
         resumeUrl = result.secure_url
-      } catch (e) {
-        console.error('[upload] Resume upload to Cloudinary failed:', e.message)
       }
+    } catch (e) {
+      console.warn('[upload] Resume upload to Cloudinary failed, using local file:', e.message)
     }
 
     const application = await prisma.jobApplication.create({

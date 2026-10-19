@@ -1,12 +1,12 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useOutletContext } from 'react-router-dom'
+import { api } from '@/utils/api'
 import {
   Briefcase,
   Plus,
   Edit2,
   Trash2,
-  Check,
   X,
   FileText,
   Download,
@@ -15,7 +15,6 @@ import {
   Users,
   Mail,
   Phone,
-  ChevronRight,
   Filter,
   AlertCircle,
   MessageCircle,
@@ -61,6 +60,100 @@ export default function AdminCareersPage() {
   const [activeTab, setActiveTab] = useState('postings') // 'postings' | 'applications'
   const [editingJob, setEditingJob] = useState(null) // null | job object (empty object for create)
   const [viewingApp, setViewingApp] = useState(null) // null | application object
+  const [downloadingId, setDownloadingId] = useState(null)
+  const [activeModalTab, setActiveModalTab] = useState('details')
+  const [previewBlobUrl, setPreviewBlobUrl] = useState(null)
+  const [previewLoading, setPreviewLoading] = useState(false)
+  const [previewError, setPreviewError] = useState(null)
+
+  useEffect(() => {
+    if (!viewingApp?.id) return
+
+    let active = true
+    let currentUrl = null
+    const timer = setTimeout(() => {
+      setPreviewLoading(true)
+      setPreviewError(null)
+
+      api
+        .getBlob(`/admin/applications/${viewingApp.id}/resume`)
+        .then((blob) => {
+          if (!active) return
+          currentUrl = window.URL.createObjectURL(blob)
+          setPreviewBlobUrl(currentUrl)
+          setPreviewLoading(false)
+        })
+        .catch((err) => {
+          if (!active) return
+          console.warn('Failed to load resume preview blob:', err)
+          setPreviewError(err?.message || 'Resume preview could not be loaded.')
+          setPreviewLoading(false)
+        })
+    }, 0)
+
+    return () => {
+      active = false
+      clearTimeout(timer)
+      if (currentUrl) {
+        window.URL.revokeObjectURL(currentUrl)
+      }
+    }
+  }, [viewingApp?.id])
+
+  const handleOpenViewModal = (app) => {
+    setViewingApp(app)
+    setActiveModalTab('details')
+    setPreviewBlobUrl(null)
+    setPreviewError(null)
+    setPreviewLoading(false)
+  }
+
+  const handleCloseViewModal = () => {
+    setViewingApp(null)
+    if (previewBlobUrl) {
+      window.URL.revokeObjectURL(previewBlobUrl)
+    }
+    setPreviewBlobUrl(null)
+    setPreviewError(null)
+    setPreviewLoading(false)
+    setActiveModalTab('details')
+  }
+
+  const handleDownloadResume = async (appId, candidateName) => {
+    try {
+      setDownloadingId(appId)
+      const blob = await api.getBlob(`/admin/applications/${appId}/resume?download=1`)
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      const safeName = (candidateName || 'Candidate').replace(/[^a-zA-Z0-9_-]/g, '_')
+      a.download = `Resume_${safeName}.pdf`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      setTimeout(() => window.URL.revokeObjectURL(url), 1000)
+    } catch (err) {
+      console.error('Failed to download resume:', err)
+      alert(err?.message || 'Failed to download resume')
+    } finally {
+      setDownloadingId(null)
+    }
+  }
+
+  const handleOpenResumeInTab = async (appId) => {
+    try {
+      setDownloadingId(appId)
+      const blob = await api.getBlob(`/admin/applications/${appId}/resume`)
+      const url = window.URL.createObjectURL(blob)
+      window.open(url, '_blank')
+      setTimeout(() => window.URL.revokeObjectURL(url), 60000)
+    } catch (err) {
+      console.error('Failed to view resume:', err)
+      alert(err?.message || 'Failed to view resume')
+    } finally {
+      setDownloadingId(null)
+    }
+  }
 
   // Applications Filters
   const [jobFilter, setJobFilter] = useState('')
@@ -532,14 +625,31 @@ export default function AdminCareersPage() {
                             </p>
                           </td>
                           <td className="py-3.5 px-4">
-                            <a
-                              href={app.resumeUrl}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-brand-red border border-red-200 bg-red-50 hover:bg-red-100 rounded-lg transition-colors cursor-pointer"
-                            >
-                              <Download className="w-3 h-3" /> CV
-                            </a>
+                            <div className="flex items-center gap-1.5">
+                              <button
+                                type="button"
+                                onClick={() => handleDownloadResume(app.id, app.fullName)}
+                                disabled={downloadingId === app.id}
+                                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-brand-red border border-red-200 bg-red-50 hover:bg-red-100 rounded-lg transition-colors cursor-pointer disabled:opacity-50"
+                                title="Download Resume"
+                              >
+                                {downloadingId === app.id ? (
+                                  <span className="w-3 h-3 border-2 border-red-600 border-t-transparent rounded-full animate-spin" />
+                                ) : (
+                                  <Download className="w-3 h-3" />
+                                )}
+                                CV
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleOpenResumeInTab(app.id)}
+                                disabled={downloadingId === app.id}
+                                className="inline-flex items-center gap-1 p-1 text-xs font-bold text-gray-500 hover:text-brand-blue hover:bg-blue-50 rounded-lg border border-gray-200 transition-colors cursor-pointer disabled:opacity-50"
+                                title="Open Resume in new tab"
+                              >
+                                <Eye className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
                           </td>
                           <td className="py-3.5 px-4">
                             <select
@@ -556,7 +666,7 @@ export default function AdminCareersPage() {
                           <td className="py-3.5 px-4 text-right">
                             <div className="flex items-center justify-end gap-1.5">
                               <button
-                                onClick={() => setViewingApp(app)}
+                                onClick={() => handleOpenViewModal(app)}
                                 className="p-1.5 rounded-lg border border-gray-200 text-gray-500 hover:text-brand-blue hover:bg-brand-blue/5 transition-all cursor-pointer inline-flex items-center gap-1"
                               >
                                 <Eye className="w-3.5 h-3.5" /> Details
@@ -775,7 +885,7 @@ export default function AdminCareersPage() {
                   </h3>
                 </div>
                 <button
-                  onClick={() => setViewingApp(null)}
+                  onClick={handleCloseViewModal}
                   className="p-1.5 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-white transition-colors cursor-pointer"
                 >
                   <X className="w-5 h-5" />
@@ -785,7 +895,7 @@ export default function AdminCareersPage() {
               {/* Body */}
               <div className="p-4 sm:p-6 space-y-5 overflow-y-auto flex-1">
                 {/* Job Info */}
-                <div className="bg-slate-50 border border-slate-100 rounded-xl p-4 flex justify-between items-center">
+                <div className="bg-slate-50 border border-slate-100 rounded-xl p-4 flex flex-wrap justify-between items-center gap-3">
                   <div>
                     <span className="text-[10px] uppercase font-bold text-gray-400">
                       Position Applied
@@ -797,80 +907,159 @@ export default function AdminCareersPage() {
                       {viewingApp.jobPosting?.department || 'General'}
                     </p>
                   </div>
-                  <a
-                    href={viewingApp.resumeUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center gap-1 bg-brand-blue text-white hover:bg-blue-600 text-xs font-bold px-3 py-2 rounded-lg transition-colors cursor-pointer shadow-xs"
-                  >
-                    <Download className="w-3.5 h-3.5" /> View Resume
-                  </a>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleDownloadResume(viewingApp.id, viewingApp.fullName)}
+                      disabled={downloadingId === viewingApp.id}
+                      className="flex items-center gap-1.5 bg-brand-red text-white hover:bg-red-700 text-xs font-bold px-3 py-2 rounded-lg transition-colors cursor-pointer shadow-xs disabled:opacity-50"
+                    >
+                      {downloadingId === viewingApp.id ? (
+                        <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      ) : (
+                        <Download className="w-3.5 h-3.5" />
+                      )}
+                      Download CV
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleOpenResumeInTab(viewingApp.id)}
+                      disabled={downloadingId === viewingApp.id}
+                      className="flex items-center gap-1.5 bg-brand-blue text-white hover:bg-blue-600 text-xs font-bold px-3 py-2 rounded-lg transition-colors cursor-pointer shadow-xs disabled:opacity-50"
+                    >
+                      <Eye className="w-3.5 h-3.5" /> Open in Tab
+                    </button>
+                  </div>
                 </div>
 
-                {/* Candidate Info */}
-                <div className="space-y-3.5">
-                  <h5 className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">
-                    Candidate Profile
-                  </h5>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <span className="text-xs text-gray-400 block">Full Name</span>
-                      <span className="text-sm font-bold text-gray-800">{viewingApp.fullName}</span>
-                    </div>
-                    <div>
-                      <span className="text-xs text-gray-400 block">Applied Date</span>
-                      <span className="text-sm font-semibold text-gray-800">
-                        {new Date(viewingApp.createdAt).toLocaleDateString()}
-                      </span>
-                    </div>
-                  </div>
+                {/* Modal View Tabs */}
+                <div className="flex border-b border-gray-200 gap-4">
+                  <button
+                    type="button"
+                    onClick={() => setActiveModalTab('details')}
+                    className={`pb-2.5 text-xs font-bold border-b-2 transition-colors cursor-pointer ${
+                      activeModalTab === 'details'
+                        ? 'border-brand-blue text-brand-blue'
+                        : 'border-transparent text-gray-500 hover:text-gray-800'
+                    }`}
+                  >
+                    Candidate Profile & Notes
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveModalTab('preview')}
+                    className={`pb-2.5 text-xs font-bold border-b-2 transition-colors cursor-pointer inline-flex items-center gap-1.5 ${
+                      activeModalTab === 'preview'
+                        ? 'border-brand-blue text-brand-blue'
+                        : 'border-transparent text-gray-500 hover:text-gray-800'
+                    }`}
+                  >
+                    <FileText className="w-3.5 h-3.5" /> Live Resume Document
+                  </button>
+                </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <span className="text-xs text-gray-400 block">Email Address</span>
-                      <a
-                        href={`mailto:${viewingApp.email}`}
-                        className="text-sm font-semibold text-brand-blue hover:underline flex items-center gap-1"
-                      >
-                        <Mail className="w-3.5 h-3.5" /> {viewingApp.email}
-                      </a>
-                    </div>
-                    <div>
-                      <span className="text-xs text-gray-400 block">Phone / WhatsApp</span>
-                      <div className="flex items-center gap-2 mt-0.5">
-                        <a
-                          href={`tel:${viewingApp.phone}`}
-                          className="text-sm font-semibold text-gray-700 hover:text-brand-blue flex items-center gap-1"
+                {activeModalTab === 'preview' ? (
+                  <div className="space-y-3">
+                    {previewLoading ? (
+                      <div className="h-96 flex flex-col items-center justify-center bg-gray-50 rounded-xl border border-dashed border-gray-200 text-gray-400">
+                        <div className="w-8 h-8 border-3 border-brand-blue border-t-transparent rounded-full animate-spin mb-3" />
+                        <p className="text-xs font-semibold text-gray-500">
+                          Loading resume document preview...
+                        </p>
+                      </div>
+                    ) : previewError ? (
+                      <div className="h-60 flex flex-col items-center justify-center bg-red-50/50 rounded-xl border border-red-200 p-6 text-center">
+                        <AlertCircle className="w-8 h-8 text-brand-red mb-2" />
+                        <p className="text-sm font-bold text-gray-800">Preview Unavailable</p>
+                        <p className="text-xs text-gray-500 mt-1 max-w-md">{previewError}</p>
+                        <button
+                          type="button"
+                          onClick={() => handleDownloadResume(viewingApp.id, viewingApp.fullName)}
+                          className="mt-4 inline-flex items-center gap-1.5 bg-brand-red text-white text-xs font-bold px-3.5 py-2 rounded-lg hover:bg-red-700 transition-colors"
                         >
-                          <Phone className="w-3.5 h-3.5" /> {viewingApp.phone}
-                        </a>
-                        <a
-                          href={getWhatsAppLink(
-                            viewingApp.fullName,
-                            viewingApp.jobPosting?.title || 'General App',
-                            viewingApp.phone
-                          )}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="flex items-center gap-1 text-[10px] font-bold text-emerald-600 hover:text-emerald-755 hover:bg-emerald-100 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 transition-colors"
-                        >
-                          <MessageCircle className="w-3 h-3 fill-emerald-500 text-emerald-600" />{' '}
-                          WhatsApp
-                        </a>
+                          <Download className="w-3.5 h-3.5" /> Download Direct File
+                        </button>
+                      </div>
+                    ) : previewBlobUrl ? (
+                      <div className="rounded-xl overflow-hidden border border-gray-200 bg-slate-900 shadow-inner">
+                        <iframe
+                          src={previewBlobUrl}
+                          className="w-full h-120 bg-white border-0"
+                          title={`Resume - ${viewingApp.fullName}`}
+                        />
+                      </div>
+                    ) : null}
+                  </div>
+                ) : (
+                  <>
+                    {/* Candidate Info */}
+                    <div className="space-y-3.5">
+                      <h5 className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">
+                        Candidate Profile
+                      </h5>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-xs text-gray-400 block">Full Name</span>
+                          <span className="text-sm font-bold text-gray-800">
+                            {viewingApp.fullName}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-xs text-gray-400 block">Applied Date</span>
+                          <span className="text-sm font-semibold text-gray-800">
+                            {new Date(viewingApp.createdAt).toLocaleDateString()}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-xs text-gray-400 block">Email Address</span>
+                          <a
+                            href={`mailto:${viewingApp.email}`}
+                            className="text-sm font-semibold text-brand-blue hover:underline flex items-center gap-1"
+                          >
+                            <Mail className="w-3.5 h-3.5" /> {viewingApp.email}
+                          </a>
+                        </div>
+                        <div>
+                          <span className="text-xs text-gray-400 block">Phone / WhatsApp</span>
+                          <div className="flex items-center gap-2 mt-0.5">
+                            <a
+                              href={`tel:${viewingApp.phone}`}
+                              className="text-sm font-semibold text-gray-700 hover:text-brand-blue flex items-center gap-1"
+                            >
+                              <Phone className="w-3.5 h-3.5" /> {viewingApp.phone}
+                            </a>
+                            <a
+                              href={getWhatsAppLink(
+                                viewingApp.fullName,
+                                viewingApp.jobPosting?.title || 'General App',
+                                viewingApp.phone
+                              )}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="flex items-center gap-1 text-[10px] font-bold text-emerald-600 hover:text-emerald-755 hover:bg-emerald-100 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 transition-colors"
+                            >
+                              <MessageCircle className="w-3 h-3 fill-emerald-500 text-emerald-600" />{' '}
+                              WhatsApp
+                            </a>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
 
-                {/* Cover Letter */}
-                <div className="space-y-2">
-                  <h5 className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">
-                    Cover Letter / Notes
-                  </h5>
-                  <div className="bg-gray-50 border border-gray-100 rounded-xl p-4 text-xs text-gray-600 leading-relaxed max-h-37.5 overflow-y-auto whitespace-pre-wrap">
-                    {viewingApp.coverLetter || 'No cover letter provided by the candidate.'}
-                  </div>
-                </div>
+                    {/* Cover Letter */}
+                    <div className="space-y-2">
+                      <h5 className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">
+                        Cover Letter / Notes
+                      </h5>
+                      <div className="bg-gray-50 border border-gray-100 rounded-xl p-4 text-xs text-gray-600 leading-relaxed max-h-37.5 overflow-y-auto whitespace-pre-wrap">
+                        {viewingApp.coverLetter || 'No cover letter provided by the candidate.'}
+                      </div>
+                    </div>
+                  </>
+                )}
 
                 {/* Quick Status Update */}
                 <div className="border-t border-gray-100 pt-4 flex flex-wrap items-center justify-between gap-3">

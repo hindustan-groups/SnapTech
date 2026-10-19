@@ -63,6 +63,7 @@ import {
   listApplications,
   updateApplicationStatus,
   deleteApplication,
+  getApplicationResume,
 } from '../controllers/adminCareers.controller.js'
 import { listLegalPages, updateLegalPage } from '../controllers/legal.controller.js'
 import {
@@ -712,6 +713,12 @@ router.patch('/careers/:id', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), u
 router.delete('/careers/:id', verifyToken, requireRole('SUPER_ADMIN'), deleteJobPosting)
 
 router.get('/applications', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), listApplications)
+router.get(
+  '/applications/:id/resume',
+  verifyToken,
+  requireRole('ADMIN', 'SUPER_ADMIN'),
+  getApplicationResume
+)
 router.patch(
   '/applications/:id/status',
   verifyToken,

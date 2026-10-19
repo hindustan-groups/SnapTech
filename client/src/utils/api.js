@@ -131,4 +131,49 @@ export const api = {
       ...options,
     }),
   delete: (path, options = {}) => request(path, { method: 'DELETE', ...options }),
+  getBlob: async (path, options = {}) => {
+    const cleanPath = path.startsWith('/') ? path : `/${path}`
+    const { params, ...fetchOptions } = options
+    let url = `${BASE_URL}${cleanPath}`
+
+    if (params && typeof params === 'object') {
+      const searchParams = new URLSearchParams()
+      Object.entries(params).forEach(([key, val]) => {
+        if (val !== undefined && val !== null && val !== '') {
+          searchParams.append(key, val)
+        }
+      })
+      const qs = searchParams.toString()
+      if (qs) {
+        url += (url.includes('?') ? '&' : '?') + qs
+      }
+    }
+
+    const headers = { ...fetchOptions.headers }
+    if (typeof window !== 'undefined' && window.sessionStorage) {
+      const unlockToken = window.sessionStorage.getItem('integration_unlock_token')
+      if (unlockToken) {
+        headers['x-integration-unlock-token'] = unlockToken
+      }
+    }
+
+    const res = await fetch(url, {
+      credentials: 'include',
+      headers,
+      ...fetchOptions,
+    })
+
+    if (!res.ok) {
+      let errText
+      try {
+        const json = await res.json()
+        errText = json.message
+      } catch {
+        errText = await res.text().catch(() => 'Failed to retrieve file')
+      }
+      throw new ApiError(errText || 'Failed to retrieve file', res.status)
+    }
+
+    return res.blob()
+  },
 }

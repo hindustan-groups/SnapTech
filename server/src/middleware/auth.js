@@ -23,7 +23,10 @@ export const verifyToken = (req, res, next) => {
   const tokenFromHeader =
     authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null
 
-  const token = tokenFromCookie || tokenFromHeader
+  // 3. Fall back to query param ?token= (useful for direct file views in new browser tabs)
+  const tokenFromQuery = req.query?.token
+
+  const token = tokenFromCookie || tokenFromHeader || tokenFromQuery
 
   if (!token) {
     return res.status(401).json({
