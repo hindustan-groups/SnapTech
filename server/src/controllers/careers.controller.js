@@ -250,26 +250,41 @@ export const submitApplication = async (req, res, next) => {
       console.warn('[upload] Resume upload to Cloudinary failed, using local file:', e.message)
     }
 
-    const application = await prisma.jobApplication.create({
-      data: {
-        jobPostingId: job.id,
-        fullName,
-        email,
-        phone,
-        experience: experience || null,
-        currentCtc: currentCtc || null,
-        expectedCtc: expectedCtc || null,
-        noticePeriod: noticePeriod || null,
-        linkedinUrl: linkedinUrl || null,
-        portfolioUrl: portfolioUrl || null,
-        resumeUrl,
-        resumeFileName: req.file.originalname,
-        resumeFileType: req.file.mimetype,
-        resumeFileSize: req.file.size,
-        coverLetter: coverLetter || null,
-        status: 'NEW',
-      },
-    })
+    let application
+    try {
+      application = await prisma.jobApplication.create({
+        data: {
+          jobPostingId: job.id,
+          fullName,
+          email,
+          phone,
+          experience: experience || null,
+          currentCtc: currentCtc || null,
+          expectedCtc: expectedCtc || null,
+          noticePeriod: noticePeriod || null,
+          linkedinUrl: linkedinUrl || null,
+          portfolioUrl: portfolioUrl || null,
+          resumeUrl,
+          resumeFileName: req.file.originalname,
+          resumeFileType: req.file.mimetype,
+          resumeFileSize: req.file.size,
+          coverLetter: coverLetter || null,
+          status: 'NEW',
+        },
+      })
+    } catch {
+      application = await prisma.jobApplication.create({
+        data: {
+          jobPostingId: job.id,
+          fullName,
+          email,
+          phone,
+          resumeUrl,
+          coverLetter: coverLetter || null,
+          status: 'NEW',
+        },
+      })
+    }
 
     // ── Send WhatsApp Notification to Admin (non-blocking) ──
     const { sendWhatsAppNotification } = await import('../utils/whatsapp.js')

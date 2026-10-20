@@ -92,7 +92,7 @@ export default function CareersPage() {
 
   const allJobs = useMemo(() => {
     if (Array.isArray(data?.data)) {
-      return data.data.filter((j) => j.slug !== 'general-application')
+      return data.data
     }
     return []
   }, [data])

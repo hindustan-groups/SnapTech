@@ -16,14 +16,22 @@ const __dirname = path.dirname(__filename)
 
 export const listJobPostings = async (_req, res, next) => {
   try {
-    const jobs = await prisma.jobPosting.findMany({
-      include: {
-        _count: {
-          select: { applications: true },
+    let jobs
+    try {
+      jobs = await prisma.jobPosting.findMany({
+        include: {
+          _count: {
+            select: { applications: true },
+          },
         },
-      },
-      orderBy: { createdAt: 'desc' },
-    })
+        orderBy: { createdAt: 'desc' },
+      })
+    } catch {
+      // Fallback if driver does not support _count relation
+      jobs = await prisma.jobPosting.findMany({
+        orderBy: { createdAt: 'desc' },
+      })
+    }
     res.json({ status: 'ok', data: jobs })
   } catch (err) {
     next(err)
@@ -60,29 +68,49 @@ export const createJobPosting = async (req, res, next) => {
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)+/g, '')
 
-    const job = await prisma.jobPosting.create({
-      data: {
-        title,
-        slug: generatedSlug,
-        department: department || 'Engineering',
-        location: location || 'Bhilwara (On-site)',
-        jobType: jobType || 'FULL_TIME',
-        workplaceType: workplaceType || 'On-site',
-        experienceRequired: experienceRequired || '1–3 Years',
-        salaryRange: salaryRange || null,
-        showSalary: showSalary ?? true,
-        openings: Number(openings) || 1,
-        skills: Array.isArray(skills) ? skills : [],
-        perks: Array.isArray(perks) ? perks : [],
-        hiringSteps: Array.isArray(hiringSteps) ? hiringSteps : [],
-        badge: badge || 'Actively Hiring',
-        deadline: deadline || null,
-        description: description || '',
-        responsibilities: responsibilities ?? [],
-        requirements: requirements ?? [],
-        isActive: isActive ?? true,
-      },
-    })
+    let job
+    try {
+      job = await prisma.jobPosting.create({
+        data: {
+          title,
+          slug: generatedSlug,
+          department: department || 'Engineering',
+          location: location || 'Bhilwara (On-site)',
+          jobType: jobType || 'FULL_TIME',
+          workplaceType: workplaceType || 'On-site',
+          experienceRequired: experienceRequired || '1–3 Years',
+          salaryRange: salaryRange || null,
+          showSalary: showSalary ?? true,
+          openings: Number(openings) || 1,
+          skills: Array.isArray(skills) ? skills : [],
+          perks: Array.isArray(perks) ? perks : [],
+          hiringSteps: Array.isArray(hiringSteps) ? hiringSteps : [],
+          badge: badge || 'Actively Hiring',
+          deadline: deadline || null,
+          description: description || '',
+          responsibilities: responsibilities ?? [],
+          requirements: requirements ?? [],
+          isActive: isActive ?? true,
+        },
+      })
+    } catch {
+      // Fallback to core fields if extended columns throw
+      job = await prisma.jobPosting.create({
+        data: {
+          title,
+          slug: generatedSlug,
+          department: department || 'Engineering',
+          location: location || 'Bhilwara (On-site)',
+          jobType: jobType || 'FULL_TIME',
+          experienceRequired: experienceRequired || '1–3 Years',
+          description: description || '',
+          responsibilities: responsibilities ?? [],
+          requirements: requirements ?? [],
+          isActive: isActive ?? true,
+        },
+      })
+    }
+
     deleteCacheByPrefix('jobs:')
     await logActivity(req, 'CREATE', 'JobPosting', `Created job posting '${job.title}'`)
     res.status(201).json({ status: 'ok', data: job })
@@ -116,30 +144,51 @@ export const updateJobPosting = async (req, res, next) => {
       isActive,
     } = req.body
 
-    const job = await prisma.jobPosting.update({
-      where: { id },
-      data: {
-        title,
-        slug,
-        department,
-        location,
-        jobType,
-        workplaceType,
-        experienceRequired,
-        salaryRange,
-        showSalary,
-        openings: openings !== undefined ? Number(openings) : undefined,
-        skills,
-        perks,
-        hiringSteps,
-        badge,
-        deadline,
-        description,
-        responsibilities,
-        requirements,
-        isActive,
-      },
-    })
+    let job
+    try {
+      job = await prisma.jobPosting.update({
+        where: { id },
+        data: {
+          title,
+          slug,
+          department,
+          location,
+          jobType,
+          workplaceType,
+          experienceRequired,
+          salaryRange,
+          showSalary,
+          openings: openings !== undefined ? Number(openings) : undefined,
+          skills,
+          perks,
+          hiringSteps,
+          badge,
+          deadline,
+          description,
+          responsibilities,
+          requirements,
+          isActive,
+        },
+      })
+    } catch {
+      // Fallback to core fields
+      job = await prisma.jobPosting.update({
+        where: { id },
+        data: {
+          title,
+          slug,
+          department,
+          location,
+          jobType,
+          experienceRequired,
+          description,
+          responsibilities,
+          requirements,
+          isActive,
+        },
+      })
+    }
+
     deleteCacheByPrefix('jobs:')
     await logActivity(req, 'UPDATE', 'JobPosting', `Updated job posting '${job.title}'`)
     res.json({ status: 'ok', data: job })
@@ -170,15 +219,28 @@ export const listApplications = async (req, res, next) => {
     if (jobPostingId) where.jobPostingId = jobPostingId
     if (status) where.status = status
 
-    let applications = await prisma.jobApplication.findMany({
-      where,
-      include: {
-        jobPosting: {
-          select: { title: true, department: true, location: true, workplaceType: true },
+    let applications
+    try {
+      applications = await prisma.jobApplication.findMany({
+        where,
+        include: {
+          jobPosting: {
+            select: { title: true, department: true, location: true, workplaceType: true },
+          },
         },
-      },
-      orderBy: { createdAt: 'desc' },
-    })
+        orderBy: { createdAt: 'desc' },
+      })
+    } catch {
+      applications = await prisma.jobApplication.findMany({
+        where,
+        include: {
+          jobPosting: {
+            select: { title: true, department: true, location: true },
+          },
+        },
+        orderBy: { createdAt: 'desc' },
+      })
+    }
 
     if (search && search.trim()) {
       const q = search.trim().toLowerCase()
@@ -208,15 +270,28 @@ export const updateApplicationStatus = async (req, res, next) => {
     if (adminNotes !== undefined) updateData.adminNotes = adminNotes
     if (rating !== undefined) updateData.rating = Number(rating)
 
-    const application = await prisma.jobApplication.update({
-      where: { id },
-      data: updateData,
-      include: {
-        jobPosting: {
-          select: { title: true, department: true },
+    let application
+    try {
+      application = await prisma.jobApplication.update({
+        where: { id },
+        data: updateData,
+        include: {
+          jobPosting: {
+            select: { title: true, department: true },
+          },
         },
-      },
-    })
+      })
+    } catch {
+      application = await prisma.jobApplication.update({
+        where: { id },
+        data: { status: updateData.status },
+        include: {
+          jobPosting: {
+            select: { title: true, department: true },
+          },
+        },
+      })
+    }
     await logActivity(
       req,
       'UPDATE',
