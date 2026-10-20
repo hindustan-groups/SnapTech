@@ -17,6 +17,8 @@ import {
   MessageSquare,
   Building2,
   Share2,
+  Copy,
+  Check,
   IndianRupee,
   Users,
   Code2,
@@ -240,12 +242,40 @@ export default function JobDetailPage() {
     [job, file, applyMutation, reset]
   )
 
-  const handleShare = () => {
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(window.location.href)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
+  const handleShare = async () => {
+    const url = window.location.href
+    const title = `${job?.title || 'Open Position'} | SnapTech Digital Careers`
+    const text = `Explore this job opportunity at SnapTech Digital: ${job?.title || 'Role'} (${job?.location || 'India'})`
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ title, text, url })
+        return
+      } catch (err) {
+        if (err.name === 'AbortError') return
+      }
     }
+
+    try {
+      if (navigator.clipboard) {
+        await navigator.clipboard.writeText(url)
+        setCopied(true)
+        setTimeout(() => setCopied(false), 2500)
+      }
+    } catch {
+      // ignore clipboard error
+    }
+  }
+
+  const handleWhatsAppShare = () => {
+    const url = window.location.href
+    const text = `💼 *Job Opening at SnapTech Digital*\n*Role:* ${job?.title || 'Open Role'}\n*Location:* ${job?.location || 'Bhilwara / Remote'}\n*Experience:* ${job?.experienceRequired || 'Freshers / Experienced'}\n\n👉 Apply directly: ${url}`
+    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer')
+  }
+
+  const handleLinkedInShare = () => {
+    const url = window.location.href
+    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`, '_blank', 'noopener,noreferrer')
   }
 
   const whatsappNumber = (cfg.whatsapp || cfg.phone || '918209604849').replace(/[^0-9]/g, '')
@@ -344,13 +374,42 @@ export default function JobDetailPage() {
               Back to All Careers
             </Link>
 
-            <button
-              onClick={handleShare}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-xs text-slate-700 transition-colors cursor-pointer"
-            >
-              <Share2 className="w-3.5 h-3.5 text-brand-blue" />
-              {copied ? 'Link Copied!' : 'Share Role'}
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={handleWhatsAppShare}
+                title="Share on WhatsApp"
+                aria-label="Share opening on WhatsApp"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-xs font-bold text-emerald-700 transition-all cursor-pointer shadow-2xs hover:scale-102"
+              >
+                <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+                  <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>
+                </svg>
+                <span className="hidden sm:inline">WhatsApp</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={handleShare}
+                className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border text-xs font-bold transition-all cursor-pointer shadow-2xs ${
+                  copied
+                    ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
+                    : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200'
+                }`}
+              >
+                {copied ? (
+                  <>
+                    <Check className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>Link Copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <Share2 className="w-3.5 h-3.5 text-brand-blue" />
+                    <span>Share Opening</span>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 sm:gap-10 items-start">
@@ -429,6 +488,70 @@ export default function JobDetailPage() {
                         {job.openings ? `${job.openings} Positions` : 'Multiple Positions'}
                       </div>
                     </div>
+                  </div>
+                </div>
+
+                {/* Share Job Opening Feature Card */}
+                <div className="p-4 sm:p-5 rounded-2xl bg-linear-to-r from-blue-50/90 via-indigo-50/40 to-slate-50 border border-blue-200 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-white border border-blue-200 flex items-center justify-center text-brand-blue shrink-0 shadow-2xs">
+                      <Share2 className="w-5 h-5 text-brand-blue" />
+                    </div>
+                    <div>
+                      <h3 className="text-xs sm:text-sm font-bold text-slate-900">
+                        Know someone who would thrive in this role?
+                      </h3>
+                      <p className="text-[11px] text-slate-600 mt-0.5">
+                        Share this opening with your professional peers or network.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      type="button"
+                      onClick={handleWhatsAppShare}
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all shadow-xs cursor-pointer hover:scale-102"
+                    >
+                      <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+                        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>
+                      </svg>
+                      <span>WhatsApp</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={handleShare}
+                      className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer shadow-xs ${
+                        copied
+                          ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
+                          : 'bg-white hover:bg-slate-100 text-slate-700 border-slate-200'
+                      }`}
+                    >
+                      {copied ? (
+                        <>
+                          <Check className="w-3.5 h-3.5 text-emerald-600" />
+                          <span>Copied!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3.5 h-3.5 text-slate-500" />
+                          <span>Copy Link</span>
+                        </>
+                      )}
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={handleLinkedInShare}
+                      title="Share on LinkedIn"
+                      aria-label="Share on LinkedIn"
+                      className="p-2 rounded-xl bg-white hover:bg-[#0077b5]/10 border border-slate-200 hover:border-[#0077b5]/30 text-slate-700 hover:text-[#0077b5] transition-all cursor-pointer shadow-xs"
+                    >
+                      <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                      </svg>
+                    </button>
                   </div>
                 </div>
 
@@ -932,6 +1055,29 @@ export default function JobDetailPage() {
                     </button>
                   </form>
                 )}
+
+                {/* Sticky Card Quick Share Strip */}
+                <div className="mt-4 pt-3.5 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+                  <span className="flex items-center gap-1.5 font-medium text-slate-600">
+                    <Share2 className="w-3.5 h-3.5 text-brand-blue shrink-0" /> Share opening:
+                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={handleWhatsAppShare}
+                      className="px-2.5 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold cursor-pointer transition-colors"
+                    >
+                      WhatsApp
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleShare}
+                      className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold cursor-pointer transition-colors"
+                    >
+                      {copied ? 'Copied!' : 'Copy Link'}
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

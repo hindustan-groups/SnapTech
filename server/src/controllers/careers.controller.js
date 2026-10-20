@@ -309,31 +309,31 @@ export const submitApplication = async (req, res, next) => {
     }
 
     // ── Rapid duplicate application debounce (30-second window) ──
-    const thirtySecsAgo = new Date(Date.now() - 30 * 1000)
-    const existingApp = await prisma.jobApplication.findFirst({
-      where: {
-        jobPostingId: job.id,
-        email: email.trim().toLowerCase(),
-        createdAt: { gte: thirtySecsAgo },
-      },
-    })
-
-    if (existingApp) {
-      return res.status(400).json({
-        status: 'error',
-        message:
-          'Your application has already been received. Please wait a moment before applying again.',
+    try {
+      const thirtySecsAgo = new Date(Date.now() - 30 * 1000)
+      const existingApp = await prisma.jobApplication.findFirst({
+        where: {
+          jobPostingId: job.id,
+          email: email.trim().toLowerCase(),
+          createdAt: { gte: thirtySecsAgo },
+        },
+        select: { id: true },
       })
+
+      if (existingApp) {
+        return res.status(400).json({
+          status: 'error',
+          message:
+            'Your application has already been received. Please wait a moment before applying again.',
+        })
+      }
+    } catch (debounceErr) {
+      console.warn('[careers] Debounce duplicate check skipped:', debounceErr.message)
     }
 
     // 1. Ensure local disk persistence in uploads/resumes across both server and root directories
     const primaryUploadsDir = path.resolve(process.cwd(), 'uploads', 'resumes')
     const serverUploadsDir = path.resolve(process.cwd(), 'server', 'uploads', 'resumes')
-    await fs.promises.mkdir(primaryUploadsDir, { recursive: true })
-    if (fs.existsSync(path.resolve(process.cwd(), 'server'))) {
-      await fs.promises.mkdir(serverUploadsDir, { recursive: true }).catch(() => {})
-    }
-
     const ext = path.extname(req.file.originalname) || '.pdf'
     const cleanBase = path
       .basename(req.file.originalname, ext)
@@ -341,10 +341,16 @@ export const submitApplication = async (req, res, next) => {
       .slice(0, 40)
     const savedFilename = `${cleanBase}_${Date.now()}${ext}`
     const localFilePath = path.join(primaryUploadsDir, savedFilename)
-    await fs.promises.writeFile(localFilePath, req.file.buffer)
 
-    if (fs.existsSync(path.resolve(process.cwd(), 'server'))) {
-      await fs.promises.writeFile(path.join(serverUploadsDir, savedFilename), req.file.buffer).catch(() => {})
+    try {
+      await fs.promises.mkdir(primaryUploadsDir, { recursive: true })
+      await fs.promises.writeFile(localFilePath, req.file.buffer)
+      if (fs.existsSync(path.resolve(process.cwd(), 'server'))) {
+        await fs.promises.mkdir(serverUploadsDir, { recursive: true }).catch(() => {})
+        await fs.promises.writeFile(path.join(serverUploadsDir, savedFilename), req.file.buffer).catch(() => {})
+      }
+    } catch (fsErr) {
+      console.warn('[upload] Local disk write notice:', fsErr.message)
     }
 
     let resumeUrl = `/uploads/resumes/${savedFilename}`
@@ -366,6 +372,16 @@ export const submitApplication = async (req, res, next) => {
     }
 
     const resumeBase64 = req.file?.buffer ? req.file.buffer.toString('base64') : null
+
+    const returnSelect = {
+      id: true,
+      fullName: true,
+      email: true,
+      phone: true,
+      resumeUrl: true,
+      status: true,
+      createdAt: true,
+    }
 
     let application
     try {
@@ -389,6 +405,7 @@ export const submitApplication = async (req, res, next) => {
           coverLetter: coverLetter || null,
           status: 'NEW',
         },
+        select: returnSelect,
       })
     } catch {
       try {
@@ -411,6 +428,7 @@ export const submitApplication = async (req, res, next) => {
             coverLetter: coverLetter || null,
             status: 'NEW',
           },
+          select: returnSelect,
         })
       } catch {
         application = await prisma.jobApplication.create({
@@ -423,6 +441,7 @@ export const submitApplication = async (req, res, next) => {
             coverLetter: coverLetter || null,
             status: 'NEW',
           },
+          select: returnSelect,
         })
       }
     }
