@@ -54,5 +54,8 @@ audit-reports/
 /desktop_*.png
 /mobile_*.png
 backups/
-backups/
 scratch/
+
+# Uploaded candidate files & user uploads (local development)
+uploads/
+**/uploads/

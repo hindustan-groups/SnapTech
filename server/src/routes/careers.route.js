@@ -42,6 +42,12 @@ router.post(
       .trim()
       .isLength({ max: 5000 })
       .withMessage('Cover letter must not exceed 5000 characters'),
+    body('experience').optional({ checkFalsy: true }).trim().isLength({ max: 100 }),
+    body('currentCtc').optional({ checkFalsy: true }).trim().isLength({ max: 100 }),
+    body('expectedCtc').optional({ checkFalsy: true }).trim().isLength({ max: 100 }),
+    body('noticePeriod').optional({ checkFalsy: true }).trim().isLength({ max: 100 }),
+    body('linkedinUrl').optional({ checkFalsy: true }).trim().isLength({ max: 500 }),
+    body('portfolioUrl').optional({ checkFalsy: true }).trim().isLength({ max: 500 }),
     body('recaptchaToken').notEmpty().withMessage('reCAPTCHA token is required'),
     body('_hp').optional().isLength({ max: 0 }).withMessage('Invalid submission'),
   ],

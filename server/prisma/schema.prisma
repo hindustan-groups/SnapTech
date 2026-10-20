@@ -249,7 +249,16 @@ model JobPosting {
   department         String
   location           String
   jobType            JobType          @default(FULL_TIME)
+  workplaceType      String?          @default("On-site")
   experienceRequired String
+  salaryRange        String?
+  showSalary         Boolean          @default(true)
+  openings           Int              @default(1)
+  skills             String[]         @default([])
+  perks              String[]         @default([])
+  hiringSteps        String[]         @default([])
+  badge              String?          @default("Actively Hiring")
+  deadline           String?
   description        String
   responsibilities   String[]
   requirements       String[]
@@ -264,17 +273,28 @@ model JobPosting {
 }
 
 model JobApplication {
-  id           String            @id @default(cuid())
-  jobPostingId String
-  jobPosting   JobPosting        @relation(fields: [jobPostingId], references: [id], onDelete: Cascade)
-  fullName     String
-  email        String
-  phone        String
-  resumeUrl    String
-  coverLetter  String?
-  status       ApplicationStatus @default(NEW)
-  createdAt    DateTime          @default(now())
-  deletedAt    DateTime?
+  id             String            @id @default(cuid())
+  jobPostingId   String
+  jobPosting     JobPosting        @relation(fields: [jobPostingId], references: [id], onDelete: Cascade)
+  fullName       String
+  email          String
+  phone          String
+  experience     String?
+  currentCtc     String?
+  expectedCtc    String?
+  noticePeriod   String?
+  linkedinUrl    String?
+  portfolioUrl   String?
+  resumeUrl      String
+  resumeFileName String?
+  resumeFileType String?
+  resumeFileSize Int?
+  coverLetter    String?
+  adminNotes     String?
+  rating         Int?              @default(0)
+  status         ApplicationStatus @default(NEW)
+  createdAt      DateTime          @default(now())
+  deletedAt      DateTime?
 
   @@index([jobPostingId])
   @@index([deletedAt])

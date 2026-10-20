@@ -7,7 +7,6 @@ import {
   ArrowLeft,
   MapPin,
   Briefcase,
-  Calendar,
   Upload,
   AlertCircle,
   FileText,
@@ -18,6 +17,13 @@ import {
   MessageSquare,
   Building2,
   Share2,
+  IndianRupee,
+  Users,
+  Code2,
+  Laptop,
+  Flame,
+  X,
+  ChevronRight,
 } from 'lucide-react'
 import { Container, Button, SEO } from '@/components/ui'
 import { SITE } from '@/components/ui/SEO'
@@ -38,10 +44,38 @@ const JOB_TYPE_CLASSES = {
   CONTRACT: 'bg-amber-50 text-amber-700 border-amber-200',
 }
 
+const WORKPLACE_LABELS = {
+  REMOTE: 'Remote (Anywhere in India)',
+  HYBRID: 'Hybrid (Bhilwara HQ + Remote)',
+  ON_SITE: 'On-site (Bhilwara Campus)',
+}
+
+const DEFAULT_HIRING_STEPS = [
+  { step: 1, title: 'CV & Profile Review', desc: 'Our engineering lead evaluates your experience and code samples within 48 hours.' },
+  { step: 2, title: 'Technical Deep-Dive', desc: 'A 45-min practical discussion on system design, architecture, and live problem-solving.' },
+  { step: 3, title: 'Leadership & Culture Fit', desc: 'Meet our founders and team leads to discuss alignment, impact, and roadmap.' },
+  { step: 4, title: 'Offer & Rapid Onboarding', desc: 'Transparent compensation offer rolled out with full workstation and equipment support.' },
+]
+
+const DEFAULT_PERKS = [
+  'Modern Apple Silicon M-Series or High-Spec Workstation',
+  'Flexible Hybrid Working Schedule with High Autonomy',
+  'Comprehensive Health & Family Medical Coverage',
+  'Annual Learning & Certification Budget (AWS, GCP, etc.)',
+  'Performance-Driven Annual Bonuses & Milestone Rewards',
+  'Direct Mentorship & Direct Impact on Enterprise Scale Systems',
+]
+
 const applySchema = z.object({
   fullName: z.string().min(2, 'Full Name is required'),
   email: z.string().email('Valid email address is required'),
   phone: z.string().min(10, 'Valid contact number is required'),
+  experience: z.string().optional(),
+  currentCtc: z.string().optional(),
+  expectedCtc: z.string().optional(),
+  noticePeriod: z.string().optional(),
+  linkedinUrl: z.string().optional(),
+  portfolioUrl: z.string().optional(),
   coverLetter: z.string().optional(),
   consent: z
     .boolean()
@@ -72,6 +106,12 @@ export default function JobDetailPage() {
       fullName: '',
       email: '',
       phone: '',
+      experience: '',
+      currentCtc: '',
+      expectedCtc: '',
+      noticePeriod: '30 Days',
+      linkedinUrl: '',
+      portfolioUrl: '',
       coverLetter: '',
       consent: false,
       _hp: '',
@@ -97,18 +137,24 @@ export default function JobDetailPage() {
     const ext = selectedFile.name.split('.').pop().toLowerCase()
 
     if (!allowedTypes.includes(selectedFile.type) && !['pdf', 'doc', 'docx'].includes(ext)) {
-      setFileError('Only PDF and Word documents (.doc, .docx) are allowed.')
+      setFileError('Only PDF and Word documents (.pdf, .doc, .docx) are allowed.')
       setFile(null)
       return
     }
 
-    if (selectedFile.size > 5 * 1024 * 1024) {
-      setFileError('File size must be under 5MB.')
+    if (selectedFile.size > 10 * 1024 * 1024) {
+      setFileError('File size must be under 10MB.')
       setFile(null)
       return
     }
 
     setFile(selectedFile)
+  }
+
+  const formatFileSize = (bytes) => {
+    if (!bytes) return ''
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
   }
 
   const onSubmit = useCallback(
@@ -118,7 +164,7 @@ export default function JobDetailPage() {
       if (!job?.slug) return
 
       if (!file) {
-        setFileError('Please upload your resume.')
+        setFileError('Please upload your resume (PDF or Word document).')
         return
       }
 
@@ -138,16 +184,19 @@ export default function JobDetailPage() {
           recaptchaToken = ''
         }
       }
-      // Graceful fallback token ensures job applications are never blocked
       recaptchaToken = recaptchaToken || 'dev-token'
 
       const payload = new FormData()
       payload.append('fullName', formData.fullName)
       payload.append('email', formData.email)
       payload.append('phone', formData.phone)
-      if (formData.coverLetter) {
-        payload.append('coverLetter', formData.coverLetter)
-      }
+      if (formData.experience) payload.append('experience', formData.experience)
+      if (formData.currentCtc) payload.append('currentCtc', formData.currentCtc)
+      if (formData.expectedCtc) payload.append('expectedCtc', formData.expectedCtc)
+      if (formData.noticePeriod) payload.append('noticePeriod', formData.noticePeriod)
+      if (formData.linkedinUrl) payload.append('linkedinUrl', formData.linkedinUrl)
+      if (formData.portfolioUrl) payload.append('portfolioUrl', formData.portfolioUrl)
+      if (formData.coverLetter) payload.append('coverLetter', formData.coverLetter)
       payload.append('resume', file)
       payload.append('recaptchaToken', recaptchaToken)
       payload.append('_hp', formData._hp || '')
@@ -287,19 +336,32 @@ export default function JobDetailPage() {
             {/* Left Column: Job Details */}
             <div className="lg:col-span-2 space-y-8">
               {/* Header Box */}
-              <div className="p-6 sm:p-8 rounded-3xl bg-slate-50/50 border border-slate-200 shadow-sm space-y-6">
+              <div className="p-6 sm:p-8 rounded-3xl bg-slate-50/70 border border-slate-200/90 shadow-sm space-y-6">
                 <div className="space-y-4 border-b border-slate-200 pb-6">
-                  <div className="flex items-center gap-2.5 flex-wrap">
+                  {/* Badges Bar */}
+                  <div className="flex items-center gap-2 flex-wrap">
                     <span
-                      className={`text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded border ${typeClass}`}
+                      className={`text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-md border ${typeClass}`}
                     >
                       {typeLabel}
                     </span>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600 bg-slate-100 border border-slate-200 px-3 py-1 rounded">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-700 bg-white border border-slate-200 px-3 py-1 rounded-md">
                       {job.department}
                     </span>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded flex items-center gap-1">
-                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" /> Direct Hiring
+                    {job.workplaceType && (
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 border border-indigo-200 px-3 py-1 rounded-md flex items-center gap-1.5">
+                        <Laptop className="w-3.5 h-3.5 text-indigo-600" />
+                        {WORKPLACE_LABELS[job.workplaceType] || job.workplaceType}
+                      </span>
+                    )}
+                    {job.badge && (
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-amber-800 bg-amber-50 border border-amber-200 px-3 py-1 rounded-md flex items-center gap-1">
+                        <Flame className="w-3.5 h-3.5 text-amber-500 fill-amber-400" />
+                        {job.badge}
+                      </span>
+                    )}
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-md flex items-center gap-1">
+                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" /> Verified Opening
                     </span>
                   </div>
 
@@ -307,31 +369,73 @@ export default function JobDetailPage() {
                     {job.title}
                   </h1>
 
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-2">
-                    <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600">
-                      <MapPin className="w-4 h-4 text-brand-blue shrink-0" />
-                      <span>{job.location}</span>
+                  {/* Corporate Attributes Matrix */}
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3">
+                    <div className="p-3 rounded-xl bg-white border border-slate-200/80 shadow-2xs">
+                      <div className="text-[10px] uppercase font-bold tracking-wider text-slate-400 flex items-center gap-1">
+                        <MapPin className="w-3 h-3 text-brand-blue" /> Location
+                      </div>
+                      <div className="text-xs sm:text-sm font-bold text-slate-800 mt-1 truncate">
+                        {job.location}
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600">
-                      <Briefcase className="w-4 h-4 text-brand-blue shrink-0" />
-                      <span>{job.experienceRequired}</span>
+
+                    <div className="p-3 rounded-xl bg-white border border-slate-200/80 shadow-2xs">
+                      <div className="text-[10px] uppercase font-bold tracking-wider text-slate-400 flex items-center gap-1">
+                        <Briefcase className="w-3 h-3 text-brand-blue" /> Experience
+                      </div>
+                      <div className="text-xs sm:text-sm font-bold text-slate-800 mt-1 truncate">
+                        {job.experienceRequired}
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 col-span-2 sm:col-span-1">
-                      <Calendar className="w-4 h-4 text-brand-blue shrink-0" />
-                      <span>
-                        Posted:{' '}
-                        {new Date(job.createdAt).toLocaleDateString('en-IN', {
-                          day: 'numeric',
-                          month: 'short',
-                          year: 'numeric',
-                        })}
-                      </span>
+
+                    <div className="p-3 rounded-xl bg-white border border-slate-200/80 shadow-2xs">
+                      <div className="text-[10px] uppercase font-bold tracking-wider text-slate-400 flex items-center gap-1">
+                        <IndianRupee className="w-3 h-3 text-emerald-600" /> Compensation
+                      </div>
+                      <div className="text-xs sm:text-sm font-bold text-emerald-700 mt-1 truncate">
+                        {job.showSalary !== false && job.salaryRange
+                          ? `₹ ${job.salaryRange}`
+                          : 'Competitive CTC'}
+                      </div>
+                    </div>
+
+                    <div className="p-3 rounded-xl bg-white border border-slate-200/80 shadow-2xs">
+                      <div className="text-[10px] uppercase font-bold tracking-wider text-slate-400 flex items-center gap-1">
+                        <Users className="w-3 h-3 text-purple-600" /> Openings
+                      </div>
+                      <div className="text-xs sm:text-sm font-bold text-purple-800 mt-1">
+                        {job.openings ? `${job.openings} Positions` : 'Multiple Positions'}
+                      </div>
                     </div>
                   </div>
                 </div>
 
+                {/* Tech Stack & Required Skills */}
+                {((Array.isArray(job.skills) && job.skills.length > 0) ||
+                  (Array.isArray(job.tags) && job.tags.length > 0)) && (
+                  <div className="space-y-3 pt-1">
+                    <h2 className="font-heading text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
+                      <Code2 className="w-4 h-4 text-brand-blue" /> Core Tech Stack &amp; Skills
+                    </h2>
+                    <div className="flex flex-wrap gap-2">
+                      {(Array.isArray(job.skills) && job.skills.length > 0 ? job.skills : job.tags).map(
+                        (skill, i) => (
+                          <span
+                            key={i}
+                            className="px-3 py-1 rounded-lg bg-white border border-slate-300 text-slate-800 text-xs font-semibold shadow-2xs flex items-center gap-1.5"
+                          >
+                            <span className="w-1.5 h-1.5 rounded-full bg-brand-blue" />
+                            {skill}
+                          </span>
+                        )
+                      )}
+                    </div>
+                  </div>
+                )}
+
                 {/* Description */}
-                <div className="space-y-3">
+                <div className="space-y-3 pt-2">
                   <h2 className="font-heading text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-brand-blue animate-pulse" /> Role Overview
                   </h2>
@@ -379,9 +483,79 @@ export default function JobDetailPage() {
                     </ul>
                   </div>
                 )}
+
+                {/* Transparent 4-Step Hiring Process Roadmap */}
+                <div className="space-y-4 pt-4 border-t border-slate-200">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-brand-blue">
+                        Clear &amp; Respectful Timeline
+                      </span>
+                      <h2 className="font-heading text-base sm:text-lg font-bold text-slate-900">
+                        Our Transparent Hiring Process
+                      </h2>
+                    </div>
+                    <span className="text-xs font-semibold text-slate-500 hidden sm:inline-block">
+                      Average turnaround: 5-7 days
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                    {(Array.isArray(job.hiringSteps) && job.hiringSteps.length > 0
+                      ? job.hiringSteps
+                      : DEFAULT_HIRING_STEPS
+                    ).map((step, idx) => (
+                      <div
+                        key={idx}
+                        className="p-3.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs flex items-start gap-3"
+                      >
+                        <div className="w-7 h-7 rounded-lg bg-blue-50 border border-blue-200 text-brand-blue text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">
+                          {idx + 1}
+                        </div>
+                        <div className="space-y-0.5">
+                          <h4 className="text-xs font-bold text-slate-900">
+                            {typeof step === 'object' ? step.title : step}
+                          </h4>
+                          {typeof step === 'object' && step.desc && (
+                            <p className="text-[11px] text-slate-500 leading-normal">
+                              {step.desc}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Company Perks & Benefits */}
+                <div className="space-y-4 pt-4 border-t border-slate-200">
+                  <div>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-brand-blue">
+                      Top-Tier Compensation &amp; Culture
+                    </span>
+                    <h2 className="font-heading text-base sm:text-lg font-bold text-slate-900">
+                      Why Top Builders Join SnapTech
+                    </h2>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    {(Array.isArray(job.perks) && job.perks.length > 0
+                      ? job.perks
+                      : DEFAULT_PERKS
+                    ).map((perk, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-100/70 border border-slate-200 text-xs text-slate-700"
+                      >
+                        <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
+                        <span className="font-medium">{perk}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
 
-              {/* Company Culture / Backed by Parent Group Card */}
+              {/* Company Culture & Support Card */}
               <div className="p-6 sm:p-8 rounded-3xl bg-linear-to-r from-blue-50 to-indigo-50/70 border border-blue-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 shadow-xs">
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 text-xs font-bold text-brand-blue uppercase tracking-wider">
@@ -425,10 +599,22 @@ export default function JobDetailPage() {
                         Application Submitted!
                       </h3>
                       <p className="text-slate-600 text-xs leading-relaxed px-2">
-                        Thank you for applying. Our talent acquisition team will review your resume
-                        and reach out within 3 to 5 business days.
+                        Thank you for applying for <strong>{job.title}</strong>. Your CV and profile details have been directly routed to our Talent Acquisition desk.
                       </p>
                     </div>
+
+                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-left text-xs space-y-2">
+                      <div className="font-bold text-slate-800">What happens next:</div>
+                      <div className="flex items-center gap-2 text-slate-600">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                        <span>Resume screening &amp; matching (24-48 hrs)</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-slate-600">
+                        <ChevronRight className="w-3.5 h-3.5 text-brand-blue shrink-0" />
+                        <span>Hiring team will reach out via WhatsApp/Phone</span>
+                      </div>
+                    </div>
+
                     <Button
                       variant="primary"
                       size="sm"
@@ -441,12 +627,20 @@ export default function JobDetailPage() {
                 ) : (
                   <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     <div className="border-b border-slate-200 pb-3 mb-2">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-brand-blue">
-                        Fast-Track Application
-                      </span>
-                      <h3 className="font-heading text-lg font-bold text-slate-900 mt-0.5">
-                        {isGeneral ? 'General Pitch' : 'Apply for Role'}
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-brand-blue">
+                          Direct Talent Pipeline
+                        </span>
+                        <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                          Fast Turnaround
+                        </span>
+                      </div>
+                      <h3 className="font-heading text-lg font-bold text-slate-900 mt-1">
+                        {isGeneral ? 'General Application' : 'Apply for this Role'}
                       </h3>
+                      <p className="text-[11px] text-slate-500 mt-0.5">
+                        Fill in your professional credentials. Our hiring lead reviews every application.
+                      </p>
                     </div>
 
                     {apiError && (
@@ -457,14 +651,14 @@ export default function JobDetailPage() {
                     )}
 
                     {/* Name */}
-                    <div className="space-y-1.5">
+                    <div className="space-y-1">
                       <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-700">
                         Full Name *
                       </label>
                       <input
                         type="text"
                         {...register('fullName')}
-                        placeholder="e.g. Vikramaditya Sharma"
+                        placeholder="e.g. Rahul Sharma"
                         className="w-full bg-slate-50 border border-slate-300 focus:border-brand-blue focus:ring-1 focus:ring-brand-blue/30 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none transition-all"
                       />
                       {errors.fullName && (
@@ -473,14 +667,14 @@ export default function JobDetailPage() {
                     </div>
 
                     {/* Email */}
-                    <div className="space-y-1.5">
+                    <div className="space-y-1">
                       <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-700">
                         Email Address *
                       </label>
                       <input
                         type="email"
                         {...register('email')}
-                        placeholder="e.g. vikram@domain.com"
+                        placeholder="e.g. rahul@example.com"
                         className="w-full bg-slate-50 border border-slate-300 focus:border-brand-blue focus:ring-1 focus:ring-brand-blue/30 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none transition-all"
                       />
                       {errors.email && (
@@ -489,7 +683,7 @@ export default function JobDetailPage() {
                     </div>
 
                     {/* Phone */}
-                    <div className="space-y-1.5">
+                    <div className="space-y-1">
                       <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-700">
                         Phone / WhatsApp *
                       </label>
@@ -504,55 +698,161 @@ export default function JobDetailPage() {
                       )}
                     </div>
 
-                    {/* Resume Upload */}
-                    <div className="space-y-1.5">
+                    {/* Experience & Notice Period Grid */}
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-700">
+                          Experience
+                        </label>
+                        <input
+                          type="text"
+                          {...register('experience')}
+                          placeholder="e.g. 3.5 Years"
+                          className="w-full bg-slate-50 border border-slate-300 focus:border-brand-blue rounded-xl px-3 py-2 text-xs text-slate-900 placeholder-slate-400 focus:outline-none"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-700">
+                          Notice Period
+                        </label>
+                        <select
+                          {...register('noticePeriod')}
+                          className="w-full bg-slate-50 border border-slate-300 focus:border-brand-blue rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none cursor-pointer"
+                        >
+                          <option value="Immediate">Immediate</option>
+                          <option value="15 Days">15 Days</option>
+                          <option value="30 Days">30 Days</option>
+                          <option value="60 Days">60 Days</option>
+                          <option value="90 Days">90 Days</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    {/* Current & Expected CTC */}
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-700">
+                          Current CTC
+                        </label>
+                        <input
+                          type="text"
+                          {...register('currentCtc')}
+                          placeholder="e.g. ₹9 LPA"
+                          className="w-full bg-slate-50 border border-slate-300 focus:border-brand-blue rounded-xl px-3 py-2 text-xs text-slate-900 placeholder-slate-400 focus:outline-none"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-700">
+                          Expected CTC
+                        </label>
+                        <input
+                          type="text"
+                          {...register('expectedCtc')}
+                          placeholder="e.g. ₹15 LPA"
+                          className="w-full bg-slate-50 border border-slate-300 focus:border-brand-blue rounded-xl px-3 py-2 text-xs text-slate-900 placeholder-slate-400 focus:outline-none"
+                        />
+                      </div>
+                    </div>
+
+                    {/* LinkedIn & Portfolio Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-700">
+                          LinkedIn Profile
+                        </label>
+                        <input
+                          type="url"
+                          {...register('linkedinUrl')}
+                          placeholder="linkedin.com/in/username"
+                          className="w-full bg-slate-50 border border-slate-300 focus:border-brand-blue rounded-xl px-3 py-2 text-xs text-slate-900 placeholder-slate-400 focus:outline-none"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-700">
+                          Portfolio / GitHub
+                        </label>
+                        <input
+                          type="url"
+                          {...register('portfolioUrl')}
+                          placeholder="github.com/username"
+                          className="w-full bg-slate-50 border border-slate-300 focus:border-brand-blue rounded-xl px-3 py-2 text-xs text-slate-900 placeholder-slate-400 focus:outline-none"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Resume Upload Box */}
+                    <div className="space-y-1.5 pt-1">
                       <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-700">
-                        Upload Resume (PDF, DOC - Max 5MB) *
+                        Upload Resume / CV (PDF, DOC, DOCX — Max 10MB) *
                       </label>
                       <div
-                        className={`relative border border-dashed rounded-xl p-4 transition-all text-center ${
+                        className={`relative border-2 border-dashed rounded-2xl p-4 transition-all text-center ${
                           file
-                            ? 'border-emerald-500 bg-emerald-50/50'
-                            : 'border-slate-300 hover:border-brand-blue/50 bg-slate-50/50'
+                            ? 'border-emerald-500 bg-emerald-50/40'
+                            : 'border-slate-300 hover:border-brand-blue bg-slate-50/60'
                         }`}
                       >
                         <input
                           type="file"
                           accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                           onChange={handleFileChange}
-                          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                         />
-                        <div className="space-y-1.5">
-                          <Upload
-                            className={`w-5 h-5 mx-auto ${
-                              file ? 'text-emerald-600 animate-bounce' : 'text-slate-400'
-                            }`}
-                          />
-                          {file ? (
-                            <div className="flex items-center justify-center gap-1.5 text-xs text-emerald-700 font-bold max-w-full truncate px-2">
-                              <FileText className="w-3.5 h-3.5 shrink-0" />
-                              <span className="truncate">{file.name}</span>
+                        {file ? (
+                          <div className="flex items-center justify-between gap-3 text-left">
+                            <div className="flex items-center gap-2.5 min-w-0">
+                              <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                                <FileText className="w-5 h-5" />
+                              </div>
+                              <div className="min-w-0">
+                                <p className="text-xs font-bold text-slate-900 truncate">
+                                  {file.name}
+                                </p>
+                                <p className="text-[10px] text-emerald-700 font-semibold">
+                                  {formatFileSize(file.size)} • Ready to upload
+                                </p>
+                              </div>
                             </div>
-                          ) : (
-                            <p className="text-[11px] text-slate-500 leading-normal">
-                              Click or drop resume file here
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                setFile(null)
+                              }}
+                              className="relative z-20 p-1.5 text-slate-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors"
+                              title="Remove file"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="space-y-1 py-1">
+                            <Upload className="w-6 h-6 mx-auto text-brand-blue" />
+                            <p className="text-xs font-bold text-slate-700">
+                              Click or drag &amp; drop your CV here
                             </p>
-                          )}
-                        </div>
+                            <p className="text-[10px] text-slate-400">
+                              Supports PDF, Word (.doc, .docx) up to 10MB
+                            </p>
+                          </div>
+                        )}
                       </div>
-                      {fileError && <p className="text-[10px] text-red-500">{fileError}</p>}
+                      {fileError && <p className="text-[10px] text-red-500 font-medium">{fileError}</p>}
                     </div>
 
                     {/* Cover Letter */}
-                    <div className="space-y-1.5">
+                    <div className="space-y-1">
                       <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-700">
-                        Brief Note / Portfolio Link (Optional)
+                        Cover Note / Personal Pitch (Optional)
                       </label>
                       <textarea
-                        rows="3"
+                        rows="2"
                         {...register('coverLetter')}
-                        placeholder="Highlight your standout achievements or GitHub/portfolio links..."
-                        className="w-full bg-slate-50 border border-slate-300 focus:border-brand-blue focus:ring-1 focus:ring-brand-blue/30 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none transition-all resize-none"
+                        placeholder="Brief summary of your proudest accomplishments, core strengths, or why you want to join..."
+                        className="w-full bg-slate-50 border border-slate-300 focus:border-brand-blue rounded-xl px-3.5 py-2 text-xs text-slate-900 placeholder-slate-400 focus:outline-none transition-all resize-none"
                       />
                     </div>
 
@@ -567,7 +867,7 @@ export default function JobDetailPage() {
                       />
                     </div>
 
-                    {/* User Permission / Privacy Consent Checkbox (DPDP & GDPR Compliant) */}
+                    {/* DPDP Consent Checkbox */}
                     <div className="pt-1">
                       <label className="flex items-start gap-2 cursor-pointer select-none">
                         <input
@@ -603,10 +903,10 @@ export default function JobDetailPage() {
                       {applyMutation.isPending ? (
                         <>
                           <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                          Submitting Application…
+                          Transmitting Application &amp; CV…
                         </>
                       ) : (
-                        'Submit Application'
+                        'Submit Job Application'
                       )}
                     </button>
                   </form>

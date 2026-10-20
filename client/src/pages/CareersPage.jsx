@@ -14,6 +14,10 @@ import {
   Code2,
   ShieldCheck,
   MessageSquare,
+  Laptop,
+  IndianRupee,
+  Users,
+  Flame,
 } from 'lucide-react'
 import { Container, Button, SEO } from '@/components/ui'
 import { useActiveJobs } from '@/hooks/useCareers'
@@ -33,6 +37,17 @@ const JOB_TYPE_CLASSES = {
   CONTRACT: 'bg-amber-50 text-amber-700 border-amber-200',
 }
 
+const WORKPLACE_LABELS = {
+  REMOTE: 'Remote',
+  HYBRID: 'Hybrid',
+  ON_SITE: 'On-site',
+}
+
+const WORKPLACE_CLASSES = {
+  REMOTE: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+  HYBRID: 'bg-blue-50 text-brand-blue border-blue-200',
+  ON_SITE: 'bg-slate-100 text-slate-700 border-slate-200',
+}
 
 const CULTURE_PILLARS = [
   {
@@ -72,6 +87,7 @@ export default function CareersPage() {
   const cfg = siteSettings?.data || {}
 
   const [selectedDept, setSelectedDept] = useState('ALL')
+  const [selectedWorkplace, setSelectedWorkplace] = useState('ALL')
   const [searchQuery, setSearchQuery] = useState('')
 
   const allJobs = useMemo(() => {
@@ -91,16 +107,22 @@ export default function CareersPage() {
   const filteredJobs = useMemo(() => {
     return allJobs.filter((job) => {
       const matchesDept = selectedDept === 'ALL' || job.department === selectedDept
+      const matchesWorkplace =
+        selectedWorkplace === 'ALL' || job.workplaceType === selectedWorkplace
       const query = searchQuery.toLowerCase().trim()
+      const skillsStr = Array.isArray(job.skills) ? job.skills.join(' ').toLowerCase() : ''
+      const tagsStr = Array.isArray(job.tags) ? job.tags.join(' ').toLowerCase() : ''
       const matchesQuery =
         !query ||
         job.title.toLowerCase().includes(query) ||
         job.department?.toLowerCase().includes(query) ||
         job.location?.toLowerCase().includes(query) ||
-        job.description?.toLowerCase().includes(query)
-      return matchesDept && matchesQuery
+        job.description?.toLowerCase().includes(query) ||
+        skillsStr.includes(query) ||
+        tagsStr.includes(query)
+      return matchesDept && matchesWorkplace && matchesQuery
     })
-  }, [allJobs, selectedDept, searchQuery])
+  }, [allJobs, selectedDept, selectedWorkplace, searchQuery])
 
   const whatsappNumber = (cfg.whatsapp || cfg.phone || '918209604849').replace(/[^0-9]/g, '')
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
@@ -283,36 +305,64 @@ export default function CareersPage() {
             </div>
           </div>
 
-          {/* Department Filter Tabs */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-8 scrollbar-none">
-            {departments.map((dept) => {
-              const count =
-                dept === 'ALL'
-                  ? allJobs.length
-                  : allJobs.filter((j) => j.department === dept).length
-              return (
-                <button
-                  key={dept}
-                  onClick={() => setSelectedDept(dept)}
-                  className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer border ${
-                    selectedDept === dept
-                      ? 'bg-brand-blue text-white border-brand-blue font-bold shadow-xs'
-                      : 'bg-slate-100 text-slate-700 border-slate-200 hover:border-slate-300 hover:text-slate-900'
-                  }`}
-                >
-                  {dept === 'ALL' ? 'All Roles' : dept}
-                  <span
-                    className={`ml-2 text-[10px] px-1.5 py-0.5 rounded-full ${
+          {/* Filter Controls: Department & Workplace Model */}
+          <div className="space-y-3 mb-8">
+            {/* Department Filter Tabs */}
+            <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+              {departments.map((dept) => {
+                const count =
+                  dept === 'ALL'
+                    ? allJobs.length
+                    : allJobs.filter((j) => j.department === dept).length
+                return (
+                  <button
+                    key={dept}
+                    onClick={() => setSelectedDept(dept)}
+                    className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer border ${
                       selectedDept === dept
-                        ? 'bg-white/20 text-white'
-                        : 'bg-slate-200 text-slate-600'
+                        ? 'bg-brand-blue text-white border-brand-blue font-bold shadow-xs'
+                        : 'bg-slate-100 text-slate-700 border-slate-200 hover:border-slate-300 hover:text-slate-900'
                     }`}
                   >
-                    {count}
-                  </span>
+                    {dept === 'ALL' ? 'All Roles' : dept}
+                    <span
+                      className={`ml-2 text-[10px] px-1.5 py-0.5 rounded-full ${
+                        selectedDept === dept
+                          ? 'bg-white/20 text-white'
+                          : 'bg-slate-200 text-slate-600'
+                      }`}
+                    >
+                      {count}
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
+
+            {/* Workplace Model Quick Filter */}
+            <div className="flex items-center gap-2 text-xs text-slate-500 overflow-x-auto pb-2 scrollbar-none">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 shrink-0">
+                Workplace:
+              </span>
+              {[
+                { key: 'ALL', label: 'All Workplace Models' },
+                { key: 'REMOTE', label: 'Remote Only' },
+                { key: 'HYBRID', label: 'Hybrid' },
+                { key: 'ON_SITE', label: 'On-site' },
+              ].map((wp) => (
+                <button
+                  key={wp.key}
+                  onClick={() => setSelectedWorkplace(wp.key)}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-medium border transition-colors cursor-pointer whitespace-nowrap ${
+                    selectedWorkplace === wp.key
+                      ? 'bg-slate-900 text-white border-slate-900 font-semibold'
+                      : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-100'
+                  }`}
+                >
+                  {wp.label}
                 </button>
-              )
-            })}
+              ))}
+            </div>
           </div>
 
           {/* Jobs Listing */}
@@ -336,6 +386,7 @@ export default function CareersPage() {
                   size="sm"
                   onClick={() => {
                     setSelectedDept('ALL')
+                    setSelectedWorkplace('ALL')
                     setSearchQuery('')
                   }}
                   className="border-slate-300 text-slate-700 hover:bg-slate-100"
@@ -355,29 +406,54 @@ export default function CareersPage() {
                 const typeClass =
                   JOB_TYPE_CLASSES[job.jobType] || 'bg-slate-100 text-slate-700 border-slate-200'
                 const typeLabel = JOB_TYPE_LABELS[job.jobType] || job.jobType
+                const workplaceClass =
+                  WORKPLACE_CLASSES[job.workplaceType] || 'bg-slate-100 text-slate-700 border-slate-200'
+                const workplaceLabel =
+                  WORKPLACE_LABELS[job.workplaceType] || job.workplaceType || 'Hybrid'
+
+                const skillsList =
+                  Array.isArray(job.skills) && job.skills.length > 0
+                    ? job.skills
+                    : Array.isArray(job.tags)
+                    ? job.tags
+                    : []
 
                 return (
                   <Link
                     key={job.id || job.slug}
                     to={`/careers/${job.slug}`}
-                    className="group relative block p-6 sm:p-7 rounded-2xl bg-slate-50/50 hover:bg-white border border-slate-200 hover:border-brand-blue/40 transition-all duration-300 hover:shadow-md overflow-hidden"
+                    className="group relative block p-6 sm:p-7 rounded-2xl bg-slate-50/60 hover:bg-white border border-slate-200 hover:border-brand-blue/50 transition-all duration-300 hover:shadow-md overflow-hidden"
                   >
                     <div className="absolute top-0 left-0 w-1.5 h-full bg-transparent group-hover:bg-brand-blue transition-all duration-300" />
 
                     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pl-2 sm:pl-3">
                       <div className="space-y-3 max-w-3xl">
-                        <div className="flex items-center gap-2.5 flex-wrap">
+                        {/* Badges Bar */}
+                        <div className="flex items-center gap-2 flex-wrap">
                           <span
                             className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded border ${typeClass}`}
                           >
                             {typeLabel}
                           </span>
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600 bg-slate-100 border border-slate-200 px-2.5 py-0.5 rounded">
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-700 bg-white border border-slate-200 px-2.5 py-0.5 rounded">
                             {job.department}
                           </span>
-                          {job.isFeatured && (
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded flex items-center gap-1">
-                              <Sparkles className="w-3 h-3 text-amber-500" /> Priority Role
+                          <span
+                            className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded border flex items-center gap-1 ${workplaceClass}`}
+                          >
+                            <Laptop className="w-3 h-3" />
+                            {workplaceLabel}
+                          </span>
+                          {(job.badge || job.isFeatured) && (
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-amber-800 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded flex items-center gap-1">
+                              <Flame className="w-3 h-3 text-amber-500 fill-amber-400" />
+                              {job.badge || 'Priority Role'}
+                            </span>
+                          )}
+                          {job.openings > 1 && (
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-purple-700 bg-purple-50 border border-purple-200 px-2 py-0.5 rounded flex items-center gap-1">
+                              <Users className="w-3 h-3 text-purple-600" />
+                              {job.openings} Openings
                             </span>
                           )}
                         </div>
@@ -390,27 +466,41 @@ export default function CareersPage() {
                           {job.description}
                         </p>
 
-                        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-slate-500 pt-1">
-                          <span className="flex items-center gap-1.5 text-slate-700">
-                            <MapPin className="w-3.5 h-3.5 text-brand-blue" /> {job.location}
+                        {/* Metadata row */}
+                        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-slate-600 pt-1">
+                          <span className="flex items-center gap-1.5 text-slate-700 font-medium">
+                            <MapPin className="w-3.5 h-3.5 text-brand-blue shrink-0" /> {job.location}
                           </span>
-                          <span className="flex items-center gap-1.5 text-slate-700">
-                            <Clock className="w-3.5 h-3.5 text-brand-blue" />{' '}
+                          <span className="flex items-center gap-1.5 text-slate-700 font-medium">
+                            <Clock className="w-3.5 h-3.5 text-brand-blue shrink-0" />{' '}
                             {job.experienceRequired}
                           </span>
-                          {job.tags && job.tags.length > 0 && (
-                            <div className="hidden sm:flex items-center gap-1.5">
-                              {job.tags.slice(0, 4).map((tag, idx) => (
-                                <span
-                                  key={idx}
-                                  className="text-[10px] bg-slate-100 text-slate-600 border border-slate-200 px-2 py-0.5 rounded"
-                                >
-                                  {tag}
-                                </span>
-                              ))}
-                            </div>
-                          )}
+                          <span className="flex items-center gap-1 text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                            <IndianRupee className="w-3 h-3" />
+                            {job.showSalary !== false && job.salaryRange
+                              ? job.salaryRange
+                              : 'Competitive CTC'}
+                          </span>
                         </div>
+
+                        {/* Skill Chips */}
+                        {skillsList.length > 0 && (
+                          <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                            {skillsList.slice(0, 5).map((skill, idx) => (
+                              <span
+                                key={idx}
+                                className="text-[10px] font-medium bg-white text-slate-700 border border-slate-200/90 px-2 py-0.5 rounded shadow-2xs"
+                              >
+                                {skill}
+                              </span>
+                            ))}
+                            {skillsList.length > 5 && (
+                              <span className="text-[10px] text-slate-400 font-medium">
+                                +{skillsList.length - 5} more
+                              </span>
+                            )}
+                          </div>
+                        )}
                       </div>
 
                       <div className="shrink-0 flex items-center gap-2 text-xs font-bold text-brand-blue group-hover:translate-x-1.5 transition-transform">
