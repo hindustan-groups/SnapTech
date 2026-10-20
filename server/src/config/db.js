@@ -1240,6 +1240,22 @@ const mockPrisma = {
       let list = [...mockJobPostings]
       if (args?.where?.isActive !== undefined)
         list = list.filter((j) => j.isActive === args.where.isActive)
+      if (args?.where?.slug)
+        list = list.filter((j) => j.slug === args.where.slug)
+      if (args?.where?.department)
+        list = list.filter((j) => j.department === args.where.department)
+      
+      // Calculate applications count for admin list
+      if (args?.include?._count) {
+        list = list.map((job) => ({
+          ...job,
+          _count: {
+            applications: mockJobApplications.filter(
+              (a) => a.jobPostingId === job.id && !a.deletedAt
+            ).length,
+          },
+        }))
+      }
       return applyPagination(list, args)
     },
     findUnique: async (args) => {
@@ -1247,12 +1263,42 @@ const mockPrisma = {
       if (args.where.slug) return mockJobPostings.find((j) => j.slug === args.where.slug) || null
       return null
     },
+    upsert: async (args) => {
+      let job = mockJobPostings.find(
+        (j) =>
+          (args.where.id && j.id === args.where.id) ||
+          (args.where.slug && j.slug === args.where.slug)
+      )
+      if (job) {
+        const idx = mockJobPostings.indexOf(job)
+        mockJobPostings[idx] = { ...mockJobPostings[idx], ...args.update, updatedAt: new Date() }
+        return mockJobPostings[idx]
+      } else {
+        const item = {
+          id: `jp-${Date.now()}`,
+          responsibilities: [],
+          requirements: [],
+          skills: [],
+          perks: [],
+          hiringSteps: [],
+          isActive: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          ...args.create,
+        }
+        mockJobPostings.push(item)
+        return item
+      }
+    },
     count: async (args) => mockJobPostings.length,
     create: async (args) => {
       const item = {
         id: `jp-${Date.now()}`,
         responsibilities: [],
         requirements: [],
+        skills: [],
+        perks: [],
+        hiringSteps: [],
         isActive: true,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -1283,6 +1329,9 @@ const mockPrisma = {
   jobApplication: {
     findMany: async (args) => {
       let list = [...mockJobApplications]
+      if (args?.where?.deletedAt === null) {
+        list = list.filter((a) => !a.deletedAt)
+      }
       if (args?.where?.jobPostingId)
         list = list.filter((a) => a.jobPostingId === args.where.jobPostingId)
       if (args?.where?.status) list = list.filter((a) => a.status === args.where.status)
@@ -1294,7 +1343,26 @@ const mockPrisma = {
       }
       return applyPagination(list, args)
     },
-    findUnique: async (args) => mockJobApplications.find((a) => a.id === args.where.id) || null,
+    findUnique: async (args) => {
+      const app = mockJobApplications.find((a) => a.id === args.where.id)
+      if (!app) return null
+      if (args?.include?.jobPosting) {
+        return {
+          ...app,
+          jobPosting: mockJobPostings.find((jp) => jp.id === app.jobPostingId) || null,
+        }
+      }
+      return { ...app }
+    },
+    findFirst: async (args) => {
+      let list = [...mockJobApplications]
+      if (args?.where?.jobPostingId) list = list.filter((a) => a.jobPostingId === args.where.jobPostingId)
+      if (args?.where?.email) list = list.filter((a) => a.email.toLowerCase() === args.where.email.toLowerCase())
+      if (args?.where?.createdAt?.gte) {
+        list = list.filter((a) => new Date(a.createdAt) >= args.where.createdAt.gte)
+      }
+      return list[0] || null
+    },
     count: async (args) => mockJobApplications.length,
     create: async (args) => {
       const item = { id: `ja-${Date.now()}`, status: 'NEW', createdAt: new Date(), ...args.data }
@@ -1305,7 +1373,14 @@ const mockPrisma = {
       const idx = mockJobApplications.findIndex((a) => a.id === args.where.id)
       if (idx !== -1) {
         mockJobApplications[idx] = { ...mockJobApplications[idx], ...args.data }
-        return mockJobApplications[idx]
+        const updated = mockJobApplications[idx]
+        if (args?.include?.jobPosting) {
+          return {
+            ...updated,
+            jobPosting: mockJobPostings.find((jp) => jp.id === updated.jobPostingId) || null,
+          }
+        }
+        return updated
       }
       throw new Error('Job application not found')
     },
@@ -1408,7 +1483,14 @@ const mockPrisma = {
   },
 }
 
-const MOCK_DB_PATH = path.join(process.cwd(), 'mock_db.json')
+const getMockDbFile = () => {
+  const p2 = path.join(process.cwd(), 'server', 'mock_db.json')
+  const p1 = path.join(process.cwd(), 'mock_db.json')
+  if (fs.existsSync(p2)) return p2
+  if (fs.existsSync(p1)) return p1
+  return p2
+}
+const MOCK_DB_PATH = getMockDbFile()
 
 // Add mock datasets for social drafts, chatbot inquiries, error logs, and page visits
 let mockSocialPostDrafts = []

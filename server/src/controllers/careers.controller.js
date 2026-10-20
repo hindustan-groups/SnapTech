@@ -86,7 +86,20 @@ export const getJobBySlug = async (req, res, next) => {
 export const submitApplication = async (req, res, next) => {
   try {
     const { slug } = req.params
-    const { fullName, email, phone, coverLetter, recaptchaToken, _hp } = req.body
+    const {
+      fullName,
+      email,
+      phone,
+      coverLetter,
+      experience,
+      currentCtc,
+      expectedCtc,
+      noticePeriod,
+      linkedinUrl,
+      portfolioUrl,
+      recaptchaToken,
+      _hp,
+    } = req.body
 
     // ── 1. Honeypot check ──────────────────────────────────────
     if (_hp) {
@@ -155,6 +168,7 @@ export const submitApplication = async (req, res, next) => {
           department: 'General',
           location: 'Remote / Bhilwara',
           jobType: 'FULL_TIME',
+          workplaceType: 'Hybrid',
           experienceRequired: 'Any experience',
           description:
             'Submit your resume for general consideration for future openings at SnapTech Digital.',
@@ -197,9 +211,13 @@ export const submitApplication = async (req, res, next) => {
       })
     }
 
-    // 1. Ensure local disk persistence in server/uploads/resumes (never lost)
-    const uploadsDir = path.resolve(process.cwd(), 'uploads', 'resumes')
-    await fs.promises.mkdir(uploadsDir, { recursive: true })
+    // 1. Ensure local disk persistence in uploads/resumes across both server and root directories
+    const primaryUploadsDir = path.resolve(process.cwd(), 'uploads', 'resumes')
+    const serverUploadsDir = path.resolve(process.cwd(), 'server', 'uploads', 'resumes')
+    await fs.promises.mkdir(primaryUploadsDir, { recursive: true })
+    if (fs.existsSync(path.resolve(process.cwd(), 'server'))) {
+      await fs.promises.mkdir(serverUploadsDir, { recursive: true }).catch(() => {})
+    }
 
     const ext = path.extname(req.file.originalname) || '.pdf'
     const cleanBase = path
@@ -207,8 +225,12 @@ export const submitApplication = async (req, res, next) => {
       .replace(/[^a-zA-Z0-9_-]/g, '_')
       .slice(0, 40)
     const savedFilename = `${cleanBase}_${Date.now()}${ext}`
-    const localFilePath = path.join(uploadsDir, savedFilename)
+    const localFilePath = path.join(primaryUploadsDir, savedFilename)
     await fs.promises.writeFile(localFilePath, req.file.buffer)
+
+    if (fs.existsSync(path.resolve(process.cwd(), 'server'))) {
+      await fs.promises.writeFile(path.join(serverUploadsDir, savedFilename), req.file.buffer).catch(() => {})
+    }
 
     let resumeUrl = `/uploads/resumes/${savedFilename}`
 
@@ -234,7 +256,16 @@ export const submitApplication = async (req, res, next) => {
         fullName,
         email,
         phone,
+        experience: experience || null,
+        currentCtc: currentCtc || null,
+        expectedCtc: expectedCtc || null,
+        noticePeriod: noticePeriod || null,
+        linkedinUrl: linkedinUrl || null,
+        portfolioUrl: portfolioUrl || null,
         resumeUrl,
+        resumeFileName: req.file.originalname,
+        resumeFileType: req.file.mimetype,
+        resumeFileSize: req.file.size,
         coverLetter: coverLetter || null,
         status: 'NEW',
       },
@@ -242,7 +273,7 @@ export const submitApplication = async (req, res, next) => {
 
     // ── Send WhatsApp Notification to Admin (non-blocking) ──
     const { sendWhatsAppNotification } = await import('../utils/whatsapp.js')
-    const whatsappBody = `💼 *New Job Application!*\n*Role:* ${job.title}\n*Name:* ${fullName}\n*Email:* ${email}\n*Phone:* ${phone}\n*Resume:* ${resumeUrl}`
+    const whatsappBody = `💼 *New Job Application!*\n*Role:* ${job.title}\n*Name:* ${fullName}\n*Email:* ${email}\n*Phone:* ${phone}\n*Experience:* ${experience || 'N/A'}\n*Notice:* ${noticePeriod || 'N/A'}\n*Resume:* ${resumeUrl}`
     
     sendWhatsAppNotification(whatsappBody).catch((err) =>
       console.error('[WhatsApp] Job application notification trigger failed:', err.message)

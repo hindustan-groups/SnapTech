@@ -76,6 +76,7 @@ export function useAdminApplications(filters = {}) {
   const params = new URLSearchParams()
   if (filters.jobPostingId) params.set('jobPostingId', filters.jobPostingId)
   if (filters.status) params.set('status', filters.status)
+  if (filters.search) params.set('search', filters.search)
   const qs = params.toString()
 
   return useQuery({
@@ -88,7 +89,8 @@ export function useAdminApplications(filters = {}) {
 export function useUpdateApplicationStatus() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: ({ id, status }) => api.patch(`/admin/applications/${id}/status`, { status }),
+    mutationFn: ({ id, status, adminNotes, rating }) =>
+      api.patch(`/admin/applications/${id}/status`, { status, adminNotes, rating }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'applications'] })
     },

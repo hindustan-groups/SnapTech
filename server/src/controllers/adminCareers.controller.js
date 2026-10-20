@@ -3,16 +3,25 @@
  */
 import fs from 'fs'
 import path from 'path'
+import { fileURLToPath } from 'url'
 import prisma from '../config/db.js'
 import { deleteCacheByPrefix } from '../utils/cache.js'
 import { logActivity } from '../utils/activity.js'
 import { generateCandidateDossierPdf } from '../utils/resumePdf.js'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 // ── Job Postings CRUD ──────────────────────────────────────────
 
 export const listJobPostings = async (_req, res, next) => {
   try {
     const jobs = await prisma.jobPosting.findMany({
+      include: {
+        _count: {
+          select: { applications: true },
+        },
+      },
       orderBy: { createdAt: 'desc' },
     })
     res.json({ status: 'ok', data: jobs })
@@ -29,22 +38,46 @@ export const createJobPosting = async (req, res, next) => {
       department,
       location,
       jobType,
+      workplaceType,
       experienceRequired,
+      salaryRange,
+      showSalary,
+      openings,
+      skills,
+      perks,
+      hiringSteps,
+      badge,
+      deadline,
       description,
       responsibilities,
       requirements,
       isActive,
     } = req.body
 
+    const generatedSlug = (slug || title || '')
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)+/g, '')
+
     const job = await prisma.jobPosting.create({
       data: {
         title,
-        slug,
-        department,
-        location,
-        jobType,
-        experienceRequired,
-        description,
+        slug: generatedSlug,
+        department: department || 'Engineering',
+        location: location || 'Bhilwara (On-site)',
+        jobType: jobType || 'FULL_TIME',
+        workplaceType: workplaceType || 'On-site',
+        experienceRequired: experienceRequired || '1–3 Years',
+        salaryRange: salaryRange || null,
+        showSalary: showSalary ?? true,
+        openings: Number(openings) || 1,
+        skills: Array.isArray(skills) ? skills : [],
+        perks: Array.isArray(perks) ? perks : [],
+        hiringSteps: Array.isArray(hiringSteps) ? hiringSteps : [],
+        badge: badge || 'Actively Hiring',
+        deadline: deadline || null,
+        description: description || '',
         responsibilities: responsibilities ?? [],
         requirements: requirements ?? [],
         isActive: isActive ?? true,
@@ -67,7 +100,16 @@ export const updateJobPosting = async (req, res, next) => {
       department,
       location,
       jobType,
+      workplaceType,
       experienceRequired,
+      salaryRange,
+      showSalary,
+      openings,
+      skills,
+      perks,
+      hiringSteps,
+      badge,
+      deadline,
       description,
       responsibilities,
       requirements,
@@ -82,7 +124,16 @@ export const updateJobPosting = async (req, res, next) => {
         department,
         location,
         jobType,
+        workplaceType,
         experienceRequired,
+        salaryRange,
+        showSalary,
+        openings: openings !== undefined ? Number(openings) : undefined,
+        skills,
+        perks,
+        hiringSteps,
+        badge,
+        deadline,
         description,
         responsibilities,
         requirements,
@@ -114,20 +165,33 @@ export const deleteJobPosting = async (req, res, next) => {
 
 export const listApplications = async (req, res, next) => {
   try {
-    const { jobPostingId, status } = req.query
+    const { jobPostingId, status, search } = req.query
     const where = { deletedAt: null }
     if (jobPostingId) where.jobPostingId = jobPostingId
     if (status) where.status = status
 
-    const applications = await prisma.jobApplication.findMany({
+    let applications = await prisma.jobApplication.findMany({
       where,
       include: {
         jobPosting: {
-          select: { title: true, department: true },
+          select: { title: true, department: true, location: true, workplaceType: true },
         },
       },
       orderBy: { createdAt: 'desc' },
     })
+
+    if (search && search.trim()) {
+      const q = search.trim().toLowerCase()
+      applications = applications.filter(
+        (app) =>
+          app.fullName?.toLowerCase().includes(q) ||
+          app.email?.toLowerCase().includes(q) ||
+          app.phone?.includes(q) ||
+          app.jobPosting?.title?.toLowerCase().includes(q) ||
+          app.experience?.toLowerCase().includes(q)
+      )
+    }
+
     res.json({ status: 'ok', data: applications })
   } catch (err) {
     next(err)
@@ -137,18 +201,28 @@ export const listApplications = async (req, res, next) => {
 export const updateApplicationStatus = async (req, res, next) => {
   try {
     const { id } = req.params
-    const { status } = req.body
+    const { status, adminNotes, rating } = req.body
+
+    const updateData = {}
+    if (status !== undefined) updateData.status = status
+    if (adminNotes !== undefined) updateData.adminNotes = adminNotes
+    if (rating !== undefined) updateData.rating = Number(rating)
 
     const application = await prisma.jobApplication.update({
       where: { id },
-      data: { status },
+      data: updateData,
       include: {
         jobPosting: {
-          select: { title: true },
+          select: { title: true, department: true },
         },
       },
     })
-    await logActivity(req, 'UPDATE', 'JobApplication', `Updated application status to '${status}' for job '${application.jobPosting?.title ?? id}'`)
+    await logActivity(
+      req,
+      'UPDATE',
+      'JobApplication',
+      `Updated application for '${application.fullName}' (Role: ${application.jobPosting?.title ?? id}, Status: ${status || application.status})`
+    )
     res.json({ status: 'ok', data: application })
   } catch (err) {
     next(err)
@@ -176,7 +250,7 @@ export const getApplicationResume = async (req, res, next) => {
       where: { id },
       include: {
         jobPosting: {
-          select: { title: true, department: true },
+          select: { title: true, department: true, location: true, workplaceType: true },
         },
       },
     })
@@ -188,29 +262,46 @@ export const getApplicationResume = async (req, res, next) => {
     const isDownload = req.query.download === 'true' || req.query.download === '1'
     const safeName = (application.fullName || 'Candidate').replace(/[^a-zA-Z0-9_-]/g, '_')
 
-    // 1. Check local file storage in server/uploads/resumes
-    const uploadsDir = path.resolve(process.cwd(), 'uploads', 'resumes')
+    // 1. Check local file storage across all possible relative locations
+    const candidateDirs = [
+      path.resolve(process.cwd(), 'uploads', 'resumes'),
+      path.resolve(process.cwd(), 'server', 'uploads', 'resumes'),
+      path.resolve(__dirname, '../../uploads/resumes'),
+      path.resolve(__dirname, '../../../uploads/resumes'),
+      path.resolve(__dirname, '../../../server/uploads/resumes'),
+    ]
+
     let localFilePath = null
 
     if (application.resumeUrl) {
       const cleanUrl = application.resumeUrl.split('?')[0]
       const filename = path.basename(cleanUrl)
-      const candidatePath = path.join(uploadsDir, filename)
-      if (fs.existsSync(candidatePath)) {
-        localFilePath = candidatePath
+      for (const dir of candidateDirs) {
+        const candidatePath = path.join(dir, filename)
+        if (fs.existsSync(candidatePath)) {
+          localFilePath = candidatePath
+          break
+        }
       }
     }
 
-    // Check if filename contains application ID
-    if (!localFilePath && fs.existsSync(uploadsDir)) {
-      try {
-        const files = await fs.promises.readdir(uploadsDir)
-        const match = files.find((f) => f.includes(application.id))
-        if (match) {
-          localFilePath = path.join(uploadsDir, match)
+    // Check if filename contains application ID or candidate safe name
+    if (!localFilePath) {
+      for (const dir of candidateDirs) {
+        if (fs.existsSync(dir)) {
+          try {
+            const files = await fs.promises.readdir(dir)
+            const match = files.find(
+              (f) => f.includes(application.id) || (safeName.length > 3 && f.includes(safeName))
+            )
+            if (match) {
+              localFilePath = path.join(dir, match)
+              break
+            }
+          } catch {
+            // ignore read error
+          }
         }
-      } catch {
-        // ignore read error
       }
     }
 
@@ -224,8 +315,9 @@ export const getApplicationResume = async (req, res, next) => {
       }
 
       const disposition = isDownload ? 'attachment' : 'inline'
+      const finalFileName = application.resumeFileName || `Resume_${safeName}${ext}`
       res.setHeader('Content-Type', mimeType)
-      res.setHeader('Content-Disposition', `${disposition}; filename="Resume_${safeName}${ext}"`)
+      res.setHeader('Content-Disposition', `${disposition}; filename="${finalFileName}"`)
       return fs.createReadStream(localFilePath).pipe(res)
     }
 
@@ -247,8 +339,9 @@ export const getApplicationResume = async (req, res, next) => {
             contentType.includes('word') || url.endsWith('.docx') || url.endsWith('.doc')
           const ext = isWord ? (url.endsWith('.doc') ? '.doc' : '.docx') : '.pdf'
           const disposition = isDownload ? 'attachment' : 'inline'
+          const finalFileName = application.resumeFileName || `Resume_${safeName}${ext}`
           res.setHeader('Content-Type', contentType)
-          res.setHeader('Content-Disposition', `${disposition}; filename="Resume_${safeName}${ext}"`)
+          res.setHeader('Content-Disposition', `${disposition}; filename="${finalFileName}"`)
           const arrayBuf = await fetchRes.arrayBuffer()
           return res.send(Buffer.from(arrayBuf))
         }
@@ -257,18 +350,24 @@ export const getApplicationResume = async (req, res, next) => {
       }
     }
 
-    // 3. Fallback: Generate clean official PDF summary so admin NEVER gets a 404 or broken file
+    // 3. High-Fidelity Professional Candidate CV PDF Generation
     const pdfBuf = generateCandidateDossierPdf({
       role: application.jobPosting?.title || 'General Application',
       department: application.jobPosting?.department || 'General',
       name: application.fullName,
       email: application.email,
       phone: application.phone,
-      date: new Date(application.createdAt).toLocaleString('en-IN'),
+      date: new Date(application.createdAt).toLocaleDateString('en-IN'),
       status: application.status,
       coverLetter: application.coverLetter || '',
       appId: application.id,
       originalUrl: application.resumeUrl,
+      experience: application.experience,
+      noticePeriod: application.noticePeriod,
+      currentCtc: application.currentCtc,
+      expectedCtc: application.expectedCtc,
+      linkedinUrl: application.linkedinUrl,
+      portfolioUrl: application.portfolioUrl,
     })
 
     const disposition = isDownload ? 'attachment' : 'inline'
