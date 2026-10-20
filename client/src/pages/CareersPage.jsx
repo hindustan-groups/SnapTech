@@ -248,76 +248,6 @@ export default function CareersPage() {
         </Container>
       </section>
 
-      {/* Why Join Us / Culture Pillars */}
-      <section className="py-16 sm:py-20 bg-slate-50/60 border-b border-slate-200/80 relative">
-        <Container>
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <span className="text-xs font-bold uppercase tracking-widest text-brand-blue">
-              Engineered for Growth
-            </span>
-            <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mt-2">
-              Why Engineers Choose SnapTech
-            </h2>
-            <p className="text-slate-600 text-sm mt-3">
-              We skip corporate fluff and prioritize clean architecture, high autonomy, and real
-              commercial impact.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {CULTURE_PILLARS.map((pillar, idx) => {
-              const Icon = pillar.icon
-              return (
-                <div
-                  key={idx}
-                  className="group relative p-6 rounded-2xl bg-white border border-slate-200 hover:border-brand-blue/40 transition-all duration-300 shadow-xs hover:shadow-md hover:-translate-y-1"
-                >
-                  <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-brand-blue mb-5 group-hover:scale-110 transition-transform">
-                    <Icon className="w-6 h-6" />
-                  </div>
-                  <h3 className="font-heading text-lg font-bold text-slate-900 mb-2">
-                    {pillar.title}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                    {pillar.desc}
-                  </p>
-                </div>
-              )
-            })}
-          </div>
-
-          {/* Perks Grid Banner */}
-          <div className="mt-12 p-6 sm:p-8 rounded-3xl bg-linear-to-r from-blue-50 to-indigo-50/70 border border-blue-200 shadow-xs">
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-              <div className="max-w-md">
-                <span className="text-xs font-bold uppercase tracking-wider text-brand-blue">
-                  Comprehensive Benefits
-                </span>
-                <h3 className="font-heading text-xl sm:text-2xl font-bold text-slate-900 mt-1">
-                  We invest in our builders
-                </h3>
-                <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                  Beyond competitive compensation, we ensure you have the tooling, peace of mind,
-                  and environment to do the best work of your career.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 flex-1 lg:max-w-2xl">
-                {PERKS.map((perk, i) => (
-                  <div
-                    key={i}
-                    className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-700"
-                  >
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span>{perk}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </Container>
-      </section>
-
       {/* Open Positions Section */}
       <section id="open-roles" className="py-16 sm:py-24 bg-white relative">
         <Container>
@@ -594,6 +524,76 @@ export default function CareersPage() {
               })}
             </div>
           )}
+        </Container>
+      </section>
+
+      {/* Why Join Us / Culture Pillars */}
+      <section className="py-16 sm:py-20 bg-slate-50/60 border-t border-slate-200/80 relative">
+        <Container>
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <span className="text-xs font-bold uppercase tracking-widest text-brand-blue">
+              Engineered for Growth
+            </span>
+            <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mt-2">
+              Why Engineers Choose SnapTech
+            </h2>
+            <p className="text-slate-600 text-sm mt-3">
+              We skip corporate fluff and prioritize clean architecture, high autonomy, and real
+              commercial impact.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {CULTURE_PILLARS.map((pillar, idx) => {
+              const Icon = pillar.icon
+              return (
+                <div
+                  key={idx}
+                  className="group relative p-6 rounded-2xl bg-white border border-slate-200 hover:border-brand-blue/40 transition-all duration-300 shadow-xs hover:shadow-md hover:-translate-y-1"
+                >
+                  <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-brand-blue mb-5 group-hover:scale-110 transition-transform">
+                    <Icon className="w-6 h-6" />
+                  </div>
+                  <h3 className="font-heading text-lg font-bold text-slate-900 mb-2">
+                    {pillar.title}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                    {pillar.desc}
+                  </p>
+                </div>
+              )
+            })}
+          </div>
+
+          {/* Perks Grid Banner */}
+          <div className="mt-12 p-6 sm:p-8 rounded-3xl bg-linear-to-r from-blue-50 to-indigo-50/70 border border-blue-200 shadow-xs">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+              <div className="max-w-md">
+                <span className="text-xs font-bold uppercase tracking-wider text-brand-blue">
+                  Comprehensive Benefits
+                </span>
+                <h3 className="font-heading text-xl sm:text-2xl font-bold text-slate-900 mt-1">
+                  We invest in our builders
+                </h3>
+                <p className="text-xs text-slate-600 mt-2 leading-relaxed">
+                  Beyond competitive compensation, we ensure you have the tooling, peace of mind,
+                  and environment to do the best work of your career.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 flex-1 lg:max-w-2xl">
+                {PERKS.map((perk, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-700"
+                  >
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <span>{perk}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
 
           {/* Bottom Open Pitch / General Application Card */}
           <div className="mt-14 p-8 sm:p-10 rounded-3xl bg-linear-to-r from-[#0a1945] via-[#0D1B4B] to-[#0a1945] border border-blue-900 text-white text-center relative overflow-hidden shadow-xl">
