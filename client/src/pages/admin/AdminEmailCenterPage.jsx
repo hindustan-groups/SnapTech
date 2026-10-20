@@ -39,6 +39,13 @@ import {
   AlertTriangle,
   RotateCw,
   GitFork,
+  Key,
+  ExternalLink,
+  Copy,
+  Megaphone,
+  Users,
+  Sparkles,
+  Play,
 } from 'lucide-react'
 import { api } from '@/utils/api'
 import { SEO } from '@/components/ui'
@@ -53,6 +60,7 @@ const TABS = [
   { id: 'accounts', label: 'Email Accounts', icon: Server },
   { id: 'routing', label: 'Email & Contact Routing', icon: GitFork },
   { id: 'compose', label: 'Compose Email', icon: Send },
+  { id: 'campaigns', label: 'Bulk Campaigns', icon: Megaphone },
   { id: 'templates', label: 'Email Templates', icon: Layers },
   { id: 'rules', label: 'Automation Rules', icon: Sliders },
   { id: 'settings', label: 'Hostinger Gateway', icon: Settings },
@@ -205,6 +213,18 @@ export default function AdminEmailCenterPage() {
           templates={templatesData?.data || []}
           accounts={accountsData?.data || []}
           onEmailSent={() => {
+            refetchStats()
+            refetchAccounts()
+            queryClient.invalidateQueries(['admin-email-logs'])
+            queryClient.invalidateQueries(['admin-email-messages'])
+          }}
+        />
+      )}
+
+      {activeTab === 'campaigns' && (
+        <CampaignsTab
+          accounts={accountsData?.data || []}
+          onCampaignSent={() => {
             refetchStats()
             refetchAccounts()
             queryClient.invalidateQueries(['admin-email-logs'])
@@ -948,6 +968,604 @@ function ComposeTab({ templates, accounts = [], onEmailSent }) {
 }
 
 // ─────────────────────────────────────────────────────────────
+// TAB: BULK EMAIL CAMPAIGNS & BROADCASTS
+// ─────────────────────────────────────────────────────────────
+function CampaignsTab({ accounts = [], onCampaignSent }) {
+  const queryClient = useQueryClient()
+  const toast = useToast()
+
+  const [audienceType, setAudienceType] = useState('all')
+  const [customRecipients, setCustomRecipients] = useState('')
+  const [senderAccountId, setSenderAccountId] = useState('')
+  const [campaignName, setCampaignName] = useState('')
+  const [subject, setSubject] = useState('')
+  const [body, setBody] = useState(
+`Hello {{name}},
+
+We hope your business and projects are thriving.
+
+At SnapTech Digital, we are continuously expanding our engineering and digital capabilities. Whether you're looking for custom software, web & mobile applications, AI automation, or dedicated technical consulting, our team is ready to accelerate your roadmap.
+
+If you have an active requirement or wish to discuss an upcoming milestone, feel free to reply directly to this email or schedule a quick discovery call.
+
+Warm regards,
+SnapTech Digital Engineering Team
+https://snaptech.digital`
+  )
+  const [viewMode, setViewMode] = useState('edit')
+  const [showConfirm, setShowConfirm] = useState(false)
+  const [lastResult, setLastResult] = useState(null)
+
+  // Audiences Query
+  const { data: audiencesData, isLoading: audiencesLoading, refetch: refetchAudiences } = useQuery({
+    queryKey: ['admin-email-campaign-audiences'],
+    queryFn: () => api.get('/admin/email/campaigns/audiences'),
+  })
+
+  const counts = audiencesData?.data || { totalUnique: 0, leads: 0, clients: 0, applicants: 0 }
+
+  // Send Bulk Campaign Mutation
+  const sendCampaignMutation = useMutation({
+    mutationFn: (payload) => api.post('/admin/email/campaigns/send', payload),
+    onSuccess: (res) => {
+      toast.success(res.message || 'Campaign broadcast dispatched successfully!')
+      setLastResult(res.data)
+      setShowConfirm(false)
+      onCampaignSent?.()
+      queryClient.invalidateQueries(['admin-email-stats'])
+      queryClient.invalidateQueries(['admin-email-logs'])
+    },
+    onError: (err) => {
+      toast.error(`Broadcast failed: ${err.message}`)
+      setShowConfirm(false)
+    },
+  })
+
+  // Parse custom recipients count
+  const parsedCustomList = customRecipients
+    .split(/[\n,;]+/)
+    .map((e) => e.trim())
+    .filter((e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e))
+
+  const getEstimatedCount = () => {
+    switch (audienceType) {
+      case 'leads':
+        return counts.leads
+      case 'clients':
+        return counts.clients
+      case 'applicants':
+        return counts.applicants
+      case 'custom':
+        return parsedCustomList.length
+      case 'all':
+      default:
+        return counts.totalUnique
+    }
+  }
+
+  const estimatedCount = getEstimatedCount()
+
+  const insertVariable = (tag, target = 'body') => {
+    if (target === 'subject') {
+      setSubject((prev) => `${prev} ${tag}`.trim())
+    } else {
+      setBody((prev) => `${prev} ${tag}`)
+    }
+    toast.info(`Inserted ${tag}`)
+  }
+
+  // Interpolated Preview Text
+  const sampleData = {
+    name: 'Rahul Sharma',
+    company: 'Apex Enterprises',
+    service: 'Web Development & Cloud Consulting',
+    email: 'rahul@example.com',
+  }
+
+  const renderInterpolated = (text) => {
+    if (!text) return ''
+    return text
+      .replace(/\{\{\s*name\s*\}\}/gi, sampleData.name)
+      .replace(/\{\{\s*company\s*\}\}/gi, sampleData.company)
+      .replace(/\{\{\s*service\s*\}\}/gi, sampleData.service)
+      .replace(/\{\{\s*email\s*\}\}/gi, sampleData.email)
+  }
+
+  const handleStartSend = () => {
+    if (!subject.trim()) {
+      toast.warning('Please enter an email subject line.')
+      return
+    }
+    if (!body.trim()) {
+      toast.warning('Please enter email body content.')
+      return
+    }
+    if (audienceType === 'custom' && parsedCustomList.length === 0) {
+      toast.warning('Please provide at least one valid recipient email in the custom list.')
+      return
+    }
+    if (estimatedCount === 0) {
+      toast.warning('Selected audience has 0 recipients.')
+      return
+    }
+    setShowConfirm(true)
+  }
+
+  const handleConfirmDispatch = () => {
+    sendCampaignMutation.mutate({
+      campaignName: campaignName.trim() || subject.trim(),
+      audienceType,
+      customRecipients: audienceType === 'custom' ? parsedCustomList : [],
+      senderAccountId: senderAccountId || null,
+      subject: subject.trim(),
+      body: body.trim(),
+    })
+  }
+
+  const activeAccount = accounts.find((a) => a.id === senderAccountId) || accounts[0]
+  const senderEmailDisplay = activeAccount ? activeAccount.email : 'info@snaptech.digital'
+
+  return (
+    <div className="space-y-6">
+      {/* Broadcast Delivery Result Card */}
+      {lastResult && (
+        <div className="p-5 bg-white border border-emerald-200 rounded-2xl shadow-sm space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-emerald-100 text-emerald-700 rounded-xl">
+                <CheckCircle2 className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-gray-900 font-heading">
+                  Bulk Campaign Broadcast Completed
+                </h3>
+                <p className="text-xs text-gray-500">
+                  Target: {lastResult.campaignName || 'SnapTech Broadcast'} &bull; Routed via verified HTTPS Gateway / Hostinger
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => setLastResult(null)}
+              className="text-gray-400 hover:text-gray-600 p-1"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-2">
+            <div className="p-3 bg-gray-50 rounded-xl text-center">
+              <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider block">Targeted</span>
+              <span className="text-xl font-bold text-gray-900">{lastResult.totalTargets || 0}</span>
+            </div>
+            <div className="p-3 bg-emerald-50 rounded-xl text-center">
+              <span className="text-[11px] font-semibold text-emerald-600 uppercase tracking-wider block">Sent Successfully</span>
+              <span className="text-xl font-bold text-emerald-700">{lastResult.sentCount || 0}</span>
+            </div>
+            <div className="p-3 bg-amber-50 rounded-xl text-center">
+              <span className="text-[11px] font-semibold text-amber-600 uppercase tracking-wider block">Skipped / Excluded</span>
+              <span className="text-xl font-bold text-amber-700">{lastResult.skippedCount || 0}</span>
+            </div>
+            <div className="p-3 bg-red-50 rounded-xl text-center">
+              <span className="text-[11px] font-semibold text-red-600 uppercase tracking-wider block">Failed</span>
+              <span className="text-xl font-bold text-red-700">{lastResult.failedCount || 0}</span>
+            </div>
+          </div>
+
+          {lastResult.errors && lastResult.errors.length > 0 && (
+            <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-xl text-xs text-red-700 space-y-1">
+              <strong className="block font-semibold">Delivery Failures:</strong>
+              {lastResult.errors.map((err, i) => (
+                <div key={i} className="font-mono text-[11px]">
+                  &bull; {err.email}: {err.error}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Audience Stats Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div
+          onClick={() => setAudienceType('all')}
+          className={`p-5 bg-white border rounded-2xl shadow-xs transition-all cursor-pointer ${
+            audienceType === 'all'
+              ? 'border-blue-500 ring-2 ring-blue-500/10 bg-blue-50/20'
+              : 'border-gray-100 hover:border-gray-200'
+          }`}
+        >
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-gray-500">All Unique Contacts</span>
+            <div className="p-2 bg-blue-50 text-blue-600 rounded-xl">
+              <Users className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="text-2xl font-bold text-gray-900 mt-2 font-heading">
+            {audiencesLoading ? '...' : counts.totalUnique}
+          </div>
+          <p className="text-[11px] text-gray-400 mt-0.5">Deduplicated CRM directory</p>
+        </div>
+
+        <div
+          onClick={() => setAudienceType('leads')}
+          className={`p-5 bg-white border rounded-2xl shadow-xs transition-all cursor-pointer ${
+            audienceType === 'leads'
+              ? 'border-blue-500 ring-2 ring-blue-500/10 bg-blue-50/20'
+              : 'border-gray-100 hover:border-gray-200'
+          }`}
+        >
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-gray-500">Inquiry Leads</span>
+            <div className="p-2 bg-emerald-50 text-emerald-600 rounded-xl">
+              <Mail className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="text-2xl font-bold text-gray-900 mt-2 font-heading">
+            {audiencesLoading ? '...' : counts.leads}
+          </div>
+          <p className="text-[11px] text-gray-400 mt-0.5">Contact & quote inquiries</p>
+        </div>
+
+        <div
+          onClick={() => setAudienceType('clients')}
+          className={`p-5 bg-white border rounded-2xl shadow-xs transition-all cursor-pointer ${
+            audienceType === 'clients'
+              ? 'border-blue-500 ring-2 ring-blue-500/10 bg-blue-50/20'
+              : 'border-gray-100 hover:border-gray-200'
+          }`}
+        >
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-gray-500">Active Clients</span>
+            <div className="p-2 bg-purple-50 text-purple-600 rounded-xl">
+              <ShieldCheck className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="text-2xl font-bold text-gray-900 mt-2 font-heading">
+            {audiencesLoading ? '...' : counts.clients}
+          </div>
+          <p className="text-[11px] text-gray-400 mt-0.5">Registered clients & partners</p>
+        </div>
+
+        <div
+          onClick={() => setAudienceType('applicants')}
+          className={`p-5 bg-white border rounded-2xl shadow-xs transition-all cursor-pointer ${
+            audienceType === 'applicants'
+              ? 'border-blue-500 ring-2 ring-blue-500/10 bg-blue-50/20'
+              : 'border-gray-100 hover:border-gray-200'
+          }`}
+        >
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-gray-500">Job Applicants</span>
+            <div className="p-2 bg-amber-50 text-amber-600 rounded-xl">
+              <FileText className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="text-2xl font-bold text-gray-900 mt-2 font-heading">
+            {audiencesLoading ? '...' : counts.applicants}
+          </div>
+          <p className="text-[11px] text-gray-400 mt-0.5">Career & hiring pipeline</p>
+        </div>
+      </div>
+
+      {/* Main Campaign Builder Card */}
+      <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-xs space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 pb-5">
+          <div>
+            <h2 className="text-lg font-bold text-gray-900 font-heading flex items-center gap-2">
+              <Megaphone className="w-5 h-5 text-blue-600" />
+              Compose Bulk Email Broadcast
+            </h2>
+            <p className="text-xs text-gray-500">
+              Personalized one-click broadcast to all leads, customers, or custom audience with dynamic variables.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => refetchAudiences()}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg transition-colors cursor-pointer"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+              Refresh Audience
+            </button>
+          </div>
+        </div>
+
+        {/* Audience Selector Chips */}
+        <div className="space-y-2">
+          <label className="text-xs font-bold text-gray-700 uppercase tracking-wider block">
+            1. Select Target Audience
+          </label>
+          <div className="flex flex-wrap items-center gap-2">
+            {[
+              { id: 'all', label: `All Contacts (${counts.totalUnique})` },
+              { id: 'leads', label: `Leads Only (${counts.leads})` },
+              { id: 'clients', label: `Clients Only (${counts.clients})` },
+              { id: 'applicants', label: `Job Applicants (${counts.applicants})` },
+              { id: 'custom', label: 'Custom Email List' },
+            ].map((target) => (
+              <button
+                key={target.id}
+                type="button"
+                onClick={() => setAudienceType(target.id)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                  audienceType === target.id
+                    ? 'bg-blue-600 text-white shadow-xs'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                {target.label}
+              </button>
+            ))}
+          </div>
+
+          {audienceType === 'custom' && (
+            <div className="mt-3 space-y-1.5">
+              <label className="text-[11px] font-semibold text-gray-600">
+                Paste recipient emails (separated by commas, spaces, or newlines):
+              </label>
+              <textarea
+                rows={3}
+                value={customRecipients}
+                onChange={(e) => setCustomRecipients(e.target.value)}
+                placeholder="client1@example.com, client2@example.com&#10;partner@domain.com"
+                className="w-full px-3 py-2 text-xs font-mono border border-gray-200 rounded-xl focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+              />
+              <span className="text-[11px] text-gray-400 block">
+                {parsedCustomList.length} valid email address(es) parsed.
+              </span>
+            </div>
+          )}
+        </div>
+
+        {/* Sender and Campaign Name */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold text-gray-700 uppercase tracking-wider block">
+              2. From / Sender Account
+            </label>
+            <select
+              value={senderAccountId}
+              onChange={(e) => setSenderAccountId(e.target.value)}
+              className="w-full px-3 py-2 text-xs border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+            >
+              <option value="">Default Primary (info@snaptech.digital)</option>
+              {accounts.map((acct) => (
+                <option key={acct.id} value={acct.id}>
+                  {acct.displayName || acct.email} &lt;{acct.email}&gt;
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold text-gray-700 uppercase tracking-wider block">
+              Campaign Label / Reference
+            </label>
+            <input
+              type="text"
+              value={campaignName}
+              onChange={(e) => setCampaignName(e.target.value)}
+              placeholder="e.g. Q2 Customer Outreach & Special Offer"
+              className="w-full px-3 py-2 text-xs border border-gray-200 rounded-xl focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+            />
+          </div>
+        </div>
+
+        {/* Personalization Tag Chips */}
+        <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-bold text-slate-700 flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+              Dynamic Personalization Tags (Click to insert):
+            </span>
+            <span className="text-[11px] text-slate-400">Auto-replaced per recipient</span>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-1.5">
+            {[
+              { tag: '{{name}}', label: 'Recipient Name' },
+              { tag: '{{company}}', label: 'Company Name' },
+              { tag: '{{service}}', label: 'Target Service' },
+              { tag: '{{email}}', label: 'Recipient Email' },
+            ].map(({ tag, label }) => (
+              <div key={tag} className="inline-flex items-center rounded-lg border border-slate-200 bg-white overflow-hidden text-[11px]">
+                <button
+                  type="button"
+                  onClick={() => insertVariable(tag, 'subject')}
+                  title="Add to Subject line"
+                  className="px-2 py-1 text-slate-700 font-mono font-semibold hover:bg-slate-100 border-r border-slate-200 cursor-pointer"
+                >
+                  + Subj: {tag}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => insertVariable(tag, 'body')}
+                  title="Add to Message Body"
+                  className="px-2 py-1 text-blue-600 font-mono font-semibold hover:bg-blue-50 cursor-pointer"
+                >
+                  + Body: {tag} ({label})
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Subject Line */}
+        <div className="space-y-1.5">
+          <label className="text-xs font-bold text-gray-700 uppercase tracking-wider block">
+            3. Email Subject Line
+          </label>
+          <input
+            type="text"
+            value={subject}
+            onChange={(e) => setSubject(e.target.value)}
+            placeholder="e.g. Exclusive Update & Digital Roadmap for {{name}}"
+            className="w-full px-3.5 py-2.5 text-sm border border-gray-200 rounded-xl focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+          />
+        </div>
+
+        {/* Message Editor / Preview Toggle */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <label className="text-xs font-bold text-gray-700 uppercase tracking-wider block">
+              4. Email Body Content
+            </label>
+            <div className="flex items-center gap-1 bg-gray-100 p-0.5 rounded-lg text-xs">
+              <button
+                type="button"
+                onClick={() => setViewMode('edit')}
+                className={`px-3 py-1 rounded-md font-semibold transition-all cursor-pointer ${
+                  viewMode === 'edit' ? 'bg-white text-gray-900 shadow-xs' : 'text-gray-500 hover:text-gray-900'
+                }`}
+              >
+                Editor
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewMode('preview')}
+                className={`px-3 py-1 rounded-md font-semibold transition-all cursor-pointer ${
+                  viewMode === 'preview' ? 'bg-white text-gray-900 shadow-xs' : 'text-gray-500 hover:text-gray-900'
+                }`}
+              >
+                Sample Preview
+              </button>
+            </div>
+          </div>
+
+          {viewMode === 'edit' ? (
+            <textarea
+              rows={10}
+              value={body}
+              onChange={(e) => setBody(e.target.value)}
+              placeholder="Write your email announcement or newsletter..."
+              className="w-full px-3.5 py-3 text-xs font-sans border border-gray-200 rounded-xl focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none leading-relaxed"
+            />
+          ) : (
+            <div className="p-4 bg-gray-50 border border-gray-200 rounded-xl space-y-3">
+              <div className="text-xs text-gray-500 pb-2 border-b border-gray-200 flex flex-wrap items-center gap-3">
+                <span><strong>To:</strong> {sampleData.name} &lt;{sampleData.email}&gt;</span>
+                <span><strong>From:</strong> {senderEmailDisplay}</span>
+                <span><strong>Subject:</strong> {renderInterpolated(subject) || '(No Subject)'}</span>
+              </div>
+              <div className="text-xs text-gray-800 whitespace-pre-wrap leading-relaxed">
+                {renderInterpolated(body)}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Dispatch Action Bar */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-gray-100">
+          <div className="flex items-center gap-2 text-xs text-gray-500">
+            <span className="w-2.5 h-2.5 rounded-full bg-blue-600 inline-block" />
+            <span>Target: <strong className="text-gray-800">{estimatedCount} recipients</strong></span>
+            <span>&bull;</span>
+            <span>Throttle: <strong className="text-gray-800">120ms anti-spam interval</strong></span>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleStartSend}
+            disabled={sendCampaignMutation.isPending || estimatedCount === 0}
+            className="inline-flex items-center justify-center gap-2 px-6 py-2.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-xl shadow-sm transition-all cursor-pointer"
+          >
+            {sendCampaignMutation.isPending ? (
+              <>
+                <RotateCw className="w-4 h-4 animate-spin" />
+                Dispatching Bulk Campaign...
+              </>
+            ) : (
+              <>
+                <Megaphone className="w-4 h-4" />
+                Dispatch Campaign to {estimatedCount} Recipients
+              </>
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Safety & Confirmation Modal */}
+      {showConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-gray-100 space-y-5 animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-start gap-4">
+              <div className="p-3 bg-blue-100 text-blue-700 rounded-xl shrink-0">
+                <Megaphone className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-gray-900 font-heading">
+                  Confirm Campaign Dispatch
+                </h3>
+                <p className="text-xs text-gray-500 mt-0.5">
+                  You are about to broadcast an email campaign to <strong className="text-gray-900">{estimatedCount} recipients</strong>.
+                </p>
+              </div>
+            </div>
+
+            <div className="p-3.5 bg-gray-50 rounded-xl space-y-2 text-xs border border-gray-200">
+              <div className="flex items-center justify-between">
+                <span className="text-gray-500">Audience Group:</span>
+                <span className="font-semibold text-gray-800 uppercase">{audienceType}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-gray-500">Recipient Count:</span>
+                <span className="font-semibold text-gray-800">{estimatedCount} verified contacts</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-gray-500">From Account:</span>
+                <span className="font-semibold text-gray-800">{senderEmailDisplay}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-gray-500">Subject:</span>
+                <span className="font-semibold text-gray-800 truncate max-w-60">{subject}</span>
+              </div>
+            </div>
+
+            <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-[11px] text-amber-800 flex items-start gap-2">
+              <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+              <span>
+                Duplicates and unsubscribed contacts will be automatically suppressed. Outgoing messages are delivered via verified HTTPS mail gateway.
+              </span>
+            </div>
+
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setShowConfirm(false)}
+                disabled={sendCampaignMutation.isPending}
+                className="px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmDispatch}
+                disabled={sendCampaignMutation.isPending}
+                className="inline-flex items-center gap-2 px-5 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-lg shadow-sm transition-all cursor-pointer"
+              >
+                {sendCampaignMutation.isPending ? (
+                  <>
+                    <RotateCw className="w-3.5 h-3.5 animate-spin" />
+                    Sending Now...
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-3.5 h-3.5" />
+                    Yes, Launch Broadcast
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ─────────────────────────────────────────────────────────────
 // TAB 3: TEMPLATES
 // ─────────────────────────────────────────────────────────────
 function TemplatesTab({ templates }) {
@@ -1132,15 +1750,66 @@ function AutomationRulesTab({ rules, accounts = [] }) {
     },
   })
 
+  const triggerFollowupMutation = useMutation({
+    mutationFn: () => api.post('/admin/email/automation/trigger-followup'),
+    onSuccess: (res) => {
+      toast.success(res.message || 'Lead auto follow-up sequence executed successfully!')
+      queryClient.invalidateQueries(['admin-email-stats'])
+      queryClient.invalidateQueries(['admin-email-logs'])
+      queryClient.invalidateQueries(['admin-email-messages'])
+    },
+    onError: (err) => {
+      toast.error(`Follow-up execution failed: ${err.message}`)
+    },
+  })
+
   return (
     <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-xs space-y-6">
-      <div>
-        <h2 className="text-lg font-bold text-gray-900 font-heading">
-          Transactional Automation Rules ({rules.length})
-        </h2>
-        <p className="text-xs text-gray-500">
-          Manage real event triggers, recipient routing, customer confirmations, and internal notification alerts.
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 pb-5">
+        <div>
+          <h2 className="text-lg font-bold text-gray-900 font-heading">
+            Transactional Automation Rules ({rules.length})
+          </h2>
+          <p className="text-xs text-gray-500">
+            Manage real event triggers, recipient routing, customer confirmations, and internal notification alerts.
+          </p>
+        </div>
+      </div>
+
+      {/* Auto Follow-up Sequence Engine Banner */}
+      <div className="p-4 bg-blue-50/70 border border-blue-200/80 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex items-start gap-3">
+          <div className="p-2.5 bg-blue-600 text-white rounded-xl shrink-0 mt-0.5">
+            <Sparkles className="w-4 h-4" />
+          </div>
+          <div>
+            <h3 className="text-sm font-bold text-gray-900">
+              Automated Lead Nurture &amp; Follow-up Sequence
+            </h3>
+            <p className="text-xs text-gray-600 mt-0.5">
+              Scans inquiries older than 48 hours without a staff reply and dispatches personalized follow-up reminders automatically.
+            </p>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => triggerFollowupMutation.mutate()}
+          disabled={triggerFollowupMutation.isPending}
+          className="inline-flex items-center justify-center gap-2 px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-lg shadow-sm transition-all cursor-pointer whitespace-nowrap"
+        >
+          {triggerFollowupMutation.isPending ? (
+            <>
+              <RotateCw className="w-3.5 h-3.5 animate-spin" />
+              Scanning &amp; Sending...
+            </>
+          ) : (
+            <>
+              <Play className="w-3.5 h-3.5" />
+              Run Auto Follow-up Now
+            </>
+          )}
+        </button>
       </div>
 
       <div className="space-y-3">
@@ -1238,7 +1907,11 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
   const [testResult, setTestResult] = useState(null)
   const [testingImap, setTestingImap] = useState(false)
   const [imapResult, setImapResult] = useState(null)
+  const [testingApiToken, setTestingApiToken] = useState(false)
+  const [apiTokenResult, setApiTokenResult] = useState(null)
   const [showPassword, setShowPassword] = useState(false)
+  const [showApiToken, setShowApiToken] = useState(false)
+  const [copiedWebhook, setCopiedWebhook] = useState(false)
 
   const [formData, setFormData] = useState({
     smtpUser: settings?.verifiedSender || 'info@snaptech.digital',
@@ -1248,14 +1921,17 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
     senderName: settings?.senderName || 'SnapTech Digital',
     defaultReplyTo: settings?.defaultReplyTo || 'info@snaptech.digital',
     emailStrategy: settings?.activeStrategy || 'auto',
+    apiToken: '',
+    imapHost: settings?.imapHost || 'imap.hostinger.com',
+    imapPort: settings?.imapPort || 993,
+    imapPass: '',
   })
-
 
   const saveMutation = useMutation({
     mutationFn: (data) => api.patch('/admin/email/settings', data),
     onSuccess: (res) => {
-      toast.success(res.message || 'Hostinger credentials saved and synchronized successfully!')
-      setFormData((prev) => ({ ...prev, smtpPass: '' }))
+      toast.success(res.message || 'Email & Gateway credentials saved and synchronized successfully!')
+      setFormData((prev) => ({ ...prev, smtpPass: '', apiToken: '', imapPass: '' }))
       onSettingsUpdated?.()
     },
     onError: (err) => {
@@ -1277,6 +1953,27 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
       toast.error(`Email Test Failed: ${err.message}`)
     },
   })
+
+  const handleTestApiToken = async () => {
+    setTestingApiToken(true)
+    setApiTokenResult(null)
+    try {
+      const res = await api.post('/admin/email/test-api-token', {
+        apiToken: formData.apiToken,
+        targetEmail: testEmail,
+      })
+      setApiTokenResult({
+        status: 'ok',
+        message: res.message || 'API Token Handshake verified successfully over HTTPS port 443!',
+      })
+      toast.success('API Token Connection verified successfully!')
+    } catch (err) {
+      setApiTokenResult({ status: 'error', message: err.message })
+      toast.error(`API Token Verification Failed: ${err.message}`)
+    } finally {
+      setTestingApiToken(false)
+    }
+  }
 
   const handleTestImap = async () => {
     const defaultAcc = accounts.find((a) => a.isDefaultSender) || accounts[0]
@@ -1307,6 +2004,14 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
     saveMutation.mutate(formData)
   }
 
+  const handleCopyWebhook = () => {
+    const webhookUrl = settings?.inboundWebhookUrl || `${window.location.origin}/api/webhooks/email-inbound`
+    navigator.clipboard?.writeText(webhookUrl)
+    setCopiedWebhook(true)
+    toast.success('Inbound Webhook URL copied to clipboard!')
+    setTimeout(() => setCopiedWebhook(false), 2500)
+  }
+
   const aliases = [
     { name: 'hello@snaptech.digital', tag: 'General Contact', desc: 'Main website contact form submissions and general public queries.' },
     { name: 'sales@snaptech.digital', tag: 'Commercial & Quotes', desc: 'Quotation requests, pricing leads, and technical proposal communications.' },
@@ -1321,164 +2026,292 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
     <div className="space-y-6">
       {/* Configuration Status Card */}
       <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-xs space-y-5">
-        <div>
-          <h2 className="text-lg font-bold text-gray-900 font-heading">
-            Hostinger SMTP &amp; IMAP Gateway
-          </h2>
-          <p className="text-xs text-gray-500">
-            Authenticated infrastructure credentials. All changes automatically sync to outbound SMTP sending and inbound IMAP syncing.
-          </p>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h2 className="text-lg font-bold text-gray-900 font-heading flex items-center gap-2">
+              <Server className="w-5 h-5 text-blue-600" />
+              Email Infrastructure &amp; API Token Gateway
+            </h2>
+            <p className="text-xs text-gray-500">
+              Dual-layer mail delivery: Verified HTTPS API Token (Port 443 — Cloud Compatible) + Hostinger SMTP &amp; IMAP.
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <a
+              href="https://mail.hostinger.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition-all"
+            >
+              <ExternalLink className="w-3.5 h-3.5" />
+              <span>Open Hostinger Webmail</span>
+            </a>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="p-4 bg-gray-50 rounded-xl border border-gray-200 space-y-1">
-            <span className="text-[11px] font-semibold text-gray-500">SMTP Host</span>
-            <div className="text-sm font-bold text-gray-900 font-mono">
-              {settings?.smtpHost || 'smtp.hostinger.com'}
+          {/* Card 1: API Token Gateway */}
+          <div className="p-4 bg-gradient-to-br from-blue-50/70 to-indigo-50/50 rounded-xl border border-blue-200/80 space-y-1">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-semibold text-blue-700">HTTPS API Gateway</span>
+              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                settings?.isApiTokenConfigured ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
+              }`}>
+                {settings?.isApiTokenConfigured ? 'Active (Port 443)' : 'Not Set'}
+              </span>
             </div>
-            <span className="text-[10px] text-gray-400">Hostinger Standard Mail</span>
+            <div className="text-sm font-bold text-slate-900 font-mono truncate">
+              {settings?.maskedApiToken || 're_••••••••••••'}
+            </div>
+            <span className="text-[10px] text-blue-600 font-medium">Bypasses Cloud Port 465/587 Blocks</span>
           </div>
 
+          {/* Card 2: Hostinger SMTP */}
           <div className="p-4 bg-gray-50 rounded-xl border border-gray-200 space-y-1">
-            <span className="text-[11px] font-semibold text-gray-500">Port &amp; Encryption</span>
+            <span className="text-[11px] font-semibold text-gray-500">Hostinger SMTP (Send)</span>
             <div className="text-sm font-bold text-gray-900 font-mono">
-              {settings?.smtpPort || 465} (SSL/TLS Direct)
+              {settings?.smtpHost || 'smtp.hostinger.com'}:{settings?.smtpPort || 465}
             </div>
-            <span className="text-[10px] text-emerald-600 font-semibold">Port 587 Fallback Supported</span>
+            <span className="text-[10px] text-gray-400">Direct Port 465 / 587 Transport</span>
           </div>
 
+          {/* Card 3: Hostinger IMAP */}
+          <div className="p-4 bg-gray-50 rounded-xl border border-gray-200 space-y-1">
+            <span className="text-[11px] font-semibold text-gray-500">Hostinger IMAP (Receive)</span>
+            <div className="text-sm font-bold text-gray-900 font-mono">
+              {settings?.imapHost || 'imap.hostinger.com'}:{settings?.imapPort || 993}
+            </div>
+            <span className="text-[10px] text-gray-400">Port 993 SSL/TLS Inbound Sync</span>
+          </div>
+
+          {/* Card 4: Primary Mailbox */}
           <div className="p-4 bg-gray-50 rounded-xl border border-gray-200 space-y-1">
             <span className="text-[11px] font-semibold text-gray-500">Authenticated Mailbox</span>
-            <div className="text-sm font-bold text-gray-900 font-mono">
+            <div className="text-sm font-bold text-gray-900 font-mono truncate">
               {settings?.verifiedSender || 'info@snaptech.digital'}
             </div>
-            <span className="text-[10px] text-blue-600 font-semibold">Primary Commercial Mailbox</span>
-          </div>
-
-          <div className="p-4 bg-gray-50 rounded-xl border border-gray-200 space-y-1">
-            <span className="text-[11px] font-semibold text-gray-500">Credential Status</span>
-            <div className="flex items-center gap-1.5 text-sm font-bold text-gray-900">
-              <Lock className="w-3.5 h-3.5 text-emerald-600" />
-              <span>{settings?.isPasswordConfigured ? '•••••••••••• (Configured)' : 'Not Set'}</span>
-            </div>
-            <span className="text-[10px] text-gray-400">Encrypted in Neon DB</span>
+            <span className="text-[10px] text-emerald-600 font-semibold">
+              {settings?.isPasswordConfigured ? '● Password Configured' : '○ Password Missing'}
+            </span>
           </div>
         </div>
 
-        {/* Update Hostinger Credentials Form */}
-        <form onSubmit={handleSaveCredentials} className="p-5 bg-slate-50 border border-slate-200 rounded-xl space-y-4">
-          <div className="flex items-center justify-between">
+        {/* Update Hostinger Credentials & API Token Form */}
+        <form onSubmit={handleSaveCredentials} className="p-5 bg-slate-50 border border-slate-200 rounded-xl space-y-5">
+          <div className="flex items-center justify-between border-b border-slate-200/80 pb-3">
             <div className="flex items-center gap-2 text-slate-900 font-bold text-sm">
-              <Server className="w-4 h-4 text-blue-600" />
-              Update Hostinger Credentials &amp; Gateway Settings
+              <Key className="w-4 h-4 text-blue-600" />
+              Configure API Token &amp; Hostinger Credentials
             </div>
             <span className="text-[11px] text-slate-500">
-              Syncs to both SMTP (sending) and IMAP (receiving)
+              Changes apply instantly to live runtime and Neon database
             </span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            <div>
-              <label className="block text-gray-700 font-medium text-xs mb-1">
-                Mailbox Address (Username) *
-              </label>
-              <input
-                type="email"
-                value={formData.smtpUser}
-                onChange={(e) => setFormData({ ...formData, smtpUser: e.target.value })}
-                required
-                className="w-full px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-blue-500"
-              />
-            </div>
-
-            <div>
-              <div className="flex items-center justify-between mb-1">
-                <div className="flex items-center gap-2">
-                  <label className="text-gray-700 font-medium text-xs">
-                    Hostinger Mailbox Password *
-                  </label>
-                  {settings?.isPasswordConfigured && (
-                    <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
-                      <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                      Saved &amp; Active
-                    </span>
-                  )}
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="text-gray-400 hover:text-gray-600 inline-flex items-center gap-1 text-[11px] cursor-pointer"
-                >
-                  {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-                  <span>{showPassword ? 'Hide' : 'Show'}</span>
-                </button>
+          {/* Section 1: API Token Gateway (Cloud Recommended) */}
+          <div className="p-4 bg-blue-50/60 border border-blue-200 rounded-xl space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Zap className="w-4 h-4 text-blue-600" />
+                <label className="text-xs font-bold text-blue-900">
+                  Resend API Token (HTTPS Gateway — Recommended for Render/Cloud)
+                </label>
+                {settings?.isApiTokenConfigured && (
+                  <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700 bg-emerald-100/80 px-2 py-0.5 rounded-full">
+                    <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                    Active &amp; Ready
+                  </span>
+                )}
               </div>
-              <input
-                type={showPassword ? 'text' : 'password'}
-                value={formData.smtpPass}
-                onChange={(e) => setFormData({ ...formData, smtpPass: e.target.value })}
-                placeholder={settings?.isPasswordConfigured ? '•••••••• (Saved in DB & Runtime — enter to replace)' : 'Enter Hostinger mailbox password'}
-                className="w-full px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs font-mono focus:outline-none focus:border-blue-500"
-              />
-            </div>
-
-            <div>
-              <label className="block text-gray-700 font-medium text-xs mb-1">
-                Sender Display Name
-              </label>
-              <input
-                type="text"
-                value={formData.senderName}
-                onChange={(e) => setFormData({ ...formData, senderName: e.target.value })}
-                placeholder="SnapTech Digital"
-                className="w-full px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-blue-500"
-              />
-            </div>
-
-            <div>
-              <label className="block text-gray-700 font-medium text-xs mb-1">
-                SMTP Host
-              </label>
-              <input
-                type="text"
-                value={formData.smtpHost}
-                onChange={(e) => setFormData({ ...formData, smtpHost: e.target.value })}
-                placeholder="smtp.hostinger.com"
-                className="w-full px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-blue-500"
-              />
-            </div>
-
-            <div>
-              <label className="block text-gray-700 font-medium text-xs mb-1">
-                SMTP Port &amp; Encryption
-              </label>
-              <select
-                value={formData.smtpPort}
-                onChange={(e) => setFormData({ ...formData, smtpPort: parseInt(e.target.value, 10) })}
-                className="w-full px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-blue-500 cursor-pointer"
+              <button
+                type="button"
+                onClick={() => setShowApiToken(!showApiToken)}
+                className="text-blue-600 hover:text-blue-800 inline-flex items-center gap-1 text-[11px] cursor-pointer"
               >
-                <option value={465}>Port 465 (SSL / TLS — Recommended)</option>
-                <option value={587}>Port 587 (STARTTLS)</option>
-              </select>
+                {showApiToken ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                <span>{showApiToken ? 'Hide Token' : 'Show Token'}</span>
+              </button>
+            </div>
+            <p className="text-[11px] text-blue-800 leading-relaxed">
+              Cloud platforms like Render Free Tier block raw SMTP TCP ports (465/587). Using an API Token routes all transactional outgoing emails via <strong>HTTPS Port 443</strong>, guaranteeing 100% deliverability with zero port blocks.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-2">
+              <input
+                type={showApiToken ? 'text' : 'password'}
+                value={formData.apiToken}
+                onChange={(e) => setFormData({ ...formData, apiToken: e.target.value })}
+                placeholder={settings?.isApiTokenConfigured ? `${settings?.maskedApiToken} (Saved — enter new to update)` : 'Enter Resend API Key (starts with re_...)'}
+                className="w-full px-3 py-1.5 bg-white border border-blue-200 rounded-xl text-xs font-mono focus:outline-none focus:border-blue-500"
+              />
+              <button
+                type="button"
+                onClick={handleTestApiToken}
+                disabled={testingApiToken}
+                className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer shadow-xs disabled:opacity-50 flex items-center justify-center gap-1"
+              >
+                {testingApiToken ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Zap className="w-3.5 h-3.5" />}
+                <span>Test API Token</span>
+              </button>
+            </div>
+            {apiTokenResult && (
+              <div className={`p-2.5 rounded-lg border text-xs ${
+                apiTokenResult.status === 'ok' ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-rose-50 border-rose-200 text-rose-900'
+              }`}>
+                <strong>{apiTokenResult.status === 'ok' ? '✓ API Token Verified: ' : '✗ API Token Failed: '}</strong>
+                {apiTokenResult.message}
+              </div>
+            )}
+          </div>
+
+          {/* Section 2: Hostinger Webmail & IMAP Mailbox Credentials */}
+          <div className="space-y-3 pt-1">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                <Mail className="w-4 h-4 text-slate-600" />
+                Hostinger Webmail &amp; IMAP Settings (Inbound Sync &amp; Fallback)
+              </span>
+              <span className="text-[11px] text-slate-500">
+                Requires your Hostinger Webmail Password
+              </span>
             </div>
 
-            <div>
-              <label className="block text-gray-700 font-medium text-xs mb-1">
-                Default Reply-To
-              </label>
-              <input
-                type="email"
-                value={formData.defaultReplyTo}
-                onChange={(e) => setFormData({ ...formData, defaultReplyTo: e.target.value })}
-                placeholder="info@snaptech.digital"
-                className="w-full px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-blue-500"
-              />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              <div>
+                <label className="block text-gray-700 font-medium text-xs mb-1">
+                  Mailbox Address (Username) *
+                </label>
+                <input
+                  type="email"
+                  value={formData.smtpUser}
+                  onChange={(e) => setFormData({ ...formData, smtpUser: e.target.value })}
+                  required
+                  className="w-full px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-blue-500"
+                />
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <div className="flex items-center gap-2">
+                    <label className="text-gray-700 font-medium text-xs">
+                      Hostinger Webmail Password *
+                    </label>
+                    {settings?.isPasswordConfigured && (
+                      <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+                        <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                        Saved
+                      </span>
+                    )}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="text-gray-400 hover:text-gray-600 inline-flex items-center gap-1 text-[11px] cursor-pointer"
+                  >
+                    {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                    <span>{showPassword ? 'Hide' : 'Show'}</span>
+                  </button>
+                </div>
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={formData.smtpPass}
+                  onChange={(e) => setFormData({ ...formData, smtpPass: e.target.value })}
+                  placeholder={settings?.isPasswordConfigured ? '•••••••• (Saved in DB — enter to replace)' : 'Enter Hostinger mailbox password'}
+                  className="w-full px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs font-mono focus:outline-none focus:border-blue-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-gray-700 font-medium text-xs mb-1">
+                  IMAP Server Host
+                </label>
+                <input
+                  type="text"
+                  value={formData.imapHost}
+                  onChange={(e) => setFormData({ ...formData, imapHost: e.target.value })}
+                  placeholder="imap.hostinger.com"
+                  className="w-full px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-blue-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-gray-700 font-medium text-xs mb-1">
+                  SMTP Host (Direct Sending)
+                </label>
+                <input
+                  type="text"
+                  value={formData.smtpHost}
+                  onChange={(e) => setFormData({ ...formData, smtpHost: e.target.value })}
+                  placeholder="smtp.hostinger.com"
+                  className="w-full px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-blue-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-gray-700 font-medium text-xs mb-1">
+                  Sender Display Name
+                </label>
+                <input
+                  type="text"
+                  value={formData.senderName}
+                  onChange={(e) => setFormData({ ...formData, senderName: e.target.value })}
+                  placeholder="SnapTech Digital"
+                  className="w-full px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-blue-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-gray-700 font-medium text-xs mb-1">
+                  Default Reply-To
+                </label>
+                <input
+                  type="email"
+                  value={formData.defaultReplyTo}
+                  onChange={(e) => setFormData({ ...formData, defaultReplyTo: e.target.value })}
+                  placeholder="info@snaptech.digital"
+                  className="w-full px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-blue-500"
+                />
+              </div>
+            </div>
+
+            {/* Crucial guidance alert for Hostinger password */}
+            <div className="p-3 bg-amber-50/80 border border-amber-200 rounded-xl text-xs text-amber-900 space-y-1">
+              <div className="font-bold flex items-center gap-1.5">
+                <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
+                <span>Hostinger IMAP Password vs. hPanel Account Password:</span>
+              </div>
+              <p className="text-[11px] text-amber-800 leading-relaxed">
+                If IMAP shows <em>"Invalid credentials for info@snaptech.digital"</em>, make sure you are using the password created specifically for this mailbox inside <strong>Hostinger Webmail (mail.hostinger.com)</strong> or <strong>hPanel &gt; Emails &gt; Manage &gt; Change Password</strong>, <u>NOT</u> your hostinger.com account billing login password. If Hostinger 2FA is active, create and use an Application Password.
+              </p>
+            </div>
+          </div>
+
+          {/* Section 3: Inbound Email Webhook (API Alternative to IMAP) */}
+          <div className="p-3.5 bg-slate-100/70 border border-slate-200 rounded-xl space-y-1.5">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                <Inbox className="w-3.5 h-3.5 text-slate-600" />
+                Inbound Email Webhook URL (Receive Emails via API)
+              </span>
+              <button
+                type="button"
+                onClick={handleCopyWebhook}
+                className="inline-flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg text-[11px] font-semibold text-slate-700 cursor-pointer transition-all shadow-2xs"
+              >
+                {copiedWebhook ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3 text-slate-500" />}
+                <span>{copiedWebhook ? 'Copied!' : 'Copy Webhook URL'}</span>
+              </button>
+            </div>
+            <p className="text-[11px] text-slate-500">
+              If your hosting environment restricts continuous IMAP sync, forward incoming emails via Resend Inbound or Cloudflare Email Routing to this endpoint to ingest incoming messages into your Inbox &amp; CRM automatically.
+            </p>
+            <div className="font-mono text-[11px] text-slate-700 bg-white p-2 rounded-lg border border-slate-200 truncate">
+              {settings?.inboundWebhookUrl || `${typeof window !== 'undefined' ? window.location.origin : 'https://www.snaptech.digital'}/api/webhooks/email-inbound`}
             </div>
           </div>
 
           <div className="flex items-center justify-between pt-2">
             <span className="text-[11px] text-gray-500">
-              Changes apply instantly to live runtime and sync to your Neon PostgreSQL database.
+              Settings update active runtime immediately.
             </span>
             <button
               type="submit"
@@ -1491,21 +2324,18 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
           </div>
         </form>
 
-        {/* Live Handshake Diagnostic Tool (SMTP Sending & IMAP Receiving) */}
+        {/* Live Handshake Diagnostic Tool */}
         <div className="p-5 bg-blue-50/50 border border-blue-200 rounded-xl space-y-4">
           <div className="flex items-center gap-2 text-blue-900 font-bold text-sm">
             <ShieldCheck className="w-4 h-4 text-blue-600" />
-            Hostinger Mail Delivery &amp; Inbound IMAP Live Diagnostic
+            Live Handshake &amp; Delivery Diagnostics (API Token, SMTP &amp; IMAP)
           </div>
           <p className="text-xs text-blue-800 leading-relaxed">
-            Verify outbound email delivery and inbound mailbox synchronization (IMAP port 993) for <strong>info@snaptech.digital</strong>.
-            <span className="block mt-1 text-[11px] text-blue-700 font-medium">
-              ⚡ Outbound Delivery Note: Cloud platforms like Render Free Tier block raw TCP ports 465/587. In those environments, outgoing emails are automatically and seamlessly delivered via verified HTTPS Mail Gateway (Port 443) using sender <strong>info@snaptech.digital</strong>.
-            </span>
+            Verify all communication channels for <strong>info@snaptech.digital</strong>.
           </p>
 
           <div className="space-y-3">
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 max-w-xl">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 max-w-2xl">
               <input
                 type="email"
                 value={testEmail}
@@ -1513,6 +2343,25 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
                 placeholder="Target recipient email for test delivery"
                 className="w-full px-3.5 py-2 text-xs bg-white border border-blue-200 rounded-xl focus:outline-none"
               />
+              <button
+                type="button"
+                onClick={handleTestApiToken}
+                disabled={testingApiToken}
+                className="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer shadow-xs disabled:opacity-50 flex items-center justify-center gap-1.5"
+              >
+                {testingApiToken ? (
+                  <>
+                    <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                    <span>Verifying API...</span>
+                  </>
+                ) : (
+                  <>
+                    <Zap className="w-3.5 h-3.5" />
+                    <span>Verify API Token</span>
+                  </>
+                )}
+              </button>
+
               <button
                 type="button"
                 onClick={() => {
@@ -1523,7 +2372,7 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
                   testMutation.mutate(testEmail)
                 }}
                 disabled={testMutation.isPending}
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer shadow-xs disabled:opacity-50 flex items-center justify-center gap-1.5"
+                className="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer shadow-xs disabled:opacity-50 flex items-center justify-center gap-1.5"
               >
                 {testMutation.isPending ? (
                   <>
@@ -1532,8 +2381,8 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
                   </>
                 ) : (
                   <>
-                    <Zap className="w-3.5 h-3.5" />
-                    <span>Run SMTP Test (Send)</span>
+                    <Send className="w-3.5 h-3.5" />
+                    <span>Run Send Test</span>
                   </>
                 )}
               </button>
@@ -1542,7 +2391,7 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
                 type="button"
                 onClick={handleTestImap}
                 disabled={testingImap}
-                className="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer shadow-xs disabled:opacity-50 flex items-center justify-center gap-1.5"
+                className="px-3.5 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer shadow-xs disabled:opacity-50 flex items-center justify-center gap-1.5"
               >
                 {testingImap ? (
                   <>
@@ -1552,11 +2401,24 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
                 ) : (
                   <>
                     <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
-                    <span>Run IMAP Test (Receive)</span>
+                    <span>Run IMAP Test</span>
                   </>
                 )}
               </button>
             </div>
+
+            {apiTokenResult && (
+              <div
+                className={`p-3.5 rounded-xl border text-xs ${
+                  apiTokenResult.status === 'ok'
+                    ? 'bg-emerald-50 border-emerald-200 text-emerald-900'
+                    : 'bg-rose-50 border-rose-200 text-rose-900'
+                }`}
+              >
+                <strong>{apiTokenResult.status === 'ok' ? '✓ API Token Handshake Passed: ' : '✗ API Token Notice: '}</strong>
+                {apiTokenResult.message}
+              </div>
+            )}
 
             {testResult && (
               <div
@@ -1566,7 +2428,7 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
                     : 'bg-rose-50 border-rose-200 text-rose-900'
                 }`}
               >
-                <strong>{testResult.status === 'ok' ? '✓ SMTP Handshake Passed: ' : '✗ SMTP Diagnostic Notice: '}</strong>
+                <strong>{testResult.status === 'ok' ? '✓ Outbound Handshake Passed: ' : '✗ Outbound Diagnostic Notice: '}</strong>
                 {testResult.message}
               </div>
             )}
@@ -1581,6 +2443,16 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
               >
                 <strong>{imapResult.status === 'ok' ? '✓ IMAP Sync Passed: ' : '✗ IMAP Diagnostic Notice: '}</strong>
                 {imapResult.message}
+                {imapResult.status === 'error' && (
+                  <div className="mt-2 pt-2 border-t border-rose-200/80 text-[11px] text-rose-800 space-y-1">
+                    <p className="font-semibold">How to resolve Hostinger IMAP Authentication:</p>
+                    <ol className="list-decimal list-inside space-y-0.5">
+                      <li>Log in directly to <a href="https://mail.hostinger.com" target="_blank" rel="noopener noreferrer" className="underline font-bold">mail.hostinger.com</a> with <code>info@snaptech.digital</code> to verify your mailbox password.</li>
+                      <li>In Hostinger hPanel, go to <strong>Emails &gt; snaptech.digital &gt; Manage &gt; info@snaptech.digital</strong> and click <em>Change Password</em> to set a fresh password.</li>
+                      <li>Copy the new password into the <strong>Hostinger Webmail Password</strong> field above and click <em>Save &amp; Sync Credentials</em>.</li>
+                    </ol>
+                  </div>
+                )}
               </div>
             )}
           </div>

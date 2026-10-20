@@ -666,6 +666,22 @@ export const getEmailSettings = async (_req, res, next) => {
       maskedUser = `${u.slice(0, 3)}••••@${d}`
     }
 
+    // Check API Token (Resend / HTTPS Gateway)
+    const dbResend = await prisma.siteSetting.findUnique({ where: { key: 'sys_resend_api_key' } }).catch(() => null)
+    const effectiveResendKey = (process.env.RESEND_API_KEY || env.RESEND_API_KEY || dbResend?.value || '').trim()
+    const isApiTokenConfigured = Boolean(effectiveResendKey)
+    let maskedApiToken = ''
+    if (effectiveResendKey) {
+      maskedApiToken = effectiveResendKey.startsWith('re_')
+        ? `re_••••••••••••${effectiveResendKey.slice(-4)}`
+        : `••••••••••••${effectiveResendKey.slice(-4)}`
+    }
+
+    const dbImapHost = await prisma.siteSetting.findUnique({ where: { key: 'sys_imap_host' } }).catch(() => null)
+    const dbImapPort = await prisma.siteSetting.findUnique({ where: { key: 'sys_imap_port' } }).catch(() => null)
+    const imapHost = dbImapHost?.value || process.env.IMAP_HOST || 'imap.hostinger.com'
+    const imapPort = parseInt(dbImapPort?.value || process.env.IMAP_PORT || '993', 10)
+
     res.json({
       status: 'ok',
       data: {
@@ -676,11 +692,19 @@ export const getEmailSettings = async (_req, res, next) => {
         smtpHost: host,
         smtpPort: port,
         isPasswordConfigured: hasPass,
-        activeStrategy: 'smtp',
+        isApiTokenConfigured,
+        maskedApiToken,
+        apiTokenProvider: 'RESEND',
+        imapHost,
+        imapPort,
+        activeStrategy: isApiTokenConfigured ? 'api_token' : 'smtp',
+        inboundWebhookUrl: `${process.env.CLIENT_URL || 'https://www.snaptech.digital'}/api/webhooks/email-inbound`,
         aliases: ROUTING_ALIASES,
         hostingerSpec: {
           recommendedHost: HOSTINGER_SMTP_HOST,
           recommendedPort: HOSTINGER_SMTP_PORT,
+          recommendedImapHost: 'imap.hostinger.com',
+          recommendedImapPort: 993,
           security: 'SSL / TLS (Direct Encrypted)',
           authAccount: VERIFIED_SENDER_MAILBOX,
           note: 'Primary authenticated mailbox sends all mail. Free aliases route via Reply-To and Hostinger forwarders.',
@@ -705,11 +729,55 @@ export const updateEmailSettings = async (req, res, next) => {
       smtpPort,
       smtpUser,
       smtpPass,
+      apiToken,
+      resendApiKey,
+      imapHost,
+      imapPort,
+      imapPass,
       emailStrategy,
     } = req.body
 
     const ops = []
 
+    // 1. API Token (Resend / HTTPS Mail Gateway)
+    const rawApiToken = (apiToken || resendApiKey || '').trim()
+    if (rawApiToken && !/^•+/.test(rawApiToken)) {
+      process.env.RESEND_API_KEY = rawApiToken
+      ops.push(
+        prisma.siteSetting.upsert({
+          where: { key: 'sys_resend_api_key' },
+          update: { value: rawApiToken },
+          create: { key: 'sys_resend_api_key', value: rawApiToken },
+        })
+      )
+    }
+
+    // 2. IMAP Host & Port
+    if (imapHost && typeof imapHost === 'string') {
+      const val = imapHost.trim()
+      process.env.IMAP_HOST = val
+      ops.push(
+        prisma.siteSetting.upsert({
+          where: { key: 'sys_imap_host' },
+          update: { value: val },
+          create: { key: 'sys_imap_host', value: val },
+        })
+      )
+    }
+
+    if (imapPort) {
+      const val = String(parseInt(imapPort, 10) || 993)
+      process.env.IMAP_PORT = val
+      ops.push(
+        prisma.siteSetting.upsert({
+          where: { key: 'sys_imap_port' },
+          update: { value: val },
+          create: { key: 'sys_imap_port', value: val },
+        })
+      )
+    }
+
+    // 3. Sender Name
     if (senderName && typeof senderName === 'string') {
       const val = senderName.trim()
       process.env.EMAIL_SENDER_NAME = val
@@ -838,6 +906,28 @@ export const updateEmailSettings = async (req, res, next) => {
           })
         )
       }
+    }
+
+    // Update specific IMAP password if provided
+    if (
+      imapPass &&
+      typeof imapPass === 'string' &&
+      imapPass.trim() &&
+      !/^•+/.test(imapPass.trim())
+    ) {
+      const { encryptCredential } = await import('../utils/crypto.js')
+      const encrypted = encryptCredential(imapPass.trim())
+      const primaryEmail = (smtpUser || process.env.EMAIL_USER || VERIFIED_SENDER_MAILBOX).trim().toLowerCase()
+      ops.push(
+        prisma.emailAccount.updateMany({
+          where: {
+            OR: [{ email: primaryEmail }, { isDefaultSender: true }],
+          },
+          data: {
+            imapPasswordEncrypted: encrypted,
+          },
+        })
+      )
     }
 
     const primaryTarget = (smtpUser || process.env.EMAIL_USER || VERIFIED_SENDER_MAILBOX).trim().toLowerCase()
@@ -1039,6 +1129,142 @@ export const testPrimaryImapHandler = async (_req, res) => {
 }
 
 /**
+ * POST /api/admin/email/test-api-token
+ * Test Resend API Gateway Key and verify connectivity over HTTPS Port 443
+ */
+export const testApiTokenHandler = async (req, res) => {
+  try {
+    const { apiToken, targetEmail } = req.body || {}
+    let effectiveKey = (apiToken && typeof apiToken === 'string' && apiToken.trim() && !/^•+/.test(apiToken.trim()))
+      ? apiToken.trim()
+      : (process.env.RESEND_API_KEY || '').trim()
+
+    if (!effectiveKey) {
+      const dbRow = await prisma.siteSetting.findUnique({ where: { key: 'sys_resend_api_key' } })
+      if (dbRow?.value) effectiveKey = dbRow.value.trim()
+    }
+
+    if (!effectiveKey) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'No API Token configured. Please enter your Resend API Key (starts with "re_") and save.',
+      })
+    }
+
+    const recipient = (targetEmail && targetEmail.trim()) || process.env.EMAIL_USER || VERIFIED_SENDER_MAILBOX
+
+    // Test send via Resend
+    const result = await sendViaResend({
+      to: recipient,
+      subject: '⚡ API Token Gateway Verification — SnapTech Digital',
+      html: `
+        <div style="font-family: Arial, sans-serif; padding: 24px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; max-width: 560px;">
+          <div style="background: linear-gradient(135deg, #0f172a, #2563eb); padding: 18px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
+            <h2 style="color: #ffffff; margin: 0; font-size: 20px;">SnapTech Digital</h2>
+            <p style="color: #bfdbfe; margin: 4px 0 0; font-size: 12px;">HTTPS Mail Gateway API Token Verification</p>
+          </div>
+          <h3 style="color: #0f172a; margin-top: 0;">✓ API Gateway Handshake Successful</h3>
+          <p style="color: #334155; font-size: 14px; line-height: 1.6;">
+            Your API Token is authentic and authorized. Outbound mail routing via HTTPS (Port 443) is active and bypassing all hosting firewall restrictions.
+          </p>
+          <div style="background: #f8fafc; border-left: 4px solid #2563eb; padding: 12px; margin: 16px 0; border-radius: 4px; font-size: 12px; color: #64748b;">
+            <p style="margin: 0;">Sender: <strong style="color: #0f172a;">${process.env.EMAIL_FROM || 'SnapTech Digital <info@snaptech.digital>'}</strong></p>
+            <p style="margin: 4px 0 0;">Recipient: <strong style="color: #0f172a;">${recipient}</strong></p>
+            <p style="margin: 4px 0 0;">Protocol: <strong style="color: #0f172a;">HTTPS REST API (Port 443 — 100% Cloud Compatible)</strong></p>
+          </div>
+        </div>
+      `,
+      text: `API Token Gateway Handshake successful for ${recipient}.`,
+    })
+
+    res.json({
+      status: 'ok',
+      message: `API Token verified successfully! Test delivery sent to ${recipient} (Message ID: ${result.messageId}).`,
+      data: {
+        provider: 'Resend HTTPS API Gateway',
+        port: 443,
+        recipient,
+        messageId: result.messageId,
+      },
+    })
+  } catch (err) {
+    const cleanMsg = sanitizeErrorMessage(err.message, [process.env.RESEND_API_KEY])
+    res.status(400).json({
+      status: 'error',
+      message: `API Token Verification Failed: ${cleanMsg}`,
+    })
+  }
+}
+
+/**
+ * POST /api/webhooks/email-inbound
+ * Inbound Email Webhook — receives parsed incoming emails from Resend Inbound, Cloudflare, etc.
+ */
+export const inboundEmailWebhookHandler = async (req, res) => {
+  try {
+    const payload = req.body || {}
+    const from = payload.from || payload.sender || payload.from_email || payload.data?.from
+    const to = payload.to || payload.recipient || payload.to_email || payload.data?.to
+    const subject = payload.subject || payload.data?.subject || '(No Subject)'
+    const bodyHtml = payload.html || payload.data?.html || ''
+    const bodyText = payload.text || payload.data?.text || ''
+    const messageId = payload.messageId || payload.data?.id || `inbound-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`
+
+    if (!from) {
+      return res.status(400).json({ status: 'error', message: 'Missing "from" address in payload.' })
+    }
+
+    const fromEmail = typeof from === 'string' ? (from.match(/<([^>]+)>/)?.[1] || from).trim().toLowerCase() : ''
+    const fromName = typeof from === 'string' ? (from.includes('<') ? from.split('<')[0].replace(/"/g, '').trim() : '') : ''
+    const toEmail = typeof to === 'string' ? (to.match(/<([^>]+)>/)?.[1] || to).trim().toLowerCase() : 'info@snaptech.digital'
+
+    const defaultAcc = await prisma.emailAccount.findFirst({
+      where: { OR: [{ email: toEmail }, { isDefaultSender: true }] },
+    })
+    const accountId = defaultAcc?.id || 'primary'
+
+    let leadId = null
+    const matchedLead = await prisma.contactLead.findFirst({
+      where: { email: { equals: fromEmail, mode: 'insensitive' } },
+    }).catch(() => null)
+    if (matchedLead) leadId = matchedLead.id
+
+    const existing = await prisma.emailMessage.findFirst({
+      where: { messageId },
+    }).catch(() => null)
+
+    if (!existing) {
+      await prisma.emailMessage.create({
+        data: {
+          accountId,
+          messageId,
+          direction: 'INBOUND',
+          folder: 'INBOX',
+          isRead: false,
+          isArchived: false,
+          isStarred: false,
+          hasAttachments: Boolean(payload.attachments?.length),
+          fromEmail,
+          fromName: fromName || null,
+          toEmail,
+          subject,
+          bodyHtml: bodyHtml || null,
+          bodyText: bodyText || (bodyHtml ? bodyHtml.replace(/<[^>]+>/g, ' ').slice(0, 1000) : ''),
+          leadId,
+          receivedAt: new Date(),
+          deliveryStatus: 'DELIVERED',
+        },
+      })
+    }
+
+    res.json({ status: 'ok', received: true, messageId })
+  } catch (err) {
+    console.error('[inboundWebhook] Error processing inbound webhook:', err.message)
+    res.status(500).json({ status: 'error', message: err.message })
+  }
+}
+
+/**
  * GET /api/admin/email/recipients
  * Autocomplete recipient list from leads, clients, and staff
  */
@@ -1087,6 +1313,316 @@ export const getEligibleRecipients = async (_req, res, next) => {
     res.json({
       status: 'ok',
       data: [...formattedLeads, ...formattedClients, ...formattedAdmins],
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
+/**
+ * GET /api/admin/email/campaigns/audiences
+ * Returns audience metrics and reachable email contact counts
+ */
+export const getCampaignAudiencesHandler = async (_req, res, next) => {
+  try {
+    const [leads, clients, applicants] = await Promise.all([
+      prisma.contactLead.findMany({
+        where: { email: { not: '' } },
+        select: { id: true, name: true, email: true, serviceInterested: true, createdAt: true },
+        orderBy: { createdAt: 'desc' },
+      }).catch(() => []),
+      prisma.client.findMany({
+        where: { email: { not: '' } },
+        select: { id: true, name: true, email: true },
+        orderBy: { createdAt: 'desc' },
+      }).catch(() => []),
+      prisma.jobApplication.findMany({
+        where: { email: { not: '' } },
+        select: { id: true, fullName: true, email: true, createdAt: true },
+        orderBy: { createdAt: 'desc' },
+      }).catch(() => []),
+    ])
+
+    const uniqueEmails = new Set([
+      ...leads.map((l) => l.email?.toLowerCase().trim()),
+      ...clients.map((c) => c.email?.toLowerCase().trim()),
+      ...applicants.map((a) => a.email?.toLowerCase().trim()),
+    ].filter(Boolean))
+
+    res.json({
+      status: 'ok',
+      data: {
+        totalUniqueContacts: uniqueEmails.size,
+        audiences: {
+          leads: {
+            count: leads.length,
+            label: 'All Contact Leads & Inquiries',
+            sample: leads.slice(0, 5),
+          },
+          clients: {
+            count: clients.length,
+            label: 'Active & Historical Clients',
+            sample: clients.slice(0, 5),
+          },
+          applicants: {
+            count: applicants.length,
+            label: 'Careers & Talent Applicants',
+            sample: applicants.slice(0, 5),
+          },
+        },
+      },
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
+/**
+ * POST /api/admin/email/campaigns/send
+ * Dispatches bulk email campaign to selected audience or custom list
+ */
+export const sendBulkCampaignHandler = async (req, res, next) => {
+  try {
+    const {
+      audience = 'leads',
+      customEmails = [],
+      campaignName = 'Bulk Announcement',
+      subject,
+      body,
+      ctaText = null,
+      ctaUrl = null,
+      senderAccountId = null,
+      dryRun = false,
+    } = req.body
+
+    if (!subject || !subject.trim()) {
+      return res.status(400).json({ status: 'error', message: 'Campaign subject is required.' })
+    }
+    if (!body || !body.trim()) {
+      return res.status(400).json({ status: 'error', message: 'Campaign body content is required.' })
+    }
+
+    let recipients = []
+
+    if (audience === 'leads' || audience === 'all') {
+      const leads = await prisma.contactLead.findMany({
+        where: { email: { not: '' } },
+        select: { id: true, name: true, email: true, serviceInterested: true },
+      }).catch(() => [])
+      recipients.push(
+        ...leads.map((l) => ({
+          name: l.name || 'Valued Partner',
+          email: l.email.trim().toLowerCase(),
+          service: l.serviceInterested || 'Digital Services',
+          type: 'Lead',
+        }))
+      )
+    }
+
+    if (audience === 'clients' || audience === 'all') {
+      const clients = await prisma.client.findMany({
+        where: { email: { not: '' } },
+        select: { id: true, name: true, email: true },
+      }).catch(() => [])
+      recipients.push(
+        ...clients.map((c) => ({
+          name: c.name || 'Valued Client',
+          email: c.email.trim().toLowerCase(),
+          service: 'Enterprise IT & Software Engineering',
+          type: 'Client',
+        }))
+      )
+    }
+
+    if (audience === 'applicants' || audience === 'all') {
+      const applicants = await prisma.jobApplication.findMany({
+        where: { email: { not: '' } },
+        select: { id: true, fullName: true, email: true },
+      }).catch(() => [])
+      recipients.push(
+        ...applicants.map((a) => ({
+          name: a.fullName || 'Applicant',
+          email: a.email.trim().toLowerCase(),
+          service: 'Careers at SnapTech Digital',
+          type: 'Applicant',
+        }))
+      )
+    }
+
+    if (audience === 'custom' && customEmails) {
+      const list = Array.isArray(customEmails)
+        ? customEmails
+        : String(customEmails)
+            .split(/[\n,;]+/)
+            .map((e) => e.trim())
+            .filter(Boolean)
+
+      recipients.push(
+        ...list.map((e) => ({
+          name: e.split('@')[0],
+          email: e.toLowerCase(),
+          service: 'Digital Solutions',
+          type: 'Custom',
+        }))
+      )
+    }
+
+    // Deduplicate recipients
+    const uniqueMap = new Map()
+    for (const r of recipients) {
+      if (r.email && r.email.includes('@') && !uniqueMap.has(r.email)) {
+        uniqueMap.set(r.email, r)
+      }
+    }
+    const finalRecipients = Array.from(uniqueMap.values())
+
+    if (finalRecipients.length === 0) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'No valid recipient email addresses found for the selected audience.',
+      })
+    }
+
+    if (dryRun) {
+      const sample = finalRecipients[0] || { name: 'Client Partner', email: 'partner@example.com' }
+      const previewSubject = subject
+        .replace(/\{\{name\}\}/gi, sample.name)
+        .replace(/\{\{email\}\}/gi, sample.email)
+        .replace(/\{\{service\}\}/gi, sample.service || 'Technology Services')
+        .replace(/\{\{company\}\}/gi, 'SnapTech Digital')
+
+      return res.json({
+        status: 'ok',
+        dryRun: true,
+        totalRecipients: finalRecipients.length,
+        recipientsSample: finalRecipients.slice(0, 15),
+        previewSubject,
+      })
+    }
+
+    let accountConfig = null
+    let senderName = process.env.EMAIL_SENDER_NAME || 'SnapTech Digital'
+    if (senderAccountId) {
+      accountConfig = await getInternalAccountWithCredentials(senderAccountId)
+      if (accountConfig?.displayName) senderName = accountConfig.displayName
+    }
+
+    let sentCount = 0
+    let failedCount = 0
+    const errors = []
+
+    for (const recipient of finalRecipients) {
+      try {
+        const personalizedSubject = subject
+          .replace(/\{\{name\}\}/gi, recipient.name || 'Valued Partner')
+          .replace(/\{\{email\}\}/gi, recipient.email)
+          .replace(/\{\{service\}\}/gi, recipient.service || 'Digital Solutions')
+          .replace(/\{\{company\}\}/gi, 'SnapTech Digital')
+
+        const personalizedBody = body
+          .replace(/\{\{name\}\}/gi, recipient.name || 'Valued Partner')
+          .replace(/\{\{email\}\}/gi, recipient.email)
+          .replace(/\{\{service\}\}/gi, recipient.service || 'Digital Solutions')
+          .replace(/\{\{company\}\}/gi, 'SnapTech Digital')
+
+        const htmlContent = renderBrandedEmailLayout({
+          title: personalizedSubject,
+          subtitle: `${campaignName} &bull; ${senderName}`,
+          contentHtml: `<div style="font-size:15px;line-height:1.7;color:#334155;">${personalizedBody.replace(/\n/g, '<br/>')}</div>`,
+          ctaText: ctaText || undefined,
+          ctaUrl: ctaUrl || undefined,
+        })
+
+        await sendEmail({
+          to: recipient.email,
+          from: `"${senderName}" <${accountConfig?.email || process.env.EMAIL_USER || VERIFIED_SENDER_MAILBOX}>`,
+          subject: personalizedSubject,
+          html: htmlContent,
+          text: personalizedBody,
+          accountConfig,
+          event: 'campaign.bulk',
+          metadata: {
+            campaignName,
+            audience,
+            recipientType: recipient.type,
+          },
+          allowDuplicate: true,
+        })
+
+        sentCount++
+      } catch (err) {
+        failedCount++
+        errors.push({ email: recipient.email, error: err.message })
+      }
+    }
+
+    res.json({
+      status: 'ok',
+      message: `Bulk campaign '${campaignName}' completed: ${sentCount} emails sent successfully (${failedCount} failed).`,
+      data: {
+        campaignName,
+        totalTargeted: finalRecipients.length,
+        sentCount,
+        failedCount,
+        errors: errors.slice(0, 10),
+      },
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
+/**
+ * POST /api/admin/email/automation/trigger-followup
+ * Manually trigger automated lead follow-up & stale lead sequences
+ */
+export const triggerAutomationFollowupHandler = async (_req, res, next) => {
+  try {
+    const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000)
+    const overdueLeads = await prisma.contactLead.findMany({
+      where: { status: 'NEW', createdAt: { lt: oneDayAgo } },
+    }).catch(() => [])
+
+    const threeDaysAgo = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000)
+    const staleLeads = await prisma.contactLead.findMany({
+      where: { status: 'CONTACTED', updatedAt: { lt: threeDaysAgo } },
+    }).catch(() => [])
+
+    const admins = await prisma.admin.findMany({ select: { email: true } }).catch(() => [])
+    const recipients = admins.map((a) => a.email).join(', ') || process.env.EMAIL_USER || VERIFIED_SENDER_MAILBOX
+
+    const executed = []
+
+    if (overdueLeads.length > 0) {
+      const { leadFollowUpReminderTemplate } = await import('../utils/mailer.js')
+      const mailOptions = leadFollowUpReminderTemplate({
+        leads: overdueLeads,
+        adminUrl: process.env.CLIENT_URL || 'https://www.snaptech.digital',
+      })
+      await sendEmail({ to: recipients, ...mailOptions, event: 'lead.reminder' })
+      executed.push(`${overdueLeads.length} overdue new leads`)
+    }
+
+    if (staleLeads.length > 0) {
+      const { staleLeadFollowUpTemplate } = await import('../utils/mailer.js')
+      const mailOptions = staleLeadFollowUpTemplate({
+        leads: staleLeads,
+        adminUrl: process.env.CLIENT_URL || 'https://www.snaptech.digital',
+      })
+      await sendEmail({ to: recipients, ...mailOptions, event: 'stale.leads' })
+      executed.push(`${staleLeads.length} stale contacted leads`)
+    }
+
+    res.json({
+      status: 'ok',
+      message: executed.length > 0
+        ? `Automation sequence triggered successfully: Dispatched follow-up reminders for ${executed.join(' and ')} to ${recipients}.`
+        : 'All leads are currently up to date! No overdue or stale leads found needing reminder.',
+      data: {
+        overdueLeadsCount: overdueLeads.length,
+        staleLeadsCount: staleLeads.length,
+        recipients,
+      },
     })
   } catch (err) {
     next(err)
