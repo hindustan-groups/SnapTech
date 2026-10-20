@@ -18,6 +18,7 @@ import {
   sendEmail,
   sendViaSMTP,
   sendViaResend,
+  getEffectiveResendKey,
   escapeHtml,
   TEMPLATES_CATALOG,
   ROUTING_ALIASES,
@@ -682,6 +683,9 @@ export const getEmailSettings = async (_req, res, next) => {
     const imapHost = dbImapHost?.value || process.env.IMAP_HOST || 'imap.hostinger.com'
     const imapPort = parseInt(dbImapPort?.value || process.env.IMAP_PORT || '993', 10)
 
+    const dbStrategy = await prisma.siteSetting.findUnique({ where: { key: 'sys_email_strategy' } }).catch(() => null)
+    const activeStrategy = dbStrategy?.value || process.env.EMAIL_STRATEGY || (isApiTokenConfigured ? 'auto' : 'smtp')
+
     res.json({
       status: 'ok',
       data: {
@@ -697,7 +701,7 @@ export const getEmailSettings = async (_req, res, next) => {
         apiTokenProvider: 'RESEND',
         imapHost,
         imapPort,
-        activeStrategy: isApiTokenConfigured ? 'api_token' : 'smtp',
+        activeStrategy,
         inboundWebhookUrl: `${process.env.CLIENT_URL || 'https://www.snaptech.digital'}/api/webhooks/email-inbound`,
         aliases: ROUTING_ALIASES,
         hostingerSpec: {
@@ -732,6 +736,8 @@ export const updateEmailSettings = async (req, res, next) => {
       imapHost,
       imapPort,
       imapPass,
+      apiToken,
+      emailStrategy,
     } = req.body
 
     const cleanUser = (smtpUser || process.env.EMAIL_USER || VERIFIED_SENDER_MAILBOX).trim().toLowerCase()
@@ -778,10 +784,26 @@ export const updateEmailSettings = async (req, res, next) => {
       update: { value: cleanReplyTo },
       create: { key: 'sys_email_reply_to', value: cleanReplyTo },
     })
+
+    // Handle API Gateway Token
+    if (apiToken && typeof apiToken === 'string' && apiToken.trim() && !/^•+/.test(apiToken.trim())) {
+      const cleanToken = apiToken.trim()
+      process.env.RESEND_API_KEY = cleanToken
+      await prisma.siteSetting.upsert({
+        where: { key: 'sys_resend_api_key' },
+        update: { value: cleanToken },
+        create: { key: 'sys_resend_api_key', value: cleanToken },
+      })
+    }
+
+    const cleanStrategy = (emailStrategy === 'smtp' || emailStrategy === 'api_token' || emailStrategy === 'auto')
+      ? emailStrategy
+      : 'auto'
+
     await prisma.siteSetting.upsert({
       where: { key: 'sys_email_strategy' },
-      update: { value: 'smtp' },
-      create: { key: 'sys_email_strategy', value: 'smtp' },
+      update: { value: cleanStrategy },
+      create: { key: 'sys_email_strategy', value: cleanStrategy },
     })
 
     // Runtime process.env updates
@@ -792,7 +814,7 @@ export const updateEmailSettings = async (req, res, next) => {
     process.env.IMAP_PORT = String(cleanImapPort)
     process.env.EMAIL_SENDER_NAME = cleanSenderName
     process.env.EMAIL_REPLY_TO = cleanReplyTo
-    process.env.EMAIL_STRATEGY = 'smtp'
+    process.env.EMAIL_STRATEGY = cleanStrategy
 
     // 2. Handle Password Updates (if provided)
     const rawPass = (smtpPass && typeof smtpPass === 'string' && smtpPass.trim() && !/^•+/.test(smtpPass.trim()))
@@ -869,9 +891,17 @@ export const updateEmailSettings = async (req, res, next) => {
       })
     }
 
+    const effectiveToken = await getEffectiveResendKey()
+    let maskedApiToken = ''
+    if (effectiveToken) {
+      maskedApiToken = effectiveToken.startsWith('re_')
+        ? `re_••••••••••••${effectiveToken.slice(-4)}`
+        : `••••••••••••${effectiveToken.slice(-4)}`
+    }
+
     res.json({
       status: 'ok',
-      message: 'Hostinger email credentials and server settings saved successfully!',
+      message: 'Email credentials and server settings saved successfully!',
       data: {
         verifiedSender: cleanUser,
         smtpHost: cleanHost,
@@ -879,6 +909,9 @@ export const updateEmailSettings = async (req, res, next) => {
         imapHost: cleanImapHost,
         imapPort: cleanImapPort,
         isPasswordConfigured: Boolean(rawPass || process.env.EMAIL_PASS),
+        isApiTokenConfigured: Boolean(effectiveToken),
+        maskedApiToken,
+        activeStrategy: cleanStrategy,
       },
     })
   } catch (err) {
@@ -950,17 +983,15 @@ export const testEmailConnection = async (req, res) => {
     if (process.env.NODE_ENV === 'test' || (!user && !process.env.EMAIL_PASS)) {
       await sendEmail(testPayload)
     } else {
+      const effectiveResend = await getEffectiveResendKey()
       try {
         await sendViaSMTP(testPayload)
       } catch (smtpErr) {
-        const isConnBlocked = /timeout|connect|econnrefused|enetunreach|esocket|econnreset|etimedout/i.test(smtpErr.message)
-        const resendKey = (process.env.RESEND_API_KEY || env.RESEND_API_KEY || '').trim()
-
-        if (isConnBlocked && resendKey) {
-          console.warn('[testEmailConnection] SMTP port 465/587 blocked by hosting provider firewall (Render Free Tier). Testing verified HTTPS Mail Gateway...')
+        if (effectiveResend) {
+          console.warn('[testEmailConnection] SMTP port 465/587 blocked or failed. Testing verified HTTPS Mail Gateway...')
           await sendViaResend(testPayload)
           deliveredVia = 'HTTPS_GATEWAY'
-          noticeMessage = 'Render Free Tier blocks raw outbound SMTP ports 465/587. Email was verified & delivered successfully via the verified HTTPS Mail Gateway for info@snaptech.digital.'
+          noticeMessage = 'Direct SMTP ports 465/587 are blocked on Render Free Tier; outgoing mail is routed via verified HTTPS Mail Gateway for info@snaptech.digital.'
         } else {
           throw smtpErr
         }

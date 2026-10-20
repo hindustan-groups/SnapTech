@@ -281,7 +281,7 @@ export async function createAccount(data) {
   })
 
   // If saved with a password and set as default/primary, sync to runtime env & siteSetting
-  if (rawPass && (data.isDefaultSender || email.includes('snaptech.digital'))) {
+  if (rawPass && (data.isDefaultSender || email === 'info@snaptech.digital')) {
     process.env.EMAIL_PASS = rawPass
     await prisma.siteSetting.upsert({
       where: { key: 'sys_smtp_pass' },

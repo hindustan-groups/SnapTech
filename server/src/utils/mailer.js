@@ -52,17 +52,36 @@ export const ROUTING_ALIASES = {
 }
 
 // ── Strategy Detection ─────────────────────────────────────────
+export async function getEffectiveResendKey() {
+  let key = (process.env.RESEND_API_KEY || env.RESEND_API_KEY || '').trim()
+  if (!key) {
+    try {
+      const dbRow = await prisma.siteSetting.findUnique({ where: { key: 'sys_resend_api_key' } })
+      if (dbRow?.value) {
+        key = dbRow.value.trim()
+        process.env.RESEND_API_KEY = key
+      }
+    } catch {
+      // ignore
+    }
+  }
+  return key
+}
+
+// ── Strategy Detection ─────────────────────────────────────────
 export function getStrategy() {
   const strategy = (process.env.EMAIL_STRATEGY || env.EMAIL_STRATEGY || '').toLowerCase()
   if (strategy === 'console') return 'console'
+  if (strategy === 'api_token' || strategy === 'resend' || strategy === 'api') return 'resend'
 
   // In test environment, use console mock logger
   if (process.env.NODE_ENV === 'test') {
     return 'console'
   }
 
-  // Hostinger SMTP is the primary and direct delivery channel for SnapTech Digital
-  return 'smtp'
+  // Explicit SMTP or Auto (default)
+  if (strategy === 'smtp') return 'smtp'
+  return 'auto'
 }
 
 // ── HTML Escaping for Email Templates ──────────────────────────
@@ -133,8 +152,8 @@ export async function logEmailSend({
 
 // ── Resend Transport ───────────────────────────────────────────
 export async function sendViaResend({ to, subject, html, text, attachments, replyTo }) {
-  const apiKey = (process.env.RESEND_API_KEY || env.RESEND_API_KEY || '').trim()
-  if (!apiKey) throw new Error('RESEND_API_KEY is not configured.')
+  const apiKey = await getEffectiveResendKey()
+  if (!apiKey) throw new Error('HTTPS Mail Gateway API Token is not configured. Please enter your API Key in Settings.')
   const resend = new Resend(apiKey)
 
   let rawFrom = (process.env.EMAIL_FROM || env.EMAIL_FROM || '').trim()
@@ -318,6 +337,13 @@ async function sendEmailDirect(options) {
     return { messageId: `dev-console-log-${Date.now()}` }
   }
 
+  const resendKey = await getEffectiveResendKey()
+
+  // If strategy is explicitly resend/api_token, route directly over HTTPS Port 443
+  if (strategy === 'resend' && resendKey) {
+    return await sendViaResend(options)
+  }
+
   // Transient retry wrapper
   const executeWithRetry = async (fn) => {
     let attempts = 0
@@ -344,17 +370,11 @@ async function sendEmailDirect(options) {
   try {
     return await executeWithRetry(() => sendViaSMTP(options))
   } catch (smtpErr) {
-    const isConnBlocked =
-      /timeout|connect|econnrefused|enetunreach|esocket|econnreset|etimedout/i.test(
-        smtpErr.message
-      )
-    const resendKey = (process.env.RESEND_API_KEY || env.RESEND_API_KEY || '').trim()
-
     // When outbound SMTP is firewalled (e.g. Render Free Tier blocks ports 25, 465, 587)
-    // or connection times out, immediately route via verified HTTPS Mail Gateway (port 443)
-    if (isConnBlocked && resendKey) {
+    // or connection fails, immediately route via verified HTTPS Mail Gateway (port 443)
+    if (resendKey) {
       console.warn(
-        `[mailer] Direct SMTP port connection failed (${smtpErr.message}). Routing seamlessly via verified HTTPS Mail Gateway for info@snaptech.digital...`
+        `[mailer] Direct SMTP failed (${smtpErr.message}). Routing seamlessly via verified HTTPS Mail Gateway for info@snaptech.digital...`
       )
       return await sendViaResend(options)
     }

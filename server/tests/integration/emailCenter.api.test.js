@@ -13,10 +13,11 @@
  * - Recipient autocomplete
  */
 
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, beforeAll } from 'vitest'
 import request from 'supertest'
 import jwt from 'jsonwebtoken'
 import app from '../../src/app.js'
+import prisma from '../../src/config/db.js'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'test-jwt-secret-for-testing-only-12345678'
 
@@ -60,6 +61,14 @@ describe('Admin Email Center API — RBAC & Stealth Verification', () => {
 })
 
 describe('Admin Email Center API — ADMIN role operations', () => {
+  beforeAll(async () => {
+    await prisma.siteSetting.upsert({
+      where: { key: 'sys_smtp_user' },
+      update: { value: 'info@snaptech.digital' },
+      create: { key: 'sys_smtp_user', value: 'info@snaptech.digital' },
+    }).catch(() => {})
+  })
+
   it('GET /api/admin/email/stats returns dashboard KPI metrics', async () => {
     const res = await request(app)
       .get('/api/admin/email/stats')
