@@ -383,6 +383,13 @@ export const submitApplication = async (req, res, next) => {
       createdAt: true,
     }
 
+    // Ensure resumeData column exists in the database
+    try {
+      await prisma.$executeRawUnsafe(`ALTER TABLE "job_applications" ADD COLUMN IF NOT EXISTS "resumeData" TEXT;`)
+    } catch (colErr) {
+      console.warn('[careers] Database column ensure warning:', colErr.message)
+    }
+
     let application
     try {
       application = await prisma.jobApplication.create({
@@ -407,7 +414,8 @@ export const submitApplication = async (req, res, next) => {
         },
         select: returnSelect,
       })
-    } catch {
+    } catch (createErr1) {
+      console.warn('[careers] First create with full profile failed, retrying with resumeData:', createErr1.message)
       try {
         application = await prisma.jobApplication.create({
           data: {
@@ -415,22 +423,18 @@ export const submitApplication = async (req, res, next) => {
             fullName,
             email,
             phone,
-            experience: experience || null,
-            currentCtc: currentCtc || null,
-            expectedCtc: expectedCtc || null,
-            noticePeriod: noticePeriod || null,
-            linkedinUrl: linkedinUrl || null,
-            portfolioUrl: portfolioUrl || null,
             resumeUrl,
             resumeFileName: req.file.originalname,
             resumeFileType: req.file.mimetype,
             resumeFileSize: req.file.size,
+            resumeData: resumeBase64,
             coverLetter: coverLetter || null,
             status: 'NEW',
           },
           select: returnSelect,
         })
-      } catch {
+      } catch (createErr2) {
+        console.warn('[careers] Second create failed, using minimal insert:', createErr2.message)
         application = await prisma.jobApplication.create({
           data: {
             jobPostingId: job.id,
@@ -438,6 +442,9 @@ export const submitApplication = async (req, res, next) => {
             email,
             phone,
             resumeUrl,
+            resumeFileName: req.file.originalname,
+            resumeFileType: req.file.mimetype,
+            resumeFileSize: req.file.size,
             coverLetter: coverLetter || null,
             status: 'NEW',
           },

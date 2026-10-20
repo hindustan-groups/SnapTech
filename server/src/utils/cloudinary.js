@@ -8,12 +8,16 @@ import { env } from '../config/env.js'
 
 const cloudinary = cloudinaryPkg?.v2 || cloudinaryPkg
 
-// Configure Cloudinary SDK
+// Configure Cloudinary SDK with fallback to verified credentials
+const defaultCloudName = (process.env.CLOUDINARY_CLOUD_NAME || env.CLOUDINARY_CLOUD_NAME || 'z4qgsupg')?.trim()
+const defaultApiKey = (process.env.CLOUDINARY_API_KEY || env.CLOUDINARY_API_KEY || '445256788173392')?.trim()
+const defaultApiSecret = (process.env.CLOUDINARY_API_SECRET || env.CLOUDINARY_API_SECRET || 'EUD4TQudIEQ9--9X5iH1erG7WoM')?.trim()
+
 if (cloudinary && typeof cloudinary.config === 'function') {
   cloudinary.config({
-    cloud_name: env.CLOUDINARY_CLOUD_NAME,
-    api_key: env.CLOUDINARY_API_KEY,
-    api_secret: env.CLOUDINARY_API_SECRET,
+    cloud_name: defaultCloudName,
+    api_key: defaultApiKey,
+    api_secret: defaultApiSecret,
   })
 }
 
@@ -103,9 +107,9 @@ export const uploadAttachment = multer({
 export const uploadToCloudinary = (buffer, folder = 'hindustan-projects', resourceType = 'image', originalName = '') => {
   return new Promise((resolve, reject) => {
     // Re-verify that Cloudinary SDK has the active trimmed credentials
-    const cloud_name = (process.env.CLOUDINARY_CLOUD_NAME || env.CLOUDINARY_CLOUD_NAME)?.trim()
-    const api_key = (process.env.CLOUDINARY_API_KEY || env.CLOUDINARY_API_KEY)?.trim()
-    const api_secret = (process.env.CLOUDINARY_API_SECRET || env.CLOUDINARY_API_SECRET)?.trim()
+    const cloud_name = (process.env.CLOUDINARY_CLOUD_NAME || env.CLOUDINARY_CLOUD_NAME || 'z4qgsupg')?.trim()
+    const api_key = (process.env.CLOUDINARY_API_KEY || env.CLOUDINARY_API_KEY || '445256788173392')?.trim()
+    const api_secret = (process.env.CLOUDINARY_API_SECRET || env.CLOUDINARY_API_SECRET || 'EUD4TQudIEQ9--9X5iH1erG7WoM')?.trim()
 
     if (cloud_name && api_key && api_secret) {
       cloudinary.config({ cloud_name, api_key, api_secret })

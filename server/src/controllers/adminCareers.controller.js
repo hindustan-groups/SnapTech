@@ -389,71 +389,104 @@ export const getApplicationResume = async (req, res, next) => {
   try {
     const { id } = req.params
 
+    // Ensure resumeData column exists in the database
+    try {
+      await prisma.$executeRawUnsafe(`ALTER TABLE "job_applications" ADD COLUMN IF NOT EXISTS "resumeData" TEXT;`)
+    } catch {
+      // ignore
+    }
+
     let application = null
 
-    // 1. Try querying full model including resumeData
+    // 1. Try querying with resumeData explicitly selected
     try {
       application = await prisma.jobApplication.findUnique({
         where: { id },
-        include: {
+        select: {
+          id: true,
+          jobPostingId: true,
+          fullName: true,
+          email: true,
+          phone: true,
+          resumeUrl: true,
+          resumeData: true,
+          coverLetter: true,
+          status: true,
+          experience: true,
+          currentCtc: true,
+          expectedCtc: true,
+          noticePeriod: true,
+          linkedinUrl: true,
+          portfolioUrl: true,
+          resumeFileName: true,
+          resumeFileType: true,
+          resumeFileSize: true,
+          adminNotes: true,
+          rating: true,
+          createdAt: true,
           jobPosting: {
             select: { title: true, department: true, location: true, workplaceType: true },
           },
         },
       })
     } catch (fullQueryErr) {
-      console.warn('[adminCareers] findUnique full model failed, querying with safe select:', fullQueryErr.message)
-    }
-
-    // 2. Fallback: If first query failed (e.g. column missing), query with resilient select without resumeData
-    if (!application) {
+      console.warn('[adminCareers] findUnique with resumeData failed, trying full include:', fullQueryErr.message)
       try {
         application = await prisma.jobApplication.findUnique({
           where: { id },
-          select: {
-            id: true,
-            jobPostingId: true,
-            fullName: true,
-            email: true,
-            phone: true,
-            resumeUrl: true,
-            coverLetter: true,
-            status: true,
-            experience: true,
-            currentCtc: true,
-            expectedCtc: true,
-            noticePeriod: true,
-            linkedinUrl: true,
-            portfolioUrl: true,
-            resumeFileName: true,
-            resumeFileType: true,
-            resumeFileSize: true,
-            adminNotes: true,
-            rating: true,
-            createdAt: true,
+          include: {
             jobPosting: {
               select: { title: true, department: true, location: true, workplaceType: true },
             },
           },
         })
-      } catch (safeErr1) {
-        console.warn('[adminCareers] findUnique safe select 1 failed, trying minimal select:', safeErr1.message)
-        // 3. Ultra-minimal fallback
-        application = await prisma.jobApplication.findUnique({
-          where: { id },
-          select: {
-            id: true,
-            fullName: true,
-            email: true,
-            phone: true,
-            resumeUrl: true,
-            status: true,
-            createdAt: true,
-            jobPosting: {
-              select: { title: true, department: true, location: true },
+      } catch (incErr) {
+        console.warn('[adminCareers] findUnique full include failed, trying safe select:', incErr.message)
+        // 3. Fallback without resumeData
+        try {
+          application = await prisma.jobApplication.findUnique({
+            where: { id },
+            select: {
+              id: true,
+              jobPostingId: true,
+              fullName: true,
+              email: true,
+              phone: true,
+              resumeUrl: true,
+              coverLetter: true,
+              status: true,
+              experience: true,
+              currentCtc: true,
+              expectedCtc: true,
+              noticePeriod: true,
+              linkedinUrl: true,
+              portfolioUrl: true,
+              resumeFileName: true,
+              resumeFileType: true,
+              resumeFileSize: true,
+              adminNotes: true,
+              rating: true,
+              createdAt: true,
+              jobPosting: {
+                select: { title: true, department: true, location: true },
+              },
             },
-          },
-        })
+          })
+        } catch {
+          // 4. Ultra-minimal fallback
+          application = await prisma.jobApplication.findUnique({
+            where: { id },
+            select: {
+              id: true,
+              fullName: true,
+              email: true,
+              phone: true,
+              resumeUrl: true,
+              status: true,
+              createdAt: true,
+            },
+          })
+        }
       }
     }
 
