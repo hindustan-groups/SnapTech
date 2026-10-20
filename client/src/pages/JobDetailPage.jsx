@@ -85,7 +85,7 @@ const applySchema = z.object({
 
 export default function JobDetailPage() {
   const { slug } = useParams()
-  const { data, isLoading, error } = useJobDetail(slug)
+  const { data, isLoading } = useJobDetail(slug)
   const applyMutation = useApplyJob(slug)
   const { data: siteSettings } = useSiteSettings()
   const cfg = siteSettings?.data || {}
@@ -118,8 +118,29 @@ export default function JobDetailPage() {
     },
   })
 
-  // Resolve job from DB
-  const job = data?.data || null
+  // Resolve job from DB with resilient General Application fallback
+  const fallbackGeneralJob = slug === 'general-application' ? {
+    id: 'general-app-fallback',
+    title: 'General Application (Future Openings)',
+    slug: 'general-application',
+    department: 'General',
+    location: 'Remote / Bhilwara',
+    jobType: 'FULL_TIME',
+    workplaceType: 'Hybrid',
+    experienceRequired: 'Any experience',
+    description: 'Submit your resume for general consideration for future openings at SnapTech Digital.',
+    responsibilities: [
+      'Support various engineering, design, and growth initiatives as needed',
+      'Collaborate with the cross-functional team on modern web and cloud solutions',
+    ],
+    requirements: [
+      'Strong passion for continuous learning and building high-impact tech products',
+      'Effective communication, integrity, and proactive problem-solving mindset',
+    ],
+    isActive: true,
+  } : null
+
+  const job = data?.data || fallbackGeneralJob
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0]
@@ -240,7 +261,7 @@ export default function JobDetailPage() {
     )
   }
 
-  if (error || (!isLoading && !job)) {
+  if (!job && !isLoading) {
     return (
       <div className="min-h-screen bg-white text-slate-700 py-32 flex items-center justify-center">
         <Container>

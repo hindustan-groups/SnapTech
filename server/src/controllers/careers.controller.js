@@ -22,10 +22,34 @@ export const getActiveJobs = async (_req, res, next) => {
       return res.json({ status: 'ok', data: cached })
     }
 
-    const jobs = await prisma.jobPosting.findMany({
-      where: { isActive: true },
-      orderBy: { createdAt: 'desc' },
-    })
+    let jobs
+    try {
+      jobs = await prisma.jobPosting.findMany({
+        where: { isActive: true },
+        orderBy: { createdAt: 'desc' },
+      })
+    } catch {
+      // Fallback: select core fields if extended columns are not yet in the DB
+      jobs = await prisma.jobPosting.findMany({
+        where: { isActive: true },
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          department: true,
+          location: true,
+          jobType: true,
+          experienceRequired: true,
+          description: true,
+          responsibilities: true,
+          requirements: true,
+          isActive: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+        orderBy: { createdAt: 'desc' },
+      })
+    }
     setCache(cacheKey, jobs, 600) // 10 min cache
     res.json({ status: 'ok', data: jobs })
   } catch (err) {
@@ -42,34 +66,83 @@ export const getJobBySlug = async (req, res, next) => {
       return res.json({ status: 'ok', data: cached })
     }
 
-    let job = await prisma.jobPosting.findUnique({
-      where: { slug: req.params.slug, isActive: true },
-    })
-
-    if (!job && req.params.slug === 'general-application') {
-      job = await prisma.jobPosting.upsert({
-        where: { slug: 'general-application' },
-        update: { isActive: true },
-        create: {
-          title: 'General Application (Future Openings)',
-          slug: 'general-application',
-          department: 'General',
-          location: 'Remote / Bhilwara',
-          jobType: 'FULL_TIME',
-          experienceRequired: 'Any experience',
-          description:
-            'Submit your resume for general consideration for future openings at SnapTech Digital.',
-          responsibilities: [
-            'Support various projects as needed',
-            'Collaborate with the team on software, design, or marketing goals',
-          ],
-          requirements: [
-            'Passion for learning and building products',
-            'Good communication and teamwork skills',
-          ],
+    let job
+    try {
+      job = await prisma.jobPosting.findFirst({
+        where: { slug: req.params.slug, isActive: true },
+      })
+    } catch {
+      job = await prisma.jobPosting.findFirst({
+        where: { slug: req.params.slug, isActive: true },
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          department: true,
+          location: true,
+          jobType: true,
+          experienceRequired: true,
+          description: true,
+          responsibilities: true,
+          requirements: true,
           isActive: true,
+          createdAt: true,
+          updatedAt: true,
         },
       })
+    }
+
+    if (!job && req.params.slug === 'general-application') {
+      try {
+        job = await prisma.jobPosting.upsert({
+          where: { slug: 'general-application' },
+          update: { isActive: true },
+          create: {
+            title: 'General Application (Future Openings)',
+            slug: 'general-application',
+            department: 'General',
+            location: 'Remote / Bhilwara',
+            jobType: 'FULL_TIME',
+            workplaceType: 'Hybrid',
+            experienceRequired: 'Any experience',
+            description:
+              'Submit your resume for general consideration for future openings at SnapTech Digital.',
+            responsibilities: [
+              'Support various projects as needed',
+              'Collaborate with the team on software, design, or marketing goals',
+            ],
+            requirements: [
+              'Passion for learning and building products',
+              'Good communication and teamwork skills',
+            ],
+            isActive: true,
+          },
+        })
+      } catch {
+        job = await prisma.jobPosting.upsert({
+          where: { slug: 'general-application' },
+          update: { isActive: true },
+          create: {
+            title: 'General Application (Future Openings)',
+            slug: 'general-application',
+            department: 'General',
+            location: 'Remote / Bhilwara',
+            jobType: 'FULL_TIME',
+            experienceRequired: 'Any experience',
+            description:
+              'Submit your resume for general consideration for future openings at SnapTech Digital.',
+            responsibilities: [
+              'Support various projects as needed',
+              'Collaborate with the team on software, design, or marketing goals',
+            ],
+            requirements: [
+              'Passion for learning and building products',
+              'Good communication and teamwork skills',
+            ],
+            isActive: true,
+          },
+        })
+      }
     }
 
     if (!job) {
@@ -154,35 +227,77 @@ export const submitApplication = async (req, res, next) => {
       })
     }
 
-    let job = await prisma.jobPosting.findUnique({
-      where: { slug, isActive: true },
-    })
-
-    if (!job && slug === 'general-application') {
-      job = await prisma.jobPosting.upsert({
-        where: { slug: 'general-application' },
-        update: { isActive: true },
-        create: {
-          title: 'General Application (Future Openings)',
-          slug: 'general-application',
-          department: 'General',
-          location: 'Remote / Bhilwara',
-          jobType: 'FULL_TIME',
-          workplaceType: 'Hybrid',
-          experienceRequired: 'Any experience',
-          description:
-            'Submit your resume for general consideration for future openings at SnapTech Digital.',
-          responsibilities: [
-            'Support various projects as needed',
-            'Collaborate with the team on software, design, or marketing goals',
-          ],
-          requirements: [
-            'Passion for learning and building products',
-            'Good communication and teamwork skills',
-          ],
+    let job
+    try {
+      job = await prisma.jobPosting.findFirst({
+        where: { slug, isActive: true },
+      })
+    } catch {
+      job = await prisma.jobPosting.findFirst({
+        where: { slug, isActive: true },
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          department: true,
+          location: true,
+          jobType: true,
           isActive: true,
         },
       })
+    }
+
+    if (!job && slug === 'general-application') {
+      try {
+        job = await prisma.jobPosting.upsert({
+          where: { slug: 'general-application' },
+          update: { isActive: true },
+          create: {
+            title: 'General Application (Future Openings)',
+            slug: 'general-application',
+            department: 'General',
+            location: 'Remote / Bhilwara',
+            jobType: 'FULL_TIME',
+            workplaceType: 'Hybrid',
+            experienceRequired: 'Any experience',
+            description:
+              'Submit your resume for general consideration for future openings at SnapTech Digital.',
+            responsibilities: [
+              'Support various projects as needed',
+              'Collaborate with the team on software, design, or marketing goals',
+            ],
+            requirements: [
+              'Passion for learning and building products',
+              'Good communication and teamwork skills',
+            ],
+            isActive: true,
+          },
+        })
+      } catch {
+        job = await prisma.jobPosting.upsert({
+          where: { slug: 'general-application' },
+          update: { isActive: true },
+          create: {
+            title: 'General Application (Future Openings)',
+            slug: 'general-application',
+            department: 'General',
+            location: 'Remote / Bhilwara',
+            jobType: 'FULL_TIME',
+            experienceRequired: 'Any experience',
+            description:
+              'Submit your resume for general consideration for future openings at SnapTech Digital.',
+            responsibilities: [
+              'Support various projects as needed',
+              'Collaborate with the team on software, design, or marketing goals',
+            ],
+            requirements: [
+              'Passion for learning and building products',
+              'Good communication and teamwork skills',
+            ],
+            isActive: true,
+          },
+        })
+      }
     }
 
     if (!job) {

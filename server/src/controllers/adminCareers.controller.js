@@ -27,10 +27,32 @@ export const listJobPostings = async (_req, res, next) => {
         orderBy: { createdAt: 'desc' },
       })
     } catch {
-      // Fallback if driver does not support _count relation
-      jobs = await prisma.jobPosting.findMany({
-        orderBy: { createdAt: 'desc' },
-      })
+      try {
+        // Fallback 1: if _count relation fails
+        jobs = await prisma.jobPosting.findMany({
+          orderBy: { createdAt: 'desc' },
+        })
+      } catch {
+        // Fallback 2: if extended columns fail, select core fields
+        jobs = await prisma.jobPosting.findMany({
+          select: {
+            id: true,
+            title: true,
+            slug: true,
+            department: true,
+            location: true,
+            jobType: true,
+            experienceRequired: true,
+            description: true,
+            responsibilities: true,
+            requirements: true,
+            isActive: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+          orderBy: { createdAt: 'desc' },
+        })
+      }
     }
     res.json({ status: 'ok', data: jobs })
   } catch (err) {
@@ -231,15 +253,36 @@ export const listApplications = async (req, res, next) => {
         orderBy: { createdAt: 'desc' },
       })
     } catch {
-      applications = await prisma.jobApplication.findMany({
-        where,
-        include: {
-          jobPosting: {
-            select: { title: true, department: true, location: true },
+      try {
+        applications = await prisma.jobApplication.findMany({
+          where,
+          include: {
+            jobPosting: {
+              select: { title: true, department: true, location: true },
+            },
           },
-        },
-        orderBy: { createdAt: 'desc' },
-      })
+          orderBy: { createdAt: 'desc' },
+        })
+      } catch {
+        applications = await prisma.jobApplication.findMany({
+          where,
+          select: {
+            id: true,
+            jobPostingId: true,
+            fullName: true,
+            email: true,
+            phone: true,
+            resumeUrl: true,
+            coverLetter: true,
+            status: true,
+            createdAt: true,
+            jobPosting: {
+              select: { title: true, department: true, location: true },
+            },
+          },
+          orderBy: { createdAt: 'desc' },
+        })
+      }
     }
 
     if (search && search.trim()) {
