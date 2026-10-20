@@ -53,19 +53,15 @@ export const ROUTING_ALIASES = {
 
 // ── Strategy Detection ─────────────────────────────────────────
 export async function getEffectiveResendKey() {
-  let key = (process.env.RESEND_API_KEY || env.RESEND_API_KEY || '').trim()
-  if (!key) {
-    try {
-      const dbRow = await prisma.siteSetting.findUnique({ where: { key: 'sys_resend_api_key' } })
-      if (dbRow?.value) {
-        key = dbRow.value.trim()
-        process.env.RESEND_API_KEY = key
-      }
-    } catch {
-      // ignore
+  try {
+    const dbRow = await prisma.siteSetting.findUnique({ where: { key: 'sys_resend_api_key' } })
+    if (dbRow?.value && dbRow.value.trim() && !/^•+/.test(dbRow.value.trim())) {
+      return dbRow.value.trim()
     }
+  } catch {
+    // ignore
   }
-  return key
+  return (process.env.RESEND_API_KEY || env.RESEND_API_KEY || '').trim()
 }
 
 // ── Strategy Detection ─────────────────────────────────────────
@@ -151,8 +147,8 @@ export async function logEmailSend({
 }
 
 // ── Resend Transport ───────────────────────────────────────────
-export async function sendViaResend({ to, subject, html, text, attachments, replyTo }) {
-  const apiKey = await getEffectiveResendKey()
+export async function sendViaResend({ to, subject, html, text, attachments, replyTo, apiKey: customKey }) {
+  const apiKey = customKey || await getEffectiveResendKey()
   if (!apiKey) throw new Error('HTTPS Mail Gateway API Token is not configured. Please enter your API Key in Settings.')
   const resend = new Resend(apiKey)
 
@@ -189,6 +185,62 @@ export async function sendViaResend({ to, subject, html, text, attachments, repl
     return { messageId: data?.id }
   } catch (err) {
     throw new Error(err.message || 'Resend send failed', { cause: err })
+  }
+}
+
+// ── Hostinger Mail REST API (Port 443 — Hostinger Official) ────
+export async function sendViaHostingerApi({ to, subject, html, text, replyTo, apiKey: customKey }) {
+  let key = customKey
+  if (!key) {
+    try {
+      const dbRow = await prisma.siteSetting.findUnique({ where: { key: 'sys_hostinger_api_key' } })
+      if (dbRow?.value && dbRow.value.trim()) key = dbRow.value.trim()
+    } catch {
+      /* ignore */
+    }
+  }
+  if (!key) {
+    key = (process.env.HOSTINGER_API_KEY || '').trim()
+  }
+
+  if (!key) {
+    throw new Error('Hostinger Mail API Token is not configured. Please enter your Hostinger API Token from hPanel > Dev Tools > API.')
+  }
+
+  const recipient = Array.isArray(to) ? to[0] : to
+  const body = {
+    to: recipient,
+    subject,
+    ...(html ? { html } : {}),
+    ...(text ? { text } : {}),
+    ...(replyTo ? { reply_to: replyTo } : {}),
+  }
+
+  const response = await fetch('https://api.mail.hostinger.com/v1/emails', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${key}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  })
+
+  if (!response.ok) {
+    const errText = await response.text().catch(() => '')
+    let errDetail = errText
+    try {
+      const parsed = JSON.parse(errText)
+      errDetail = parsed.message || parsed.error || errText
+    } catch {
+      /* ignore */
+    }
+    throw new Error(`Hostinger Mail API error (HTTP ${response.status}): ${errDetail}`)
+  }
+
+  const data = await response.json().catch(() => ({}))
+  return {
+    messageId: data.id || data.messageId || `hostinger-api-${Date.now()}`,
+    provider: 'HOSTINGER_API',
   }
 }
 
@@ -338,10 +390,33 @@ async function sendEmailDirect(options) {
   }
 
   const resendKey = await getEffectiveResendKey()
+  let hostingerKey = (process.env.HOSTINGER_API_KEY || '').trim()
+  if (!hostingerKey) {
+    try {
+      const dbH = await prisma.siteSetting.findUnique({ where: { key: 'sys_hostinger_api_key' } })
+      if (dbH?.value && dbH.value.trim()) hostingerKey = dbH.value.trim()
+    } catch {
+      /* ignore */
+    }
+  }
+
+  const sendViaHttpGateway = async (opt) => {
+    if (hostingerKey) {
+      try {
+        return await sendViaHostingerApi({ ...opt, apiKey: hostingerKey })
+      } catch (hErr) {
+        console.warn(`[mailer] Hostinger Mail API failed (${hErr.message}). Falling back to Resend Gateway...`)
+      }
+    }
+    if (resendKey) {
+      return await sendViaResend({ ...opt, apiKey: resendKey })
+    }
+    throw new Error('No HTTPS Mail API Key configured.')
+  }
 
   // If strategy is explicitly resend/api_token, route directly over HTTPS Port 443
-  if (strategy === 'resend' && resendKey) {
-    return await sendViaResend(options)
+  if ((strategy === 'resend' || strategy === 'api_token') && (resendKey || hostingerKey)) {
+    return await sendViaHttpGateway(options)
   }
 
   // Transient retry wrapper
@@ -372,11 +447,11 @@ async function sendEmailDirect(options) {
   } catch (smtpErr) {
     // When outbound SMTP is firewalled (e.g. Render Free Tier blocks ports 25, 465, 587)
     // or connection fails, immediately route via verified HTTPS Mail Gateway (port 443)
-    if (resendKey) {
+    if (resendKey || hostingerKey) {
       console.warn(
         `[mailer] Direct SMTP failed (${smtpErr.message}). Routing seamlessly via verified HTTPS Mail Gateway for info@snaptech.digital...`
       )
-      return await sendViaResend(options)
+      return await sendViaHttpGateway(options)
     }
 
     throw smtpErr

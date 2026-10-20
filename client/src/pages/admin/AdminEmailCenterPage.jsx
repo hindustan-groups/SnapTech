@@ -1966,7 +1966,7 @@ function SettingsTab({ settings, onSettingsUpdated }) {
     setApiTokenResult(null)
     try {
       const res = await api.post('/admin/email/test-api-token', {
-        apiToken: formData.apiToken,
+        apiToken: formData.apiToken.trim() || undefined,
         targetEmail: testEmail,
       })
       setApiTokenResult({
@@ -2215,7 +2215,7 @@ function SettingsTab({ settings, onSettingsUpdated }) {
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <label className="text-gray-700 font-semibold text-xs">
-                    Mail Gateway API Key (Resend / Cloud API Token)
+                    API Gateway Token (Hostinger Mail API or Resend Key)
                   </label>
                   <button
                     type="button"
@@ -2232,11 +2232,14 @@ function SettingsTab({ settings, onSettingsUpdated }) {
                   onChange={(e) => setFormData({ ...formData, apiToken: e.target.value })}
                   placeholder={
                     settings?.isApiTokenConfigured
-                      ? `${settings.maskedApiToken || 're_••••••••'} (Saved in DB — type to update)`
-                      : 're_xxxxxxxxxxxxxxxxxxxxxxxx'
+                      ? `${settings.maskedApiToken || 'Saved in Database'} (Leave blank to use saved key)`
+                      : 'Hostinger API Token (from hPanel) or Resend (re_...)'
                   }
                   className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-xs font-mono focus:outline-none focus:border-emerald-500"
                 />
+                <p className="mt-1 text-[10px] text-slate-500">
+                  <em>Note:</em> Do not enter your Hostinger Webmail password here. Mailbox password goes in <strong>Section 3</strong> below.
+                </p>
               </div>
 
               <div className="text-[11px] text-slate-600 bg-white/80 p-3 rounded-lg border border-emerald-100 space-y-1">

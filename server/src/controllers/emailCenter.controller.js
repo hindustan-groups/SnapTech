@@ -18,6 +18,7 @@ import {
   sendEmail,
   sendViaSMTP,
   sendViaResend,
+  sendViaHostingerApi,
   getEffectiveResendKey,
   escapeHtml,
   TEMPLATES_CATALOG,
@@ -1112,27 +1113,38 @@ export const testApiTokenHandler = async (req, res) => {
     const { apiToken, targetEmail } = req.body || {}
     let effectiveKey = (apiToken && typeof apiToken === 'string' && apiToken.trim() && !/^•+/.test(apiToken.trim()))
       ? apiToken.trim()
-      : (process.env.RESEND_API_KEY || '').trim()
+      : ''
 
     if (!effectiveKey) {
-      const dbRow = await prisma.siteSetting.findUnique({ where: { key: 'sys_resend_api_key' } })
-      if (dbRow?.value) effectiveKey = dbRow.value.trim()
+      effectiveKey = await getEffectiveResendKey()
+    }
+    if (!effectiveKey) {
+      try {
+        const dbH = await prisma.siteSetting.findUnique({ where: { key: 'sys_hostinger_api_key' } })
+        if (dbH?.value && dbH.value.trim()) effectiveKey = dbH.value.trim()
+      } catch {
+        /* ignore */
+      }
     }
 
     if (!effectiveKey) {
       return res.status(400).json({
         status: 'error',
-        message: 'No API Token configured. Please enter your Resend API Key (starts with "re_") and save.',
+        message: 'No API Token configured. Please enter your Hostinger API Token (from hPanel > Dev Tools > API) or Resend API Key (starts with "re_") and click Save.',
       })
     }
 
     const recipient = (targetEmail && targetEmail.trim()) || process.env.EMAIL_USER || VERIFIED_SENDER_MAILBOX
 
-    // Test send via Resend
-    const result = await sendViaResend({
-      to: recipient,
-      subject: '⚡ API Token Gateway Verification — SnapTech Digital',
-      html: `
+    let result
+    let providerName
+
+    if (effectiveKey.startsWith('re_')) {
+      providerName = 'Resend HTTPS Mail Gateway (Port 443)'
+      result = await sendViaResend({
+        to: recipient,
+        subject: '⚡ API Token Gateway Verification — SnapTech Digital',
+        html: `
         <div style="font-family: Arial, sans-serif; padding: 24px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; max-width: 560px;">
           <div style="background: linear-gradient(135deg, #0f172a, #2563eb); padding: 18px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
             <h2 style="color: #ffffff; margin: 0; font-size: 20px;">SnapTech Digital</h2>
@@ -1148,25 +1160,56 @@ export const testApiTokenHandler = async (req, res) => {
             <p style="margin: 4px 0 0;">Protocol: <strong style="color: #0f172a;">HTTPS REST API (Port 443 — 100% Cloud Compatible)</strong></p>
           </div>
         </div>
-      `,
-      text: `API Token Gateway Handshake successful for ${recipient}.`,
-    })
+        `,
+        text: `API Token Gateway Handshake successful for ${recipient}.`,
+        apiKey: effectiveKey,
+      })
+    } else {
+      providerName = 'Hostinger Official Mail API (Port 443)'
+      result = await sendViaHostingerApi({
+        to: recipient,
+        subject: '⚡ Hostinger Mail API Verification — SnapTech Digital',
+        html: `
+        <div style="font-family: Arial, sans-serif; padding: 24px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; max-width: 560px;">
+          <div style="background: linear-gradient(135deg, #0f172a, #2563eb); padding: 18px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
+            <h2 style="color: #ffffff; margin: 0; font-size: 20px;">SnapTech Digital</h2>
+            <p style="color: #bfdbfe; margin: 4px 0 0; font-size: 12px;">Hostinger Mail REST API Verification</p>
+          </div>
+          <h3 style="color: #0f172a; margin-top: 0;">✓ Hostinger API Handshake Successful</h3>
+          <p style="color: #334155; font-size: 14px; line-height: 1.6;">
+            Your Hostinger Mail API Token is authorized and verified. Outbound mail routing via Hostinger REST API (Port 443) is working.
+          </p>
+          <div style="background: #f8fafc; border-left: 4px solid #2563eb; padding: 12px; margin: 16px 0; border-radius: 4px; font-size: 12px; color: #64748b;">
+            <p style="margin: 0;">Sender: <strong style="color: #0f172a;">${process.env.EMAIL_FROM || 'SnapTech Digital <info@snaptech.digital>'}</strong></p>
+            <p style="margin: 4px 0 0;">Recipient: <strong style="color: #0f172a;">${recipient}</strong></p>
+            <p style="margin: 4px 0 0;">Endpoint: <strong style="color: #0f172a;">api.mail.hostinger.com/v1/emails (Port 443)</strong></p>
+          </div>
+        </div>
+        `,
+        text: `Hostinger Mail API Handshake successful for ${recipient}.`,
+        apiKey: effectiveKey,
+      })
+    }
 
     res.json({
       status: 'ok',
-      message: `API Token verified successfully! Test delivery sent to ${recipient} (Message ID: ${result.messageId}).`,
+      message: `${providerName} verified successfully! Test delivery sent to ${recipient} (Message ID: ${result.messageId}).`,
       data: {
-        provider: 'Resend HTTPS API Gateway',
+        provider: providerName,
         port: 443,
         recipient,
         messageId: result.messageId,
       },
     })
   } catch (err) {
-    const cleanMsg = sanitizeErrorMessage(err.message, [process.env.RESEND_API_KEY])
+    const cleanMsg = sanitizeErrorMessage(err.message, [process.env.RESEND_API_KEY, process.env.HOSTINGER_API_KEY])
+    let guidance = ''
+    if (/invalid|401|unauthorized/i.test(cleanMsg)) {
+      guidance = ' (Important: Hostinger Webmail password is for direct SMTP Port 465 below. For API Gateway, either generate an API token from Hostinger hPanel > Dev Tools > API, or use a Resend API key starting with "re_").'
+    }
     res.status(400).json({
       status: 'error',
-      message: `API Token Verification Failed: ${cleanMsg}`,
+      message: `API Token Verification Failed: ${cleanMsg}${guidance}`,
     })
   }
 }
