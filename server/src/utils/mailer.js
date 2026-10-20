@@ -179,14 +179,14 @@ export async function sendViaSMTP(options = {}) {
   const host = (accountConfig?.smtpHost || process.env.EMAIL_HOST || env.EMAIL_HOST || HOSTINGER_SMTP_HOST).trim()
   const port = parseInt(accountConfig?.smtpPort || process.env.EMAIL_PORT || env.EMAIL_PORT || String(HOSTINGER_SMTP_PORT), 10)
   const user = (accountConfig?.smtpUser || process.env.EMAIL_USER || env.EMAIL_USER || VERIFIED_SENDER_MAILBOX).trim()
-  let pass = (accountConfig?.smtpPassword || process.env.EMAIL_PASS || env.EMAIL_PASS || '').trim().replace(/\s+/g, '')
+  let pass = (accountConfig?.smtpPassword || process.env.EMAIL_PASS || env.EMAIL_PASS || '').trim()
 
   // Self-heal: If password is empty in process.env, check SiteSetting or EmailAccount in database
   if (!pass) {
     try {
       const dbSetting = await prisma.siteSetting.findUnique({ where: { key: 'sys_smtp_pass' } })
       if (dbSetting?.value) {
-        pass = dbSetting.value.trim().replace(/\s+/g, '')
+        pass = dbSetting.value.trim()
         process.env.EMAIL_PASS = pass
       }
     } catch {
@@ -203,7 +203,7 @@ export async function sendViaSMTP(options = {}) {
         const { decryptCredential } = await import('./crypto.js')
         const decrypted = decryptCredential(defaultAcc.smtpPasswordEncrypted)
         if (decrypted) {
-          pass = decrypted.trim().replace(/\s+/g, '')
+          pass = decrypted.trim()
           process.env.EMAIL_PASS = pass
         }
       }
@@ -238,9 +238,9 @@ export async function sendViaSMTP(options = {}) {
     secure: isSecure,
     requireTLS: finalPort === 587,
     auth: { user, pass },
-    connectionTimeout: 5000,
-    greetingTimeout: 5000,
-    socketTimeout: 5000,
+    connectionTimeout: 15000,
+    greetingTimeout: 15000,
+    socketTimeout: 15000,
     family: 4,
     tls: {
       rejectUnauthorized: false,

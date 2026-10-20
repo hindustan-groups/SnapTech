@@ -44,8 +44,23 @@ export function sanitizeErrorMessage(msg, secrets = []) {
  */
 export async function ensureDefaultAccounts() {
   try {
-    const primaryEmail = (process.env.EMAIL_USER || env.EMAIL_USER || 'info@snaptech.digital').trim().toLowerCase()
-    const primaryPass = (process.env.EMAIL_PASS || env.EMAIL_PASS || '').trim()
+    let primaryEmail = (process.env.EMAIL_USER || env.EMAIL_USER || '').trim().toLowerCase()
+    let primaryPass = (process.env.EMAIL_PASS || env.EMAIL_PASS || '').trim()
+
+    if (!primaryEmail) {
+      const dbUser = await prisma.siteSetting.findUnique({ where: { key: 'sys_smtp_user' } }).catch(() => null)
+      if (dbUser?.value) primaryEmail = dbUser.value.trim().toLowerCase()
+    }
+    if (!primaryEmail) primaryEmail = 'info@snaptech.digital'
+
+    if (!primaryPass) {
+      const dbPass = await prisma.siteSetting.findUnique({ where: { key: 'sys_smtp_pass' } }).catch(() => null)
+      if (dbPass?.value) {
+        primaryPass = dbPass.value.trim()
+        process.env.EMAIL_PASS = primaryPass
+      }
+    }
+
     const host = (process.env.EMAIL_HOST || env.EMAIL_HOST || DEFAULT_HOSTINGER_HOST).trim()
     const port = parseInt(process.env.EMAIL_PORT || env.EMAIL_PORT || String(DEFAULT_HOSTINGER_PORT), 10)
     const isHostinger = host.includes('hostinger') || host.includes('titan')
@@ -62,7 +77,7 @@ export async function ensureDefaultAccounts() {
     })
 
     if (existing) {
-      // Self-heal: If database record has no password but environment has EMAIL_PASS, populate it
+      // Self-heal: If database record has no password but environment or siteSetting has password, populate it
       if (primaryPass && (!existing.smtpPasswordEncrypted || !existing.imapPasswordEncrypted)) {
         await prisma.emailAccount.update({
           where: { id: existing.id },
@@ -180,8 +195,8 @@ export async function getInternalAccountWithCredentials(idOrEmail) {
     }
   }
 
-  const effectiveSmtpPass = (decryptedSmtpPass || fallbackPass || decryptedImapPass || '').trim().replace(/\s+/g, '')
-  const effectiveImapPass = (decryptedImapPass || fallbackPass || decryptedSmtpPass || '').trim().replace(/\s+/g, '')
+  const effectiveSmtpPass = (decryptedSmtpPass || fallbackPass || decryptedImapPass || '').trim()
+  const effectiveImapPass = (decryptedImapPass || fallbackPass || decryptedSmtpPass || '').trim()
 
   return {
     ...account,
@@ -268,10 +283,15 @@ export async function createAccount(data) {
   // If saved with a password and set as default/primary, sync to runtime env & siteSetting
   if (rawPass && (data.isDefaultSender || email.includes('snaptech.digital'))) {
     process.env.EMAIL_PASS = rawPass
-    prisma.siteSetting.upsert({
+    await prisma.siteSetting.upsert({
       where: { key: 'sys_smtp_pass' },
       update: { value: rawPass },
       create: { key: 'sys_smtp_pass', value: rawPass },
+    }).catch(() => {})
+    await prisma.siteSetting.upsert({
+      where: { key: 'sys_smtp_user' },
+      update: { value: email },
+      create: { key: 'sys_smtp_user', value: email },
     }).catch(() => {})
   }
 
@@ -314,7 +334,7 @@ export async function updateAccount(id, data) {
     // Also sync to runtime env & siteSetting for primary/default mailbox
     if (existing.isDefaultSender || existing.email.toLowerCase().includes('snaptech.digital')) {
       process.env.EMAIL_PASS = rawPass
-      prisma.siteSetting.upsert({
+      await prisma.siteSetting.upsert({
         where: { key: 'sys_smtp_pass' },
         update: { value: rawPass },
         create: { key: 'sys_smtp_pass', value: rawPass },
@@ -376,7 +396,7 @@ export async function testAccountSmtp(id, targetRecipient = null) {
   const host = account.smtpHost || DEFAULT_HOSTINGER_HOST
   const configuredPort = account.smtpPort || 465
   const user = account.smtpUser || account.email
-  const pass = (account.smtpPassword || '').trim().replace(/\s+/g, '')
+  const pass = (account.smtpPassword || '').trim()
 
   if (!pass) {
     throw new Error('SMTP password is not configured for this account. Please enter the password and save.')
@@ -392,9 +412,9 @@ export async function testAccountSmtp(id, targetRecipient = null) {
     secure: p === 465,
     requireTLS: p === 587,
     auth: { user, pass },
-    connectionTimeout: 8000,
-    greetingTimeout: 8000,
-    socketTimeout: 8000,
+    connectionTimeout: 15000,
+    greetingTimeout: 15000,
+    socketTimeout: 15000,
     family: 4,
     tls: {
       rejectUnauthorized: false,
@@ -460,7 +480,7 @@ export async function testAccountImap(id) {
   const host = account.imapHost || DEFAULT_HOSTINGER_IMAP_HOST
   const port = account.imapPort || 993
   const user = account.imapUser || account.email
-  const pass = (account.imapPassword || '').trim().replace(/\s+/g, '')
+  const pass = (account.imapPassword || '').trim()
 
   if (!pass) {
     throw new Error('IMAP password is not configured for this account. Please enter the password and save.')
@@ -475,8 +495,8 @@ export async function testAccountImap(id) {
     secure: account.imapSecure !== false,
     auth: { user, pass },
     logger: false,
-    connectionTimeout: process.env.NODE_ENV === 'test' ? 1500 : 8000,
-    greetingTimeout: process.env.NODE_ENV === 'test' ? 1500 : 6000,
+    connectionTimeout: process.env.NODE_ENV === 'test' ? 1500 : 15000,
+    greetingTimeout: process.env.NODE_ENV === 'test' ? 1500 : 12000,
     tls: {
       rejectUnauthorized: false,
       servername: host,

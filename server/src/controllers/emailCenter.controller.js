@@ -729,229 +729,157 @@ export const updateEmailSettings = async (req, res, next) => {
       smtpPort,
       smtpUser,
       smtpPass,
-      apiToken,
-      resendApiKey,
       imapHost,
       imapPort,
       imapPass,
-      emailStrategy,
     } = req.body
 
-    const ops = []
+    const cleanUser = (smtpUser || process.env.EMAIL_USER || VERIFIED_SENDER_MAILBOX).trim().toLowerCase()
+    const cleanHost = (smtpHost || process.env.EMAIL_HOST || HOSTINGER_SMTP_HOST).trim()
+    const cleanPort = parseInt(smtpPort || process.env.EMAIL_PORT || '465', 10)
+    const cleanImapHost = (imapHost || process.env.IMAP_HOST || 'imap.hostinger.com').trim()
+    const cleanImapPort = parseInt(imapPort || process.env.IMAP_PORT || '993', 10)
+    const cleanSenderName = (senderName || process.env.EMAIL_SENDER_NAME || 'SnapTech Digital').trim()
+    const cleanReplyTo = (defaultReplyTo || process.env.EMAIL_REPLY_TO || cleanUser).trim().toLowerCase()
 
-    // 1. API Token (Resend / HTTPS Mail Gateway)
-    const rawApiToken = (apiToken || resendApiKey || '').trim()
-    if (rawApiToken && !/^•+/.test(rawApiToken)) {
-      process.env.RESEND_API_KEY = rawApiToken
-      ops.push(
-        prisma.siteSetting.upsert({
-          where: { key: 'sys_resend_api_key' },
-          update: { value: rawApiToken },
-          create: { key: 'sys_resend_api_key', value: rawApiToken },
-        })
-      )
+    // 1. Update basic settings in siteSetting sequentially
+    await prisma.siteSetting.upsert({
+      where: { key: 'sys_smtp_user' },
+      update: { value: cleanUser },
+      create: { key: 'sys_smtp_user', value: cleanUser },
+    })
+    await prisma.siteSetting.upsert({
+      where: { key: 'sys_smtp_host' },
+      update: { value: cleanHost },
+      create: { key: 'sys_smtp_host', value: cleanHost },
+    })
+    await prisma.siteSetting.upsert({
+      where: { key: 'sys_smtp_port' },
+      update: { value: String(cleanPort) },
+      create: { key: 'sys_smtp_port', value: String(cleanPort) },
+    })
+    await prisma.siteSetting.upsert({
+      where: { key: 'sys_imap_host' },
+      update: { value: cleanImapHost },
+      create: { key: 'sys_imap_host', value: cleanImapHost },
+    })
+    await prisma.siteSetting.upsert({
+      where: { key: 'sys_imap_port' },
+      update: { value: String(cleanImapPort) },
+      create: { key: 'sys_imap_port', value: String(cleanImapPort) },
+    })
+    await prisma.siteSetting.upsert({
+      where: { key: 'sys_email_sender_name' },
+      update: { value: cleanSenderName },
+      create: { key: 'sys_email_sender_name', value: cleanSenderName },
+    })
+    await prisma.siteSetting.upsert({
+      where: { key: 'sys_email_reply_to' },
+      update: { value: cleanReplyTo },
+      create: { key: 'sys_email_reply_to', value: cleanReplyTo },
+    })
+    await prisma.siteSetting.upsert({
+      where: { key: 'sys_email_strategy' },
+      update: { value: 'smtp' },
+      create: { key: 'sys_email_strategy', value: 'smtp' },
+    })
+
+    // Runtime process.env updates
+    process.env.EMAIL_USER = cleanUser
+    process.env.EMAIL_HOST = cleanHost
+    process.env.EMAIL_PORT = String(cleanPort)
+    process.env.IMAP_HOST = cleanImapHost
+    process.env.IMAP_PORT = String(cleanImapPort)
+    process.env.EMAIL_SENDER_NAME = cleanSenderName
+    process.env.EMAIL_REPLY_TO = cleanReplyTo
+    process.env.EMAIL_STRATEGY = 'smtp'
+
+    // 2. Handle Password Updates (if provided)
+    const rawPass = (smtpPass && typeof smtpPass === 'string' && smtpPass.trim() && !/^•+/.test(smtpPass.trim()))
+      ? smtpPass.trim()
+      : null
+
+    const rawImapPass = (imapPass && typeof imapPass === 'string' && imapPass.trim() && !/^•+/.test(imapPass.trim()))
+      ? imapPass.trim()
+      : rawPass
+
+    if (rawPass) {
+      process.env.EMAIL_PASS = rawPass
+      await prisma.siteSetting.upsert({
+        where: { key: 'sys_smtp_pass' },
+        update: { value: rawPass },
+        create: { key: 'sys_smtp_pass', value: rawPass },
+      })
     }
 
-    // 2. IMAP Host & Port
-    if (imapHost && typeof imapHost === 'string') {
-      const val = imapHost.trim()
-      process.env.IMAP_HOST = val
-      ops.push(
-        prisma.siteSetting.upsert({
-          where: { key: 'sys_imap_host' },
-          update: { value: val },
-          create: { key: 'sys_imap_host', value: val },
-        })
-      )
-    }
+    // 3. Sync to prisma.emailAccount for unified mailbox & IMAP syncing
+    const { encryptCredential } = await import('../utils/crypto.js')
+    const existingAccounts = await prisma.emailAccount.findMany({
+      where: {
+        OR: [{ email: cleanUser }, { isDefaultSender: true }],
+      },
+    })
 
-    if (imapPort) {
-      const val = String(parseInt(imapPort, 10) || 993)
-      process.env.IMAP_PORT = val
-      ops.push(
-        prisma.siteSetting.upsert({
-          where: { key: 'sys_imap_port' },
-          update: { value: val },
-          create: { key: 'sys_imap_port', value: val },
+    if (existingAccounts.length > 0) {
+      for (const acc of existingAccounts) {
+        const updateData = {
+          email: cleanUser,
+          smtpUser: cleanUser,
+          imapUser: cleanUser,
+          smtpHost: cleanHost,
+          smtpPort: cleanPort,
+          imapHost: cleanImapHost,
+          imapPort: cleanImapPort,
+          provider: 'HOSTINGER',
+          displayName: cleanSenderName,
+          replyTo: cleanReplyTo,
+          isDefaultSender: true,
+          isActive: true,
+          syncEnabled: true,
+        }
+        if (rawPass) {
+          updateData.smtpPasswordEncrypted = encryptCredential(rawPass)
+          updateData.imapPasswordEncrypted = encryptCredential(rawImapPass || rawPass)
+        }
+        await prisma.emailAccount.update({
+          where: { id: acc.id },
+          data: updateData,
         })
-      )
-    }
-
-    // 3. Sender Name
-    if (senderName && typeof senderName === 'string') {
-      const val = senderName.trim()
-      process.env.EMAIL_SENDER_NAME = val
-      ops.push(
-        prisma.siteSetting.upsert({
-          where: { key: 'sys_email_sender_name' },
-          update: { value: val },
-          create: { key: 'sys_email_sender_name', value: val },
-        })
-      )
-    }
-
-    if (defaultReplyTo && typeof defaultReplyTo === 'string') {
-      const val = defaultReplyTo.trim().toLowerCase()
-      process.env.EMAIL_REPLY_TO = val
-      ops.push(
-        prisma.siteSetting.upsert({
-          where: { key: 'sys_email_reply_to' },
-          update: { value: val },
-          create: { key: 'sys_email_reply_to', value: val },
-        })
-      )
-    }
-
-    if (smtpHost && typeof smtpHost === 'string') {
-      const val = smtpHost.trim()
-      process.env.EMAIL_HOST = val
-      ops.push(
-        prisma.siteSetting.upsert({
-          where: { key: 'sys_smtp_host' },
-          update: { value: val },
-          create: { key: 'sys_smtp_host', value: val },
-        })
-      )
-    }
-
-    if (smtpPort) {
-      const val = String(parseInt(smtpPort, 10) || 465)
-      process.env.EMAIL_PORT = val
-      ops.push(
-        prisma.siteSetting.upsert({
-          where: { key: 'sys_smtp_port' },
-          update: { value: val },
-          create: { key: 'sys_smtp_port', value: val },
-        })
-      )
-    }
-
-    if (smtpUser && typeof smtpUser === 'string') {
-      const val = smtpUser.trim().toLowerCase()
-      process.env.EMAIL_USER = val
-      ops.push(
-        prisma.siteSetting.upsert({
-          where: { key: 'sys_smtp_user' },
-          update: { value: val },
-          create: { key: 'sys_smtp_user', value: val },
-        })
-      )
-    }
-
-    if (emailStrategy && typeof emailStrategy === 'string') {
-      const val = emailStrategy.trim().toLowerCase()
-      process.env.EMAIL_STRATEGY = val
-      ops.push(
-        prisma.siteSetting.upsert({
-          where: { key: 'sys_email_strategy' },
-          update: { value: val },
-          create: { key: 'sys_email_strategy', value: val },
-        })
-      )
-    }
-
-    // Only update password if a new raw non-masked password is provided
-    if (
-      smtpPass &&
-      typeof smtpPass === 'string' &&
-      smtpPass.trim() &&
-      !/^•+/.test(smtpPass.trim())
-    ) {
-      const val = smtpPass.trim()
-      process.env.EMAIL_PASS = val
-      ops.push(
-        prisma.siteSetting.upsert({
-          where: { key: 'sys_smtp_pass' },
-          update: { value: val },
-          create: { key: 'sys_smtp_pass', value: val },
-        })
-      )
-
-      // Sync password to EmailAccount so IMAP sync & account mailers have it immediately
-      const { encryptCredential } = await import('../utils/crypto.js')
-      const encrypted = encryptCredential(val)
-      const primaryEmail = (smtpUser || process.env.EMAIL_USER || VERIFIED_SENDER_MAILBOX).trim().toLowerCase()
-      const existingAcc = await prisma.emailAccount.findFirst({
-        where: {
-          OR: [{ email: primaryEmail }, { isDefaultSender: true }],
+      }
+    } else {
+      await prisma.emailAccount.create({
+        data: {
+          email: cleanUser,
+          displayName: cleanSenderName,
+          provider: 'HOSTINGER',
+          isDefaultSender: true,
+          isActive: true,
+          syncEnabled: true,
+          replyTo: cleanReplyTo,
+          smtpHost: cleanHost,
+          smtpPort: cleanPort,
+          smtpUser: cleanUser,
+          smtpPasswordEncrypted: rawPass ? encryptCredential(rawPass) : null,
+          imapHost: cleanImapHost,
+          imapPort: cleanImapPort,
+          imapUser: cleanUser,
+          imapPasswordEncrypted: rawImapPass ? encryptCredential(rawImapPass) : (rawPass ? encryptCredential(rawPass) : null),
+          imapMailbox: 'INBOX',
         },
       })
-      if (existingAcc) {
-        ops.push(
-          prisma.emailAccount.update({
-            where: { id: existingAcc.id },
-            data: {
-              smtpPasswordEncrypted: encrypted,
-              imapPasswordEncrypted: encrypted,
-            },
-          })
-        )
-      } else {
-        ops.push(
-          prisma.emailAccount.create({
-            data: {
-              email: primaryEmail,
-              displayName: senderName || 'SnapTech Digital',
-              provider: 'HOSTINGER',
-              isDefaultSender: true,
-              smtpHost: smtpHost || 'smtp.hostinger.com',
-              smtpPort: parseInt(smtpPort, 10) || 465,
-              smtpUser: primaryEmail,
-              smtpPasswordEncrypted: encrypted,
-              imapHost: 'imap.hostinger.com',
-              imapPort: 993,
-              imapUser: primaryEmail,
-              imapPasswordEncrypted: encrypted,
-            },
-          })
-        )
-      }
     }
-
-    // Update specific IMAP password if provided
-    if (
-      imapPass &&
-      typeof imapPass === 'string' &&
-      imapPass.trim() &&
-      !/^•+/.test(imapPass.trim())
-    ) {
-      const { encryptCredential } = await import('../utils/crypto.js')
-      const encrypted = encryptCredential(imapPass.trim())
-      const primaryEmail = (smtpUser || process.env.EMAIL_USER || VERIFIED_SENDER_MAILBOX).trim().toLowerCase()
-      ops.push(
-        prisma.emailAccount.updateMany({
-          where: {
-            OR: [{ email: primaryEmail }, { isDefaultSender: true }],
-          },
-          data: {
-            imapPasswordEncrypted: encrypted,
-          },
-        })
-      )
-    }
-
-    const primaryTarget = (smtpUser || process.env.EMAIL_USER || VERIFIED_SENDER_MAILBOX).trim().toLowerCase()
-    const syncFields = {}
-    if (smtpHost) syncFields.smtpHost = smtpHost.trim()
-    if (smtpPort) syncFields.smtpPort = parseInt(smtpPort, 10)
-    if (senderName) syncFields.displayName = senderName.trim()
-    if (defaultReplyTo) syncFields.replyTo = defaultReplyTo.trim()
-    if (Object.keys(syncFields).length > 0) {
-      ops.push(
-        prisma.emailAccount.updateMany({
-          where: {
-            OR: [{ email: primaryTarget }, { isDefaultSender: true }],
-          },
-          data: syncFields,
-        }).catch(() => {})
-      )
-    }
-
-    await Promise.all(ops)
 
     res.json({
       status: 'ok',
-      message: 'Email settings saved successfully and applied to active server runtime.',
+      message: 'Hostinger email credentials and server settings saved successfully!',
+      data: {
+        verifiedSender: cleanUser,
+        smtpHost: cleanHost,
+        smtpPort: cleanPort,
+        imapHost: cleanImapHost,
+        imapPort: cleanImapPort,
+        isPasswordConfigured: Boolean(rawPass || process.env.EMAIL_PASS),
+      },
     })
   } catch (err) {
     next(err)
@@ -1106,17 +1034,33 @@ export const testEmailConnection = async (req, res) => {
  */
 export const testPrimaryImapHandler = async (_req, res) => {
   try {
-    const defaultAccount = await getDefaultSenderAccount()
+    let defaultAccount = await getDefaultSenderAccount()
+    if (!defaultAccount || !defaultAccount.imapPassword) {
+      const dbPass = await prisma.siteSetting.findUnique({ where: { key: 'sys_smtp_pass' } }).catch(() => null)
+      const pass = dbPass?.value || process.env.EMAIL_PASS
+      if (pass && defaultAccount) {
+        const { encryptCredential } = await import('../utils/crypto.js')
+        await prisma.emailAccount.update({
+          where: { id: defaultAccount.id },
+          data: {
+            smtpPasswordEncrypted: encryptCredential(pass),
+            imapPasswordEncrypted: encryptCredential(pass),
+          },
+        })
+        defaultAccount = await getDefaultSenderAccount()
+      }
+    }
+
     if (!defaultAccount) {
       return res.status(400).json({
         status: 'error',
-        message: 'No active email account configured for IMAP test. Please configure an account in Email Accounts.',
+        message: 'No active email account configured for IMAP test. Please configure your Hostinger mailbox in Hostinger Gateway Settings.',
       })
     }
     const result = await testAccountImap(defaultAccount.id)
     res.json({
       status: 'ok',
-      message: `IMAP connection handshake & mailbox authentication verified successfully for ${defaultAccount.email}.`,
+      message: `Hostinger IMAP connection handshake & mailbox authentication verified successfully for ${defaultAccount.email}.`,
       data: result,
     })
   } catch (err) {

@@ -11,7 +11,7 @@
  *  - Technical audit report on Hostinger IMAP vs SMTP inbound feasibility
  */
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   Mail,
@@ -393,7 +393,7 @@ function DashboardTab({ stats, loading, onSwitchTab }) {
       </div>
 
       {/* Gateway Architecture Summary Card */}
-      <div className="bg-gradient-to-r from-slate-900 to-blue-950 text-white rounded-2xl p-6 shadow-md border border-slate-800">
+      <div className="bg-linear-to-r from-slate-900 to-blue-950 text-white rounded-2xl p-6 shadow-md border border-slate-800">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-blue-500/20 text-blue-300 text-xs font-medium border border-blue-400/30">
@@ -1901,17 +1901,19 @@ function AutomationRulesTab({ rules, accounts = [] }) {
 // ─────────────────────────────────────────────────────────────
 // TAB 5: EMAIL SETTINGS & CONNECTION TEST
 // ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+// TAB 5: HOSTINGER EMAIL SETTINGS & CONNECTION TEST
+// ─────────────────────────────────────────────────────────────
 function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
   const toast = useToast()
   const [testEmail, setTestEmail] = useState('info@snaptech.digital')
   const [testResult, setTestResult] = useState(null)
   const [testingImap, setTestingImap] = useState(false)
   const [imapResult, setImapResult] = useState(null)
-  const [testingApiToken, setTestingApiToken] = useState(false)
-  const [apiTokenResult, setApiTokenResult] = useState(null)
   const [showPassword, setShowPassword] = useState(false)
-  const [showApiToken, setShowApiToken] = useState(false)
-  const [copiedWebhook, setCopiedWebhook] = useState(false)
+  const [showImapPassword, setShowImapPassword] = useState(false)
+  const [syncImapPassword, setSyncImapPassword] = useState(true)
+  const [passwordSaved, setPasswordSaved] = useState(false)
 
   const [formData, setFormData] = useState({
     smtpUser: settings?.verifiedSender || 'info@snaptech.digital',
@@ -1920,18 +1922,32 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
     smtpPort: settings?.smtpPort || 465,
     senderName: settings?.senderName || 'SnapTech Digital',
     defaultReplyTo: settings?.defaultReplyTo || 'info@snaptech.digital',
-    emailStrategy: settings?.activeStrategy || 'auto',
-    apiToken: '',
     imapHost: settings?.imapHost || 'imap.hostinger.com',
     imapPort: settings?.imapPort || 993,
     imapPass: '',
   })
 
+  // Synchronize formData whenever server settings load or update
+  useEffect(() => {
+    if (settings) {
+      setFormData((prev) => ({
+        ...prev,
+        smtpUser: settings.verifiedSender || prev.smtpUser || 'info@snaptech.digital',
+        smtpHost: settings.smtpHost || prev.smtpHost || 'smtp.hostinger.com',
+        smtpPort: settings.smtpPort || prev.smtpPort || 465,
+        senderName: settings.senderName || prev.senderName || 'SnapTech Digital',
+        defaultReplyTo: settings.defaultReplyTo || prev.defaultReplyTo || 'info@snaptech.digital',
+        imapHost: settings.imapHost || prev.imapHost || 'imap.hostinger.com',
+        imapPort: settings.imapPort || prev.imapPort || 993,
+      }))
+    }
+  }, [settings])
+
   const saveMutation = useMutation({
     mutationFn: (data) => api.patch('/admin/email/settings', data),
     onSuccess: (res) => {
-      toast.success(res.message || 'Email & Gateway credentials saved and synchronized successfully!')
-      setFormData((prev) => ({ ...prev, smtpPass: '', apiToken: '', imapPass: '' }))
+      toast.success(res.message || 'Hostinger email settings & credentials saved successfully!')
+      setPasswordSaved(true)
       onSettingsUpdated?.()
     },
     onError: (err) => {
@@ -1946,54 +1962,28 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
     },
     onSuccess: (res) => {
       setTestResult(res)
-      toast.success(res.message || 'Email delivery verified successfully!')
+      toast.success(res.message || 'Hostinger SMTP test email delivered successfully!')
     },
     onError: (err) => {
       setTestResult({ status: 'error', message: err.message })
-      toast.error(`Email Test Failed: ${err.message}`)
+      toast.error(`Hostinger SMTP Test Failed: ${err.message}`)
     },
   })
 
-  const handleTestApiToken = async () => {
-    setTestingApiToken(true)
-    setApiTokenResult(null)
-    try {
-      const res = await api.post('/admin/email/test-api-token', {
-        apiToken: formData.apiToken,
-        targetEmail: testEmail,
-      })
-      setApiTokenResult({
-        status: 'ok',
-        message: res.message || 'API Token Handshake verified successfully over HTTPS port 443!',
-      })
-      toast.success('API Token Connection verified successfully!')
-    } catch (err) {
-      setApiTokenResult({ status: 'error', message: err.message })
-      toast.error(`API Token Verification Failed: ${err.message}`)
-    } finally {
-      setTestingApiToken(false)
-    }
-  }
-
   const handleTestImap = async () => {
-    const defaultAcc = accounts.find((a) => a.isDefaultSender) || accounts[0]
-    if (!defaultAcc) {
-      toast.warning('No email account configured to test IMAP receiving.')
-      return
-    }
     setTestingImap(true)
     setImapResult(null)
     try {
-      const res = await api.post(`/admin/email/accounts/${defaultAcc.id}/test-imap`)
-      const d = res.data
+      const res = await api.post('/admin/email/test-imap')
+      const d = res.data || {}
       setImapResult({
         status: 'ok',
-        message: `Connected to ${d.host}:${d.port}. Mailbox '${d.mailbox}' has ${d.totalMessages} messages (${d.unseenMessages} unread).`,
+        message: res.message || `Connected to ${d.host || 'imap.hostinger.com'}:${d.port || 993}. Mailbox '${d.mailbox || 'INBOX'}' has ${d.totalMessages ?? 0} messages (${d.unseenMessages ?? 0} unread).`,
       })
-      toast.success('Inbound IMAP Connection verified successfully!')
+      toast.success('Hostinger IMAP Connection verified successfully!')
     } catch (err) {
       setImapResult({ status: 'error', message: err.message })
-      toast.error(`IMAP Test Failed: ${err.message}`)
+      toast.error(`Hostinger IMAP Test Failed: ${err.message}`)
     } finally {
       setTestingImap(false)
     }
@@ -2001,16 +1991,14 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
 
   const handleSaveCredentials = (e) => {
     e.preventDefault()
-    saveMutation.mutate(formData)
+    const payload = { ...formData }
+    if (syncImapPassword && payload.smtpPass && !payload.imapPass) {
+      payload.imapPass = payload.smtpPass
+    }
+    saveMutation.mutate(payload)
   }
 
-  const handleCopyWebhook = () => {
-    const webhookUrl = settings?.inboundWebhookUrl || `${window.location.origin}/api/webhooks/email-inbound`
-    navigator.clipboard?.writeText(webhookUrl)
-    setCopiedWebhook(true)
-    toast.success('Inbound Webhook URL copied to clipboard!')
-    setTimeout(() => setCopiedWebhook(false), 2500)
-  }
+  const isConfigured = Boolean(settings?.isPasswordConfigured || passwordSaved)
 
   const aliases = [
     { name: 'hello@snaptech.digital', tag: 'General Contact', desc: 'Main website contact form submissions and general public queries.' },
@@ -2030,10 +2018,10 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
           <div>
             <h2 className="text-lg font-bold text-gray-900 font-heading flex items-center gap-2">
               <Server className="w-5 h-5 text-blue-600" />
-              Email Infrastructure &amp; API Token Gateway
+              Hostinger Email Gateway &amp; Mailbox Settings
             </h2>
             <p className="text-xs text-gray-500">
-              Dual-layer mail delivery: Verified HTTPS API Token (Port 443 — Cloud Compatible) + Hostinger SMTP &amp; IMAP.
+              100% Hostinger Infrastructure: Outbound SMTP (Port 465 SSL) &amp; Inbound IMAP (Port 993 SSL) for info@snaptech.digital.
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -2041,7 +2029,7 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
               href="https://mail.hostinger.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition-all"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition-all cursor-pointer"
             >
               <ExternalLink className="w-3.5 h-3.5" />
               <span>Open Hostinger Webmail</span>
@@ -2050,288 +2038,295 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Card 1: API Token Gateway */}
-          <div className="p-4 bg-gradient-to-br from-blue-50/70 to-indigo-50/50 rounded-xl border border-blue-200/80 space-y-1">
+          {/* Card 1: Hostinger SMTP (Send) */}
+          <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-200/80 space-y-1">
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-semibold text-blue-700">HTTPS API Gateway</span>
-              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                settings?.isApiTokenConfigured ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
-              }`}>
-                {settings?.isApiTokenConfigured ? 'Active (Port 443)' : 'Not Set'}
+              <span className="text-[11px] font-semibold text-blue-800">Hostinger SMTP (Send)</span>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+                Port 465 SSL
               </span>
             </div>
-            <div className="text-sm font-bold text-slate-900 font-mono truncate">
-              {settings?.maskedApiToken || 're_••••••••••••'}
-            </div>
-            <span className="text-[10px] text-blue-600 font-medium">Bypasses Cloud Port 465/587 Blocks</span>
-          </div>
-
-          {/* Card 2: Hostinger SMTP */}
-          <div className="p-4 bg-gray-50 rounded-xl border border-gray-200 space-y-1">
-            <span className="text-[11px] font-semibold text-gray-500">Hostinger SMTP (Send)</span>
-            <div className="text-sm font-bold text-gray-900 font-mono">
+            <div className="text-sm font-bold text-slate-900 font-mono">
               {settings?.smtpHost || 'smtp.hostinger.com'}:{settings?.smtpPort || 465}
             </div>
-            <span className="text-[10px] text-gray-400">Direct Port 465 / 587 Transport</span>
+            <span className="text-[10px] text-blue-600 font-medium">Encrypted Direct TLS/SSL</span>
           </div>
 
-          {/* Card 3: Hostinger IMAP */}
-          <div className="p-4 bg-gray-50 rounded-xl border border-gray-200 space-y-1">
-            <span className="text-[11px] font-semibold text-gray-500">Hostinger IMAP (Receive)</span>
-            <div className="text-sm font-bold text-gray-900 font-mono">
+          {/* Card 2: Hostinger IMAP (Receive) */}
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-semibold text-slate-700">Hostinger IMAP (Receive)</span>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800">
+                Port 993 SSL
+              </span>
+            </div>
+            <div className="text-sm font-bold text-slate-900 font-mono">
               {settings?.imapHost || 'imap.hostinger.com'}:{settings?.imapPort || 993}
             </div>
-            <span className="text-[10px] text-gray-400">Port 993 SSL/TLS Inbound Sync</span>
+            <span className="text-[10px] text-slate-500 font-medium">Continuous 5-Min Sync</span>
           </div>
 
-          {/* Card 4: Primary Mailbox */}
+          {/* Card 3: Mailbox */}
           <div className="p-4 bg-gray-50 rounded-xl border border-gray-200 space-y-1">
             <span className="text-[11px] font-semibold text-gray-500">Authenticated Mailbox</span>
             <div className="text-sm font-bold text-gray-900 font-mono truncate">
-              {settings?.verifiedSender || 'info@snaptech.digital'}
+              {formData.smtpUser || settings?.verifiedSender || 'info@snaptech.digital'}
             </div>
-            <span className="text-[10px] text-emerald-600 font-semibold">
-              {settings?.isPasswordConfigured ? '● Password Configured' : '○ Password Missing'}
-            </span>
+            <span className="text-[10px] text-gray-500 font-medium">Primary Envelope Address</span>
+          </div>
+
+          {/* Card 4: Password Status */}
+          <div className="p-4 bg-gray-50 rounded-xl border border-gray-200 space-y-1">
+            <span className="text-[11px] font-semibold text-gray-500">Hostinger Password Status</span>
+            <div className="text-sm font-bold font-mono">
+              {isConfigured ? (
+                <span className="text-emerald-700 flex items-center gap-1">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  Saved &amp; Active
+                </span>
+              ) : (
+                <span className="text-amber-700 flex items-center gap-1">
+                  <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
+                  Not Configured
+                </span>
+              )}
+            </div>
+            <span className="text-[10px] text-gray-400">Encrypted in Database</span>
           </div>
         </div>
 
-        {/* Update Hostinger Credentials & API Token Form */}
+        {/* Update Hostinger Credentials Form */}
         <form onSubmit={handleSaveCredentials} className="p-5 bg-slate-50 border border-slate-200 rounded-xl space-y-5">
-          <div className="flex items-center justify-between border-b border-slate-200/80 pb-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200/80 pb-3">
             <div className="flex items-center gap-2 text-slate-900 font-bold text-sm">
               <Key className="w-4 h-4 text-blue-600" />
-              Configure API Token &amp; Hostinger Credentials
+              Configure Hostinger Mailbox Credentials &amp; Servers
             </div>
-            <span className="text-[11px] text-slate-500">
-              Changes apply instantly to live runtime and Neon database
-            </span>
+            {isConfigured && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-semibold">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                Credentials Active in Database
+              </span>
+            )}
           </div>
 
-          {/* Section 1: API Token Gateway (Cloud Recommended) */}
-          <div className="p-4 bg-blue-50/60 border border-blue-200 rounded-xl space-y-2">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Zap className="w-4 h-4 text-blue-600" />
-                <label className="text-xs font-bold text-blue-900">
-                  Resend API Token (HTTPS Gateway — Recommended for Render/Cloud)
-                </label>
-                {settings?.isApiTokenConfigured && (
-                  <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700 bg-emerald-100/80 px-2 py-0.5 rounded-full">
-                    <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                    Active &amp; Ready
-                  </span>
-                )}
-              </div>
-              <button
-                type="button"
-                onClick={() => setShowApiToken(!showApiToken)}
-                className="text-blue-600 hover:text-blue-800 inline-flex items-center gap-1 text-[11px] cursor-pointer"
-              >
-                {showApiToken ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-                <span>{showApiToken ? 'Hide Token' : 'Show Token'}</span>
-              </button>
-            </div>
-            <p className="text-[11px] text-blue-800 leading-relaxed">
-              Cloud platforms like Render Free Tier block raw SMTP TCP ports (465/587). Using an API Token routes all transactional outgoing emails via <strong>HTTPS Port 443</strong>, guaranteeing 100% deliverability with zero port blocks.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+            {/* Field 1: Mailbox Address */}
+            <div>
+              <label className="block text-gray-700 font-semibold text-xs mb-1">
+                Hostinger Mailbox Address (Username) *
+              </label>
               <input
-                type={showApiToken ? 'text' : 'password'}
-                value={formData.apiToken}
-                onChange={(e) => setFormData({ ...formData, apiToken: e.target.value })}
-                placeholder={settings?.isApiTokenConfigured ? `${settings?.maskedApiToken} (Saved — enter new to update)` : 'Enter Resend API Key (starts with re_...)'}
-                className="w-full px-3 py-1.5 bg-white border border-blue-200 rounded-xl text-xs font-mono focus:outline-none focus:border-blue-500"
+                type="email"
+                value={formData.smtpUser}
+                onChange={(e) => setFormData({ ...formData, smtpUser: e.target.value })}
+                required
+                placeholder="info@snaptech.digital"
+                className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-blue-500"
               />
-              <button
-                type="button"
-                onClick={handleTestApiToken}
-                disabled={testingApiToken}
-                className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer shadow-xs disabled:opacity-50 flex items-center justify-center gap-1"
-              >
-                {testingApiToken ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Zap className="w-3.5 h-3.5" />}
-                <span>Test API Token</span>
-              </button>
             </div>
-            {apiTokenResult && (
-              <div className={`p-2.5 rounded-lg border text-xs ${
-                apiTokenResult.status === 'ok' ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-rose-50 border-rose-200 text-rose-900'
-              }`}>
-                <strong>{apiTokenResult.status === 'ok' ? '✓ API Token Verified: ' : '✗ API Token Failed: '}</strong>
-                {apiTokenResult.message}
+
+            {/* Field 2: Mailbox Password */}
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <div className="flex items-center gap-1.5">
+                  <label className="text-gray-700 font-semibold text-xs">
+                    Hostinger Webmail Password *
+                  </label>
+                  {isConfigured && (
+                    <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
+                      Saved
+                    </span>
+                  )}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="text-gray-400 hover:text-gray-600 inline-flex items-center gap-1 text-[11px] cursor-pointer"
+                >
+                  {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                  <span>{showPassword ? 'Hide' : 'Show'}</span>
+                </button>
+              </div>
+              <input
+                type={showPassword ? 'text' : 'password'}
+                value={formData.smtpPass}
+                onChange={(e) => {
+                  const val = e.target.value
+                  setFormData((prev) => ({
+                    ...prev,
+                    smtpPass: val,
+                    ...(syncImapPassword ? { imapPass: val } : {}),
+                  }))
+                }}
+                placeholder={isConfigured ? '•••••••••••• (Saved in DB — type to change)' : 'Enter Hostinger mailbox password'}
+                className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-xs font-mono focus:outline-none focus:border-blue-500"
+              />
+            </div>
+
+            {/* Field 3: Sender Display Name */}
+            <div>
+              <label className="block text-gray-700 font-semibold text-xs mb-1">
+                Sender Display Name
+              </label>
+              <input
+                type="text"
+                value={formData.senderName}
+                onChange={(e) => setFormData({ ...formData, senderName: e.target.value })}
+                placeholder="SnapTech Digital"
+                className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-blue-500"
+              />
+            </div>
+
+            {/* Field 4: SMTP Host */}
+            <div>
+              <label className="block text-gray-700 font-semibold text-xs mb-1">
+                SMTP Server Host (Outgoing)
+              </label>
+              <input
+                type="text"
+                value={formData.smtpHost}
+                onChange={(e) => setFormData({ ...formData, smtpHost: e.target.value })}
+                placeholder="smtp.hostinger.com"
+                className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-xs font-mono focus:outline-none focus:border-blue-500"
+              />
+            </div>
+
+            {/* Field 5: SMTP Port */}
+            <div>
+              <label className="block text-gray-700 font-semibold text-xs mb-1">
+                SMTP Port (Default 465 SSL)
+              </label>
+              <input
+                type="number"
+                value={formData.smtpPort}
+                onChange={(e) => setFormData({ ...formData, smtpPort: parseInt(e.target.value, 10) || 465 })}
+                placeholder="465"
+                className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-xs font-mono focus:outline-none focus:border-blue-500"
+              />
+            </div>
+
+            {/* Field 6: Default Reply-To */}
+            <div>
+              <label className="block text-gray-700 font-semibold text-xs mb-1">
+                Default Reply-To Address
+              </label>
+              <input
+                type="email"
+                value={formData.defaultReplyTo}
+                onChange={(e) => setFormData({ ...formData, defaultReplyTo: e.target.value })}
+                placeholder="info@snaptech.digital"
+                className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-blue-500"
+              />
+            </div>
+          </div>
+
+          {/* Linked IMAP Password Checkbox */}
+          <div className="p-3 bg-blue-50/70 border border-blue-200 rounded-xl space-y-2">
+            <label className="inline-flex items-center gap-2 text-xs font-semibold text-blue-900 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={syncImapPassword}
+                onChange={(e) => {
+                  const checked = e.target.checked
+                  setSyncImapPassword(checked)
+                  if (checked && formData.smtpPass) {
+                    setFormData((prev) => ({ ...prev, imapPass: prev.smtpPass }))
+                  }
+                }}
+                className="rounded text-blue-600 focus:ring-blue-500"
+              />
+              <span>Use identical password for Hostinger IMAP receiving (Hostinger Webmail Standard)</span>
+            </label>
+            <p className="text-[11px] text-blue-700">
+              Hostinger mailboxes share the exact same password for both sending (SMTP) and receiving (IMAP). Keeping this enabled automatically configures both protocols.
+            </p>
+
+            {!syncImapPassword && (
+              <div className="pt-2 grid grid-cols-1 sm:grid-cols-3 gap-3 border-t border-blue-200/80">
+                <div>
+                  <label className="block text-gray-700 font-semibold text-xs mb-1">IMAP Host</label>
+                  <input
+                    type="text"
+                    value={formData.imapHost}
+                    onChange={(e) => setFormData({ ...formData, imapHost: e.target.value })}
+                    placeholder="imap.hostinger.com"
+                    className="w-full px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs font-mono"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700 font-semibold text-xs mb-1">IMAP Port</label>
+                  <input
+                    type="number"
+                    value={formData.imapPort}
+                    onChange={(e) => setFormData({ ...formData, imapPort: parseInt(e.target.value, 10) || 993 })}
+                    placeholder="993"
+                    className="w-full px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs font-mono"
+                  />
+                </div>
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-gray-700 font-semibold text-xs">Separate IMAP Password</label>
+                    <button
+                      type="button"
+                      onClick={() => setShowImapPassword(!showImapPassword)}
+                      className="text-gray-400 hover:text-gray-600 text-[10px]"
+                    >
+                      {showImapPassword ? 'Hide' : 'Show'}
+                    </button>
+                  </div>
+                  <input
+                    type={showImapPassword ? 'text' : 'password'}
+                    value={formData.imapPass}
+                    onChange={(e) => setFormData({ ...formData, imapPass: e.target.value })}
+                    placeholder="Enter IMAP password"
+                    className="w-full px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs font-mono"
+                  />
+                </div>
               </div>
             )}
           </div>
 
-          {/* Section 2: Hostinger Webmail & IMAP Mailbox Credentials */}
-          <div className="space-y-3 pt-1">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                <Mail className="w-4 h-4 text-slate-600" />
-                Hostinger Webmail &amp; IMAP Settings (Inbound Sync &amp; Fallback)
-              </span>
-              <span className="text-[11px] text-slate-500">
-                Requires your Hostinger Webmail Password
-              </span>
+          {/* Hostinger Guidance Alert */}
+          <div className="p-3 bg-amber-50/80 border border-amber-200 rounded-xl text-xs text-amber-900 space-y-1">
+            <div className="font-bold flex items-center gap-1.5">
+              <AlertTriangle className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+              <span>Hostinger Mailbox Password Guidance:</span>
             </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              <div>
-                <label className="block text-gray-700 font-medium text-xs mb-1">
-                  Mailbox Address (Username) *
-                </label>
-                <input
-                  type="email"
-                  value={formData.smtpUser}
-                  onChange={(e) => setFormData({ ...formData, smtpUser: e.target.value })}
-                  required
-                  className="w-full px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-blue-500"
-                />
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between mb-1">
-                  <div className="flex items-center gap-2">
-                    <label className="text-gray-700 font-medium text-xs">
-                      Hostinger Webmail Password *
-                    </label>
-                    {settings?.isPasswordConfigured && (
-                      <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
-                        <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                        Saved
-                      </span>
-                    )}
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="text-gray-400 hover:text-gray-600 inline-flex items-center gap-1 text-[11px] cursor-pointer"
-                  >
-                    {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-                    <span>{showPassword ? 'Hide' : 'Show'}</span>
-                  </button>
-                </div>
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  value={formData.smtpPass}
-                  onChange={(e) => setFormData({ ...formData, smtpPass: e.target.value })}
-                  placeholder={settings?.isPasswordConfigured ? '•••••••• (Saved in DB — enter to replace)' : 'Enter Hostinger mailbox password'}
-                  className="w-full px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs font-mono focus:outline-none focus:border-blue-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-700 font-medium text-xs mb-1">
-                  IMAP Server Host
-                </label>
-                <input
-                  type="text"
-                  value={formData.imapHost}
-                  onChange={(e) => setFormData({ ...formData, imapHost: e.target.value })}
-                  placeholder="imap.hostinger.com"
-                  className="w-full px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-blue-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-700 font-medium text-xs mb-1">
-                  SMTP Host (Direct Sending)
-                </label>
-                <input
-                  type="text"
-                  value={formData.smtpHost}
-                  onChange={(e) => setFormData({ ...formData, smtpHost: e.target.value })}
-                  placeholder="smtp.hostinger.com"
-                  className="w-full px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-blue-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-700 font-medium text-xs mb-1">
-                  Sender Display Name
-                </label>
-                <input
-                  type="text"
-                  value={formData.senderName}
-                  onChange={(e) => setFormData({ ...formData, senderName: e.target.value })}
-                  placeholder="SnapTech Digital"
-                  className="w-full px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-blue-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-700 font-medium text-xs mb-1">
-                  Default Reply-To
-                </label>
-                <input
-                  type="email"
-                  value={formData.defaultReplyTo}
-                  onChange={(e) => setFormData({ ...formData, defaultReplyTo: e.target.value })}
-                  placeholder="info@snaptech.digital"
-                  className="w-full px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-blue-500"
-                />
-              </div>
-            </div>
-
-            {/* Crucial guidance alert for Hostinger password */}
-            <div className="p-3 bg-amber-50/80 border border-amber-200 rounded-xl text-xs text-amber-900 space-y-1">
-              <div className="font-bold flex items-center gap-1.5">
-                <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
-                <span>Hostinger IMAP Password vs. hPanel Account Password:</span>
-              </div>
-              <p className="text-[11px] text-amber-800 leading-relaxed">
-                If IMAP shows <em>"Invalid credentials for info@snaptech.digital"</em>, make sure you are using the password created specifically for this mailbox inside <strong>Hostinger Webmail (mail.hostinger.com)</strong> or <strong>hPanel &gt; Emails &gt; Manage &gt; Change Password</strong>, <u>NOT</u> your hostinger.com account billing login password. If Hostinger 2FA is active, create and use an Application Password.
-              </p>
-            </div>
-          </div>
-
-          {/* Section 3: Inbound Email Webhook (API Alternative to IMAP) */}
-          <div className="p-3.5 bg-slate-100/70 border border-slate-200 rounded-xl space-y-1.5">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                <Inbox className="w-3.5 h-3.5 text-slate-600" />
-                Inbound Email Webhook URL (Receive Emails via API)
-              </span>
-              <button
-                type="button"
-                onClick={handleCopyWebhook}
-                className="inline-flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg text-[11px] font-semibold text-slate-700 cursor-pointer transition-all shadow-2xs"
-              >
-                {copiedWebhook ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3 text-slate-500" />}
-                <span>{copiedWebhook ? 'Copied!' : 'Copy Webhook URL'}</span>
-              </button>
-            </div>
-            <p className="text-[11px] text-slate-500">
-              If your hosting environment restricts continuous IMAP sync, forward incoming emails via Resend Inbound or Cloudflare Email Routing to this endpoint to ingest incoming messages into your Inbox &amp; CRM automatically.
+            <p className="text-[11px] text-amber-800 leading-relaxed">
+              Use the password created for <strong>info@snaptech.digital</strong> inside <strong>Hostinger Webmail (mail.hostinger.com)</strong> or <strong>Hostinger hPanel &gt; Emails &gt; Manage &gt; Change Password</strong>. Do <u>NOT</u> use your hostinger.com account billing login password or a Gmail 16-character App Password.
             </p>
-            <div className="font-mono text-[11px] text-slate-700 bg-white p-2 rounded-lg border border-slate-200 truncate">
-              {settings?.inboundWebhookUrl || `${typeof window !== 'undefined' ? window.location.origin : 'https://www.snaptech.digital'}/api/webhooks/email-inbound`}
-            </div>
           </div>
 
           <div className="flex items-center justify-between pt-2">
             <span className="text-[11px] text-gray-500">
-              Settings update active runtime immediately.
+              Settings persist to live runtime and Neon database immediately.
             </span>
             <button
               type="submit"
               disabled={saveMutation.isPending}
-              className="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold cursor-pointer transition-all shadow-xs disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold cursor-pointer transition-all shadow-xs disabled:opacity-50"
             >
-              <Save className="w-3.5 h-3.5" />
-              {saveMutation.isPending ? 'Saving Settings...' : 'Save & Sync Credentials'}
+              <Save className="w-4 h-4" />
+              {saveMutation.isPending ? 'Saving Settings...' : 'Save & Sync Hostinger Settings'}
             </button>
           </div>
         </form>
 
-        {/* Live Handshake Diagnostic Tool */}
-        <div className="p-5 bg-blue-50/50 border border-blue-200 rounded-xl space-y-4">
-          <div className="flex items-center gap-2 text-blue-900 font-bold text-sm">
-            <ShieldCheck className="w-4 h-4 text-blue-600" />
-            Live Handshake &amp; Delivery Diagnostics (API Token, SMTP &amp; IMAP)
+        {/* Live Hostinger Diagnostics (SMTP Send & IMAP Receive) */}
+        <div className="p-5 bg-slate-50 border border-slate-200 rounded-xl space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-slate-900 font-bold text-sm">
+              <ShieldCheck className="w-4 h-4 text-blue-600" />
+              Live Hostinger Handshake &amp; Delivery Diagnostics
+            </div>
+            <span className="text-[11px] text-slate-500 font-mono">
+              smtp.hostinger.com:465 &bull; imap.hostinger.com:993
+            </span>
           </div>
-          <p className="text-xs text-blue-800 leading-relaxed">
-            Verify all communication channels for <strong>info@snaptech.digital</strong>.
+
+          <p className="text-xs text-slate-600 leading-relaxed">
+            Test outbound email sending (SMTP) and inbound mailbox checking (IMAP) for <strong>info@snaptech.digital</strong>.
           </p>
 
           <div className="space-y-3">
@@ -2341,27 +2336,8 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
                 value={testEmail}
                 onChange={(e) => setTestEmail(e.target.value)}
                 placeholder="Target recipient email for test delivery"
-                className="w-full px-3.5 py-2 text-xs bg-white border border-blue-200 rounded-xl focus:outline-none"
+                className="w-full px-3.5 py-2 text-xs bg-white border border-gray-200 rounded-xl focus:outline-none focus:border-blue-500"
               />
-              <button
-                type="button"
-                onClick={handleTestApiToken}
-                disabled={testingApiToken}
-                className="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer shadow-xs disabled:opacity-50 flex items-center justify-center gap-1.5"
-              >
-                {testingApiToken ? (
-                  <>
-                    <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                    <span>Verifying API...</span>
-                  </>
-                ) : (
-                  <>
-                    <Zap className="w-3.5 h-3.5" />
-                    <span>Verify API Token</span>
-                  </>
-                )}
-              </button>
-
               <button
                 type="button"
                 onClick={() => {
@@ -2372,7 +2348,7 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
                   testMutation.mutate(testEmail)
                 }}
                 disabled={testMutation.isPending}
-                className="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer shadow-xs disabled:opacity-50 flex items-center justify-center gap-1.5"
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer shadow-xs disabled:opacity-50 flex items-center justify-center gap-1.5"
               >
                 {testMutation.isPending ? (
                   <>
@@ -2382,7 +2358,7 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
                 ) : (
                   <>
                     <Send className="w-3.5 h-3.5" />
-                    <span>Run Send Test</span>
+                    <span>Test Hostinger SMTP</span>
                   </>
                 )}
               </button>
@@ -2391,7 +2367,7 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
                 type="button"
                 onClick={handleTestImap}
                 disabled={testingImap}
-                className="px-3.5 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer shadow-xs disabled:opacity-50 flex items-center justify-center gap-1.5"
+                className="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer shadow-xs disabled:opacity-50 flex items-center justify-center gap-1.5"
               >
                 {testingImap ? (
                   <>
@@ -2401,24 +2377,11 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
                 ) : (
                   <>
                     <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
-                    <span>Run IMAP Test</span>
+                    <span>Test Hostinger IMAP</span>
                   </>
                 )}
               </button>
             </div>
-
-            {apiTokenResult && (
-              <div
-                className={`p-3.5 rounded-xl border text-xs ${
-                  apiTokenResult.status === 'ok'
-                    ? 'bg-emerald-50 border-emerald-200 text-emerald-900'
-                    : 'bg-rose-50 border-rose-200 text-rose-900'
-                }`}
-              >
-                <strong>{apiTokenResult.status === 'ok' ? '✓ API Token Handshake Passed: ' : '✗ API Token Notice: '}</strong>
-                {apiTokenResult.message}
-              </div>
-            )}
 
             {testResult && (
               <div
@@ -2428,7 +2391,7 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
                     : 'bg-rose-50 border-rose-200 text-rose-900'
                 }`}
               >
-                <strong>{testResult.status === 'ok' ? '✓ Outbound Handshake Passed: ' : '✗ Outbound Diagnostic Notice: '}</strong>
+                <strong>{testResult.status === 'ok' ? '✓ Hostinger SMTP Passed: ' : '✗ Hostinger SMTP Notice: '}</strong>
                 {testResult.message}
               </div>
             )}
@@ -2441,7 +2404,7 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
                     : 'bg-rose-50 border-rose-200 text-rose-900'
                 }`}
               >
-                <strong>{imapResult.status === 'ok' ? '✓ IMAP Sync Passed: ' : '✗ IMAP Diagnostic Notice: '}</strong>
+                <strong>{imapResult.status === 'ok' ? '✓ Hostinger IMAP Passed: ' : '✗ Hostinger IMAP Notice: '}</strong>
                 {imapResult.message}
                 {imapResult.status === 'error' && (
                   <div className="mt-2 pt-2 border-t border-rose-200/80 text-[11px] text-rose-800 space-y-1">
@@ -2449,7 +2412,7 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
                     <ol className="list-decimal list-inside space-y-0.5">
                       <li>Log in directly to <a href="https://mail.hostinger.com" target="_blank" rel="noopener noreferrer" className="underline font-bold">mail.hostinger.com</a> with <code>info@snaptech.digital</code> to verify your mailbox password.</li>
                       <li>In Hostinger hPanel, go to <strong>Emails &gt; snaptech.digital &gt; Manage &gt; info@snaptech.digital</strong> and click <em>Change Password</em> to set a fresh password.</li>
-                      <li>Copy the new password into the <strong>Hostinger Webmail Password</strong> field above and click <em>Save &amp; Sync Credentials</em>.</li>
+                      <li>Copy the new password into the <strong>Hostinger Webmail Password</strong> field above and click <em>Save &amp; Sync Hostinger Settings</em>.</li>
                     </ol>
                   </div>
                 )}
