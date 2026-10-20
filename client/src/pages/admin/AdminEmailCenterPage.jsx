@@ -11,7 +11,7 @@
  *  - Technical audit report on Hostinger IMAP vs SMTP inbound feasibility
  */
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   Mail,
@@ -30,7 +30,6 @@ import {
   FileText,
   Layers,
   ChevronRight,
-  Lock,
   Server,
   Zap,
   Info,
@@ -41,7 +40,6 @@ import {
   GitFork,
   Key,
   ExternalLink,
-  Copy,
   Megaphone,
   Users,
   Sparkles,
@@ -246,9 +244,8 @@ export default function AdminEmailCenterPage() {
 
       {activeTab === 'settings' && (
         <SettingsTab
-          key={settingsData?.data ? `${settingsData.data.verifiedSender || 'loaded'}` : 'loading'}
+          key={settingsData?.data ? `${settingsData.data.verifiedSender || 'loaded'}-${settingsData.data.smtpHost || ''}-${settingsData.data.isPasswordConfigured}` : 'loading'}
           settings={settingsData?.data}
-          accounts={accountsData?.data || []}
           onSettingsUpdated={() => {
             refetchSettings()
             refetchAccounts()
@@ -1904,7 +1901,7 @@ function AutomationRulesTab({ rules, accounts = [] }) {
 // ─────────────────────────────────────────────────────────────
 // TAB 5: HOSTINGER EMAIL SETTINGS & CONNECTION TEST
 // ─────────────────────────────────────────────────────────────
-function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
+function SettingsTab({ settings, onSettingsUpdated }) {
   const toast = useToast()
   const [testEmail, setTestEmail] = useState('info@snaptech.digital')
   const [testResult, setTestResult] = useState(null)
@@ -1926,22 +1923,6 @@ function SettingsTab({ settings, accounts = [], onSettingsUpdated }) {
     imapPort: settings?.imapPort || 993,
     imapPass: '',
   })
-
-  // Synchronize formData whenever server settings load or update
-  useEffect(() => {
-    if (settings) {
-      setFormData((prev) => ({
-        ...prev,
-        smtpUser: settings.verifiedSender || prev.smtpUser || 'info@snaptech.digital',
-        smtpHost: settings.smtpHost || prev.smtpHost || 'smtp.hostinger.com',
-        smtpPort: settings.smtpPort || prev.smtpPort || 465,
-        senderName: settings.senderName || prev.senderName || 'SnapTech Digital',
-        defaultReplyTo: settings.defaultReplyTo || prev.defaultReplyTo || 'info@snaptech.digital',
-        imapHost: settings.imapHost || prev.imapHost || 'imap.hostinger.com',
-        imapPort: settings.imapPort || prev.imapPort || 993,
-      }))
-    }
-  }, [settings])
 
   const saveMutation = useMutation({
     mutationFn: (data) => api.patch('/admin/email/settings', data),
