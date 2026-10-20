@@ -289,6 +289,7 @@ model JobApplication {
   resumeFileName String?
   resumeFileType String?
   resumeFileSize Int?
+  resumeData     String?
   coverLetter    String?
   adminNotes     String?
   rating         Int?              @default(0)

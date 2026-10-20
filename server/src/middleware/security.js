@@ -55,10 +55,14 @@ export const helmetConfig = helmet({
         ...(process.env.NODE_ENV === 'development' ? ['http://localhost:5173', 'ws://localhost:5173'] : []),
       ],
       frameSrc: [
+        "'self'",
+        'blob:',
+        'data:',
+        'https://res.cloudinary.com',
         'https://www.google.com', // reCAPTCHA iframe
         'https://maps.google.com', // Google Maps embed
       ],
-      objectSrc: ["'none'"],
+      objectSrc: ["'self'", 'blob:'],
       upgradeInsecureRequests: process.env.NODE_ENV === 'production' ? [] : null,
     },
   },

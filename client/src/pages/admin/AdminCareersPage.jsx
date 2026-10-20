@@ -1575,40 +1575,37 @@ export default function AdminCareersPage() {
               {/* Modal Body */}
               <div className="p-4 sm:p-6 overflow-y-auto flex-1 space-y-4">
                 {/* ── TAB 1: RESUME VIEWER ── */}
-                {activeModalTab === 'resume' && (
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between text-xs text-gray-500 bg-gray-50 px-3.5 py-2 rounded-lg border border-gray-200">
-                      <div className="flex items-center gap-2">
-                        <FileText className="w-4 h-4 text-brand-blue" />
-                        <span className="font-semibold text-gray-800">
-                          {viewingApp.resumeFileName || `Resume_${viewingApp.fullName}.pdf`}
-                        </span>
-                        {viewingApp.resumeFileSize && (
-                          <span className="text-[10px] text-gray-400 font-mono">
-                            ({Math.round(viewingApp.resumeFileSize / 1024)} KB)
-                          </span>
-                        )}
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 font-bold">
-                          Document Verified
-                        </span>
-                      </div>
-                    </div>
+                {activeModalTab === 'resume' && (() => {
+                  const isDocx =
+                    viewingApp.resumeFileName?.toLowerCase().endsWith('.docx') ||
+                    viewingApp.resumeFileName?.toLowerCase().endsWith('.doc') ||
+                    viewingApp.resumeFileType?.includes('word') ||
+                    viewingApp.resumeFileType?.includes('officedocument')
 
-                    {previewLoading ? (
-                      <div className="h-120 flex flex-col items-center justify-center bg-gray-50 rounded-xl border border-dashed border-gray-200 text-gray-400">
-                        <div className="w-8 h-8 border-3 border-brand-blue border-t-transparent rounded-full animate-spin mb-3" />
-                        <p className="text-xs font-semibold text-gray-500">
-                          Loading candidate resume document...
-                        </p>
-                      </div>
-                    ) : previewError ? (
-                      <div className="h-80 flex flex-col items-center justify-center bg-red-50/50 rounded-xl border border-red-200 p-6 text-center">
-                        <AlertCircle className="w-8 h-8 text-brand-red mb-2" />
-                        <p className="text-sm font-bold text-gray-800">Resume Preview Unavailable</p>
-                        <p className="text-xs text-gray-500 mt-1 max-w-md">{previewError}</p>
-                        <div className="flex gap-2 mt-4">
+                  return (
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between text-xs text-gray-500 bg-gray-50 px-3.5 py-2.5 rounded-xl border border-gray-200 shadow-2xs">
+                        <div className="flex items-center gap-2.5 truncate">
+                          <div
+                            className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 ${
+                              isDocx ? 'bg-blue-100 text-blue-700' : 'bg-red-100 text-red-700'
+                            }`}
+                          >
+                            {isDocx ? 'DOC' : 'PDF'}
+                          </div>
+                          <div className="truncate">
+                            <span className="font-bold text-gray-900 block truncate">
+                              {viewingApp.resumeFileName || `Resume_${viewingApp.fullName}.pdf`}
+                            </span>
+                            <span className="text-[10px] text-gray-500 font-mono">
+                              {isDocx ? 'Microsoft Word Document' : 'Adobe Acrobat PDF Document'}
+                              {viewingApp.resumeFileSize
+                                ? ` • ${Math.round(viewingApp.resumeFileSize / 1024)} KB`
+                                : ''}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2 shrink-0">
                           <button
                             type="button"
                             onClick={() =>
@@ -1618,23 +1615,107 @@ export default function AdminCareersPage() {
                                 viewingApp.resumeFileName
                               )
                             }
-                            className="inline-flex items-center gap-1.5 bg-brand-red text-white text-xs font-bold px-3.5 py-2 rounded-lg hover:bg-red-700 transition-colors"
+                            disabled={downloadingId === viewingApp.id}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-brand-red text-white rounded-lg text-xs font-bold hover:bg-red-700 transition-colors shadow-2xs cursor-pointer"
                           >
-                            <Download className="w-3.5 h-3.5" /> Download File Directly
+                            <Download className="w-3.5 h-3.5" /> Download
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              handleOpenResumeInTab(viewingApp.id, viewingApp.resumeFileName)
+                            }
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-lg text-xs font-bold transition-colors cursor-pointer"
+                          >
+                            <ExternalLink className="w-3.5 h-3.5" /> Open Tab
                           </button>
                         </div>
                       </div>
-                    ) : previewBlobUrl ? (
-                      <div className="rounded-xl overflow-hidden border border-gray-300 bg-slate-900 shadow-inner">
-                        <iframe
-                          src={previewBlobUrl}
-                          className="w-full h-130 bg-white border-0"
-                          title={`Resume - ${viewingApp.fullName}`}
-                        />
-                      </div>
-                    ) : null}
-                  </div>
-                )}
+
+                      {previewLoading ? (
+                        <div className="h-120 flex flex-col items-center justify-center bg-gray-50 rounded-xl border border-dashed border-gray-200 text-gray-400">
+                          <div className="w-8 h-8 border-3 border-brand-blue border-t-transparent rounded-full animate-spin mb-3" />
+                          <p className="text-xs font-semibold text-gray-500">
+                            Loading candidate resume document...
+                          </p>
+                        </div>
+                      ) : previewError ? (
+                        <div className="h-80 flex flex-col items-center justify-center bg-red-50/50 rounded-xl border border-red-200 p-6 text-center">
+                          <AlertCircle className="w-8 h-8 text-brand-red mb-2" />
+                          <p className="text-sm font-bold text-gray-800">Resume Preview Notice</p>
+                          <p className="text-xs text-gray-500 mt-1 max-w-md">{previewError}</p>
+                          <div className="flex gap-2 mt-4">
+                            <button
+                              type="button"
+                              onClick={() =>
+                                handleDownloadResume(
+                                  viewingApp.id,
+                                  viewingApp.fullName,
+                                  viewingApp.resumeFileName
+                                )
+                              }
+                              className="inline-flex items-center gap-1.5 bg-brand-red text-white text-xs font-bold px-3.5 py-2 rounded-lg hover:bg-red-700 transition-colors cursor-pointer"
+                            >
+                              <Download className="w-3.5 h-3.5" /> Download Candidate File Directly
+                            </button>
+                          </div>
+                        </div>
+                      ) : isDocx ? (
+                        <div className="p-8 bg-blue-50/50 border border-blue-200 rounded-2xl text-center space-y-4">
+                          <div className="w-16 h-16 rounded-2xl bg-blue-100 text-brand-blue flex items-center justify-center mx-auto shadow-inner">
+                            <FileText className="w-8 h-8" />
+                          </div>
+                          <div className="max-w-md mx-auto">
+                            <h4 className="font-heading font-bold text-base text-gray-900">
+                              Microsoft Word Document Submitted
+                            </h4>
+                            <p className="text-xs text-gray-600 mt-1.5 leading-relaxed">
+                              This candidate uploaded a native Word document (.docx/.doc). Web browsers render PDFs directly, while Word documents can be viewed or edited directly by downloading or opening in Word.
+                            </p>
+                          </div>
+                          <div className="flex items-center justify-center gap-3 pt-2">
+                            <button
+                              type="button"
+                              onClick={() =>
+                                handleDownloadResume(
+                                  viewingApp.id,
+                                  viewingApp.fullName,
+                                  viewingApp.resumeFileName
+                                )
+                              }
+                              className="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-blue text-white rounded-xl text-xs font-bold hover:bg-blue-600 shadow-sm transition-all cursor-pointer"
+                            >
+                              <Download className="w-4 h-4" /> Download Original Word File (
+                              {Math.round((viewingApp.resumeFileSize || 0) / 1024)} KB)
+                            </button>
+                          </div>
+                        </div>
+                      ) : previewBlobUrl ? (
+                        <div className="space-y-2">
+                          <div className="rounded-xl overflow-hidden border border-gray-300 bg-slate-900 shadow-inner">
+                            <iframe
+                              src={previewBlobUrl}
+                              className="w-full h-130 bg-white border-0"
+                              title={`Resume - ${viewingApp.fullName}`}
+                            />
+                          </div>
+                          <div className="flex items-center justify-between text-[11px] text-gray-400 px-1">
+                            <span>Showing original candidate uploaded PDF</span>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                handleOpenResumeInTab(viewingApp.id, viewingApp.resumeFileName)
+                              }
+                              className="text-brand-blue hover:underline font-semibold flex items-center gap-1 cursor-pointer"
+                            >
+                              <ExternalLink className="w-3 h-3" /> Open in full browser tab
+                            </button>
+                          </div>
+                        </div>
+                      ) : null}
+                    </div>
+                  )
+                })()}
 
                 {/* ── TAB 2: CANDIDATE PROFILE & DETAILS ── */}
                 {activeModalTab === 'profile' && (

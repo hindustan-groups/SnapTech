@@ -31,3 +31,4 @@ ALTER TABLE "job_applications" ADD COLUMN IF NOT EXISTS "resumeFileType" TEXT;
 ALTER TABLE "job_applications" ADD COLUMN IF NOT EXISTS "resumeFileSize" INTEGER;
 ALTER TABLE "job_applications" ADD COLUMN IF NOT EXISTS "adminNotes" TEXT;
 ALTER TABLE "job_applications" ADD COLUMN IF NOT EXISTS "rating" INTEGER;
+ALTER TABLE "job_applications" ADD COLUMN IF NOT EXISTS "resumeData" TEXT;

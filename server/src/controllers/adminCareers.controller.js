@@ -380,6 +380,24 @@ export const getApplicationResume = async (req, res, next) => {
     const isDownload = req.query.download === 'true' || req.query.download === '1'
     const safeName = (application.fullName || 'Candidate').replace(/[^a-zA-Z0-9_-]/g, '_')
 
+    // 0. Highest Priority: Direct byte-exact copy stored in database
+    if (application.resumeData) {
+      const buf = Buffer.from(application.resumeData, 'base64')
+      const ext = (path.extname(application.resumeFileName || '') || '.pdf').toLowerCase()
+      let mimeType = application.resumeFileType || 'application/pdf'
+      if (ext === '.docx') {
+        mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      } else if (ext === '.doc') {
+        mimeType = 'application/msword'
+      }
+
+      const disposition = isDownload ? 'attachment' : 'inline'
+      const finalFileName = application.resumeFileName || `Resume_${safeName}${ext}`
+      res.setHeader('Content-Type', mimeType)
+      res.setHeader('Content-Disposition', `${disposition}; filename="${finalFileName}"`)
+      return res.send(buf)
+    }
+
     // 1. Check local file storage across all possible relative locations
     const candidateDirs = [
       path.resolve(process.cwd(), 'uploads', 'resumes'),
