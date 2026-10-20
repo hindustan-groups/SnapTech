@@ -218,32 +218,36 @@ export default function AboutPage() {
       {/* ── 3. Corporate Heritage & Story ───────────────────────────── */}
       <section className="py-16 sm:py-20 lg:py-24 bg-white relative">
         <Container>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            {/* Left: Image Card */}
-            <div className="lg:col-span-5 relative">
-              <div className="relative rounded-2xl overflow-hidden border border-slate-200 bg-slate-100 shadow-xl group">
-                <img
-                  src={aboutStoryImage}
-                  alt="SnapTech engineering team in collaborative session"
-                  className="w-full h-96 object-cover opacity-90 group-hover:scale-105 group-hover:opacity-100 transition-all duration-500"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-linear-to-t from-slate-950/60 via-transparent to-transparent" />
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+            {/* Left: Showcase Graphic Card (Full Uncropped View) */}
+            <div className="lg:col-span-6 relative order-2 lg:order-1">
+              <div className="relative rounded-3xl overflow-hidden border border-slate-200/90 bg-slate-900 shadow-xl group">
+                {/* Image Container - Natural Aspect Ratio, Zero Crop */}
+                <div className="relative overflow-hidden bg-slate-950 flex items-center justify-center">
+                  <img
+                    src={aboutStoryImage}
+                    alt="SnapTech engineering team in collaborative session"
+                    className="w-full h-auto object-cover group-hover:scale-[1.02] transition-transform duration-500 block"
+                    loading="lazy"
+                  />
+                </div>
 
-                {/* Badge bottom */}
-                <div className="absolute bottom-5 left-5 right-5 p-4 rounded-xl border border-slate-200 bg-white/95 backdrop-blur-md flex items-center justify-between shadow-lg">
+                {/* Engineering Hub Footer Meta Bar - Sleek & Non-Intrusive */}
+                <div className="p-4 sm:p-5 bg-white border-t border-slate-100 flex flex-wrap sm:flex-nowrap items-center justify-between gap-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-lg bg-blue-50 border border-blue-200 flex items-center justify-center shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200/80 flex items-center justify-center shrink-0">
                       <MapPin className="w-4 h-4 text-brand-blue" />
                     </div>
                     <div>
                       <p className="text-[10px] font-mono font-bold text-brand-blue uppercase tracking-wider">
-                        Engineering Hub
+                        Engineering Hub &amp; Headquarters
                       </p>
-                      <p className="text-xs text-slate-900 font-semibold">Bhilwara, Rajasthan, India</p>
+                      <p className="text-xs sm:text-sm text-slate-900 font-bold">
+                        Bhilwara, Rajasthan, India
+                      </p>
                     </div>
                   </div>
-                  <span className="text-[11px] font-mono px-2.5 py-0.5 rounded bg-blue-50 text-brand-blue font-bold border border-blue-200">
+                  <span className="text-[11px] font-mono px-3 py-1 rounded-full bg-blue-50 text-brand-blue font-bold border border-blue-200 shrink-0">
                     Group Tech Wing
                   </span>
                 </div>
@@ -251,17 +255,21 @@ export default function AboutPage() {
             </div>
 
             {/* Right: Narrative Story */}
-            <div className="lg:col-span-7">
-              <span className="text-xs font-mono font-bold tracking-wider uppercase text-brand-blue mb-3 block">
-                // INSTITUTIONAL NARRATIVE
-              </span>
-              <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0D1B4B] mb-6 leading-tight">
-                Rooted in Rajasthan.{' '}
-                <span className="text-transparent bg-clip-text bg-linear-to-r from-brand-blue to-indigo-600">
-                  Executing Pan-India.
-                </span>
-              </h2>
-              <div className="space-y-4 text-slate-600 text-sm sm:text-base leading-relaxed font-normal mb-8">
+            <div className="lg:col-span-6 order-1 lg:order-2 space-y-6">
+              <div>
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-200 bg-blue-50 text-brand-blue text-xs font-mono font-bold uppercase tracking-wider mb-4 shadow-2xs">
+                  <Sparkles className="w-3.5 h-3.5 text-brand-blue animate-pulse" />
+                  <span>// INSTITUTIONAL NARRATIVE</span>
+                </div>
+                <h2 className="font-heading text-3xl sm:text-4xl lg:text-[2.6rem] font-extrabold text-[#0D1B4B] leading-tight tracking-tight">
+                  Rooted in Rajasthan.{' '}
+                  <span className="text-transparent bg-clip-text bg-linear-to-r from-brand-blue via-blue-600 to-indigo-600">
+                    Executing Pan-India.
+                  </span>
+                </h2>
+              </div>
+
+              <div className="space-y-4 text-slate-600 text-sm sm:text-base leading-relaxed font-normal">
                 <p>
                   Hindustan Projects founded SnapTech Digital with a clear institutional conviction: enterprise-caliber IT architecture should not be monopolized by Tier-1 metropolitan agencies charging inflated retainer costs with opaque delivery timelines.
                 </p>
@@ -273,32 +281,55 @@ export default function AboutPage() {
                 </p>
               </div>
 
-              {/* Mission & Vision Dual Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="p-5 rounded-2xl border border-slate-200/90 bg-slate-50/80 shadow-xs hover:border-brand-blue/40 hover:bg-white transition-all">
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center mb-3">
-                    <Target className="w-5 h-5 text-brand-blue" />
-                  </div>
-                  <h3 className="font-heading text-base font-bold text-slate-900 mb-1.5">
-                    Our Core Mission
-                  </h3>
-                  <p className="text-xs text-slate-600 leading-relaxed font-normal">
-                    Deliver resilient, enterprise-grade software and digital systems that create lasting, measurable operational and revenue advantages for our clients.
-                  </p>
-                </div>
-
-                <div className="p-5 rounded-2xl border border-slate-200/90 bg-slate-50/80 shadow-xs hover:border-brand-blue/40 hover:bg-white transition-all">
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center mb-3">
-                    <Eye className="w-5 h-5 text-brand-blue" />
-                  </div>
-                  <h3 className="font-heading text-base font-bold text-slate-900 mb-1.5">
-                    Our Strategic Vision
-                  </h3>
-                  <p className="text-xs text-slate-600 leading-relaxed font-normal">
-                    To be the foremost technology conglomerate in Western India, recognized for unmatched engineering fidelity, zero-downtime operations, and institutional reliability.
-                  </p>
-                </div>
+              {/* Key Trust Highlights */}
+              <div className="pt-2 flex flex-wrap gap-2.5">
+                {[
+                  '100% Code & IP Handover',
+                  'Deterministic 2-Week Sprints',
+                  'Direct Architect Collaboration',
+                ].map((item, idx) => (
+                  <span
+                    key={idx}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-slate-50 border border-slate-200 text-xs font-medium text-slate-700"
+                  >
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                    <span>{item}</span>
+                  </span>
+                ))}
               </div>
+            </div>
+          </div>
+
+          {/* Mission & Vision Dual Cards - Dedicated Foundation Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12 sm:mt-16 pt-12 border-t border-slate-200/80">
+            <div className="p-7 sm:p-8 rounded-3xl border border-slate-200/90 bg-linear-to-br from-slate-50/80 via-white to-blue-50/30 shadow-xs hover:shadow-md hover:border-brand-blue/30 transition-all duration-300 group">
+              <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform shadow-2xs">
+                <Target className="w-6 h-6 text-brand-blue" />
+              </div>
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-brand-blue mb-1.5 block">
+                Operational Purpose
+              </span>
+              <h3 className="font-heading text-xl font-bold text-slate-900 mb-2">
+                Our Core Mission
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                Deliver resilient, enterprise-grade software and digital systems that create lasting, measurable operational and revenue advantages for our clients.
+              </p>
+            </div>
+
+            <div className="p-7 sm:p-8 rounded-3xl border border-slate-200/90 bg-linear-to-br from-slate-50/80 via-white to-indigo-50/30 shadow-xs hover:shadow-md hover:border-indigo-400/30 transition-all duration-300 group">
+              <div className="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-200 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform shadow-2xs">
+                <Eye className="w-6 h-6 text-indigo-600" />
+              </div>
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-indigo-600 mb-1.5 block">
+                Long-Term Horizon
+              </span>
+              <h3 className="font-heading text-xl font-bold text-slate-900 mb-2">
+                Our Strategic Vision
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                To be the foremost technology conglomerate in Western India, recognized for unmatched engineering fidelity, zero-downtime operations, and institutional reliability.
+              </p>
             </div>
           </div>
         </Container>
