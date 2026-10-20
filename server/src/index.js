@@ -88,6 +88,27 @@ const startServer = async () => {
     await prisma.$connect()
     logger.info('Database connected successfully')
 
+    // Auto-migrate schema: ensure all careers recruitment columns exist
+    try {
+      await prisma.$executeRawUnsafe(`
+        ALTER TABLE "job_applications" ADD COLUMN IF NOT EXISTS "resumeData" TEXT;
+        ALTER TABLE "job_applications" ADD COLUMN IF NOT EXISTS "experience" TEXT;
+        ALTER TABLE "job_applications" ADD COLUMN IF NOT EXISTS "currentCtc" TEXT;
+        ALTER TABLE "job_applications" ADD COLUMN IF NOT EXISTS "expectedCtc" TEXT;
+        ALTER TABLE "job_applications" ADD COLUMN IF NOT EXISTS "noticePeriod" TEXT;
+        ALTER TABLE "job_applications" ADD COLUMN IF NOT EXISTS "linkedinUrl" TEXT;
+        ALTER TABLE "job_applications" ADD COLUMN IF NOT EXISTS "portfolioUrl" TEXT;
+        ALTER TABLE "job_applications" ADD COLUMN IF NOT EXISTS "resumeFileName" TEXT;
+        ALTER TABLE "job_applications" ADD COLUMN IF NOT EXISTS "resumeFileType" TEXT;
+        ALTER TABLE "job_applications" ADD COLUMN IF NOT EXISTS "resumeFileSize" INTEGER;
+        ALTER TABLE "job_applications" ADD COLUMN IF NOT EXISTS "adminNotes" TEXT;
+        ALTER TABLE "job_applications" ADD COLUMN IF NOT EXISTS "rating" INTEGER;
+      `)
+      logger.info('Database auto-migration: verified job_applications columns exist')
+    } catch (migErr) {
+      logger.warn('Database auto-migration warning:', migErr.message)
+    }
+
     // Load admin-saved integration keys from DB
     await loadIntegrationConfig()
 

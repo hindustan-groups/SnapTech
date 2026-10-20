@@ -256,9 +256,29 @@ export const listApplications = async (req, res, next) => {
       try {
         applications = await prisma.jobApplication.findMany({
           where,
-          include: {
+          select: {
+            id: true,
+            jobPostingId: true,
+            fullName: true,
+            email: true,
+            phone: true,
+            resumeUrl: true,
+            coverLetter: true,
+            status: true,
+            experience: true,
+            currentCtc: true,
+            expectedCtc: true,
+            noticePeriod: true,
+            linkedinUrl: true,
+            portfolioUrl: true,
+            resumeFileName: true,
+            resumeFileType: true,
+            resumeFileSize: true,
+            adminNotes: true,
+            rating: true,
+            createdAt: true,
             jobPosting: {
-              select: { title: true, department: true, location: true },
+              select: { title: true, department: true, location: true, workplaceType: true },
             },
           },
           orderBy: { createdAt: 'desc' },
@@ -313,26 +333,30 @@ export const updateApplicationStatus = async (req, res, next) => {
     if (adminNotes !== undefined) updateData.adminNotes = adminNotes
     if (rating !== undefined) updateData.rating = Number(rating)
 
+    const returnSelect = {
+      id: true,
+      status: true,
+      adminNotes: true,
+      rating: true,
+      fullName: true,
+      jobPostingId: true,
+      jobPosting: {
+        select: { title: true, department: true },
+      },
+    }
+
     let application
     try {
       application = await prisma.jobApplication.update({
         where: { id },
         data: updateData,
-        include: {
-          jobPosting: {
-            select: { title: true, department: true },
-          },
-        },
+        select: returnSelect,
       })
     } catch {
       application = await prisma.jobApplication.update({
         where: { id },
         data: { status: updateData.status },
-        include: {
-          jobPosting: {
-            select: { title: true, department: true },
-          },
-        },
+        select: returnSelect,
       })
     }
     await logActivity(
@@ -364,14 +388,74 @@ export const deleteApplication = async (req, res, next) => {
 export const getApplicationResume = async (req, res, next) => {
   try {
     const { id } = req.params
-    const application = await prisma.jobApplication.findUnique({
-      where: { id },
-      include: {
-        jobPosting: {
-          select: { title: true, department: true, location: true, workplaceType: true },
+
+    let application = null
+
+    // 1. Try querying full model including resumeData
+    try {
+      application = await prisma.jobApplication.findUnique({
+        where: { id },
+        include: {
+          jobPosting: {
+            select: { title: true, department: true, location: true, workplaceType: true },
+          },
         },
-      },
-    })
+      })
+    } catch (fullQueryErr) {
+      console.warn('[adminCareers] findUnique full model failed, querying with safe select:', fullQueryErr.message)
+    }
+
+    // 2. Fallback: If first query failed (e.g. column missing), query with resilient select without resumeData
+    if (!application) {
+      try {
+        application = await prisma.jobApplication.findUnique({
+          where: { id },
+          select: {
+            id: true,
+            jobPostingId: true,
+            fullName: true,
+            email: true,
+            phone: true,
+            resumeUrl: true,
+            coverLetter: true,
+            status: true,
+            experience: true,
+            currentCtc: true,
+            expectedCtc: true,
+            noticePeriod: true,
+            linkedinUrl: true,
+            portfolioUrl: true,
+            resumeFileName: true,
+            resumeFileType: true,
+            resumeFileSize: true,
+            adminNotes: true,
+            rating: true,
+            createdAt: true,
+            jobPosting: {
+              select: { title: true, department: true, location: true, workplaceType: true },
+            },
+          },
+        })
+      } catch (safeErr1) {
+        console.warn('[adminCareers] findUnique safe select 1 failed, trying minimal select:', safeErr1.message)
+        // 3. Ultra-minimal fallback
+        application = await prisma.jobApplication.findUnique({
+          where: { id },
+          select: {
+            id: true,
+            fullName: true,
+            email: true,
+            phone: true,
+            resumeUrl: true,
+            status: true,
+            createdAt: true,
+            jobPosting: {
+              select: { title: true, department: true, location: true },
+            },
+          },
+        })
+      }
+    }
 
     if (!application) {
       return res.status(404).json({ status: 'error', message: 'Application not found' })
