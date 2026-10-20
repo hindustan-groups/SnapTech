@@ -157,6 +157,7 @@ import {
   updateEmailSettings,
   testEmailConnection,
   testPrimaryImapHandler,
+  testApiTokenHandler,
   getEligibleRecipients,
   listEmailAccounts,
   getEmailAccountById,
@@ -175,6 +176,9 @@ import {
   deleteEmailMessage,
   getEmailRoutingHandler,
   updateEmailRoutingHandler,
+  getCampaignAudiencesHandler,
+  sendBulkCampaignHandler,
+  triggerAutomationFollowupHandler,
 } from '../controllers/emailCenter.controller.js'
 
 // ── CMS Validation Schemas ─────────────────────────────────────
@@ -841,7 +845,13 @@ router.get('/email/settings', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), 
 router.patch('/email/settings', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), updateEmailSettings)
 router.post('/email/test', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), testEmailConnection)
 router.post('/email/test-imap', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), testPrimaryImapHandler)
+router.post('/email/test-api-token', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), testApiTokenHandler)
 router.get('/email/recipients', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), getEligibleRecipients)
+
+// Bulk Email Campaigns & Full Automation
+router.get('/email/campaigns/audiences', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), getCampaignAudiencesHandler)
+router.post('/email/campaigns/send', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), sendBulkCampaignHandler)
+router.post('/email/automation/trigger-followup', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), triggerAutomationFollowupHandler)
 
 // Central Email & Contact Routing
 router.get('/email/routing', verifyToken, requireRole('ADMIN', 'SUPER_ADMIN'), getEmailRoutingHandler)
