@@ -109,6 +109,14 @@ const startServer = async () => {
       logger.warn('Database auto-migration warning:', migErr.message)
     }
 
+    // Auto-seed initial blog posts if empty
+    try {
+      const { autoSeedBlogPosts } = await import('./utils/blogSeed.js')
+      await autoSeedBlogPosts(prisma)
+    } catch (seedErr) {
+      logger.warn('Blog auto-seed notice:', seedErr.message)
+    }
+
     // Load admin-saved integration keys from DB
     await loadIntegrationConfig()
 

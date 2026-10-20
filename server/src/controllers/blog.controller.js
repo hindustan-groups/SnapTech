@@ -3,11 +3,9 @@
  */
 import prisma from '../config/db.js'
 import { getCache, setCache, deleteCacheByPrefix } from '../utils/cache.js'
-import { createHash } from 'crypto'
 import { logActivity } from '../utils/activity.js'
 
 const CACHE_SHORT = 'public, max-age=300, stale-while-revalidate=60'
-const CACHE_LONG = 'public, max-age=3600, stale-while-revalidate=300'
 
 /** Slug generator from title */
 function slugify(text) {
@@ -58,7 +56,7 @@ export const getPublicPosts = async (req, res, next) => {
       }),
     }
 
-    const [total, posts] = await Promise.all([
+    let [total, posts] = await Promise.all([
       prisma.blogPost.count({ where }),
       prisma.blogPost.findMany({
         where,
@@ -81,6 +79,38 @@ export const getPublicPosts = async (req, res, next) => {
         },
       }),
     ])
+
+    if (total === 0 && !category && !tag && !search) {
+      try {
+        const { autoSeedBlogPosts } = await import('../utils/blogSeed.js')
+        await autoSeedBlogPosts(prisma)
+        ;[total, posts] = await Promise.all([
+          prisma.blogPost.count({ where }),
+          prisma.blogPost.findMany({
+            where,
+            orderBy: { [sort]: 'desc' },
+            skip: (page - 1) * limit,
+            take: limit,
+            select: {
+              id: true,
+              title: true,
+              slug: true,
+              excerpt: true,
+              featuredImageUrl: true,
+              category: true,
+              tags: true,
+              authorName: true,
+              publishedAt: true,
+              viewCount: true,
+              isFeatured: true,
+              content: true,
+            },
+          }),
+        ])
+      } catch {
+        // non-fatal
+      }
+    }
 
     // Add read time estimate (avg 200 words/min)
     const postsWithReadTime = posts.map((p) => {
@@ -303,7 +333,7 @@ export const adminListPosts = async (req, res, next) => {
       }),
     }
 
-    const posts = await prisma.blogPost.findMany({
+    let posts = await prisma.blogPost.findMany({
       where,
       orderBy: { createdAt: 'desc' },
       select: {
@@ -321,6 +351,33 @@ export const adminListPosts = async (req, res, next) => {
         _count: { select: { comments: true } },
       },
     })
+
+    if (posts.length === 0 && !status && !category && !search) {
+      try {
+        const { autoSeedBlogPosts } = await import('../utils/blogSeed.js')
+        await autoSeedBlogPosts(prisma)
+        posts = await prisma.blogPost.findMany({
+          where,
+          orderBy: { createdAt: 'desc' },
+          select: {
+            id: true,
+            title: true,
+            slug: true,
+            status: true,
+            category: true,
+            authorName: true,
+            isFeatured: true,
+            viewCount: true,
+            publishedAt: true,
+            createdAt: true,
+            updatedAt: true,
+            _count: { select: { comments: true } },
+          },
+        })
+      } catch {
+        // non-fatal
+      }
+    }
 
     res.json({ status: 'ok', data: posts })
   } catch (err) {
