@@ -3,6 +3,7 @@
  * Manages public contact information, WhatsApp widget templates, social links,
  * website hero media assets, 3D device showcase mockups, and company statistics.
  */
+import { useMemo } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import {
@@ -271,14 +272,8 @@ const FIELD_GROUPS = [
         Icon: Globe,
       },
       {
-        key: 'about_hero_laptop_image',
-        label: 'About Page Laptop Screen Mockup (Desktop View)',
-        isImage: true,
-        Icon: Globe,
-      },
-      {
-        key: 'about_hero_phone_image',
-        label: 'About Page Phone Screen Mockup (Mobile View)',
+        key: 'about_story_image',
+        label: 'About Page Corporate Story & Team Graphic ("Rooted in Rajasthan" Section)',
         isImage: true,
         Icon: Globe,
       },
@@ -331,6 +326,19 @@ export default function AdminSiteSettingsPage() {
 
   const { data, isLoading, refetch } = useSiteSettings()
 
+  const defaultValues = useMemo(() => {
+    if (!data?.data) return {}
+    return {
+      ...data.data,
+      about_story_image:
+        data.data.about_story_image ||
+        data.data.about_hero_laptop_image ||
+        data.data.about_image_url ||
+        data.data.about_hero_phone_image ||
+        '',
+    }
+  }, [data])
+
   const {
     register,
     handleSubmit,
@@ -338,7 +346,7 @@ export default function AdminSiteSettingsPage() {
     watch,
     formState: { isSubmitting },
   } = useForm({
-    values: data?.data || {},
+    values: defaultValues,
   })
 
   // Real-time watched form state for live web preview
@@ -355,7 +363,13 @@ export default function AdminSiteSettingsPage() {
     },
   })
 
-  const onSubmit = (d) => mutation.mutate(d)
+  const onSubmit = (d) => {
+    const payload = {
+      ...d,
+      about_hero_laptop_image: d.about_story_image || d.about_hero_laptop_image || '',
+    }
+    mutation.mutate(payload)
+  }
 
   return (
     <>
