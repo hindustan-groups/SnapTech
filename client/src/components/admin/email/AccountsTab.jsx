@@ -247,8 +247,17 @@ export default function AccountsTab({ accounts = [], isLoading, onAccountChanged
                             <CheckCircle2 className="w-3 h-3" /> Synced
                           </span>
                         ) : acct.lastSyncStatus === 'FAILED' ? (
-                          <span className="text-rose-600 flex items-center gap-1" title={acct.lastSyncError}>
-                            <AlertCircle className="w-3 h-3" /> Failed
+                          <span className="flex items-center gap-1.5">
+                            <span className="text-rose-600 flex items-center gap-1" title={acct.lastSyncError}>
+                              <AlertCircle className="w-3 h-3" /> Failed
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => setModalState({ mode: 'edit', account: acct })}
+                              className="text-[10px] text-blue-600 underline font-semibold cursor-pointer hover:text-blue-800"
+                            >
+                              Update Password
+                            </button>
                           </span>
                         ) : (
                           <span className="text-gray-400">Never synced</span>

@@ -789,12 +789,21 @@ export const updateEmailSettings = async (req, res, next) => {
     // Handle API Gateway Token
     if (apiToken && typeof apiToken === 'string' && apiToken.trim() && !/^•+/.test(apiToken.trim())) {
       const cleanToken = apiToken.trim()
-      process.env.RESEND_API_KEY = cleanToken
-      await prisma.siteSetting.upsert({
-        where: { key: 'sys_resend_api_key' },
-        update: { value: cleanToken },
-        create: { key: 'sys_resend_api_key', value: cleanToken },
-      })
+      if (cleanToken.startsWith('re_')) {
+        process.env.RESEND_API_KEY = cleanToken
+        await prisma.siteSetting.upsert({
+          where: { key: 'sys_resend_api_key' },
+          update: { value: cleanToken },
+          create: { key: 'sys_resend_api_key', value: cleanToken },
+        })
+      } else {
+        process.env.HOSTINGER_API_KEY = cleanToken
+        await prisma.siteSetting.upsert({
+          where: { key: 'sys_hostinger_api_key' },
+          update: { value: cleanToken },
+          create: { key: 'sys_hostinger_api_key', value: cleanToken },
+        })
+      }
     }
 
     const cleanStrategy = (emailStrategy === 'smtp' || emailStrategy === 'api_token' || emailStrategy === 'auto')
@@ -1097,9 +1106,13 @@ export const testPrimaryImapHandler = async (_req, res) => {
     })
   } catch (err) {
     const cleanMsg = sanitizeErrorMessage(err.message, [process.env.EMAIL_PASS])
+    let guidance = ''
+    if (/authentication failed|invalid credentials|no \[/i.test(cleanMsg)) {
+      guidance = ' (Note: A Gmail 16-character App Password will not work on Hostinger. Please open Hostinger hPanel > Emails > snaptech.digital > Manage > Change Password, set your mailbox password, enter it in Section 3 below, and click "Save & Sync All Settings").'
+    }
     res.status(400).json({
       status: 'error',
-      message: cleanMsg,
+      message: `${cleanMsg}${guidance}`,
     })
   }
 }
@@ -1182,7 +1195,7 @@ export const testApiTokenHandler = async (req, res) => {
           <div style="background: #f8fafc; border-left: 4px solid #2563eb; padding: 12px; margin: 16px 0; border-radius: 4px; font-size: 12px; color: #64748b;">
             <p style="margin: 0;">Sender: <strong style="color: #0f172a;">${process.env.EMAIL_FROM || 'SnapTech Digital <info@snaptech.digital>'}</strong></p>
             <p style="margin: 4px 0 0;">Recipient: <strong style="color: #0f172a;">${recipient}</strong></p>
-            <p style="margin: 4px 0 0;">Endpoint: <strong style="color: #0f172a;">api.mail.hostinger.com/v1/emails (Port 443)</strong></p>
+            <p style="margin: 4px 0 0;">Endpoint: <strong style="color: #0f172a;">api.mail.hostinger.com/api/v1/mailboxes/send (Port 443)</strong></p>
           </div>
         </div>
         `,
@@ -1205,7 +1218,7 @@ export const testApiTokenHandler = async (req, res) => {
     const cleanMsg = sanitizeErrorMessage(err.message, [process.env.RESEND_API_KEY, process.env.HOSTINGER_API_KEY])
     let guidance = ''
     if (/invalid|401|unauthorized/i.test(cleanMsg)) {
-      guidance = ' (Important: Hostinger Webmail password is for direct SMTP Port 465 below. For API Gateway, either generate an API token from Hostinger hPanel > Dev Tools > API, or use a Resend API key starting with "re_").'
+      guidance = ' (Important: Hostinger Webmail password is for direct SMTP Port 465 / IMAP Port 993 below. For API Gateway, either generate a Mail API token from Hostinger hPanel > Dev Tools > API, or leave blank to use the pre-configured verified Cloud Gateway).'
     }
     res.status(400).json({
       status: 'error',

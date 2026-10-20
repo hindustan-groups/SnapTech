@@ -207,25 +207,60 @@ export async function sendViaHostingerApi({ to, subject, html, text, replyTo, ap
     throw new Error('Hostinger Mail API Token is not configured. Please enter your Hostinger API Token from hPanel > Dev Tools > API.')
   }
 
-  const recipient = Array.isArray(to) ? to[0] : to
+  // 1. Fetch authorized mailboxes via official Hostinger Mail API spec (/api/v1/me)
+  const meResponse = await fetch('https://api.mail.hostinger.com/api/v1/me', {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${key}`,
+      'Accept': 'application/json',
+    },
+  })
+
+  if (!meResponse.ok) {
+    const errText = await meResponse.text().catch(() => '')
+    let errDetail = errText
+    try {
+      const parsed = JSON.parse(errText)
+      errDetail = parsed.message || parsed.error || errText
+    } catch {
+      /* ignore */
+    }
+    throw new Error(`Hostinger Mail API Auth error (HTTP ${meResponse.status}): ${errDetail}`)
+  }
+
+  const meData = await meResponse.json().catch(() => ({}))
+  const mailboxes = meData?.data?.mailboxes || []
+  if (!mailboxes.length) {
+    throw new Error('Hostinger Mail API returned no active mailboxes for this token.')
+  }
+
+  // Resolve matching mailbox or pick first authorized
+  const preferredSender = (process.env.EMAIL_USER || VERIFIED_SENDER_MAILBOX).toLowerCase()
+  const targetMailbox = mailboxes.find((m) => m.address?.toLowerCase() === preferredSender) || mailboxes[0]
+  const mailboxResourceId = targetMailbox.resourceId
+
+  // 2. Dispatch email via /api/v1/mailboxes/{mailboxResourceId}/send
+  const recipient = Array.isArray(to) ? to : [to]
   const body = {
     to: recipient,
+    displayName: process.env.EMAIL_SENDER_NAME || 'SnapTech Digital',
     subject,
     ...(html ? { html } : {}),
     ...(text ? { text } : {}),
-    ...(replyTo ? { reply_to: replyTo } : {}),
+    ...(replyTo ? { replyTo } : {}),
   }
 
-  const response = await fetch('https://api.mail.hostinger.com/v1/emails', {
+  const response = await fetch(`https://api.mail.hostinger.com/api/v1/mailboxes/${mailboxResourceId}/send`, {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${key}`,
       'Content-Type': 'application/json',
+      'Accept': 'application/json',
     },
     body: JSON.stringify(body),
   })
 
-  if (!response.ok) {
+  if (!response.ok && response.status !== 204) {
     const errText = await response.text().catch(() => '')
     let errDetail = errText
     try {
@@ -234,13 +269,13 @@ export async function sendViaHostingerApi({ to, subject, html, text, replyTo, ap
     } catch {
       /* ignore */
     }
-    throw new Error(`Hostinger Mail API error (HTTP ${response.status}): ${errDetail}`)
+    throw new Error(`Hostinger Mail API Send error (HTTP ${response.status}): ${errDetail}`)
   }
 
-  const data = await response.json().catch(() => ({}))
   return {
-    messageId: data.id || data.messageId || `hostinger-api-${Date.now()}`,
+    messageId: `hostinger-${mailboxResourceId}-${Date.now()}`,
     provider: 'HOSTINGER_API',
+    mailbox: targetMailbox.address,
   }
 }
 

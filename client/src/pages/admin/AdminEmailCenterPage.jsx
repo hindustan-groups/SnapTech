@@ -2232,14 +2232,25 @@ function SettingsTab({ settings, onSettingsUpdated }) {
                   onChange={(e) => setFormData({ ...formData, apiToken: e.target.value })}
                   placeholder={
                     settings?.isApiTokenConfigured
-                      ? `${settings.maskedApiToken || 'Saved in Database'} (Leave blank to use saved key)`
-                      : 'Hostinger API Token (from hPanel) or Resend (re_...)'
+                      ? `${settings.maskedApiToken || 'Saved in Database'} (Leave blank to use verified cloud gateway)`
+                      : 'Leave blank to use verified Cloud Gateway (re_...)'
                   }
                   className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-xs font-mono focus:outline-none focus:border-emerald-500"
                 />
-                <p className="mt-1 text-[10px] text-slate-500">
-                  <em>Note:</em> Do not enter your Hostinger Webmail password here. Mailbox password goes in <strong>Section 3</strong> below.
-                </p>
+                <div className="mt-1 flex items-center justify-between text-[10px]">
+                  <span className="text-slate-500">
+                    <em>Default:</em> Verified Cloud Gateway for <code>info@snaptech.digital</code> is ready.
+                  </span>
+                  {formData.apiToken && (
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, apiToken: '' })}
+                      className="text-emerald-700 font-bold hover:underline cursor-pointer"
+                    >
+                      Clear &amp; use default
+                    </button>
+                  )}
+                </div>
               </div>
 
               <div className="text-[11px] text-slate-600 bg-white/80 p-3 rounded-lg border border-emerald-100 space-y-1">
@@ -2315,9 +2326,12 @@ function SettingsTab({ settings, onSettingsUpdated }) {
                       ...(syncImapPassword ? { imapPass: val } : {}),
                     }))
                   }}
-                  placeholder={isConfigured ? '•••••••••••• (Saved in DB — type to change)' : 'Enter Hostinger mailbox password'}
+                  placeholder={isConfigured ? '•••••••••••• (Saved in DB — type new password to change)' : 'Enter Hostinger mailbox password'}
                   className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-xs font-mono focus:outline-none focus:border-blue-500"
                 />
+                <p className="mt-1 text-[10px] text-amber-700 bg-amber-50/70 p-1.5 rounded-lg border border-amber-200/60 leading-tight">
+                  <strong>Important:</strong> Enter password created in Hostinger Webmail/hPanel for <code>info@snaptech.digital</code> (do NOT use a Gmail 16-character App Password).
+                </p>
               </div>
 
               {/* Field 3: Sender Display Name */}
