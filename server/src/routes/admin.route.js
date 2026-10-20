@@ -368,7 +368,15 @@ const blogPostCreateValidation = [
     .isLength({ max: 200 }),
   body('excerpt').trim().notEmpty().withMessage('Excerpt is required.').isLength({ max: 500 }),
   body('content').trim().notEmpty().withMessage('Content is required.').isLength({ max: 50000 }),
-  body('featuredImageUrl').optional({ checkFalsy: true }).trim().isURL().withMessage('Featured Image URL must be valid.').isLength({ max: 1000 }),
+  body('featuredImageUrl')
+    .optional({ checkFalsy: true })
+    .trim()
+    .custom((val) => {
+      if (!val) return true
+      if (val.startsWith('/') || /^(https?:\/\/)/i.test(val)) return true
+      throw new Error('Featured Image URL must be a valid URL or path starting with /.')
+    })
+    .isLength({ max: 1000 }),
   body('category').trim().notEmpty().withMessage('Category is required.').isLength({ max: 100 }),
   body('tags').optional().isArray().custom((arr) => arr.every((item) => typeof item === 'string')),
   body('authorName').optional({ checkFalsy: true }).trim().isLength({ max: 100 }),
@@ -390,7 +398,15 @@ const blogPostUpdateValidation = [
     .isLength({ max: 200 }),
   body('excerpt').optional().trim().notEmpty().withMessage('Excerpt cannot be empty.').isLength({ max: 500 }),
   body('content').optional().trim().notEmpty().withMessage('Content cannot be empty.').isLength({ max: 50000 }),
-  body('featuredImageUrl').optional({ checkFalsy: true }).trim().isURL().withMessage('Featured Image URL must be valid.').isLength({ max: 1000 }),
+  body('featuredImageUrl')
+    .optional({ checkFalsy: true })
+    .trim()
+    .custom((val) => {
+      if (!val) return true
+      if (val.startsWith('/') || /^(https?:\/\/)/i.test(val)) return true
+      throw new Error('Featured Image URL must be a valid URL or path starting with /.')
+    })
+    .isLength({ max: 1000 }),
   body('category').optional().trim().notEmpty().withMessage('Category cannot be empty.').isLength({ max: 100 }),
   body('tags').optional().isArray().custom((arr) => arr.every((item) => typeof item === 'string')),
   body('authorName').optional({ checkFalsy: true }).trim().isLength({ max: 100 }),

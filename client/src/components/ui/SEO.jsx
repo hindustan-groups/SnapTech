@@ -322,7 +322,10 @@ export default function SEO({
   const canonical = customCanonical
     ? (customCanonical.startsWith('http') ? customCanonical : `${SITE.url}${customCanonical.startsWith('/') ? '' : '/'}${customCanonical}`)
     : `${SITE.url}${path}`
-  const image = ogImage || cfg.og_image_url || SITE.ogImage
+  const rawImage = ogImage || cfg.og_image_url || SITE.ogImage
+  const image = rawImage
+    ? (rawImage.startsWith('http') ? rawImage : `${SITE.url}${rawImage.startsWith('/') ? '' : '/'}${rawImage}`)
+    : `${SITE.url}/og-image.png`
 
   // Default schemas on every page using live Site Settings
   const defaultSchemas = [organizationSchema(cfg), websiteSchema(cfg)]

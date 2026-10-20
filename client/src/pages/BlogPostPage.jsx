@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
@@ -339,7 +339,11 @@ export default function BlogPostPage() {
     '@type': 'BlogPosting',
     headline: post.title,
     description: post.excerpt,
-    image: post.featuredImageUrl || `${SITE.url}/og-image.png`,
+    image: post.featuredImageUrl
+      ? (post.featuredImageUrl.startsWith('http')
+          ? post.featuredImageUrl
+          : `${SITE.url}${post.featuredImageUrl.startsWith('/') ? '' : '/'}${post.featuredImageUrl}`)
+      : `${SITE.url}/og-image.png`,
     author: { '@type': 'Person', name: post.authorName || 'SnapTech Engineering Team' },
     publisher: {
       '@type': 'Organization',
