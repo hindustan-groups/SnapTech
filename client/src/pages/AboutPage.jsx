@@ -58,6 +58,12 @@ export default function AboutPage() {
   ]
 
   const parentUrl = cfg.parent_company_url || 'https://www.hindustanprojects.in'
+  const aboutStoryImage =
+    cfg.about_story_image ||
+    cfg.about_hero_laptop_image ||
+    cfg.about_image_url ||
+    cfg.about_hero_phone_image ||
+    'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=700&q=80&auto=format&fit=crop'
 
   return (
     <div className="bg-white min-h-screen text-slate-900 selection:bg-brand-blue/15 selection:text-brand-blue">
@@ -217,7 +223,7 @@ export default function AboutPage() {
             <div className="lg:col-span-5 relative">
               <div className="relative rounded-2xl overflow-hidden border border-slate-200 bg-slate-100 shadow-xl group">
                 <img
-                  src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=700&q=80&auto=format&fit=crop"
+                  src={aboutStoryImage}
                   alt="SnapTech engineering team in collaborative session"
                   className="w-full h-96 object-cover opacity-90 group-hover:scale-105 group-hover:opacity-100 transition-all duration-500"
                   loading="lazy"
