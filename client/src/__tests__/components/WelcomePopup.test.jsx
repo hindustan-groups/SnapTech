@@ -1,6 +1,6 @@
 /**
  * WelcomePopup.test.jsx
- * Unit and integration tests for the improved WelcomePopup component.
+ * Unit and integration tests for the redesigned premium WelcomePopup component.
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
@@ -55,7 +55,7 @@ describe('WelcomePopup Component', () => {
     )
   }
 
-  it('renders popup after 7-second timer on eligible routes', () => {
+  it('renders popup with new premium design after 7-second timer on eligible routes', () => {
     renderPopup('/')
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
@@ -66,9 +66,29 @@ describe('WelcomePopup Component', () => {
     })
 
     expect(screen.getByRole('dialog')).toBeInTheDocument()
-    expect(screen.getByText(/Need a Fast, Modern Website or Custom Software\?/i)).toBeInTheDocument()
-    expect(screen.getByText(/Get a Clear Project Estimate/i)).toBeInTheDocument()
-    expect(screen.getByText(/Instant WhatsApp Consultation/i)).toBeInTheDocument()
+    // Brand header
+    expect(screen.getByText(/SnapTech/i)).toBeInTheDocument()
+    expect(screen.getByText(/Digital/i)).toBeInTheDocument()
+    expect(screen.getByText(/Engineering High-Impact Web, Cloud & AI Solutions/i)).toBeInTheDocument()
+
+    // Badge & Heading
+    expect(screen.getByText(/BUILD YOUR IDEAS WITH EXPERTS/i)).toBeInTheDocument()
+    expect(screen.getByText(/Need a Modern Website/i)).toBeInTheDocument()
+    expect(screen.getByText(/or Custom Software\?/i)).toBeInTheDocument()
+
+    // Feature Cards
+    expect(screen.getByText(/Clear Project Estimate/i)).toBeInTheDocument()
+    expect(screen.getByText(/Detailed scope, timeline & cost — no hidden charges/i)).toBeInTheDocument()
+    expect(screen.getByText(/100% Code Ownership/i)).toBeInTheDocument()
+    expect(screen.getByText(/You own the code with full transparency/i)).toBeInTheDocument()
+
+    // CTAs
+    expect(screen.getByRole('button', { name: /Get a Free Project Estimate/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Chat on WhatsApp/i })).toBeInTheDocument()
+
+    // Footer
+    expect(screen.getByRole('button', { name: /Explore Our Services & Pricing/i })).toBeInTheDocument()
+    expect(screen.getByText(/Get a response within 1 business day/i)).toBeInTheDocument()
 
     expect(analytics.trackEvent).toHaveBeenCalledWith('popup_impression', {
       popup_name: 'welcome_modal',
@@ -123,7 +143,7 @@ describe('WelcomePopup Component', () => {
       vi.advanceTimersByTime(7000)
     })
 
-    expect(screen.queryByText(/Need a Fast, Modern Website or Custom Software\?/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/Need a Modern Website/i)).not.toBeInTheDocument()
 
     // Clean up mock modal
     document.body.removeChild(activeModal)
@@ -176,7 +196,7 @@ describe('WelcomePopup Component', () => {
       vi.advanceTimersByTime(7000)
     })
 
-    const waBtn = screen.getByRole('button', { name: /Instant WhatsApp Consultation/i })
+    const waBtn = screen.getByRole('button', { name: /Chat on WhatsApp/i })
     fireEvent.click(waBtn)
 
     expect(window.open).toHaveBeenCalledWith(
@@ -193,3 +213,4 @@ describe('WelcomePopup Component', () => {
     window.open = originalOpen
   })
 })
+
