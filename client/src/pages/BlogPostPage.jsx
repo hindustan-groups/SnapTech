@@ -199,39 +199,83 @@ function RelatedCard({ post }) {
   return (
     <Link to={`/blog/${post.slug}`} className="group block h-full">
       <article className="bg-white rounded-2xl border border-slate-200/80 overflow-hidden hover:border-brand-blue/40 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full flex flex-col shadow-xs">
-        <div className="relative h-44 bg-slate-100 overflow-hidden shrink-0">
-          {post.featuredImageUrl ? (
-            <img
-              src={post.featuredImageUrl}
-              alt={post.title}
-              loading="lazy"
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center bg-blue-50/50">
-              <BookOpen className="w-10 h-10 text-brand-blue/20" />
+        {/* Mobile View (< sm): Horizontal Compact Card */}
+        <div className="flex sm:hidden p-3 items-stretch gap-3">
+          <div className="relative w-24 h-24 xs:w-28 xs:h-28 shrink-0 rounded-xl overflow-hidden bg-slate-100 border border-slate-100">
+            {post.featuredImageUrl ? (
+              <img
+                src={post.featuredImageUrl}
+                alt={post.title}
+                loading="lazy"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-blue-50/50">
+                <BookOpen className="w-8 h-8 text-brand-blue/20" />
+              </div>
+            )}
+          </div>
+          <div className="flex-1 min-w-0 flex flex-col justify-between py-0.5">
+            <div>
+              <div className="flex items-center justify-between gap-1 mb-1">
+                <span className="text-[10px] font-bold text-brand-blue uppercase tracking-wider line-clamp-1">
+                  {post.category}
+                </span>
+                {post.readTime && (
+                  <span className="text-[10px] text-slate-400 font-medium shrink-0">
+                    {post.readTime} min
+                  </span>
+                )}
+              </div>
+              <h3 className="font-heading font-bold text-slate-900 text-xs xs:text-sm leading-snug group-hover:text-brand-blue transition-colors line-clamp-2">
+                {post.title}
+              </h3>
             </div>
-          )}
-          <div className="absolute inset-0 bg-linear-to-t from-slate-900/60 via-transparent to-transparent opacity-60" />
-          <span className="absolute top-3 left-3 text-[10px] font-bold bg-white/95 text-brand-blue border border-blue-200/80 px-2.5 py-1 rounded-full shadow-xs">
-            {post.category}
-          </span>
+            <div className="flex items-center justify-between text-[10px] text-slate-400 font-medium pt-1.5 border-t border-slate-100 mt-1.5">
+              <span>{date}</span>
+              <span className="text-brand-blue font-semibold inline-flex items-center gap-0.5 group-hover:translate-x-0.5 transition-transform">
+                Read <ChevronRight className="w-3 h-3" />
+              </span>
+            </div>
+          </div>
         </div>
-        <div className="p-5 flex flex-col flex-1">
-          <h3 className="font-heading font-bold text-slate-900 text-sm leading-snug mb-2 group-hover:text-brand-blue transition-colors line-clamp-2 flex-1">
-            {post.title}
-          </h3>
-          <div className="flex items-center gap-3 text-[11px] text-slate-500 pt-3 border-t border-slate-100 mt-auto">
-            {date && (
-              <span className="flex items-center gap-1">
-                <Calendar className="w-3 h-3 text-brand-blue" /> {date}
-              </span>
+
+        {/* Desktop View (>= sm): Standard Vertical Grid Card */}
+        <div className="hidden sm:flex sm:flex-col sm:h-full">
+          <div className="relative h-44 bg-slate-100 overflow-hidden shrink-0">
+            {post.featuredImageUrl ? (
+              <img
+                src={post.featuredImageUrl}
+                alt={post.title}
+                loading="lazy"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-blue-50/50">
+                <BookOpen className="w-10 h-10 text-brand-blue/20" />
+              </div>
             )}
-            {post.readTime && (
-              <span className="flex items-center gap-1">
-                <Clock className="w-3 h-3 text-brand-blue" /> {post.readTime} min
-              </span>
-            )}
+            <div className="absolute inset-0 bg-linear-to-t from-slate-900/60 via-transparent to-transparent opacity-60" />
+            <span className="absolute top-3 left-3 text-[10px] font-bold bg-white/95 text-brand-blue border border-blue-200/80 px-2.5 py-1 rounded-full shadow-xs">
+              {post.category}
+            </span>
+          </div>
+          <div className="p-5 flex flex-col flex-1">
+            <h3 className="font-heading font-bold text-slate-900 text-sm leading-snug mb-2 group-hover:text-brand-blue transition-colors line-clamp-2 flex-1">
+              {post.title}
+            </h3>
+            <div className="flex items-center gap-3 text-[11px] text-slate-500 pt-3 border-t border-slate-100 mt-auto">
+              {date && (
+                <span className="flex items-center gap-1">
+                  <Calendar className="w-3 h-3 text-brand-blue" /> {date}
+                </span>
+              )}
+              {post.readTime && (
+                <span className="flex items-center gap-1">
+                  <Clock className="w-3 h-3 text-brand-blue" /> {post.readTime} min
+                </span>
+              )}
+            </div>
           </div>
         </div>
       </article>
@@ -915,7 +959,7 @@ export default function BlogPostPage() {
                 View all <ChevronRight className="w-4 h-4" />
               </Link>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-6">
               {relatedPosts.map((p, i) => (
                 <motion.div
                   key={p.id || p.slug}

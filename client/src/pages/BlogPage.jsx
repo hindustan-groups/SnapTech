@@ -31,16 +31,29 @@ const DEFAULT_CATEGORIES = [
 
 function BlogCardSkeleton() {
   return (
-    <div className="bg-white rounded-2xl border border-slate-200/80 overflow-hidden animate-pulse shadow-sm">
-      <div className="h-48 bg-slate-100" />
-      <div className="p-5 space-y-3">
-        <div className="h-3 bg-slate-100 rounded w-1/4" />
-        <div className="h-5 bg-slate-100 rounded w-3/4" />
-        <div className="h-3 bg-slate-100 rounded w-full" />
-        <div className="h-3 bg-slate-100 rounded w-2/3" />
-        <div className="flex gap-3 pt-2">
-          <div className="h-3 bg-slate-100 rounded w-16" />
-          <div className="h-3 bg-slate-100 rounded w-16" />
+    <div className="bg-white rounded-2xl border border-slate-200/80 overflow-hidden animate-pulse shadow-xs">
+      {/* Mobile view skeleton */}
+      <div className="flex sm:hidden p-3 items-center gap-3">
+        <div className="w-24 h-24 xs:w-28 xs:h-28 bg-slate-100 rounded-xl shrink-0" />
+        <div className="flex-1 space-y-2 py-1">
+          <div className="h-2.5 bg-slate-100 rounded w-1/3" />
+          <div className="h-4 bg-slate-100 rounded w-4/5" />
+          <div className="h-3 bg-slate-100 rounded w-full" />
+          <div className="h-2.5 bg-slate-100 rounded w-1/2 pt-1" />
+        </div>
+      </div>
+      {/* Desktop view skeleton */}
+      <div className="hidden sm:block">
+        <div className="h-48 bg-slate-100" />
+        <div className="p-5 space-y-3">
+          <div className="h-3 bg-slate-100 rounded w-1/4" />
+          <div className="h-5 bg-slate-100 rounded w-3/4" />
+          <div className="h-3 bg-slate-100 rounded w-full" />
+          <div className="h-3 bg-slate-100 rounded w-2/3" />
+          <div className="flex gap-3 pt-2">
+            <div className="h-3 bg-slate-100 rounded w-16" />
+            <div className="h-3 bg-slate-100 rounded w-16" />
+          </div>
         </div>
       </div>
     </div>
@@ -59,52 +72,103 @@ function BlogCard({ post }) {
   return (
     <Link to={`/blog/${post.slug}`} className="group block h-full">
       <article className="bg-white rounded-2xl border border-slate-200/80 overflow-hidden hover:border-brand-blue/40 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full flex flex-col shadow-sm">
-        {/* Featured image */}
-        <div className="relative h-48 bg-slate-100 overflow-hidden shrink-0">
-          {post.featuredImageUrl ? (
-            <img
-              src={post.featuredImageUrl}
-              alt={post.title}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              loading="lazy"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center bg-blue-50/50">
-              <BookOpen className="w-12 h-12 text-brand-blue/30" />
+        {/* MOBILE VIEW (< sm): Sleek compact horizontal layout */}
+        <div className="flex sm:hidden p-3 items-stretch gap-3">
+          {/* Left Thumbnail */}
+          <div className="relative w-24 h-24 xs:w-28 xs:h-28 shrink-0 rounded-xl overflow-hidden bg-slate-100 border border-slate-100">
+            {post.featuredImageUrl ? (
+              <img
+                src={post.featuredImageUrl}
+                alt={post.title}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                loading="lazy"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-blue-50/50">
+                <BookOpen className="w-8 h-8 text-brand-blue/30" />
+              </div>
+            )}
+          </div>
+
+          {/* Right Content */}
+          <div className="flex-1 min-w-0 flex flex-col justify-between py-0.5">
+            <div>
+              <div className="flex items-center justify-between gap-1 mb-1">
+                <span className="text-[10px] font-bold text-brand-blue uppercase tracking-wider line-clamp-1">
+                  {post.category}
+                </span>
+                <span className="text-[10px] text-slate-400 shrink-0 font-medium">
+                  {post.readTime || 4} min read
+                </span>
+              </div>
+              <h2 className="font-heading font-bold text-slate-900 text-xs xs:text-sm leading-snug group-hover:text-brand-blue transition-colors line-clamp-2 mb-1">
+                {post.title}
+              </h2>
+              {post.excerpt && (
+                <p className="text-[11px] text-slate-500 leading-relaxed line-clamp-2">
+                  {post.excerpt}
+                </p>
+              )}
             </div>
-          )}
-          <div className="absolute inset-0 bg-linear-to-t from-slate-900/60 via-transparent to-transparent opacity-60" />
-          {/* Category badge */}
-          <span className="absolute top-3 left-3 text-[10px] font-bold px-3 py-1 rounded-full bg-white/95 text-brand-blue border border-blue-200/80 backdrop-blur-md shadow-sm">
-            {post.category}
-          </span>
+
+            <div className="flex items-center justify-between text-[10px] text-slate-400 font-medium pt-1.5 border-t border-slate-100 mt-1.5">
+              <span>{date}</span>
+              <span className="text-brand-blue font-semibold inline-flex items-center gap-0.5 group-hover:translate-x-0.5 transition-transform">
+                Read <ChevronRight className="w-3 h-3" />
+              </span>
+            </div>
+          </div>
         </div>
 
-        {/* Content */}
-        <div className="p-5 sm:p-6 flex flex-col flex-1">
-          <h2 className="font-heading font-bold text-slate-900 text-base leading-snug mb-2 group-hover:text-brand-blue transition-colors line-clamp-2">
-            {post.title}
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed line-clamp-2 mb-4 flex-1">
-            {post.excerpt}
-          </p>
-
-          {/* Meta */}
-          <div className="flex items-center gap-3 text-[11px] text-slate-500 font-medium pt-3 border-t border-slate-100">
-            {date && (
-              <span className="flex items-center gap-1">
-                <Calendar className="w-3.5 h-3.5 text-brand-blue" />
-                {date}
-              </span>
+        {/* DESKTOP VIEW (>= sm): Standard Vertical Grid Card */}
+        <div className="hidden sm:flex sm:flex-col sm:h-full">
+          {/* Featured image */}
+          <div className="relative h-48 bg-slate-100 overflow-hidden shrink-0">
+            {post.featuredImageUrl ? (
+              <img
+                src={post.featuredImageUrl}
+                alt={post.title}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                loading="lazy"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-blue-50/50">
+                <BookOpen className="w-12 h-12 text-brand-blue/30" />
+              </div>
             )}
-            <span className="flex items-center gap-1">
-              <Clock className="w-3.5 h-3.5 text-brand-blue" />
-              {post.readTime || 4} min read
+            <div className="absolute inset-0 bg-linear-to-t from-slate-900/60 via-transparent to-transparent opacity-60" />
+            {/* Category badge */}
+            <span className="absolute top-3 left-3 text-[10px] font-bold px-3 py-1 rounded-full bg-white/95 text-brand-blue border border-blue-200/80 backdrop-blur-md shadow-sm">
+              {post.category}
             </span>
-            <span className="flex items-center gap-1 ml-auto text-slate-400">
-              <Eye className="w-3.5 h-3.5" />
-              {post.viewCount || 100}
-            </span>
+          </div>
+
+          {/* Content */}
+          <div className="p-5 sm:p-6 flex flex-col flex-1">
+            <h2 className="font-heading font-bold text-slate-900 text-base leading-snug mb-2 group-hover:text-brand-blue transition-colors line-clamp-2">
+              {post.title}
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed line-clamp-2 mb-4 flex-1">
+              {post.excerpt}
+            </p>
+
+            {/* Meta */}
+            <div className="flex items-center gap-3 text-[11px] text-slate-500 font-medium pt-3 border-t border-slate-100">
+              {date && (
+                <span className="flex items-center gap-1">
+                  <Calendar className="w-3.5 h-3.5 text-brand-blue" />
+                  {date}
+                </span>
+              )}
+              <span className="flex items-center gap-1">
+                <Clock className="w-3.5 h-3.5 text-brand-blue" />
+                {post.readTime || 4} min read
+              </span>
+              <span className="flex items-center gap-1 ml-auto text-slate-400">
+                <Eye className="w-3.5 h-3.5" />
+                {post.viewCount || 100}
+              </span>
+            </div>
           </div>
         </div>
       </article>
@@ -123,15 +187,15 @@ function FeaturedCard({ post }) {
 
   return (
     <Link to={`/blog/${post.slug}`} className="group block">
-      <article className="relative rounded-3xl overflow-hidden bg-white border border-slate-200/80 shadow-md hover:shadow-xl hover:border-brand-blue/40 transition-all duration-300">
+      <article className="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-white border border-slate-200/80 shadow-md hover:shadow-xl hover:border-brand-blue/40 transition-all duration-300">
         <div className="grid grid-cols-1 lg:grid-cols-2">
-          {/* Image */}
-          <div className="relative h-64 lg:h-auto min-h-75 bg-slate-100 overflow-hidden">
+          {/* Image — Uses aspect-video on mobile and tablet to preserve full image without cutting sides */}
+          <div className="relative aspect-video sm:aspect-video lg:aspect-auto lg:h-full lg:min-h-85 bg-slate-100 overflow-hidden">
             {post.featuredImageUrl ? (
               <img
                 src={post.featuredImageUrl}
                 alt={post.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                className="w-full h-full object-cover object-left sm:object-center group-hover:scale-105 transition-transform duration-500"
                 loading="lazy"
               />
             ) : (
@@ -139,36 +203,36 @@ function FeaturedCard({ post }) {
                 <BookOpen className="w-20 h-20 text-brand-blue/20" />
               </div>
             )}
-            <span className="absolute top-4 left-4 text-xs font-bold px-3 py-1 rounded-full bg-brand-blue text-white shadow-md shadow-blue-500/30 flex items-center gap-1.5">
+            <span className="absolute top-3 left-3 sm:top-4 sm:left-4 text-[11px] sm:text-xs font-bold px-3 py-1 rounded-full bg-brand-blue text-white shadow-md shadow-blue-500/30 flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5" /> Featured Analysis
             </span>
           </div>
 
           {/* Content */}
-          <div className="p-8 sm:p-10 flex flex-col justify-center">
-            <span className="inline-block text-xs font-bold text-brand-blue bg-blue-50 border border-blue-200/60 px-3 py-1 rounded-full mb-4 w-fit">
+          <div className="p-5 sm:p-8 lg:p-10 flex flex-col justify-center">
+            <span className="inline-block text-xs font-bold text-brand-blue bg-blue-50 border border-blue-200/60 px-3 py-1 rounded-full mb-3 sm:mb-4 w-fit">
               {post.category}
             </span>
-            <h2 className="font-heading font-bold text-slate-900 text-2xl sm:text-3xl leading-tight mb-4 group-hover:text-brand-blue transition-colors">
+            <h2 className="font-heading font-bold text-slate-900 text-xl sm:text-2xl lg:text-3xl leading-snug sm:leading-tight mb-3 sm:mb-4 group-hover:text-brand-blue transition-colors">
               {post.title}
             </h2>
-            <p className="text-slate-600 text-sm leading-relaxed mb-6 line-clamp-3">
+            <p className="text-slate-600 text-xs sm:text-sm leading-relaxed mb-4 sm:mb-6 line-clamp-3">
               {post.excerpt}
             </p>
-            <div className="flex items-center gap-4 text-xs text-slate-500 font-medium mb-6">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-xs text-slate-500 font-medium mb-5 sm:mb-6">
               {date && (
                 <span className="flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5 text-brand-blue" /> {date}
+                  <Calendar className="w-3.5 h-3.5 text-brand-blue shrink-0" /> {date}
                 </span>
               )}
               <span className="flex items-center gap-1.5">
-                <Clock className="w-3.5 h-3.5 text-brand-blue" /> {post.readTime || 5} min read
+                <Clock className="w-3.5 h-3.5 text-brand-blue shrink-0" /> {post.readTime || 5} min read
               </span>
               <span className="flex items-center gap-1.5">
-                <Eye className="w-3.5 h-3.5 text-brand-blue" /> {post.viewCount || 150} views
+                <Eye className="w-3.5 h-3.5 text-brand-blue shrink-0" /> {post.viewCount || 150} views
               </span>
             </div>
-            <span className="inline-flex items-center gap-2 text-brand-blue font-semibold text-sm group-hover:gap-3 transition-all">
+            <span className="inline-flex items-center gap-2 text-brand-blue font-semibold text-xs sm:text-sm group-hover:gap-3 transition-all">
               Read Deep-Dive <ChevronRight className="w-4 h-4" />
             </span>
           </div>
@@ -519,7 +583,7 @@ export default function BlogPage() {
           ) : isLoading ? (
             <div className="space-y-8">
               <div className="bg-white rounded-3xl border border-slate-200/80 h-72 animate-pulse shadow-sm" />
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-6">
                 {Array.from({ length: 6 }).map((_, i) => (
                   <BlogCardSkeleton key={i} />
                 ))}
@@ -551,7 +615,7 @@ export default function BlogPage() {
               {gridPosts.length > 0 && (
                 <motion.div
                   variants={staggerContainer}
-                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-6"
                 >
                   {gridPosts.map((post) => (
                     <motion.div key={post.id || post.slug} variants={fadeUp}>
