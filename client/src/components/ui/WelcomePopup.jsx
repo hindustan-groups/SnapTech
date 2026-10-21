@@ -267,9 +267,13 @@ function HeaderTechIllustration() {
 }
 
 export default function WelcomePopup() {
-  const [isOpen, setIsOpen] = useState(false)
-  const navigate = useNavigate()
   const location = useLocation()
+  const [isOpen, setIsOpen] = useState(() => {
+    if (typeof window === 'undefined') return false
+    const searchParams = new URLSearchParams(window.location.search)
+    return searchParams.get('welcome') === '1' || searchParams.get('popup') === '1'
+  })
+  const navigate = useNavigate()
   const timerRef = useRef(null)
   const modalRef = useRef(null)
   const previousActiveElementRef = useRef(null)
@@ -340,7 +344,6 @@ export default function WelcomePopup() {
     // 1. Instant preview/test support via query param (?welcome=1 or ?popup=1)
     const searchParams = new URLSearchParams(location.search)
     if (searchParams.get('welcome') === '1' || searchParams.get('popup') === '1') {
-      setIsOpen(true)
       return
     }
 
