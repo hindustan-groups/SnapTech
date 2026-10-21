@@ -27,9 +27,14 @@ export const askQuestion = async (req, res, next) => {
     let answer = null
     let isAnswered = false
 
-    // ── STEP 1: Fetch dynamic site settings (phone, email, whatsapp) ─
+    // ── STEP 1: Fetch dynamic site settings (phone, email, sales, support, careers, privacy) ─
     let phoneVal = '+91 8209604849'
     let emailVal = 'info@snaptech.digital'
+    let salesEmailVal = 'sales@snaptech.digital'
+    let supportEmailVal = 'support@snaptech.digital'
+    let careersEmailVal = 'careers@snaptech.digital'
+    let privacyEmailVal = 'privacy@snaptech.digital'
+
     try {
       const rows = await prisma.siteSetting.findMany()
       const settings = {}
@@ -37,7 +42,11 @@ export const askQuestion = async (req, res, next) => {
         settings[r.key] = r.value
       }
       if (settings.phone) phoneVal = settings.phone
-      if (settings.email) emailVal = settings.email
+      if (settings.email_routing_general || settings.email) emailVal = settings.email_routing_general || settings.email
+      if (settings.sales_email || settings.email_routing_sales) salesEmailVal = settings.sales_email || settings.email_routing_sales
+      if (settings.support_email || settings.email_routing_support) supportEmailVal = settings.support_email || settings.email_routing_support
+      if (settings.careers_email || settings.email_routing_careers) careersEmailVal = settings.careers_email || settings.email_routing_careers
+      if (settings.privacy_email || settings.email_routing_privacy) privacyEmailVal = settings.privacy_email || settings.email_routing_privacy
     } catch {
       // Graceful fallback if DB is sleeping
     }
@@ -89,31 +98,49 @@ export const askQuestion = async (req, res, next) => {
 
     // ── STEP 3: Fallback keyword rules ────────────────────────────
     if (!isAnswered) {
-      // Refined keywords (exact phrases, no generic short words like 'kab', 'open', 'call', 'app', 'days')
+      // Dedicated Departmental Inquiries
+      const salesKeywords = ['sales email', 'quotation email', 'quote email', 'sales inquiry', 'sales enquiry', 'commercial email', 'proposal email', 'sales contact', 'pricing email', 'sales query', 'quote inquiry']
+      const supportKeywords = ['support email', 'helpdesk email', 'help desk', 'customer support', 'tech support', 'technical support', 'raise a ticket', 'ticket email', 'support contact', 'helpdesk', 'customer helpdesk', 'complaint']
+      const careerEmailKeywords = ['career email', 'careers email', 'recruitment email', 'job email', 'hr email', 'send resume', 'send cv', 'apply email', 'hiring email', 'submit cv', 'submit resume']
+      const privacyKeywords = ['privacy email', 'legal email', 'compliance email', 'data protection', 'dpdp', 'gdpr', 'privacy inquiry', 'legal inquiry', 'data policy email', 'privacy contact']
+
+      // General Categories
       const hours    = ['business hours', 'working hours', 'office hours', 'open time', 'closing time', 'timings', 'timing', 'timeing', 'timeings', 'schedule', 'working days', 'weekend', 'kitne baje', 'kab khulta', 'kab band']
       const pricing  = ['price', 'pricing', 'cost', 'charges', 'fees', 'rate', 'budget', 'package', 'kitna', 'how much', 'quote', 'estimate', 'charge']
       const services = ['what services', 'service offer', 'our services', 'web development', 'app development', 'digital marketing', 'seo', 'software development', 'erp system', 'designing', 'kya karte', 'kya kaam', 'what do you do', 'do you offer']
-      const contact  = ['contact', 'phone number', 'email', 'call you', 'whatsapp', 'reach you', 'address', 'location', 'office address', 'where are you', 'kahan', 'phone no', 'mobile number']
+      const contact  = ['contact', 'phone number', 'email', 'call you', 'whatsapp', 'reach you', 'address', 'location', 'office address', 'where are you', 'kahan', 'phone no', 'mobile number', 'contact us', 'get in touch']
       const portfolio = ['portfolio', 'projects', 'our work', 'sample', 'case study', 'case studies', 'previous work', 'examples of work']
       const careers  = ['jobs', 'career', 'hiring', 'vacancies', 'internships', 'openings', 'apply for', 'join the team', 'careers']
 
-      if (hours.some((k) => clean.includes(k))) {
+      if (salesKeywords.some((k) => clean.includes(k))) {
+        answer = `💼 **Sales & Quotation Inquiries:**\n\nFor enterprise proposals, pricing quotes, and commercial discussions:\n\n• 📧 **Email:** ${salesEmailVal}\n• 📱 **WhatsApp / Call:** ${phoneVal}\n\nOur solutions architect will review your project and get back to you within 24 hours!`
+        isAnswered = true
+      } else if (supportKeywords.some((k) => clean.includes(k))) {
+        answer = `🛠️ **Customer Support & Helpdesk:**\n\nFor technical assistance, bug reports, and maintenance tickets:\n\n• 📧 **Email:** ${supportEmailVal}\n• 📱 **WhatsApp Hotline:** ${phoneVal}\n\nOur engineering team provides prompt ticket resolution for active clients!`
+        isAnswered = true
+      } else if (careerEmailKeywords.some((k) => clean.includes(k))) {
+        answer = `👥 **Careers & Recruitment:**\n\nLooking to join the SnapTech Digital engineering team?\n\n• 📧 **Send Resume / Portfolio:** ${careersEmailVal}\n• 🌐 Explore open positions on our **Careers** page\n\nOur HR & engineering recruitment team reviews every application!`
+        isAnswered = true
+      } else if (privacyKeywords.some((k) => clean.includes(k))) {
+        answer = `🔒 **Privacy & Legal Inquiries:**\n\nFor data privacy compliance, DPDP Act 2023 / GDPR requests, or legal queries:\n\n• 📧 **Email:** ${privacyEmailVal}\n\nYou can also read our full **Privacy Policy** and **Terms of Service** in the website footer.`
+        isAnswered = true
+      } else if (hours.some((k) => clean.includes(k))) {
         answer = `⏰ **Business Hours:**\n\nMonday – Saturday: **10:00 AM to 7:00 PM IST**\n\nWe are closed on Sundays and national holidays. For urgent matters, drop us a WhatsApp at ${phoneVal}!`
         isAnswered = true
       } else if (pricing.some((k) => clean.includes(k))) {
-        answer = '💰 **Pricing at SnapTech Digital** depends on the project scope.\n\n• Simple landing page: starting ₹15,000\n• Business website: ₹25,000–₹60,000\n• Custom web/mobile app, ERP, or SaaS: quoted individually\n\nContact us for a free detailed estimate — we\'ll tailor it to your exact requirements!'
+        answer = `💰 **Pricing at SnapTech Digital** depends on the project scope:\n\n• Simple landing page: starting ₹15,000\n• Business website: ₹25,000–₹60,000\n• Custom web/mobile app, ERP, or SaaS: quoted individually\n\n📧 For formal proposals & quotation requests, email our sales team at **${salesEmailVal}** or submit the Contact Form!`
         isAnswered = true
       } else if (services.some((k) => clean.includes(k))) {
         answer = '🛠️ **Our Services include:**\n\n• Web Development (React, Node.js, PHP, WordPress)\n• Mobile App Development (Flutter, React Native)\n• Custom Software & ERP Systems\n• UI/UX Design & Branding\n• Digital Marketing & SEO\n• E-Commerce Solutions\n\nVisit our Services page for full details!'
         isAnswered = true
       } else if (contact.some((k) => clean.includes(k))) {
-        answer = `📞 **Reach us easily:**\n\n• 📧 Email: ${emailVal}\n• 📱 WhatsApp/Call: ${phoneVal}\n• 📍 Office: Bhilwara, Rajasthan, India\n\nOr submit the **Contact Form** on our website — we respond within 24 hours!`
+        answer = `📞 **SnapTech Digital Official Contact Channels:**\n\n• 💼 **Sales & Quotations:** ${salesEmailVal}\n• 🛠️ **Customer Support:** ${supportEmailVal}\n• 👥 **Careers & Recruitment:** ${careersEmailVal}\n• 🔒 **Privacy & Legal:** ${privacyEmailVal}\n• 📧 **General Inquiries:** ${emailVal}\n• 📱 **WhatsApp / Call:** ${phoneVal}\n• 📍 **Headquarters:** Bhilwara, Rajasthan 311001, India\n\nOr submit the **Contact Form** on our website — we respond within 24 hours!`
         isAnswered = true
       } else if (portfolio.some((k) => clean.includes(k))) {
         answer = '🎨 **Our Portfolio** showcases projects across web, mobile, ERP, and branding.\n\nVisit the **Portfolio** section on our website to see our latest client work with live demos!'
         isAnswered = true
       } else if (careers.some((k) => clean.includes(k))) {
-        answer = '💼 **We\'re hiring!** SnapTech Digital regularly posts openings for developers, designers, and marketing roles.\n\nCheck the **Careers** page on our website for current openings and apply directly!'
+        answer = `💼 **We're hiring!** SnapTech Digital regularly posts openings for developers, designers, and marketing roles.\n\n• 📧 Email your CV/Portfolio to: **${careersEmailVal}**\n• Check the **Careers** page on our website to apply directly!`
         isAnswered = true
       }
     }

@@ -115,6 +115,8 @@ export default function Footer() {
   const cfg = settingsData?.data || {}
   const phone = cfg.phone || '+91 8209604849'
   const contactEmail = cfg.email || 'info@snaptech.digital'
+  const salesEmail = cfg.sales_email || 'sales@snaptech.digital'
+  const supportEmail = cfg.support_email || 'support@snaptech.digital'
   const address = cfg.address || 'Bhilwara, Rajasthan 311001, India'
   const parentName = cfg.parent_company_name || 'Hindustan Projects Group'
   const companyName = cfg.company_name || 'SnapTech Digital'
@@ -399,11 +401,28 @@ export default function Footer() {
                     {phone}
                   </a>
                 </div>
-                <div className="flex gap-3 items-center">
-                  <Mail className="w-4 h-4 shrink-0 text-brand-primary-light" aria-hidden="true" />
-                  <a href={`mailto:${contactEmail}`} className="hover:text-brand-cyan transition-colors break-all">
-                    {contactEmail}
-                  </a>
+                <div className="flex gap-3 items-start">
+                  <Mail className="w-4 h-4 mt-0.5 shrink-0 text-brand-primary-light" aria-hidden="true" />
+                  <div className="space-y-1 text-xs">
+                    <div>
+                      <span className="text-slate-400">General: </span>
+                      <a href={`mailto:${contactEmail}`} className="hover:text-brand-cyan transition-colors break-all">
+                        {contactEmail}
+                      </a>
+                    </div>
+                    <div>
+                      <span className="text-slate-400">Sales: </span>
+                      <a href={`mailto:${salesEmail}`} className="hover:text-brand-cyan transition-colors break-all">
+                        {salesEmail}
+                      </a>
+                    </div>
+                    <div>
+                      <span className="text-slate-400">Support: </span>
+                      <a href={`mailto:${supportEmail}`} className="hover:text-brand-cyan transition-colors break-all">
+                        {supportEmail}
+                      </a>
+                    </div>
+                  </div>
                 </div>
 
                 {/* WhatsApp CTA */}

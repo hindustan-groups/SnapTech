@@ -5,12 +5,32 @@ import { api } from '@/utils/api'
 
 const QUICK_QUESTIONS = [
   { emoji: '💰', label: 'Pricing', text: 'What is your pricing?' },
-  { emoji: '🛠️', label: 'Services', text: 'What services do you offer?' },
-  { emoji: '⏰', label: 'Timings', text: 'What are your business hours?' },
+  { emoji: '💼', label: 'Sales & Quotes', text: 'What is your sales and quotation email?' },
+  { emoji: '🛠️', label: 'Support', text: 'How do I reach customer support?' },
   { emoji: '📞', label: 'Contact', text: 'How can I contact you?' },
 ]
 
-/* Renders plain text with **bold** and newline support — crash-safe */
+function renderWithLinks(text) {
+  if (!text || typeof text !== 'string') return text
+  const emailRegex = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g
+  const chunks = text.split(emailRegex)
+  return chunks.map((chunk, i) => {
+    if (chunk.match(emailRegex)) {
+      return (
+        <a
+          key={i}
+          href={`mailto:${chunk}`}
+          style={{ color: '#1a3e8c', textDecoration: 'underline', fontWeight: 600 }}
+        >
+          {chunk}
+        </a>
+      )
+    }
+    return chunk
+  })
+}
+
+/* Renders plain text with **bold**, clickable emails, and newline support — crash-safe */
 function BotMessage({ text }) {
   if (!text || typeof text !== 'string') return null
 
@@ -23,9 +43,9 @@ function BotMessage({ text }) {
           <span key={li}>
             {parts.map((part, pi) =>
               pi % 2 === 1 ? (
-                <strong key={pi}>{part}</strong>
+                <strong key={pi}>{renderWithLinks(part)}</strong>
               ) : (
-                <span key={pi}>{part}</span>
+                <span key={pi}>{renderWithLinks(part)}</span>
               )
             )}
             {li < lines.length - 1 && <br />}
@@ -42,7 +62,7 @@ export function ChatbotWidget() {
     {
       id: 0,
       sender: 'bot',
-      text: '👋 Hello! Welcome to **SnapTech Digital**. How can I help you today? Ask me about our services, pricing, timings, or contact info.',
+      text: '👋 Hello! Welcome to **SnapTech Digital**. How can I help you today? Ask me about our services, pricing, quotation, support, or direct departmental contacts.',
       isAnswered: true,
     },
   ])

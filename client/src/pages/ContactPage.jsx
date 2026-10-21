@@ -13,6 +13,10 @@ import {
   CheckCircle,
   AlertCircle,
   ChevronDown,
+  Briefcase,
+  LifeBuoy,
+  UserCheck,
+  ShieldCheck,
 } from 'lucide-react'
 import { Container, SEO } from '@/components/ui'
 import { useServices } from '@/hooks/useServices'
@@ -174,6 +178,10 @@ export default function ContactPage() {
   const cfg = settingsData?.data || {}
   const phone = cfg.phone || '+91 8209604849'
   const email = cfg.email || 'info@snaptech.digital'
+  const salesEmail = cfg.sales_email || 'sales@snaptech.digital'
+  const supportEmail = cfg.support_email || 'support@snaptech.digital'
+  const careersEmail = cfg.careers_email || 'careers@snaptech.digital'
+  const privacyEmail = cfg.privacy_email || 'privacy@snaptech.digital'
   const address = cfg.address || 'SnapTech Digital, Bhilwara, Rajasthan 311001, India'
   const whatsapp = cfg.whatsapp || cfg.phone || '+91 8209604849'
   const whatsappNum = whatsapp.replace(/[^0-9]/g, '')
@@ -378,11 +386,102 @@ export default function ContactPage() {
                 />
                 <ContactInfoCard
                   icon={Mail}
-                  label="Official Email"
+                  label="Official General Email"
                   value={email}
                   href={`mailto:${email}`}
                   borderColor="border-l-indigo-600"
                 />
+              </motion.div>
+
+              {/* Department Direct Inquiries */}
+              <motion.div variants={fadeUp} className="p-5 rounded-2xl bg-slate-50 border border-slate-200/90 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-bold text-brand-blue uppercase tracking-wider block">
+                    Department Direct Desks
+                  </span>
+                  <span className="text-[10px] font-semibold text-slate-500">Fast Response</span>
+                </div>
+                <div className="grid grid-cols-1 gap-2.5">
+                  <a
+                    href={`mailto:${salesEmail}`}
+                    className="flex items-center justify-between p-3 rounded-xl bg-white border border-slate-200/80 hover:border-brand-blue/50 hover:shadow-xs transition-all group"
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <span className="w-8 h-8 rounded-lg bg-blue-50 text-brand-blue flex items-center justify-center shrink-0">
+                        <Briefcase className="w-4 h-4" />
+                      </span>
+                      <div className="min-w-0">
+                        <p className="text-[11px] font-bold text-slate-900 group-hover:text-brand-blue transition-colors">
+                          Sales &amp; Quotations
+                        </p>
+                        <p className="text-[11px] text-slate-500 font-mono truncate">{salesEmail}</p>
+                      </div>
+                    </div>
+                    <span className="text-[10px] font-semibold text-brand-blue shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                      Mail &rarr;
+                    </span>
+                  </a>
+
+                  <a
+                    href={`mailto:${supportEmail}`}
+                    className="flex items-center justify-between p-3 rounded-xl bg-white border border-slate-200/80 hover:border-brand-blue/50 hover:shadow-xs transition-all group"
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <span className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                        <LifeBuoy className="w-4 h-4" />
+                      </span>
+                      <div className="min-w-0">
+                        <p className="text-[11px] font-bold text-slate-900 group-hover:text-brand-blue transition-colors">
+                          Customer Support &amp; Helpdesk
+                        </p>
+                        <p className="text-[11px] text-slate-500 font-mono truncate">{supportEmail}</p>
+                      </div>
+                    </div>
+                    <span className="text-[10px] font-semibold text-brand-blue shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                      Mail &rarr;
+                    </span>
+                  </a>
+
+                  <a
+                    href={`mailto:${careersEmail}`}
+                    className="flex items-center justify-between p-3 rounded-xl bg-white border border-slate-200/80 hover:border-brand-blue/50 hover:shadow-xs transition-all group"
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <span className="w-8 h-8 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
+                        <UserCheck className="w-4 h-4" />
+                      </span>
+                      <div className="min-w-0">
+                        <p className="text-[11px] font-bold text-slate-900 group-hover:text-brand-blue transition-colors">
+                          Careers &amp; Recruitment
+                        </p>
+                        <p className="text-[11px] text-slate-500 font-mono truncate">{careersEmail}</p>
+                      </div>
+                    </div>
+                    <span className="text-[10px] font-semibold text-brand-blue shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                      Mail &rarr;
+                    </span>
+                  </a>
+
+                  <a
+                    href={`mailto:${privacyEmail}`}
+                    className="flex items-center justify-between p-3 rounded-xl bg-white border border-slate-200/80 hover:border-brand-blue/50 hover:shadow-xs transition-all group"
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <span className="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+                        <ShieldCheck className="w-4 h-4" />
+                      </span>
+                      <div className="min-w-0">
+                        <p className="text-[11px] font-bold text-slate-900 group-hover:text-brand-blue transition-colors">
+                          Privacy &amp; Legal Inquiries
+                        </p>
+                        <p className="text-[11px] text-slate-500 font-mono truncate">{privacyEmail}</p>
+                      </div>
+                    </div>
+                    <span className="text-[10px] font-semibold text-brand-blue shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                      Mail &rarr;
+                    </span>
+                  </a>
+                </div>
               </motion.div>
 
               {/* WhatsApp CTA */}

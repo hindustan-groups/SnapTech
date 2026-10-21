@@ -55,6 +55,8 @@ export function organizationSchema(cfg = {}) {
   const email = cfg.email || SITE.email
   const salesEmail = cfg.sales_email || SITE.salesEmail
   const supportEmail = cfg.support_email || SITE.supportEmail
+  const careersEmail = cfg.careers_email || SITE.careersEmail
+  const privacyEmail = cfg.privacy_email || SITE.privacyEmail
   const logo = cfg.logo_url || SITE.logo
 
   const sameAs = [
@@ -104,6 +106,22 @@ export function organizationSchema(cfg = {}) {
         telephone: phone,
         email: supportEmail,
         contactType: 'technical support',
+        availableLanguage: ['English', 'Hindi'],
+        areaServed: 'IN',
+      },
+      {
+        '@type': 'ContactPoint',
+        telephone: phone,
+        email: careersEmail,
+        contactType: 'recruitment',
+        availableLanguage: ['English', 'Hindi'],
+        areaServed: 'IN',
+      },
+      {
+        '@type': 'ContactPoint',
+        telephone: phone,
+        email: privacyEmail,
+        contactType: 'privacy & legal',
         availableLanguage: ['English', 'Hindi'],
         areaServed: 'IN',
       },

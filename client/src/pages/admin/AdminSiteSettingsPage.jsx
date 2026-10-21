@@ -579,6 +579,12 @@ export default function AdminSiteSettingsPage() {
                           {watched.email || 'info@snaptech.digital'}
                         </span>
                       </div>
+                      <div className="pt-1 pl-6 space-y-0.5 text-[10px] text-white/60 border-l border-white/10 ml-1.5">
+                        <p>Sales: <span className="text-white/85 font-mono">{watched.sales_email || 'sales@snaptech.digital'}</span></p>
+                        <p>Support: <span className="text-white/85 font-mono">{watched.support_email || 'support@snaptech.digital'}</span></p>
+                        <p>Careers: <span className="text-white/85 font-mono">{watched.careers_email || 'careers@snaptech.digital'}</span></p>
+                        <p>Privacy: <span className="text-white/85 font-mono">{watched.privacy_email || 'privacy@snaptech.digital'}</span></p>
+                      </div>
                     </div>
 
                     <hr className="border-white/10" />
