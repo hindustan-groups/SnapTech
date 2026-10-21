@@ -20,6 +20,7 @@ import {
   Flame,
   Share2,
   Check,
+  Mail,
 } from 'lucide-react'
 import { Container, Button, SEO } from '@/components/ui'
 import { useActiveJobs } from '@/hooks/useCareers'
@@ -87,6 +88,7 @@ export default function CareersPage() {
   const { data, isLoading } = useActiveJobs()
   const { data: siteSettings } = useSiteSettings()
   const cfg = siteSettings?.data || {}
+  const careersEmail = cfg.careers_email || 'careers@snaptech.digital'
 
   const [selectedDept, setSelectedDept] = useState('ALL')
   const [selectedWorkplace, setSelectedWorkplace] = useState('ALL')
@@ -620,6 +622,13 @@ export default function CareersPage() {
                     Submit General Resume <ArrowRight className="w-4 h-4 ml-1.5" />
                   </Button>
                 </Link>
+                <a
+                  href={`mailto:${careersEmail}?subject=Application%20for%20Engineering%20Role%20-%20SnapTech%20Digital`}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 text-white text-xs font-semibold transition-colors"
+                >
+                  <Mail className="w-4 h-4 text-blue-300" />
+                  Email CV: {careersEmail}
+                </a>
                 <a
                   href={whatsappUrl}
                   target="_blank"

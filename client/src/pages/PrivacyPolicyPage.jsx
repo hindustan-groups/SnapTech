@@ -1,10 +1,13 @@
-import { useLegalPage } from '@/hooks/useContent'
+import { useLegalPage, useSiteSettings } from '@/hooks/useContent'
 import { Container, SEO } from '@/components/ui'
-import { Calendar, ShieldAlert } from 'lucide-react'
+import { Calendar, ShieldAlert, Mail, ShieldCheck } from 'lucide-react'
 import DOMPurify from 'dompurify'
 
 export default function PrivacyPolicyPage() {
   const { data: page, isLoading, error } = useLegalPage('PRIVACY_POLICY')
+  const { data: settingsData } = useSiteSettings()
+  const cfg = settingsData?.data || {}
+  const privacyEmail = cfg.privacy_email || 'privacy@snaptech.digital'
 
   return (
     <>
@@ -60,10 +63,32 @@ export default function PrivacyPolicyPage() {
                 <p className="text-xs text-slate-500">Make sure the API server is online.</p>
               </div>
             ) : (
-              <div
-                className="prose prose-slate max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:text-slate-900 prose-a:text-brand-blue prose-p:leading-relaxed prose-li:leading-relaxed"
-                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(page.content) }}
-              />
+              <>
+                <div
+                  className="prose prose-slate max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:text-slate-900 prose-a:text-brand-blue prose-p:leading-relaxed prose-li:leading-relaxed"
+                  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(page.content) }}
+                />
+
+                {/* Privacy & Legal Desk Box */}
+                <div className="mt-8 pt-6 border-t flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50 p-5 rounded-2xl border border-slate-200/80">
+                  <div className="flex items-start gap-3">
+                    <ShieldCheck className="w-5 h-5 text-brand-blue shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-xs font-bold text-slate-900">Data Protection &amp; Legal Desk</p>
+                      <p className="text-xs text-slate-600">
+                        For questions on DPDP Act 2023, GDPR rights, or data deletion requests:
+                      </p>
+                    </div>
+                  </div>
+                  <a
+                    href={`mailto:${privacyEmail}`}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-blue hover:bg-blue-600 text-white text-xs font-semibold transition-colors shrink-0 shadow-xs"
+                  >
+                    <Mail className="w-3.5 h-3.5" />
+                    {privacyEmail}
+                  </a>
+                </div>
+              </>
             )}
           </div>
         </Container>
