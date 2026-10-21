@@ -3,7 +3,7 @@
  * Supports multi-image screenshot gallery, verified impact metrics, challenge/solution narratives,
  * core deliverables, and interactive tech stack pills.
  */
-import { useState, useRef } from 'react'
+import { useState, useRef, useMemo } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   Plus,
@@ -208,8 +208,21 @@ function GalleryImagesManager({ images = [], onChange }) {
 }
 
 /* ── Project Form Component ─────────────────────────────────────── */
-function ProjectForm({ initial, onSave, onCancel, loading }) {
-  const { register, handleSubmit, control, watch, setValue } = useForm({
+function ProjectForm({ initial, onSave, onCancel, loading, existingCategories = [] }) {
+  const allCategories = Array.from(new Set([...CATEGORIES, ...existingCategories]))
+  const [isCustomCategory, setIsCustomCategory] = useState(() => {
+    if (!initial?.category) return false
+    return !CATEGORIES.includes(initial.category)
+  })
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm({
     defaultValues: initial ?? {
       title: '',
       slug: '',
@@ -261,6 +274,7 @@ function ProjectForm({ initial, onSave, onCancel, loading }) {
   const onSubmit = (data) => {
     onSave({
       ...data,
+      category: data.category?.trim() || 'Web',
       technologies: data.technologies
         ? data.technologies
             .split(',')
@@ -336,12 +350,79 @@ function ProjectForm({ initial, onSave, onCancel, loading }) {
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-gray-700 block mb-1">Category</label>
-            <select {...register('category')} className={inputCls}>
-              {CATEGORIES.map((c) => (
-                <option key={c}>{c}</option>
-              ))}
-            </select>
+            <div className="flex items-center justify-between mb-1">
+              <label className="text-xs font-semibold text-gray-700">
+                Category <span className="text-red-500">*</span>
+              </label>
+              <button
+                type="button"
+                onClick={() => {
+                  const nextState = !isCustomCategory
+                  setIsCustomCategory(nextState)
+                  setValue('category', nextState ? '' : (allCategories[0] || 'Web'), {
+                    shouldValidate: true,
+                  })
+                }}
+                className="text-[11px] text-brand-blue font-bold hover:underline cursor-pointer"
+              >
+                {isCustomCategory ? '← Choose from list' : '+ Type custom category'}
+              </button>
+            </div>
+
+            {isCustomCategory ? (
+              <div className="space-y-1.5">
+                <input
+                  {...register('category', {
+                    required: 'Category is required',
+                    maxLength: { value: 50, message: 'Category must be under 50 characters' },
+                    validate: (val) => Boolean(val?.trim()) || 'Category cannot be empty',
+                  })}
+                  placeholder="e.g. AI & Automation, Cloud & DevOps, ERP"
+                  className={inputCls}
+                  autoFocus
+                />
+                {errors.category && (
+                  <p className="text-[11px] text-red-500 font-medium">
+                    {errors.category.message || 'Category is required'}
+                  </p>
+                )}
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <span className="text-[10px] text-gray-400 font-medium">Suggestions:</span>
+                  {['AI & Automation', 'Cloud & DevOps', 'Custom ERP', 'E-Commerce', 'SaaS', 'Consulting'].map((sug) => (
+                    <button
+                      key={sug}
+                      type="button"
+                      onClick={() =>
+                        setValue('category', sug, { shouldValidate: true, shouldDirty: true })
+                      }
+                      className="text-[10px] px-2 py-0.5 rounded-md bg-gray-100 hover:bg-blue-50 hover:text-brand-blue text-gray-600 transition-colors cursor-pointer border border-gray-200/60"
+                    >
+                      +{sug}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <select
+                aria-label="Project Category"
+                {...register('category', {
+                  onChange: (e) => {
+                    if (e.target.value === '__CUSTOM__') {
+                      setIsCustomCategory(true)
+                      setValue('category', '', { shouldValidate: true })
+                    }
+                  },
+                })}
+                className={inputCls}
+              >
+                {allCategories.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
+                <option value="__CUSTOM__">+ Other / Type custom category...</option>
+              </select>
+            )}
           </div>
 
           <div>
@@ -579,6 +660,13 @@ export default function AdminProjectsPage() {
     },
   })
 
+  const allCategories = useMemo(() => {
+    const fromProjects = projects
+      .map((p) => p.category?.trim())
+      .filter((c) => Boolean(c) && !CATEGORIES.includes(c))
+    return [...CATEGORIES, ...Array.from(new Set(fromProjects))]
+  }, [projects])
+
   const filteredProjects = projects.filter((p) => {
     const matchesSearch =
       p.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -652,6 +740,8 @@ export default function AdminProjectsPage() {
               </div>
 
               <ProjectForm
+                key={editing ? editing.id : 'new-project'}
+                existingCategories={allCategories}
                 initial={
                   editing
                     ? {
@@ -692,12 +782,13 @@ export default function AdminProjectsPage() {
           </div>
           <div className="w-full sm:w-48">
             <select
+              aria-label="Filter by category"
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
               className="w-full px-3.5 py-2.5 text-sm border border-gray-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-brand-blue/25 focus:border-brand-blue cursor-pointer"
             >
               <option value="">All Categories ({projects.length})</option>
-              {CATEGORIES.map((c) => (
+              {allCategories.map((c) => (
                 <option key={c} value={c}>
                   {c} ({projects.filter((p) => p.category === c).length})
                 </option>
@@ -782,7 +873,7 @@ export default function AdminProjectsPage() {
                         )}
                         <span
                           className={`text-[11px] px-2.5 py-0.5 rounded-full font-mono font-bold border ${
-                            CATEGORY_COLORS[p.category] || 'bg-gray-100 text-gray-700 border-gray-200'
+                            CATEGORY_COLORS[p.category] || 'bg-indigo-50 text-indigo-700 border-indigo-200'
                           }`}
                         >
                           {p.category}
