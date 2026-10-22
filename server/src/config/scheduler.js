@@ -26,6 +26,10 @@ export function initScheduler() {
   // Check for any ContactLead with status "NEW" that was created more than 24 hours ago.
   // Schedule: Runs every 6 hours ("0 */6 * * *").
   cron.schedule('0 */6 * * *', async () => {
+    if (process.env.ENABLE_SCHEDULER_CRON_EMAILS !== 'true') {
+      console.log('[Scheduler] Auto Lead Follow-Up Reminder skipped (ENABLE_SCHEDULER_CRON_EMAILS is not true).')
+      return
+    }
     console.log('[Scheduler] Running Auto Lead Follow-Up Reminder job...')
     try {
       const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000)
@@ -45,6 +49,8 @@ export function initScheduler() {
         await sendEmail({
           to: recipients,
           ...mailOptions,
+          event: 'lead.reminder',
+          isInternalAlert: true,
         })
         console.log(`[Scheduler] Sent follow-up reminder for ${overdueLeads.length} leads to: ${recipients}`)
       } else {
@@ -59,6 +65,10 @@ export function initScheduler() {
   // If a lead has been in "CONTACTED" status for more than 3 days with no further change, remind the admin.
   // Schedule: Runs daily at 8:00 AM ("0 8 * * *").
   cron.schedule('0 8 * * *', async () => {
+    if (process.env.ENABLE_SCHEDULER_CRON_EMAILS !== 'true') {
+      console.log('[Scheduler] Stale Lead Follow-Up skipped (ENABLE_SCHEDULER_CRON_EMAILS is not true).')
+      return
+    }
     console.log('[Scheduler] Running Stale Lead Follow-Up job...')
     try {
       const threeDaysAgo = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000)
@@ -78,6 +88,8 @@ export function initScheduler() {
         await sendEmail({
           to: recipients,
           ...mailOptions,
+          event: 'stale.leads',
+          isInternalAlert: true,
         })
         console.log(`[Scheduler] Sent stale leads reminder for ${staleLeads.length} leads to: ${recipients}`)
       } else {
@@ -92,6 +104,10 @@ export function initScheduler() {
   // Compile totals, service breakdowns, and status changes for Monday morning.
   // Schedule: Runs every Monday at 9:00 AM ("0 9 * * 1").
   cron.schedule('0 9 * * 1', async () => {
+    if (process.env.ENABLE_SCHEDULER_CRON_EMAILS !== 'true') {
+      console.log('[Scheduler] Weekly Summary Report skipped (ENABLE_SCHEDULER_CRON_EMAILS is not true).')
+      return
+    }
     console.log('[Scheduler] Running Weekly Summary Report job...')
     try {
       const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
@@ -141,6 +157,8 @@ export function initScheduler() {
       await sendEmail({
         to: recipients,
         ...mailOptions,
+        event: 'weekly.summary',
+        isInternalAlert: true,
       })
       console.log(`[Scheduler] Weekly summary report sent successfully to: ${recipients}`)
     } catch (err) {
@@ -152,8 +170,13 @@ export function initScheduler() {
   // Generates record count health summaries and directs authorized administrators to the authenticated admin portal.
   // Sensitive customer PII (leads, resumes, phone numbers) is omitted from email bodies and attachments.
   // Schedule: Runs nightly at 2:00 AM ("0 2 * * *").
+  // Gated behind ENABLE_NIGHTLY_SNAPSHOT_EMAIL to avoid consuming daily Hostinger SMTP quota.
   cron.schedule('0 2 * * *', async () => {
-    await runDatabaseSnapshotStatusCheck()
+    if (process.env.ENABLE_NIGHTLY_SNAPSHOT_EMAIL === 'true') {
+      await runDatabaseSnapshotStatusCheck()
+    } else {
+      console.log('[Scheduler] Nightly snapshot email skipped (ENABLE_NIGHTLY_SNAPSHOT_EMAIL is not true). Record counts remain accessible via Admin Portal.')
+    }
   })
 
   // 5. AUTOMATED ANALYTICS & ERROR LOG RETENTION PRUNING (DATA-01)
@@ -332,6 +355,8 @@ export async function runDatabaseSnapshotStatusCheck() {
       to: recipients,
       subject,
       html,
+      event: 'system.snapshot',
+      isInternalAlert: true,
     })
     console.log('[Scheduler] Nightly snapshot status email successfully sent.')
   } catch (err) {
@@ -341,6 +366,8 @@ export async function runDatabaseSnapshotStatusCheck() {
       await sendEmail({
         to: recipients,
         ...mailOptions,
+        event: 'system.backup_failure',
+        isInternalAlert: true,
       })
       console.log('[Scheduler] Backup failure notification email dispatched.')
     } catch (alertErr) {
