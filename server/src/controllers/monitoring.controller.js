@@ -204,27 +204,35 @@ async function checkErrorThresholdAlert() {
     if (errorCount >= 5 && Date.now() - lastAlertTime > 15 * 60 * 1000) {
       lastAlertTime = Date.now()
       
-      const adminEmail = process.env.ADMIN_EMAIL || 'info@snaptech.digital'
-      const { sendEmail } = await import('../utils/mailer.js')
+      console.warn(`[monitoring] High error rate threshold reached (${errorCount} errors in 10m). Recorded in ErrorLog.`)
 
-      sendEmail({
-        to: adminEmail,
-        subject: '🚨 CRITICAL SYSTEM ALERT: High Error Rate Detected',
-        html: `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 2px solid #E31E24; border-radius: 8px;">
-            <h2 style="color: #E31E24; margin-top: 0;">🚨 Critical System Alert: High Error Rate</h2>
-            <p>The system has logged <strong>${errorCount} errors</strong> in the last 10 minutes.</p>
-            <p>Something may be broken on the website. Please check the Admin Monitoring Dashboard immediately.</p>
-            <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 20px 0;" />
-            <p style="font-size: 13px; color: #6B7280; text-align: center;">
-              Sent automatically by SnapTech Digital Website Monitoring Service
-            </p>
-          </div>
-        `,
-        text: `Critical System Alert: High Error Rate Detected. ${errorCount} errors logged in the last 10 minutes. Check your dashboard.`,
-      }).catch((err) => {
-        console.error('[monitoring] Failed to send emergency error alert email:', err.message)
-      })
+      // Emergency error email alerts are suppressed by default to protect Hostinger SMTP quota.
+      // All error details are logged and accessible in the Admin Monitoring dashboard.
+      if (process.env.ENABLE_MONITORING_EMAIL_ALERTS === 'true') {
+        const adminEmail = process.env.ADMIN_EMAIL || 'info@snaptech.digital'
+        const { sendEmail } = await import('../utils/mailer.js')
+
+        sendEmail({
+          to: adminEmail,
+          event: 'system.error',
+          isInternalAlert: true,
+          subject: '🚨 CRITICAL SYSTEM ALERT: High Error Rate Detected',
+          html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 2px solid #E31E24; border-radius: 8px;">
+              <h2 style="color: #E31E24; margin-top: 0;">🚨 Critical System Alert: High Error Rate</h2>
+              <p>The system has logged <strong>${errorCount} errors</strong> in the last 10 minutes.</p>
+              <p>Something may be broken on the website. Please check the Admin Monitoring Dashboard immediately.</p>
+              <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 20px 0;" />
+              <p style="font-size: 13px; color: #6B7280; text-align: center;">
+                Sent automatically by SnapTech Digital Website Monitoring Service
+              </p>
+            </div>
+          `,
+          text: `Critical System Alert: High Error Rate Detected. ${errorCount} errors logged in the last 10 minutes. Check your dashboard.`,
+        }).catch((err) => {
+          console.error('[monitoring] Failed to send emergency error alert email:', err.message)
+        })
+      }
     }
   } catch (err) {
     console.error('[monitoring] Error threshold check failed:', err.message)

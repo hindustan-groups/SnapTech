@@ -189,22 +189,28 @@ export const adminLogin = async (req, res, next) => {
         }
       })
 
-      sendEmail({
-        to: admin.email,
-        subject: 'New Admin Login Detected - SnapTech Digital',
-        html: `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
-            <h2>Security Notice: Successful Login</h2>
-            <p>A new login was recorded for your admin account: <strong>${admin.email}</strong>.</p>
-            <p><strong>IP Address:</strong> ${ip}</p>
-            <p><strong>Time:</strong> ${new Date().toISOString()}</p>
-            <p>If this was you, no action is needed. Otherwise, please contact support immediately.</p>
-          </div>
-        `,
-        text: `Security Notice: Successful Login\n\nA new login was recorded for admin: ${admin.email}\nIP Address: ${ip}\nTime: ${new Date().toISOString()}`
-      }).catch((err) => {
-        console.error('[audit/mailer] Login notification failed:', err.message)
-      })
+      // Routine successful admin login emails are suppressed by default to protect Hostinger's daily 100-email quota.
+      // Every login attempt remains securely logged to the database activity log above.
+      if (process.env.ENABLE_ADMIN_LOGIN_NOTIFICATION === 'true') {
+        sendEmail({
+          to: admin.email,
+          event: 'admin.login',
+          isInternalAlert: true,
+          subject: 'New Admin Login Detected - SnapTech Digital',
+          html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
+              <h2>Security Notice: Successful Login</h2>
+              <p>A new login was recorded for your admin account: <strong>${admin.email}</strong>.</p>
+              <p><strong>IP Address:</strong> ${ip}</p>
+              <p><strong>Time:</strong> ${new Date().toISOString()}</p>
+              <p>If this was you, no action is needed. Otherwise, please contact support immediately.</p>
+            </div>
+          `,
+          text: `Security Notice: Successful Login\n\nA new login was recorded for admin: ${admin.email}\nIP Address: ${ip}\nTime: ${new Date().toISOString()}`,
+        }).catch((err) => {
+          console.error('[audit/mailer] Login notification failed:', err.message)
+        })
+      }
     } catch (err) {
       console.error('[audit] Activity log failed:', err.message)
     }

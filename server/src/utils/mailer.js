@@ -598,6 +598,18 @@ export async function sendEmail(options) {
   // Manual sends (isManual: true or event === 'manual.compose' or event === 'system.test') NEVER get suppressed by automation rules.
   const isExplicitManual = isManual === true || event === 'manual.compose' || event === 'system.test'
 
+  // Safety check: Suppress internal alert emails if internal alerts are globally disabled via env to preserve SMTP quota
+  if (isInternalAlert === true && process.env.DISABLE_INTERNAL_EMAIL_ALERTS === 'true') {
+    console.warn(`[mailer] Internal alert suppressed via DISABLE_INTERNAL_EMAIL_ALERTS: event '${event || 'unknown'}' to ${to}`)
+    return {
+      messageId: null,
+      skipped: true,
+      suppressed: true,
+      reason: 'DISABLE_INTERNAL_EMAIL_ALERTS is true',
+      event,
+    }
+  }
+
   let targetRecipient = to
   let effectiveOptions = { ...options }
 
